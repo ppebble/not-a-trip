@@ -19,12 +19,15 @@ main (프로덕션 배포)
 
 ### 브랜치 명명 규칙
 
-| 브랜치 타입 | 형식              | 예시                    | 용도             |
-| ----------- | ----------------- | ----------------------- | ---------------- |
-| `feature/`  | `feature/기능명`  | `feature/user-auth`     | 새로운 기능 개발 |
-| `bugfix/`   | `bugfix/버그명`   | `bugfix/login-error`    | 버그 수정        |
-| `hotfix/`   | `hotfix/핫픽스명` | `hotfix/security-patch` | 긴급 수정        |
-| `chore/`    | `chore/작업명`    | `chore/update-deps`     | 빌드, 설정 등    |
+| 브랜치 타입    | 형식                               | 예시                          | 용도                   |
+| -------------- | ---------------------------------- | ----------------------------- | ---------------------- |
+| `feat/`        | `feat/{이슈번호}--{기능명}`        | `feat/5--user-auth`           | 새로운 기능 개발       |
+| `fix/`         | `fix/{이슈번호}--{버그명}`         | `fix/12--login-error`         | 버그 수정              |
+| `ui/`          | `ui/{이슈번호}--{UI명}`            | `ui/15--mobile-button`        | UI/UX 개선             |
+| `enhancement/` | `enhancement/{이슈번호}--{개선명}` | `enhancement/25--search-perf` | 기능 개선, 성능 최적화 |
+| `chore/`       | `chore/{이슈번호}--{작업명}`       | `chore/20--lint-setup`        | 빌드, 설정 등          |
+| `refactor/`    | `refactor/{이슈번호}--{리팩터명}`  | `refactor/30--api-structure`  | 코드 리팩토링          |
+| `hotfix/`      | `hotfix/{이슈번호}--{핫픽스명}`    | `hotfix/99--security-patch`   | 긴급 수정              |
 
 ## 워크플로우
 
@@ -35,18 +38,18 @@ main (프로덕션 배포)
 git checkout develop
 git pull origin develop
 
-# 새 feature 브랜치 생성
-git checkout -b feature/새기능명
+# 새 feature 브랜치 생성 (이슈 번호 포함)
+git checkout -b feat/5--user-login-ui
 
 # 개발 작업 수행
 # ... 코드 작성 ...
 
 # 커밋 (commitlint 규칙 준수)
 git add .
-git commit -m "feat: 새 기능 구현"
+git commit -m "feat: 사용자 로그인 UI 구현"
 
 # 원격 브랜치에 푸시
-git push -u origin feature/새기능명
+git push -u origin feat/5--user-login-ui
 
 # GitHub에서 develop으로 PR 생성
 ```
@@ -59,20 +62,41 @@ git checkout develop
 git pull origin develop
 
 # bugfix 브랜치 생성
-git checkout -b bugfix/버그명
+git checkout -b fix/12--login-validation-error
 
 # 버그 수정
 # ... 코드 수정 ...
 
 # 커밋
 git add .
-git commit -m "fix: 버그 수정 내용"
+git commit -m "fix: 로그인 폼 유효성 검사 오류 수정"
 
 # 푸시 및 PR 생성
-git push -u origin bugfix/버그명
+git push -u origin fix/12--login-validation-error
 ```
 
-### 3. 긴급 수정 (Hotfix)
+### 3. UI 개선
+
+```bash
+# develop 브랜치에서 시작
+git checkout develop
+git pull origin develop
+
+# UI 개선 브랜치 생성
+git checkout -b ui/15--mobile-responsive-header
+
+# UI 개선 작업
+# ... 스타일 수정 ...
+
+# 커밋
+git add .
+git commit -m "ui: 모바일 헤더 반응형 레이아웃 개선"
+
+# 푸시 및 PR 생성
+git push -u origin ui/15--mobile-responsive-header
+```
+
+### 4. 긴급 수정 (Hotfix)
 
 ```bash
 # main 브랜치에서 시작
@@ -80,17 +104,17 @@ git checkout main
 git pull origin main
 
 # hotfix 브랜치 생성
-git checkout -b hotfix/긴급수정명
+git checkout -b hotfix/99--security-patch
 
 # 긴급 수정
 # ... 코드 수정 ...
 
 # 커밋
 git add .
-git commit -m "fix: 긴급 수정 내용"
+git commit -m "fix: 보안 취약점 긴급 패치"
 
 # main과 develop 모두에 머지 필요
-git push -u origin hotfix/긴급수정명
+git push -u origin hotfix/99--security-patch
 ```
 
 ## 커밋 메시지 규칙
