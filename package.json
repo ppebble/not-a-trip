@@ -6,7 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky install",
+    "commit": "git-cz"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.14",
@@ -19,7 +28,10 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/eslintrc": "^3.3.3",
+    "@types/jest": "^30.0.0",
     "@types/leaflet": "^1.9.21",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
@@ -27,8 +39,23 @@
     "autoprefixer": "^10.4.23",
     "eslint": "^9.17.0",
     "eslint-config-next": "^15.1.0",
+    "fast-check": "^4.5.3",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.7",
     "postcss": "^8.4.49",
+    "prettier": "^3.7.4",
     "tailwindcss": "^3.4.17",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss}": [
+      "prettier --write"
+    ]
   }
 }
