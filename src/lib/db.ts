@@ -1,21 +1,24 @@
-import { MongoClient, Db, Collection, Document } from 'mongodb';
+import { MongoClient, Db, Collection, Document } from 'mongodb'
 
 // MongoDB connection configuration
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
+const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
 
 // Global connection cache to prevent multiple connections in development
-let cachedClient: MongoClient | null = null;
-let cachedDb: Db | null = null;
+let cachedClient: MongoClient | null = null
+let cachedDb: Db | null = null
 
 /**
  * Connect to MongoDB and return the database instance
  * Uses connection caching to prevent multiple connections in development
  */
-export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db }> {
+export async function connectToDatabase(): Promise<{
+  client: MongoClient
+  db: Db
+}> {
   // Return cached connection if available
   if (cachedClient && cachedDb) {
-    return { client: cachedClient, db: cachedDb };
+    return { client: cachedClient, db: cachedDb }
   }
 
   try {
@@ -24,32 +27,34 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-    });
+    })
 
     // Connect to MongoDB
-    await client.connect();
-    
+    await client.connect()
+
     // Get database instance
-    const db = client.db(MONGODB_DB);
+    const db = client.db(MONGODB_DB)
 
     // Cache the connection
-    cachedClient = client;
-    cachedDb = db;
+    cachedClient = client
+    cachedDb = db
 
-    console.log('Connected to MongoDB successfully');
-    return { client, db };
+    console.log('Connected to MongoDB successfully')
+    return { client, db }
   } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    throw new Error('Database connection failed');
+    console.error('Failed to connect to MongoDB:', error)
+    throw new Error('Database connection failed')
   }
 }
 
 /**
  * Get a specific collection from the database
  */
-export async function getCollection<T extends Document = Document>(collectionName: string): Promise<Collection<T>> {
-  const { db } = await connectToDatabase();
-  return db.collection<T>(collectionName);
+export async function getCollection<T extends Document = Document>(
+  collectionName: string
+): Promise<Collection<T>> {
+  const { db } = await connectToDatabase()
+  return db.collection<T>(collectionName)
 }
 
 /**
@@ -58,10 +63,10 @@ export async function getCollection<T extends Document = Document>(collectionNam
  */
 export async function closeDatabaseConnection(): Promise<void> {
   if (cachedClient) {
-    await cachedClient.close();
-    cachedClient = null;
-    cachedDb = null;
-    console.log('MongoDB connection closed');
+    await cachedClient.close()
+    cachedClient = null
+    cachedDb = null
+    console.log('MongoDB connection closed')
   }
 }
 
@@ -71,4 +76,4 @@ export const COLLECTIONS = {
   FACILITIES: 'facilities',
   POSTS: 'posts',
   COMMENTS: 'comments',
-} as const;
+} as const

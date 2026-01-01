@@ -2,51 +2,56 @@ name: Feature Branch Validation
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [develop]
     types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 
 jobs:
   validate-feature:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Validate branch name
-      run: |
-        BRANCH_NAME="${{ github.head_ref }}"
-        if [[ ! $BRANCH_NAME =~ ^(feat|fix|ui|enhancement|chore|refactor|hotfix)\/[0-9]+--[a-z0-9-]+$ ]]; then
-          echo "❌ 브랜치 이름이 규칙에 맞지 않습니다."
-          echo "   올바른 형식: {type}/{이슈번호}--{요약}"
-          echo "   예시: feat/5--user-login, fix/12--validation-error"
-          echo "   타입: feat, fix, ui, enhancement, chore, refactor, hotfix"
-          exit 1
-        fi
-        echo "✅ 브랜치 이름이 규칙에 맞습니다: $BRANCH_NAME"
-        
-    - name: Run quick tests
-      run: |
-        npm run type-check
-        npm run lint
-        npm run test
-        
-    - name: Comment PR
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: '✅ 피처 브랜치 검증이 완료되었습니다! 코드 리뷰를 진행해주세요.'
-          })
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate branch name
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          if [[ ! $BRANCH_NAME =~ ^(feat|fix|ui|enhancement|chore|refactor|hotfix)\/[0-9]+--[a-z0-9-]+$ ]]; then
+            echo "❌ 브랜치 이름이 규칙에 맞지 않습니다."
+            echo "   올바른 형식: {type}/{이슈번호}--{요약}"
+            echo "   예시: feat/5--user-login, fix/12--validation-error"
+            echo "   타입: feat, fix, ui, enhancement, chore, refactor, hotfix"
+            exit 1
+          fi
+          echo "✅ 브랜치 이름이 규칙에 맞습니다: $BRANCH_NAME"
+
+      - name: Run quick tests
+        run: |
+          npm run type-check
+          npm run lint
+          npm run test
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ 피처 브랜치 검증이 완료되었습니다! 코드 리뷰를 진행해주세요.'
+            })
