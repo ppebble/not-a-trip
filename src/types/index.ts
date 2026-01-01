@@ -3,75 +3,80 @@
 // ============================================
 
 export interface Coordinates {
-  lat: number;
-  lng: number;
+  lat: number
+  lng: number
 }
 
 export interface MediaInfo {
-  title: string;
-  type: 'anime' | 'drama' | 'movie' | 'other';
-  year?: number;
+  title: string
+  type: 'anime' | 'drama' | 'movie' | 'other'
+  year?: number
 }
 
 export interface Spot {
-  id: string;
-  name: string;
-  description: string;
-  photos: string[];
-  address: string;
-  coordinates: Coordinates;
-  relatedMedia: MediaInfo[];
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  name: string
+  description: string
+  photos: string[]
+  address: string
+  coordinates: Coordinates
+  relatedMedia: MediaInfo[]
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface SpotPin {
-  id: string;
-  name: string;
-  coordinates: [number, number];
-  thumbnailUrl: string;
+  id: string
+  name: string
+  coordinates: [number, number]
+  thumbnailUrl: string
 }
 
 export interface SpotPreviewData {
-  id: string;
-  name: string;
-  description: string;
-  photoUrl: string;
-  address: string;
+  id: string
+  name: string
+  description: string
+  photoUrl: string
+  address: string
 }
 
 export interface SpotDetailData {
-  id: string;
-  name: string;
-  description: string;
-  photos: string[];
-  address: string;
-  coordinates: [number, number];
-  relatedMedia: MediaInfo[];
-  nearbyFacilities: NearbyFacility[];
+  id: string
+  name: string
+  description: string
+  photos: string[]
+  address: string
+  coordinates: [number, number]
+  relatedMedia: MediaInfo[]
+  nearbyFacilities: NearbyFacility[]
 }
 
 // ============================================
 // Facility Types
 // ============================================
 
-export type FacilityType = 'restaurant' | 'convenience_store' | 'cafe' | 'station' | 'other';
+export type FacilityType =
+  | 'restaurant'
+  | 'convenience_store'
+  | 'cafe'
+  | 'station'
+  | 'other'
 
 export interface NearbyFacility {
-  id: string;
-  name: string;
-  type: FacilityType;
-  distance: number; // meters
-  address: string;
-  coordinates: [number, number];
+  id: string
+  name: string
+  type: FacilityType
+  distance: number // meters
+  address: string
+  coordinates: [number, number]
 }
 
 export interface Facility {
-  id: string;
-  name: string;
-  type: FacilityType;
-  address: string;
-  coordinates: Coordinates;
+  id: string
+  name: string
+  type: FacilityType
+  address: string
+  coordinates: Coordinates
 }
 
 // ============================================
@@ -79,32 +84,32 @@ export interface Facility {
 // ============================================
 
 export interface Post {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: Date;
-  updatedAt: Date;
-  viewCount: number;
-  commentCount: number;
+  id: string
+  title: string
+  content: string
+  author: string
+  createdAt: Date
+  updatedAt: Date
+  viewCount: number
+  commentCount: number
 }
 
 export interface Comment {
-  id: string;
-  postId: string;
-  content: string;
-  author: string;
-  createdAt: Date;
+  id: string
+  postId: string
+  content: string
+  author: string
+  createdAt: Date
 }
 
 export interface CreatePostInput {
-  title: string;
-  content: string;
+  title: string
+  content: string
 }
 
 export interface CreateCommentInput {
-  postId: string;
-  content: string;
+  postId: string
+  content: string
 }
 
 // ============================================
@@ -112,18 +117,18 @@ export interface CreateCommentInput {
 // ============================================
 
 export interface ApiError {
-  error: string;
-  details?: string[];
+  error: string
+  details?: string[]
 }
 
 export interface SpotResponse {
-  id: string;
-  name: string;
-  description: string;
-  photos: string[];
-  address: string;
-  coordinates: [number, number];
-  relatedMedia: MediaInfo[];
+  id: string
+  name: string
+  description: string
+  photos: string[]
+  address: string
+  coordinates: [number, number]
+  relatedMedia: MediaInfo[]
 }
 
 // ============================================
@@ -131,18 +136,18 @@ export interface SpotResponse {
 // ============================================
 
 export interface MapStore {
-  center: [number, number];
-  zoom: number;
-  selectedSpotId: string | null;
-  setCenter: (center: [number, number]) => void;
-  setZoom: (zoom: number) => void;
-  setSelectedSpot: (spotId: string | null) => void;
+  center: [number, number]
+  zoom: number
+  selectedSpotId: string | null
+  setCenter: (center: [number, number]) => void
+  setZoom: (zoom: number) => void
+  setSelectedSpot: (spotId: string | null) => void
 }
 
 export interface UIStore {
-  isPreviewOpen: boolean;
-  isMobileMenuOpen: boolean;
-  openPreview: () => void;
-  closePreview: () => void;
-  toggleMobileMenu: () => void;
+  isPreviewOpen: boolean
+  isMobileMenuOpen: boolean
+  openPreview: () => void
+  closePreview: () => void
+  toggleMobileMenu: () => void
 }

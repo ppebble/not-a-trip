@@ -75,7 +75,7 @@ body:
         Given 사용자가 모바일 디바이스에서 접속했을 때
         When 주요 버튼들을 터치하면
         Then 44px 이상의 터치 영역으로 쉽게 클릭할 수 있다.
-        
+
         And 색상 대비가 WCAG AA 기준(4.5:1 이상)을 만족한다.
     validations:
       required: true
