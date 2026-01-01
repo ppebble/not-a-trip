@@ -54,6 +54,7 @@ const spotArbitrary = fc.record({
 
 /**
  * Helper function to check if two Spot objects are equivalent
+ * Handles JSON serialization edge cases properly
  */
 function spotsAreEquivalent(spot1: Spot, spot2: Spot): boolean {
   return (

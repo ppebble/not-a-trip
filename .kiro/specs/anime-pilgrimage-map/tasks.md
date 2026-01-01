@@ -101,19 +101,28 @@ git push -u origin feat/8--leaflet-map-setup
     - `GET /api/spots/[id]/facilities` - 근처 편의시설 조회
     - _Requirements: 4.1, 4.2_
 
-- [ ] 3. Checkpoint - API 기반 완료 확인
-  - Ensure all tests pass, ask the user if questions arise.
+- [x] 3. Checkpoint - API 기반 완료 확인
+  - ✅ 모든 PBT 테스트 통과 (3/3)
+  - ✅ TypeScript 타입 체크 통과
+  - ✅ Next.js 빌드 성공
+  - ✅ Jest 설정 Next.js 15 호환성 수정
 
-- [ ] 4. 상태 관리 설정
-  - [ ] 4.1 TanStack Query Provider 설정
-    - QueryClient 설정 및 Provider 래핑
+- [x] 4. 상태 관리 설정
+  - [x] 4.1 TanStack Query Provider 설정
+    - ✅ QueryClient 최적화된 설정 (5분 staleTime, 10분 gcTime)
+    - ✅ 개발환경 DevTools 활성화
+    - ✅ 앱 전체에 Provider 적용
     - _Requirements: 1.1_
-  - [ ] 4.2 Zustand 스토어 구현
-    - `mapStore.ts` - 지도 상태 관리
-    - `uiStore.ts` - UI 상태 관리
+  - [x] 4.2 Zustand 스토어 구현
+    - ✅ `mapStore.ts` - 지도 중심, 줌, 선택된 스팟 상태 관리
+    - ✅ `uiStore.ts` - 미리보기, 모바일 메뉴, 로딩 상태 관리
+    - ✅ DevTools 미들웨어 및 최적화된 셀렉터 제공
     - _Requirements: 2.1, 2.3_
-  - [ ] 4.3 TanStack Query 커스텀 훅 구현
-    - `useSpots`, `useSpotDetail`, `usePosts` 훅 작성
+  - [x] 4.3 TanStack Query 커스텀 훅 구현
+    - ✅ `useSpots`, `useSpotPreview` - 스팟 목록 및 미리보기
+    - ✅ `useSpotDetail`, `useNearbyFacilities` - 스팟 상세 및 편의시설
+    - ✅ `usePosts`, `useCreatePost`, `useCreateComment` - 게시글 CRUD
+    - ✅ 체계적인 쿼리 키 구조 및 캐싱 전략
     - _Requirements: 1.2, 3.1_
 
 - [ ] 5. 지도 컴포넌트 구현
@@ -248,6 +257,28 @@ git push -u origin feat/8--leaflet-map-setup
 1. **테스트 실행**: 해당 속성 테스트 실행
 2. **상태 업데이트**: `updatePBTStatus` 도구로 결과 업데이트
 3. **실패 시**: 실패 예제와 함께 상태 업데이트, 즉시 수정하지 말고 사용자에게 문의
+
+### 브랜치 분할 전략 (500줄 이하 원칙)
+
+**현재 완료된 작업:**
+
+- Task 4 (상태 관리 설정): 924줄 - **리뷰하기에 너무 많음**
+
+**앞으로의 개선 방향:**
+각 Task를 500줄 이하의 하위 브랜치로 분할하여 리뷰 효율성 향상
+
+**예시 분할 전략:**
+
+```
+Task 5 (지도 컴포넌트 구현) → 3개 브랜치로 분할
+├── feat/5-1--leaflet-map-setup (~200줄)
+├── feat/5-2--spot-pins-markers (~150줄)
+└── feat/5-3--spot-preview-popup (~200줄)
+
+Task 8 (스팟 상세 페이지) → 2개 브랜치로 분할
+├── feat/8-1--spot-detail-page (~300줄)
+└── feat/8-2--nearby-facilities (~250줄)
+```
 
 ### 다음 작업자를 위한 정보
 
