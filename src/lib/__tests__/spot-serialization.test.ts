@@ -57,64 +57,27 @@ const spotArbitrary = fc.record({
  * Handles JSON serialization edge cases properly
  */
 function spotsAreEquivalent(spot1: Spot, spot2: Spot): boolean {
-  // Check basic string fields
-  if (
-    spot1.id !== spot2.id ||
-    spot1.name !== spot2.name ||
-    spot1.description !== spot2.description ||
-    spot1.address !== spot2.address
-  ) {
-    return false
-  }
-
-  // Check coordinates
-  if (
-    spot1.coordinates.lat !== spot2.coordinates.lat ||
-    spot1.coordinates.lng !== spot2.coordinates.lng
-  ) {
-    return false
-  }
-
-  // Check photos array (order independent)
-  if (
-    spot1.photos.length !== spot2.photos.length ||
-    JSON.stringify(spot1.photos.sort()) !== JSON.stringify(spot2.photos.sort())
-  ) {
-    return false
-  }
-
-  // Check related media
-  if (spot1.relatedMedia.length !== spot2.relatedMedia.length) {
-    return false
-  }
-
-  for (let i = 0; i < spot1.relatedMedia.length; i++) {
-    const media1 = spot1.relatedMedia[i]
-    const media2 = spot2.relatedMedia[i]
-
-    if (media1.title !== media2.title || media1.type !== media2.type) {
-      return false
-    }
-
-    // Handle undefined year properly - JSON.stringify converts undefined to null
-    const year1 = media1.year === undefined ? null : media1.year
-    const year2 = media2.year === undefined ? null : media2.year
-    if (year1 !== year2) {
-      return false
-    }
-  }
-
-  // Check dates - ensure both are valid dates
-  const time1 = spot1.createdAt.getTime()
-  const time2 = spot2.createdAt.getTime()
-  const time3 = spot1.updatedAt.getTime()
-  const time4 = spot2.updatedAt.getTime()
-
-  if (isNaN(time1) || isNaN(time2) || isNaN(time3) || isNaN(time4)) {
-    return false
-  }
-
-  return time1 === time2 && time3 === time4
+  return (
+    spot1.id === spot2.id &&
+    spot1.name === spot2.name &&
+    spot1.description === spot2.description &&
+    JSON.stringify(spot1.photos.sort()) ===
+      JSON.stringify(spot2.photos.sort()) &&
+    spot1.address === spot2.address &&
+    spot1.coordinates.lat === spot2.coordinates.lat &&
+    spot1.coordinates.lng === spot2.coordinates.lng &&
+    spot1.relatedMedia.length === spot2.relatedMedia.length &&
+    spot1.relatedMedia.every((media1, index) => {
+      const media2 = spot2.relatedMedia[index]
+      return (
+        media1.title === media2.title &&
+        media1.type === media2.type &&
+        media1.year === media2.year
+      )
+    }) &&
+    spot1.createdAt.getTime() === spot2.createdAt.getTime() &&
+    spot1.updatedAt.getTime() === spot2.updatedAt.getTime()
+  )
 }
 
 describe('Spot Data Serialization Round-trip Property Tests', () => {
@@ -153,18 +116,16 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
             .filter((s) => s.trim().length > 0),
           coordinates: coordinatesArbitrary,
           relatedMedia: fc.constant([] as MediaInfo[]), // Empty related media array
-          createdAt: validDateArbitrary,
-          updatedAt: validDateArbitrary,
+          createdAt: fc.date({
+            min: new Date('2000-01-01'),
+            max: new Date('2030-12-31'),
+          }),
+          updatedAt: fc.date({
+            min: new Date('2000-01-01'),
+            max: new Date('2030-12-31'),
+          }),
         }),
         (originalSpot: Spot) => {
-          // Ensure dates are valid before serialization
-          if (
-            isNaN(originalSpot.createdAt.getTime()) ||
-            isNaN(originalSpot.updatedAt.getTime())
-          ) {
-            return true // Skip invalid dates
-          }
-
           const serialized = JSON.stringify(originalSpot)
           const deserialized: Spot = JSON.parse(serialized)
 

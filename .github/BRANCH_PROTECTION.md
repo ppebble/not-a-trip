@@ -16,6 +16,7 @@ GitHub 저장소에서 다음 브랜치 보호 규칙을 설정해주세요:
    - ✅ Restrict pushes that create files larger than 100MB
 
 ### 필수 상태 체크:
+
 - `lint-and-test (18.x)`
 - `lint-and-test (20.x)`
 - `build`
@@ -29,6 +30,7 @@ GitHub 저장소에서 다음 브랜치 보호 규칙을 설정해주세요:
    - ✅ Require branches to be up to date before merging
 
 ### 필수 상태 체크:
+
 - `validate-feature`
 
 ## 브랜치 전략
@@ -43,6 +45,7 @@ main (프로덕션)
 ```
 
 ### 브랜치 명명 규칙:
+
 - `feature/기능명`: 새로운 기능 개발
 - `bugfix/버그명`: 버그 수정
 - `hotfix/핫픽스명`: 긴급 수정
