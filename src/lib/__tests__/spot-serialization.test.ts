@@ -23,6 +23,14 @@ const mediaInfoArbitrary = fc.record({
   year: fc.option(fc.integer({ min: 1900, max: 2030 }), { nil: undefined }),
 })
 
+// Generate valid dates (excluding invalid dates)
+const validDateArbitrary = fc
+  .date({
+    min: new Date('2000-01-01'),
+    max: new Date('2030-12-31'),
+  })
+  .filter((date) => !isNaN(date.getTime()))
+
 // Generate valid Spot objects (with valid dates and no NaN values)
 const spotArbitrary = fc.record({
   id: fc
@@ -40,14 +48,8 @@ const spotArbitrary = fc.record({
     .filter((s) => s.trim().length > 0),
   coordinates: coordinatesArbitrary,
   relatedMedia: fc.array(mediaInfoArbitrary, { minLength: 0, maxLength: 5 }),
-  createdAt: fc.date({
-    min: new Date('2000-01-01'),
-    max: new Date('2030-12-31'),
-  }),
-  updatedAt: fc.date({
-    min: new Date('2000-01-01'),
-    max: new Date('2030-12-31'),
-  }),
+  createdAt: validDateArbitrary,
+  updatedAt: validDateArbitrary,
 })
 
 /**
@@ -161,20 +163,24 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
                 'movie',
                 'other'
               ) as fc.Arbitrary<MediaInfo['type']>,
-              year: fc.constant(undefined), // Test without year
+              year: fc.option(fc.integer({ min: 1900, max: 2030 }), {
+                nil: undefined,
+              }), // Use option for proper undefined handling
             }),
             { minLength: 1, maxLength: 3 }
           ),
-          createdAt: fc.date({
-            min: new Date('2000-01-01'),
-            max: new Date('2030-12-31'),
-          }),
-          updatedAt: fc.date({
-            min: new Date('2000-01-01'),
-            max: new Date('2030-12-31'),
-          }),
+          createdAt: validDateArbitrary,
+          updatedAt: validDateArbitrary,
         }),
         (originalSpot: Spot) => {
+          // Ensure dates are valid before serialization
+          if (
+            isNaN(originalSpot.createdAt.getTime()) ||
+            isNaN(originalSpot.updatedAt.getTime())
+          ) {
+            return true // Skip invalid dates
+          }
+
           const serialized = JSON.stringify(originalSpot)
           const deserialized: Spot = JSON.parse(serialized)
 
