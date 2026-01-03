@@ -126,7 +126,7 @@ git push -u origin feat/8--leaflet-map-setup
     - _Requirements: 1.2, 3.1_
 
 - [ ] 5. 지도 컴포넌트 구현
-  - [ ] 5.1 PilgrimageMap 컴포넌트 구현
+  - [x] 5.1 PilgrimageMap 컴포넌트 구현
     - Leaflet 지도 렌더링
     - 줌/팬 인터랙션 지원
     - _Requirements: 1.1, 1.3_
