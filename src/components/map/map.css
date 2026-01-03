@@ -59,3 +59,43 @@
     right: 12px;
   }
 }
+
+/* SpotPin custom marker styles */
+.custom-spot-pin {
+  background: transparent;
+  border: none;
+}
+
+.custom-spot-pin:hover {
+  z-index: 1000 !important;
+}
+
+/* Spot popup styling */
+.spot-popup .leaflet-popup-content-wrapper {
+  @apply rounded-lg border-2 border-navy-300 bg-white p-0 shadow-xl;
+}
+
+.spot-popup .leaflet-popup-content {
+  @apply m-0;
+}
+
+.spot-popup .leaflet-popup-tip {
+  @apply border-navy-300 bg-white;
+}
+
+/* Selected marker animation */
+@keyframes pulse-marker {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+  }
+}
+
+.custom-spot-pin.selected > div {
+  animation: pulse-marker 2s infinite;
+}
