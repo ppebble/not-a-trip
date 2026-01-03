@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
 import { useMapStore } from '@/stores/mapStore'
+import { SpotPin as SpotPinType } from '@/types'
+import SpotPin from './SpotPin'
 import 'leaflet/dist/leaflet.css'
 import './map.css'
 
@@ -11,12 +13,16 @@ interface PilgrimageMapProps {
   initialCenter?: [number, number]
   initialZoom?: number
   className?: string
+  spots?: SpotPinType[]
+  onSpotSelect?: (spotId: string) => void
 }
 
 export default function PilgrimageMap({
   initialCenter,
   initialZoom,
   className = '',
+  spots = [],
+  onSpotSelect,
 }: PilgrimageMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
   const { center, zoom, setCenter, setZoom } = useMapStore()
@@ -68,6 +74,11 @@ export default function PilgrimageMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           className="map-tiles"
         />
+
+        {/* 스팟 핀 렌더링 */}
+        {spots.map((spot) => (
+          <SpotPin key={spot.id} spot={spot} onSelect={onSpotSelect} />
+        ))}
       </MapContainer>
 
       {/* Custom map controls with navy theme */}
