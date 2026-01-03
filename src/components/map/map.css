@@ -1,0 +1,61 @@
+/* Leaflet map styling with navy theme */
+
+/* Override default Leaflet control styles */
+.leaflet-control-zoom a {
+  @apply border-navy-500 bg-navy-600 text-white;
+}
+
+.leaflet-control-zoom a:hover {
+  @apply bg-navy-700;
+}
+
+/* Style the map tiles */
+.map-tiles {
+  filter: brightness(0.95) contrast(1.05);
+}
+
+/* Custom popup styling (for future use) */
+.leaflet-popup-content-wrapper {
+  @apply rounded-lg border border-navy-200 bg-white shadow-lg;
+}
+
+.leaflet-popup-tip {
+  @apply border-navy-200 bg-white;
+}
+
+/* Ensure map container has proper styling */
+.leaflet-container {
+  @apply bg-navy-50;
+}
+
+/* Attribution styling */
+.leaflet-control-attribution {
+  @apply bg-navy-800/80 text-xs text-white;
+}
+
+.leaflet-control-attribution a {
+  @apply text-navy-200;
+}
+
+/* Zoom control positioning */
+.leaflet-top.leaflet-right {
+  top: 60px;
+  right: 16px;
+}
+
+/* Loading spinner for map */
+.leaflet-container.leaflet-loading {
+  @apply bg-navy-100;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .leaflet-control-zoom {
+    @apply scale-90;
+  }
+
+  .leaflet-top.leaflet-right {
+    top: 50px;
+    right: 12px;
+  }
+}
