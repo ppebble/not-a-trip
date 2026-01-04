@@ -72,7 +72,7 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-white md:text-2xl">
-                  Anime Pilgrimage Map
+                  Anime Pilgrim
                 </h1>
                 <p className="text-xs text-navy-300 md:text-sm">
                   애니메이션 성지순례 스팟 공유 플랫폼
@@ -169,7 +169,7 @@ export default function Home() {
                 피드백
               </button>
               <span className="hidden md:inline">|</span>
-              <span>© 2024 Anime Pilgrimage Map</span>
+              <span>© 2024 Anime Pilgrim</span>
             </div>
           </div>
         </div>
