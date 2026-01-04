@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { SpotPin as SpotPinType } from '@/types'
+import SpotPreview from '@/components/map/SpotPreview'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -143,6 +144,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* SpotPreview 팝업 컴포넌트 */}
+      <SpotPreview />
 
       {/* 개선된 푸터 */}
       <footer className="border-t border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-3">
