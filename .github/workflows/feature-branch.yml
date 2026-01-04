@@ -30,7 +30,7 @@ jobs:
       - name: Validate branch name
         run: |
           BRANCH_NAME="${{ github.head_ref }}"
-          if [[ ! $BRANCH_NAME =~ ^(feat|fix|ui|enhancement|chore|refactor|hotfix)\/[0-9]+--[a-z0-9-]+$ ]]; then
+          if [[ ! $BRANCH_NAME =~ ^(feat|fix|ui|enhancement|chore|refactor|hotfix|test)\/[0-9]+--[a-z0-9-]+$ ]]; then
             echo "❌ 브랜치 이름이 규칙에 맞지 않습니다."
             echo "   올바른 형식: {type}/{이슈번호}--{요약}"
             echo "   예시: feat/5--user-login, fix/12--validation-error"
