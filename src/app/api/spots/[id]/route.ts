@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ObjectId } from 'mongodb'
 import { getCollection } from '@/lib/db'
 import { SpotResponse, MediaInfo } from '@/types'
 
-// MongoDB document interface (with _id)
+// MongoDB document interface
 interface SpotDocument {
-  _id: ObjectId
+  id: string
   name: string
   description: string
   photos: string[]
@@ -34,18 +33,10 @@ export async function GET(
   try {
     const { id } = await params
 
-    // Validate ObjectId format
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { error: 'Invalid spot ID format' },
-        { status: 400 }
-      )
-    }
-
     const collection = await getCollection<SpotDocument>('spots')
 
-    // Find spot by ID
-    const spot = await collection.findOne({ _id: new ObjectId(id) })
+    // Find spot by custom id field
+    const spot = await collection.findOne({ id })
 
     if (!spot) {
       return NextResponse.json({ error: 'Spot not found' }, { status: 404 })
@@ -53,7 +44,7 @@ export async function GET(
 
     // Transform to SpotResponse format
     const spotResponse: SpotResponse = {
-      id: spot._id.toString(),
+      id: spot.id,
       name: spot.name,
       description: spot.description,
       photos: spot.photos,
@@ -68,6 +59,7 @@ export async function GET(
 
     return NextResponse.json(spotResponse)
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching spot detail:', error)
     return NextResponse.json(
       { error: 'Failed to fetch spot detail' },
