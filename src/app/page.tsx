@@ -62,18 +62,62 @@ export default function Home() {
 
   return (
     <main className="flex h-screen flex-col bg-navy-900">
-      {/* 헤더 */}
-      <header className="border-b border-navy-700 bg-navy-800 px-4 py-3">
-        <h1 className="text-center text-xl font-bold text-white">
-          🗾 Anime Pilgrimage Map
-        </h1>
-        <p className="mt-1 text-center text-sm text-navy-300">
-          애니메이션 성지순례 스팟 공유 플랫폼
-        </p>
+      {/* 개선된 헤더 */}
+      <header className="relative border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl">
+                🗾
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white md:text-2xl">
+                  Anime Pilgrim
+                </h1>
+                <p className="text-xs text-navy-300 md:text-sm">
+                  애니메이션 성지순례 스팟 공유 플랫폼
+                </p>
+              </div>
+            </div>
+
+            {/* 네비게이션 메뉴 (모바일에서는 숨김) */}
+            <nav className="hidden space-x-6 md:flex">
+              <button className="text-sm text-navy-300 transition-colors hover:text-white">
+                지도
+              </button>
+              <button className="text-sm text-navy-300 transition-colors hover:text-white">
+                커뮤니티
+              </button>
+              <button className="text-sm text-navy-300 transition-colors hover:text-white">
+                내 스팟
+              </button>
+            </nav>
+
+            {/* 모바일 메뉴 버튼 */}
+            <button className="flex h-8 w-8 items-center justify-center rounded text-navy-300 hover:text-white md:hidden">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* 헤더 하단 그라데이션 */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-navy-500 to-transparent"></div>
       </header>
 
       {/* 지도 영역 */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 overflow-hidden">
         <PilgrimageMap
           initialCenter={[35.6762, 139.6503]} // 도쿄 중심
           initialZoom={6}
@@ -81,13 +125,54 @@ export default function Home() {
           spots={DUMMY_SPOTS}
           onSpotSelect={handleSpotSelect}
         />
+
+        {/* 플로팅 정보 패널 (데스크톱) */}
+        <div className="absolute bottom-4 left-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
+          <div className="flex items-center space-x-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-600 text-white">
+              📍
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-navy-800">
+                {DUMMY_SPOTS.length}개의 성지순례 스팟
+              </p>
+              <p className="text-xs text-navy-600">
+                클릭하여 상세 정보를 확인하세요
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* 하단 정보 */}
-      <footer className="border-t border-navy-700 bg-navy-800 px-4 py-2">
-        <p className="text-center text-xs text-navy-400">
-          📍 {DUMMY_SPOTS.length}개의 성지순례 스팟이 등록되어 있습니다
-        </p>
+      {/* 개선된 푸터 */}
+      <footer className="border-t border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-3">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
+            <div className="flex items-center space-x-4 text-xs text-navy-400">
+              <span className="flex items-center space-x-1">
+                <span>📍</span>
+                <span>{DUMMY_SPOTS.length}개 스팟</span>
+              </span>
+              <span className="hidden md:inline">|</span>
+              <span className="flex items-center space-x-1">
+                <span>🌏</span>
+                <span>일본, 대만 지역</span>
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-4 text-xs text-navy-400">
+              <button className="transition-colors hover:text-navy-200">
+                도움말
+              </button>
+              <span className="hidden md:inline">|</span>
+              <button className="transition-colors hover:text-navy-200">
+                피드백
+              </button>
+              <span className="hidden md:inline">|</span>
+              <span>© 2024 Anime Pilgrim</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </main>
   )

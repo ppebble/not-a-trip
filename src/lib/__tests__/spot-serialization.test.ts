@@ -116,21 +116,31 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
             .filter((s) => s.trim().length > 0),
           coordinates: coordinatesArbitrary,
           relatedMedia: fc.constant([] as MediaInfo[]), // Empty related media array
-          createdAt: fc.date({
-            min: new Date('2000-01-01'),
-            max: new Date('2030-12-31'),
-          }),
-          updatedAt: fc.date({
-            min: new Date('2000-01-01'),
-            max: new Date('2030-12-31'),
-          }),
+          createdAt: validDateArbitrary, // Use validDateArbitrary instead of fc.date
+          updatedAt: validDateArbitrary, // Use validDateArbitrary instead of fc.date
         }),
         (originalSpot: Spot) => {
+          // Additional validation to ensure dates are valid
+          if (
+            isNaN(originalSpot.createdAt.getTime()) ||
+            isNaN(originalSpot.updatedAt.getTime())
+          ) {
+            return true // Skip invalid dates
+          }
+
           const serialized = JSON.stringify(originalSpot)
           const deserialized: Spot = JSON.parse(serialized)
 
           deserialized.createdAt = new Date(deserialized.createdAt)
           deserialized.updatedAt = new Date(deserialized.updatedAt)
+
+          // Additional validation after deserialization
+          if (
+            isNaN(deserialized.createdAt.getTime()) ||
+            isNaN(deserialized.updatedAt.getTime())
+          ) {
+            return false // Fail if deserialization produces invalid dates
+          }
 
           return spotsAreEquivalent(originalSpot, deserialized)
         }

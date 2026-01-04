@@ -61,7 +61,7 @@ export default function PilgrimageMap({
         zoom={mapZoom}
         className="h-full w-full rounded-lg border-2 border-navy-200"
         ref={mapRef}
-        zoomControl={true}
+        zoomControl={false} // 기본 줌 컨트롤 비활성화 (커스텀 컨트롤 사용)
         scrollWheelZoom={true}
         doubleClickZoom={true}
         dragging={true}
@@ -136,7 +136,7 @@ export default function PilgrimageMap({
 
       {/* Map attribution with navy theme */}
       <div className="absolute bottom-2 left-2 z-[1000] rounded bg-navy-800/80 px-2 py-1 text-xs text-white">
-        Anime Pilgrimage Map
+        Anime Pilgrim
       </div>
     </div>
   )
