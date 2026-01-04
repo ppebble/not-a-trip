@@ -95,8 +95,8 @@ export function useSpotPreview(spotId: string | null) {
         )
       }
 
-      const data: SpotResponse = await response.json()
-      const spot = data.spot
+      // API returns SpotResponse directly (not wrapped in { spot: ... })
+      const spot: SpotDetailData = await response.json()
 
       // Transform to preview format
       return {

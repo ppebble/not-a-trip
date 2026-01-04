@@ -21,36 +21,36 @@ function MapLoadingSkeleton() {
   )
 }
 
-// 테스트용 더미 스팟 데이터 (서울 주변)
+// 테스트용 더미 스팟 데이터 (MongoDB와 일치하는 커스텀 ID)
 const DUMMY_SPOTS: SpotPinType[] = [
   {
-    id: '1',
+    id: 'SPOT-001',
     name: '너의 이름은 - 스가 신사',
-    coordinates: [35.6762, 139.6503], // 도쿄
+    coordinates: [35.6762, 139.6503],
     thumbnailUrl: 'https://picsum.photos/seed/spot1/400/300',
   },
   {
-    id: '2',
+    id: 'SPOT-002',
     name: '슬램덩크 - 가마쿠라 건널목',
-    coordinates: [35.3084, 139.5503], // 가마쿠라
+    coordinates: [35.3084, 139.5503],
     thumbnailUrl: 'https://picsum.photos/seed/spot2/400/300',
   },
   {
-    id: '3',
+    id: 'SPOT-003',
     name: '센과 치히로 - 지우펀',
-    coordinates: [25.1089, 121.8443], // 대만 지우펀
+    coordinates: [25.1089, 121.8443],
     thumbnailUrl: 'https://picsum.photos/seed/spot3/400/300',
   },
   {
-    id: '4',
+    id: 'SPOT-004',
     name: '스즈메의 문단속 - 미야자키',
-    coordinates: [31.9077, 131.4202], // 미야자키
+    coordinates: [31.9077, 131.4202],
     thumbnailUrl: 'https://picsum.photos/seed/spot4/400/300',
   },
   {
-    id: '5',
+    id: 'SPOT-005',
     name: '귀멸의 칼날 - 운젠 지옥',
-    coordinates: [32.7503, 130.2667], // 운젠
+    coordinates: [32.7503, 130.2667],
     thumbnailUrl: 'https://picsum.photos/seed/spot5/400/300',
   },
 ]
