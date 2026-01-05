@@ -35,7 +35,7 @@
 #### Acceptance Criteria
 
 1. WHEN a User clicks on a Spot_Pin, THE System SHALL display a Spot_Preview popup
-2. WHEN the Spot_Preview is displayed, THE System SHALL show the Spot name, a representative photo, brief description, and address
+2. WHEN the Spot_Preview is displayed, THE System SHALL show the Spot name, a representative photo (or placeholder image if photo is unavailable), brief description, and address
 3. WHEN a User clicks outside the Spot_Preview, THE System SHALL close the popup
 4. THE Spot_Preview SHALL include a button to navigate to the Spot_Detail page
 
