@@ -142,24 +142,29 @@ git checkout -b {type}/{이슈번호}--{간단한-요약}
 
 **🚨 커밋 메시지 규칙 (commit-guidelines.md 참조)**
 
+- **한 줄 커밋**: Body 없이 한 줄로 완결
 - **한글 사용**: 모든 설명은 한글로 (기술용어/파일명 제외)
 - **형식**: `<type>: <description>` (50자 이내, 소문자 시작, 마침표 없음)
-- **기능별 분할**: 하나의 커밋 = 하나의 논리적 변경사항
+- **기능별 분할**: 여러 기능 = 여러 커밋 (필수)
 
 ```bash
-# ✅ 올바른 예시
-git add src/components/spot/
-git commit -m "feat: spot detail 페이지 구현
+# ✅ 올바른 예시 (기능별 분할)
+git add src/app/spots/[id]/page.tsx
+git commit -m "feat: spot detail 페이지 구현"
+
+git add src/hooks/useSpotDetail.ts
+git commit -m "fix: useSpotDetail API 응답 처리 수정"
+
+git add src/app/spots/[id]/page.tsx
+git commit -m "fix: coordinates undefined 에러 방지 추가"
+
+# ❌ 잘못된 예시 (여러 기능을 하나의 커밋에)
+git add .
+git commit -m "feat: spot detail 페이지 구현 및 에러 수정
 
 - SpotDetailContent 컴포넌트 추가
-- 로딩/에러 상태 처리 구현
-- 네이비 테마 적용
-- Requirements 3.1, 3.2 대응"
-
-# ✅ 기능별 분할 예시
-git commit -m "feat: spotpin 컴포넌트 기본 구현"
-git commit -m "style: spotpin 마커 ui/ux 개선"
-git commit -m "fix: coordinates undefined 에러 수정"
+- API 응답 처리 수정
+- coordinates 안전장치 추가"
 ```
 
 ### 4️⃣ PR 생성 및 Issue 연결
