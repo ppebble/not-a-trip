@@ -1,7 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { SpotPin as SpotPinType } from '@/types'
+import { useSpots } from '@/hooks/useSpots'
+import { SpotPin } from '@/types'
 import SpotPreview from '@/components/map/SpotPreview'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
@@ -26,42 +27,59 @@ function MapLoadingSkeleton() {
 }
 
 /**
- * 테스트용 더미 스팟 데이터
- * MongoDB와 일치하는 커스텀 ID 형식 사용
- * 실제 애니메이션 성지순례 장소들의 좌표 데이터
+ * 스팟 데이터 로딩 중 표시되는 컴포넌트
  */
-const DUMMY_SPOTS: SpotPinType[] = [
-  {
-    id: 'SPOT-001',
-    name: '너의 이름은 - 스가 신사',
-    coordinates: [35.6762, 139.6503],
-    thumbnailUrl: 'https://picsum.photos/seed/spot1/400/300',
-  },
-  {
-    id: 'SPOT-002',
-    name: '슬램덩크 - 가마쿠라 건널목',
-    coordinates: [35.3084, 139.5503],
-    thumbnailUrl: 'https://picsum.photos/seed/spot2/400/300',
-  },
-  {
-    id: 'SPOT-003',
-    name: '센과 치히로 - 지우펀',
-    coordinates: [25.1089, 121.8443],
-    thumbnailUrl: 'https://picsum.photos/seed/spot3/400/300',
-  },
-  {
-    id: 'SPOT-004',
-    name: '스즈메의 문단속 - 미야자키',
-    coordinates: [31.9077, 131.4202],
-    thumbnailUrl: 'https://picsum.photos/seed/spot4/400/300',
-  },
-  {
-    id: 'SPOT-005',
-    name: '귀멸의 칼날 - 운젠 지옥',
-    coordinates: [32.7503, 130.2667],
-    thumbnailUrl: 'https://picsum.photos/seed/spot5/400/300',
-  },
-]
+function SpotLoadingSkeleton() {
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-navy-800">
+      <div className="text-center">
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-navy-400 border-t-white"></div>
+        <p className="mt-2 text-sm text-navy-200">스팟 데이터 로딩 중...</p>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * 스팟 데이터 로딩 에러 표시 컴포넌트
+ */
+function SpotErrorDisplay({
+  error,
+  onRetry,
+}: {
+  error: Error
+  onRetry: () => void
+}) {
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-navy-800">
+      <div className="text-center">
+        <div className="mx-auto h-12 w-12 rounded-full bg-red-100 p-3">
+          <svg
+            className="h-6 w-6 text-red-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            />
+          </svg>
+        </div>
+        <p className="mt-4 text-navy-200">스팟 데이터를 불러올 수 없습니다</p>
+        <p className="mt-1 text-xs text-navy-400">{error.message}</p>
+        <button
+          onClick={onRetry}
+          className="mt-3 rounded bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-500"
+        >
+          다시 시도
+        </button>
+      </div>
+    </div>
+  )
+}
 
 /**
  * 메인 페이지 컴포넌트
@@ -69,9 +87,12 @@ const DUMMY_SPOTS: SpotPinType[] = [
  * - 전체 화면 인터랙티브 지도 표시
  * - 네이비 테마 색상 스킴 적용
  * - 반응형 레이아웃 지원
+ * - 실제 API 데이터 연동 (Task 6.2)
  */
-
 export default function Home() {
+  // 실제 API에서 스팟 데이터 가져오기
+  const { data: spots, isLoading, error, refetch } = useSpots()
+
   /**
    * 스팟 선택 핸들러
    * 현재는 콘솔 로그만 출력하며, 향후 상세 페이지 네비게이션으로 확장 예정
@@ -80,6 +101,28 @@ export default function Home() {
     // eslint-disable-next-line no-console
     console.log('Selected spot:', spotId)
   }
+
+  // 스팟 데이터 로딩 중일 때
+  if (isLoading) {
+    return (
+      <main className="flex h-screen flex-col bg-navy-900">
+        <SpotLoadingSkeleton />
+      </main>
+    )
+  }
+
+  // 스팟 데이터 로딩 에러일 때
+  if (error) {
+    return (
+      <main className="flex h-screen flex-col bg-navy-900">
+        <SpotErrorDisplay error={error} onRetry={() => refetch()} />
+      </main>
+    )
+  }
+
+  // 스팟 데이터가 없을 때 빈 배열 사용
+  const spotData = spots || []
+  const spotCount = spotData.length
 
   return (
     <main className="flex h-screen flex-col bg-navy-900">
@@ -144,7 +187,7 @@ export default function Home() {
           initialCenter={[35.6762, 139.6503]} // 도쿄 중심 좌표
           initialZoom={6}
           className="h-full w-full"
-          spots={DUMMY_SPOTS}
+          spots={spotData}
           onSpotSelect={handleSpotSelect}
         />
 
@@ -156,10 +199,12 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm font-semibold text-navy-800">
-                {DUMMY_SPOTS.length}개의 성지순례 스팟
+                {spotCount}개의 성지순례 스팟
               </p>
               <p className="text-xs text-navy-600">
-                클릭하여 상세 정보를 확인하세요
+                {spotCount > 0
+                  ? '클릭하여 상세 정보를 확인하세요'
+                  : '스팟 데이터를 불러오는 중...'}
               </p>
             </div>
           </div>
@@ -177,7 +222,7 @@ export default function Home() {
             <div className="flex items-center space-x-4 text-xs text-navy-400">
               <span className="flex items-center space-x-1">
                 <span>📍</span>
-                <span>{DUMMY_SPOTS.length}개 스팟</span>
+                <span>{spotCount}개 스팟</span>
               </span>
               <span className="hidden md:inline">|</span>
               <span className="flex items-center space-x-1">
