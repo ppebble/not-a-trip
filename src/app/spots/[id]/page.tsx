@@ -179,7 +179,8 @@ function SpotDetailContent({ spot }: SpotDetailContentProps) {
               </svg>
               <p>지도 컴포넌트 (향후 구현 예정)</p>
               <p className="mt-1 text-sm">
-                좌표: {spot.coordinates[0]}, {spot.coordinates[1]}
+                좌표: {spot.coordinates?.[0] || 'N/A'},{' '}
+                {spot.coordinates?.[1] || 'N/A'}
               </p>
             </div>
           </div>

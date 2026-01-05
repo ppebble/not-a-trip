@@ -1,11 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { spotKeys, SpotDetailData } from './useSpots'
 
-// API response type for spot detail
-interface SpotDetailResponse {
-  spot: SpotDetailData
-}
-
 /**
  * Hook to fetch detailed spot information
  * Used for spot detail pages and comprehensive spot data
@@ -26,8 +21,9 @@ export function useSpotDetail(spotId: string | null) {
         )
       }
 
-      const data: SpotDetailResponse = await response.json()
-      return data.spot
+      // API returns SpotResponse directly (not wrapped in { spot: ... })
+      const data: SpotDetailData = await response.json()
+      return data
     },
     enabled: !!spotId,
     staleTime: 10 * 60 * 1000, // 10 minutes for detailed spot data
