@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic'
 import { useSpots } from '@/hooks/useSpots'
-import { SpotPin } from '@/types'
 import SpotPreview from '@/components/map/SpotPreview'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용

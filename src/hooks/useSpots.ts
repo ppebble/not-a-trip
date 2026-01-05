@@ -38,10 +38,6 @@ interface SpotsResponse {
   total: number
 }
 
-interface SpotResponse {
-  spot: SpotDetailData
-}
-
 // Query keys
 export const spotKeys = {
   all: ['spots'] as const,
@@ -95,7 +91,7 @@ export function useSpotPreview(spotId: string | null) {
         )
       }
 
-      // API returns SpotResponse directly (not wrapped in { spot: ... })
+      // API returns SpotDetailData directly (not wrapped)
       const spot: SpotDetailData = await response.json()
 
       // Transform to preview format
