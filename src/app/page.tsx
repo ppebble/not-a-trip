@@ -10,6 +10,10 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   loading: () => <MapLoadingSkeleton />,
 })
 
+/**
+ * 지도 로딩 중 표시되는 스켈레톤 컴포넌트
+ * 네이비 테마를 적용한 로딩 인디케이터
+ */
 function MapLoadingSkeleton() {
   return (
     <div className="flex h-full w-full items-center justify-center bg-navy-800">
@@ -21,7 +25,11 @@ function MapLoadingSkeleton() {
   )
 }
 
-// 테스트용 더미 스팟 데이터 (MongoDB와 일치하는 커스텀 ID)
+/**
+ * 테스트용 더미 스팟 데이터
+ * MongoDB와 일치하는 커스텀 ID 형식 사용
+ * 실제 애니메이션 성지순례 장소들의 좌표 데이터
+ */
 const DUMMY_SPOTS: SpotPinType[] = [
   {
     id: 'SPOT-001',
@@ -55,7 +63,19 @@ const DUMMY_SPOTS: SpotPinType[] = [
   },
 ]
 
+/**
+ * 메인 페이지 컴포넌트
+ * Requirements 1.1, 1.4를 만족하는 지도 기반 메인 페이지
+ * - 전체 화면 인터랙티브 지도 표시
+ * - 네이비 테마 색상 스킴 적용
+ * - 반응형 레이아웃 지원
+ */
+
 export default function Home() {
+  /**
+   * 스팟 선택 핸들러
+   * 현재는 콘솔 로그만 출력하며, 향후 상세 페이지 네비게이션으로 확장 예정
+   */
   const handleSpotSelect = (spotId: string) => {
     // eslint-disable-next-line no-console
     console.log('Selected spot:', spotId)
@@ -63,10 +83,11 @@ export default function Home() {
 
   return (
     <main className="flex h-screen flex-col bg-navy-900">
-      {/* 개선된 헤더 */}
+      {/* 메인 헤더 - 네이비 테마 그라데이션 적용 */}
       <header className="relative border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between">
+            {/* 로고 및 타이틀 영역 */}
             <div className="flex items-center space-x-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl">
                 🗾
@@ -81,7 +102,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 네비게이션 메뉴 (모바일에서는 숨김) */}
+            {/* 데스크톱 네비게이션 메뉴 */}
             <nav className="hidden space-x-6 md:flex">
               <button className="text-sm text-navy-300 transition-colors hover:text-white">
                 지도
@@ -94,7 +115,7 @@ export default function Home() {
               </button>
             </nav>
 
-            {/* 모바일 메뉴 버튼 */}
+            {/* 모바일 햄버거 메뉴 버튼 */}
             <button className="flex h-8 w-8 items-center justify-center rounded text-navy-300 hover:text-white md:hidden">
               <svg
                 className="h-5 w-5"
@@ -113,21 +134,21 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 헤더 하단 그라데이션 */}
+        {/* 헤더 하단 장식용 그라데이션 라인 */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-navy-500 to-transparent"></div>
       </header>
 
-      {/* 지도 영역 */}
+      {/* 메인 지도 영역 - 전체 화면 인터랙티브 지도 */}
       <div className="relative flex-1 overflow-hidden">
         <PilgrimageMap
-          initialCenter={[35.6762, 139.6503]} // 도쿄 중심
+          initialCenter={[35.6762, 139.6503]} // 도쿄 중심 좌표
           initialZoom={6}
           className="h-full w-full"
           spots={DUMMY_SPOTS}
           onSpotSelect={handleSpotSelect}
         />
 
-        {/* 플로팅 정보 패널 (데스크톱) */}
+        {/* 데스크톱용 플로팅 정보 패널 */}
         <div className="absolute bottom-4 left-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
           <div className="flex items-center space-x-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-600 text-white">
@@ -145,13 +166,14 @@ export default function Home() {
         </div>
       </div>
 
-      {/* SpotPreview 팝업 컴포넌트 */}
+      {/* 스팟 미리보기 팝업 컴포넌트 */}
       <SpotPreview />
 
-      {/* 개선된 푸터 */}
+      {/* 메인 푸터 - 네이비 테마 그라데이션 적용 */}
       <footer className="border-t border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-3">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
+            {/* 좌측 통계 정보 */}
             <div className="flex items-center space-x-4 text-xs text-navy-400">
               <span className="flex items-center space-x-1">
                 <span>📍</span>
@@ -164,6 +186,7 @@ export default function Home() {
               </span>
             </div>
 
+            {/* 우측 링크 및 저작권 정보 */}
             <div className="flex items-center space-x-4 text-xs text-navy-400">
               <button className="transition-colors hover:text-navy-200">
                 도움말
