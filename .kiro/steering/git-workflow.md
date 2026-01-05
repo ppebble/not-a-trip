@@ -138,19 +138,28 @@ git checkout -b {type}/{이슈번호}--{간단한-요약}
 - `fix/{이슈번호}--{간단한-요약}`
 - `chore/{이슈번호}--{간단한-요약}`
 
-### 3️⃣ 논리적 커밋 분할
+### 3️⃣ 논리적 커밋 분할 (필수 준수)
 
-**커밋 생성시 최대한 한글을 사용하도록 함. 명사나 파일명등은 영어로**
-**커밋 메세지는 한줄로 작성되도록하고 기능별로 커밋을 구분해야함**
+**🚨 커밋 메시지 규칙 (commit-guidelines.md 참조)**
+
+- **한글 사용**: 모든 설명은 한글로 (기술용어/파일명 제외)
+- **형식**: `<type>: <description>` (50자 이내, 소문자 시작, 마침표 없음)
+- **기능별 분할**: 하나의 커밋 = 하나의 논리적 변경사항
 
 ```bash
-# 핵심 기능 구현
-git add [파일들]
-git commit -m "feat: [기능] 구현"
+# ✅ 올바른 예시
+git add src/components/spot/
+git commit -m "feat: spot detail 페이지 구현
 
-# 스타일링 추가
-git add [CSS 파일들]
-git commit -m "style: [컴포넌트] 네이비 테마 스타일링 추가"
+- SpotDetailContent 컴포넌트 추가
+- 로딩/에러 상태 처리 구현
+- 네이비 테마 적용
+- Requirements 3.1, 3.2 대응"
+
+# ✅ 기능별 분할 예시
+git commit -m "feat: spotpin 컴포넌트 기본 구현"
+git commit -m "style: spotpin 마커 ui/ux 개선"
+git commit -m "fix: coordinates undefined 에러 수정"
 ```
 
 ### 4️⃣ PR 생성 및 Issue 연결

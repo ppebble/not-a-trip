@@ -1,0 +1,20 @@
+{
+  "steering": {
+    "autoInclude": [
+      "commit-guidelines.md",
+      "task-execution-rules.md",
+      "git-workflow.md"
+    ],
+    "enforceGuidelines": true
+  },
+  "tasks": {
+    "requireIssueLink": true,
+    "enforceCommitRules": true,
+    "maxCommitSize": 500
+  },
+  "git": {
+    "enforceConventionalCommits": true,
+    "requireKoreanDescription": true,
+    "maxDescriptionLength": 50
+  }
+}

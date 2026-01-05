@@ -1,0 +1,19 @@
+{
+  "steering": {
+    "enabled": true,
+    "autoLoad": true,
+    "enforceRules": true,
+    "includePaths": [
+      ".kiro/steering/*.md"
+    ]
+  },
+  "git": {
+    "enforceCommitRules": true,
+    "requireKoreanMessages": true,
+    "conventionalCommits": true
+  },
+  "tasks": {
+    "requireIssueTracking": true,
+    "enforceWorkflow": true
+  }
+}
