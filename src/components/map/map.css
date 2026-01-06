@@ -4,40 +4,46 @@
 .leaflet-container {
   height: 100% !important;
   width: 100% !important;
-  position: relative;
-  outline: 0;
-  background: #ddd;
-  overflow: hidden;
+  position: relative !important;
+  outline: 0 !important;
+  background: #d9e0ed !important; /* navy-100 */
+  overflow: hidden !important;
   border-radius: 0.5rem;
+  font-family: inherit !important;
+  z-index: 0 !important;
+}
+
+/* 타일 컨테이너 크기 강제 설정 */
+.leaflet-tile-container {
+  overflow: hidden !important;
+  width: 256px !important;
+  height: 256px !important;
 }
 
 .leaflet-tile {
   filter: inherit;
-  visibility: inherit;
-  opacity: 1;
+  visibility: inherit !important;
+  opacity: 1 !important;
   image-rendering: optimizeQuality;
-}
-
-.leaflet-tile-container {
-  overflow: hidden;
-  width: 256px;
-  height: 256px;
+  width: 256px !important;
+  height: 256px !important;
 }
 
 .leaflet-tile-pane {
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 200 !important;
 }
 
 .leaflet-map-pane {
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
 }
 
 .leaflet-layer {
-  position: relative;
+  position: relative !important;
 }
 
 .leaflet-control-container {
@@ -48,13 +54,16 @@
   pointer-events: auto;
 }
 
-/* Override default Leaflet control styles */
+/* Override default Leaflet control styles with navy theme */
 .leaflet-control-zoom a {
-  @apply border-navy-500 bg-navy-600 text-white;
+  background-color: #345084 !important; /* navy-600 */
+  border-color: #4164a5 !important; /* navy-500 */
+  color: white !important;
+  text-decoration: none !important;
 }
 
 .leaflet-control-zoom a:hover {
-  @apply bg-navy-700;
+  background-color: #273c63 !important; /* navy-700 */
 }
 
 /* Style the map tiles */
@@ -62,27 +71,35 @@
   filter: brightness(0.95) contrast(1.05);
 }
 
-/* Custom popup styling (for future use) */
+/* Custom popup styling */
 .leaflet-popup-content-wrapper {
-  @apply rounded-lg border border-navy-200 bg-white shadow-lg;
+  background: white !important;
+  border: 1px solid #b3c1db !important; /* navy-200 */
+  border-radius: 0.5rem !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .leaflet-popup-tip {
-  @apply border-navy-200 bg-white;
+  background: white !important;
+  border-color: #b3c1db !important; /* navy-200 */
 }
 
 /* Ensure map container has proper styling */
 .leaflet-container {
-  @apply bg-navy-50;
+  background: #d9e0ed !important; /* navy-100 */
 }
 
 /* Attribution styling */
 .leaflet-control-attribution {
-  @apply bg-navy-800/80 text-xs text-white;
+  background: rgba(26, 40, 66, 0.8) !important; /* navy-800/80 */
+  color: white !important;
+  font-size: 0.75rem !important;
 }
 
 .leaflet-control-attribution a {
-  @apply text-navy-200;
+  color: #b3c1db !important; /* navy-200 */
 }
 
 /* Zoom control positioning */
@@ -93,13 +110,13 @@
 
 /* Loading spinner for map */
 .leaflet-container.leaflet-loading {
-  @apply bg-navy-100;
+  background: #d9e0ed !important; /* navy-100 */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .leaflet-control-zoom {
-    @apply scale-90;
+    transform: scale(0.9);
   }
 
   .leaflet-top.leaflet-right {
@@ -110,8 +127,8 @@
 
 /* SpotPin custom marker styles */
 .custom-spot-pin {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
 }
 
 .custom-spot-pin:hover {
@@ -120,31 +137,36 @@
 
 /* Spot popup styling */
 .spot-popup .leaflet-popup-content-wrapper {
-  @apply rounded-xl border-2 border-navy-300 bg-white p-0 shadow-2xl;
+  background: white !important;
+  border: 2px solid #8da2c9 !important; /* navy-300 */
+  border-radius: 0.75rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
   backdrop-filter: blur(10px);
   max-width: 350px !important;
   min-width: 320px !important;
+  padding: 0 !important;
 }
 
 .spot-popup .leaflet-popup-content {
-  @apply m-0;
+  margin: 0 !important;
   width: 100% !important;
 }
 
 .spot-popup .leaflet-popup-tip {
-  @apply border-navy-300 bg-white;
+  background: white !important;
+  border-color: #8da2c9 !important; /* navy-300 */
 }
 
 .spot-popup-content {
-  @apply p-4;
+  padding: 1rem;
 }
 
 .spot-popup-content h3 {
-  @apply text-navy-800;
+  color: #1a2842 !important; /* navy-800 */
 }
 
 .spot-popup-content button:hover {
-  @apply text-navy-800;
+  color: #1a2842 !important; /* navy-800 */
 }
 
 /* Enhanced marker animations */

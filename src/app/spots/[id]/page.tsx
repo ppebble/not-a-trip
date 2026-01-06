@@ -9,9 +9,6 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import NearbyFacilities from '@/components/spot/NearbyFacilities'
 
-// Leaflet CSS를 전역으로 로드
-import 'leaflet/dist/leaflet.css'
-
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
   ssr: false,

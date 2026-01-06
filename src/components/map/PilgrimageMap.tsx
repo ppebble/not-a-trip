@@ -6,7 +6,6 @@ import { Map as LeafletMap } from 'leaflet'
 import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
-import 'leaflet/dist/leaflet.css'
 import './map.css'
 
 interface PilgrimageMapProps {
@@ -34,6 +33,11 @@ export default function PilgrimageMap({
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
+
+    // 지도 크기 재계산 (중요!)
+    setTimeout(() => {
+      map.invalidateSize()
+    }, 100)
 
     // Update store when map view changes
     const handleMoveEnd = () => {
@@ -68,11 +72,20 @@ export default function PilgrimageMap({
         touchZoom={true}
         boxZoom={true}
         keyboard={true}
+        whenReady={() => {
+          // 지도가 준비되면 크기 재계산
+          setTimeout(() => {
+            mapRef.current?.invalidateSize()
+          }, 100)
+        }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           className="map-tiles"
+          maxZoom={19}
+          tileSize={256}
+          zoomOffset={0}
         />
 
         {/* 스팟 핀 렌더링 */}
