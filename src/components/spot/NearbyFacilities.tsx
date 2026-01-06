@@ -2,6 +2,7 @@
 
 import { NearbyFacility, FacilityType } from '@/types'
 import { useMemo } from 'react'
+import { groupFacilitiesByType } from '@/lib/facility-utils'
 
 interface NearbyFacilitiesProps {
   facilities: NearbyFacility[]
@@ -42,23 +43,9 @@ const FACILITY_CONFIG: Record<
 export default function NearbyFacilities({
   facilities,
 }: NearbyFacilitiesProps) {
-  // 편의시설을 타입별로 분류
+  // 편의시설을 타입별로 분류 (공유 유틸리티 함수 사용)
   const facilitiesByType = useMemo(() => {
-    const grouped: Record<FacilityType, NearbyFacility[]> = {
-      restaurant: [],
-      convenience_store: [],
-      cafe: [],
-      station: [],
-      other: [],
-    }
-
-    facilities.forEach((facility) => {
-      if (grouped[facility.type]) {
-        grouped[facility.type].push(facility)
-      } else {
-        grouped.other.push(facility)
-      }
-    })
+    const grouped = groupFacilitiesByType(facilities)
 
     // 각 타입별로 거리순 정렬
     Object.keys(grouped).forEach((type) => {
