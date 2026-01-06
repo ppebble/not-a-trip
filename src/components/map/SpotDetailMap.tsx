@@ -5,7 +5,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Map as LeafletMap, Icon } from 'leaflet'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, FacilityType } from '@/types'
-import 'leaflet/dist/leaflet.css'
 import './map.css'
 
 interface SpotDetailMapProps {
@@ -96,9 +95,20 @@ export default function SpotDetailMap({
 }: SpotDetailMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
 
+  // 디버깅: 스팟 데이터 확인
+  console.log('SpotDetailMap - spot data:', spot)
+  console.log('SpotDetailMap - coordinates:', spot.coordinates)
+  console.log('SpotDetailMap - coordinates type:', typeof spot.coordinates)
+  console.log('SpotDetailMap - coordinates length:', spot.coordinates?.length)
+
   // 스팟 좌표가 유효한지 확인
   const hasValidCoordinates = spot.coordinates && spot.coordinates.length === 2
-  const [lat, lng] = hasValidCoordinates ? spot.coordinates : [0, 0]
+  const [lat, lng] = hasValidCoordinates
+    ? spot.coordinates
+    : [35.6762, 139.6503] // 기본값 설정
+
+  console.log('SpotDetailMap - hasValidCoordinates:', hasValidCoordinates)
+  console.log('SpotDetailMap - lat, lng:', lat, lng)
 
   // 지도 중심점과 줌 레벨 계산
   const mapCenter: [number, number] = [lat, lng]
@@ -106,62 +116,41 @@ export default function SpotDetailMap({
 
   useEffect(() => {
     const map = mapRef.current
-    if (!map || !hasValidCoordinates) return
+    if (!map) return
 
-    // 스팟과 편의시설을 모두 포함하는 영역으로 지도 조정
-    if (facilities.length > 0) {
-      const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
+    // 지도가 완전히 로드된 후 실행
+    const timer = setTimeout(() => {
+      map.invalidateSize()
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const bounds = allPoints.reduce(
-        (bounds: any, point) => {
-          return bounds.extend(point)
-        },
-        new (window as any).L.LatLngBounds()
-      )
+      // 스팟과 편의시설을 모두 포함하는 영역으로 지도 조정
+      if (hasValidCoordinates && facilities.length > 0) {
+        const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
 
-      // 적절한 패딩을 추가하여 지도 영역 조정
-      map.fitBounds(bounds, { padding: [20, 20] })
-    }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const bounds = allPoints.reduce(
+          (bounds: any, point) => {
+            return bounds.extend(point)
+          },
+          new (window as any).L.LatLngBounds()
+        )
+
+        // 적절한 패딩을 추가하여 지도 영역 조정
+        map.fitBounds(bounds, { padding: [20, 20] })
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
   }, [lat, lng, facilities, hasValidCoordinates])
 
-  if (!hasValidCoordinates) {
-    return (
-      <div
-        className={`flex h-64 items-center justify-center rounded-lg bg-gray-100 ${className}`}
-      >
-        <div className="text-center text-gray-500">
-          <svg
-            className="mx-auto mb-2 h-12 w-12"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-          <p>위치 정보를 사용할 수 없습니다</p>
-        </div>
-      </div>
-    )
-  }
+  console.log('SpotDetailMap - Rendering map component')
 
   return (
-    <div className={`relative h-full w-full ${className}`}>
+    <div className={`relative w-full ${className}`} style={{ height: '384px' }}>
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}
-        className="h-full w-full rounded-lg border-2 border-navy-200"
+        style={{ height: '100%', width: '100%' }}
+        className="overflow-hidden rounded-lg border-2 border-navy-200"
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
@@ -170,11 +159,19 @@ export default function SpotDetailMap({
         touchZoom={true}
         boxZoom={true}
         keyboard={true}
+        whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance
+          // 지도 생성 후 크기 재계산
+          setTimeout(() => {
+            mapInstance.invalidateSize()
+          }, 100)
+        }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           className="map-tiles"
+          crossOrigin=""
         />
 
         {/* 스팟 마커 */}
