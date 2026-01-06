@@ -1,5 +1,53 @@
 /* Leaflet map styling with navy theme */
 
+/* 중요: Leaflet 기본 스타일 강제 적용 */
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  position: relative;
+  outline: 0;
+  background: #ddd;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.leaflet-tile {
+  filter: inherit;
+  visibility: inherit;
+  opacity: 1;
+  image-rendering: optimizeQuality;
+}
+
+.leaflet-tile-container {
+  overflow: hidden;
+  width: 256px;
+  height: 256px;
+}
+
+.leaflet-tile-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.leaflet-map-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.leaflet-layer {
+  position: relative;
+}
+
+.leaflet-control-container {
+  pointer-events: none;
+}
+
+.leaflet-control {
+  pointer-events: auto;
+}
+
 /* Override default Leaflet control styles */
 .leaflet-control-zoom a {
   @apply border-navy-500 bg-navy-600 text-white;
