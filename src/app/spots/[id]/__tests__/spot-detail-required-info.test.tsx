@@ -115,6 +115,11 @@ jest.mock('@/hooks/useSpotDetail', () => ({
     isLoading: false,
     error: null,
   }),
+  useNearbyFacilities: () => ({
+    data: [],
+    isLoading: false,
+    error: null,
+  }),
 }))
 
 /**
@@ -153,6 +158,15 @@ jest.mock('next/link', () => {
         {children}
       </a>
     )
+  }
+})
+
+/**
+ * Mock SpotDetailMap component
+ */
+jest.mock('@/components/map/SpotDetailMap', () => {
+  return function MockSpotDetailMap() {
+    return <div data-testid="spot-detail-map">지도 컴포넌트</div>
   }
 })
 
