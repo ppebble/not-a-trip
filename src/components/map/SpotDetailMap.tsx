@@ -117,22 +117,21 @@ export default function SpotDetailMap({
       if (hasValidCoordinates && facilities.length > 0) {
         const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
 
-        const bounds = allPoints.reduce(
-          (bounds: any, point) => {
+        // Leaflet의 LatLngBounds 사용
+        const L = (window as any).L
+        if (L) {
+          const bounds = allPoints.reduce((bounds, point) => {
             return bounds.extend(point)
-          },
-          new (window as any).L.LatLngBounds()
-        )
+          }, new L.LatLngBounds())
 
-        // 적절한 패딩을 추가하여 지도 영역 조정
-        map.fitBounds(bounds, { padding: [20, 20] })
+          // 적절한 패딩을 추가하여 지도 영역 조정
+          map.fitBounds(bounds, { padding: [20, 20] })
+        }
       }
     }, 300)
 
     return () => clearTimeout(timer)
   }, [lat, lng, facilities, hasValidCoordinates])
-
-  console.log('SpotDetailMap - Rendering map component')
 
   return (
     <div className={`relative w-full ${className}`} style={{ height: '384px' }}>
