@@ -8,6 +8,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
+// Leaflet CSS를 전역으로 로드
+import 'leaflet/dist/leaflet.css'
+
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
   ssr: false,
@@ -175,7 +178,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
           <h2 className="mb-4 text-2xl font-bold text-gray-900">
             위치 및 근처 편의시설
           </h2>
-          <div className="h-96 w-full">
+          <div className="h-96 w-full overflow-hidden rounded-lg">
             <SpotDetailMap spot={spot} facilities={facilities} />
           </div>
           {facilities.length > 0 && (
