@@ -5,7 +5,7 @@ import { NearbyFacility, FacilityType } from '@/types'
 
 // MongoDB document interfaces
 interface SpotDocument {
-  _id: ObjectId
+  id: string // 커스텀 ID 사용
   coordinates: {
     lat: number
     lng: number
@@ -62,18 +62,10 @@ export async function GET(
     const radiusKm = parseFloat(searchParams.get('radius') || '2') // Default 2km radius
     const maxResults = parseInt(searchParams.get('limit') || '50') // Default 50 results
 
-    // Validate ObjectId format
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { error: 'Invalid spot ID format' },
-        { status: 400 }
-      )
-    }
-
-    // Get spot coordinates
+    // Get spot coordinates using custom id field
     const spotsCollection = await getCollection<SpotDocument>('spots')
     const spot = await spotsCollection.findOne(
-      { _id: new ObjectId(id) },
+      { id }, // 커스텀 ID로 검색
       { projection: { coordinates: 1 } }
     )
 
