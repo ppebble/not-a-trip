@@ -95,20 +95,11 @@ export default function SpotDetailMap({
 }: SpotDetailMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
 
-  // 디버깅: 스팟 데이터 확인
-  console.log('SpotDetailMap - spot data:', spot)
-  console.log('SpotDetailMap - coordinates:', spot.coordinates)
-  console.log('SpotDetailMap - coordinates type:', typeof spot.coordinates)
-  console.log('SpotDetailMap - coordinates length:', spot.coordinates?.length)
-
   // 스팟 좌표가 유효한지 확인
   const hasValidCoordinates = spot.coordinates && spot.coordinates.length === 2
   const [lat, lng] = hasValidCoordinates
     ? spot.coordinates
     : [35.6762, 139.6503] // 기본값 설정
-
-  console.log('SpotDetailMap - hasValidCoordinates:', hasValidCoordinates)
-  console.log('SpotDetailMap - lat, lng:', lat, lng)
 
   // 지도 중심점과 줌 레벨 계산
   const mapCenter: [number, number] = [lat, lng]
@@ -126,7 +117,6 @@ export default function SpotDetailMap({
       if (hasValidCoordinates && facilities.length > 0) {
         const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const bounds = allPoints.reduce(
           (bounds: any, point) => {
             return bounds.extend(point)
@@ -159,11 +149,10 @@ export default function SpotDetailMap({
         touchZoom={true}
         boxZoom={true}
         keyboard={true}
-        whenCreated={(mapInstance) => {
-          mapRef.current = mapInstance
-          // 지도 생성 후 크기 재계산
+        whenReady={() => {
+          // 지도가 준비되면 크기 재계산
           setTimeout(() => {
-            mapInstance.invalidateSize()
+            mapRef.current?.invalidateSize()
           }, 100)
         }}
       >
