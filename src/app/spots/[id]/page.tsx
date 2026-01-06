@@ -7,6 +7,7 @@ import { NearbyFacility } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
+import NearbyFacilities from '@/components/spot/NearbyFacilities'
 
 // Leaflet CSS를 전역으로 로드
 import 'leaflet/dist/leaflet.css'
@@ -191,6 +192,9 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
           )}
         </div>
       </div>
+
+      {/* Nearby Facilities */}
+      <NearbyFacilities facilities={facilities} />
     </div>
   )
 }
