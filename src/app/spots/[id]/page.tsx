@@ -1,16 +1,35 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import { useSpotDetail } from '@/hooks/useSpotDetail'
+import { useSpotDetail, useNearbyFacilities } from '@/hooks/useSpotDetail'
 import { SpotDetailData } from '@/hooks/useSpots'
+import { NearbyFacility } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+// Leaflet CSS를 전역으로 로드
+import 'leaflet/dist/leaflet.css'
+
+// 지도 컴포넌트를 동적으로 로드 (SSR 방지)
+const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100">
+      <div className="text-center text-gray-500">
+        <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-navy-600 border-t-transparent"></div>
+        <p>지도를 불러오는 중...</p>
+      </div>
+    </div>
+  ),
+})
 
 export default function SpotDetailPage() {
   const params = useParams()
   const spotId = params.id as string
 
   const { data: spot, isLoading, error } = useSpotDetail(spotId)
+  const { data: facilities = [] } = useNearbyFacilities(spotId)
 
   if (isLoading) {
     return <SpotDetailSkeleton />
@@ -56,7 +75,7 @@ export default function SpotDetailPage() {
 
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <SpotDetailContent spot={spot} />
+        <SpotDetailContent spot={spot} facilities={facilities} />
       </main>
     </div>
   )
@@ -64,9 +83,10 @@ export default function SpotDetailPage() {
 
 interface SpotDetailContentProps {
   spot: SpotDetailData
+  facilities: NearbyFacility[]
 }
 
-function SpotDetailContent({ spot }: SpotDetailContentProps) {
+function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
   return (
     <div className="space-y-8">
       {/* Spot Header */}
@@ -152,38 +172,23 @@ function SpotDetailContent({ spot }: SpotDetailContentProps) {
         </div>
       )}
 
-      {/* Location Map Placeholder */}
+      {/* Location Map */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-6">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900">위치</h2>
-          <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100">
-            <div className="text-center text-gray-500">
-              <svg
-                className="mx-auto mb-2 h-12 w-12"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              <p>지도 컴포넌트 (향후 구현 예정)</p>
-              <p className="mt-1 text-sm">
-                좌표: {spot.coordinates?.[0] || 'N/A'},{' '}
-                {spot.coordinates?.[1] || 'N/A'}
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">
+            위치 및 근처 편의시설
+          </h2>
+          <div className="h-96 w-full overflow-hidden rounded-lg">
+            <SpotDetailMap spot={spot} facilities={facilities} />
+          </div>
+          {facilities.length > 0 && (
+            <div className="mt-4">
+              <p className="text-sm text-gray-600">
+                근처 편의시설 {facilities.length}개가 표시됩니다. 마커를
+                클릭하면 상세 정보를 확인할 수 있습니다.
               </p>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
