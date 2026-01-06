@@ -50,11 +50,6 @@ export type FacilityType =
   | 'station'
   | 'other'
 
-interface NearbyFacilitiesResponse {
-  facilities: NearbyFacility[]
-  total: number
-}
-
 export function useNearbyFacilities(spotId: string | null) {
   return useQuery({
     queryKey: [...spotKeys.detail(spotId || ''), 'facilities'],
@@ -71,8 +66,9 @@ export function useNearbyFacilities(spotId: string | null) {
         )
       }
 
-      const data: NearbyFacilitiesResponse = await response.json()
-      return data.facilities
+      // API returns array directly (not wrapped in { facilities: ... })
+      const data: NearbyFacility[] = await response.json()
+      return data
     },
     enabled: !!spotId,
     staleTime: 15 * 60 * 1000, // 15 minutes for facility data (changes less frequently)

@@ -21,6 +21,8 @@ const config: Config = {
           800: '#1a2842',
           900: '#0d1421',
         },
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
       },
     },
   },

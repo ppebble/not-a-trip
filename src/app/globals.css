@@ -6,17 +6,17 @@
   --background: #ffffff;
   --foreground: #171717;
 
-  /* Navy theme colors */
-  --navy-50: #f8fafc;
-  --navy-100: #f1f5f9;
-  --navy-200: #e2e8f0;
-  --navy-300: #cbd5e1;
-  --navy-400: #94a3b8;
-  --navy-500: #64748b;
-  --navy-600: #475569;
-  --navy-700: #334155;
-  --navy-800: #1e293b;
-  --navy-900: #0f172a;
+  /* Navy theme colors - Tailwind와 일치 */
+  --navy-50: #f0f3f9;
+  --navy-100: #d9e0ed;
+  --navy-200: #b3c1db;
+  --navy-300: #8da2c9;
+  --navy-400: #6783b7;
+  --navy-500: #4164a5;
+  --navy-600: #345084;
+  --navy-700: #273c63;
+  --navy-800: #1a2842;
+  --navy-900: #0d1421;
 }
 
 @media (prefers-color-scheme: dark) {

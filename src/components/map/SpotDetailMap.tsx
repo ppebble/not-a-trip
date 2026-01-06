@@ -117,22 +117,22 @@ export default function SpotDetailMap({
       if (hasValidCoordinates && facilities.length > 0) {
         const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
 
-        const bounds = allPoints.reduce(
-          (bounds: any, point) => {
+        // Leaflet의 LatLngBounds 사용
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const L = (window as any).L
+        if (L) {
+          const bounds = allPoints.reduce((bounds, point) => {
             return bounds.extend(point)
-          },
-          new (window as any).L.LatLngBounds()
-        )
+          }, new L.LatLngBounds())
 
-        // 적절한 패딩을 추가하여 지도 영역 조정
-        map.fitBounds(bounds, { padding: [20, 20] })
+          // 적절한 패딩을 추가하여 지도 영역 조정
+          map.fitBounds(bounds, { padding: [20, 20] })
+        }
       }
     }, 300)
 
     return () => clearTimeout(timer)
   }, [lat, lng, facilities, hasValidCoordinates])
-
-  console.log('SpotDetailMap - Rendering map component')
 
   return (
     <div className={`relative w-full ${className}`} style={{ height: '384px' }}>
@@ -160,6 +160,9 @@ export default function SpotDetailMap({
           attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           className="map-tiles"
+          maxZoom={19}
+          tileSize={256}
+          zoomOffset={0}
           crossOrigin=""
         />
 
@@ -179,30 +182,39 @@ export default function SpotDetailMap({
         </Marker>
 
         {/* 편의시설 마커들 */}
-        {facilities.map((facility) => (
-          <Marker
-            key={facility.id}
-            position={facility.coordinates}
-            icon={facilityIcons[facility.type]}
-          >
-            <Popup>
-              <div className="p-2">
-                <div className="mb-1 flex items-center justify-between">
-                  <h4 className="font-semibold text-gray-900">
-                    {facility.name}
-                  </h4>
-                  <span className="rounded bg-navy-100 px-2 py-1 text-xs text-navy-800">
-                    {facilityTypeLabels[facility.type]}
-                  </span>
+        {facilities.map((facility) => {
+          // 좌표 유효성 검사
+          const coords = facility.coordinates
+          if (!coords || !Array.isArray(coords) || coords.length !== 2) {
+            return null
+          }
+          return (
+            <Marker
+              key={facility.id}
+              position={[coords[0], coords[1]]}
+              icon={facilityIcons[facility.type]}
+            >
+              <Popup>
+                <div className="p-2">
+                  <div className="mb-1 flex items-center justify-between">
+                    <h4 className="font-semibold text-gray-900">
+                      {facility.name}
+                    </h4>
+                    <span className="rounded bg-navy-100 px-2 py-1 text-xs text-navy-800">
+                      {facilityTypeLabels[facility.type]}
+                    </span>
+                  </div>
+                  <p className="mb-1 text-sm text-gray-600">
+                    {facility.address}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    스팟에서 약 {Math.round(facility.distance)}m
+                  </p>
                 </div>
-                <p className="mb-1 text-sm text-gray-600">{facility.address}</p>
-                <p className="text-xs text-gray-500">
-                  스팟에서 약 {Math.round(facility.distance)}m
-                </p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+              </Popup>
+            </Marker>
+          )
+        })}
       </MapContainer>
 
       {/* 범례 */}
