@@ -71,6 +71,10 @@
 3. WHEN a User views a post, THE System SHALL display the full content and allow comments
 4. WHEN a User submits a comment, THE System SHALL add it to the post and display it chronologically
 5. IF a User attempts to post without required fields, THEN THE System SHALL display an error message and prevent submission
+6. WHEN a User clicks the write button, THE System SHALL navigate to a post creation page with title and content input fields
+7. WHEN a User edits their post, THE System SHALL update the post content and display the updated information
+8. WHEN a User deletes their post, THE System SHALL remove the post and associated comments from the database
+9. WHEN a User confirms post deletion, THE System SHALL redirect to the post list page
 
 ### Requirement 6: 스팟 데이터 관리
 

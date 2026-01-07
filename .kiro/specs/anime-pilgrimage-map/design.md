@@ -326,8 +326,15 @@ interface SpotResponse {
 // GET /api/posts - 게시글 목록
 // GET /api/posts/[id] - 게시글 상세
 // POST /api/posts - 게시글 작성
+// PUT /api/posts/[id] - 게시글 수정
+// DELETE /api/posts/[id] - 게시글 삭제
 // GET /api/posts/[id]/comments - 댓글 목록
 // POST /api/posts/[id]/comments - 댓글 작성
+
+interface UpdatePostInput {
+  title?: string
+  content?: string
+}
 ```
 
 ## Data Models
