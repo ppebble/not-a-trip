@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { useSpots } from '@/hooks/useSpots'
 import SpotPreview from '@/components/map/SpotPreview'
 
@@ -146,12 +147,15 @@ export default function Home() {
 
             {/* 데스크톱 네비게이션 메뉴 */}
             <nav className="hidden space-x-6 md:flex">
-              <button className="text-sm text-navy-300 transition-colors hover:text-white">
+              <Link href="/" className="text-sm font-medium text-white">
                 지도
-              </button>
-              <button className="text-sm text-navy-300 transition-colors hover:text-white">
+              </Link>
+              <Link
+                href="/community"
+                className="text-sm text-navy-300 transition-colors hover:text-white"
+              >
                 커뮤니티
-              </button>
+              </Link>
               <button className="text-sm text-navy-300 transition-colors hover:text-white">
                 내 스팟
               </button>
