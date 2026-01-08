@@ -278,3 +278,33 @@ export function useUpdatePost() {
     },
   })
 }
+
+/**
+ * Hook to delete a post
+ * Requirements: 5.8, 5.9
+ */
+export function useDeletePost() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (postId: string): Promise<void> => {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete post: ${response.status} ${response.statusText}`
+        )
+      }
+    },
+    onSuccess: (_, postId) => {
+      // Remove post from cache
+      queryClient.removeQueries({
+        queryKey: postKeys.detail(postId),
+      })
+      // Invalidate posts list
+      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
+    },
+  })
+}
