@@ -31,6 +31,12 @@ export interface CreateCommentInput {
   author: string
 }
 
+export interface UpdatePostInput {
+  postId: string
+  title?: string
+  content?: string
+}
+
 // API response types
 interface PostsResponse {
   posts: Post[]
@@ -226,6 +232,49 @@ export function useCreateComment() {
       queryClient.invalidateQueries({
         queryKey: postKeys.detail(variables.postId),
       })
+    },
+  })
+}
+
+/**
+ * Hook to update an existing post
+ * Requirements: 5.7
+ */
+export function useUpdatePost() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: UpdatePostInput): Promise<Post> => {
+      const response = await fetch(`/api/posts/${data.postId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: data.title,
+          content: data.content,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update post: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const result = await response.json()
+      return {
+        ...result,
+        createdAt: new Date(result.createdAt),
+      }
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate post detail to refetch updated data
+      queryClient.invalidateQueries({
+        queryKey: postKeys.detail(variables.postId),
+      })
+      // Invalidate posts list to update title if changed
+      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
     },
   })
 }
