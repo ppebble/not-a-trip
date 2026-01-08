@@ -107,6 +107,11 @@ export interface CreatePostInput {
   content: string
 }
 
+export interface UpdatePostInput {
+  title?: string
+  content?: string
+}
+
 export interface CreateCommentInput {
   postId: string
   content: string
