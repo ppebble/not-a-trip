@@ -104,7 +104,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       ...newPost,
     }
 
-    return NextResponse.json(createdPost, { status: 201 })
+    return NextResponse.json({ post: createdPost }, { status: 201 })
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error creating post:', error)
