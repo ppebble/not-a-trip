@@ -163,7 +163,7 @@ function PostContent({ post }: PostContentProps) {
       </div>
 
       {/* 하단 네비게이션 */}
-      <footer className="mt-8 border-t border-navy-100 pt-4">
+      <footer className="mt-8 flex items-center justify-between border-t border-navy-100 pt-4">
         <Link
           href="/community"
           className="inline-flex items-center gap-2 text-sm text-navy-600 transition-colors hover:text-navy-800"
@@ -182,6 +182,27 @@ function PostContent({ post }: PostContentProps) {
             />
           </svg>
           목록으로 돌아가기
+        </Link>
+
+        {/* 수정 버튼 - Requirements 5.7 */}
+        <Link
+          href={`/community/${post.id}/edit`}
+          className="inline-flex items-center gap-2 rounded-lg border border-navy-300 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+        >
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            />
+          </svg>
+          수정
         </Link>
       </footer>
     </article>
