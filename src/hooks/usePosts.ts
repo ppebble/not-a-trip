@@ -37,10 +37,6 @@ interface PostsResponse {
   total: number
 }
 
-interface PostResponse {
-  post: Post
-}
-
 interface CommentsResponse {
   comments: Comment[]
   total: number
@@ -105,12 +101,12 @@ export function usePostDetail(postId: string | null) {
         )
       }
 
-      const data: PostResponse = await response.json()
+      const data = await response.json()
 
-      // Convert date string to Date object
+      // API returns Post object directly (not wrapped in { post: ... })
       return {
-        ...data.post,
-        createdAt: new Date(data.post.createdAt),
+        ...data,
+        createdAt: new Date(data.createdAt),
       }
     },
     enabled: !!postId,
@@ -175,10 +171,11 @@ export function useCreatePost() {
         )
       }
 
-      const result: PostResponse = await response.json()
+      // API returns Post object directly (not wrapped in { post: ... })
+      const result = await response.json()
       return {
-        ...result.post,
-        createdAt: new Date(result.post.createdAt),
+        ...result,
+        createdAt: new Date(result.createdAt),
       }
     },
     onSuccess: () => {
@@ -213,10 +210,11 @@ export function useCreateComment() {
         )
       }
 
+      // API returns Comment object directly (not wrapped in { comment: ... })
       const result = await response.json()
       return {
-        ...result.comment,
-        createdAt: new Date(result.comment.createdAt),
+        ...result,
+        createdAt: new Date(result.createdAt),
       }
     },
     onSuccess: (_, variables) => {
