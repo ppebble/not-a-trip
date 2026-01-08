@@ -6,6 +6,7 @@ import PostList from '@/components/community/PostList'
 /**
  * 커뮤니티 게시판 페이지
  * Requirements 5.1: 게시글 목록 표시
+ * Requirements 5.6: 글쓰기 버튼 클릭 시 작성 페이지로 이동
  */
 export default function CommunityPage() {
   return (
@@ -45,6 +46,29 @@ export default function CommunityPage() {
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
+        {/* 글쓰기 버튼 */}
+        <div className="mb-4 flex justify-end">
+          <Link
+            href="/community/write"
+            className="flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            글쓰기
+          </Link>
+        </div>
+
         <PostList />
       </div>
     </main>
