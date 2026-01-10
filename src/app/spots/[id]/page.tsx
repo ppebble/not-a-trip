@@ -9,6 +9,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import NearbyFacilities from '@/components/spot/NearbyFacilities'
 import SpotCommunitySection from '@/components/spot/SpotCommunitySection'
+import SceneGallery from '@/components/spot/SceneGallery'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -191,8 +192,14 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         </div>
       </div>
 
-      {/* Nearby Facilities */}
-      <NearbyFacilities facilities={facilities} />
+      {/* Nearby Facilities and Scene Gallery - 2 column layout */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {/* Nearby Facilities */}
+        <NearbyFacilities facilities={facilities} />
+
+        {/* Scene Gallery */}
+        <SceneGallery spotId={spot.id} />
+      </div>
 
       {/* Community Section */}
       <SpotCommunitySection spotId={spot.id} spotName={spot.name} />
