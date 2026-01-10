@@ -14,6 +14,8 @@ interface PostDocument {
   commentCount: number
   createdAt: Date
   updatedAt: Date
+  spotId?: string
+  mediaTitle?: string
 }
 
 /**
@@ -29,21 +31,43 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
     commentCount: doc.commentCount,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
+    spotId: doc.spotId,
+    mediaTitle: doc.mediaTitle,
   }
 }
 
 /**
  * GET /api/posts - 게시글 목록 조회
  * Requirements: 5.1
+ *
+ * Query Parameters:
+ * - spotId: 특정 스팟 관련 게시글만 조회
+ * - mediaTitle: 특정 작품 관련 게시글만 조회
  */
-export async function GET(_request: NextRequest): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    const { searchParams } = new URL(request.url)
+    const spotId = searchParams.get('spotId')
+    const mediaTitle = searchParams.get('mediaTitle')
+
     const collection = await getCollection<PostDocument & { _id: ObjectId }>(
       COLLECTIONS.POSTS
     )
 
+    // 필터 조건 구성
+    const filter: Record<string, string> = {}
+    if (spotId) {
+      filter.spotId = spotId
+    }
+    if (mediaTitle) {
+      filter.mediaTitle = mediaTitle
+    }
+
     // 최신순으로 정렬하여 조회
-    const posts = await collection.find({}).sort({ createdAt: -1 }).toArray()
+    const posts = await collection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .toArray()
 
     // Post 타입으로 변환
     const postList: Post[] = posts.map(documentToPost)
@@ -69,6 +93,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const input: CreatePostInput = {
       title: body.title,
       content: body.content,
+      spotId: body.spotId,
+      mediaTitle: body.mediaTitle,
     }
 
     // 유효성 검사
@@ -93,6 +119,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       commentCount: 0,
       createdAt: now,
       updatedAt: now,
+      ...(input.spotId && { spotId: input.spotId }),
+      ...(input.mediaTitle && { mediaTitle: input.mediaTitle.trim() }),
     }
 
     const result = await collection.insertOne(
