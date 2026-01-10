@@ -89,7 +89,7 @@ export default function NearbyFacilities({
                 </h3>
               </div>
 
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="space-y-3">
                 {typeFacilities.map((facility) => (
                   <FacilityCard
                     key={facility.id}
