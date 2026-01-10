@@ -199,25 +199,28 @@ export default function SpotCommunitySection({
         {/* 헤더 */}
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">커뮤니티</h2>
-          <Link
-            href={`/community/write?spotId=${spotId}&spotName=${encodeURIComponent(spotName)}`}
-            className="flex items-center gap-1 rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
-          >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* 게시글이 있을 때만 헤더에 글쓰기 버튼 표시 */}
+          {posts && posts.length > 0 && (
+            <Link
+              href={`/community/write?spotId=${spotId}&spotName=${encodeURIComponent(spotName)}`}
+              className="flex items-center gap-1 rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            글쓰기
-          </Link>
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              글쓰기
+            </Link>
+          )}
         </div>
 
         {/* 콘텐츠 */}
