@@ -92,6 +92,8 @@ export interface Post {
   updatedAt: Date
   viewCount: number
   commentCount: number
+  spotId?: string // 연결된 스팟 ID (optional)
+  mediaTitle?: string // 연결된 작품 제목 (optional)
 }
 
 export interface Comment {
@@ -105,11 +107,15 @@ export interface Comment {
 export interface CreatePostInput {
   title: string
   content: string
+  spotId?: string // 연결된 스팟 ID (optional)
+  mediaTitle?: string // 연결된 작품 제목 (optional)
 }
 
 export interface UpdatePostInput {
   title?: string
   content?: string
+  spotId?: string | null // null로 연결 해제 가능
+  mediaTitle?: string | null // null로 연결 해제 가능
 }
 
 export interface CreateCommentInput {
