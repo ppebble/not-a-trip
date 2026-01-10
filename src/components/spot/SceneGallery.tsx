@@ -1,8 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import Image from 'next/image'
-import { useScenesBySpot, useLikeScene } from '@/hooks/useScenes'
+import {
+  useScenesBySpot,
+  useLikeScene,
+  useCreateScene,
+} from '@/hooks/useScenes'
 import { Scene } from '@/types'
 
 interface SceneCardProps {
@@ -20,7 +24,6 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
 
   const handleLike = () => {
     if (liked || isLiking) return
-
     setLiked(true)
     setLocalLikeCount((prev) => prev + 1)
     onLike(scene.id)
@@ -28,7 +31,6 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
 
   return (
     <div className="group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-      {/* 이미지 */}
       <div className="relative aspect-video">
         <Image
           src={scene.imageUrl}
@@ -37,11 +39,8 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
-        {/* 오버레이 - 호버 시 표시 */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
       </div>
-
-      {/* 정보 영역 */}
       <div className="p-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
@@ -52,8 +51,6 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
               <p className="text-xs text-gray-500">{scene.episodeInfo}</p>
             )}
           </div>
-
-          {/* 좋아요 버튼 */}
           <button
             onClick={handleLike}
             disabled={liked || isLiking}
@@ -80,7 +77,6 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
             <span>{localLikeCount}</span>
           </button>
         </div>
-
         {scene.description && (
           <p className="mt-2 line-clamp-2 text-xs text-gray-600">
             {scene.description}
@@ -91,13 +87,10 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   )
 }
 
-/**
- * 로딩 스켈레톤
- */
 function SceneGallerySkeleton() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      {[1, 2, 3, 4].map((i) => (
+      {[1, 2].map((i) => (
         <div
           key={i}
           className="animate-pulse overflow-hidden rounded-lg border border-gray-200"
@@ -113,17 +106,148 @@ function SceneGallerySkeleton() {
   )
 }
 
-/**
- * 빈 상태 표시
- */
-function SceneGalleryEmpty() {
+interface AddSceneModalProps {
+  spotId: string
+  onClose: () => void
+}
+
+function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
+  const createScene = useCreateScene()
+  const [imageUrl, setImageUrl] = useState('')
+  const [animeTitle, setAnimeTitle] = useState('')
+  const [episodeInfo, setEpisodeInfo] = useState('')
+  const [description, setDescription] = useState('')
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    if (!imageUrl.trim()) {
+      setError('이미지 URL을 입력해주세요')
+      return
+    }
+    if (!animeTitle.trim()) {
+      setError('작품명을 입력해주세요')
+      return
+    }
+
+    try {
+      await createScene.mutateAsync({
+        spotId,
+        imageUrl: imageUrl.trim(),
+        animeTitle: animeTitle.trim(),
+        episodeInfo: episodeInfo.trim() || undefined,
+        description: description.trim() || undefined,
+      })
+      onClose()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '장면 추가에 실패했습니다')
+    }
+  }
+
   return (
-    <div className="py-8 text-center">
-      <div className="mb-3 text-3xl">🎬</div>
-      <p className="text-gray-600">아직 등록된 장면이 없습니다</p>
-      <p className="mt-1 text-sm text-gray-500">
-        곧 작품 속 장면이 추가될 예정입니다
-      </p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-gray-900">작품 속 장면 추가</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              이미지 URL <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              작품명 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={animeTitle}
+              onChange={(e) => setAnimeTitle(e.target.value)}
+              placeholder="슬램덩크"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              에피소드 정보
+            </label>
+            <input
+              type="text"
+              value={episodeInfo}
+              onChange={(e) => setEpisodeInfo(e.target.value)}
+              placeholder="1화, OVA 등"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              설명
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="장면에 대한 간단한 설명"
+              rows={2}
+              className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            />
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              disabled={createScene.isPending}
+              className="flex-1 rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-700 disabled:opacity-50"
+            >
+              {createScene.isPending ? '추가 중...' : '추가하기'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
@@ -132,12 +256,10 @@ interface SceneGalleryProps {
   spotId: string
 }
 
-/**
- * 작품 속 장면 갤러리 컴포넌트
- */
 export default function SceneGallery({ spotId }: SceneGalleryProps) {
   const { data: scenes, isLoading, error } = useScenesBySpot(spotId)
   const likeScene = useLikeScene()
+  const [showAddModal, setShowAddModal] = useState(false)
 
   const handleLike = (sceneId: string) => {
     likeScene.mutate(sceneId)
@@ -146,10 +268,30 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
       <div className="p-6">
-        {/* 헤더 */}
-        <div className="mb-4 flex items-center gap-2">
-          <span className="text-2xl">🎬</span>
-          <h2 className="text-2xl font-bold text-gray-900">작품 속 장면</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🎬</span>
+            <h2 className="text-2xl font-bold text-gray-900">작품 속 장면</h2>
+          </div>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-1 rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            장면 추가
+          </button>
         </div>
 
         <p className="mb-4 text-sm text-gray-500">
@@ -157,7 +299,6 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
           눌러주세요!
         </p>
 
-        {/* 콘텐츠 */}
         {isLoading ? (
           <SceneGallerySkeleton />
         ) : error ? (
@@ -165,7 +306,13 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
             장면을 불러오는데 실패했습니다
           </div>
         ) : !scenes || scenes.length === 0 ? (
-          <SceneGalleryEmpty />
+          <div className="py-8 text-center">
+            <div className="mb-3 text-3xl">🎬</div>
+            <p className="text-gray-600">아직 등록된 장면이 없습니다</p>
+            <p className="mt-1 text-sm text-gray-500">
+              첫 번째 장면을 추가해보세요!
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {scenes.map((scene) => (
@@ -179,6 +326,10 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
           </div>
         )}
       </div>
+
+      {showAddModal && (
+        <AddSceneModal spotId={spotId} onClose={() => setShowAddModal(false)} />
+      )}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Scene } from '@/types'
+import { Scene, CreateSceneInput } from '@/types'
 
 // API response type
 interface ScenesResponse {
@@ -42,6 +42,38 @@ export function useScenesBySpot(spotId: string | null) {
     enabled: !!spotId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
+  })
+}
+
+/**
+ * Hook to create a new scene
+ */
+export function useCreateScene() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (input: CreateSceneInput): Promise<Scene> => {
+      const response = await fetch(`/api/spots/${input.spotId}/scenes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(input),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to create scene')
+      }
+
+      return response.json()
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate scenes for this spot
+      queryClient.invalidateQueries({
+        queryKey: sceneKeys.bySpot(variables.spotId),
+      })
+    },
   })
 }
 

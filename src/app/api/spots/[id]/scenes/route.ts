@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
-import { Scene } from '@/types'
+import { Scene, CreateSceneInput } from '@/types'
 import { ObjectId } from 'mongodb'
 
 // MongoDB document interface
@@ -58,6 +58,74 @@ export async function GET(
     console.error('Error fetching scenes:', error)
     return NextResponse.json(
       { error: 'Failed to fetch scenes' },
+      { status: 500 }
+    )
+  }
+}
+
+/**
+ * POST /api/spots/[id]/scenes - 새 장면 추가
+ */
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    const { id: spotId } = await params
+    const body = await request.json()
+
+    const input: CreateSceneInput = {
+      spotId,
+      imageUrl: body.imageUrl,
+      animeTitle: body.animeTitle,
+      episodeInfo: body.episodeInfo,
+      description: body.description,
+    }
+
+    // 유효성 검사
+    if (!input.imageUrl || input.imageUrl.trim().length === 0) {
+      return NextResponse.json(
+        { error: '이미지 URL은 필수입니다' },
+        { status: 400 }
+      )
+    }
+
+    if (!input.animeTitle || input.animeTitle.trim().length === 0) {
+      return NextResponse.json(
+        { error: '작품명은 필수입니다' },
+        { status: 400 }
+      )
+    }
+
+    const collection = await getCollection<SceneDocument & { _id: ObjectId }>(
+      COLLECTIONS.SCENES
+    )
+
+    const now = new Date()
+    const newScene: SceneDocument = {
+      spotId: input.spotId,
+      imageUrl: input.imageUrl.trim(),
+      animeTitle: input.animeTitle.trim(),
+      episodeInfo: input.episodeInfo?.trim(),
+      description: input.description?.trim(),
+      likeCount: 0,
+      createdAt: now,
+    }
+
+    const result = await collection.insertOne(
+      newScene as SceneDocument & { _id: ObjectId }
+    )
+
+    const createdScene: Scene = {
+      id: result.insertedId.toHexString(),
+      ...newScene,
+    }
+
+    return NextResponse.json(createdScene, { status: 201 })
+  } catch (error) {
+    console.error('Error creating scene:', error)
+    return NextResponse.json(
+      { error: 'Failed to create scene' },
       { status: 500 }
     )
   }
