@@ -8,6 +8,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import NearbyFacilities from '@/components/spot/NearbyFacilities'
+import SpotCommunitySection from '@/components/spot/SpotCommunitySection'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -192,6 +193,9 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
 
       {/* Nearby Facilities */}
       <NearbyFacilities facilities={facilities} />
+
+      {/* Community Section */}
+      <SpotCommunitySection spotId={spot.id} spotName={spot.name} />
     </div>
   )
 }
