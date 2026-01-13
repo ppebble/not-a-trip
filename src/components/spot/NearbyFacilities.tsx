@@ -121,12 +121,14 @@ function FacilityCard({ facility, config }: FacilityCardProps) {
     }
   }
 
-  // 외부 지도 링크 생성 (Google Maps)
+  // 외부 지도 링크 생성 (Google Maps - 시설명으로 검색)
   const handleMapClick = () => {
-    const [lat, lng] = facility.coordinates
-    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${encodeURIComponent(facility.name)}`
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.name)}`
     window.open(googleMapsUrl, '_blank', 'noopener,noreferrer')
   }
+
+  // 주소 표시 여부 (주소 정보 없음이면 숨김)
+  const showAddress = facility.address && facility.address !== '주소 정보 없음'
 
   return (
     <div className="rounded-lg border border-gray-200 p-4 transition-all hover:border-gray-300 hover:shadow-md">
@@ -144,28 +146,30 @@ function FacilityCard({ facility, config }: FacilityCardProps) {
           </div>
 
           <div className="space-y-1 text-sm text-gray-600">
-            <div className="flex items-center space-x-1">
-              <svg
-                className="h-4 w-4 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              <span className="truncate">{facility.address}</span>
-            </div>
+            {showAddress && (
+              <div className="flex items-center space-x-1">
+                <svg
+                  className="h-4 w-4 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+                <span className="truncate">{facility.address}</span>
+              </div>
+            )}
 
             <div className="flex items-center space-x-1">
               <svg
