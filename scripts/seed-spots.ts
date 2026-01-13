@@ -24,7 +24,7 @@ const SEED_SPOTS = [
       'https://picsum.photos/seed/spot1-3/800/600',
     ],
     address: '일본 도쿄도 신주쿠구 스가초 5',
-    coordinates: { lat: 35.6762, lng: 139.6503 },
+    coordinates: { lat: 35.6872, lng: 139.7197 }, // 스가 신사 실제 좌표
     relatedMedia: [
       { title: '너의 이름은 (君の名は。)', type: 'anime', year: 2016 },
     ],
@@ -41,7 +41,7 @@ const SEED_SPOTS = [
       'https://picsum.photos/seed/spot2-2/800/600',
     ],
     address: '일본 가나가와현 가마쿠라시 고시고에 1-1',
-    coordinates: { lat: 35.3084, lng: 139.5503 },
+    coordinates: { lat: 35.3082, lng: 139.4952 }, // 가마쿠라코코마에역 건널목 실제 좌표
     relatedMedia: [
       { title: '슬램덩크 (スラムダンク)', type: 'anime', year: 1993 },
       { title: '더 퍼스트 슬램덩크', type: 'movie', year: 2022 },
