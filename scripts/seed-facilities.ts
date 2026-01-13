@@ -1,14 +1,11 @@
 /**
  * MongoDB 편의시설 시드 데이터 스크립트
- * 테스트용 편의시설 데이터를 MongoDB에 추가합니다.
+ * Overpass API (OpenStreetMap)에서 가져온 실제 데이터입니다.
+ *
+ * 생성일: 2026-01-13T13:22:29.080Z
  *
  * 실행 방법:
  * npx tsx scripts/seed-facilities.ts
- *
- * 스팟 좌표 기준 (실제 위치):
- * - SPOT-001 (스가 신사): lat: 35.6872, lng: 139.7197
- * - SPOT-002 (가마쿠라 건널목): lat: 35.3082, lng: 139.4952
- * - SPOT-003 (지우펀): lat: 25.1089, lng: 121.8443
  */
 
 import { MongoClient } from 'mongodb'
@@ -16,141 +13,162 @@ import { MongoClient } from 'mongodb'
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
 const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
 
-// 시드 데이터 - 각 스팟 좌표 기준 반경 100~500m 이내 편의시설
 const SEED_FACILITIES = [
-  // ========================================
-  // 스가 신사 (SPOT-001) 근처 편의시설들
-  // 기준 좌표: lat: 35.6872, lng: 139.7197
-  // ========================================
   {
-    name: '세븐일레븐 요츠야3초메점',
+    name: 'セブン-イレブン',
     type: 'convenience_store',
-    address: '도쿄도 신주쿠구 요츠야 3-11',
-    coordinates: { lat: 35.6868, lng: 139.7192 },
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6878874, lng: 139.7171508 },
   },
   {
-    name: '스타벅스 요츠야점',
-    type: 'cafe',
-    address: '도쿄도 신주쿠구 요츠야 1-3-4',
-    coordinates: { lat: 35.6878, lng: 139.7205 },
-  },
-  {
-    name: '요츠야 라멘',
-    type: 'restaurant',
-    address: '도쿄도 신주쿠구 요츠야 1-4-5',
-    coordinates: { lat: 35.6865, lng: 139.7188 },
-  },
-  {
-    name: '도쿄메트로 요츠야3초메역',
-    type: 'station',
-    address: '도쿄도 신주쿠구 요츠야 3-8',
-    coordinates: { lat: 35.6875, lng: 139.721 },
-  },
-  {
-    name: '패밀리마트 스가초점',
+    name: 'セブン-イレブン',
     type: 'convenience_store',
-    address: '도쿄도 신주쿠구 스가초 5-1',
-    coordinates: { lat: 35.688, lng: 139.719 },
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6875906, lng: 139.7193686 },
   },
   {
-    name: '도토루 커피 요츠야점',
-    type: 'cafe',
-    address: '도쿄도 신주쿠구 요츠야 1-5-6',
-    coordinates: { lat: 35.6862, lng: 139.72 },
+    name: 'セブン-イレブン',
+    type: 'convenience_store',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6871668, lng: 139.7204977 },
   },
   {
-    name: '요츠야 스시',
+    name: '山形うまいもん処 花笠庵',
     type: 'restaurant',
-    address: '도쿄도 신주쿠구 요츠야 1-6-7',
-    coordinates: { lat: 35.6885, lng: 139.7195 },
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6875723, lng: 139.7201565 },
   },
   {
-    name: '요츠야 약국',
+    name: 'とみ吉',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6871138, lng: 139.7201022 },
+  },
+  {
+    name: '浅野屋',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.686098, lng: 139.7200206 },
+  },
+  {
+    name: 'しなのCafe',
+    type: 'cafe',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6840391, lng: 139.7196139 },
+  },
+  {
+    name: 'Moriva Coffee',
+    type: 'cafe',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.687629, lng: 139.72521 },
+  },
+  {
+    name: 'スターバックス',
+    type: 'cafe',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6876227, lng: 139.7232641 },
+  },
+  {
+    name: 'シナノ薬局',
     type: 'other',
-    address: '도쿄도 신주쿠구 요츠야 1-7-8',
-    coordinates: { lat: 35.687, lng: 139.7185 },
-  },
-
-  // ========================================
-  // 가마쿠라 건널목 (SPOT-002) 근처 편의시설들
-  // 기준 좌표: lat: 35.3082, lng: 139.4952
-  // ========================================
-  {
-    name: '로손 가마쿠라코코마에점',
-    type: 'convenience_store',
-    address: '가나가와현 가마쿠라시 고시고에 1-2-1',
-    coordinates: { lat: 35.3078, lng: 139.4958 },
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6839021, lng: 139.7197422 },
   },
   {
-    name: '가마쿠라 해변 카페',
-    type: 'cafe',
-    address: '가나가와현 가마쿠라시 고시고에 1-3-2',
-    coordinates: { lat: 35.3085, lng: 139.4945 },
-  },
-  {
-    name: '에노덴 가마쿠라코코마에역',
-    type: 'station',
-    address: '가나가와현 가마쿠라시 고시고에 1-1-32',
-    coordinates: { lat: 35.308, lng: 139.4948 },
-  },
-  {
-    name: '가마쿠라 해산물 레스토랑',
-    type: 'restaurant',
-    address: '가나가와현 가마쿠라시 고시고에 1-4-3',
-    coordinates: { lat: 35.3088, lng: 139.496 },
-  },
-  {
-    name: '세븐일레븐 가마쿠라코코마에점',
-    type: 'convenience_store',
-    address: '가나가와현 가마쿠라시 고시고에 1-5-1',
-    coordinates: { lat: 35.3075, lng: 139.4955 },
-  },
-  {
-    name: '쇼난 서핑 카페',
-    type: 'cafe',
-    address: '가나가와현 가마쿠라시 고시고에 1-6-2',
-    coordinates: { lat: 35.309, lng: 139.494 },
-  },
-
-  // ========================================
-  // 지우펀 (SPOT-003) 근처 편의시설들
-  // 기준 좌표: lat: 25.1089, lng: 121.8443
-  // ========================================
-  {
-    name: '지우펀 찻집 (아메이차루)',
-    type: 'cafe',
-    address: '대만 신베이시 루이팡구 지우펀 기산가 142호',
-    coordinates: { lat: 25.1092, lng: 121.8448 },
-  },
-  {
-    name: '지우펀 전통 레스토랑',
-    type: 'restaurant',
-    address: '대만 신베이시 루이팡구 지우펀 기산가 156호',
-    coordinates: { lat: 25.1085, lng: 121.8438 },
-  },
-  {
-    name: '지우펀 편의점',
-    type: 'convenience_store',
-    address: '대만 신베이시 루이팡구 지우펀 기산가 120호',
-    coordinates: { lat: 25.1095, lng: 121.845 },
-  },
-  {
-    name: '지우펀 타로볼 가게',
-    type: 'restaurant',
-    address: '대만 신베이시 루이팡구 지우펀 수치로 35호',
-    coordinates: { lat: 25.1082, lng: 121.8448 },
-  },
-  {
-    name: '지우펀 기념품점',
+    name: 'SEIYODO',
     type: 'other',
-    address: '대만 신베이시 루이팡구 지우펀 기산가 100호',
-    coordinates: { lat: 25.1093, lng: 121.8435 },
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.684549, lng: 139.7171061 },
   },
   {
-    name: '루이팡역',
+    name: '左門町薬局',
+    type: 'other',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.6853859, lng: 139.7203191 },
+  },
+  {
+    name: '四谷三丁目',
     type: 'station',
-    address: '대만 신베이시 루이팡구 밍덩로 1단 82호',
-    coordinates: { lat: 25.1086, lng: 121.8065 },
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.687988, lng: 139.7205752 },
+  },
+  {
+    name: '吉野屋 134号線江ノ島店',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.3082376, lng: 139.4916537 },
+  },
+  {
+    name: 'ケンタッキーフライドチキン 江ノ島店',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.3082409, lng: 139.4919085 },
+  },
+  {
+    name: '鎌倉 大勝軒',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.3101549, lng: 139.4904953 },
+  },
+  {
+    name: '腰越',
+    type: 'station',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.3083817, lng: 139.4932077 },
+  },
+  {
+    name: 'フレッシュストアヤオミネ Fresh Store YAOMINE',
+    type: 'convenience_store',
+    address: '주소 정보 없음',
+    coordinates: { lat: 35.3094946, lng: 139.4911943 },
+  },
+  {
+    name: '阿妹茶樓',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 25.1085348, lng: 121.8436634 },
+  },
+  {
+    name: '芋仔番薯茶坊',
+    type: 'restaurant',
+    address: '주소 정보 없음',
+    coordinates: { lat: 25.1086667, lng: 121.8437667 },
+  },
+  {
+    name: '九份觀海樓',
+    type: 'restaurant',
+    address: '新北市瑞芳區基山街183之1號',
+    coordinates: { lat: 25.1078162, lng: 121.84311 },
+  },
+  {
+    name: '7-Eleven',
+    type: 'convenience_store',
+    address: '주소 정보 없음',
+    coordinates: { lat: 25.1097369, lng: 121.845348 },
+  },
+  {
+    name: '全家便利商店',
+    type: 'convenience_store',
+    address: '주소 정보 없음',
+    coordinates: { lat: 25.1102002, lng: 121.8453651 },
+  },
+  {
+    name: '九份茶坊',
+    type: 'cafe',
+    address: '基山街 142',
+    coordinates: { lat: 25.1081545, lng: 121.8435344 },
+  },
+  {
+    name: '喝杯咖啡 Her back Cafe',
+    type: 'cafe',
+    address: '주소 정보 없음',
+    coordinates: { lat: 25.1070142, lng: 121.8417376 },
+  },
+  {
+    name: '分子冰琪淋',
+    type: 'cafe',
+    address: '주소 정보 없음',
+    coordinates: { lat: 25.1100206, lng: 121.8454052 },
   },
 ]
 
@@ -165,29 +183,21 @@ async function seedFacilities() {
     const db = client.db(MONGODB_DB)
     const collection = db.collection('facilities')
 
-    // 기존 데이터 삭제
     console.log('기존 편의시설 데이터 삭제 중...')
     await collection.deleteMany({})
 
-    // 시드 데이터 삽입
     console.log('편의시설 시드 데이터 삽입 중...')
     const result = await collection.insertMany(SEED_FACILITIES)
 
     console.log(
       `✅ ${result.insertedCount}개의 편의시설 데이터가 추가되었습니다!`
     )
-
-    // 스팟별 편의시설 수 출력
-    console.log('\n📍 스팟별 편의시설 배치 현황:')
-    console.log('- 스가 신사 (SPOT-001) 근처: 8개')
-    console.log('- 가마쿠라 건널목 (SPOT-002) 근처: 6개')
-    console.log('- 지우펀 (SPOT-003) 근처: 6개')
   } catch (error) {
     console.error('❌ 편의시설 시드 데이터 삽입 실패:', error)
     process.exit(1)
   } finally {
     await client.close()
-    console.log('\nMongoDB 연결 종료')
+    console.log('MongoDB 연결 종료')
   }
 }
 
