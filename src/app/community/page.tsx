@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import PostList from '@/components/community/PostList'
+import { useSpotCommunitySummary } from '@/hooks/useSpots'
 
 /**
  * 커뮤니티 카테고리 타입
@@ -255,8 +257,110 @@ export default function CommunityPage() {
 /**
  * 스팟별 카테고리 섹션
  * 스팟 목록을 카드 형태로 표시하고 각 스팟의 커뮤니티로 이동 가능
+ * Requirements: 5.1, 3.1
  */
 function SpotCategorySection() {
+  const { data: spots, isLoading, error } = useSpotCommunitySummary()
+
+  if (isLoading) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center gap-2">
+          <svg
+            className="h-5 w-5 text-navy-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          <h2 className="text-lg font-semibold text-navy-800">
+            스팟별 커뮤니티
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="animate-pulse rounded-lg border border-navy-100 bg-navy-50 p-4"
+            >
+              <div className="mb-3 h-32 rounded-lg bg-navy-200" />
+              <div className="mb-2 h-4 w-3/4 rounded bg-navy-200" />
+              <div className="h-3 w-1/2 rounded bg-navy-200" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-4xl">⚠️</div>
+          <p className="mb-2 text-navy-700">스팟 정보를 불러오지 못했습니다</p>
+          <p className="text-sm text-navy-500">잠시 후 다시 시도해주세요.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!spots || spots.length === 0) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center gap-2">
+          <svg
+            className="h-5 w-5 text-navy-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          <h2 className="text-lg font-semibold text-navy-800">
+            스팟별 커뮤니티
+          </h2>
+        </div>
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-4xl">🗺️</div>
+          <p className="mb-2 text-navy-700">등록된 스팟이 없습니다</p>
+          <p className="text-sm text-navy-500">
+            새로운 성지순례 스팟을 등록해주세요.
+          </p>
+          <Link
+            href="/"
+            className="mt-4 rounded-lg bg-navy-100 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-200"
+          >
+            지도에서 스팟 둘러보기
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
@@ -285,21 +389,91 @@ function SpotCategorySection() {
         성지순례 스팟을 선택하여 해당 장소에 대한 게시글을 확인하세요.
       </p>
 
-      {/* 스팟 목록 - Task 13.2에서 구현 예정 */}
-      <div className="flex flex-col items-center justify-center py-8 text-center">
-        <div className="mb-4 text-4xl">🗺️</div>
-        <p className="mb-2 text-navy-700">스팟별 커뮤니티 준비 중</p>
-        <p className="text-sm text-navy-500">
-          곧 스팟별로 게시글을 모아볼 수 있습니다.
-        </p>
-        <Link
-          href="/"
-          className="mt-4 rounded-lg bg-navy-100 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-200"
-        >
-          지도에서 스팟 둘러보기
-        </Link>
+      {/* 스팟 카드 그리드 */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {spots.map((spot) => (
+          <SpotCard key={spot.id} spot={spot} />
+        ))}
       </div>
     </div>
+  )
+}
+
+/**
+ * 스팟 카드 컴포넌트
+ * 스팟 이미지, 이름, 게시글 수를 표시
+ */
+function SpotCard({
+  spot,
+}: {
+  spot: { id: string; name: string; thumbnailUrl: string; postCount: number }
+}) {
+  const [imageError, setImageError] = useState(false)
+
+  return (
+    <Link
+      href={`/spots/${spot.id}#community`}
+      className="group block overflow-hidden rounded-lg border border-navy-100 bg-white transition-all hover:border-navy-300 hover:shadow-md"
+    >
+      {/* 스팟 이미지 */}
+      <div className="relative h-32 w-full overflow-hidden bg-navy-100">
+        {spot.thumbnailUrl && !imageError ? (
+          <Image
+            src={spot.thumbnailUrl}
+            alt={spot.name}
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+            onError={() => setImageError(true)}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <svg
+              className="h-12 w-12 text-navy-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      {/* 스팟 정보 */}
+      <div className="p-4">
+        <h3 className="mb-1 truncate font-medium text-navy-800 group-hover:text-navy-600">
+          {spot.name}
+        </h3>
+        <div className="flex items-center gap-1 text-sm text-navy-500">
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+            />
+          </svg>
+          <span>게시글 {spot.postCount}개</span>
+        </div>
+      </div>
+    </Link>
   )
 }
 
