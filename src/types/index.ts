@@ -147,6 +147,17 @@ export interface CreateSceneInput {
 }
 
 // ============================================
+// Community Summary Types
+// ============================================
+
+export interface SpotCommunitySummary {
+  id: string
+  name: string
+  thumbnailUrl: string
+  postCount: number
+}
+
+// ============================================
 // API Response Types
 // ============================================
 

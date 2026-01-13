@@ -38,6 +38,20 @@ interface SpotsResponse {
   total: number
 }
 
+// Community summary type
+export interface SpotCommunitySummary {
+  id: string
+  name: string
+  thumbnailUrl: string
+  postCount: number
+}
+
+// API response types
+interface SpotCommunitySummaryResponse {
+  summaries: SpotCommunitySummary[]
+  total: number
+}
+
 // Query keys
 export const spotKeys = {
   all: ['spots'] as const,
@@ -48,6 +62,7 @@ export const spotKeys = {
   preview: (id: string) => [...spotKeys.previews(), id] as const,
   details: () => [...spotKeys.all, 'detail'] as const,
   detail: (id: string) => [...spotKeys.details(), id] as const,
+  communitySummary: () => [...spotKeys.all, 'community-summary'] as const,
 }
 
 /**
@@ -107,5 +122,30 @@ export function useSpotPreview(spotId: string | null) {
     },
     enabled: !!spotId,
     staleTime: 10 * 60 * 1000, // 10 minutes for individual spots
+  })
+}
+
+/**
+ * Hook to fetch spot community summary
+ * Returns spots with their post counts for community overview
+ * Requirements: 5.1, 3.1
+ */
+export function useSpotCommunitySummary() {
+  return useQuery({
+    queryKey: spotKeys.communitySummary(),
+    queryFn: async (): Promise<SpotCommunitySummary[]> => {
+      const response = await fetch('/api/spots/community-summary')
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch spot community summary: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const data: SpotCommunitySummaryResponse = await response.json()
+      return data.summaries
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes (게시글 수는 자주 변경될 수 있음)
+    gcTime: 5 * 60 * 1000, // 5 minutes
   })
 }
