@@ -201,8 +201,8 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
   const isSubmitting = isUploading || createScene.isPending
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
+      <div className="relative z-[10000] w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-bold text-gray-900">작품 속 장면 추가</h3>
           <button
