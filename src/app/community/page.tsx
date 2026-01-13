@@ -11,9 +11,9 @@ import {
 } from '@/hooks/useSpots'
 
 /**
- * 커뮤니티 카테고리 타입
+ * 커뮤니티 카테고리 타입 (전체 카테고리 제거)
  */
-type CommunityCategory = 'all' | 'spot' | 'media' | 'general'
+type CommunityCategory = 'media' | 'spot' | 'general'
 
 interface CategoryTab {
   id: CommunityCategory
@@ -23,12 +23,12 @@ interface CategoryTab {
 }
 
 /**
- * 카테고리 탭 정의
+ * 카테고리 탭 정의 (작품별을 첫 번째로)
  */
 const categoryTabs: CategoryTab[] = [
   {
-    id: 'all',
-    label: '전체',
+    id: 'media',
+    label: '작품별',
     icon: (
       <svg
         className="h-4 w-4"
@@ -40,11 +40,11 @@ const categoryTabs: CategoryTab[] = [
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+          d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
         />
       </svg>
     ),
-    description: '모든 게시글',
+    description: '애니메이션/드라마별 게시글',
   },
   {
     id: 'spot',
@@ -71,26 +71,6 @@ const categoryTabs: CategoryTab[] = [
       </svg>
     ),
     description: '성지순례 스팟별 게시글',
-  },
-  {
-    id: 'media',
-    label: '작품별',
-    icon: (
-      <svg
-        className="h-4 w-4"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
-        />
-      </svg>
-    ),
-    description: '애니메이션/드라마별 게시글',
   },
   {
     id: 'general',
@@ -149,7 +129,9 @@ function CategoryTabButton({
  * Requirements 5.6: 글쓰기 버튼 클릭 시 작성 페이지로 이동
  */
 export default function CommunityPage() {
-  const [activeCategory, setActiveCategory] = useState<CommunityCategory>('all')
+  // 초기 탭을 작품별(media)로 설정
+  const [activeCategory, setActiveCategory] =
+    useState<CommunityCategory>('media')
 
   // 현재 카테고리에 맞는 글쓰기 링크 생성
   const getWriteLink = () => {
@@ -248,9 +230,8 @@ export default function CommunityPage() {
           role="tabpanel"
           aria-label={`${categoryTabs.find((tab) => tab.id === activeCategory)?.label} 게시글`}
         >
-          {activeCategory === 'all' && <PostList />}
-          {activeCategory === 'spot' && <SpotCategorySection />}
           {activeCategory === 'media' && <MediaCategorySection />}
+          {activeCategory === 'spot' && <SpotCategorySection />}
           {activeCategory === 'general' && <PostList filterType="general" />}
         </div>
       </div>
@@ -406,6 +387,7 @@ function SpotCategorySection() {
 /**
  * 스팟 카드 컴포넌트
  * 스팟 이미지, 이름, 게시글 수를 표시
+ * 클릭 시 스팟 커뮤니티 페이지로 이동 (디테일 페이지가 아님)
  */
 function SpotCard({
   spot,
@@ -416,7 +398,7 @@ function SpotCard({
 
   return (
     <Link
-      href={`/spots/${spot.id}#community`}
+      href={`/community/spot/${spot.id}`}
       className="group block overflow-hidden rounded-lg border border-navy-100 bg-white transition-all hover:border-navy-300 hover:shadow-md"
     >
       {/* 스팟 이미지 */}
