@@ -76,4 +76,5 @@ export const COLLECTIONS = {
   FACILITIES: 'facilities',
   POSTS: 'posts',
   COMMENTS: 'comments',
+  SCENES: 'scenes',
 } as const

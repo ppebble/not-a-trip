@@ -44,6 +44,8 @@ export const spotKeys = {
   lists: () => [...spotKeys.all, 'list'] as const,
   list: (filters: Record<string, unknown>) =>
     [...spotKeys.lists(), { filters }] as const,
+  previews: () => [...spotKeys.all, 'preview'] as const,
+  preview: (id: string) => [...spotKeys.previews(), id] as const,
   details: () => [...spotKeys.all, 'detail'] as const,
   detail: (id: string) => [...spotKeys.details(), id] as const,
 }
@@ -77,7 +79,7 @@ export function useSpots() {
  */
 export function useSpotPreview(spotId: string | null) {
   return useQuery({
-    queryKey: spotKeys.detail(spotId || ''),
+    queryKey: spotKeys.preview(spotId || ''),
     queryFn: async (): Promise<SpotPreviewData> => {
       if (!spotId) {
         throw new Error('Spot ID is required')

@@ -42,3 +42,6 @@ next-env.d.ts
 
 # velog posts (temporary files for blog writing)
 velog-post.md
+
+# user uploaded files
+/public/uploads/

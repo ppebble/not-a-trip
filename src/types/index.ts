@@ -124,6 +124,29 @@ export interface CreateCommentInput {
 }
 
 // ============================================
+// Scene Types (작품 속 장면)
+// ============================================
+
+export interface Scene {
+  id: string
+  spotId: string
+  imageUrl: string
+  animeTitle: string
+  episodeInfo?: string // 예: "1화", "OVA" 등
+  description?: string
+  likeCount: number
+  createdAt: Date
+}
+
+export interface CreateSceneInput {
+  spotId: string
+  imageUrl: string
+  animeTitle: string
+  episodeInfo?: string
+  description?: string
+}
+
+// ============================================
 // API Response Types
 // ============================================
 

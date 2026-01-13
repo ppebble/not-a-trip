@@ -23,6 +23,8 @@ export interface CreatePostInput {
   title: string
   content: string
   author: string
+  spotId?: string
+  mediaTitle?: string
 }
 
 export interface CreateCommentInput {
@@ -54,6 +56,7 @@ export const postKeys = {
   lists: () => [...postKeys.all, 'list'] as const,
   list: (filters: Record<string, unknown>) =>
     [...postKeys.lists(), { filters }] as const,
+  bySpot: (spotId: string) => [...postKeys.lists(), 'spot', spotId] as const,
   details: () => [...postKeys.all, 'detail'] as const,
   detail: (id: string) => [...postKeys.details(), id] as const,
   comments: (postId: string) =>
@@ -84,6 +87,40 @@ export function usePosts() {
       }))
     },
     staleTime: 2 * 60 * 1000, // 2 minutes for posts (more dynamic content)
+    gcTime: 5 * 60 * 1000, // 5 minutes cache time
+  })
+}
+
+/**
+ * Hook to fetch posts for a specific spot
+ * Requirements: 3.1, 5.1
+ */
+export function usePostsBySpot(spotId: string | null) {
+  return useQuery({
+    queryKey: postKeys.bySpot(spotId || ''),
+    queryFn: async (): Promise<Post[]> => {
+      if (!spotId) {
+        throw new Error('Spot ID is required')
+      }
+
+      const response = await fetch(`/api/posts?spotId=${spotId}`)
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch posts: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const data: PostsResponse = await response.json()
+
+      // Convert date strings to Date objects
+      return data.posts.map((post) => ({
+        ...post,
+        createdAt: new Date(post.createdAt),
+      }))
+    },
+    enabled: !!spotId,
+    staleTime: 2 * 60 * 1000, // 2 minutes for posts
     gcTime: 5 * 60 * 1000, // 5 minutes cache time
   })
 }
@@ -184,9 +221,15 @@ export function useCreatePost() {
         createdAt: new Date(result.createdAt),
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       // Invalidate posts list to refetch with new post
       queryClient.invalidateQueries({ queryKey: postKeys.lists() })
+      // If post is linked to a spot, invalidate spot posts
+      if (variables.spotId) {
+        queryClient.invalidateQueries({
+          queryKey: postKeys.bySpot(variables.spotId),
+        })
+      }
     },
   })
 }
