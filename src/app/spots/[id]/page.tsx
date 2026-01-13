@@ -165,6 +165,25 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
                   {media.year && (
                     <p className="mt-1 text-sm text-gray-600">{media.year}년</p>
                   )}
+                  <Link
+                    href={`/community/media/${encodeURIComponent(media.title)}`}
+                    className="mt-3 inline-flex items-center gap-1 text-sm text-navy-600 transition-colors hover:text-navy-800"
+                  >
+                    <span>커뮤니티 보기</span>
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </Link>
                 </div>
               ))}
             </div>
