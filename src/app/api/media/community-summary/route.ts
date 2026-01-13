@@ -12,11 +12,13 @@ interface SpotDocument {
 }
 
 interface PostDocument {
+  spotId?: string
   mediaTitle?: string
 }
 
 /**
  * GET /api/media/community-summary - 작품별 게시글 수 조회
+ * 작품에 연결된 모든 스팟의 게시글 수를 합산하여 반환
  * Requirements: 5.1
  */
 export async function GET(): Promise<NextResponse> {
@@ -24,39 +26,56 @@ export async function GET(): Promise<NextResponse> {
     const spotsCollection = await getCollection<SpotDocument>(COLLECTIONS.SPOTS)
     const postsCollection = await getCollection<PostDocument>(COLLECTIONS.POSTS)
 
-    // 모든 스팟에서 작품 정보 수집
+    // 모든 스팟 조회
     const spots = await spotsCollection.find({}).toArray()
 
-    // 작품별로 중복 제거하여 수집 (title을 키로 사용)
-    const mediaMap = new Map<
+    // 작품별로 연결된 스팟 ID 목록 수집
+    const mediaToSpots = new Map<
       string,
-      { title: string; type: 'anime' | 'drama' | 'movie' | 'other' }
+      {
+        title: string
+        type: 'anime' | 'drama' | 'movie' | 'other'
+        spotIds: string[]
+      }
     >()
 
     spots.forEach((spot) => {
       if (spot.relatedMedia && Array.isArray(spot.relatedMedia)) {
         spot.relatedMedia.forEach((media) => {
-          if (media.title && !mediaMap.has(media.title)) {
-            mediaMap.set(media.title, {
-              title: media.title,
-              type: media.type || 'other',
-            })
+          if (media.title) {
+            const existing = mediaToSpots.get(media.title)
+            if (existing) {
+              existing.spotIds.push(spot.id)
+            } else {
+              mediaToSpots.set(media.title, {
+                title: media.title,
+                type: media.type || 'other',
+                spotIds: [spot.id],
+              })
+            }
           }
         })
       }
     })
 
-    // 각 작품별 게시글 수 집계
+    // 각 작품별 게시글 수 집계 (연결된 스팟의 게시글 + 직접 연결된 게시글)
     const summaries: MediaCommunitySummary[] = await Promise.all(
-      Array.from(mediaMap.values()).map(async (media) => {
-        const postCount = await postsCollection.countDocuments({
+      Array.from(mediaToSpots.values()).map(async (media) => {
+        // 해당 작품과 연결된 스팟들의 게시글 수
+        const spotPostCount = await postsCollection.countDocuments({
+          spotId: { $in: media.spotIds },
+        })
+
+        // 직접 mediaTitle로 연결된 게시글 수 (스팟 없이 작품만 연결된 경우)
+        const directPostCount = await postsCollection.countDocuments({
           mediaTitle: media.title,
+          spotId: { $exists: false },
         })
 
         return {
           title: media.title,
           type: media.type,
-          postCount,
+          postCount: spotPostCount + directPostCount,
         }
       })
     )
