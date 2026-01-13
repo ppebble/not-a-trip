@@ -5,9 +5,9 @@
  * 실행 방법:
  * npx tsx scripts/seed-facilities.ts
  *
- * 스팟 좌표 기준:
- * - SPOT-001 (스가 신사): lat: 35.6762, lng: 139.6503
- * - SPOT-002 (가마쿠라 건널목): lat: 35.3084, lng: 139.5503
+ * 스팟 좌표 기준 (실제 위치):
+ * - SPOT-001 (스가 신사): lat: 35.6872, lng: 139.7197
+ * - SPOT-002 (가마쿠라 건널목): lat: 35.3082, lng: 139.4952
  * - SPOT-003 (지우펀): lat: 25.1089, lng: 121.8443
  */
 
@@ -20,96 +20,96 @@ const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
 const SEED_FACILITIES = [
   // ========================================
   // 스가 신사 (SPOT-001) 근처 편의시설들
-  // 기준 좌표: lat: 35.6762, lng: 139.6503
+  // 기준 좌표: lat: 35.6872, lng: 139.7197
   // ========================================
   {
-    name: '세븐일레븐 요츠야점',
+    name: '세븐일레븐 요츠야3초메점',
     type: 'convenience_store',
-    address: '도쿄도 신주쿠구 요츠야 1-2-3',
-    coordinates: { lat: 35.6758, lng: 139.6498 }, // 스가 신사에서 약 60m
+    address: '도쿄도 신주쿠구 요츠야 3-11',
+    coordinates: { lat: 35.6868, lng: 139.7192 },
   },
   {
     name: '스타벅스 요츠야점',
     type: 'cafe',
     address: '도쿄도 신주쿠구 요츠야 1-3-4',
-    coordinates: { lat: 35.677, lng: 139.651 }, // 스가 신사에서 약 110m
+    coordinates: { lat: 35.6878, lng: 139.7205 },
   },
   {
     name: '요츠야 라멘',
     type: 'restaurant',
     address: '도쿄도 신주쿠구 요츠야 1-4-5',
-    coordinates: { lat: 35.6755, lng: 139.6515 }, // 스가 신사에서 약 130m
+    coordinates: { lat: 35.6865, lng: 139.7188 },
   },
   {
-    name: 'JR 요츠야역',
+    name: '도쿄메트로 요츠야3초메역',
     type: 'station',
-    address: '도쿄도 신주쿠구 요츠야 1-1-1',
-    coordinates: { lat: 35.685, lng: 139.73 }, // 요츠야역 실제 좌표 (약 7km - 역은 멀리 있음)
+    address: '도쿄도 신주쿠구 요츠야 3-8',
+    coordinates: { lat: 35.6875, lng: 139.721 },
   },
   {
     name: '패밀리마트 스가초점',
     type: 'convenience_store',
     address: '도쿄도 신주쿠구 스가초 5-1',
-    coordinates: { lat: 35.6768, lng: 139.6495 }, // 스가 신사에서 약 90m
+    coordinates: { lat: 35.688, lng: 139.719 },
   },
   {
     name: '도토루 커피 요츠야점',
     type: 'cafe',
     address: '도쿄도 신주쿠구 요츠야 1-5-6',
-    coordinates: { lat: 35.6752, lng: 139.6508 }, // 스가 신사에서 약 120m
+    coordinates: { lat: 35.6862, lng: 139.72 },
   },
   {
     name: '요츠야 스시',
     type: 'restaurant',
     address: '도쿄도 신주쿠구 요츠야 1-6-7',
-    coordinates: { lat: 35.6775, lng: 139.6498 }, // 스가 신사에서 약 150m
+    coordinates: { lat: 35.6885, lng: 139.7195 },
   },
   {
     name: '요츠야 약국',
     type: 'other',
     address: '도쿄도 신주쿠구 요츠야 1-7-8',
-    coordinates: { lat: 35.676, lng: 139.6518 }, // 스가 신사에서 약 140m
+    coordinates: { lat: 35.687, lng: 139.7185 },
   },
 
   // ========================================
   // 가마쿠라 건널목 (SPOT-002) 근처 편의시설들
-  // 기준 좌표: lat: 35.3084, lng: 139.5503
+  // 기준 좌표: lat: 35.3082, lng: 139.4952
   // ========================================
   {
-    name: '로손 가마쿠라점',
+    name: '로손 가마쿠라코코마에점',
     type: 'convenience_store',
     address: '가나가와현 가마쿠라시 고시고에 1-2-1',
-    coordinates: { lat: 35.308, lng: 139.551 }, // 건널목에서 약 80m
+    coordinates: { lat: 35.3078, lng: 139.4958 },
   },
   {
     name: '가마쿠라 해변 카페',
     type: 'cafe',
     address: '가나가와현 가마쿠라시 고시고에 1-3-2',
-    coordinates: { lat: 35.3078, lng: 139.5498 }, // 건널목에서 약 80m
+    coordinates: { lat: 35.3085, lng: 139.4945 },
   },
   {
     name: '에노덴 가마쿠라코코마에역',
     type: 'station',
     address: '가나가와현 가마쿠라시 고시고에 1-1-32',
-    coordinates: { lat: 35.3082, lng: 139.5495 }, // 건널목에서 약 80m (실제 역 위치)
+    coordinates: { lat: 35.308, lng: 139.4948 },
   },
   {
     name: '가마쿠라 해산물 레스토랑',
     type: 'restaurant',
     address: '가나가와현 가마쿠라시 고시고에 1-4-3',
-    coordinates: { lat: 35.309, lng: 139.5508 }, // 건널목에서 약 80m
+    coordinates: { lat: 35.3088, lng: 139.496 },
   },
   {
     name: '세븐일레븐 가마쿠라코코마에점',
     type: 'convenience_store',
     address: '가나가와현 가마쿠라시 고시고에 1-5-1',
-    coordinates: { lat: 35.3088, lng: 139.5495 }, // 건널목에서 약 90m
+    coordinates: { lat: 35.3075, lng: 139.4955 },
   },
   {
     name: '쇼난 서핑 카페',
     type: 'cafe',
     address: '가나가와현 가마쿠라시 고시고에 1-6-2',
-    coordinates: { lat: 35.3075, lng: 139.5512 }, // 건널목에서 약 130m
+    coordinates: { lat: 35.309, lng: 139.494 },
   },
 
   // ========================================
@@ -120,37 +120,37 @@ const SEED_FACILITIES = [
     name: '지우펀 찻집 (아메이차루)',
     type: 'cafe',
     address: '대만 신베이시 루이팡구 지우펀 기산가 142호',
-    coordinates: { lat: 25.1092, lng: 121.8448 }, // 지우펀에서 약 60m
+    coordinates: { lat: 25.1092, lng: 121.8448 },
   },
   {
     name: '지우펀 전통 레스토랑',
     type: 'restaurant',
     address: '대만 신베이시 루이팡구 지우펀 기산가 156호',
-    coordinates: { lat: 25.1085, lng: 121.8438 }, // 지우펀에서 약 70m
+    coordinates: { lat: 25.1085, lng: 121.8438 },
   },
   {
     name: '지우펀 편의점',
     type: 'convenience_store',
     address: '대만 신베이시 루이팡구 지우펀 기산가 120호',
-    coordinates: { lat: 25.1095, lng: 121.845 }, // 지우펀에서 약 100m
+    coordinates: { lat: 25.1095, lng: 121.845 },
   },
   {
     name: '지우펀 타로볼 가게',
     type: 'restaurant',
     address: '대만 신베이시 루이팡구 지우펀 수치로 35호',
-    coordinates: { lat: 25.1082, lng: 121.8448 }, // 지우펀에서 약 90m
+    coordinates: { lat: 25.1082, lng: 121.8448 },
   },
   {
     name: '지우펀 기념품점',
     type: 'other',
     address: '대만 신베이시 루이팡구 지우펀 기산가 100호',
-    coordinates: { lat: 25.1093, lng: 121.8435 }, // 지우펀에서 약 100m
+    coordinates: { lat: 25.1093, lng: 121.8435 },
   },
   {
     name: '루이팡역',
     type: 'station',
     address: '대만 신베이시 루이팡구 밍덩로 1단 82호',
-    coordinates: { lat: 25.1086, lng: 121.8065 }, // 루이팡역 (지우펀에서 버스로 이동)
+    coordinates: { lat: 25.1086, lng: 121.8065 },
   },
 ]
 
