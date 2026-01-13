@@ -113,18 +113,48 @@ interface AddSceneModalProps {
 
 function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
   const createScene = useCreateScene()
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [animeTitle, setAnimeTitle] = useState('')
   const [episodeInfo, setEpisodeInfo] = useState('')
   const [description, setDescription] = useState('')
   const [error, setError] = useState('')
+  const [isUploading, setIsUploading] = useState(false)
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // 파일 타입 검증
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      setError('지원하지 않는 파일 형식입니다. (JPG, PNG, GIF, WEBP만 가능)')
+      return
+    }
+
+    // 파일 크기 검증 (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('파일 크기는 5MB 이하여야 합니다')
+      return
+    }
+
+    setError('')
+    setImageFile(file)
+
+    // 미리보기 생성
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
 
-    if (!imageUrl.trim()) {
-      setError('이미지 URL을 입력해주세요')
+    if (!imageFile) {
+      setError('이미지를 선택해주세요')
       return
     }
     if (!animeTitle.trim()) {
@@ -133,18 +163,42 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
     }
 
     try {
+      setIsUploading(true)
+
+      // 1. 이미지 업로드
+      const formData = new FormData()
+      formData.append('file', imageFile)
+
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!uploadResponse.ok) {
+        const uploadError = await uploadResponse.json()
+        throw new Error(uploadError.error || '이미지 업로드에 실패했습니다')
+      }
+
+      const { imageUrl } = await uploadResponse.json()
+
+      // 2. 장면 생성
       await createScene.mutateAsync({
         spotId,
-        imageUrl: imageUrl.trim(),
+        imageUrl,
         animeTitle: animeTitle.trim(),
         episodeInfo: episodeInfo.trim() || undefined,
         description: description.trim() || undefined,
       })
+
       onClose()
     } catch (err) {
       setError(err instanceof Error ? err.message : '장면 추가에 실패했습니다')
+    } finally {
+      setIsUploading(false)
     }
   }
+
+  const isSubmitting = isUploading || createScene.isPending
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -178,17 +232,75 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* 이미지 업로드 */}
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              이미지 URL <span className="text-red-500">*</span>
+              이미지 <span className="text-red-500">*</span>
             </label>
-            <input
-              type="url"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
-            />
+            <div className="mt-1">
+              {imagePreview ? (
+                <div className="relative">
+                  <div className="relative aspect-video overflow-hidden rounded-lg border border-gray-200">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imagePreview}
+                      alt="미리보기"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setImageFile(null)
+                      setImagePreview(null)
+                    }}
+                    className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white shadow-md hover:bg-red-600"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-6 transition-colors hover:border-navy-400 hover:bg-gray-100">
+                  <svg
+                    className="mb-2 h-10 w-10 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <span className="text-sm text-gray-600">
+                    클릭하여 이미지 선택
+                  </span>
+                  <span className="mt-1 text-xs text-gray-400">
+                    JPG, PNG, GIF, WEBP (최대 5MB)
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
+              )}
+            </div>
           </div>
 
           <div>
@@ -240,10 +352,10 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
             </button>
             <button
               type="submit"
-              disabled={createScene.isPending}
+              disabled={isSubmitting}
               className="flex-1 rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-700 disabled:opacity-50"
             >
-              {createScene.isPending ? '추가 중...' : '추가하기'}
+              {isSubmitting ? '업로드 중...' : '추가하기'}
             </button>
           </div>
         </form>
