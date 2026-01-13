@@ -57,6 +57,8 @@ export const postKeys = {
   list: (filters: Record<string, unknown>) =>
     [...postKeys.lists(), { filters }] as const,
   bySpot: (spotId: string) => [...postKeys.lists(), 'spot', spotId] as const,
+  byMedia: (mediaTitle: string) =>
+    [...postKeys.lists(), 'media', mediaTitle] as const,
   details: () => [...postKeys.all, 'detail'] as const,
   detail: (id: string) => [...postKeys.details(), id] as const,
   comments: (postId: string) =>
@@ -120,6 +122,42 @@ export function usePostsBySpot(spotId: string | null) {
       }))
     },
     enabled: !!spotId,
+    staleTime: 2 * 60 * 1000, // 2 minutes for posts
+    gcTime: 5 * 60 * 1000, // 5 minutes cache time
+  })
+}
+
+/**
+ * Hook to fetch posts for a specific media title
+ * Requirements: 5.1
+ */
+export function usePostsByMedia(mediaTitle: string | null) {
+  return useQuery({
+    queryKey: postKeys.byMedia(mediaTitle || ''),
+    queryFn: async (): Promise<Post[]> => {
+      if (!mediaTitle) {
+        throw new Error('Media title is required')
+      }
+
+      const response = await fetch(
+        `/api/posts?mediaTitle=${encodeURIComponent(mediaTitle)}`
+      )
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch posts: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const data: PostsResponse = await response.json()
+
+      // Convert date strings to Date objects
+      return data.posts.map((post) => ({
+        ...post,
+        createdAt: new Date(post.createdAt),
+      }))
+    },
+    enabled: !!mediaTitle,
     staleTime: 2 * 60 * 1000, // 2 minutes for posts
     gcTime: 5 * 60 * 1000, // 5 minutes cache time
   })
