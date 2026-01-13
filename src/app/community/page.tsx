@@ -4,7 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PostList from '@/components/community/PostList'
-import { useSpotCommunitySummary } from '@/hooks/useSpots'
+import {
+  useSpotCommunitySummary,
+  useMediaCommunitySummary,
+  MediaCommunitySummary,
+} from '@/hooks/useSpots'
 
 /**
  * 커뮤니티 카테고리 타입
@@ -480,8 +484,98 @@ function SpotCard({
 /**
  * 작품별 카테고리 섹션
  * 작품 목록을 카드 형태로 표시하고 각 작품의 커뮤니티로 이동 가능
+ * Requirements: 5.1
  */
 function MediaCategorySection() {
+  const { data: mediaList, isLoading, error } = useMediaCommunitySummary()
+
+  if (isLoading) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center gap-2">
+          <svg
+            className="h-5 w-5 text-navy-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
+            />
+          </svg>
+          <h2 className="text-lg font-semibold text-navy-800">
+            작품별 커뮤니티
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="animate-pulse rounded-lg border border-navy-100 bg-navy-50 p-4"
+            >
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-navy-200" />
+              <div className="mb-2 h-4 w-3/4 rounded bg-navy-200" />
+              <div className="h-3 w-1/2 rounded bg-navy-200" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-4xl">⚠️</div>
+          <p className="mb-2 text-navy-700">작품 정보를 불러오지 못했습니다</p>
+          <p className="text-sm text-navy-500">잠시 후 다시 시도해주세요.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!mediaList || mediaList.length === 0) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center gap-2">
+          <svg
+            className="h-5 w-5 text-navy-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
+            />
+          </svg>
+          <h2 className="text-lg font-semibold text-navy-800">
+            작품별 커뮤니티
+          </h2>
+        </div>
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-4xl">🎬</div>
+          <p className="mb-2 text-navy-700">등록된 작품이 없습니다</p>
+          <p className="text-sm text-navy-500">
+            스팟에 연결된 작품 정보가 표시됩니다.
+          </p>
+          <Link
+            href="/"
+            className="mt-4 rounded-lg bg-navy-100 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-200"
+          >
+            지도에서 스팟 둘러보기
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
@@ -504,20 +598,89 @@ function MediaCategorySection() {
         애니메이션, 드라마, 영화 등 작품을 선택하여 관련 게시글을 확인하세요.
       </p>
 
-      {/* 작품 목록 - Task 13.3에서 구현 예정 */}
-      <div className="flex flex-col items-center justify-center py-8 text-center">
-        <div className="mb-4 text-4xl">🎬</div>
-        <p className="mb-2 text-navy-700">작품별 커뮤니티 준비 중</p>
-        <p className="text-sm text-navy-500">
-          곧 작품별로 게시글을 모아볼 수 있습니다.
-        </p>
-        <Link
-          href="/"
-          className="mt-4 rounded-lg bg-navy-100 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-200"
-        >
-          지도에서 작품 둘러보기
-        </Link>
+      {/* 작품 카드 그리드 */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {mediaList.map((media) => (
+          <MediaCard key={media.title} media={media} />
+        ))}
       </div>
     </div>
+  )
+}
+
+/**
+ * 작품 타입에 따른 아이콘 반환
+ */
+function getMediaTypeIcon(type: MediaCommunitySummary['type']) {
+  switch (type) {
+    case 'anime':
+      return '🎌'
+    case 'drama':
+      return '📺'
+    case 'movie':
+      return '🎬'
+    default:
+      return '🎭'
+  }
+}
+
+/**
+ * 작품 타입에 따른 라벨 반환
+ */
+function getMediaTypeLabel(type: MediaCommunitySummary['type']) {
+  switch (type) {
+    case 'anime':
+      return '애니메이션'
+    case 'drama':
+      return '드라마'
+    case 'movie':
+      return '영화'
+    default:
+      return '기타'
+  }
+}
+
+/**
+ * 작품 카드 컴포넌트
+ * 작품명, 타입, 게시글 수를 표시
+ * Requirements: 5.1
+ */
+function MediaCard({ media }: { media: MediaCommunitySummary }) {
+  return (
+    <Link
+      href={`/community/media/${encodeURIComponent(media.title)}`}
+      className="group block overflow-hidden rounded-lg border border-navy-100 bg-white p-4 transition-all hover:border-navy-300 hover:shadow-md"
+    >
+      {/* 작품 아이콘 및 타입 */}
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-100 text-2xl transition-colors group-hover:bg-navy-200">
+          {getMediaTypeIcon(media.type)}
+        </div>
+        <span className="rounded-full bg-navy-50 px-2 py-0.5 text-xs text-navy-600">
+          {getMediaTypeLabel(media.type)}
+        </span>
+      </div>
+
+      {/* 작품 정보 */}
+      <h3 className="mb-2 truncate font-medium text-navy-800 group-hover:text-navy-600">
+        {media.title}
+      </h3>
+      <div className="flex items-center gap-1 text-sm text-navy-500">
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+          />
+        </svg>
+        <span>게시글 {media.postCount}개</span>
+      </div>
+    </Link>
   )
 }
