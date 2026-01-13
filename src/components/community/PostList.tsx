@@ -219,6 +219,7 @@ function PostListEmpty() {
 
 interface PostListProps {
   className?: string
+  filterType?: 'all' | 'general' | 'spot' | 'media'
 }
 
 /**
@@ -229,9 +230,21 @@ interface PostListProps {
  * Requirements:
  * - 5.1: 게시글 목록에 제목, 작성자, 날짜, 조회수 표시
  */
-export default function PostList({ className = '' }: PostListProps) {
+export default function PostList({
+  className = '',
+  filterType = 'all',
+}: PostListProps) {
   const router = useRouter()
-  const { data: posts, isLoading, error, refetch } = usePosts()
+  const { data: allPosts, isLoading, error, refetch } = usePosts()
+
+  // 필터 타입에 따라 게시글 필터링
+  const posts = allPosts?.filter((post) => {
+    if (filterType === 'all') return true
+    if (filterType === 'general') return !post.spotId && !post.mediaTitle
+    if (filterType === 'spot') return !!post.spotId
+    if (filterType === 'media') return !!post.mediaTitle
+    return true
+  })
 
   // 게시글 클릭 핸들러
   const handlePostClick = (postId: string) => {
