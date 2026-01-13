@@ -9,6 +9,8 @@ export interface Post {
   createdAt: Date
   viewCount: number
   commentCount: number
+  spotId?: string
+  mediaTitle?: string
 }
 
 export interface Comment {
