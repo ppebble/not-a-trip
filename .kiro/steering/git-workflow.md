@@ -176,6 +176,8 @@ git push -u origin [브랜치명]
 - GitHub에서 develop 브랜치로 PR 생성
 - PR 설명에 `Closes #{이슈번호}` 작성
 
+- pr , issue 생성 시 .git 하단 해당 탬플릿 반드시 참조
+
 ## ⚠️ 주의사항
 
 - 브랜치명: 모두 소문자, 하이픈 사용
