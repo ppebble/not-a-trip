@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import PostList from '@/components/community/PostList'
@@ -129,9 +130,73 @@ function CategoryTabButton({
  * Requirements 5.6: 글쓰기 버튼 클릭 시 작성 페이지로 이동
  */
 export default function CommunityPage() {
-  // 초기 탭을 작품별(media)로 설정
+  return (
+    <Suspense fallback={<CommunityPageSkeleton />}>
+      <CommunityPageContent />
+    </Suspense>
+  )
+}
+
+/**
+ * 로딩 스켈레톤
+ */
+function CommunityPageSkeleton() {
+  return (
+    <main className="min-h-screen bg-navy-50">
+      <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+        <div className="mx-auto max-w-4xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl">
+                🗾
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white">커뮤니티</h1>
+                <p className="text-xs text-navy-300">
+                  성지순례 경험을 공유하세요
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div className="mx-auto max-w-4xl px-4 py-6">
+        <div className="animate-pulse">
+          <div className="mb-6 flex gap-2">
+            <div className="h-10 w-24 rounded-lg bg-navy-200" />
+            <div className="h-10 w-24 rounded-lg bg-navy-200" />
+            <div className="h-10 w-24 rounded-lg bg-navy-200" />
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+/**
+ * 커뮤니티 페이지 실제 콘텐츠
+ */
+function CommunityPageContent() {
+  const searchParams = useSearchParams()
+  const tabParam = searchParams.get('tab')
+
+  // URL 쿼리 파라미터로 초기 탭 설정 (삭제 후 돌아올 때 사용)
+  const getInitialTab = (): CommunityCategory => {
+    if (tabParam === 'general' || tabParam === 'spot' || tabParam === 'media') {
+      return tabParam
+    }
+    return 'media' // 기본값
+  }
+
   const [activeCategory, setActiveCategory] =
-    useState<CommunityCategory>('media')
+    useState<CommunityCategory>(getInitialTab)
+
+  // URL 파라미터 변경 시 탭 업데이트
+  useEffect(() => {
+    const newTab = getInitialTab()
+    setActiveCategory(newTab)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabParam])
 
   // 현재 카테고리에 맞는 글쓰기 링크 생성
   const getWriteLink = () => {
