@@ -157,6 +157,12 @@ export interface SpotCommunitySummary {
   postCount: number
 }
 
+export interface MediaCommunitySummary {
+  title: string
+  type: 'anime' | 'drama' | 'movie' | 'other'
+  postCount: number
+}
+
 // ============================================
 // API Response Types
 // ============================================
