@@ -14,9 +14,10 @@ function WriteForm() {
   const searchParams = useSearchParams()
   const createPost = useCreatePost()
 
-  // URL 파라미터에서 스팟 정보 가져오기
+  // URL 파라미터에서 스팟/작품 정보 가져오기
   const spotIdParam = searchParams.get('spotId')
   const spotNameParam = searchParams.get('spotName')
+  const mediaTitleParam = searchParams.get('mediaTitle')
 
   // 폼 상태
   const [title, setTitle] = useState('')
@@ -24,11 +25,12 @@ function WriteForm() {
   const [author, setAuthor] = useState('')
   const [spotId, setSpotId] = useState<string | null>(null)
   const [spotName, setSpotName] = useState<string | null>(null)
+  const [mediaTitle, setMediaTitle] = useState<string | null>(null)
 
   // 에러 상태
   const [errors, setErrors] = useState<string[]>([])
 
-  // URL 파라미터로 스팟 정보 설정
+  // URL 파라미터로 스팟/작품 정보 설정
   useEffect(() => {
     if (spotIdParam) {
       setSpotId(spotIdParam)
@@ -36,7 +38,10 @@ function WriteForm() {
     if (spotNameParam) {
       setSpotName(decodeURIComponent(spotNameParam))
     }
-  }, [spotIdParam, spotNameParam])
+    if (mediaTitleParam) {
+      setMediaTitle(decodeURIComponent(mediaTitleParam))
+    }
+  }, [spotIdParam, spotNameParam, mediaTitleParam])
 
   // 폼 제출 핸들러
   const handleSubmit = async (e: FormEvent) => {
@@ -70,12 +75,17 @@ function WriteForm() {
         content: content.trim(),
         author: author.trim(),
         ...(spotId && { spotId }),
+        ...(mediaTitle && { mediaTitle }),
       })
 
       // 작성 완료 후 이동
-      // 스팟에서 작성한 경우 스팟 상세 페이지로, 아니면 커뮤니티 목록으로
+      // 스팟에서 작성한 경우 스팟 상세 페이지로
+      // 작품에서 작성한 경우 작품 커뮤니티 페이지로
+      // 그 외에는 커뮤니티 목록으로
       if (spotId) {
         router.push(`/spots/${spotId}`)
+      } else if (mediaTitle) {
+        router.push(`/community/media/${encodeURIComponent(mediaTitle)}`)
       } else {
         router.push('/community')
       }
@@ -88,6 +98,11 @@ function WriteForm() {
   const handleRemoveSpot = () => {
     setSpotId(null)
     setSpotName(null)
+  }
+
+  // 작품 연결 해제 핸들러
+  const handleRemoveMedia = () => {
+    setMediaTitle(null)
   }
 
   return (
@@ -159,6 +174,41 @@ function WriteForm() {
                 onClick={handleRemoveSpot}
                 className="rounded p-1 text-navy-400 transition-colors hover:bg-navy-100 hover:text-navy-600"
                 title="스팟 연결 해제"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* 연결된 작품 정보 표시 */}
+        {mediaTitle && (
+          <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🎬</span>
+                <div>
+                  <p className="text-xs text-purple-500">연결된 작품</p>
+                  <p className="font-medium text-purple-800">{mediaTitle}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleRemoveMedia}
+                className="rounded p-1 text-purple-400 transition-colors hover:bg-purple-100 hover:text-purple-600"
+                title="작품 연결 해제"
               >
                 <svg
                   className="h-5 w-5"
