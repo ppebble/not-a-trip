@@ -239,20 +239,31 @@ export default function PostList({
   mediaTitle,
 }: PostListProps) {
   const router = useRouter()
+
+  // API 레벨에서 필터링 (type=general인 경우 API에서 처리)
+  const apiFilters: { spotId?: string; mediaTitle?: string; type?: 'general' } =
+    {}
+  if (spotId) {
+    apiFilters.spotId = spotId
+  } else if (mediaTitle) {
+    apiFilters.mediaTitle = mediaTitle
+  } else if (filterType === 'general') {
+    apiFilters.type = 'general'
+  }
+
   const {
     data: allPosts,
     isLoading,
     error,
     refetch,
-  } = usePosts({ spotId, mediaTitle })
+  } = usePosts(Object.keys(apiFilters).length > 0 ? apiFilters : undefined)
 
-  // 필터 타입에 따라 게시글 필터링 (spotId/mediaTitle이 없을 때만 적용)
+  // 클라이언트 사이드 필터링 (API에서 처리하지 않는 경우에만)
   const posts = allPosts?.filter((post) => {
-    // spotId나 mediaTitle이 지정된 경우 필터링 없이 모두 표시
-    if (spotId || mediaTitle) return true
+    // spotId, mediaTitle, 또는 type=general이 지정된 경우 API에서 이미 필터링됨
+    if (spotId || mediaTitle || filterType === 'general') return true
 
     if (filterType === 'all') return true
-    if (filterType === 'general') return !post.spotId && !post.mediaTitle
     if (filterType === 'spot') return !!post.spotId
     if (filterType === 'media') return !!post.mediaTitle
     return true
