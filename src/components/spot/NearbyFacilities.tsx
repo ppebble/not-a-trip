@@ -1,7 +1,7 @@
 'use client'
 
 import { NearbyFacility, FacilityType } from '@/types'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { groupFacilitiesByType } from '@/lib/facility-utils'
 
 interface NearbyFacilitiesProps {
@@ -40,6 +40,9 @@ const FACILITY_CONFIG: Record<
   },
 }
 
+// 기본 표시 개수
+const DEFAULT_VISIBLE_COUNT = 3
+
 export default function NearbyFacilities({
   facilities,
 }: NearbyFacilitiesProps) {
@@ -54,6 +57,47 @@ export default function NearbyFacilities({
 
     return grouped
   }, [facilities])
+
+  // 타입 순서 (시설이 있는 타입만)
+  const orderedTypes = useMemo(() => {
+    return Object.entries(facilitiesByType)
+      .filter(([, items]) => items.length > 0)
+      .map(([type]) => type as FacilityType)
+  }, [facilitiesByType])
+
+  // 아코디언 열림 상태 (첫 번째 타입만 기본 열림)
+  const [openTypes, setOpenTypes] = useState<Set<FacilityType>>(() => {
+    return new Set(orderedTypes.length > 0 ? [orderedTypes[0]] : [])
+  })
+
+  // 더보기 상태 (타입별)
+  const [expandedTypes, setExpandedTypes] = useState<Set<FacilityType>>(
+    new Set()
+  )
+
+  const toggleAccordion = (type: FacilityType) => {
+    setOpenTypes((prev) => {
+      const next = new Set(prev)
+      if (next.has(type)) {
+        next.delete(type)
+      } else {
+        next.add(type)
+      }
+      return next
+    })
+  }
+
+  const toggleExpand = (type: FacilityType) => {
+    setExpandedTypes((prev) => {
+      const next = new Set(prev)
+      if (next.has(type)) {
+        next.delete(type)
+      } else {
+        next.add(type)
+      }
+      return next
+    })
+  }
 
   // 편의시설이 없는 경우
   if (facilities.length === 0) {
@@ -74,30 +118,114 @@ export default function NearbyFacilities({
         근처 편의시설 ({facilities.length}개)
       </h2>
 
-      <div className="space-y-6">
-        {Object.entries(facilitiesByType).map(([type, typeFacilities]) => {
-          if (typeFacilities.length === 0) return null
-
-          const config = FACILITY_CONFIG[type as FacilityType]
+      <div className="space-y-3">
+        {orderedTypes.map((type) => {
+          const typeFacilities = facilitiesByType[type]
+          const config = FACILITY_CONFIG[type]
+          const isOpen = openTypes.has(type)
+          const isExpanded = expandedTypes.has(type)
+          const hasMore = typeFacilities.length > DEFAULT_VISIBLE_COUNT
+          const visibleFacilities = isExpanded
+            ? typeFacilities
+            : typeFacilities.slice(0, DEFAULT_VISIBLE_COUNT)
 
           return (
-            <div key={type} className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-xl">{config.icon}</span>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {config.label} ({typeFacilities.length})
-                </h3>
-              </div>
-
-              <div className="space-y-3">
-                {typeFacilities.map((facility) => (
-                  <FacilityCard
-                    key={facility.id}
-                    facility={facility}
-                    config={config}
+            <div
+              key={type}
+              className="overflow-hidden rounded-lg border border-gray-200"
+            >
+              {/* 아코디언 헤더 */}
+              <button
+                onClick={() => toggleAccordion(type)}
+                className="flex w-full items-center justify-between bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100"
+              >
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl">{config.icon}</span>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {config.label}
+                  </h3>
+                  <span className="rounded-full bg-navy-100 px-2 py-0.5 text-sm font-medium text-navy-700">
+                    {typeFacilities.length}
+                  </span>
+                </div>
+                <svg
+                  className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
                   />
-                ))}
-              </div>
+                </svg>
+              </button>
+
+              {/* 아코디언 콘텐츠 */}
+              {isOpen && (
+                <div className="border-t border-gray-200 p-4">
+                  <div className="space-y-3">
+                    {visibleFacilities.map((facility) => (
+                      <FacilityCard
+                        key={facility.id}
+                        facility={facility}
+                        config={config}
+                      />
+                    ))}
+                  </div>
+
+                  {/* 더보기/접기 버튼 */}
+                  {hasMore && (
+                    <button
+                      onClick={() => toggleExpand(type)}
+                      className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-200 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+                    >
+                      {isExpanded ? (
+                        <>
+                          <span>접기</span>
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 15l7-7 7 7"
+                            />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          <span>
+                            더보기 (+
+                            {typeFacilities.length - DEFAULT_VISIBLE_COUNT})
+                          </span>
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           )
         })}
