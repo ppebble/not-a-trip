@@ -7,7 +7,7 @@ import {
   useLikeScene,
   useCreateScene,
 } from '@/hooks/useScenes'
-import { Scene } from '@/types'
+import { Scene, MediaInfo } from '@/types'
 
 interface SceneCardProps {
   scene: Scene
@@ -250,18 +250,37 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
 
 interface AddSceneModalProps {
   spotId: string
+  relatedMedia?: MediaInfo[]
   onClose: () => void
 }
 
-function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
+function AddSceneModal({
+  spotId,
+  relatedMedia = [],
+  onClose,
+}: AddSceneModalProps) {
   const createScene = useCreateScene()
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [animeTitle, setAnimeTitle] = useState('')
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState<number>(-1) // -1: 직접 입력
+  const [isCustomInput, setIsCustomInput] = useState(relatedMedia.length === 0)
   const [episodeInfo, setEpisodeInfo] = useState('')
   const [description, setDescription] = useState('')
   const [error, setError] = useState('')
   const [isUploading, setIsUploading] = useState(false)
+
+  // 작품 선택 시 제목 자동 설정
+  const handleMediaSelect = (index: number) => {
+    setSelectedMediaIndex(index)
+    if (index >= 0 && relatedMedia[index]) {
+      setAnimeTitle(relatedMedia[index].title)
+      setIsCustomInput(false)
+    } else {
+      setAnimeTitle('')
+      setIsCustomInput(true)
+    }
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -449,13 +468,42 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
             <label className="mb-1 block text-sm font-medium text-gray-700">
               작품명 <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              value={animeTitle}
-              onChange={(e) => setAnimeTitle(e.target.value)}
-              placeholder="슬램덩크"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
-            />
+            {relatedMedia.length > 0 ? (
+              <div className="space-y-2">
+                {/* 작품 선택 드롭다운 */}
+                <select
+                  value={selectedMediaIndex}
+                  onChange={(e) => handleMediaSelect(Number(e.target.value))}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+                >
+                  <option value={-1}>직접 입력</option>
+                  {relatedMedia.map((media, index) => (
+                    <option key={index} value={index}>
+                      {media.title} ({getMediaTypeLabel(media.type)})
+                    </option>
+                  ))}
+                </select>
+                {/* 직접 입력 모드일 때만 텍스트 입력 표시 */}
+                {isCustomInput && (
+                  <input
+                    type="text"
+                    value={animeTitle}
+                    onChange={(e) => setAnimeTitle(e.target.value)}
+                    placeholder="작품명을 입력하세요"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+                  />
+                )}
+              </div>
+            ) : (
+              /* 연결된 작품이 없으면 직접 입력만 표시 */
+              <input
+                type="text"
+                value={animeTitle}
+                onChange={(e) => setAnimeTitle(e.target.value)}
+                placeholder="슬램덩크"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+              />
+            )}
           </div>
 
           <div>
@@ -508,9 +556,13 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
 
 interface SceneGalleryProps {
   spotId: string
+  relatedMedia?: MediaInfo[]
 }
 
-export default function SceneGallery({ spotId }: SceneGalleryProps) {
+export default function SceneGallery({
+  spotId,
+  relatedMedia = [],
+}: SceneGalleryProps) {
   const { data: scenes, isLoading, error } = useScenesBySpot(spotId)
   const likeScene = useLikeScene()
   const [showAddModal, setShowAddModal] = useState(false)
@@ -577,8 +629,25 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
       </div>
 
       {showAddModal && (
-        <AddSceneModal spotId={spotId} onClose={() => setShowAddModal(false)} />
+        <AddSceneModal
+          spotId={spotId}
+          relatedMedia={relatedMedia}
+          onClose={() => setShowAddModal(false)}
+        />
       )}
     </div>
   )
+}
+
+/**
+ * 미디어 타입 라벨 변환 헬퍼 함수
+ */
+function getMediaTypeLabel(type: string): string {
+  const labels: Record<string, string> = {
+    anime: '애니메이션',
+    drama: '드라마',
+    movie: '영화',
+    other: '기타',
+  }
+  return labels[type] || type
 }
