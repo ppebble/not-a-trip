@@ -18,6 +18,15 @@ interface PostDocument {
   mediaTitle?: string
 }
 
+interface SpotDocument {
+  id: string
+  relatedMedia: {
+    title: string
+    type: string
+    year?: number
+  }[]
+}
+
 /**
  * MongoDB 문서를 Post 타입으로 변환
  */
@@ -42,7 +51,7 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
  *
  * Query Parameters:
  * - spotId: 특정 스팟 관련 게시글만 조회
- * - mediaTitle: 특정 작품 관련 게시글만 조회
+ * - mediaTitle: 특정 작품 관련 게시글만 조회 (해당 작품과 연결된 스팟의 게시글도 포함)
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
@@ -50,21 +59,39 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const spotId = searchParams.get('spotId')
     const mediaTitle = searchParams.get('mediaTitle')
 
-    const collection = await getCollection<PostDocument & { _id: ObjectId }>(
-      COLLECTIONS.POSTS
-    )
+    const postsCollection = await getCollection<
+      PostDocument & { _id: ObjectId }
+    >(COLLECTIONS.POSTS)
 
-    // 필터 조건 구성
-    const filter: Record<string, string> = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let filter: any = {}
+
     if (spotId) {
+      // 특정 스팟의 게시글만 조회
       filter.spotId = spotId
-    }
-    if (mediaTitle) {
-      filter.mediaTitle = mediaTitle
+    } else if (mediaTitle) {
+      // 작품별 조회: 해당 작품과 연결된 스팟들의 게시글도 포함
+      const spotsCollection = await getCollection<SpotDocument>(
+        COLLECTIONS.SPOTS
+      )
+
+      // 해당 작품과 연결된 스팟 ID 목록 조회
+      const spots = await spotsCollection
+        .find({ 'relatedMedia.title': mediaTitle })
+        .toArray()
+      const spotIds = spots.map((spot) => spot.id)
+
+      // 작품과 직접 연결된 게시글 OR 해당 작품의 스팟과 연결된 게시글
+      filter = {
+        $or: [
+          { mediaTitle: mediaTitle },
+          ...(spotIds.length > 0 ? [{ spotId: { $in: spotIds } }] : []),
+        ],
+      }
     }
 
     // 최신순으로 정렬하여 조회
-    const posts = await collection
+    const posts = await postsCollection
       .find(filter)
       .sort({ createdAt: -1 })
       .toArray()

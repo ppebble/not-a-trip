@@ -162,11 +162,28 @@ function PostContent({ post }: PostContentProps) {
     setIsDeleteModalOpen(true)
   }
 
+  /**
+   * 게시글 삭제 후 원래 게시판으로 리다이렉트
+   * - spotId가 있으면 스팟 커뮤니티로
+   * - mediaTitle이 있으면 작품 커뮤니티로
+   * - 둘 다 없으면 자유게시판(general 탭)으로
+   */
+  const getRedirectUrl = () => {
+    if (post.spotId) {
+      return `/community/spot/${post.spotId}`
+    }
+    if (post.mediaTitle) {
+      return `/community/media/${encodeURIComponent(post.mediaTitle)}`
+    }
+    // 자유게시판 게시글인 경우 general 탭으로 이동
+    return '/community?tab=general'
+  }
+
   const handleDeleteConfirm = () => {
     deletePost.mutate(post.id, {
       onSuccess: () => {
-        // Requirements 5.9: 삭제 후 목록 페이지로 리다이렉트
-        router.push('/community')
+        // Requirements 5.9: 삭제 후 원래 게시판으로 리다이렉트
+        router.push(getRedirectUrl())
       },
       onError: (error) => {
         alert(`삭제 실패: ${error.message}`)

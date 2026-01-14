@@ -69,12 +69,24 @@ export const postKeys = {
 
 /**
  * Hook to fetch all posts for community board
+ * Supports optional filtering by spotId or mediaTitle
  */
-export function usePosts() {
+export function usePosts(filters?: { spotId?: string; mediaTitle?: string }) {
+  const { spotId, mediaTitle } = filters || {}
+
   return useQuery({
-    queryKey: postKeys.lists(),
+    queryKey: spotId
+      ? postKeys.bySpot(spotId)
+      : mediaTitle
+        ? postKeys.byMedia(mediaTitle)
+        : postKeys.lists(),
     queryFn: async (): Promise<Post[]> => {
-      const response = await fetch('/api/posts')
+      const params = new URLSearchParams()
+      if (spotId) params.set('spotId', spotId)
+      if (mediaTitle) params.set('mediaTitle', mediaTitle)
+
+      const url = `/api/posts${params.toString() ? `?${params.toString()}` : ''}`
+      const response = await fetch(url)
 
       if (!response.ok) {
         throw new Error(

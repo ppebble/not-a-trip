@@ -46,9 +46,21 @@ export interface SpotCommunitySummary {
   postCount: number
 }
 
+// Media community summary type
+export interface MediaCommunitySummary {
+  title: string
+  type: 'anime' | 'drama' | 'movie' | 'other'
+  postCount: number
+}
+
 // API response types
 interface SpotCommunitySummaryResponse {
   summaries: SpotCommunitySummary[]
+  total: number
+}
+
+interface MediaCommunitySummaryResponse {
+  summaries: MediaCommunitySummary[]
   total: number
 }
 
@@ -63,6 +75,11 @@ export const spotKeys = {
   details: () => [...spotKeys.all, 'detail'] as const,
   detail: (id: string) => [...spotKeys.details(), id] as const,
   communitySummary: () => [...spotKeys.all, 'community-summary'] as const,
+}
+
+export const mediaKeys = {
+  all: ['media'] as const,
+  communitySummary: () => [...mediaKeys.all, 'community-summary'] as const,
 }
 
 /**
@@ -143,6 +160,31 @@ export function useSpotCommunitySummary() {
       }
 
       const data: SpotCommunitySummaryResponse = await response.json()
+      return data.summaries
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes (게시글 수는 자주 변경될 수 있음)
+    gcTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+/**
+ * Hook to fetch media community summary
+ * Returns media titles with their post counts for community overview
+ * Requirements: 5.1
+ */
+export function useMediaCommunitySummary() {
+  return useQuery({
+    queryKey: mediaKeys.communitySummary(),
+    queryFn: async (): Promise<MediaCommunitySummary[]> => {
+      const response = await fetch('/api/media/community-summary')
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch media community summary: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const data: MediaCommunitySummaryResponse = await response.json()
       return data.summaries
     },
     staleTime: 2 * 60 * 1000, // 2 minutes (게시글 수는 자주 변경될 수 있음)

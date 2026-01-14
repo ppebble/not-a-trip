@@ -220,6 +220,8 @@ function PostListEmpty() {
 interface PostListProps {
   className?: string
   filterType?: 'all' | 'general' | 'spot' | 'media'
+  spotId?: string
+  mediaTitle?: string
 }
 
 /**
@@ -233,12 +235,22 @@ interface PostListProps {
 export default function PostList({
   className = '',
   filterType = 'all',
+  spotId,
+  mediaTitle,
 }: PostListProps) {
   const router = useRouter()
-  const { data: allPosts, isLoading, error, refetch } = usePosts()
+  const {
+    data: allPosts,
+    isLoading,
+    error,
+    refetch,
+  } = usePosts({ spotId, mediaTitle })
 
-  // 필터 타입에 따라 게시글 필터링
+  // 필터 타입에 따라 게시글 필터링 (spotId/mediaTitle이 없을 때만 적용)
   const posts = allPosts?.filter((post) => {
+    // spotId나 mediaTitle이 지정된 경우 필터링 없이 모두 표시
+    if (spotId || mediaTitle) return true
+
     if (filterType === 'all') return true
     if (filterType === 'general') return !post.spotId && !post.mediaTitle
     if (filterType === 'spot') return !!post.spotId
