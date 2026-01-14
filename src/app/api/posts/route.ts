@@ -53,6 +53,7 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
  * - spotId: 특정 스팟 관련 게시글만 조회
  * - mediaTitle: 특정 작품 관련 게시글만 조회 (해당 작품과 연결된 스팟의 게시글도 포함)
  * - type: 게시글 타입 필터 ('general' - 스팟/작품과 연결되지 않은 일반 게시글)
+ * - search: 제목/내용 검색어
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const spotId = searchParams.get('spotId')
     const mediaTitle = searchParams.get('mediaTitle')
     const type = searchParams.get('type')
+    const search = searchParams.get('search')
 
     const postsCollection = await getCollection<
       PostDocument & { _id: ObjectId }
@@ -97,6 +99,21 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           { mediaTitle: mediaTitle },
           ...(spotIds.length > 0 ? [{ spotId: { $in: spotIds } }] : []),
         ],
+      }
+    }
+
+    // 검색어가 있는 경우 제목/내용에서 검색 (대소문자 무시)
+    if (search && search.trim()) {
+      const searchRegex = { $regex: search.trim(), $options: 'i' }
+      const searchCondition = {
+        $or: [{ title: searchRegex }, { content: searchRegex }],
+      }
+
+      // 기존 필터와 검색 조건 결합
+      if (Object.keys(filter).length > 0) {
+        filter = { $and: [filter, searchCondition] }
+      } else {
+        filter = searchCondition
       }
     }
 

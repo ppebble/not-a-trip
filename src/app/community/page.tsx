@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,6 +10,7 @@ import {
   useMediaCommunitySummary,
   MediaCommunitySummary,
 } from '@/hooks/useSpots'
+import { usePosts } from '@/hooks/usePosts'
 
 /**
  * 커뮤니티 카테고리 타입 (전체 카테고리 제거)
@@ -190,6 +191,18 @@ function CommunityPageContent() {
 
   const [activeCategory, setActiveCategory] =
     useState<CommunityCategory>(getInitialTab)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [isSearchMode, setIsSearchMode] = useState(false)
+
+  // 검색어 디바운싱 (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery)
+      setIsSearchMode(searchQuery.trim().length > 0)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
 
   // URL 파라미터 변경 시 탭 업데이트
   useEffect(() => {
@@ -197,6 +210,13 @@ function CommunityPageContent() {
     setActiveCategory(newTab)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabParam])
+
+  // 검색 초기화
+  const handleClearSearch = useCallback(() => {
+    setSearchQuery('')
+    setDebouncedSearch('')
+    setIsSearchMode(false)
+  }, [])
 
   // 현재 카테고리에 맞는 글쓰기 링크 생성
   const getWriteLink = () => {
@@ -245,36 +265,18 @@ function CommunityPageContent() {
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
-        {/* 카테고리 탭 네비게이션 */}
+        {/* 검색 입력 */}
         <div className="mb-6">
-          <div
-            className="flex flex-wrap gap-2"
-            role="tablist"
-            aria-label="커뮤니티 카테고리"
-          >
-            {categoryTabs.map((tab) => (
-              <CategoryTabButton
-                key={tab.id}
-                tab={tab}
-                isActive={activeCategory === tab.id}
-                onClick={() => setActiveCategory(tab.id)}
-              />
-            ))}
-          </div>
-          {/* 현재 카테고리 설명 */}
-          <p className="mt-3 text-sm text-navy-500">
-            {categoryTabs.find((tab) => tab.id === activeCategory)?.description}
-          </p>
-        </div>
-
-        {/* 글쓰기 버튼 */}
-        <div className="mb-4 flex justify-end">
-          <Link
-            href={getWriteLink()}
-            className="flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
-          >
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="게시글 제목 또는 내용 검색..."
+              className="w-full rounded-lg border border-navy-200 bg-white px-4 py-3 pl-10 pr-10 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
+            />
             <svg
-              className="h-4 w-4"
+              className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-navy-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -283,24 +285,177 @@ function CommunityPageContent() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 4v16m8-8H4"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            글쓰기
-          </Link>
+            {searchQuery && (
+              <button
+                onClick={handleClearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-navy-400 transition-colors hover:bg-navy-100 hover:text-navy-600"
+                aria-label="검색어 지우기"
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
+          {isSearchMode && (
+            <p className="mt-2 text-sm text-navy-500">
+              &quot;{debouncedSearch}&quot; 검색 결과
+            </p>
+          )}
         </div>
 
-        {/* 카테고리별 콘텐츠 */}
+        {/* 검색 모드가 아닐 때만 카테고리 탭 표시 */}
+        {!isSearchMode && (
+          <>
+            {/* 카테고리 탭 네비게이션 */}
+            <div className="mb-6">
+              <div
+                className="flex flex-wrap gap-2"
+                role="tablist"
+                aria-label="커뮤니티 카테고리"
+              >
+                {categoryTabs.map((tab) => (
+                  <CategoryTabButton
+                    key={tab.id}
+                    tab={tab}
+                    isActive={activeCategory === tab.id}
+                    onClick={() => setActiveCategory(tab.id)}
+                  />
+                ))}
+              </div>
+              {/* 현재 카테고리 설명 */}
+              <p className="mt-3 text-sm text-navy-500">
+                {
+                  categoryTabs.find((tab) => tab.id === activeCategory)
+                    ?.description
+                }
+              </p>
+            </div>
+
+            {/* 글쓰기 버튼 */}
+            <div className="mb-4 flex justify-end">
+              <Link
+                href={getWriteLink()}
+                className="flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                글쓰기
+              </Link>
+            </div>
+          </>
+        )}
+
+        {/* 카테고리별 콘텐츠 또는 검색 결과 */}
         <div
           role="tabpanel"
-          aria-label={`${categoryTabs.find((tab) => tab.id === activeCategory)?.label} 게시글`}
+          aria-label={
+            isSearchMode
+              ? '검색 결과'
+              : `${categoryTabs.find((tab) => tab.id === activeCategory)?.label} 게시글`
+          }
         >
-          {activeCategory === 'media' && <MediaCategorySection />}
-          {activeCategory === 'spot' && <SpotCategorySection />}
-          {activeCategory === 'general' && <PostList filterType="general" />}
+          {isSearchMode ? (
+            <SearchResultsSection searchQuery={debouncedSearch} />
+          ) : (
+            <>
+              {activeCategory === 'media' && <MediaCategorySection />}
+              {activeCategory === 'spot' && <SpotCategorySection />}
+              {activeCategory === 'general' && (
+                <PostList filterType="general" />
+              )}
+            </>
+          )}
         </div>
       </div>
     </main>
+  )
+}
+
+/**
+ * 검색 결과 섹션
+ * 전체 게시글에서 검색어와 일치하는 게시글 표시
+ */
+function SearchResultsSection({ searchQuery }: { searchQuery: string }) {
+  const { data: posts, isLoading, error } = usePosts({ search: searchQuery })
+
+  if (isLoading) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="animate-pulse">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="mb-4 border-b border-navy-100 pb-4">
+              <div className="mb-2 h-5 w-3/4 rounded bg-navy-200" />
+              <div className="flex gap-4">
+                <div className="h-4 w-20 rounded bg-navy-100" />
+                <div className="h-4 w-24 rounded bg-navy-100" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-4xl">⚠️</div>
+          <p className="mb-2 text-navy-700">검색 중 오류가 발생했습니다</p>
+          <p className="text-sm text-navy-500">잠시 후 다시 시도해주세요.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-4 text-4xl">🔍</div>
+          <p className="mb-2 text-navy-700">
+            &quot;{searchQuery}&quot;에 대한 검색 결과가 없습니다
+          </p>
+          <p className="text-sm text-navy-500">다른 검색어로 시도해보세요.</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-lg bg-white shadow-sm">
+      <div className="border-b border-navy-100 px-4 py-3">
+        <p className="text-sm text-navy-600">
+          총 <span className="font-semibold">{posts.length}</span>개의 검색 결과
+        </p>
+      </div>
+      <PostList searchQuery={searchQuery} />
+    </div>
   )
 }
 

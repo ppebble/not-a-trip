@@ -222,6 +222,7 @@ interface PostListProps {
   filterType?: 'all' | 'general' | 'spot' | 'media'
   spotId?: string
   mediaTitle?: string
+  searchQuery?: string
 }
 
 /**
@@ -237,18 +238,28 @@ export default function PostList({
   filterType = 'all',
   spotId,
   mediaTitle,
+  searchQuery,
 }: PostListProps) {
   const router = useRouter()
 
   // API 레벨에서 필터링 (type=general인 경우 API에서 처리)
-  const apiFilters: { spotId?: string; mediaTitle?: string; type?: 'general' } =
-    {}
+  const apiFilters: {
+    spotId?: string
+    mediaTitle?: string
+    type?: 'general'
+    search?: string
+  } = {}
   if (spotId) {
     apiFilters.spotId = spotId
   } else if (mediaTitle) {
     apiFilters.mediaTitle = mediaTitle
   } else if (filterType === 'general') {
     apiFilters.type = 'general'
+  }
+
+  // 검색어 추가
+  if (searchQuery && searchQuery.trim()) {
+    apiFilters.search = searchQuery.trim()
   }
 
   const {
