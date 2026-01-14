@@ -33,68 +33,70 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   }
 
   return (
-    <div className="group relative h-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl">
-      {/* 이미지 영역 - 더 큰 비율 */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
-          src={scene.imageUrl}
-          alt={scene.episodeInfo || '장면 이미지'}
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, 50vw"
-        />
-        {/* 오버레이 - 호버 시 표시 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+    <div className="group relative h-full">
+      <div className="h-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
+        {/* 이미지 영역 - 더 큰 비율 */}
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={scene.imageUrl}
+            alt={scene.episodeInfo || '장면 이미지'}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, 50vw"
+          />
+          {/* 오버레이 - 호버 시 표시 */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
-        {/* 좋아요 버튼 */}
-        <button
-          onClick={handleLike}
-          disabled={liked || isLiking}
-          className={`absolute right-3 top-3 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium shadow-md transition-all ${
-            liked
-              ? 'bg-red-500 text-white'
-              : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
-          }`}
-          aria-label={liked ? '좋아요 완료' : '좋아요'}
-        >
-          <svg
-            className="h-5 w-5"
-            fill={liked ? 'currentColor' : 'none'}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          {/* 좋아요 버튼 */}
+          <button
+            onClick={handleLike}
+            disabled={liked || isLiking}
+            className={`absolute right-3 top-3 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium shadow-md transition-all ${
+              liked
+                ? 'bg-red-500 text-white'
+                : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
+            }`}
+            aria-label={liked ? '좋아요 완료' : '좋아요'}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-          <span>{localLikeCount}</span>
-        </button>
+            <svg
+              className="h-5 w-5"
+              fill={liked ? 'currentColor' : 'none'}
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+            <span>{localLikeCount}</span>
+          </button>
 
-        {/* 하단 정보 오버레이 - 호버 시 설명 표시 */}
-        {scene.description && (
-          <div className="absolute bottom-0 left-0 right-0 p-3 text-white opacity-0 transition-opacity group-hover:opacity-100">
-            <p className="line-clamp-2 text-sm">{scene.description}</p>
-          </div>
-        )}
-      </div>
+          {/* 하단 정보 오버레이 - 호버 시 설명 표시 */}
+          {scene.description && (
+            <div className="absolute bottom-0 left-0 right-0 p-3 text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <p className="line-clamp-2 text-sm">{scene.description}</p>
+            </div>
+          )}
+        </div>
 
-      {/* 정보 영역 - 에피소드 정보 상단, 설명 하단 */}
-      <div className="px-3 py-2">
-        {scene.episodeInfo ? (
-          <p className="truncate text-sm font-medium text-gray-900">
-            {scene.episodeInfo}
-          </p>
-        ) : (
-          <p className="text-sm text-gray-400">에피소드 정보 없음</p>
-        )}
-        {scene.description && (
-          <p className="mt-1 line-clamp-2 text-xs text-gray-500">
-            {scene.description}
-          </p>
-        )}
+        {/* 정보 영역 - 에피소드 정보 상단, 설명 하단 */}
+        <div className="px-3 py-2">
+          {scene.episodeInfo ? (
+            <p className="truncate text-sm font-medium text-gray-900">
+              {scene.episodeInfo}
+            </p>
+          ) : (
+            <p className="text-sm text-gray-400">에피소드 정보 없음</p>
+          )}
+          {scene.description && (
+            <p className="mt-1 line-clamp-2 text-xs text-gray-500">
+              {scene.description}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )
