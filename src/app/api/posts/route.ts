@@ -52,12 +52,14 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
  * Query Parameters:
  * - spotId: 특정 스팟 관련 게시글만 조회
  * - mediaTitle: 특정 작품 관련 게시글만 조회 (해당 작품과 연결된 스팟의 게시글도 포함)
+ * - type: 게시글 타입 필터 ('general' - 스팟/작품과 연결되지 않은 일반 게시글)
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url)
     const spotId = searchParams.get('spotId')
     const mediaTitle = searchParams.get('mediaTitle')
+    const type = searchParams.get('type')
 
     const postsCollection = await getCollection<
       PostDocument & { _id: ObjectId }
@@ -66,7 +68,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let filter: any = {}
 
-    if (spotId) {
+    if (type === 'general') {
+      // 자유게시판: 스팟/작품과 연결되지 않은 게시글만 조회
+      filter = {
+        $and: [
+          { $or: [{ spotId: { $exists: false } }, { spotId: null }] },
+          { $or: [{ mediaTitle: { $exists: false } }, { mediaTitle: null }] },
+        ],
+      }
+    } else if (spotId) {
       // 특정 스팟의 게시글만 조회
       filter.spotId = spotId
     } else if (mediaTitle) {
