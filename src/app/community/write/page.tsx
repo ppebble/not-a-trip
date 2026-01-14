@@ -18,6 +18,10 @@ function WriteForm() {
   const spotIdParam = searchParams.get('spotId')
   const spotNameParam = searchParams.get('spotName')
   const mediaTitleParam = searchParams.get('mediaTitle')
+  const typeParam = searchParams.get('type') // 'general' for 자유게시판
+
+  // 자유게시판 모드 여부
+  const isGeneralMode = typeParam === 'general'
 
   // 폼 상태
   const [title, setTitle] = useState('')
@@ -30,18 +34,20 @@ function WriteForm() {
   // 에러 상태
   const [errors, setErrors] = useState<string[]>([])
 
-  // URL 파라미터로 스팟/작품 정보 설정
+  // URL 파라미터로 스팟/작품 정보 설정 (자유게시판 모드가 아닐 때만)
   useEffect(() => {
-    if (spotIdParam) {
-      setSpotId(spotIdParam)
+    if (!isGeneralMode) {
+      if (spotIdParam) {
+        setSpotId(spotIdParam)
+      }
+      if (spotNameParam) {
+        setSpotName(decodeURIComponent(spotNameParam))
+      }
+      if (mediaTitleParam) {
+        setMediaTitle(decodeURIComponent(mediaTitleParam))
+      }
     }
-    if (spotNameParam) {
-      setSpotName(decodeURIComponent(spotNameParam))
-    }
-    if (mediaTitleParam) {
-      setMediaTitle(decodeURIComponent(mediaTitleParam))
-    }
-  }, [spotIdParam, spotNameParam, mediaTitleParam])
+  }, [spotIdParam, spotNameParam, mediaTitleParam, isGeneralMode])
 
   // 폼 제출 핸들러
   const handleSubmit = async (e: FormEvent) => {
@@ -81,11 +87,14 @@ function WriteForm() {
       // 작성 완료 후 이동
       // 스팟에서 작성한 경우 스팟 상세 페이지로
       // 작품에서 작성한 경우 작품 커뮤니티 페이지로
+      // 자유게시판에서 작성한 경우 자유게시판 탭으로
       // 그 외에는 커뮤니티 목록으로
       if (spotId) {
         router.push(`/spots/${spotId}`)
       } else if (mediaTitle) {
         router.push(`/community/media/${encodeURIComponent(mediaTitle)}`)
+      } else if (isGeneralMode) {
+        router.push('/community?tab=general')
       } else {
         router.push('/community')
       }
@@ -140,8 +149,35 @@ function WriteForm() {
 
       {/* 작성 폼 */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* 연결된 스팟 정보 표시 */}
-        {spotId && spotName && (
+        {/* 자유게시판 모드 안내 */}
+        {isGeneralMode && (
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
+              </svg>
+              <div>
+                <p className="font-medium text-blue-800">자유게시판</p>
+                <p className="text-sm text-blue-600">
+                  스팟이나 작품과 관계없이 자유롭게 이야기를 나눠보세요.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 연결된 스팟 정보 표시 (자유게시판 모드가 아닐 때만) */}
+        {!isGeneralMode && spotId && spotName && (
           <div className="rounded-lg border border-navy-200 bg-navy-50 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -193,8 +229,8 @@ function WriteForm() {
           </div>
         )}
 
-        {/* 연결된 작품 정보 표시 */}
-        {mediaTitle && (
+        {/* 연결된 작품 정보 표시 (자유게시판 모드가 아닐 때만) */}
+        {!isGeneralMode && mediaTitle && (
           <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
