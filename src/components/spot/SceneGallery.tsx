@@ -16,13 +16,14 @@ interface SceneCardProps {
 }
 
 /**
- * 개별 장면 카드 컴포넌트 - 전체 너비 레이아웃용 큰 카드
+ * 개별 장면 카드 컴포넌트 - 큰 이미지 중심 카드
  */
 function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   const [liked, setLiked] = useState(false)
   const [localLikeCount, setLocalLikeCount] = useState(scene.likeCount)
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation()
     if (liked || isLiking) return
     setLiked(true)
     setLocalLikeCount((prev) => prev + 1)
@@ -30,17 +31,20 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   }
 
   return (
-    <div className="group relative h-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-lg">
-      <div className="relative aspect-[16/10]">
+    <div className="group relative h-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg">
+      {/* 이미지 영역 - 더 큰 비율 */}
+      <div className="relative aspect-[4/3]">
         <Image
           src={scene.imageUrl}
           alt={`${scene.animeTitle} 장면`}
           fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, 50vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-        {/* 좋아요 버튼 - 이미지 위에 오버레이 */}
+        {/* 오버레이 - 호버 시 표시 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+
+        {/* 좋아요 버튼 */}
         <button
           onClick={handleLike}
           disabled={liked || isLiking}
@@ -66,18 +70,23 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
           </svg>
           <span>{localLikeCount}</span>
         </button>
+
+        {/* 하단 정보 오버레이 */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 text-white opacity-0 transition-opacity group-hover:opacity-100">
+          <p className="truncate text-sm font-medium">{scene.animeTitle}</p>
+          {scene.episodeInfo && (
+            <p className="text-xs text-white/80">{scene.episodeInfo}</p>
+          )}
+        </div>
       </div>
-      <div className="p-4">
-        <h4 className="truncate text-base font-semibold text-gray-900">
+
+      {/* 간소화된 정보 영역 */}
+      <div className="px-3 py-2">
+        <p className="truncate text-sm font-medium text-gray-900">
           {scene.animeTitle}
-        </h4>
+        </p>
         {scene.episodeInfo && (
-          <p className="mt-1 text-sm text-gray-500">{scene.episodeInfo}</p>
-        )}
-        {scene.description && (
-          <p className="mt-2 line-clamp-2 text-sm text-gray-600">
-            {scene.description}
-          </p>
+          <p className="truncate text-xs text-gray-500">{scene.episodeInfo}</p>
         )}
       </div>
     </div>
@@ -86,16 +95,15 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
 
 function SceneGallerySkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {[1, 2, 3, 4].map((i) => (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      {[1, 2].map((i) => (
         <div
           key={i}
           className="animate-pulse overflow-hidden rounded-xl border border-gray-200"
         >
-          <div className="aspect-[16/10] bg-gray-200" />
-          <div className="p-4">
-            <div className="mb-2 h-5 w-3/4 rounded bg-gray-200" />
-            <div className="h-4 w-1/2 rounded bg-gray-100" />
+          <div className="aspect-[4/3] bg-gray-200" />
+          <div className="px-3 py-2">
+            <div className="h-4 w-3/4 rounded bg-gray-200" />
           </div>
         </div>
       ))}
@@ -110,20 +118,16 @@ interface CarouselProps {
 }
 
 /**
- * 캐러셀 컴포넌트 - 전체 너비 레이아웃용
+ * 캐러셀 컴포넌트 - 2개씩 큰 카드 표시
  */
 function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(1)
 
-  // 반응형 아이템 개수 설정 (전체 너비에서 더 많은 카드 표시)
+  // 반응형 아이템 개수 설정 (2개씩 큰 카드)
   useEffect(() => {
     const updateItemsPerView = () => {
-      if (window.innerWidth >= 1280) {
-        setItemsPerView(4)
-      } else if (window.innerWidth >= 1024) {
-        setItemsPerView(3)
-      } else if (window.innerWidth >= 640) {
+      if (window.innerWidth >= 640) {
         setItemsPerView(2)
       } else {
         setItemsPerView(1)
@@ -167,7 +171,7 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
     <div className="relative px-2">
       {/* 캐러셀 컨테이너 */}
       <div className="overflow-hidden">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {visibleScenes.map((scene) => (
             <SceneCard
               key={scene.id}
