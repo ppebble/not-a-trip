@@ -143,7 +143,39 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         </div>
       )}
 
-      {/* Related Media */}
+      {/* Scene Gallery - 전체 너비로 더 큰 이미지 표시 */}
+      <SceneGallery spotId={spot.id} />
+
+      {/* Location Map */}
+      <div className="overflow-hidden rounded-lg bg-white shadow-md">
+        <div className="p-6">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">
+            위치 및 근처 편의시설
+          </h2>
+          <div className="h-96 w-full overflow-hidden rounded-lg">
+            <SpotDetailMap spot={spot} facilities={facilities} />
+          </div>
+          {facilities.length > 0 && (
+            <div className="mt-4">
+              <p className="text-sm text-gray-600">
+                근처 편의시설 {facilities.length}개가 표시됩니다. 마커를
+                클릭하면 상세 정보를 확인할 수 있습니다.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Nearby Facilities and Community - 2 column layout */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {/* Nearby Facilities */}
+        <NearbyFacilities facilities={facilities} />
+
+        {/* Community Section */}
+        <SpotCommunitySection spotId={spot.id} spotName={spot.name} />
+      </div>
+
+      {/* Related Media - 맨 아래 */}
       {spot.relatedMedia && spot.relatedMedia.length > 0 && (
         <div className="overflow-hidden rounded-lg bg-white shadow-md">
           <div className="p-6">
@@ -190,38 +222,6 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
           </div>
         </div>
       )}
-
-      {/* Location Map */}
-      <div className="overflow-hidden rounded-lg bg-white shadow-md">
-        <div className="p-6">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900">
-            위치 및 근처 편의시설
-          </h2>
-          <div className="h-96 w-full overflow-hidden rounded-lg">
-            <SpotDetailMap spot={spot} facilities={facilities} />
-          </div>
-          {facilities.length > 0 && (
-            <div className="mt-4">
-              <p className="text-sm text-gray-600">
-                근처 편의시설 {facilities.length}개가 표시됩니다. 마커를
-                클릭하면 상세 정보를 확인할 수 있습니다.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Nearby Facilities and Scene Gallery - 2 column layout */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* Nearby Facilities */}
-        <NearbyFacilities facilities={facilities} />
-
-        {/* Scene Gallery */}
-        <SceneGallery spotId={spot.id} />
-      </div>
-
-      {/* Community Section */}
-      <SpotCommunitySection spotId={spot.id} spotName={spot.name} />
     </div>
   )
 }

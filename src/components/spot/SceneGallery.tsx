@@ -16,7 +16,7 @@ interface SceneCardProps {
 }
 
 /**
- * 개별 장면 카드 컴포넌트
+ * 개별 장면 카드 컴포넌트 - 전체 너비 레이아웃용 큰 카드
  */
 function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   const [liked, setLiked] = useState(false)
@@ -30,55 +30,52 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   }
 
   return (
-    <div className="group relative h-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-      <div className="relative aspect-video">
+    <div className="group relative h-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-lg">
+      <div className="relative aspect-[16/10]">
         <Image
           src={scene.imageUrl}
           alt={`${scene.animeTitle} 장면`}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-      </div>
-      <div className="p-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 flex-1">
-            <h4 className="truncate text-sm font-medium text-gray-900">
-              {scene.animeTitle}
-            </h4>
-            {scene.episodeInfo && (
-              <p className="text-xs text-gray-500">{scene.episodeInfo}</p>
-            )}
-          </div>
-          <button
-            onClick={handleLike}
-            disabled={liked || isLiking}
-            className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs transition-all ${
-              liked
-                ? 'bg-red-50 text-red-500'
-                : 'bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-500'
-            }`}
-            aria-label={liked ? '좋아요 완료' : '좋아요'}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+        {/* 좋아요 버튼 - 이미지 위에 오버레이 */}
+        <button
+          onClick={handleLike}
+          disabled={liked || isLiking}
+          className={`absolute right-3 top-3 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium shadow-md transition-all ${
+            liked
+              ? 'bg-red-500 text-white'
+              : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
+          }`}
+          aria-label={liked ? '좋아요 완료' : '좋아요'}
+        >
+          <svg
+            className="h-5 w-5"
+            fill={liked ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              className="h-4 w-4"
-              fill={liked ? 'currentColor' : 'none'}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span>{localLikeCount}</span>
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          <span>{localLikeCount}</span>
+        </button>
+      </div>
+      <div className="p-4">
+        <h4 className="truncate text-base font-semibold text-gray-900">
+          {scene.animeTitle}
+        </h4>
+        {scene.episodeInfo && (
+          <p className="mt-1 text-sm text-gray-500">{scene.episodeInfo}</p>
+        )}
         {scene.description && (
-          <p className="mt-2 line-clamp-2 text-xs text-gray-600">
+          <p className="mt-2 line-clamp-2 text-sm text-gray-600">
             {scene.description}
           </p>
         )}
@@ -89,16 +86,16 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
 
 function SceneGallerySkeleton() {
   return (
-    <div className="flex gap-4">
-      {[1, 2].map((i) => (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {[1, 2, 3, 4].map((i) => (
         <div
           key={i}
-          className="w-full flex-shrink-0 animate-pulse overflow-hidden rounded-lg border border-gray-200 sm:w-1/2 lg:w-1/3"
+          className="animate-pulse overflow-hidden rounded-xl border border-gray-200"
         >
-          <div className="aspect-video bg-gray-200" />
-          <div className="p-3">
-            <div className="mb-2 h-4 w-3/4 rounded bg-gray-200" />
-            <div className="h-3 w-1/2 rounded bg-gray-100" />
+          <div className="aspect-[16/10] bg-gray-200" />
+          <div className="p-4">
+            <div className="mb-2 h-5 w-3/4 rounded bg-gray-200" />
+            <div className="h-4 w-1/2 rounded bg-gray-100" />
           </div>
         </div>
       ))}
@@ -113,16 +110,18 @@ interface CarouselProps {
 }
 
 /**
- * 캐러셀 컴포넌트
+ * 캐러셀 컴포넌트 - 전체 너비 레이아웃용
  */
 function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(1)
 
-  // 반응형 아이템 개수 설정
+  // 반응형 아이템 개수 설정 (전체 너비에서 더 많은 카드 표시)
   useEffect(() => {
     const updateItemsPerView = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 1280) {
+        setItemsPerView(4)
+      } else if (window.innerWidth >= 1024) {
         setItemsPerView(3)
       } else if (window.innerWidth >= 640) {
         setItemsPerView(2)
@@ -165,17 +164,17 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
   if (scenes.length === 0) return null
 
   return (
-    <div className="relative">
+    <div className="relative px-2">
       {/* 캐러셀 컨테이너 */}
       <div className="overflow-hidden">
-        <div className="flex gap-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {visibleScenes.map((scene) => (
-            <div
+            <SceneCard
               key={scene.id}
-              className="w-full flex-shrink-0 sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
-            >
-              <SceneCard scene={scene} onLike={onLike} isLiking={isLiking} />
-            </div>
+              scene={scene}
+              onLike={onLike}
+              isLiking={isLiking}
+            />
           ))}
         </div>
       </div>
@@ -185,11 +184,11 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
         <>
           <button
             onClick={goToPrev}
-            className="absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl"
+            className="absolute -left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl"
             aria-label="이전 장면"
           >
             <svg
-              className="h-5 w-5 text-gray-700"
+              className="h-6 w-6 text-gray-700"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -204,11 +203,11 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
           </button>
           <button
             onClick={goToNext}
-            className="absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl"
+            className="absolute -right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl"
             aria-label="다음 장면"
           >
             <svg
-              className="h-5 w-5 text-gray-700"
+              className="h-6 w-6 text-gray-700"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -226,15 +225,15 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
 
       {/* 인디케이터 도트 */}
       {totalSlides > 1 && (
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-6 flex justify-center gap-2">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`h-2 rounded-full transition-all ${
+              className={`h-2.5 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'w-6 bg-navy-600'
-                  : 'w-2 bg-gray-300 hover:bg-gray-400'
+                  ? 'w-8 bg-navy-600'
+                  : 'w-2.5 bg-gray-300 hover:bg-gray-400'
               }`}
               aria-label={`${index + 1}번째 슬라이드로 이동`}
             />
