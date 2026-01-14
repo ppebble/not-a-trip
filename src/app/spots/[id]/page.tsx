@@ -144,7 +144,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
       )}
 
       {/* Scene Gallery - 전체 너비로 더 큰 이미지 표시 */}
-      <SceneGallery spotId={spot.id} />
+      <SceneGallery spotId={spot.id} relatedMedia={spot.relatedMedia} />
 
       {/* Location Map */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
