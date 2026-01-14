@@ -18,6 +18,7 @@ interface SceneCardProps {
 /**
  * 개별 장면 카드 컴포넌트 - 큰 이미지 중심 카드
  * 에피소드 정보를 상단에, 설명을 하단에 표시
+ * 호버 시 카드 전체가 확대됨
  */
 function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   const [liked, setLiked] = useState(false)
@@ -32,14 +33,14 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   }
 
   return (
-    <div className="group relative h-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg">
+    <div className="group relative h-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl">
       {/* 이미지 영역 - 더 큰 비율 */}
-      <div className="relative aspect-[4/3]">
+      <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={scene.imageUrl}
           alt={scene.episodeInfo || '장면 이미지'}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover"
           sizes="(max-width: 640px) 100vw, 50vw"
         />
         {/* 오버레이 - 호버 시 표시 */}
