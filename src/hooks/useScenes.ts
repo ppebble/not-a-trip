@@ -79,10 +79,9 @@ export function useCreateScene() {
 
 /**
  * Hook to like a scene
+ * 좋아요 후 캐시 무효화하지 않음 - 순서 변동 방지
  */
 export function useLikeScene() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async (sceneId: string): Promise<{ likeCount: number }> => {
       const response = await fetch(`/api/scenes/${sceneId}/like`, {
@@ -95,19 +94,15 @@ export function useLikeScene() {
 
       return response.json()
     },
-    onSuccess: () => {
-      // Invalidate all scene queries to refetch with updated like counts
-      queryClient.invalidateQueries({ queryKey: sceneKeys.all })
-    },
+    // onSuccess에서 캐시 무효화 제거 - 로컬 상태로만 좋아요 수 업데이트
   })
 }
 
 /**
  * Hook to unlike a scene
+ * 좋아요 취소 후 캐시 무효화하지 않음 - 순서 변동 방지
  */
 export function useUnlikeScene() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async (sceneId: string): Promise<{ likeCount: number }> => {
       const response = await fetch(`/api/scenes/${sceneId}/like`, {
@@ -120,8 +115,6 @@ export function useUnlikeScene() {
 
       return response.json()
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: sceneKeys.all })
-    },
+    // onSuccess에서 캐시 무효화 제거 - 로컬 상태로만 좋아요 수 업데이트
   })
 }
