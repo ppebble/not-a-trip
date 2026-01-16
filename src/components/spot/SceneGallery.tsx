@@ -8,18 +8,21 @@ import {
   useCreateScene,
 } from '@/hooks/useScenes'
 import { Scene } from '@/types'
+import SceneImageModal from './SceneImageModal'
 
 interface SceneCardProps {
   scene: Scene
   onLike: (sceneId: string) => void
   isLiking: boolean
+  onClick: () => void
 }
 
 /**
  * 개별 장면 카드 컴포넌트 - 이미지 중심 카드
  * 호버 시 중앙에 에피소드 정보 + 설명 표시
+ * 클릭 시 전체보기 모달 열기
  */
-function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
+function SceneCard({ scene, onLike, isLiking, onClick }: SceneCardProps) {
   const [liked, setLiked] = useState(false)
   const [localLikeCount, setLocalLikeCount] = useState(scene.likeCount)
 
@@ -32,7 +35,19 @@ function SceneCard({ scene, onLike, isLiking }: SceneCardProps) {
   }
 
   return (
-    <div className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-gray-200 shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <div
+      className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-gray-200 shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onClick()
+        }
+      }}
+      aria-label={`${scene.episodeInfo || '장면'} 전체보기`}
+    >
       {/* 이미지 */}
       <Image
         src={scene.imageUrl}
@@ -111,12 +126,18 @@ interface CarouselProps {
   scenes: Scene[]
   onLike: (sceneId: string) => void
   isLiking: boolean
+  onSceneClick: (index: number) => void
 }
 
 /**
  * 캐러셀 컴포넌트 - 2개씩 큰 카드 표시
  */
-function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
+function SceneCarousel({
+  scenes,
+  onLike,
+  isLiking,
+  onSceneClick,
+}: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(1)
 
@@ -168,12 +189,13 @@ function SceneCarousel({ scenes, onLike, isLiking }: CarouselProps) {
       {/* 캐러셀 컨테이너 */}
       <div className="overflow-hidden">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {visibleScenes.map((scene) => (
+          {visibleScenes.map((scene, idx) => (
             <SceneCard
               key={scene.id}
               scene={scene}
               onLike={onLike}
               isLiking={isLiking}
+              onClick={() => onSceneClick(startIdx + idx)}
             />
           ))}
         </div>
@@ -492,9 +514,18 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
   const { data: scenes, isLoading, error } = useScenesBySpot(spotId)
   const likeScene = useLikeScene()
   const [showAddModal, setShowAddModal] = useState(false)
+  const [imageModalIndex, setImageModalIndex] = useState<number | null>(null)
 
   const handleLike = (sceneId: string) => {
     likeScene.mutate(sceneId)
+  }
+
+  const handleSceneClick = (index: number) => {
+    setImageModalIndex(index)
+  }
+
+  const closeImageModal = () => {
+    setImageModalIndex(null)
   }
 
   return (
@@ -550,12 +581,22 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
             scenes={scenes}
             onLike={handleLike}
             isLiking={likeScene.isPending}
+            onSceneClick={handleSceneClick}
           />
         )}
       </div>
 
       {showAddModal && (
         <AddSceneModal spotId={spotId} onClose={() => setShowAddModal(false)} />
+      )}
+
+      {/* 이미지 전체보기 모달 */}
+      {imageModalIndex !== null && scenes && scenes.length > 0 && (
+        <SceneImageModal
+          scenes={scenes}
+          initialIndex={imageModalIndex}
+          onClose={closeImageModal}
+        />
       )}
     </div>
   )
