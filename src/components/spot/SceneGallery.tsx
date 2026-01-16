@@ -596,6 +596,7 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
           scenes={scenes}
           initialIndex={imageModalIndex}
           onClose={closeImageModal}
+          onLike={handleLike}
         />
       )}
     </div>

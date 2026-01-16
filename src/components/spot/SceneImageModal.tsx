@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { Scene } from '@/types'
 
@@ -8,11 +8,13 @@ interface SceneImageModalProps {
   scenes: Scene[]
   initialIndex: number
   onClose: () => void
+  onLike: (sceneId: string) => void
 }
 
 /**
  * 장면 이미지 전체보기 모달 컴포넌트
- * - 이미지 확대/축소 기능
+ * - 마우스 스크롤로 확대/축소
+ * - 더블클릭으로 좋아요
  * - 좌우 화살표로 다른 장면 탐색
  * - ESC 또는 배경 클릭으로 닫기
  */
@@ -20,52 +22,61 @@ export default function SceneImageModal({
   scenes,
   initialIndex,
   onClose,
+  onLike,
 }: SceneImageModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [scale, setScale] = useState(1)
-  const [isZoomed, setIsZoomed] = useState(false)
+  const [likedScenes, setLikedScenes] = useState<Set<string>>(new Set())
+  const [showLikeAnimation, setShowLikeAnimation] = useState(false)
+  const imageContainerRef = useRef<HTMLDivElement>(null)
 
   const currentScene = scenes[currentIndex]
+  const isLiked = likedScenes.has(currentScene.id)
 
   // 이전 장면으로 이동
   const goToPrev = useCallback(() => {
     setScale(1)
-    setIsZoomed(false)
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : scenes.length - 1))
   }, [scenes.length])
 
   // 다음 장면으로 이동
   const goToNext = useCallback(() => {
     setScale(1)
-    setIsZoomed(false)
     setCurrentIndex((prev) => (prev < scenes.length - 1 ? prev + 1 : 0))
   }, [scenes.length])
 
-  // 확대/축소 토글
-  const toggleZoom = useCallback(() => {
-    if (isZoomed) {
-      setScale(1)
-      setIsZoomed(false)
-    } else {
-      setScale(2)
-      setIsZoomed(true)
-    }
-  }, [isZoomed])
+  // 좋아요 처리
+  const handleLike = useCallback(() => {
+    if (isLiked) return
 
-  // 확대
-  const zoomIn = useCallback(() => {
-    setScale((prev) => Math.min(prev + 0.5, 3))
-    setIsZoomed(true)
+    setLikedScenes((prev) => new Set(prev).add(currentScene.id))
+    setShowLikeAnimation(true)
+    onLike(currentScene.id)
+
+    // 애니메이션 후 숨기기
+    setTimeout(() => setShowLikeAnimation(false), 1000)
+  }, [currentScene.id, isLiked, onLike])
+
+  // 더블클릭으로 좋아요
+  const handleDoubleClick = useCallback(() => {
+    handleLike()
+  }, [handleLike])
+
+  // 마우스 휠로 확대/축소
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault()
+    const delta = e.deltaY > 0 ? -0.2 : 0.2
+    setScale((prev) => Math.min(Math.max(prev + delta, 1), 3))
   }, [])
 
-  // 축소
-  const zoomOut = useCallback(() => {
-    const newScale = Math.max(scale - 0.5, 1)
-    setScale(newScale)
-    if (newScale === 1) {
-      setIsZoomed(false)
+  // 휠 이벤트 등록
+  useEffect(() => {
+    const container = imageContainerRef.current
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false })
+      return () => container.removeEventListener('wheel', handleWheel)
     }
-  }, [scale])
+  }, [handleWheel])
 
   // 키보드 이벤트 핸들링
   useEffect(() => {
@@ -80,25 +91,17 @@ export default function SceneImageModal({
         case 'ArrowRight':
           goToNext()
           break
-        case '+':
-        case '=':
-          zoomIn()
-          break
-        case '-':
-          zoomOut()
-          break
       }
     }
 
     document.addEventListener('keydown', handleKeyDown)
-    // 모달 열릴 때 스크롤 방지
     document.body.style.overflow = 'hidden'
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = 'unset'
     }
-  }, [onClose, goToPrev, goToNext, zoomIn, zoomOut])
+  }, [onClose, goToPrev, goToNext])
 
   // 배경 클릭 시 닫기
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -136,77 +139,31 @@ export default function SceneImageModal({
         </svg>
       </button>
 
-      {/* 확대/축소 컨트롤 */}
-      <div className="absolute right-4 top-16 z-10 flex flex-col gap-2">
-        <button
-          onClick={zoomIn}
-          disabled={scale >= 3}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 disabled:opacity-50"
-          aria-label="확대"
+      {/* 좋아요 버튼 */}
+      <button
+        onClick={handleLike}
+        disabled={isLiked}
+        className={`absolute right-4 top-16 z-10 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+          isLiked
+            ? 'bg-red-500 text-white'
+            : 'bg-white/10 text-white hover:bg-white/20'
+        }`}
+        aria-label={isLiked ? '좋아요 완료' : '좋아요'}
+      >
+        <svg
+          className="h-5 w-5"
+          fill={isLiked ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-        </button>
-        <button
-          onClick={zoomOut}
-          disabled={scale <= 1}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 disabled:opacity-50"
-          aria-label="축소"
-        >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M20 12H4"
-            />
-          </svg>
-        </button>
-        <button
-          onClick={toggleZoom}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-          aria-label={isZoomed ? '원본 크기' : '확대'}
-        >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            {isZoomed ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
-              />
-            )}
-          </svg>
-        </button>
-      </div>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+      </button>
 
       {/* 좌측 화살표 */}
       {scenes.length > 1 && (
@@ -256,16 +213,27 @@ export default function SceneImageModal({
 
       {/* 이미지 컨테이너 */}
       <div
+        ref={imageContainerRef}
         className="relative flex h-[80vh] w-[90vw] max-w-5xl items-center justify-center overflow-hidden"
         onClick={(e) => e.stopPropagation()}
+        onDoubleClick={handleDoubleClick}
       >
+        {/* 좋아요 애니메이션 */}
+        {showLikeAnimation && (
+          <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+            <svg
+              className="h-24 w-24 animate-ping text-red-500"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </div>
+        )}
+
         <div
           className="relative h-full w-full transition-transform duration-200"
-          style={{
-            transform: `scale(${scale})`,
-            cursor: isZoomed ? 'zoom-out' : 'zoom-in',
-          }}
-          onClick={toggleZoom}
+          style={{ transform: `scale(${scale})` }}
         >
           <Image
             src={currentScene.imageUrl}
@@ -289,15 +257,20 @@ export default function SceneImageModal({
           {currentScene.description && (
             <p className="text-sm text-white/80">{currentScene.description}</p>
           )}
+
+          {/* 조작 안내 */}
+          <p className="mt-2 text-xs text-white/50">
+            스크롤: 확대/축소 · 더블클릭: 좋아요 · ←→: 이동
+          </p>
+
           {/* 인디케이터 */}
           {scenes.length > 1 && (
-            <div className="mt-4 flex justify-center gap-2">
+            <div className="mt-3 flex justify-center gap-2">
               {scenes.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => {
                     setScale(1)
-                    setIsZoomed(false)
                     setCurrentIndex(index)
                   }}
                   className={`h-2 rounded-full transition-all ${
