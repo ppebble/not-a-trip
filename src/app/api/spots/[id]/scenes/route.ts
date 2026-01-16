@@ -82,17 +82,10 @@ export async function POST(
       description: body.description,
     }
 
-    // 유효성 검사
+    // 유효성 검사 - 이미지 URL만 필수 (작품명은 스팟에서 자동 관리)
     if (!input.imageUrl || input.imageUrl.trim().length === 0) {
       return NextResponse.json(
         { error: '이미지 URL은 필수입니다' },
-        { status: 400 }
-      )
-    }
-
-    if (!input.animeTitle || input.animeTitle.trim().length === 0) {
-      return NextResponse.json(
-        { error: '작품명은 필수입니다' },
         { status: 400 }
       )
     }
@@ -105,7 +98,7 @@ export async function POST(
     const newScene: SceneDocument = {
       spotId: input.spotId,
       imageUrl: input.imageUrl.trim(),
-      animeTitle: input.animeTitle.trim(),
+      animeTitle: input.animeTitle?.trim() || '',
       episodeInfo: input.episodeInfo?.trim(),
       description: input.description?.trim(),
       likeCount: 0,
