@@ -92,6 +92,46 @@
   z-index: 1000 !important;
 }
 
+/* 이미지 핀 커스텀 마커 스타일 */
+.custom-image-spot-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-image-spot-pin:hover {
+  z-index: 1000 !important;
+}
+
+/* 이미지 핀 호버 효과 */
+.image-pin-container:hover .image-circle {
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 이미지 핀 펄스 애니메이션 */
+@keyframes image-pin-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+/* 선택 링 펄스 애니메이션 */
+@keyframes ring-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.08);
+  }
+}
+
 /* 스팟 팝업 스타일 */
 .spot-popup .leaflet-popup-content-wrapper {
   background: white !important;
