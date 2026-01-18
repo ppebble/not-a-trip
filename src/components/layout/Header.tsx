@@ -47,20 +47,12 @@ export function Header() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <Link
-                href="/auth/signin"
-                className="rounded-lg px-3 py-1.5 text-sm text-slate-300 transition hover:text-white"
-              >
-                로그인
-              </Link>
-              <Link
-                href="/auth/register"
-                className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition hover:bg-blue-700"
-              >
-                회원가입
-              </Link>
-            </div>
+            <Link
+              href="/auth/signin"
+              className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition hover:bg-blue-700"
+            >
+              로그인
+            </Link>
           )}
         </div>
       </div>
