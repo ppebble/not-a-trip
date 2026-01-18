@@ -108,6 +108,33 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
+/* 호버 상태 핀 스타일 */
+.image-pin-container.is-hovered {
+  z-index: 1000 !important;
+}
+
+.image-pin-container.is-hovered .image-circle {
+  transform: scale(1.05);
+}
+
+/* 선택 상태 핀 스타일 */
+.image-pin-container.is-selected {
+  z-index: 1001 !important;
+}
+
+/* 호버 링 펄스 애니메이션 */
+@keyframes hover-ring-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
 /* 이미지 핀 펄스 애니메이션 */
 @keyframes image-pin-pulse {
   0%,

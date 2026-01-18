@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useCallback, useMemo } from 'react'
 import { Marker } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType } from '@/types'
@@ -11,25 +12,34 @@ interface SpotPinProps {
   onSelect?: (spotId: string) => void
 }
 
+// 핀 크기 상수
+const PIN_SIZES = {
+  base: 48,
+  hovered: 54,
+  selected: 58,
+}
+
 // 작품 이미지 핀 아이콘 생성
 const createImagePinIcon = (
   thumbnailUrl: string,
   isSelected: boolean = false,
   isHovered: boolean = false
 ) => {
-  // 핀 크기 설정 (기존보다 확대)
-  const baseSize = 48
-  const selectedSize = 56
-  const hoveredSize = 52
+  // 핀 크기 설정 (호버/선택 상태에 따라 확대)
+  let size: number = PIN_SIZES.base
+  if (isSelected) size = PIN_SIZES.selected
+  else if (isHovered) size = PIN_SIZES.hovered
 
-  let size = baseSize
-  if (isSelected) size = selectedSize
-  else if (isHovered) size = hoveredSize
+  // 테두리 색상 및 스타일
+  const borderColor = isSelected ? '#fbbf24' : isHovered ? '#60a5fa' : '#2d4a6f'
+  const borderWidth = isSelected ? 4 : isHovered ? 3 : 3
+  const shadowIntensity = isSelected ? 0.5 : isHovered ? 0.45 : 0.3
 
-  // 테두리 색상
-  const borderColor = isSelected ? '#fbbf24' : '#2d4a6f'
-  const borderWidth = isSelected ? 4 : 3
-  const shadowIntensity = isSelected ? 0.5 : isHovered ? 0.4 : 0.3
+  // 호버 시 글로우 효과
+  const glowEffect =
+    isHovered && !isSelected
+      ? 'box-shadow: 0 0 12px 2px rgba(96, 165, 250, 0.4);'
+      : ''
 
   // 이미지 URL이 있으면 이미지 핀, 없으면 기본 아이콘
   const hasImage = thumbnailUrl && thumbnailUrl.length > 0
@@ -73,16 +83,21 @@ const createImagePinIcon = (
         </svg>
       </div>`
 
+  // 호버 상태 클래스
+  const hoverClass = isHovered ? 'is-hovered' : ''
+  const selectedClass = isSelected ? 'is-selected' : ''
+
   return L.divIcon({
-    className: 'custom-image-spot-pin',
+    className: `custom-image-spot-pin ${hoverClass} ${selectedClass}`,
     html: `
-      <div class="image-pin-container" style="
+      <div class="image-pin-container ${hoverClass} ${selectedClass}" style="
         width: ${size}px;
         height: ${size + 12}px;
         position: relative;
         cursor: pointer;
         filter: drop-shadow(0 4px 8px rgba(0,0,0,${shadowIntensity}));
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform: ${isHovered && !isSelected ? 'translateY(-4px)' : 'translateY(0)'};
       ">
         <!-- 원형 이미지 컨테이너 -->
         <div class="image-circle" style="
@@ -93,7 +108,8 @@ const createImagePinIcon = (
           overflow: hidden;
           background: #e5e7eb;
           box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+          ${glowEffect}
           ${isSelected ? 'animation: image-pin-pulse 2s infinite;' : ''}
         ">
           ${imageContent}
@@ -110,6 +126,7 @@ const createImagePinIcon = (
           border-left: 8px solid transparent;
           border-right: 8px solid transparent;
           border-top: 12px solid ${borderColor};
+          transition: border-color 0.25s ease;
         "></div>
         
         ${
@@ -118,38 +135,49 @@ const createImagePinIcon = (
           <!-- 선택 시 외곽 링 -->
           <div class="selection-ring" style="
             position: absolute;
+            top: -6px;
+            left: -6px;
+            width: ${size + 12}px;
+            height: ${size + 12}px;
+            border: 3px solid #fbbf24;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: ring-pulse 1.5s infinite;
+          "></div>
+          <!-- 선택 시 내부 글로우 -->
+          <div class="selection-glow" style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: ${size}px;
+            height: ${size}px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 8px rgba(251, 191, 36, 0.3);
+            pointer-events: none;
+          "></div>
+        `
+            : ''
+        }
+        
+        ${
+          isHovered && !isSelected
+            ? `
+          <!-- 호버 시 외곽 링 -->
+          <div class="hover-ring" style="
+            position: absolute;
             top: -4px;
             left: -4px;
             width: ${size + 8}px;
             height: ${size + 8}px;
-            border: 2px solid #fbbf24;
+            border: 2px solid #60a5fa;
             border-radius: 50%;
             opacity: 0.6;
-            animation: ring-pulse 2s infinite;
+            animation: hover-ring-pulse 1s infinite;
           "></div>
         `
             : ''
         }
       </div>
-      
-      <style>
-        @keyframes image-pin-pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.03); }
-        }
-        @keyframes ring-pulse {
-          0%, 100% { opacity: 0.6; transform: scale(1); }
-          50% { opacity: 0.3; transform: scale(1.08); }
-        }
-        .image-pin-container:hover .image-circle {
-          transform: scale(1.08);
-          box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-        }
-        .custom-image-spot-pin {
-          background: transparent !important;
-          border: none !important;
-        }
-      </style>
     `,
     iconSize: [size, size + 12],
     iconAnchor: [size / 2, size + 12],
@@ -160,10 +188,17 @@ const createImagePinIcon = (
 export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const { selectedSpotId, setSelectedSpot } = useMapStore()
   const { openPreview } = useUIStore()
+  const [isHovered, setIsHovered] = useState(false)
 
   const isSelected = selectedSpotId === spot.id
 
-  const handleClick = () => {
+  // 아이콘을 메모이제이션하여 불필요한 재생성 방지
+  const icon = useMemo(
+    () => createImagePinIcon(spot.thumbnailUrl, isSelected, isHovered),
+    [spot.thumbnailUrl, isSelected, isHovered]
+  )
+
+  const handleClick = useCallback(() => {
     // 스팟 선택 상태 업데이트
     setSelectedSpot(spot.id)
 
@@ -172,14 +207,24 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
 
     // 외부 콜백 호출
     onSelect?.(spot.id)
-  }
+  }, [spot.id, setSelectedSpot, openPreview, onSelect])
+
+  const handleMouseOver = useCallback(() => {
+    setIsHovered(true)
+  }, [])
+
+  const handleMouseOut = useCallback(() => {
+    setIsHovered(false)
+  }, [])
 
   return (
     <Marker
       position={spot.coordinates}
-      icon={createImagePinIcon(spot.thumbnailUrl, isSelected)}
+      icon={icon}
       eventHandlers={{
         click: handleClick,
+        mouseover: handleMouseOver,
+        mouseout: handleMouseOut,
       }}
     />
   )
