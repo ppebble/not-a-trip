@@ -45,33 +45,33 @@ export default function SpotDetailPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-navy-900 text-white shadow-lg">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-center space-x-2 transition-colors hover:text-navy-200"
+      {/* 페이지 타이틀 */}
+      <div className="border-b border-slate-200 bg-white px-4 py-4">
+        <div className="mx-auto max-w-7xl">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
+          >
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              <span className="font-medium">지도로 돌아가기</span>
-            </Link>
-            <h1 className="text-xl font-bold">성지순례 스팟</h1>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            <span>지도로 돌아가기</span>
+          </Link>
+          <h1 className="mt-2 text-xl font-bold text-navy-800">
+            성지순례 스팟
+          </h1>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -229,17 +229,12 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
 function SpotDetailSkeleton() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-navy-900 text-white shadow-lg">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="h-6 w-6 animate-pulse rounded bg-navy-700"></div>
-              <div className="h-4 w-32 animate-pulse rounded bg-navy-700"></div>
-            </div>
-            <div className="h-6 w-24 animate-pulse rounded bg-navy-700"></div>
-          </div>
+      <div className="border-b border-slate-200 bg-white px-4 py-4">
+        <div className="mx-auto max-w-7xl">
+          <div className="h-5 w-32 animate-pulse rounded bg-slate-200"></div>
+          <div className="mt-2 h-6 w-40 animate-pulse rounded bg-slate-200"></div>
         </div>
-      </header>
+      </div>
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-8">

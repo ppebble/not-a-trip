@@ -69,22 +69,12 @@ export default function EditPostPage() {
   if (isLoading) {
     return (
       <main className="min-h-screen bg-navy-50">
-        <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+        <div className="border-b border-navy-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl"
-              >
-                🗾
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-white">게시글 수정</h1>
-                <p className="text-xs text-navy-300">로딩 중...</p>
-              </div>
-            </div>
+            <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
+            <p className="text-sm text-navy-500">로딩 중...</p>
           </div>
-        </header>
+        </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
           <div className="flex items-center justify-center py-12">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy-300 border-t-navy-600" />
@@ -98,22 +88,12 @@ export default function EditPostPage() {
   if (error || !post) {
     return (
       <main className="min-h-screen bg-navy-50">
-        <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+        <div className="border-b border-navy-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl"
-              >
-                🗾
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-white">게시글 수정</h1>
-                <p className="text-xs text-navy-300">오류 발생</p>
-              </div>
-            </div>
+            <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
+            <p className="text-sm text-navy-500">오류 발생</p>
           </div>
-        </header>
+        </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
           <div className="rounded-lg bg-white p-6 text-center shadow-sm">
             <p className="text-navy-600">게시글을 찾을 수 없습니다.</p>
@@ -131,36 +111,13 @@ export default function EditPostPage() {
 
   return (
     <main className="min-h-screen bg-navy-50">
-      {/* 헤더 */}
-      <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+      {/* 페이지 타이틀 */}
+      <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl"
-              >
-                🗾
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-white">게시글 수정</h1>
-                <p className="text-xs text-navy-300">내용을 수정하세요</p>
-              </div>
-            </div>
-            <nav className="flex space-x-4">
-              <Link href="/" className="text-sm text-navy-300 hover:text-white">
-                지도
-              </Link>
-              <Link
-                href="/community"
-                className="text-sm text-navy-300 hover:text-white"
-              >
-                커뮤니티
-              </Link>
-            </nav>
-          </div>
+          <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
+          <p className="text-sm text-navy-500">내용을 수정하세요</p>
         </div>
-      </header>
+      </div>
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">

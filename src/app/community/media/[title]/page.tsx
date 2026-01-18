@@ -219,36 +219,21 @@ export default function MediaCommunityPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-navy-50">
-      {/* 헤더 */}
-      <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+      {/* 페이지 타이틀 */}
+      <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/community"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl transition-colors hover:bg-navy-500"
-              >
-                ←
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-white">{mediaTitle}</h1>
-                <p className="text-xs text-navy-300">작품 관련 게시글</p>
-              </div>
-            </div>
-            <nav className="flex space-x-4">
-              <Link href="/" className="text-sm text-navy-300 hover:text-white">
-                지도
-              </Link>
-              <Link
-                href="/community"
-                className="text-sm text-navy-300 hover:text-white"
-              >
-                커뮤니티
-              </Link>
-            </nav>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/community"
+              className="text-navy-500 hover:text-navy-700"
+            >
+              ← 커뮤니티
+            </Link>
           </div>
+          <h1 className="mt-2 text-xl font-bold text-navy-800">{mediaTitle}</h1>
+          <p className="text-sm text-navy-500">작품 관련 게시글</p>
         </div>
-      </header>
+      </div>
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
