@@ -77,4 +77,14 @@ export const COLLECTIONS = {
   POSTS: 'posts',
   COMMENTS: 'comments',
   SCENES: 'scenes',
+  USERS: 'users',
 } as const
+
+/**
+ * Get the database instance directly
+ * Convenience function for simpler access
+ */
+export async function getDb(): Promise<Db> {
+  const { db } = await connectToDatabase()
+  return db
+}
