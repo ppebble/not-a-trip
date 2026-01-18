@@ -183,6 +183,33 @@ export interface SpotResponse {
 }
 
 // ============================================
+// User & Auth Types
+// ============================================
+
+export interface User {
+  id: string
+  email: string
+  name?: string
+  nickname?: string
+  image?: string
+  provider: 'credentials' | 'google' | 'kakao' | 'naver'
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface UserCredentials {
+  email: string
+  password: string
+}
+
+export interface RegisterInput {
+  email: string
+  password: string
+  name: string
+  nickname?: string
+}
+
+// ============================================
 // Store Types
 // ============================================
 
