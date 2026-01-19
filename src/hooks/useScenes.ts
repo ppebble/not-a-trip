@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Scene, CreateSceneInput, UserLikeStatus } from '@/types'
+import { getDeviceId } from '@/lib/device-id'
 
 // API response type
 interface ScenesResponse {
@@ -19,6 +20,22 @@ export const sceneKeys = {
   all: ['scenes'] as const,
   bySpot: (spotId: string) => [...sceneKeys.all, 'spot', spotId] as const,
   likeStatus: (sceneId: string) => [...sceneKeys.all, 'like', sceneId] as const,
+}
+
+/**
+ * deviceId 헤더를 포함한 fetch 옵션 생성
+ */
+function getHeadersWithDeviceId(): HeadersInit {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  }
+
+  const deviceId = getDeviceId()
+  if (deviceId) {
+    headers['X-Device-Id'] = deviceId
+  }
+
+  return headers
 }
 
 /**
@@ -64,7 +81,13 @@ export function useLikeStatus(sceneId: string | null) {
         throw new Error('Scene ID is required')
       }
 
-      const response = await fetch(`/api/scenes/${sceneId}/like`)
+      const deviceId = getDeviceId()
+      const headers: HeadersInit = {}
+      if (deviceId) {
+        headers['X-Device-Id'] = deviceId
+      }
+
+      const response = await fetch(`/api/scenes/${sceneId}/like`, { headers })
 
       if (!response.ok) {
         throw new Error('Failed to fetch like status')
@@ -88,9 +111,7 @@ export function useCreateScene() {
     mutationFn: async (input: CreateSceneInput): Promise<Scene> => {
       const response = await fetch(`/api/spots/${input.spotId}/scenes`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getHeadersWithDeviceId(),
         body: JSON.stringify(input),
       })
 
@@ -111,16 +132,23 @@ export function useCreateScene() {
 }
 
 /**
- * Hook to toggle like on a scene (for logged-in users)
- * 좋아요 토글 후 캐시 무효화하지 않음 - 순서 변동 방지
+ * Hook to toggle like on a scene
+ * 로그인/비로그인 모두 토글 방식으로 동작
  */
 export function useToggleLike() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
+      const deviceId = getDeviceId()
+      const headers: HeadersInit = {}
+      if (deviceId) {
+        headers['X-Device-Id'] = deviceId
+      }
+
       const response = await fetch(`/api/scenes/${sceneId}/like`, {
         method: 'POST',
+        headers,
       })
 
       if (!response.ok) {
@@ -140,37 +168,29 @@ export function useToggleLike() {
 }
 
 /**
- * Hook to like a scene (legacy - for non-logged-in users)
- * 좋아요 후 캐시 무효화하지 않음 - 순서 변동 방지
+ * Hook to like a scene (legacy - for compatibility)
  */
 export function useLikeScene() {
-  return useMutation({
-    mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
-      const response = await fetch(`/api/scenes/${sceneId}/like`, {
-        method: 'POST',
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to like scene')
-      }
-
-      return response.json()
-    },
-    // onSuccess에서 캐시 무효화 제거 - 로컬 상태로만 좋아요 수 업데이트
-  })
+  return useToggleLike()
 }
 
 /**
- * Hook to unlike a scene (for logged-in users)
- * 좋아요 취소 후 캐시 무효화하지 않음 - 순서 변동 방지
+ * Hook to unlike a scene
  */
 export function useUnlikeScene() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
+      const deviceId = getDeviceId()
+      const headers: HeadersInit = {}
+      if (deviceId) {
+        headers['X-Device-Id'] = deviceId
+      }
+
       const response = await fetch(`/api/scenes/${sceneId}/like`, {
         method: 'DELETE',
+        headers,
       })
 
       if (!response.ok) {
@@ -187,4 +207,37 @@ export function useUnlikeScene() {
       })
     },
   })
+}
+
+/**
+ * 여러 장면의 좋아요 상태를 일괄 조회하는 함수
+ */
+export async function fetchLikeStatuses(
+  sceneIds: string[]
+): Promise<Map<string, boolean>> {
+  const deviceId = getDeviceId()
+  const headers: HeadersInit = {}
+  if (deviceId) {
+    headers['X-Device-Id'] = deviceId
+  }
+
+  const results = new Map<string, boolean>()
+
+  await Promise.all(
+    sceneIds.map(async (sceneId) => {
+      try {
+        const response = await fetch(`/api/scenes/${sceneId}/like`, { headers })
+        if (response.ok) {
+          const data = await response.json()
+          results.set(sceneId, data.liked)
+        } else {
+          results.set(sceneId, false)
+        }
+      } catch {
+        results.set(sceneId, false)
+      }
+    })
+  )
+
+  return results
 }
