@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Post, UpdatePostInput } from '@/types'
 import { ObjectId } from 'mongodb'
+import { auth } from '@/lib/auth'
+import bcrypt from 'bcryptjs'
 
 // MongoDB document interface
 interface PostDocument {
@@ -129,7 +131,10 @@ function validateUpdateInput(
 
 /**
  * PUT /api/posts/[id] - 게시글 수정
- * Requirements: 5.7
+ * Requirements: 5.7, 16.8.7
+ *
+ * 회원: 본인 userId 일치 시 수정 가능
+ * 비회원: 비밀번호 해시 비교 후 수정 가능
  */
 export async function PUT(
   request: NextRequest,
@@ -158,6 +163,57 @@ export async function PUT(
     }
 
     const body = await request.json()
+
+    // 권한 검증
+    const session = await auth()
+    const isAuthenticated = !!session?.user
+
+    if (existingPost.isGuest) {
+      // 비회원 게시글: 비밀번호 검증 필수
+      if (!body.password) {
+        return NextResponse.json(
+          { error: '비밀번호가 필요합니다', requirePassword: true },
+          { status: 401 }
+        )
+      }
+
+      // 비밀번호가 저장되어 있지 않은 경우 (기존 데이터)
+      if (!existingPost.password) {
+        return NextResponse.json(
+          { error: '이 게시글은 비밀번호가 설정되지 않아 수정할 수 없습니다' },
+          { status: 403 }
+        )
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        body.password,
+        existingPost.password
+      )
+
+      if (!isPasswordValid) {
+        return NextResponse.json(
+          { error: '비밀번호가 일치하지 않습니다' },
+          { status: 401 }
+        )
+      }
+    } else {
+      // 회원 게시글: 본인 확인
+      if (!isAuthenticated) {
+        return NextResponse.json(
+          { error: '로그인이 필요합니다' },
+          { status: 401 }
+        )
+      }
+
+      const currentUserId = session.user.id || session.user.email
+      if (existingPost.userId !== currentUserId) {
+        return NextResponse.json(
+          { error: '본인의 게시글만 수정할 수 있습니다' },
+          { status: 403 }
+        )
+      }
+    }
+
     const input: UpdatePostInput = {
       title: body.title,
       content: body.content,
@@ -214,11 +270,14 @@ export async function PUT(
 
 /**
  * DELETE /api/posts/[id] - 게시글 삭제
- * Requirements: 5.8
+ * Requirements: 5.8, 16.8.7
+ *
+ * 회원: 본인 userId 일치 시 삭제 가능
+ * 비회원: 비밀번호 해시 비교 후 삭제 가능
  * 게시글 삭제 시 연관된 댓글도 함께 삭제
  */
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -243,6 +302,65 @@ export async function DELETE(
 
     if (!existingPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
+    }
+
+    // 권한 검증
+    const session = await auth()
+    const isAuthenticated = !!session?.user
+
+    // body에서 비밀번호 추출 (DELETE 요청도 body를 가질 수 있음)
+    let password: string | undefined
+    try {
+      const body = await request.json()
+      password = body.password
+    } catch {
+      // body가 없는 경우 무시
+    }
+
+    if (existingPost.isGuest) {
+      // 비회원 게시글: 비밀번호 검증 필수
+      if (!password) {
+        return NextResponse.json(
+          { error: '비밀번호가 필요합니다', requirePassword: true },
+          { status: 401 }
+        )
+      }
+
+      // 비밀번호가 저장되어 있지 않은 경우 (기존 데이터)
+      if (!existingPost.password) {
+        return NextResponse.json(
+          { error: '이 게시글은 비밀번호가 설정되지 않아 삭제할 수 없습니다' },
+          { status: 403 }
+        )
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        existingPost.password
+      )
+
+      if (!isPasswordValid) {
+        return NextResponse.json(
+          { error: '비밀번호가 일치하지 않습니다' },
+          { status: 401 }
+        )
+      }
+    } else {
+      // 회원 게시글: 본인 확인
+      if (!isAuthenticated) {
+        return NextResponse.json(
+          { error: '로그인이 필요합니다' },
+          { status: 401 }
+        )
+      }
+
+      const currentUserId = session.user.id || session.user.email
+      if (existingPost.userId !== currentUserId) {
+        return NextResponse.json(
+          { error: '본인의 게시글만 삭제할 수 있습니다' },
+          { status: 403 }
+        )
+      }
     }
 
     // 연관된 댓글 삭제 (Requirements 5.8)
