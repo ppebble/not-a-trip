@@ -144,23 +144,12 @@ export default function CommunityPage() {
 function CommunityPageSkeleton() {
   return (
     <main className="min-h-screen bg-navy-50">
-      <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+      <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl">
-                🗾
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-white">커뮤니티</h1>
-                <p className="text-xs text-navy-300">
-                  성지순례 경험을 공유하세요
-                </p>
-              </div>
-            </div>
-          </div>
+          <div className="h-6 w-24 animate-pulse rounded bg-navy-200" />
+          <div className="mt-1 h-4 w-48 animate-pulse rounded bg-navy-100" />
         </div>
-      </header>
+      </div>
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="animate-pulse">
           <div className="mb-6 flex gap-2">
@@ -230,38 +219,13 @@ function CommunityPageContent() {
 
   return (
     <main className="min-h-screen bg-navy-50">
-      {/* 헤더 */}
-      <header className="border-b border-navy-700 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 px-4 py-4 shadow-lg">
+      {/* 페이지 타이틀 */}
+      <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600 text-xl"
-              >
-                🗾
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-white">커뮤니티</h1>
-                <p className="text-xs text-navy-300">
-                  성지순례 경험을 공유하세요
-                </p>
-              </div>
-            </div>
-            <nav className="flex space-x-4">
-              <Link href="/" className="text-sm text-navy-300 hover:text-white">
-                지도
-              </Link>
-              <Link
-                href="/community"
-                className="text-sm font-medium text-white"
-              >
-                커뮤니티
-              </Link>
-            </nav>
-          </div>
+          <h1 className="text-xl font-bold text-navy-800">커뮤니티</h1>
+          <p className="text-sm text-navy-500">성지순례 경험을 공유하세요</p>
         </div>
-      </header>
+      </div>
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
