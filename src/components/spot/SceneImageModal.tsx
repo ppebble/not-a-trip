@@ -9,6 +9,7 @@ interface SceneImageModalProps {
   initialIndex: number
   onClose: () => void
   onLike: (sceneId: string) => void
+  likedSceneIds: Set<string>
 }
 
 /**
@@ -23,15 +24,15 @@ export default function SceneImageModal({
   initialIndex,
   onClose,
   onLike,
+  likedSceneIds,
 }: SceneImageModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [scale, setScale] = useState(1)
-  const [likedScenes, setLikedScenes] = useState<Set<string>>(new Set())
   const [showLikeAnimation, setShowLikeAnimation] = useState(false)
   const imageContainerRef = useRef<HTMLDivElement>(null)
 
   const currentScene = scenes[currentIndex]
-  const isLiked = likedScenes.has(currentScene.id)
+  const isLiked = likedSceneIds.has(currentScene.id)
 
   // 이전 장면으로 이동
   const goToPrev = useCallback(() => {
@@ -45,17 +46,14 @@ export default function SceneImageModal({
     setCurrentIndex((prev) => (prev < scenes.length - 1 ? prev + 1 : 0))
   }, [scenes.length])
 
-  // 좋아요 처리
+  // 좋아요 처리 (토글 방식)
   const handleLike = useCallback(() => {
-    if (isLiked) return
-
-    setLikedScenes((prev) => new Set(prev).add(currentScene.id))
     setShowLikeAnimation(true)
     onLike(currentScene.id)
 
     // 애니메이션 후 숨기기
     setTimeout(() => setShowLikeAnimation(false), 1000)
-  }, [currentScene.id, isLiked, onLike])
+  }, [currentScene.id, onLike])
 
   // 더블클릭으로 좋아요
   const handleDoubleClick = useCallback(() => {
