@@ -11,6 +11,8 @@ export interface Post {
   commentCount: number
   spotId?: string
   mediaTitle?: string
+  userId?: string
+  isGuest?: boolean
 }
 
 export interface Comment {
@@ -347,13 +349,17 @@ export function useCreateComment() {
 
 /**
  * Hook to update an existing post
- * Requirements: 5.7
+ * Requirements: 5.7, 16.8.7
+ *
+ * 비회원 게시글 수정 시 password 필드 필요
  */
 export function useUpdatePost() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: UpdatePostInput): Promise<Post> => {
+    mutationFn: async (
+      data: UpdatePostInput & { password?: string }
+    ): Promise<Post> => {
       const response = await fetch(`/api/posts/${data.postId}`, {
         method: 'PUT',
         headers: {
@@ -362,13 +368,18 @@ export function useUpdatePost() {
         body: JSON.stringify({
           title: data.title,
           content: data.content,
+          password: data.password,
         }),
       })
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to update post: ${response.status} ${response.statusText}`
-        )
+        const errorData = await response.json().catch(() => ({}))
+        const error = new Error(
+          errorData.error ||
+            `Failed to update post: ${response.status} ${response.statusText}`
+        ) as Error & { requirePassword?: boolean }
+        error.requirePassword = errorData.requirePassword
+        throw error
       }
 
       const result = await response.json()
@@ -390,27 +401,40 @@ export function useUpdatePost() {
 
 /**
  * Hook to delete a post
- * Requirements: 5.8, 5.9
+ * Requirements: 5.8, 5.9, 16.8.7
+ *
+ * 비회원 게시글 삭제 시 password 필드 필요
  */
 export function useDeletePost() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (postId: string): Promise<void> => {
-      const response = await fetch(`/api/posts/${postId}`, {
+    mutationFn: async (data: {
+      postId: string
+      password?: string
+    }): Promise<void> => {
+      const response = await fetch(`/api/posts/${data.postId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: data.password }),
       })
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to delete post: ${response.status} ${response.statusText}`
-        )
+        const errorData = await response.json().catch(() => ({}))
+        const error = new Error(
+          errorData.error ||
+            `Failed to delete post: ${response.status} ${response.statusText}`
+        ) as Error & { requirePassword?: boolean }
+        error.requirePassword = errorData.requirePassword
+        throw error
       }
     },
-    onSuccess: (_, postId) => {
+    onSuccess: (_, data) => {
       // Remove post from cache
       queryClient.removeQueries({
-        queryKey: postKeys.detail(postId),
+        queryKey: postKeys.detail(data.postId),
       })
       // Invalidate posts list
       queryClient.invalidateQueries({ queryKey: postKeys.lists() })

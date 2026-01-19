@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { usePostDetail, useDeletePost, Post } from '@/hooks/usePosts'
+import { useAuth } from '@/hooks/useAuth'
+import PasswordModal from './PasswordModal'
 
 /**
  * 날짜를 한국어 형식으로 포맷팅
@@ -152,14 +154,59 @@ function DeleteConfirmModal({
  * 게시글 내용 컴포넌트
  * Requirements 5.3: 게시글 전체 내용 표시
  * Requirements 5.8, 5.9: 게시글 삭제 기능
+ * Requirements 16.8.7, 16.8.9: 비회원 게시글 비밀번호 검증
  */
 function PostContent({ post }: PostContentProps) {
   const router = useRouter()
+  const { user, isAuthenticated } = useAuth()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
   const deletePost = useDeletePost()
 
+  // 현재 사용자가 게시글 작성자인지 확인
+  const isOwner = () => {
+    if (post.isGuest) {
+      // 비회원 게시글은 비밀번호로 확인
+      return true // 비밀번호 모달로 확인
+    }
+    // 회원 게시글은 userId로 확인
+    if (!isAuthenticated || !user) return false
+    const currentUserId = user.id || user.email
+    return post.userId === currentUserId
+  }
+
+  // 수정/삭제 버튼 표시 여부
+  const canModify = () => {
+    if (post.isGuest) return true // 비회원 게시글은 비밀번호로 확인
+    return isOwner()
+  }
+
   const handleDeleteClick = () => {
-    setIsDeleteModalOpen(true)
+    if (post.isGuest) {
+      // 비회원 게시글: 비밀번호 모달 표시
+      setPasswordError(null)
+      setIsPasswordModalOpen(true)
+    } else if (isOwner()) {
+      // 회원 게시글 + 본인: 삭제 확인 모달 표시
+      setIsDeleteModalOpen(true)
+    } else {
+      // 회원 게시글 + 타인: 권한 없음
+      alert('본인의 게시글만 삭제할 수 있습니다.')
+    }
+  }
+
+  const handleEditClick = () => {
+    if (post.isGuest) {
+      // 비회원 게시글: 수정 페이지에서 비밀번호 확인
+      router.push(`/community/${post.id}/edit`)
+    } else if (isOwner()) {
+      // 회원 게시글 + 본인: 수정 페이지로 이동
+      router.push(`/community/${post.id}/edit`)
+    } else {
+      // 회원 게시글 + 타인: 권한 없음
+      alert('본인의 게시글만 수정할 수 있습니다.')
+    }
   }
 
   /**
@@ -179,21 +226,45 @@ function PostContent({ post }: PostContentProps) {
     return '/community?tab=general'
   }
 
+  // 비회원 게시글 삭제 (비밀번호 확인 후)
+  const handlePasswordConfirm = (password: string) => {
+    deletePost.mutate(
+      { postId: post.id, password },
+      {
+        onSuccess: () => {
+          setIsPasswordModalOpen(false)
+          router.push(getRedirectUrl())
+        },
+        onError: (error) => {
+          setPasswordError(error.message)
+        },
+      }
+    )
+  }
+
+  // 회원 게시글 삭제 확인
   const handleDeleteConfirm = () => {
-    deletePost.mutate(post.id, {
-      onSuccess: () => {
-        // Requirements 5.9: 삭제 후 원래 게시판으로 리다이렉트
-        router.push(getRedirectUrl())
-      },
-      onError: (error) => {
-        alert(`삭제 실패: ${error.message}`)
-        setIsDeleteModalOpen(false)
-      },
-    })
+    deletePost.mutate(
+      { postId: post.id },
+      {
+        onSuccess: () => {
+          router.push(getRedirectUrl())
+        },
+        onError: (error) => {
+          alert(`삭제 실패: ${error.message}`)
+          setIsDeleteModalOpen(false)
+        },
+      }
+    )
   }
 
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false)
+  }
+
+  const handlePasswordCancel = () => {
+    setIsPasswordModalOpen(false)
+    setPasswordError(null)
   }
 
   return (
@@ -313,59 +384,73 @@ function PostContent({ post }: PostContentProps) {
           </Link>
 
           {/* 수정/삭제 버튼 그룹 */}
-          <div className="flex items-center gap-2">
-            {/* 수정 버튼 - Requirements 5.7 */}
-            <Link
-              href={`/community/${post.id}/edit`}
-              className="inline-flex items-center gap-2 rounded-lg border border-navy-300 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-50"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {canModify() && (
+            <div className="flex items-center gap-2">
+              {/* 수정 버튼 - Requirements 5.7 */}
+              <button
+                type="button"
+                onClick={handleEditClick}
+                className="inline-flex items-center gap-2 rounded-lg border border-navy-300 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-50"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-              수정
-            </Link>
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                수정
+              </button>
 
-            {/* 삭제 버튼 - Requirements 5.8 */}
-            <button
-              type="button"
-              onClick={handleDeleteClick}
-              className="inline-flex items-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              {/* 삭제 버튼 - Requirements 5.8 */}
+              <button
+                type="button"
+                onClick={handleDeleteClick}
+                className="inline-flex items-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-              삭제
-            </button>
-          </div>
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                삭제
+              </button>
+            </div>
+          )}
         </footer>
       </article>
 
-      {/* 삭제 확인 모달 */}
+      {/* 삭제 확인 모달 (회원 게시글용) */}
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
         isDeleting={deletePost.isPending}
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
+      />
+
+      {/* 비밀번호 입력 모달 (비회원 게시글용) */}
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        title="게시글 삭제"
+        description="비회원 게시글을 삭제하려면 작성 시 입력한 비밀번호를 입력하세요."
+        isLoading={deletePost.isPending}
+        error={passwordError}
+        onConfirm={handlePasswordConfirm}
+        onCancel={handlePasswordCancel}
       />
     </>
   )
