@@ -48,12 +48,13 @@ export default function SceneImageModal({
 
   // 좋아요 처리 (토글 방식)
   const handleLike = useCallback(() => {
-    setShowLikeAnimation(true)
+    // 좋아요 추가 시에만 애니메이션 표시 (취소 시에는 표시 안 함)
+    if (!isLiked) {
+      setShowLikeAnimation(true)
+      setTimeout(() => setShowLikeAnimation(false), 1000)
+    }
     onLike(currentScene.id)
-
-    // 애니메이션 후 숨기기
-    setTimeout(() => setShowLikeAnimation(false), 1000)
-  }, [currentScene.id, onLike])
+  }, [currentScene.id, isLiked, onLike])
 
   // 더블클릭으로 좋아요
   const handleDoubleClick = useCallback(() => {
@@ -140,13 +141,12 @@ export default function SceneImageModal({
       {/* 좋아요 버튼 */}
       <button
         onClick={handleLike}
-        disabled={isLiked}
         className={`absolute right-4 top-16 z-10 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
           isLiked
             ? 'bg-red-500 text-white'
             : 'bg-white/10 text-white hover:bg-white/20'
         }`}
-        aria-label={isLiked ? '좋아요 완료' : '좋아요'}
+        aria-label={isLiked ? '좋아요 취소' : '좋아요'}
       >
         <svg
           className="h-5 w-5"
