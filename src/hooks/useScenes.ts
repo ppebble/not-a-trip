@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Scene, CreateSceneInput } from '@/types'
+import { Scene, CreateSceneInput, UserLikeStatus } from '@/types'
 
 // API response type
 interface ScenesResponse {
@@ -7,10 +7,18 @@ interface ScenesResponse {
   total: number
 }
 
+// Like toggle response type
+interface LikeToggleResponse {
+  success: boolean
+  liked: boolean
+  likeCount: number
+}
+
 // Query keys
 export const sceneKeys = {
   all: ['scenes'] as const,
   bySpot: (spotId: string) => [...sceneKeys.all, 'spot', spotId] as const,
+  likeStatus: (sceneId: string) => [...sceneKeys.all, 'like', sceneId] as const,
 }
 
 /**
@@ -42,6 +50,31 @@ export function useScenesBySpot(spotId: string | null) {
     enabled: !!spotId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
+  })
+}
+
+/**
+ * Hook to get like status for a specific scene
+ */
+export function useLikeStatus(sceneId: string | null) {
+  return useQuery({
+    queryKey: sceneKeys.likeStatus(sceneId || ''),
+    queryFn: async (): Promise<UserLikeStatus> => {
+      if (!sceneId) {
+        throw new Error('Scene ID is required')
+      }
+
+      const response = await fetch(`/api/scenes/${sceneId}/like`)
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch like status')
+      }
+
+      return response.json()
+    },
+    enabled: !!sceneId,
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 5 * 60 * 1000, // 5 minutes
   })
 }
 
@@ -78,12 +111,41 @@ export function useCreateScene() {
 }
 
 /**
- * Hook to like a scene
+ * Hook to toggle like on a scene (for logged-in users)
+ * 좋아요 토글 후 캐시 무효화하지 않음 - 순서 변동 방지
+ */
+export function useToggleLike() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
+      const response = await fetch(`/api/scenes/${sceneId}/like`, {
+        method: 'POST',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to toggle like')
+      }
+
+      return response.json()
+    },
+    onSuccess: (data, sceneId) => {
+      // 좋아요 상태 캐시 업데이트
+      queryClient.setQueryData(sceneKeys.likeStatus(sceneId), {
+        liked: data.liked,
+        likeCount: data.likeCount,
+      })
+    },
+  })
+}
+
+/**
+ * Hook to like a scene (legacy - for non-logged-in users)
  * 좋아요 후 캐시 무효화하지 않음 - 순서 변동 방지
  */
 export function useLikeScene() {
   return useMutation({
-    mutationFn: async (sceneId: string): Promise<{ likeCount: number }> => {
+    mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
       const response = await fetch(`/api/scenes/${sceneId}/like`, {
         method: 'POST',
       })
@@ -99,12 +161,14 @@ export function useLikeScene() {
 }
 
 /**
- * Hook to unlike a scene
+ * Hook to unlike a scene (for logged-in users)
  * 좋아요 취소 후 캐시 무효화하지 않음 - 순서 변동 방지
  */
 export function useUnlikeScene() {
+  const queryClient = useQueryClient()
+
   return useMutation({
-    mutationFn: async (sceneId: string): Promise<{ likeCount: number }> => {
+    mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
       const response = await fetch(`/api/scenes/${sceneId}/like`, {
         method: 'DELETE',
       })
@@ -115,6 +179,12 @@ export function useUnlikeScene() {
 
       return response.json()
     },
-    // onSuccess에서 캐시 무효화 제거 - 로컬 상태로만 좋아요 수 업데이트
+    onSuccess: (data, sceneId) => {
+      // 좋아요 상태 캐시 업데이트
+      queryClient.setQueryData(sceneKeys.likeStatus(sceneId), {
+        liked: data.liked,
+        likeCount: data.likeCount,
+      })
+    },
   })
 }

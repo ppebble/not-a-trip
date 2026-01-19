@@ -2,9 +2,10 @@
 
 import { useState, FormEvent, useCallback, useEffect } from 'react'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 import {
   useScenesBySpot,
-  useLikeScene,
+  useToggleLike,
   useCreateScene,
 } from '@/hooks/useScenes'
 import { Scene } from '@/types'
@@ -15,6 +16,8 @@ interface SceneCardProps {
   onLike: (sceneId: string) => void
   isLiking: boolean
   onClick: () => void
+  isLoggedIn: boolean
+  initialLiked?: boolean
 }
 
 /**
@@ -22,16 +25,43 @@ interface SceneCardProps {
  * 호버 시 중앙에 에피소드 정보 + 설명 표시
  * 클릭 시 전체보기 모달 열기
  */
-function SceneCard({ scene, onLike, isLiking, onClick }: SceneCardProps) {
-  const [liked, setLiked] = useState(false)
+function SceneCard({
+  scene,
+  onLike,
+  isLiking,
+  onClick,
+  isLoggedIn,
+  initialLiked = false,
+}: SceneCardProps) {
+  const [liked, setLiked] = useState(initialLiked)
   const [localLikeCount, setLocalLikeCount] = useState(scene.likeCount)
+
+  // initialLiked가 변경되면 상태 업데이트
+  useEffect(() => {
+    setLiked(initialLiked)
+  }, [initialLiked])
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (liked || isLiking) return
-    setLiked(true)
-    setLocalLikeCount((prev) => prev + 1)
-    onLike(scene.id)
+    if (isLiking) return
+
+    if (isLoggedIn) {
+      // 로그인 사용자: 토글 방식
+      if (liked) {
+        setLiked(false)
+        setLocalLikeCount((prev) => Math.max(0, prev - 1))
+      } else {
+        setLiked(true)
+        setLocalLikeCount((prev) => prev + 1)
+      }
+      onLike(scene.id)
+    } else {
+      // 비로그인 사용자: 한 번만 좋아요 가능 (세션 내)
+      if (liked) return
+      setLiked(true)
+      setLocalLikeCount((prev) => prev + 1)
+      onLike(scene.id)
+    }
   }
 
   return (
@@ -77,13 +107,22 @@ function SceneCard({ scene, onLike, isLiking, onClick }: SceneCardProps) {
       {/* 좋아요 버튼 - 항상 표시 */}
       <button
         onClick={handleLike}
-        disabled={liked || isLiking}
+        disabled={isLiking || (!isLoggedIn && liked)}
         className={`absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium shadow-md transition-all ${
           liked
             ? 'bg-red-500 text-white'
             : 'bg-white/90 text-gray-700 hover:bg-red-500 hover:text-white'
-        }`}
-        aria-label={liked ? '좋아요 완료' : '좋아요'}
+        } ${!isLoggedIn && liked ? 'cursor-not-allowed opacity-70' : ''}`}
+        aria-label={liked ? '좋아요 취소' : '좋아요'}
+        title={
+          isLoggedIn
+            ? liked
+              ? '좋아요 취소'
+              : '좋아요'
+            : liked
+              ? '로그인하면 좋아요를 취소할 수 있습니다'
+              : '좋아요'
+        }
       >
         <svg
           className="h-5 w-5"
@@ -127,6 +166,8 @@ interface CarouselProps {
   onLike: (sceneId: string) => void
   isLiking: boolean
   onSceneClick: (index: number) => void
+  isLoggedIn: boolean
+  likedSceneIds: Set<string>
 }
 
 /**
@@ -137,6 +178,8 @@ function SceneCarousel({
   onLike,
   isLiking,
   onSceneClick,
+  isLoggedIn,
+  likedSceneIds,
 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(1)
@@ -196,6 +239,8 @@ function SceneCarousel({
               onLike={onLike}
               isLiking={isLiking}
               onClick={() => onSceneClick(startIdx + idx)}
+              isLoggedIn={isLoggedIn}
+              initialLiked={likedSceneIds.has(scene.id)}
             />
           ))}
         </div>
@@ -511,13 +556,64 @@ interface SceneGalleryProps {
 }
 
 export default function SceneGallery({ spotId }: SceneGalleryProps) {
+  const { data: session } = useSession()
+  const isLoggedIn = !!session?.user
   const { data: scenes, isLoading, error } = useScenesBySpot(spotId)
-  const likeScene = useLikeScene()
+  const toggleLike = useToggleLike()
   const [showAddModal, setShowAddModal] = useState(false)
   const [imageModalIndex, setImageModalIndex] = useState<number | null>(null)
+  const [likedSceneIds, setLikedSceneIds] = useState<Set<string>>(new Set())
+  const [isLoadingLikes, setIsLoadingLikes] = useState(false)
+
+  // 로그인 사용자의 좋아요 상태 일괄 조회
+  useEffect(() => {
+    const fetchLikeStatuses = async () => {
+      if (!isLoggedIn || !scenes || scenes.length === 0) {
+        setLikedSceneIds(new Set())
+        return
+      }
+
+      setIsLoadingLikes(true)
+      try {
+        const likePromises = scenes.map(async (scene) => {
+          const response = await fetch(`/api/scenes/${scene.id}/like`)
+          if (response.ok) {
+            const data = await response.json()
+            return { sceneId: scene.id, liked: data.liked }
+          }
+          return { sceneId: scene.id, liked: false }
+        })
+
+        const results = await Promise.all(likePromises)
+        const likedIds = new Set(
+          results.filter((r) => r.liked).map((r) => r.sceneId)
+        )
+        setLikedSceneIds(likedIds)
+      } catch (err) {
+        console.error('Failed to fetch like statuses:', err)
+      } finally {
+        setIsLoadingLikes(false)
+      }
+    }
+
+    fetchLikeStatuses()
+  }, [isLoggedIn, scenes])
 
   const handleLike = (sceneId: string) => {
-    likeScene.mutate(sceneId)
+    toggleLike.mutate(sceneId, {
+      onSuccess: (data) => {
+        // 좋아요 상태 업데이트
+        setLikedSceneIds((prev) => {
+          const newSet = new Set(prev)
+          if (data.liked) {
+            newSet.add(sceneId)
+          } else {
+            newSet.delete(sceneId)
+          }
+          return newSet
+        })
+      },
+    })
   }
 
   const handleSceneClick = (index: number) => {
@@ -558,11 +654,13 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
         </div>
 
         <p className="mb-4 text-sm text-gray-500">
-          이 장소가 등장한 애니메이션 장면들입니다. 마음에 드는 장면에 좋아요를
-          눌러주세요!
+          이 장소가 등장한 애니메이션 장면들입니다.{' '}
+          {isLoggedIn
+            ? '마음에 드는 장면에 좋아요를 눌러주세요! (다시 클릭하면 취소됩니다)'
+            : '로그인하면 좋아요를 취소할 수 있습니다.'}
         </p>
 
-        {isLoading ? (
+        {isLoading || isLoadingLikes ? (
           <SceneGallerySkeleton />
         ) : error ? (
           <div className="py-8 text-center text-gray-500">
@@ -580,8 +678,10 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
           <SceneCarousel
             scenes={scenes}
             onLike={handleLike}
-            isLiking={likeScene.isPending}
+            isLiking={toggleLike.isPending}
             onSceneClick={handleSceneClick}
+            isLoggedIn={isLoggedIn}
+            likedSceneIds={likedSceneIds}
           />
         )}
       </div>

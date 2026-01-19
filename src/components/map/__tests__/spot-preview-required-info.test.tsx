@@ -105,17 +105,35 @@ jest.mock('next/navigation', () => ({
 
 /**
  * Mock Next.js Image component
+ * Filter out Next.js specific props that are not valid HTML attributes
  */
 jest.mock('next/image', () => {
   return function MockImage({
     src,
     alt,
+    priority,
+    fill,
+    sizes,
+    quality,
+    placeholder,
+    blurDataURL,
+    loader,
+    onLoadingComplete,
     ...props
   }: {
     src: string
     alt: string
-    [key: string]: any
+    priority?: boolean
+    fill?: boolean
+    sizes?: string
+    quality?: number
+    placeholder?: string
+    blurDataURL?: string
+    loader?: unknown
+    onLoadingComplete?: unknown
+    [key: string]: unknown
   }) {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt} {...props} />
   }
 })
