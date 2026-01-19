@@ -13,6 +13,12 @@ interface PostDocument {
   commentCount: number
   createdAt: Date
   updatedAt: Date
+  spotId?: string
+  mediaTitle?: string
+  // 비회원/회원 구분 필드
+  password?: string // 비회원용 비밀번호 (해시 저장)
+  userId?: string // 회원용 사용자 ID (optional)
+  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
 }
 
 interface CommentDocument {
@@ -33,6 +39,11 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
     commentCount: doc.commentCount,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
+    spotId: doc.spotId,
+    mediaTitle: doc.mediaTitle,
+    // 비회원/회원 구분 필드 (password는 보안상 제외)
+    userId: doc.userId,
+    isGuest: doc.isGuest,
   }
 }
 

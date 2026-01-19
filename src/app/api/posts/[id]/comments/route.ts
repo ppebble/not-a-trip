@@ -10,6 +10,10 @@ interface CommentDocument {
   content: string
   author: string
   createdAt: Date
+  // 비회원/회원 구분 필드
+  password?: string // 비회원용 비밀번호 (해시 저장)
+  userId?: string // 회원용 사용자 ID (optional)
+  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
 }
 
 interface PostDocument {
@@ -48,6 +52,9 @@ function documentToComment(doc: CommentDocument & { _id: ObjectId }): Comment {
     content: doc.content,
     author: doc.author,
     createdAt: doc.createdAt,
+    // 비회원/회원 구분 필드 (password는 보안상 제외)
+    userId: doc.userId,
+    isGuest: doc.isGuest,
   }
 }
 
@@ -157,6 +164,7 @@ export async function POST(
       content: input.content!.trim(),
       author: body.author || '익명',
       createdAt: now,
+      isGuest: true, // 기본값: 비회원 (추후 인증 로직에서 변경)
     }
 
     const result = await commentsCollection.insertOne(
@@ -175,6 +183,7 @@ export async function POST(
       content: newComment.content,
       author: newComment.author,
       createdAt: newComment.createdAt,
+      isGuest: newComment.isGuest,
     }
 
     return NextResponse.json(createdComment, { status: 201 })
