@@ -21,6 +21,8 @@ export interface Comment {
   content: string
   author: string
   createdAt: Date
+  userId?: string
+  isGuest?: boolean
 }
 
 export interface CreatePostInput {
@@ -35,6 +37,7 @@ export interface CreateCommentInput {
   postId: string
   content: string
   author: string
+  password?: string
 }
 
 export interface UpdatePostInput {
@@ -304,6 +307,9 @@ export function useCreatePost() {
 
 /**
  * Hook to create a new comment
+ * Requirements: 5.4, 16.8.6
+ *
+ * 비회원 댓글 작성 시 password 필드 필요
  */
 export function useCreateComment() {
   const queryClient = useQueryClient()
@@ -318,12 +324,16 @@ export function useCreateComment() {
         body: JSON.stringify({
           content: data.content,
           author: data.author,
+          password: data.password,
         }),
       })
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
         throw new Error(
-          `Failed to create comment: ${response.status} ${response.statusText}`
+          errorData.details?.[0] ||
+            errorData.error ||
+            `Failed to create comment: ${response.status} ${response.statusText}`
         )
       }
 
@@ -332,6 +342,55 @@ export function useCreateComment() {
       return {
         ...result,
         createdAt: new Date(result.createdAt),
+      }
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate comments for this post
+      queryClient.invalidateQueries({
+        queryKey: postKeys.comments(variables.postId),
+      })
+      // Also invalidate post detail to update comment count
+      queryClient.invalidateQueries({
+        queryKey: postKeys.detail(variables.postId),
+      })
+    },
+  })
+}
+
+/**
+ * Hook to delete a comment
+ * Requirements: 5.4, 16.8.8
+ *
+ * 비회원 댓글 삭제 시 password 필드 필요
+ */
+export function useDeleteComment() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: {
+      postId: string
+      commentId: string
+      password?: string
+    }): Promise<void> => {
+      const response = await fetch(
+        `/api/posts/${data.postId}/comments/${data.commentId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ password: data.password }),
+        }
+      )
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        const error = new Error(
+          errorData.error ||
+            `Failed to delete comment: ${response.status} ${response.statusText}`
+        ) as Error & { requirePassword?: boolean }
+        error.requirePassword = errorData.requirePassword
+        throw error
       }
     },
     onSuccess: (_, variables) => {
