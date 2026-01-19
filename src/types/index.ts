@@ -94,6 +94,10 @@ export interface Post {
   commentCount: number
   spotId?: string // 연결된 스팟 ID (optional)
   mediaTitle?: string // 연결된 작품 제목 (optional)
+  // 비회원/회원 구분 필드
+  password?: string // 비회원용 비밀번호 (해시 저장)
+  userId?: string // 회원용 사용자 ID (optional)
+  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
 }
 
 export interface Comment {
@@ -102,11 +106,17 @@ export interface Comment {
   content: string
   author: string
   createdAt: Date
+  // 비회원/회원 구분 필드
+  password?: string // 비회원용 비밀번호 (해시 저장)
+  userId?: string // 회원용 사용자 ID (optional)
+  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
 }
 
 export interface CreatePostInput {
   title: string
   content: string
+  author?: string // 비회원: 닉네임 입력, 회원: 자동 설정
+  password?: string // 비회원용 비밀번호 (필수)
   spotId?: string // 연결된 스팟 ID (optional)
   mediaTitle?: string // 연결된 작품 제목 (optional)
 }
@@ -116,11 +126,14 @@ export interface UpdatePostInput {
   content?: string
   spotId?: string | null // null로 연결 해제 가능
   mediaTitle?: string | null // null로 연결 해제 가능
+  password?: string // 비회원 수정 시 비밀번호 확인용
 }
 
 export interface CreateCommentInput {
   postId: string
   content: string
+  author?: string // 비회원: 닉네임 입력, 회원: 자동 설정
+  password?: string // 비회원용 비밀번호 (필수)
 }
 
 // ============================================
