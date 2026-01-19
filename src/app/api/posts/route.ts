@@ -16,6 +16,10 @@ interface PostDocument {
   updatedAt: Date
   spotId?: string
   mediaTitle?: string
+  // 비회원/회원 구분 필드
+  password?: string // 비회원용 비밀번호 (해시 저장)
+  userId?: string // 회원용 사용자 ID (optional)
+  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
 }
 
 interface SpotDocument {
@@ -42,6 +46,9 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
     updatedAt: doc.updatedAt,
     spotId: doc.spotId,
     mediaTitle: doc.mediaTitle,
+    // 비회원/회원 구분 필드 (password는 보안상 제외)
+    userId: doc.userId,
+    isGuest: doc.isGuest,
   }
 }
 
@@ -173,6 +180,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       commentCount: 0,
       createdAt: now,
       updatedAt: now,
+      isGuest: true, // 기본값: 비회원 (추후 인증 로직에서 변경)
       ...(input.spotId && { spotId: input.spotId }),
       ...(input.mediaTitle && { mediaTitle: input.mediaTitle.trim() }),
     }
