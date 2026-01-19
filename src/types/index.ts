@@ -147,6 +147,22 @@ export interface CreateSceneInput {
 }
 
 // ============================================
+// User Like Types (사용자 좋아요)
+// ============================================
+
+export interface UserLike {
+  id: string
+  userId: string
+  sceneId: string
+  createdAt: Date
+}
+
+export interface UserLikeStatus {
+  liked: boolean
+  likeCount: number
+}
+
+// ============================================
 // Community Summary Types
 // ============================================
 
