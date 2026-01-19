@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Comment, CreateCommentInput } from '@/types'
 import { ObjectId } from 'mongodb'
+import { auth } from '@/lib/auth'
+import bcrypt from 'bcryptjs'
 
 // MongoDB document interface
 interface CommentDocument {
@@ -115,7 +117,10 @@ export async function GET(
 
 /**
  * POST /api/posts/[id]/comments - 댓글 작성
- * Requirements: 5.3, 5.4
+ * Requirements: 5.3, 5.4, 16.8.6
+ *
+ * 회원: 세션에서 userId 자동 추출, 비밀번호 불필요
+ * 비회원: 닉네임 + 비밀번호 필수, 비밀번호 해시 저장
  */
 export async function POST(
   request: NextRequest,
@@ -154,17 +159,64 @@ export async function POST(
       )
     }
 
+    // 세션 확인 (회원/비회원 구분)
+    const session = await auth()
+    const isAuthenticated = !!session?.user
+
+    // 비회원인 경우 비밀번호 필수 검증
+    if (!isAuthenticated) {
+      if (!body.password || body.password.trim().length === 0) {
+        return NextResponse.json(
+          {
+            error: 'Validation failed',
+            details: ['비회원은 비밀번호가 필수입니다'],
+          },
+          { status: 400 }
+        )
+      }
+      if (body.password.length < 4) {
+        return NextResponse.json(
+          {
+            error: 'Validation failed',
+            details: ['비밀번호는 4자 이상이어야 합니다'],
+          },
+          { status: 400 }
+        )
+      }
+    }
+
     const commentsCollection = await getCollection<
       CommentDocument & { _id: ObjectId }
     >(COLLECTIONS.COMMENTS)
 
     const now = new Date()
-    const newComment: CommentDocument = {
-      postId: new ObjectId(id),
-      content: input.content!.trim(),
-      author: body.author || '익명',
-      createdAt: now,
-      isGuest: true, // 기본값: 비회원 (추후 인증 로직에서 변경)
+
+    // 회원/비회원에 따른 댓글 데이터 구성
+    let newComment: CommentDocument
+
+    if (isAuthenticated && session.user) {
+      // 회원 댓글
+      newComment = {
+        postId: new ObjectId(id),
+        content: input.content!.trim(),
+        author:
+          session.user.name || session.user.email?.split('@')[0] || '회원',
+        createdAt: now,
+        isGuest: false,
+        userId: session.user.id || session.user.email || undefined,
+      }
+    } else {
+      // 비회원 댓글 - 비밀번호 해시 저장
+      const hashedPassword = await bcrypt.hash(body.password, 10)
+
+      newComment = {
+        postId: new ObjectId(id),
+        content: input.content!.trim(),
+        author: body.author || '익명',
+        createdAt: now,
+        isGuest: true,
+        password: hashedPassword,
+      }
     }
 
     const result = await commentsCollection.insertOne(
@@ -177,12 +229,14 @@ export async function POST(
       { $inc: { commentCount: 1 } }
     )
 
+    // 응답에서 password 제외
     const createdComment: Comment = {
       id: result.insertedId.toHexString(),
       postId: id,
       content: newComment.content,
       author: newComment.author,
       createdAt: newComment.createdAt,
+      userId: newComment.userId,
       isGuest: newComment.isGuest,
     }
 
