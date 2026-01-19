@@ -3,6 +3,8 @@ import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Post, CreatePostInput } from '@/types'
 import { validatePostInput } from '@/lib/post-validation'
 import { ObjectId } from 'mongodb'
+import { auth } from '@/lib/auth'
+import bcrypt from 'bcryptjs'
 
 // MongoDB document interface
 interface PostDocument {
@@ -146,7 +148,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
 /**
  * POST /api/posts - 게시글 작성
- * Requirements: 5.2
+ * Requirements: 5.2, 16.8.4
+ *
+ * 회원: 세션에서 userId 자동 추출, 비밀번호 불필요
+ * 비회원: 닉네임 + 비밀번호 필수, 비밀번호 해시 저장
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -167,31 +172,94 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
+    // 세션 확인 (회원/비회원 구분)
+    const session = await auth()
+    const isAuthenticated = !!session?.user
+
+    // 비회원인 경우 비밀번호 필수 검증
+    if (!isAuthenticated) {
+      if (!body.password || body.password.trim().length === 0) {
+        return NextResponse.json(
+          {
+            error: 'Validation failed',
+            details: ['비회원은 비밀번호가 필수입니다'],
+          },
+          { status: 400 }
+        )
+      }
+      if (body.password.length < 4) {
+        return NextResponse.json(
+          {
+            error: 'Validation failed',
+            details: ['비밀번호는 4자 이상이어야 합니다'],
+          },
+          { status: 400 }
+        )
+      }
+    }
+
     const collection = await getCollection<PostDocument & { _id: ObjectId }>(
       COLLECTIONS.POSTS
     )
 
     const now = new Date()
-    const newPost: PostDocument = {
-      title: input.title.trim(),
-      content: input.content.trim(),
-      author: body.author || '익명', // 기본값: 익명
-      viewCount: 0,
-      commentCount: 0,
-      createdAt: now,
-      updatedAt: now,
-      isGuest: true, // 기본값: 비회원 (추후 인증 로직에서 변경)
-      ...(input.spotId && { spotId: input.spotId }),
-      ...(input.mediaTitle && { mediaTitle: input.mediaTitle.trim() }),
+
+    // 회원/비회원에 따른 게시글 데이터 구성
+    let newPost: PostDocument
+
+    if (isAuthenticated && session.user) {
+      // 회원 게시글
+      newPost = {
+        title: input.title.trim(),
+        content: input.content.trim(),
+        author:
+          session.user.name || session.user.email?.split('@')[0] || '회원',
+        viewCount: 0,
+        commentCount: 0,
+        createdAt: now,
+        updatedAt: now,
+        isGuest: false,
+        userId: session.user.id || session.user.email || undefined,
+        ...(input.spotId && { spotId: input.spotId }),
+        ...(input.mediaTitle && { mediaTitle: input.mediaTitle.trim() }),
+      }
+    } else {
+      // 비회원 게시글 - 비밀번호 해시 저장
+      const hashedPassword = await bcrypt.hash(body.password, 10)
+
+      newPost = {
+        title: input.title.trim(),
+        content: input.content.trim(),
+        author: body.author || '익명',
+        viewCount: 0,
+        commentCount: 0,
+        createdAt: now,
+        updatedAt: now,
+        isGuest: true,
+        password: hashedPassword,
+        ...(input.spotId && { spotId: input.spotId }),
+        ...(input.mediaTitle && { mediaTitle: input.mediaTitle.trim() }),
+      }
     }
 
     const result = await collection.insertOne(
       newPost as PostDocument & { _id: ObjectId }
     )
 
+    // 응답에서 password 제외
     const createdPost: Post = {
       id: result.insertedId.toHexString(),
-      ...newPost,
+      title: newPost.title,
+      content: newPost.content,
+      author: newPost.author,
+      viewCount: newPost.viewCount,
+      commentCount: newPost.commentCount,
+      createdAt: newPost.createdAt,
+      updatedAt: newPost.updatedAt,
+      spotId: newPost.spotId,
+      mediaTitle: newPost.mediaTitle,
+      userId: newPost.userId,
+      isGuest: newPost.isGuest,
     }
 
     return NextResponse.json({ post: createdPost }, { status: 201 })
