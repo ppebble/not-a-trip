@@ -1,7 +1,14 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { useComments, useCreateComment, Comment } from '@/hooks/usePosts'
+import {
+  useComments,
+  useCreateComment,
+  useDeleteComment,
+  Comment,
+} from '@/hooks/usePosts'
+import { useAuth } from '@/hooks/useAuth'
+import PasswordModal from './PasswordModal'
 
 /**
  * 날짜를 한국어 형식으로 포맷팅
@@ -32,29 +39,59 @@ function formatDate(date: Date): string {
 
 interface CommentItemProps {
   comment: Comment
+  postId: string
+  currentUserId?: string
+  onDeleteClick: (comment: Comment) => void
 }
 
 /**
  * 개별 댓글 아이템 컴포넌트
  * Requirements 5.4: 댓글 시간순 표시
  */
-function CommentItem({ comment }: CommentItemProps) {
+function CommentItem({
+  comment,
+  currentUserId,
+  onDeleteClick,
+}: CommentItemProps) {
+  // 삭제 권한 확인: 회원은 본인 댓글만, 비회원은 비밀번호로 삭제
+  const canDelete =
+    comment.isGuest || (currentUserId && comment.userId === currentUserId)
+
   return (
     <div className="border-b border-navy-100 py-4 last:border-b-0">
-      <div className="mb-2 flex items-center gap-3">
-        {/* 작성자 아바타 */}
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-200 text-sm font-medium text-navy-600">
-          {comment.author.charAt(0).toUpperCase()}
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {/* 작성자 아바타 */}
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-200 text-sm font-medium text-navy-600">
+            {comment.author.charAt(0).toUpperCase()}
+          </div>
+          {/* 작성자 정보 */}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-navy-700">
+                {comment.author}
+              </span>
+              {comment.isGuest && (
+                <span className="rounded bg-navy-100 px-1.5 py-0.5 text-xs text-navy-500">
+                  비회원
+                </span>
+              )}
+            </div>
+            <span className="text-xs text-navy-400">
+              {formatDate(comment.createdAt)}
+            </span>
+          </div>
         </div>
-        {/* 작성자 정보 */}
-        <div className="flex flex-col">
-          <span className="text-sm font-medium text-navy-700">
-            {comment.author}
-          </span>
-          <span className="text-xs text-navy-400">
-            {formatDate(comment.createdAt)}
-          </span>
-        </div>
+        {/* 삭제 버튼 */}
+        {canDelete && (
+          <button
+            onClick={() => onDeleteClick(comment)}
+            className="text-xs text-navy-400 transition-colors hover:text-red-500"
+            title="댓글 삭제"
+          >
+            삭제
+          </button>
+        )}
       </div>
       {/* 댓글 내용 */}
       <p className="ml-11 whitespace-pre-wrap text-sm text-navy-600">
@@ -106,11 +143,13 @@ interface CommentFormProps {
 
 /**
  * 댓글 작성 폼 컴포넌트
- * Requirements 5.3, 5.4: 댓글 작성 기능
+ * Requirements 5.3, 5.4, 16.8.5: 댓글 작성 기능 (회원/비회원 구분)
  */
 function CommentForm({ postId, onSuccess }: CommentFormProps) {
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth()
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   const createComment = useCreateComment()
@@ -125,16 +164,31 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
       return
     }
 
+    // 비회원인 경우 비밀번호 필수
+    if (!isAuthenticated && !password.trim()) {
+      setError('비회원은 비밀번호가 필수입니다')
+      return
+    }
+
+    if (!isAuthenticated && password.length < 4) {
+      setError('비밀번호는 4자 이상이어야 합니다')
+      return
+    }
+
     try {
       await createComment.mutateAsync({
         postId,
         content: content.trim(),
-        author: author.trim() || '익명',
+        author: isAuthenticated
+          ? user?.name || user?.email?.split('@')[0] || '회원'
+          : author.trim() || '익명',
+        password: isAuthenticated ? undefined : password,
       })
 
       // 성공 시 폼 초기화
       setContent('')
       setAuthor('')
+      setPassword('')
       onSuccess?.()
     } catch (err) {
       setError(err instanceof Error ? err.message : '댓글 작성에 실패했습니다')
@@ -143,24 +197,60 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* 작성자 입력 */}
-      <div>
-        <label
-          htmlFor="comment-author"
-          className="mb-1 block text-sm font-medium text-navy-700"
-        >
-          닉네임 (선택)
-        </label>
-        <input
-          id="comment-author"
-          type="text"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          placeholder="익명"
-          className="w-full rounded-lg border border-navy-200 px-4 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
-          maxLength={20}
-        />
-      </div>
+      {/* 로그인 상태 표시 */}
+      {isAuthLoading ? (
+        <div className="h-10 animate-pulse rounded-lg bg-navy-100"></div>
+      ) : isAuthenticated ? (
+        <div className="flex items-center gap-2 rounded-lg bg-navy-50 px-4 py-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-navy-200 text-xs font-medium text-navy-600">
+            {(user?.name || user?.email || '회')[0].toUpperCase()}
+          </div>
+          <span className="text-sm text-navy-700">
+            {user?.name || user?.email?.split('@')[0] || '회원'}
+          </span>
+          <span className="text-xs text-navy-400">(으)로 작성</span>
+        </div>
+      ) : (
+        <>
+          {/* 비회원: 닉네임 입력 */}
+          <div>
+            <label
+              htmlFor="comment-author"
+              className="mb-1 block text-sm font-medium text-navy-700"
+            >
+              닉네임
+            </label>
+            <input
+              id="comment-author"
+              type="text"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              placeholder="익명"
+              className="w-full rounded-lg border border-navy-200 px-4 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+              maxLength={20}
+            />
+          </div>
+
+          {/* 비회원: 비밀번호 입력 */}
+          <div>
+            <label
+              htmlFor="comment-password"
+              className="mb-1 block text-sm font-medium text-navy-700"
+            >
+              비밀번호 <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="comment-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="댓글 삭제 시 필요합니다 (4자 이상)"
+              className="w-full rounded-lg border border-navy-200 px-4 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+              maxLength={20}
+            />
+          </div>
+        </>
+      )}
 
       {/* 댓글 내용 입력 */}
       <div>
@@ -211,12 +301,60 @@ interface CommentSectionProps {
  * Requirements:
  * - 5.3: 게시글에 댓글 허용
  * - 5.4: 댓글 시간순 정렬 표시
+ * - 16.8.5: 비회원 비밀번호 입력 필드
+ * - 16.8.8: 댓글 삭제 권한 검증
  */
 export default function CommentSection({
   postId,
   className = '',
 }: CommentSectionProps) {
+  const { user, isAuthenticated } = useAuth()
   const { data: comments, isLoading, error, refetch } = useComments(postId)
+  const deleteComment = useDeleteComment()
+
+  // 삭제 모달 상태
+  const [deleteTarget, setDeleteTarget] = useState<Comment | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+
+  const currentUserId = isAuthenticated
+    ? user?.id || user?.email || undefined
+    : undefined
+
+  // 댓글 삭제 클릭 핸들러
+  const handleDeleteClick = (comment: Comment) => {
+    setDeleteTarget(comment)
+    setDeleteError(null)
+  }
+
+  // 댓글 삭제 확인 핸들러
+  const handleDeleteConfirm = async (password?: string) => {
+    if (!deleteTarget) return
+
+    try {
+      await deleteComment.mutateAsync({
+        postId,
+        commentId: deleteTarget.id,
+        password: deleteTarget.isGuest ? password : undefined,
+      })
+      setDeleteTarget(null)
+      setDeleteError(null)
+    } catch (err) {
+      const error = err as Error & { requirePassword?: boolean }
+      if (error.requirePassword) {
+        // 비밀번호 필요 - 모달 유지
+        setDeleteError('비밀번호를 입력해주세요')
+      } else {
+        setDeleteError(error.message || '댓글 삭제에 실패했습니다')
+      }
+    }
+  }
+
+  // 회원 댓글 삭제 (비밀번호 불필요)
+  const handleMemberDelete = () => {
+    if (deleteTarget && !deleteTarget.isGuest) {
+      handleDeleteConfirm()
+    }
+  }
 
   return (
     <div className={`rounded-lg bg-white p-6 shadow-sm ${className}`}>
@@ -264,11 +402,70 @@ export default function CommentSection({
         ) : (
           <div>
             {comments.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                postId={postId}
+                currentUserId={currentUserId}
+                onDeleteClick={handleDeleteClick}
+              />
             ))}
           </div>
         )}
       </div>
+
+      {/* 비회원 댓글 삭제 비밀번호 모달 */}
+      {deleteTarget?.isGuest && (
+        <PasswordModal
+          isOpen={!!deleteTarget}
+          title="댓글 삭제"
+          description="댓글 작성 시 입력한 비밀번호를 입력해주세요."
+          isLoading={deleteComment.isPending}
+          error={deleteError}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => {
+            setDeleteTarget(null)
+            setDeleteError(null)
+          }}
+        />
+      )}
+
+      {/* 회원 댓글 삭제 확인 모달 */}
+      {deleteTarget && !deleteTarget.isGuest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setDeleteTarget(null)}
+          />
+          <div className="relative z-10 mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="mb-2 text-lg font-semibold text-navy-800">
+              댓글 삭제
+            </h3>
+            <p className="mb-4 text-sm text-navy-600">
+              이 댓글을 삭제하시겠습니까?
+            </p>
+            {deleteError && (
+              <p className="mb-4 text-sm text-red-500">{deleteError}</p>
+            )}
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleteComment.isPending}
+                className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50 disabled:opacity-50"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleMemberDelete}
+                disabled={deleteComment.isPending}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+              >
+                {deleteComment.isPending ? '삭제 중...' : '삭제'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
