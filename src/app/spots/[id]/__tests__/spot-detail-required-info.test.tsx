@@ -124,15 +124,32 @@ jest.mock('@/hooks/useSpotDetail', () => ({
 
 /**
  * Mock Next.js Image component
+ * Filter out Next.js specific props that are not valid HTML attributes
  */
 jest.mock('next/image', () => {
   return function MockImage({
     src,
     alt,
+    priority,
+    fill,
+    sizes,
+    quality,
+    placeholder,
+    blurDataURL,
+    loader,
+    onLoadingComplete,
     ...props
   }: {
     src: string
     alt: string
+    priority?: boolean
+    fill?: boolean
+    sizes?: string
+    quality?: number
+    placeholder?: string
+    blurDataURL?: string
+    loader?: unknown
+    onLoadingComplete?: unknown
     [key: string]: unknown
   }) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -167,6 +184,35 @@ jest.mock('next/link', () => {
 jest.mock('@/components/map/SpotDetailMap', () => {
   return function MockSpotDetailMap() {
     return <div data-testid="spot-detail-map">지도 컴포넌트</div>
+  }
+})
+
+/**
+ * Mock next-auth/react for useSession
+ */
+jest.mock('next-auth/react', () => ({
+  useSession: () => ({
+    data: null,
+    status: 'unauthenticated',
+  }),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
+/**
+ * Mock SceneGallery component to avoid next-auth dependency issues
+ */
+jest.mock('@/components/spot/SceneGallery', () => {
+  return function MockSceneGallery() {
+    return <div data-testid="scene-gallery">장면 갤러리</div>
+  }
+})
+
+/**
+ * Mock SpotCommunitySection component
+ */
+jest.mock('@/components/spot/SpotCommunitySection', () => {
+  return function MockSpotCommunitySection() {
+    return <div data-testid="spot-community-section">커뮤니티 섹션</div>
   }
 })
 
