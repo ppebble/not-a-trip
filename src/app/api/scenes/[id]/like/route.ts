@@ -4,10 +4,37 @@ import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
 
 /**
+ * 클라이언트 IP 추출
+ */
+function getClientIP(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for')
+  const realIP = request.headers.get('x-real-ip')
+
+  if (forwarded) {
+    return forwarded.split(',')[0].trim()
+  }
+
+  if (realIP) {
+    return realIP
+  }
+
+  return 'unknown'
+}
+
+/**
+ * 비회원 식별자 생성 (IP + deviceId 조합)
+ */
+function getGuestIdentifier(request: NextRequest): string {
+  const ip = getClientIP(request)
+  const deviceId = request.headers.get('x-device-id') || 'no-device-id'
+  return `guest:${ip}:${deviceId}`
+}
+
+/**
  * GET /api/scenes/[id]/like - 사용자의 좋아요 상태 조회
  */
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -29,12 +56,21 @@ export async function GET(
       return NextResponse.json({ error: 'Scene not found' }, { status: 404 })
     }
 
-    // 로그인한 사용자의 좋아요 상태 확인
+    const userLikesCollection = await getCollection(COLLECTIONS.USER_LIKES)
     let liked = false
+
     if (userId) {
-      const userLikesCollection = await getCollection(COLLECTIONS.USER_LIKES)
+      // 로그인 사용자: userId로 조회
       const existingLike = await userLikesCollection.findOne({
-        userId,
+        visitorId: userId,
+        sceneId,
+      })
+      liked = !!existingLike
+    } else {
+      // 비회원: IP + deviceId 조합으로 조회
+      const guestId = getGuestIdentifier(request)
+      const existingLike = await userLikesCollection.findOne({
+        visitorId: guestId,
         sceneId,
       })
       liked = !!existingLike
@@ -54,12 +90,13 @@ export async function GET(
 }
 
 /**
- * POST /api/scenes/[id]/like - 좋아요 토글 (로그인 사용자)
- * 로그인 사용자: 좋아요 상태 토글 (추가/취소)
- * 비로그인 사용자: 단순 좋아요 추가 (취소 불가)
+ * POST /api/scenes/[id]/like - 좋아요 토글
+ * 로그인 사용자: userId로 식별
+ * 비회원: IP + deviceId 조합으로 식별
+ * 모두 토글 방식으로 동작
  */
 export async function POST(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -76,54 +113,44 @@ export async function POST(
     const session = await auth()
     const userId = session?.user?.id
 
+    // 방문자 식별자 결정
+    const visitorId = userId || getGuestIdentifier(request)
+    const isGuest = !userId
+
     // 장면 존재 확인
     const scene = await scenesCollection.findOne({ _id: new ObjectId(sceneId) })
     if (!scene) {
       return NextResponse.json({ error: 'Scene not found' }, { status: 404 })
     }
 
-    if (userId) {
-      // 로그인 사용자: 토글 방식
-      const existingLike = await userLikesCollection.findOne({
-        userId,
-        sceneId,
+    // 기존 좋아요 확인
+    const existingLike = await userLikesCollection.findOne({
+      visitorId,
+      sceneId,
+    })
+
+    if (existingLike) {
+      // 이미 좋아요한 경우 -> 좋아요 취소
+      await userLikesCollection.deleteOne({ visitorId, sceneId })
+      const result = await scenesCollection.findOneAndUpdate(
+        { _id: new ObjectId(sceneId), likeCount: { $gt: 0 } },
+        { $inc: { likeCount: -1 } },
+        { returnDocument: 'after' }
+      )
+
+      return NextResponse.json({
+        success: true,
+        liked: false,
+        likeCount: result?.likeCount || 0,
       })
-
-      if (existingLike) {
-        // 이미 좋아요한 경우 -> 좋아요 취소
-        await userLikesCollection.deleteOne({ userId, sceneId })
-        const result = await scenesCollection.findOneAndUpdate(
-          { _id: new ObjectId(sceneId), likeCount: { $gt: 0 } },
-          { $inc: { likeCount: -1 } },
-          { returnDocument: 'after' }
-        )
-
-        return NextResponse.json({
-          success: true,
-          liked: false,
-          likeCount: result?.likeCount || 0,
-        })
-      } else {
-        // 좋아요하지 않은 경우 -> 좋아요 추가
-        await userLikesCollection.insertOne({
-          userId,
-          sceneId,
-          createdAt: new Date(),
-        })
-        const result = await scenesCollection.findOneAndUpdate(
-          { _id: new ObjectId(sceneId) },
-          { $inc: { likeCount: 1 } },
-          { returnDocument: 'after' }
-        )
-
-        return NextResponse.json({
-          success: true,
-          liked: true,
-          likeCount: result?.likeCount || 0,
-        })
-      }
     } else {
-      // 비로그인 사용자: 단순 좋아요 추가 (취소 불가)
+      // 좋아요하지 않은 경우 -> 좋아요 추가
+      await userLikesCollection.insertOne({
+        visitorId,
+        sceneId,
+        isGuest,
+        createdAt: new Date(),
+      })
       const result = await scenesCollection.findOneAndUpdate(
         { _id: new ObjectId(sceneId) },
         { $inc: { likeCount: 1 } },
@@ -132,7 +159,7 @@ export async function POST(
 
       return NextResponse.json({
         success: true,
-        liked: false, // 비로그인은 상태 추적 불가
+        liked: true,
         likeCount: result?.likeCount || 0,
       })
     }
@@ -146,10 +173,12 @@ export async function POST(
 }
 
 /**
- * DELETE /api/scenes/[id]/like - 좋아요 취소 (로그인 사용자 전용)
+ * DELETE /api/scenes/[id]/like - 좋아요 취소
+ * 로그인 사용자: userId로 식별
+ * 비회원: IP + deviceId 조합으로 식별
  */
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -163,19 +192,15 @@ export async function DELETE(
     const session = await auth()
     const userId = session?.user?.id
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Login required to unlike' },
-        { status: 401 }
-      )
-    }
+    // 방문자 식별자 결정
+    const visitorId = userId || getGuestIdentifier(request)
 
     const scenesCollection = await getCollection(COLLECTIONS.SCENES)
     const userLikesCollection = await getCollection(COLLECTIONS.USER_LIKES)
 
     // 좋아요 기록 확인
     const existingLike = await userLikesCollection.findOne({
-      userId,
+      visitorId,
       sceneId,
     })
 
@@ -184,7 +209,7 @@ export async function DELETE(
     }
 
     // 좋아요 기록 삭제
-    await userLikesCollection.deleteOne({ userId, sceneId })
+    await userLikesCollection.deleteOne({ visitorId, sceneId })
 
     // 장면의 좋아요 수 감소
     const result = await scenesCollection.findOneAndUpdate(
