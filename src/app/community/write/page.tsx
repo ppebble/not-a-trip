@@ -4,6 +4,7 @@ import { useState, FormEvent, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useCreatePost } from '@/hooks/usePosts'
+import { useAuth } from '@/hooks/useAuth'
 import { validatePostInput } from '@/lib/post-validation'
 
 /**
@@ -13,6 +14,7 @@ function WriteForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const createPost = useCreatePost()
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth()
 
   // URL 파라미터에서 스팟/작품 정보 가져오기
   const spotIdParam = searchParams.get('spotId')
@@ -27,6 +29,7 @@ function WriteForm() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
+  const [password, setPassword] = useState('') // 비회원용 비밀번호
   const [spotId, setSpotId] = useState<string | null>(null)
   const [spotName, setSpotName] = useState<string | null>(null)
   const [mediaTitle, setMediaTitle] = useState<string | null>(null)
@@ -49,6 +52,14 @@ function WriteForm() {
     }
   }, [spotIdParam, spotNameParam, mediaTitleParam, isGeneralMode])
 
+  // 로그인 사용자의 경우 작성자 자동 설정
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const displayName = user.name || user.email?.split('@')[0] || '회원'
+      setAuthor(displayName)
+    }
+  }, [isAuthenticated, user])
+
   // 폼 제출 핸들러
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -67,6 +78,15 @@ function WriteForm() {
       allErrors.push('작성자는 필수입니다')
     }
 
+    // 비회원인 경우 비밀번호 필수
+    if (!isAuthenticated) {
+      if (!password || password.trim().length === 0) {
+        allErrors.push('비밀번호는 필수입니다')
+      } else if (password.length < 4) {
+        allErrors.push('비밀번호는 4자 이상이어야 합니다')
+      }
+    }
+
     if (allErrors.length > 0) {
       setErrors(allErrors)
       return
@@ -80,6 +100,8 @@ function WriteForm() {
         title: title.trim(),
         content: content.trim(),
         author: author.trim(),
+        // 비회원인 경우에만 비밀번호 전송
+        ...(!isAuthenticated && { password }),
         ...(spotId && { spotId }),
         ...(mediaTitle && { mediaTitle }),
       })
@@ -112,6 +134,11 @@ function WriteForm() {
   // 작품 연결 해제 핸들러
   const handleRemoveMedia = () => {
     setMediaTitle(null)
+  }
+
+  // 인증 로딩 중일 때 스켈레톤 표시
+  if (isAuthLoading) {
+    return <WriteFormSkeleton />
   }
 
   return (
@@ -149,6 +176,63 @@ function WriteForm() {
 
       {/* 작성 폼 */}
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* 로그인 상태 안내 */}
+        {isAuthenticated ? (
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div>
+                <p className="font-medium text-green-800">회원으로 작성</p>
+                <p className="text-sm text-green-600">
+                  {user?.email}로 로그인되어 있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5 text-amber-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <div>
+                <p className="font-medium text-amber-800">비회원으로 작성</p>
+                <p className="text-sm text-amber-600">
+                  수정/삭제 시 비밀번호가 필요합니다.{' '}
+                  <Link
+                    href="/auth/signin"
+                    className="underline hover:text-amber-700"
+                  >
+                    로그인
+                  </Link>
+                  하면 더 편리하게 이용할 수 있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         {/* 자유게시판 모드 안내 */}
         {isGeneralMode && (
           <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
@@ -286,7 +370,7 @@ function WriteForm() {
           </p>
         </div>
 
-        {/* 작성자 입력 */}
+        {/* 작성자 입력 - 회원/비회원 구분 */}
         <div>
           <label
             htmlFor="author"
@@ -294,19 +378,64 @@ function WriteForm() {
           >
             작성자 <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            id="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder="닉네임을 입력하세요"
-            className="w-full rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
-            maxLength={30}
-          />
-          <p className="mt-1 text-right text-xs text-navy-400">
-            {author.length}/30
-          </p>
+          {isAuthenticated ? (
+            // 로그인 사용자: 읽기 전용
+            <div className="relative">
+              <input
+                type="text"
+                id="author"
+                value={author}
+                readOnly
+                className="w-full cursor-not-allowed rounded-lg border border-navy-200 bg-navy-50 px-4 py-3 text-navy-600 focus:outline-none"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                  회원
+                </span>
+              </div>
+            </div>
+          ) : (
+            // 비회원: 입력 가능
+            <input
+              type="text"
+              id="author"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              placeholder="닉네임을 입력하세요"
+              className="w-full rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
+              maxLength={30}
+            />
+          )}
+          {!isAuthenticated && (
+            <p className="mt-1 text-right text-xs text-navy-400">
+              {author.length}/30
+            </p>
+          )}
         </div>
+
+        {/* 비회원 비밀번호 입력 */}
+        {!isAuthenticated && (
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-navy-700"
+            >
+              비밀번호 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="수정/삭제 시 필요한 비밀번호 (4자 이상)"
+              className="w-full rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
+              maxLength={50}
+            />
+            <p className="mt-1 text-xs text-navy-400">
+              게시글 수정/삭제 시 이 비밀번호가 필요합니다.
+            </p>
+          </div>
+        )}
 
         {/* 내용 입력 */}
         <div>
@@ -383,6 +512,11 @@ function WriteFormSkeleton() {
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
       <div className="animate-pulse space-y-6">
+        <div className="h-16 w-full rounded-lg bg-gray-200"></div>
+        <div>
+          <div className="mb-2 h-4 w-16 rounded bg-gray-200"></div>
+          <div className="h-12 w-full rounded-lg bg-gray-200"></div>
+        </div>
         <div>
           <div className="mb-2 h-4 w-16 rounded bg-gray-200"></div>
           <div className="h-12 w-full rounded-lg bg-gray-200"></div>
@@ -408,6 +542,9 @@ function WriteFormSkeleton() {
  * - 5.5: 필수 필드 누락 시 에러 메시지 표시 및 제출 방지
  * - 5.6: 글쓰기 버튼 클릭 시 제목, 내용 입력 폼이 있는 작성 페이지로 이동
  * - 3.1, 5.1: 스팟 상세에서 작성 시 스팟 자동 연결
+ * - 16.8.3: 회원/비회원 구분 작성자 처리
+ *   - 로그인 사용자: 작성자 필드 자동 설정 (닉네임 표시, 수정 불가)
+ *   - 비회원: 닉네임 + 비밀번호 입력 필드 표시
  */
 export default function WritePage() {
   return (
