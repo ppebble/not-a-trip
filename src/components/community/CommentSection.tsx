@@ -211,45 +211,27 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
           <span className="text-xs text-navy-400">(으)로 작성</span>
         </div>
       ) : (
-        <>
-          {/* 비회원: 닉네임 입력 */}
-          <div>
-            <label
-              htmlFor="comment-author"
-              className="mb-1 block text-sm font-medium text-navy-700"
-            >
-              닉네임
-            </label>
-            <input
-              id="comment-author"
-              type="text"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              placeholder="익명"
-              className="w-full rounded-lg border border-navy-200 px-4 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
-              maxLength={20}
-            />
-          </div>
-
-          {/* 비회원: 비밀번호 입력 */}
-          <div>
-            <label
-              htmlFor="comment-password"
-              className="mb-1 block text-sm font-medium text-navy-700"
-            >
-              비밀번호 <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="comment-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="댓글 삭제 시 필요합니다 (4자 이상)"
-              className="w-full rounded-lg border border-navy-200 px-4 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
-              maxLength={20}
-            />
-          </div>
-        </>
+        /* 비회원: 닉네임 + 비밀번호 한 줄 입력 */
+        <div className="flex gap-2">
+          <input
+            id="comment-author"
+            type="text"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            placeholder="닉네임"
+            className="w-1/3 rounded-lg border border-navy-200 px-3 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            maxLength={20}
+          />
+          <input
+            id="comment-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호 (4자 이상) *"
+            className="w-2/3 rounded-lg border border-navy-200 px-3 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            maxLength={20}
+          />
+        </div>
       )}
 
       {/* 댓글 내용 입력 */}
