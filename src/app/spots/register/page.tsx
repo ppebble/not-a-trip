@@ -3,6 +3,7 @@
 import { useEffect, useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
+import { AddressSearch } from '@/components/spot/AddressSearch'
 import {
   CATEGORY_CONFIG,
   SpotCategory,
@@ -325,35 +326,19 @@ function SpotRegisterForm() {
 
           {/* 주소 검색 */}
           <div className="mb-4">
-            <label
-              htmlFor="address"
-              className="mb-2 block text-sm font-medium text-navy-700"
-            >
+            <label className="mb-2 block text-sm font-medium text-navy-700">
               주소 <span className="text-red-500">*</span>
             </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="주소를 입력하세요 (검색 기능은 Task 5.3에서 구현)"
-                className="flex-1 rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
-              />
-              <button
-                type="button"
-                className="rounded-lg bg-navy-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-navy-700"
-                onClick={() =>
-                  alert('주소 검색 기능은 Task 5.3에서 구현됩니다.')
-                }
-              >
-                검색
-              </button>
-            </div>
-            <p className="mt-1 text-xs text-navy-400">
-              주소 검색 또는 지도에서 직접 위치를 선택하세요
-            </p>
+            <AddressSearch
+              initialValue={formData.address}
+              onSelect={(address, coordinates) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  address,
+                  coordinates,
+                }))
+              }}
+            />
           </div>
 
           {/* 좌표 표시 */}
@@ -366,16 +351,18 @@ function SpotRegisterForm() {
             </div>
           )}
 
-          {/* 지도 위치 선택 (플레이스홀더) */}
+          {/* 지도 위치 선택 (플레이스홀더 - Task 5.4에서 LocationPicker로 교체) */}
           <div
             className="cursor-pointer rounded-lg border-2 border-dashed border-navy-200 bg-navy-50 p-8 transition-colors hover:border-navy-300 hover:bg-navy-100"
             onClick={() => {
-              // 임시: 테스트용 좌표 설정
-              setFormData((prev) => ({
-                ...prev,
-                coordinates: { lat: 35.6762, lng: 139.6503 },
-                address: prev.address || '도쿄, 일본',
-              }))
+              // 임시: 테스트용 좌표 설정 (LocationPicker 구현 전까지)
+              if (!formData.coordinates) {
+                setFormData((prev) => ({
+                  ...prev,
+                  coordinates: { lat: 35.6762, lng: 139.6503 },
+                  address: prev.address || '도쿄, 일본',
+                }))
+              }
             }}
           >
             <div className="flex flex-col items-center justify-center text-center">
