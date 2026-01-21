@@ -519,6 +519,57 @@ function SpotRegisterForm() {
 }
 
 /**
+ * 로그인 필요 모달 컴포넌트
+ */
+function LoginRequiredModal({
+  isOpen,
+  onConfirm,
+}: {
+  isOpen: boolean
+  onConfirm: () => void
+}) {
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+        <div className="mb-4 flex justify-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100">
+            <svg
+              className="h-6 w-6 text-amber-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          </div>
+        </div>
+        <h3 className="mb-2 text-center text-lg font-semibold text-navy-800">
+          로그인이 필요한 서비스입니다
+        </h3>
+        <p className="mb-6 text-center text-sm text-navy-500">
+          스팟을 등록하려면 로그인이 필요합니다.
+          <br />
+          로그인 페이지로 이동합니다.
+        </p>
+        <button
+          onClick={onConfirm}
+          className="w-full rounded-lg bg-navy-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+        >
+          로그인하러 가기
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/**
  * 스팟 등록 페이지
  *
  * Requirements:
@@ -528,15 +579,21 @@ function SpotRegisterForm() {
 export default function SpotRegisterPage() {
   const router = useRouter()
   const { isAuthenticated, isLoading } = useAuth()
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
-  // 비로그인 시 로그인 페이지로 리다이렉트
+  // 비로그인 시 모달 표시
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push('/auth/signin?callbackUrl=/spots/register')
+      setShowLoginModal(true)
     }
-  }, [isAuthenticated, isLoading, router])
+  }, [isAuthenticated, isLoading])
 
-  // 로딩 중이거나 비로그인 상태면 스켈레톤 표시
+  // 모달 확인 시 로그인 페이지로 이동
+  const handleLoginConfirm = () => {
+    router.push('/auth/signin?callbackUrl=/spots/register')
+  }
+
+  // 로딩 중이거나 비로그인 상태면 스켈레톤 + 모달 표시
   if (isLoading || !isAuthenticated) {
     return (
       <main className="min-h-screen bg-navy-50">
@@ -549,6 +606,10 @@ export default function SpotRegisterPage() {
         <div className="mx-auto max-w-4xl px-4 py-6">
           <RegisterFormSkeleton />
         </div>
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onConfirm={handleLoginConfirm}
+        />
       </main>
     )
   }
