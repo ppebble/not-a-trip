@@ -1,4 +1,40 @@
 // ============================================
+// Spot Category & Content Types
+// ============================================
+
+export type SpotCategory =
+  | 'animation' // 애니메이션/만화
+  | 'sports' // 스포츠 (축구, 야구 등)
+  | 'movie_drama' // 영화/드라마
+  | 'music' // 음악/콘서트
+  | 'game' // 게임/e스포츠
+  | 'other' // 기타
+
+export type ContentType =
+  | 'anime' // 애니메이션
+  | 'movie' // 영화
+  | 'drama' // 드라마
+  | 'sports_team' // 스포츠 팀
+  | 'artist' // 아티스트/가수
+  | 'game' // 게임
+  | 'other' // 기타
+
+export interface CategoryConfig {
+  icon: string
+  color: string
+  label: string
+}
+
+export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
+  animation: { icon: '🎬', color: '#FF6B6B', label: '애니메이션' },
+  sports: { icon: '⚽', color: '#4ECDC4', label: '스포츠' },
+  movie_drama: { icon: '🎥', color: '#45B7D1', label: '영화/드라마' },
+  music: { icon: '🎵', color: '#96CEB4', label: '음악/콘서트' },
+  game: { icon: '🎮', color: '#DDA0DD', label: '게임' },
+  other: { icon: '📍', color: '#95A5A6', label: '기타' },
+}
+
+// ============================================
 // Spot Types
 // ============================================
 
