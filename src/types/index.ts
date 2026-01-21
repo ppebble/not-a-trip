@@ -49,6 +49,14 @@ export interface MediaInfo {
   year?: number
 }
 
+// 확장된 관련 콘텐츠 인터페이스 (다양한 콘텐츠 타입 지원)
+export interface RelatedContent {
+  name: string // 콘텐츠 이름 (작품명, 팀명, 아티스트명 등)
+  type: ContentType // 콘텐츠 타입
+  year?: number // 연도 (선택)
+  additionalInfo?: string // 추가 정보 (에피소드, 시즌 등)
+}
+
 export interface Spot {
   id: string
   name: string
@@ -56,9 +64,16 @@ export interface Spot {
   photos: string[]
   address: string
   coordinates: Coordinates
-  relatedMedia: MediaInfo[]
+  category?: SpotCategory // 스팟 카테고리 (마이그레이션 전 optional)
+  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
+  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠 (마이그레이션 후 사용)
   createdAt: Date
   updatedAt: Date
+  // 작성자 정보 (마이그레이션 전 optional)
+  authorId?: string // 회원 작성자 ID
+  authorName?: string // 작성자 이름
+  isGuestSpot?: boolean // 비회원 등록 여부
+  password?: string // 비회원 수정/삭제용 (해시)
 }
 
 export interface SpotPin {
@@ -66,6 +81,7 @@ export interface SpotPin {
   name: string
   coordinates: [number, number]
   thumbnailUrl: string
+  category?: SpotCategory // 마이그레이션 전 optional
 }
 
 export interface SpotPreviewData {
@@ -83,8 +99,14 @@ export interface SpotDetailData {
   photos: string[]
   address: string
   coordinates: [number, number]
-  relatedMedia: MediaInfo[]
+  category?: SpotCategory // 마이그레이션 전 optional
+  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
+  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠
   nearbyFacilities: NearbyFacility[]
+  // 작성자 정보 (마이그레이션 전 optional)
+  authorId?: string
+  authorName?: string
+  isGuestSpot?: boolean
 }
 
 // ============================================
@@ -244,7 +266,38 @@ export interface SpotResponse {
   photos: string[]
   address: string
   coordinates: [number, number]
-  relatedMedia: MediaInfo[]
+  category?: SpotCategory // 마이그레이션 전 optional
+  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
+  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠
+  authorId?: string
+  authorName?: string
+  isGuestSpot?: boolean
+}
+
+// 스팟 등록 Input
+export interface CreateSpotInput {
+  name: string
+  description: string
+  address: string
+  coordinates: Coordinates
+  category: SpotCategory
+  photos?: string[]
+  relatedContent?: RelatedContent[]
+  // 작성자 정보
+  authorName?: string // 비회원용 닉네임
+  password?: string // 비회원용 비밀번호
+}
+
+// 스팟 수정 Input
+export interface UpdateSpotInput {
+  name?: string
+  description?: string
+  address?: string
+  coordinates?: Coordinates
+  category?: SpotCategory
+  photos?: string[]
+  relatedContent?: RelatedContent[]
+  password?: string // 비회원 수정 시 비밀번호 확인용
 }
 
 // ============================================
