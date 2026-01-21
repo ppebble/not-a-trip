@@ -149,9 +149,9 @@ export default function Home() {
           onSpotSelect={handleSpotSelect}
         />
 
-        {/* 카테고리 필터 (상단) */}
-        <div className="absolute left-4 right-4 top-4 z-[1000]">
-          <div className="rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm">
+        {/* 카테고리 필터 (하단 중앙 플로팅 바) */}
+        <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
+          <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
             <CategoryFilter
               selectedCategories={selectedCategories}
               onChange={setSelectedCategories}
@@ -160,7 +160,7 @@ export default function Home() {
         </div>
 
         {/* 데스크톱용 플로팅 정보 패널 */}
-        <div className="absolute bottom-4 left-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
+        <div className="absolute left-4 top-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
           <div className="flex items-center space-x-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-600 text-white">
               📍
