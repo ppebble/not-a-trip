@@ -57,6 +57,9 @@ const spotArbitrary = fc.record({
  * Handles JSON serialization edge cases properly
  */
 function spotsAreEquivalent(spot1: Spot, spot2: Spot): boolean {
+  const relatedMedia1 = spot1.relatedMedia || []
+  const relatedMedia2 = spot2.relatedMedia || []
+
   return (
     spot1.id === spot2.id &&
     spot1.name === spot2.name &&
@@ -66,9 +69,9 @@ function spotsAreEquivalent(spot1: Spot, spot2: Spot): boolean {
     spot1.address === spot2.address &&
     spot1.coordinates.lat === spot2.coordinates.lat &&
     spot1.coordinates.lng === spot2.coordinates.lng &&
-    spot1.relatedMedia.length === spot2.relatedMedia.length &&
-    spot1.relatedMedia.every((media1, index) => {
-      const media2 = spot2.relatedMedia[index]
+    relatedMedia1.length === relatedMedia2.length &&
+    relatedMedia1.every((media1, index) => {
+      const media2 = relatedMedia2[index]
       return (
         media1.title === media2.title &&
         media1.type === media2.type &&
