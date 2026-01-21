@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
 import { useSpots } from '@/hooks/useSpots'
 import SpotPreview from '@/components/map/SpotPreview'
+import CategoryFilter from '@/components/map/CategoryFilter'
+import { SpotCategory } from '@/types'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -83,15 +85,26 @@ function SpotErrorDisplay({
 
 /**
  * 메인 페이지 컴포넌트
- * Requirements 1.1, 1.4를 만족하는 지도 기반 메인 페이지
+ * Requirements 1.1, 1.4, 2.2를 만족하는 지도 기반 메인 페이지
  * - 전체 화면 인터랙티브 지도 표시
  * - 네이비 테마 색상 스킴 적용
  * - 반응형 레이아웃 지원
  * - 실제 API 데이터 연동 (Task 6.2)
+ * - 카테고리 필터링 지원 (Requirements 2.2)
  */
 export default function Home() {
-  // 실제 API에서 스팟 데이터 가져오기
-  const { data: spots, isLoading, error, refetch } = useSpots()
+  // 카테고리 필터 상태 관리
+  const [selectedCategories, setSelectedCategories] = useState<SpotCategory[]>(
+    []
+  )
+
+  // 실제 API에서 스팟 데이터 가져오기 (카테고리 필터 적용)
+  const {
+    data: spots,
+    isLoading,
+    error,
+    refetch,
+  } = useSpots(selectedCategories.length > 0 ? selectedCategories : undefined)
 
   /**
    * 스팟 선택 핸들러
@@ -135,6 +148,16 @@ export default function Home() {
           spots={spotData}
           onSpotSelect={handleSpotSelect}
         />
+
+        {/* 카테고리 필터 (상단) */}
+        <div className="absolute left-4 right-4 top-4 z-[1000]">
+          <div className="rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm">
+            <CategoryFilter
+              selectedCategories={selectedCategories}
+              onChange={setSelectedCategories}
+            />
+          </div>
+        </div>
 
         {/* 데스크톱용 플로팅 정보 패널 */}
         <div className="absolute bottom-4 left-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
