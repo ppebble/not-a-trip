@@ -72,7 +72,7 @@ export function LocationPicker({
     }
   }, [initialCoordinates])
 
-  // 역지오코딩 (좌표 → 주소)
+  // 역지오코딩 (좌표 → 주소) - Nominatim API 사용
   const reverseGeocode = useCallback(
     async (coordinates: Coordinates) => {
       if (!onAddressSuggestion) return
@@ -80,23 +80,18 @@ export function LocationPicker({
       setIsLoading(true)
       try {
         const response = await fetch(
-          `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${coordinates.lng}&y=${coordinates.lat}`,
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coordinates.lat}&lon=${coordinates.lng}&addressdetails=1`,
           {
             headers: {
-              Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+              'Accept-Language': 'ko,en',
             },
           }
         )
 
         if (response.ok) {
           const data = await response.json()
-          if (data.documents && data.documents.length > 0) {
-            const doc = data.documents[0]
-            const address =
-              doc.road_address?.address_name || doc.address?.address_name
-            if (address) {
-              onAddressSuggestion(address)
-            }
+          if (data.display_name) {
+            onAddressSuggestion(data.display_name)
           }
         }
       } catch {

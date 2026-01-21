@@ -10,8 +10,16 @@ interface AddressSearchProps {
 
 interface AddressResult {
   address: string
-  roadAddress?: string
+  placeType?: string
   coordinates: Coordinates
+}
+
+interface NominatimResult {
+  lat: string
+  lon: string
+  display_name: string
+  type: string
+  class: string
 }
 
 /**
@@ -21,7 +29,7 @@ interface AddressResult {
  * - 4.4: 주소 검색/자동완성 기능
  * - 4.5: 선택 시 좌표 자동 설정
  *
- * Kakao 주소 검색 API 사용
+ * Nominatim (OpenStreetMap) API 사용 - 전세계 주소 검색 지원
  */
 export function AddressSearch({
   onSelect,
@@ -50,7 +58,7 @@ export function AddressSearch({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Kakao 주소 검색 API 호출
+  // Nominatim 주소 검색 API 호출
   const searchAddress = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim() || searchQuery.length < 2) {
       setResults([])
@@ -62,12 +70,12 @@ export function AddressSearch({
     setError(null)
 
     try {
-      // Kakao Local API 사용 (REST API)
+      // Nominatim API 사용 (OpenStreetMap)
       const response = await fetch(
-        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(searchQuery)}`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=5&addressdetails=1`,
         {
           headers: {
-            Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+            'Accept-Language': 'ko,en',
           },
         }
       )
@@ -76,49 +84,18 @@ export function AddressSearch({
         throw new Error('주소 검색에 실패했습니다')
       }
 
-      const data = await response.json()
+      const data: NominatimResult[] = await response.json()
 
-      const addressResults: AddressResult[] = data.documents.map(
-        (doc: any) => ({
-          address: doc.address_name || doc.address?.address_name,
-          roadAddress: doc.road_address?.address_name,
-          coordinates: {
-            lat: parseFloat(doc.y),
-            lng: parseFloat(doc.x),
-          },
-        })
-      )
+      const addressResults: AddressResult[] = data.map((item) => ({
+        address: item.display_name,
+        placeType: item.type,
+        coordinates: {
+          lat: parseFloat(item.lat),
+          lng: parseFloat(item.lon),
+        },
+      }))
 
-      // 주소 검색 결과가 없으면 키워드 검색 시도
-      if (addressResults.length === 0) {
-        const keywordResponse = await fetch(
-          `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(searchQuery)}`,
-          {
-            headers: {
-              Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
-            },
-          }
-        )
-
-        if (keywordResponse.ok) {
-          const keywordData = await keywordResponse.json()
-
-          const keywordResults: AddressResult[] = keywordData.documents.map(
-            (doc: any) => ({
-              address: doc.address_name,
-              roadAddress: doc.road_address_name,
-              coordinates: {
-                lat: parseFloat(doc.y),
-                lng: parseFloat(doc.x),
-              },
-            })
-          )
-          setResults(keywordResults.slice(0, 5))
-        }
-      } else {
-        setResults(addressResults.slice(0, 5))
-      }
-
+      setResults(addressResults)
       setIsOpen(true)
     } catch (err) {
       setError(
@@ -148,10 +125,9 @@ export function AddressSearch({
 
   // 결과 선택
   const handleSelect = (result: AddressResult) => {
-    const displayAddress = result.roadAddress || result.address
-    setQuery(displayAddress)
+    setQuery(result.address)
     setIsOpen(false)
-    onSelect(displayAddress, result.coordinates)
+    onSelect(result.address, result.coordinates)
   }
 
   // 검색 버튼 클릭
@@ -180,7 +156,7 @@ export function AddressSearch({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => results.length > 0 && setIsOpen(true)}
-            placeholder="주소를 검색하세요 (예: 서울시 강남구)"
+            placeholder="주소 또는 장소명 검색 (예: Tokyo Dome, 서울역)"
             className="w-full rounded-lg border border-navy-200 px-4 py-3 pr-10 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
           />
           {isLoading && (
@@ -252,12 +228,11 @@ export function AddressSearch({
                 </svg>
                 <div>
                   <p className="text-sm font-medium text-navy-800">
-                    {result.roadAddress || result.address}
+                    {result.address}
                   </p>
-                  {result.roadAddress &&
-                    result.address !== result.roadAddress && (
-                      <p className="text-xs text-navy-400">{result.address}</p>
-                    )}
+                  {result.placeType && (
+                    <p className="text-xs text-navy-400">{result.placeType}</p>
+                  )}
                 </div>
               </div>
             </button>
@@ -273,7 +248,7 @@ export function AddressSearch({
       )}
 
       <p className="mt-1 text-xs text-navy-400">
-        주소 또는 장소명을 입력하세요
+        전세계 주소 및 장소명 검색 가능 (Powered by OpenStreetMap)
       </p>
     </div>
   )
