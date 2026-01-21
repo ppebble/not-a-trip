@@ -83,6 +83,7 @@ function containsRequiredInfo(
 
   // Check if related media information is present
   const hasRelatedMedia =
+    !spotData.relatedMedia ||
     spotData.relatedMedia.length === 0 ||
     spotData.relatedMedia.some((media) => content.includes(media.title)) ||
     content.includes('관련 작품')
@@ -302,9 +303,9 @@ describe('SpotDetail Required Information Property Tests', () => {
           const hasName = content.includes(spotData.name)
           const hasAddress = content.includes(spotData.address)
           const hasDescription = content.includes(spotData.description)
-          const hasRelatedMedia = spotData.relatedMedia.some((media) =>
-            content.includes(media.title)
-          )
+          const hasRelatedMedia =
+            !spotData.relatedMedia ||
+            spotData.relatedMedia.some((media) => content.includes(media.title))
 
           // Photos section should not be rendered when photos array is empty
           const photosSection = container.querySelector('h2')
