@@ -72,6 +72,12 @@ export default function PilgrimageMap({
         touchZoom={true}
         boxZoom={true}
         keyboard={true}
+        minZoom={2} // 최소 줌 레벨 제한 (세계 지도 반복 방지)
+        maxBounds={[
+          [-90, -180], // 남서쪽 경계
+          [90, 180], // 북동쪽 경계
+        ]}
+        maxBoundsViscosity={1.0} // 경계 밖으로 드래그 완전 방지
         whenReady={() => {
           // 지도가 준비되면 크기 재계산
           setTimeout(() => {
@@ -86,6 +92,7 @@ export default function PilgrimageMap({
           maxZoom={19}
           tileSize={256}
           zoomOffset={0}
+          noWrap={true} // 타일 반복 방지
         />
 
         {/* 스팟 핀 렌더링 */}

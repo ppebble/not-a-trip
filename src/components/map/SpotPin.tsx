@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { Marker } from 'react-leaflet'
 import L from 'leaflet'
-import { SpotPin as SpotPinType } from '@/types'
+import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore } from '@/stores/uiStore'
 
@@ -19,19 +19,40 @@ const PIN_SIZES = {
   selected: 58,
 }
 
+// 카테고리별 색상 가져오기
+const getCategoryColor = (category?: SpotCategory): string => {
+  if (!category) return '#2d4a6f' // 기본 네이비 색상
+  return CATEGORY_CONFIG[category]?.color || '#2d4a6f'
+}
+
+// 카테고리별 아이콘 가져오기
+const getCategoryIcon = (category?: SpotCategory): string => {
+  if (!category) return '📍' // 기본 아이콘
+  return CATEGORY_CONFIG[category]?.icon || '📍'
+}
+
 // 작품 이미지 핀 아이콘 생성
 const createImagePinIcon = (
   thumbnailUrl: string,
   isSelected: boolean = false,
-  isHovered: boolean = false
+  isHovered: boolean = false,
+  category?: SpotCategory
 ) => {
   // 핀 크기 설정 (호버/선택 상태에 따라 확대)
   let size: number = PIN_SIZES.base
   if (isSelected) size = PIN_SIZES.selected
   else if (isHovered) size = PIN_SIZES.hovered
 
-  // 테두리 색상 및 스타일
-  const borderColor = isSelected ? '#fbbf24' : isHovered ? '#60a5fa' : '#2d4a6f'
+  // 카테고리별 색상 적용
+  const categoryColor = getCategoryColor(category)
+  const categoryIcon = getCategoryIcon(category)
+
+  // 테두리 색상 및 스타일 (카테고리 색상 적용)
+  const borderColor = isSelected
+    ? '#fbbf24'
+    : isHovered
+      ? '#60a5fa'
+      : categoryColor
   const borderWidth = isSelected ? 4 : isHovered ? 3 : 3
   const shadowIntensity = isSelected ? 0.5 : isHovered ? 0.45 : 0.3
 
@@ -60,27 +81,25 @@ const createImagePinIcon = (
         display: none;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #2d4a6f 0%, #1e3a5f 100%);
+        background: ${categoryColor};
         border-radius: 50%;
         align-items: center;
         justify-content: center;
+        font-size: 24px;
       ">
-        <svg viewBox="0 0 24 24" fill="white" style="width: 60%; height: 60%;">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-        </svg>
+        ${categoryIcon}
       </div>`
     : `<div style="
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #2d4a6f 0%, #1e3a5f 100%);
+        background: ${categoryColor};
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 24px;
       ">
-        <svg viewBox="0 0 24 24" fill="white" style="width: 60%; height: 60%;">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-        </svg>
+        ${categoryIcon}
       </div>`
 
   // 호버 상태 클래스
@@ -192,10 +211,16 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
 
   const isSelected = selectedSpotId === spot.id
 
-  // 아이콘을 메모이제이션하여 불필요한 재생성 방지
+  // 아이콘을 메모이제이션하여 불필요한 재생성 방지 (카테고리 색상/아이콘 적용)
   const icon = useMemo(
-    () => createImagePinIcon(spot.thumbnailUrl, isSelected, isHovered),
-    [spot.thumbnailUrl, isSelected, isHovered]
+    () =>
+      createImagePinIcon(
+        spot.thumbnailUrl,
+        isSelected,
+        isHovered,
+        spot.category
+      ),
+    [spot.thumbnailUrl, spot.category, isSelected, isHovered]
   )
 
   const handleClick = useCallback(() => {

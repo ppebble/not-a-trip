@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { SpotCategory } from '@/types'
 
 // Types for spot data
 export interface SpotPin {
@@ -6,6 +7,7 @@ export interface SpotPin {
   name: string
   coordinates: [number, number]
   thumbnailUrl: string
+  category?: SpotCategory
 }
 
 export interface SpotPreviewData {
@@ -84,12 +86,20 @@ export const mediaKeys = {
 
 /**
  * Hook to fetch all spots for map pins
+ * @param categories - 필터링할 카테고리 배열 (선택사항)
  */
-export function useSpots() {
+export function useSpots(categories?: SpotCategory[]) {
   return useQuery({
-    queryKey: spotKeys.lists(),
+    queryKey: spotKeys.list({ categories }),
     queryFn: async (): Promise<SpotPin[]> => {
-      const response = await fetch('/api/spots')
+      // 카테고리 필터 쿼리 파라미터 생성
+      const params = new URLSearchParams()
+      if (categories && categories.length > 0) {
+        params.set('category', categories.join(','))
+      }
+
+      const url = `/api/spots${params.toString() ? `?${params.toString()}` : ''}`
+      const response = await fetch(url)
 
       if (!response.ok) {
         throw new Error(
