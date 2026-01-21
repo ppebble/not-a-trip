@@ -2,15 +2,29 @@
 
 import { useEffect, useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 import { AddressSearch } from '@/components/spot/AddressSearch'
-import { LocationPicker } from '@/components/spot/LocationPicker'
 import {
   CATEGORY_CONFIG,
   SpotCategory,
   Coordinates,
   RelatedContent,
 } from '@/types'
+
+// LocationPicker는 Leaflet을 사용하므로 SSR 비활성화
+const LocationPicker = dynamic(
+  () =>
+    import('@/components/spot/LocationPicker').then(
+      (mod) => mod.LocationPicker
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-64 w-full animate-pulse rounded-lg bg-navy-100" />
+    ),
+  }
+)
 
 // 폼 상태 인터페이스
 interface SpotFormData {
