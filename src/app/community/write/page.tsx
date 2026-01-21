@@ -553,7 +553,7 @@ export default function WritePage() {
       <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <h1 className="text-xl font-bold text-navy-800">게시글 작성</h1>
-          <p className="text-sm text-navy-500">성지순례 경험을 공유하세요</p>
+          <p className="text-sm text-navy-500">특별한 여행 경험을 공유하세요</p>
         </div>
       </div>
 
