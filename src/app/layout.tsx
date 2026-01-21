@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Anime Pilgrimage Map',
-  description: '애니메이션 성지순례 스팟 공유 플랫폼',
+  title: 'Not a Trip',
+  description: '특별한 여행지를 공유하고 탐색하는 플랫폼',
 }
 
 export default function RootLayout({

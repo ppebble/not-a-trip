@@ -161,7 +161,7 @@ export default function SignInPage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-white">로그인</h1>
           <p className="mt-2 text-slate-400">
-            애니메이션 성지순례 지도에 오신 것을 환영합니다
+            Not a Trip에 오신 것을 환영합니다
           </p>
         </div>
 

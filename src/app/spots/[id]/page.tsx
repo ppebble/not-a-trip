@@ -68,7 +68,7 @@ export default function SpotDetailPage() {
             <span>지도로 돌아가기</span>
           </Link>
           <h1 className="mt-2 text-xl font-bold text-navy-800">
-            성지순례 스팟
+            특별한 여행지
           </h1>
         </div>
       </div>

@@ -58,7 +58,7 @@ export default function RegisterPage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-white">회원가입</h1>
           <p className="mt-2 text-slate-400">
-            새 계정을 만들어 성지순례를 시작하세요
+            새 계정을 만들어 특별한 여행을 시작하세요
           </p>
         </div>
 

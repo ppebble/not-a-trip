@@ -164,7 +164,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
               {/* 배지 */}
               <div className="absolute bottom-3 left-3">
                 <span className="inline-flex items-center rounded-full bg-navy-600/90 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                  📍 성지순례 스팟
+                  📍 특별한 여행지
                 </span>
               </div>
             </div>

@@ -224,7 +224,7 @@ export default function SpotDetailMap({
           <div className="space-y-1">
             <div className="flex items-center text-xs">
               <div className="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
-              <span>성지순례 스팟</span>
+              <span>특별한 여행지</span>
             </div>
             {Array.from(new Set(facilities.map((f) => f.type))).map((type) => (
               <div key={type} className="flex items-center text-xs">
@@ -240,7 +240,7 @@ export default function SpotDetailMap({
 
       {/* Map attribution with navy theme */}
       <div className="absolute bottom-2 right-2 z-[1000] rounded bg-navy-800/80 px-2 py-1 text-xs text-white">
-        Anime Pilgrim
+        Not a Trip
       </div>
     </div>
   )

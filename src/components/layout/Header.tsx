@@ -11,7 +11,7 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* 로고 */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-white">🗺️ 성지순례 지도</span>
+          <span className="text-xl font-bold text-white">✈️ Not a Trip</span>
         </Link>
 
         {/* 네비게이션 */}
@@ -20,13 +20,19 @@ export function Header() {
             href="/"
             className="text-sm text-slate-300 transition hover:text-white"
           >
-            지도
+            홈
           </Link>
           <Link
             href="/community"
             className="text-sm text-slate-300 transition hover:text-white"
           >
             커뮤니티
+          </Link>
+          <Link
+            href="/spots/register"
+            className="text-sm text-slate-300 transition hover:text-white"
+          >
+            스팟 등록
           </Link>
         </nav>
 

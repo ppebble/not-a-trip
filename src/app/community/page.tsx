@@ -72,7 +72,7 @@ const categoryTabs: CategoryTab[] = [
         />
       </svg>
     ),
-    description: '성지순례 스팟별 게시글',
+    description: '특별한 여행지별 게시글',
   },
   {
     id: 'general',
@@ -223,7 +223,7 @@ function CommunityPageContent() {
       <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <h1 className="text-xl font-bold text-navy-800">커뮤니티</h1>
-          <p className="text-sm text-navy-500">성지순례 경험을 공유하세요</p>
+          <p className="text-sm text-navy-500">특별한 여행 경험을 공유하세요</p>
         </div>
       </div>
 
@@ -517,7 +517,7 @@ function SpotCategorySection() {
           <div className="mb-4 text-4xl">🗺️</div>
           <p className="mb-2 text-navy-700">등록된 스팟이 없습니다</p>
           <p className="text-sm text-navy-500">
-            새로운 성지순례 스팟을 등록해주세요.
+            새로운 특별한 여행지를 등록해주세요.
           </p>
           <Link
             href="/"
@@ -555,7 +555,7 @@ function SpotCategorySection() {
         <h2 className="text-lg font-semibold text-navy-800">스팟별 커뮤니티</h2>
       </div>
       <p className="mb-6 text-sm text-navy-500">
-        성지순례 스팟을 선택하여 해당 장소에 대한 게시글을 확인하세요.
+        특별한 여행지를 선택하여 해당 장소에 대한 게시글을 확인하세요.
       </p>
 
       {/* 스팟 카드 그리드 */}

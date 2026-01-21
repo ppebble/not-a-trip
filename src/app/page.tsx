@@ -144,7 +144,7 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm font-semibold text-navy-800">
-                {spotCount}개의 성지순례 스팟
+                {spotCount}개의 특별한 여행지
               </p>
               <p className="text-xs text-navy-600">
                 {spotCount > 0
