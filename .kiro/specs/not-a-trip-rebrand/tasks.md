@@ -40,17 +40,17 @@
   - 헤더 및 메타데이터 변경 확인
   - 사용자 피드백 수렴
 
-- [ ] 4. 카테고리 시스템 구현
-  - [ ] 4.1 CategoryFilter 컴포넌트 구현
+- [x] 4. 카테고리 시스템 구현
+  - [x] 4.1 CategoryFilter 컴포넌트 구현
     - `src/components/map/CategoryFilter.tsx` 생성
     - 카테고리별 체크박스/버튼 UI
     - 선택된 카테고리 상태 관리
     - _Requirements: 2.2_
-  - [ ] 4.2 SpotPin 카테고리 표시 업데이트
+  - [x] 4.2 SpotPin 카테고리 표시 업데이트
     - 카테고리별 색상/아이콘 적용
     - `src/components/map/SpotPin.tsx` 수정
     - _Requirements: 2.4_
-  - [ ] 4.3 스팟 API 카테고리 필터링 추가
+  - [x] 4.3 스팟 API 카테고리 필터링 추가
     - `GET /api/spots?category=animation,sports` 지원
     - `src/app/api/spots/route.ts` 수정
     - _Requirements: 2.2_
@@ -58,7 +58,7 @@
     - **Property 2: 카테고리 필터 정확성**
     - _For any_ 카테고리 필터 적용 시, 반환되는 모든 스팟은 선택된 카테고리에 속해야 함
     - **Validates: Requirements 2.2**
-  - [ ] 4.5 메인 페이지에 카테고리 필터 통합
+  - [x] 4.5 메인 페이지에 카테고리 필터 통합
     - `src/app/page.tsx`에 CategoryFilter 추가
     - 필터 상태에 따른 스팟 표시
     - _Requirements: 2.2_
