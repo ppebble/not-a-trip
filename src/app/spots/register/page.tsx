@@ -4,6 +4,7 @@ import { useEffect, useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { AddressSearch } from '@/components/spot/AddressSearch'
+import { LocationPicker } from '@/components/spot/LocationPicker'
 import {
   CATEGORY_CONFIG,
   SpotCategory,
@@ -341,58 +342,25 @@ function SpotRegisterForm() {
             />
           </div>
 
-          {/* 좌표 표시 */}
-          {formData.coordinates && (
-            <div className="mb-4 rounded-lg border border-navy-200 bg-navy-50 p-3">
-              <p className="text-sm text-navy-600">
-                📍 선택된 좌표: {formData.coordinates.lat.toFixed(6)},{' '}
-                {formData.coordinates.lng.toFixed(6)}
-              </p>
-            </div>
-          )}
-
-          {/* 지도 위치 선택 (플레이스홀더 - Task 5.4에서 LocationPicker로 교체) */}
-          <div
-            className="cursor-pointer rounded-lg border-2 border-dashed border-navy-200 bg-navy-50 p-8 transition-colors hover:border-navy-300 hover:bg-navy-100"
-            onClick={() => {
-              // 임시: 테스트용 좌표 설정 (LocationPicker 구현 전까지)
-              if (!formData.coordinates) {
+          {/* 지도 위치 선택 */}
+          <LocationPicker
+            initialCoordinates={formData.coordinates || undefined}
+            onLocationChange={(coordinates) => {
+              setFormData((prev) => ({
+                ...prev,
+                coordinates,
+              }))
+            }}
+            onAddressSuggestion={(address) => {
+              // 주소가 비어있을 때만 자동 설정
+              if (!formData.address) {
                 setFormData((prev) => ({
                   ...prev,
-                  coordinates: { lat: 35.6762, lng: 139.6503 },
-                  address: prev.address || '도쿄, 일본',
+                  address,
                 }))
               }
             }}
-          >
-            <div className="flex flex-col items-center justify-center text-center">
-              <svg
-                className="mb-2 h-12 w-12 text-navy-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              <p className="text-sm text-navy-500">
-                클릭하여 테스트 좌표 설정 (LocationPicker는 Task 5.4에서 구현)
-              </p>
-              <p className="text-xs text-navy-400">
-                실제 지도 컴포넌트가 여기에 표시됩니다
-              </p>
-            </div>
-          </div>
+          />
         </div>
 
         {/* 사진 섹션 */}
