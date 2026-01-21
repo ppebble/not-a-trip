@@ -1,16 +1,13 @@
 'use client'
 
-import { useEffect, useState, FormEvent } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
+import { useSpotRegistration } from '@/hooks/useSpotRegistration'
 import { AddressSearch } from '@/components/spot/AddressSearch'
-import {
-  CATEGORY_CONFIG,
-  SpotCategory,
-  Coordinates,
-  RelatedContent,
-} from '@/types'
+import { RelatedContentForm } from '@/components/spot/RelatedContentForm'
+import { CATEGORY_CONFIG, SpotCategory } from '@/types'
 
 // LocationPicker는 Leaflet을 사용하므로 SSR 비활성화
 const LocationPicker = dynamic(
@@ -26,28 +23,6 @@ const LocationPicker = dynamic(
   }
 )
 
-// 폼 상태 인터페이스
-interface SpotFormData {
-  name: string
-  description: string
-  address: string
-  coordinates: Coordinates | null
-  category: SpotCategory | ''
-  photos: string[]
-  relatedContent: RelatedContent[]
-}
-
-// 초기 폼 상태
-const initialFormData: SpotFormData = {
-  name: '',
-  description: '',
-  address: '',
-  coordinates: null,
-  category: '',
-  photos: [],
-  relatedContent: [],
-}
-
 /**
  * 스팟 등록 폼 스켈레톤
  */
@@ -55,9 +30,7 @@ function RegisterFormSkeleton() {
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
       <div className="animate-pulse space-y-6">
-        {/* 로그인 상태 안내 */}
         <div className="h-16 w-full rounded-lg bg-gray-200"></div>
-        {/* 기본 정보 섹션 */}
         <div>
           <div className="mb-2 h-4 w-20 rounded bg-gray-200"></div>
           <div className="h-12 w-full rounded-lg bg-gray-200"></div>
@@ -70,13 +43,11 @@ function RegisterFormSkeleton() {
           <div className="mb-2 h-4 w-20 rounded bg-gray-200"></div>
           <div className="h-32 w-full rounded-lg bg-gray-200"></div>
         </div>
-        {/* 위치 정보 섹션 */}
         <div>
           <div className="mb-2 h-4 w-20 rounded bg-gray-200"></div>
           <div className="h-12 w-full rounded-lg bg-gray-200"></div>
         </div>
         <div className="h-64 w-full rounded-lg bg-gray-200"></div>
-        {/* 버튼 영역 */}
         <div className="flex justify-end gap-3 pt-4">
           <div className="h-10 w-20 rounded-lg bg-gray-200"></div>
           <div className="h-10 w-20 rounded-lg bg-gray-200"></div>
@@ -93,92 +64,19 @@ function RegisterFormSkeleton() {
  * - 4.2: 필수 필드 (이름, 설명, 주소, 카테고리)
  * - 4.3: 선택 필드 (사진, 관련 콘텐츠)
  * - 4.6: 필수 필드 누락 시 유효성 검사 에러
+ * - 4.7: 등록 성공 시 스팟 상세 페이지로 이동
  */
 function SpotRegisterForm() {
   const router = useRouter()
   const { user } = useAuth()
-
-  // 폼 상태
-  const [formData, setFormData] = useState<SpotFormData>(initialFormData)
-  const [errors, setErrors] = useState<string[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // 필드 변경 핸들러
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  // 유효성 검사
-  const validateForm = (): string[] => {
-    const validationErrors: string[] = []
-
-    if (!formData.name.trim()) {
-      validationErrors.push('스팟 이름은 필수입니다')
-    } else if (formData.name.trim().length < 2) {
-      validationErrors.push('스팟 이름은 2자 이상이어야 합니다')
-    }
-
-    if (!formData.category) {
-      validationErrors.push('카테고리를 선택해주세요')
-    }
-
-    if (!formData.description.trim()) {
-      validationErrors.push('설명은 필수입니다')
-    } else if (formData.description.trim().length < 10) {
-      validationErrors.push('설명은 10자 이상이어야 합니다')
-    }
-
-    if (!formData.address.trim()) {
-      validationErrors.push('주소는 필수입니다')
-    }
-
-    if (!formData.coordinates) {
-      validationErrors.push('지도에서 위치를 선택해주세요')
-    }
-
-    return validationErrors
-  }
-
-  // 폼 제출 핸들러
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-
-    // 유효성 검사
-    const validationErrors = validateForm()
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors)
-      return
-    }
-
-    setErrors([])
-    setIsSubmitting(true)
-
-    try {
-      // TODO: API 호출 (Task 5.6에서 구현)
-      // const response = await fetch('/api/spots', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     ...formData,
-      //     authorId: user?.id,
-      //     authorName: user?.name || user?.email?.split('@')[0],
-      //   }),
-      // })
-
-      // 임시: 성공 시 메인 페이지로 이동
-      alert('스팟 등록 API는 Task 5.6에서 구현됩니다.')
-      router.push('/')
-    } catch {
-      setErrors(['스팟 등록에 실패했습니다. 다시 시도해주세요.'])
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const {
+    formData,
+    setFormData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleSubmit,
+  } = useSpotRegistration()
 
   // 취소 핸들러
   const handleCancel = () => {
@@ -366,7 +264,6 @@ function SpotRegisterForm() {
               }))
             }}
             onAddressSuggestion={(address) => {
-              // 주소가 비어있을 때만 자동 설정
               if (!formData.address) {
                 setFormData((prev) => ({
                   ...prev,
@@ -401,7 +298,7 @@ function SpotRegisterForm() {
                 />
               </svg>
               <p className="text-sm text-navy-500">
-                사진을 드래그하거나 클릭하여 업로드
+                사진 업로드 기능은 추후 구현 예정입니다
               </p>
               <p className="text-xs text-navy-400">JPG, PNG 형식 (최대 5MB)</p>
             </div>
@@ -414,30 +311,15 @@ function SpotRegisterForm() {
             관련 콘텐츠{' '}
             <span className="text-xs font-normal text-navy-400">(선택)</span>
           </h2>
-          <div className="rounded-lg border border-navy-200 bg-navy-50 p-4">
-            <p className="text-sm text-navy-500">
-              이 스팟과 관련된 작품, 팀, 아티스트 등을 추가할 수 있습니다.
-            </p>
-            <button
-              type="button"
-              className="mt-3 flex items-center gap-2 rounded-lg border border-navy-300 bg-white px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              콘텐츠 추가
-            </button>
-          </div>
+          <RelatedContentForm
+            value={formData.relatedContent}
+            onChange={(contents) => {
+              setFormData((prev) => ({
+                ...prev,
+                relatedContent: contents,
+              }))
+            }}
+          />
         </div>
 
         {/* 버튼 영역 */}
@@ -550,19 +432,16 @@ export default function SpotRegisterPage() {
   const { isAuthenticated, isLoading } = useAuth()
   const [showLoginModal, setShowLoginModal] = useState(false)
 
-  // 비로그인 시 모달 표시
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       setShowLoginModal(true)
     }
   }, [isAuthenticated, isLoading])
 
-  // 모달 확인 시 로그인 페이지로 이동
   const handleLoginConfirm = () => {
     router.push('/auth/signin?callbackUrl=/spots/register')
   }
 
-  // 로딩 중이거나 비로그인 상태면 스켈레톤 + 모달 표시
   if (isLoading || !isAuthenticated) {
     return (
       <main className="min-h-screen bg-navy-50">
@@ -585,15 +464,12 @@ export default function SpotRegisterPage() {
 
   return (
     <main className="min-h-screen bg-navy-50">
-      {/* 페이지 타이틀 */}
       <div className="border-b border-navy-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <h1 className="text-xl font-bold text-navy-800">스팟 등록</h1>
           <p className="text-sm text-navy-500">특별한 여행지를 공유하세요</p>
         </div>
       </div>
-
-      {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
         <SpotRegisterForm />
       </div>
