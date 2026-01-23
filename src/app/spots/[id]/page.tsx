@@ -1,9 +1,13 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useSpotDetail, useNearbyFacilities } from '@/hooks/useSpotDetail'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility } from '@/types'
+import { useAuth } from '@/hooks/useAuth'
+import { useQueryClient } from '@tanstack/react-query'
+import { spotKeys } from '@/hooks/useSpots'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -26,10 +30,51 @@ const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
 
 export default function SpotDetailPage() {
   const params = useParams()
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const spotId = params.id as string
+  const { user } = useAuth()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const { data: spot, isLoading, error } = useSpotDetail(spotId)
   const { data: facilities = [] } = useNearbyFacilities(spotId)
+
+  // 본인 스팟 여부 확인 (Requirements 6.1)
+  const isOwner = spot?.authorId && user?.id && spot.authorId === user.id
+
+  // 스팟 삭제 핸들러
+  const handleDelete = async () => {
+    if (
+      !confirm(
+        '정말로 이 스팟을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.'
+      )
+    ) {
+      return
+    }
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/spots/${spotId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        alert(data.error || '스팟 삭제에 실패했습니다')
+        return
+      }
+
+      // 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: spotKeys.all })
+
+      // 메인 페이지로 이동 (Requirements 6.5)
+      router.push('/')
+    } catch {
+      alert('스팟 삭제에 실패했습니다. 다시 시도해주세요.')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
   if (isLoading) {
     return <SpotDetailSkeleton />
@@ -48,28 +93,51 @@ export default function SpotDetailPage() {
       {/* 페이지 타이틀 */}
       <div className="border-b border-slate-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-7xl">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span>지도로 돌아가기</span>
-          </Link>
-          <h1 className="mt-2 text-xl font-bold text-navy-800">
-            특별한 여행지
-          </h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                <span>지도로 돌아가기</span>
+              </Link>
+              <h1 className="mt-2 text-xl font-bold text-navy-800">
+                특별한 여행지
+              </h1>
+            </div>
+
+            {/* 수정/삭제 버튼 - 본인 스팟인 경우에만 표시 (Requirements 6.1, 6.5) */}
+            {isOwner && (
+              <div className="flex gap-2">
+                <Link
+                  href={`/spots/${spotId}/edit`}
+                  className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+                >
+                  수정
+                </Link>
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isDeleting ? '삭제 중...' : '삭제'}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
