@@ -116,7 +116,7 @@
   - 회원 등록 테스트
   - 사용자 피드백 수렴
 
-- [-] 7. 스팟 수정/삭제 기능 구현 (회원 전용)
+- [x] 7. 스팟 수정/삭제 기능 구현 (회원 전용)
   - [x] 7.1 스팟 수정 페이지 구현
     - `src/app/spots/[id]/edit/page.tsx` 생성
     - 기존 데이터 로드 및 수정 폼
@@ -145,38 +145,72 @@
     - 본인 스팟인 경우에만 버튼 표시
     - _Requirements: 6.1, 6.5_
 
-- [ ] 8. Checkpoint - 스팟 수정/삭제 기능 확인
-  - 수정/삭제 권한 검증 확인
-  - 본인 스팟만 수정/삭제 가능 확인
+- [ ] 8. UI/UX 리팩토링 및 컴포넌트 통합
+  - [ ] 8.1 리팩토링 방침 수립
+    - 전체 화면 검토 및 공통 패턴 분석
+    - 재사용 가능한 컴포넌트 식별
+    - 리팩토링 우선순위 결정
+  - [ ] 8.2 SpotForm 공통 컴포넌트 생성
+    - `src/components/spot/SpotForm.tsx` 생성
+    - 등록/수정 페이지에서 공유하는 폼 로직 통합
+    - props로 mode (create/edit) 구분
+  - [ ] 8.3 AddressSearch 초기값 표시 버그 수정
+    - 수정 페이지에서 기존 주소가 표시되도록 수정
+    - initialValue prop 동작 확인
+  - [ ] 8.4 등록/수정 페이지 SpotForm 적용
+    - `src/app/spots/register/page.tsx` 리팩토링
+    - `src/app/spots/[id]/edit/page.tsx` 리팩토링
+  - [ ] 8.5 기타 공통 컴포넌트 추출 (필요시)
+    - 검토 결과에 따라 추가 리팩토링
+
+- [ ] 9. 사진 업로드 기능 구현
+  - [ ] 9.1 ImageUpload 컴포넌트 구현
+    - `src/components/spot/ImageUpload.tsx` 생성
+    - 드래그 앤 드롭 지원
+    - 이미지 미리보기
+    - 최대 5장 제한
+  - [ ] 9.2 이미지 업로드 API 연동
+    - 기존 `/api/upload` 활용
+    - 업로드 진행률 표시
+  - [ ] 9.3 스팟 등록/수정 폼에 ImageUpload 통합
+    - SpotForm에 사진 업로드 섹션 연동
+    - 기존 사진 표시 및 삭제 기능
+  - [ ] 9.4 업로드된 이미지 관리
+    - 이미지 순서 변경
+    - 개별 이미지 삭제
+
+- [ ] 10. Checkpoint - 리팩토링 및 사진 업로드 확인
+  - SpotForm 컴포넌트 동작 확인
+  - 사진 업로드 기능 테스트
   - 사용자 피드백 수렴
 
-- [ ] 9. 데이터 마이그레이션
-  - [ ] 9.1 마이그레이션 스크립트 작성
+- [ ] 11. 데이터 마이그레이션
+  - [ ] 11.1 마이그레이션 스크립트 작성
     - `scripts/migrate-spots.ts` 생성
     - `relatedMedia` → `relatedContent` 변환
     - 기존 스팟에 `category: 'animation'` 기본값 설정
     - 기존 스팟에 `authorName: 'System'` 설정 (시스템 등록 스팟)
     - _Requirements: 3.4_
-  - [ ]\* 9.2 마이그레이션 데이터 무결성 속성 테스트
+  - [ ]\* 11.2 마이그레이션 데이터 무결성 속성 테스트
     - **Property 3: 콘텐츠 타입 유효성 및 마이그레이션**
     - _For any_ 마이그레이션된 스팟에서, relatedContent의 모든 항목은 유효한 ContentType을 가져야 함
     - **Validates: Requirements 3.3, 3.4**
-  - [ ] 9.3 마이그레이션 실행 및 검증
+  - [ ] 11.3 마이그레이션 실행 및 검증
     - 마이그레이션 스크립트 실행
     - 데이터 무결성 확인
     - _Requirements: 3.4_
 
-- [ ] 10. 스팟 상세 페이지 카테고리 표시
-  - [ ] 10.1 스팟 상세 페이지 카테고리 UI 추가
+- [ ] 12. 스팟 상세 페이지 카테고리 표시
+  - [ ] 12.1 스팟 상세 페이지 카테고리 UI 추가
     - 카테고리 아이콘 및 라벨 표시
     - `src/app/spots/[id]/page.tsx` 수정
     - _Requirements: 2.3_
-  - [ ] 10.2 관련 콘텐츠 표시 업데이트
+  - [ ] 12.2 관련 콘텐츠 표시 업데이트
     - relatedContent 형식으로 표시
     - 콘텐츠 타입별 아이콘
     - _Requirements: 3.3_
 
-- [ ] 11. Final Checkpoint - 전체 기능 완료 확인
+- [ ] 13. Final Checkpoint - 전체 기능 완료 확인
   - 모든 테스트 통과 확인
   - 브랜딩 일관성 확인
   - 사용자 피드백 최종 수렴
