@@ -63,34 +63,34 @@
     - 필터 상태에 따른 스팟 표시
     - _Requirements: 2.2_
 
-- [ ] 5. 스팟 등록 페이지 구현 (회원 전용)
-  - [ ] 5.1 스팟 등록 페이지 생성
+- [-] 5. 스팟 등록 페이지 구현 (회원 전용)
+  - [x] 5.1 스팟 등록 페이지 생성
     - `src/app/spots/register/page.tsx` 생성
     - 기본 폼 레이아웃 구현
     - 비로그인 시 로그인 페이지로 리다이렉트
     - _Requirements: 4.1, 4.8_
-  - [ ] 5.2 스팟 등록 폼 구현
+  - [x] 5.2 스팟 등록 폼 구현
     - 필수 필드: 이름, 설명, 주소, 카테고리
     - 선택 필드: 사진 (최대 5장), 관련 콘텐츠
     - 로그인 사용자 정보 자동 설정 (authorId, authorName)
     - _Requirements: 4.2, 4.3_
-  - [ ] 5.3 AddressSearch 컴포넌트 구현
+  - [x] 5.3 AddressSearch 컴포넌트 구현
     - `src/components/spot/AddressSearch.tsx` 생성
     - 주소 검색/자동완성 기능
     - 선택 시 좌표 자동 설정
     - _Requirements: 4.4, 4.5_
-  - [ ] 5.4 LocationPicker 컴포넌트 구현
+  - [x] 5.4 LocationPicker 컴포넌트 구현
     - `src/components/spot/LocationPicker.tsx` 생성
     - 지도 클릭으로 위치 선택
     - 마커 드래그 기능
     - 역지오코딩 주소 제안
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
-  - [ ] 5.5 RelatedContentForm 컴포넌트 구현
+  - [x] 5.5 RelatedContentForm 컴포넌트 구현
     - `src/components/spot/RelatedContentForm.tsx` 생성
     - 관련 콘텐츠 추가/삭제 UI
     - 콘텐츠 타입 선택
     - _Requirements: 4.3_
-  - [ ] 5.6 스팟 등록 API 구현
+  - [x] 5.6 스팟 등록 API 구현
     - `POST /api/spots` 구현
     - 필수 필드 유효성 검사
     - 인증된 사용자만 등록 가능 (세션 검증)
@@ -104,25 +104,25 @@
     - **Property 7: 스팟 등록 인증 검증**
     - _For any_ 스팟 등록 요청에서, 인증되지 않은 사용자는 등록이 거부되어야 함
     - **Validates: Requirements 4.8**
-  - [ ] 5.9 useSpotRegistration 훅 구현
+  - [x] 5.9 useSpotRegistration 훅 구현
     - `src/hooks/useSpotRegistration.ts` 생성
     - 스팟 등록 mutation
     - 폼 상태 관리
     - _Requirements: 4.7_
 
-- [ ] 6. Checkpoint - 스팟 등록 기능 확인
+- [x] 6. Checkpoint - 스팟 등록 기능 확인
   - 스팟 등록 폼 동작 확인
   - 비로그인 시 리다이렉트 확인
   - 회원 등록 테스트
   - 사용자 피드백 수렴
 
-- [ ] 7. 스팟 수정/삭제 기능 구현 (회원 전용)
-  - [ ] 7.1 스팟 수정 페이지 구현
+- [-] 7. 스팟 수정/삭제 기능 구현 (회원 전용)
+  - [x] 7.1 스팟 수정 페이지 구현
     - `src/app/spots/[id]/edit/page.tsx` 생성
     - 기존 데이터 로드 및 수정 폼
     - 본인 스팟만 수정 가능
     - _Requirements: 6.1_
-  - [ ] 7.2 스팟 수정 API 구현
+  - [-] 7.2 스팟 수정 API 구현
     - `PUT /api/spots/[id]` 구현
     - 인증된 사용자만 수정 가능
     - 본인 스팟 여부 검증 (authorId === userId)

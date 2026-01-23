@@ -32,6 +32,10 @@ export interface SpotDetailData {
   address: string
   coordinates: [number, number]
   relatedMedia: MediaInfo[]
+  // 작성자 정보 (마이그레이션 전 optional)
+  authorId?: string
+  authorName?: string
+  isGuestSpot?: boolean
 }
 
 // API response types
