@@ -6,19 +6,7 @@ import { useRouter } from 'next/navigation'
 import { usePostDetail, useDeletePost, Post } from '@/hooks/usePosts'
 import { useAuth } from '@/hooks/useAuth'
 import PasswordModal from './PasswordModal'
-
-/**
- * 날짜를 한국어 형식으로 포맷팅
- */
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
+import { formatFullDate } from '@/lib/date-utils'
 
 /**
  * 로딩 스켈레톤 컴포넌트
@@ -309,7 +297,7 @@ function PostContent({ post }: PostContentProps) {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span>{formatDate(post.createdAt)}</span>
+              <span>{formatFullDate(post.createdAt)}</span>
             </span>
 
             {/* 조회수 */}
