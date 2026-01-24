@@ -1,9 +1,10 @@
 'use client'
 
-import { FormEvent } from 'react'
+import { FormEvent, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import { AddressSearch } from '@/components/spot/AddressSearch'
 import { RelatedContentForm } from '@/components/spot/RelatedContentForm'
+import { ImageUpload, UploadedImage } from '@/components/spot/ImageUpload'
 import {
   CATEGORY_CONFIG,
   SpotCategory,
@@ -71,6 +72,10 @@ interface SpotFormProps {
     name: string
     email?: string
   }
+  /** 이미지 업로드 상태 */
+  uploadedImages?: UploadedImage[]
+  /** 이미지 업로드 상태 변경 핸들러 */
+  onImagesChange?: (images: UploadedImage[]) => void
 }
 
 /**
@@ -144,9 +149,17 @@ function UserInfoBanner({
 }
 
 /**
- * 사진 업로드 섹션 (플레이스홀더)
+ * 사진 업로드 섹션
  */
-function PhotoUploadSection() {
+function PhotoUploadSection({
+  images,
+  onChange,
+  disabled,
+}: {
+  images: UploadedImage[]
+  onChange: (images: UploadedImage[]) => void
+  disabled?: boolean
+}) {
   return (
     <div className="border-b border-navy-100 pb-6">
       <h2 className="mb-4 text-lg font-semibold text-navy-800">
@@ -155,27 +168,12 @@ function PhotoUploadSection() {
           (선택, 최대 5장)
         </span>
       </h2>
-      <div className="rounded-lg border-2 border-dashed border-navy-200 bg-navy-50 p-8">
-        <div className="flex flex-col items-center justify-center text-center">
-          <svg
-            className="mb-2 h-12 w-12 text-navy-300"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          <p className="text-sm text-navy-500">
-            사진 업로드 기능은 추후 구현 예정입니다
-          </p>
-          <p className="text-xs text-navy-400">JPG, PNG 형식 (최대 5MB)</p>
-        </div>
-      </div>
+      <ImageUpload
+        images={images}
+        onChange={onChange}
+        maxImages={5}
+        disabled={disabled}
+      />
     </div>
   )
 }
@@ -225,10 +223,28 @@ export function SpotForm({
   onDelete,
   handleChange,
   userInfo,
+  uploadedImages = [],
+  onImagesChange,
 }: SpotFormProps) {
   const isEditMode = mode === 'edit'
   const submitLabel = isEditMode ? '수정하기' : '등록하기'
   const submittingLabel = isEditMode ? '수정 중...' : '등록 중...'
+
+  // 이미지 변경 핸들러 (photos 배열도 함께 업데이트)
+  const handleImagesChange = useCallback(
+    (images: UploadedImage[]) => {
+      onImagesChange?.(images)
+      // 완료된 이미지의 URL만 photos에 저장
+      const completedUrls = images
+        .filter((img) => img.status === 'completed')
+        .map((img) => img.url)
+      setFormData((prev) => ({
+        ...prev,
+        photos: completedUrls,
+      }))
+    },
+    [onImagesChange, setFormData]
+  )
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
@@ -361,7 +377,11 @@ export function SpotForm({
         </div>
 
         {/* 사진 섹션 */}
-        <PhotoUploadSection />
+        <PhotoUploadSection
+          images={uploadedImages}
+          onChange={handleImagesChange}
+          disabled={isSubmitting || isDeleting}
+        />
 
         {/* 관련 콘텐츠 섹션 */}
         <div className="border-b border-navy-100 pb-6">
