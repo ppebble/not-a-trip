@@ -3,33 +3,7 @@
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { usePostsBySpot, Post } from '@/hooks/usePosts'
-
-/**
- * 날짜를 한국어 형식으로 포맷팅
- */
-function formatDate(date: Date): string {
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-  if (diffDays === 0) {
-    const diffHours = Math.floor(diff / (1000 * 60 * 60))
-    if (diffHours === 0) {
-      const diffMinutes = Math.floor(diff / (1000 * 60))
-      return diffMinutes <= 0 ? '방금 전' : `${diffMinutes}분 전`
-    }
-    return `${diffHours}시간 전`
-  }
-
-  if (diffDays === 1) return '어제'
-  if (diffDays < 7) return `${diffDays}일 전`
-
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
+import { formatRelativeDate } from '@/lib/date-utils'
 
 interface PostItemProps {
   post: Post
@@ -61,7 +35,7 @@ function PostItem({ post, onClick }: PostItemProps) {
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <span>{post.author}</span>
             <span>·</span>
-            <span>{formatDate(post.createdAt)}</span>
+            <span>{formatRelativeDate(post.createdAt)}</span>
           </div>
         </div>
         <div className="flex items-center gap-3 text-xs text-gray-400">
