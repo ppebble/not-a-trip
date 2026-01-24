@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSpotRegistration } from '@/hooks/useSpotRegistration'
 import { SpotForm, SpotFormSkeleton } from '@/components/spot/SpotForm'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
+import { UploadedImage } from '@/components/spot/ImageUpload'
 
 /**
  * 스팟 등록 페이지
@@ -22,6 +23,7 @@ export default function SpotRegisterPage() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading } = useAuth()
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
 
   const {
     formData,
@@ -108,6 +110,8 @@ export default function SpotRegisterPage() {
           onCancel={handleCancel}
           handleChange={handleChange}
           userInfo={userInfo}
+          uploadedImages={uploadedImages}
+          onImagesChange={setUploadedImages}
         />
       </div>
     </main>
