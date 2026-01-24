@@ -8,6 +8,7 @@ import { useSpotEdit } from '@/hooks/useSpotEdit'
 import { useSpotDetail } from '@/hooks/useSpotDetail'
 import { SpotForm, SpotFormSkeleton } from '@/components/spot/SpotForm'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
+import { UploadedImage } from '@/components/spot/ImageUpload'
 
 /**
  * 권한 없음 컴포넌트
@@ -62,6 +63,7 @@ export default function SpotEditPage() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth()
   const { data: spot, isLoading: spotLoading } = useSpotDetail(spotId)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
 
   const {
     formData,
@@ -74,6 +76,25 @@ export default function SpotEditPage() {
     handleSubmit,
     handleDelete,
   } = useSpotEdit(spotId)
+
+  // 기존 사진을 UploadedImage 형식으로 변환
+  useEffect(() => {
+    if (
+      formData.photos &&
+      formData.photos.length > 0 &&
+      uploadedImages.length === 0
+    ) {
+      const existingImages: UploadedImage[] = formData.photos.map(
+        (url, index) => ({
+          url,
+          fileName: `existing-${index}`,
+          progress: 100,
+          status: 'completed' as const,
+        })
+      )
+      setUploadedImages(existingImages)
+    }
+  }, [formData.photos, uploadedImages.length])
 
   // 비로그인 시 로그인 모달 표시
   useEffect(() => {
@@ -201,6 +222,8 @@ export default function SpotEditPage() {
           onCancel={handleCancel}
           onDelete={handleDelete}
           handleChange={handleChange}
+          uploadedImages={uploadedImages}
+          onImagesChange={setUploadedImages}
         />
       </div>
     </main>
