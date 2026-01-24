@@ -43,6 +43,14 @@ export function AddressSearch({
   const containerRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
+  // initialValue가 변경되면 query 상태 업데이트 (수정 페이지에서 기존 주소 표시)
+  useEffect(() => {
+    if (initialValue && initialValue !== query) {
+      setQuery(initialValue)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValue])
+
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
