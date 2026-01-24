@@ -2,43 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { usePosts, Post } from '@/hooks/usePosts'
-
-/**
- * 날짜를 한국어 형식으로 포맷팅
- */
-function formatDate(date: Date): string {
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-  if (diffDays === 0) {
-    const diffHours = Math.floor(diff / (1000 * 60 * 60))
-    if (diffHours === 0) {
-      const diffMinutes = Math.floor(diff / (1000 * 60))
-      return diffMinutes <= 0 ? '방금 전' : `${diffMinutes}분 전`
-    }
-    return `${diffHours}시간 전`
-  }
-
-  if (diffDays === 1) return '어제'
-  if (diffDays < 7) return `${diffDays}일 전`
-
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-/**
- * 조회수를 포맷팅 (1000 이상일 경우 K 단위로 표시)
- */
-function formatViewCount(count: number): string {
-  if (count >= 1000) {
-    return `${(count / 1000).toFixed(1)}K`
-  }
-  return count.toString()
-}
+import { formatRelativeDate, formatViewCount } from '@/lib/date-utils'
 
 interface PostItemProps {
   post: Post
@@ -106,7 +70,7 @@ function PostItem({ post, onClick }: PostItemProps) {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span>{formatDate(post.createdAt)}</span>
+              <span>{formatRelativeDate(post.createdAt)}</span>
             </span>
           </div>
         </div>
