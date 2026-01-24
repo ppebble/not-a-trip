@@ -146,21 +146,21 @@
     - _Requirements: 6.1, 6.5_
 
 - [ ] 8. UI/UX 리팩토링 및 컴포넌트 통합
-  - [ ] 8.1 리팩토링 방침 수립
+  - [x] 8.1 리팩토링 방침 수립
     - 전체 화면 검토 및 공통 패턴 분석
     - 재사용 가능한 컴포넌트 식별
     - 리팩토링 우선순위 결정
-  - [ ] 8.2 SpotForm 공통 컴포넌트 생성
+  - [x] 8.2 SpotForm 공통 컴포넌트 생성
     - `src/components/spot/SpotForm.tsx` 생성
     - 등록/수정 페이지에서 공유하는 폼 로직 통합
     - props로 mode (create/edit) 구분
-  - [ ] 8.3 AddressSearch 초기값 표시 버그 수정
+  - [x] 8.3 AddressSearch 초기값 표시 버그 수정
     - 수정 페이지에서 기존 주소가 표시되도록 수정
     - initialValue prop 동작 확인
-  - [ ] 8.4 등록/수정 페이지 SpotForm 적용
+  - [x] 8.4 등록/수정 페이지 SpotForm 적용
     - `src/app/spots/register/page.tsx` 리팩토링
     - `src/app/spots/[id]/edit/page.tsx` 리팩토링
-  - [ ] 8.5 기타 공통 컴포넌트 추출 (필요시)
+  - [-] 8.5 기타 공통 컴포넌트 추출 (필요시)
     - 검토 결과에 따라 추가 리팩토링
 
 - [ ] 9. 사진 업로드 기능 구현

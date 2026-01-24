@@ -9,33 +9,7 @@ import {
 } from '@/hooks/usePosts'
 import { useAuth } from '@/hooks/useAuth'
 import PasswordModal from './PasswordModal'
-
-/**
- * 날짜를 한국어 형식으로 포맷팅
- */
-function formatDate(date: Date): string {
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-  if (diffDays === 0) {
-    const diffHours = Math.floor(diff / (1000 * 60 * 60))
-    if (diffHours === 0) {
-      const diffMinutes = Math.floor(diff / (1000 * 60))
-      return diffMinutes <= 0 ? '방금 전' : `${diffMinutes}분 전`
-    }
-    return `${diffHours}시간 전`
-  }
-
-  if (diffDays === 1) return '어제'
-  if (diffDays < 7) return `${diffDays}일 전`
-
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
+import { formatRelativeDate } from '@/lib/date-utils'
 
 interface CommentItemProps {
   comment: Comment
@@ -78,7 +52,7 @@ function CommentItem({
               )}
             </div>
             <span className="text-xs text-navy-400">
-              {formatDate(comment.createdAt)}
+              {formatRelativeDate(comment.createdAt)}
             </span>
           </div>
         </div>
