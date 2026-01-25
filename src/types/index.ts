@@ -1,4 +1,36 @@
 // ============================================
+// External Link Types (외부 링크)
+// ============================================
+
+export type ExternalLinkType =
+  | 'official'
+  | 'ticket'
+  | 'schedule'
+  | 'sns'
+  | 'other'
+
+export interface ExternalLink {
+  id: string
+  type: ExternalLinkType
+  label: string // "공식 홈페이지", "티켓 예매" 등
+  url: string // https://...
+}
+
+export interface LinkTypeConfig {
+  label: string
+  icon: string
+  color: string
+}
+
+export const LINK_TYPE_CONFIG: Record<ExternalLinkType, LinkTypeConfig> = {
+  official: { label: '공식 홈페이지', icon: '🏠', color: '#3B82F6' },
+  ticket: { label: '티켓 예매', icon: '🎫', color: '#10B981' },
+  schedule: { label: '일정 확인', icon: '📅', color: '#F59E0B' },
+  sns: { label: 'SNS', icon: '📱', color: '#8B5CF6' },
+  other: { label: '기타', icon: '🔗', color: '#6B7280' },
+}
+
+// ============================================
 // Spot Category & Content Types
 // ============================================
 
@@ -35,6 +67,49 @@ export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
 }
 
 // ============================================
+// Category Section Mapping (카테고리별 섹션 매핑)
+// ============================================
+
+export type SectionType = 'scenes' | 'events' | 'info'
+
+// 카테고리별 표시할 섹션
+export const CATEGORY_SECTIONS: Record<SpotCategory, SectionType[]> = {
+  animation: ['scenes'], // 작품 속 장면
+  movie_drama: ['scenes'], // 작품 속 장면
+  sports: ['events'], // 이벤트 정보 (경기 일정)
+  music: ['events'], // 이벤트 정보 (공연 정보)
+  game: ['scenes', 'events'], // 둘 다
+  other: ['info'], // 일반 정보
+}
+
+// 섹션별 헤더 텍스트
+export const SECTION_HEADERS: Record<
+  SectionType,
+  Partial<Record<SpotCategory, string>>
+> = {
+  scenes: {
+    animation: '작품 속 장면',
+    movie_drama: '작품 속 장면',
+    game: '게임 속 장면',
+  },
+  events: {
+    sports: '경기 일정',
+    music: '공연 정보',
+    game: 'e스포츠 경기',
+  },
+  info: {
+    other: '정보',
+  },
+}
+
+// 섹션별 아이콘
+export const SECTION_ICONS: Record<SectionType, string> = {
+  scenes: '🎬',
+  events: '📅',
+  info: '📍',
+}
+
+// ============================================
 // Spot Types
 // ============================================
 
@@ -67,6 +142,7 @@ export interface Spot {
   category?: SpotCategory // 스팟 카테고리 (마이그레이션 전 optional)
   relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
   relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠 (마이그레이션 후 사용)
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   createdAt: Date
   updatedAt: Date
   // 작성자 정보 (마이그레이션 전 optional)
@@ -102,6 +178,7 @@ export interface SpotDetailData {
   category?: SpotCategory // 마이그레이션 전 optional
   relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
   relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   nearbyFacilities: NearbyFacility[]
   // 작성자 정보 (마이그레이션 전 optional)
   authorId?: string
@@ -269,6 +346,7 @@ export interface SpotResponse {
   category?: SpotCategory // 마이그레이션 전 optional
   relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
   relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
@@ -283,6 +361,7 @@ export interface CreateSpotInput {
   category: SpotCategory
   photos?: string[]
   relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   // 작성자 정보
   authorName?: string // 비회원용 닉네임
   password?: string // 비회원용 비밀번호
@@ -297,6 +376,7 @@ export interface UpdateSpotInput {
   category?: SpotCategory
   photos?: string[]
   relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   password?: string // 비회원 수정 시 비밀번호 확인용
 }
 
