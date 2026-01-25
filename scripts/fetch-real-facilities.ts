@@ -4,10 +4,7 @@
  * 실행 방법:
  * npx tsx scripts/fetch-real-facilities.ts
  *
- * 스팟 좌표:
- * - SPOT-001 (스가 신사): lat: 35.6872, lng: 139.7197
- * - SPOT-002 (가마쿠라 건널목): lat: 35.3082, lng: 139.4952
- * - SPOT-003 (지우펀): lat: 25.1089, lng: 121.8443
+ * seed-real-spots.ts의 모든 스팟에 대해 주변 편의시설을 검색합니다.
  */
 
 interface SpotInfo {
@@ -27,6 +24,7 @@ interface OverpassElement {
     'name:en'?: string
     'name:ja'?: string
     'name:zh'?: string
+    'name:ko'?: string
     amenity?: string
     shop?: string
     railway?: string
@@ -44,10 +42,73 @@ interface Facility {
   spotId: string
 }
 
+// ============================================
+// 모든 실제 스팟 좌표 (seed-real-spots.ts 기반)
+// ============================================
 const SPOTS: SpotInfo[] = [
-  { id: 'SPOT-001', name: '스가 신사', lat: 35.6872, lng: 139.7197 },
-  { id: 'SPOT-002', name: '가마쿠라 건널목', lat: 35.3082, lng: 139.4952 },
-  { id: 'SPOT-003', name: '지우펀', lat: 25.1089, lng: 121.8443 },
+  // 애니메이션 스팟
+  { id: 'REAL-ANI-001', name: '스가 신사', lat: 35.6872, lng: 139.7197 },
+  {
+    id: 'REAL-ANI-002',
+    name: '가마쿠라코코마에역 건널목',
+    lat: 35.3082,
+    lng: 139.4952,
+  },
+  { id: 'REAL-ANI-003', name: '지우펀', lat: 25.1089, lng: 121.8443 },
+  {
+    id: 'REAL-ANI-004',
+    name: '이와토비 고등학교 모델',
+    lat: 35.5167,
+    lng: 134.3333,
+  },
+  { id: 'REAL-ANI-005', name: '와시노미야 신사', lat: 36.1028, lng: 139.6003 },
+  { id: 'REAL-ANI-006', name: '오아라이 마을', lat: 36.3133, lng: 140.5747 },
+  { id: 'REAL-ANI-007', name: '히다 후루카와', lat: 36.2378, lng: 137.1861 },
+  { id: 'REAL-ANI-008', name: '도쿄 타워', lat: 35.6586, lng: 139.7454 },
+  { id: 'REAL-ANI-009', name: '에노시마', lat: 35.3008, lng: 139.4797 },
+  { id: 'REAL-ANI-010', name: '아키하바라', lat: 35.7023, lng: 139.7745 },
+  { id: 'REAL-ANI-011', name: '나라 공원', lat: 34.6851, lng: 135.843 },
+  // 스포츠 스팟
+  { id: 'REAL-SPO-001', name: '캄프 누', lat: 41.3809, lng: 2.1228 },
+  { id: 'REAL-SPO-002', name: '올드 트래포드', lat: 53.4631, lng: -2.2913 },
+  { id: 'REAL-SPO-003', name: '고시엔 구장', lat: 34.7214, lng: 135.3617 },
+  {
+    id: 'REAL-SPO-004',
+    name: '산티아고 베르나베우',
+    lat: 40.4531,
+    lng: -3.6883,
+  },
+  { id: 'REAL-SPO-005', name: '잠실 야구장', lat: 37.5122, lng: 127.0719 },
+  { id: 'REAL-SPO-006', name: '앤필드', lat: 53.4308, lng: -2.9608 },
+  // 영화/드라마 스팟
+  { id: 'REAL-MOV-001', name: '글렌피넌 고가교', lat: 56.8711, lng: -5.4319 },
+  { id: 'REAL-MOV-002', name: '북촌 한옥마을', lat: 37.5826, lng: 126.985 },
+  { id: 'REAL-MOV-003', name: '호비튼', lat: -37.8722, lng: 175.683 },
+  { id: 'REAL-MOV-004', name: '주문진 방파제', lat: 37.8986, lng: 128.8308 },
+  { id: 'REAL-MOV-005', name: '스페인 광장', lat: 41.9058, lng: 12.4823 },
+  { id: 'REAL-MOV-006', name: '해운대', lat: 35.1587, lng: 129.1604 },
+  // 음악 스팟
+  { id: 'REAL-MUS-001', name: '애비 로드', lat: 51.532, lng: -0.178 },
+  { id: 'REAL-MUS-002', name: '도쿄돔', lat: 35.7056, lng: 139.7519 },
+  { id: 'REAL-MUS-003', name: '그레이스랜드', lat: 35.0477, lng: -90.0261 },
+  { id: 'REAL-MUS-004', name: 'HYBE 인사이트', lat: 37.5283, lng: 126.9654 },
+  {
+    id: 'REAL-MUS-005',
+    name: 'SM타운 코엑스아티움',
+    lat: 37.5116,
+    lng: 127.0595,
+  },
+  { id: 'REAL-MUS-006', name: 'KSPO DOME', lat: 37.5209, lng: 127.115 },
+  // 게임 스팟
+  { id: 'REAL-GAM-001', name: 'LoL 파크', lat: 37.57, lng: 126.992 },
+  { id: 'REAL-GAM-002', name: '닌텐도 도쿄', lat: 35.662, lng: 139.6983 },
+  {
+    id: 'REAL-GAM-003',
+    name: '포켓몬 센터 메가 도쿄',
+    lat: 35.7295,
+    lng: 139.7186,
+  },
+  { id: 'REAL-GAM-004', name: '슈퍼 닌텐도 월드', lat: 34.6654, lng: 135.4323 },
 ]
 
 const OVERPASS_API = 'https://overpass-api.de/api/interpreter'
@@ -74,6 +135,7 @@ function extractName(element: OverpassElement): string {
     tags.name ||
     tags['name:en'] ||
     tags['name:ja'] ||
+    tags['name:ko'] ||
     tags['name:zh'] ||
     `Unknown (${element.id})`
   )
@@ -231,6 +293,7 @@ seedFacilities()
 // 메인 실행
 async function main() {
   console.log('🌍 Overpass API를 사용하여 실제 편의시설 데이터 수집 시작...\n')
+  console.log(`총 ${SPOTS.length}개의 스팟에 대해 편의시설을 검색합니다.\n`)
 
   const allFacilities: Facility[] = []
 
@@ -238,7 +301,7 @@ async function main() {
     const facilities = await fetchFacilities(spot)
     allFacilities.push(...facilities)
 
-    // API 부하 방지를 위한 딜레이
+    // API 부하 방지를 위한 딜레이 (2초)
     await new Promise((resolve) => setTimeout(resolve, 2000))
   }
 
