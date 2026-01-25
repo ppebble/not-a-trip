@@ -5,6 +5,7 @@
  * - relatedMedia → relatedContent 필드 변환
  * - category: 'animation' 기본값 설정
  * - authorName: 'System' 설정 (시스템 등록 스팟)
+ * - 난수 ID → SPOT-{숫자} 형식으로 변환
  *
  * 실행 방법:
  * npx tsx scripts/migrate-spots.ts
@@ -74,6 +75,28 @@ function convertMediaToContent(media: OldMediaInfo): NewRelatedContent {
 }
 
 /**
+ * SPOT-{숫자} 형식인지 확인
+ */
+function isValidSpotId(id: string): boolean {
+  return /^SPOT-\d+$/.test(id)
+}
+
+/**
+ * 다음 스팟 ID 번호 계산
+ */
+function getNextSpotNumber(existingIds: string[]): number {
+  const spotNumbers = existingIds
+    .filter(isValidSpotId)
+    .map((id) => parseInt(id.replace('SPOT-', ''), 10))
+
+  if (spotNumbers.length === 0) {
+    return 1
+  }
+
+  return Math.max(...spotNumbers) + 1
+}
+
+/**
  * 스팟 마이그레이션 실행
  */
 async function migrateSpots(dryRun: boolean = false): Promise<MigrationStats> {
@@ -97,6 +120,10 @@ async function migrateSpots(dryRun: boolean = false): Promise<MigrationStats> {
     const spots = await collection.find({}).toArray()
     stats.total = spots.length
 
+    // 기존 SPOT-{숫자} ID들 수집
+    const existingIds = spots.map((s) => s.id)
+    let nextSpotNumber = getNextSpotNumber(existingIds)
+
     console.log(`\n총 ${stats.total}개의 스팟을 마이그레이션합니다.`)
     console.log(
       dryRun
@@ -109,6 +136,16 @@ async function migrateSpots(dryRun: boolean = false): Promise<MigrationStats> {
         const updates: Record<string, unknown> = {}
         const unsets: Record<string, string> = {}
         let needsUpdate = false
+        const oldId = spot.id
+        let newId = spot.id
+
+        // 0. ID 형식 변환 (난수 ID → SPOT-{숫자})
+        if (!isValidSpotId(spot.id)) {
+          newId = `SPOT-${nextSpotNumber.toString().padStart(3, '0')}`
+          nextSpotNumber++
+          needsUpdate = true
+          console.log(`  [${oldId}] ID 변환: ${oldId} → ${newId}`)
+        }
 
         // 1. relatedMedia → relatedContent 변환
         if (
@@ -143,28 +180,51 @@ async function migrateSpots(dryRun: boolean = false): Promise<MigrationStats> {
         // 업데이트 실행
         if (needsUpdate) {
           if (!dryRun) {
-            const updateQuery: {
-              $set?: Record<string, unknown>
-              $unset?: Record<string, string>
-            } = {}
+            // ID가 변경된 경우 새 문서 생성 후 기존 문서 삭제
+            if (oldId !== newId) {
+              const { _id, ...spotWithoutId } = spot
+              const newDoc = { ...spotWithoutId, id: newId }
 
-            if (Object.keys(updates).length > 0) {
-              updateQuery.$set = updates
-            }
-            if (Object.keys(unsets).length > 0) {
-              updateQuery.$unset = unsets
-            }
+              // 추가 업데이트 적용
+              if (updates.relatedContent) {
+                newDoc.relatedContent =
+                  updates.relatedContent as NewRelatedContent[]
+                delete newDoc.relatedMedia
+              }
+              if (updates.category) {
+                newDoc.category = updates.category as string
+              }
+              if (updates.authorName) {
+                newDoc.authorName = updates.authorName as string
+                newDoc.isGuestSpot = updates.isGuestSpot as boolean
+              }
 
-            await collection.updateOne({ id: spot.id }, updateQuery)
+              await collection.insertOne(newDoc)
+              await collection.deleteOne({ id: oldId })
+            } else {
+              const updateQuery: {
+                $set?: Record<string, unknown>
+                $unset?: Record<string, string>
+              } = {}
+
+              if (Object.keys(updates).length > 0) {
+                updateQuery.$set = updates
+              }
+              if (Object.keys(unsets).length > 0) {
+                updateQuery.$unset = unsets
+              }
+
+              await collection.updateOne({ id: spot.id }, updateQuery)
+            }
           }
           stats.migrated++
           console.log(
-            `  ✅ [${spot.id}] ${spot.name} - 마이그레이션 ${dryRun ? '예정' : '완료'}`
+            `  ✅ [${newId}] ${spot.name} - 마이그레이션 ${dryRun ? '예정' : '완료'}`
           )
         } else {
           stats.skipped++
           console.log(
-            `  ⏭️ [${spot.id}] ${spot.name} - 이미 마이그레이션됨 (스킵)`
+            `  ⏭️ [${newId}] ${spot.name} - 이미 마이그레이션됨 (스킵)`
           )
         }
       } catch (error) {
@@ -216,7 +276,11 @@ async function verifyMigration(): Promise<boolean> {
     // 4. 전체 스팟 수
     const totalSpots = await collection.countDocuments({})
 
-    // 5. 마이그레이션된 스팟 샘플 출력
+    // 5. 잘못된 ID 형식 스팟 확인
+    const allSpots = await collection.find({}).project({ id: 1 }).toArray()
+    const invalidIdSpots = allSpots.filter((s) => !/^SPOT-\d+$/.test(s.id))
+
+    // 6. 마이그레이션된 스팟 샘플 출력
     const sampleSpot = await collection.findOne({})
 
     console.log('검증 결과:')
@@ -224,6 +288,13 @@ async function verifyMigration(): Promise<boolean> {
     console.log(`  - relatedMedia만 있는 스팟: ${spotsWithOldMedia}`)
     console.log(`  - category 없는 스팟: ${spotsWithoutCategory}`)
     console.log(`  - authorName 없는 스팟: ${spotsWithoutAuthor}`)
+    console.log(`  - 잘못된 ID 형식 스팟: ${invalidIdSpots.length}`)
+
+    if (invalidIdSpots.length > 0) {
+      console.log(
+        `    → 잘못된 ID들: ${invalidIdSpots.map((s) => s.id).join(', ')}`
+      )
+    }
 
     if (sampleSpot) {
       console.log('\n샘플 스팟 데이터:')
@@ -233,7 +304,8 @@ async function verifyMigration(): Promise<boolean> {
     const isValid =
       spotsWithOldMedia === 0 &&
       spotsWithoutCategory === 0 &&
-      spotsWithoutAuthor === 0
+      spotsWithoutAuthor === 0 &&
+      invalidIdSpots.length === 0
 
     if (isValid) {
       console.log('\n✅ 마이그레이션 검증 성공!')
