@@ -184,8 +184,8 @@
   - 사진 업로드 기능 테스트
   - 사용자 피드백 수렴
 
-- [ ] 11. 데이터 마이그레이션
-  - [ ] 11.1 마이그레이션 스크립트 작성
+- [x] 11. 데이터 마이그레이션
+  - [x] 11.1 마이그레이션 스크립트 작성
     - `scripts/migrate-spots.ts` 생성
     - `relatedMedia` → `relatedContent` 변환
     - 기존 스팟에 `category: 'animation'` 기본값 설정
@@ -195,7 +195,7 @@
     - **Property 3: 콘텐츠 타입 유효성 및 마이그레이션**
     - _For any_ 마이그레이션된 스팟에서, relatedContent의 모든 항목은 유효한 ContentType을 가져야 함
     - **Validates: Requirements 3.3, 3.4**
-  - [ ] 11.3 마이그레이션 실행 및 검증
+  - [x] 11.3 마이그레이션 실행 및 검증
     - 마이그레이션 스크립트 실행
     - 데이터 무결성 확인
     - _Requirements: 3.4_
