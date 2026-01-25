@@ -13,16 +13,16 @@
 
 ## Tasks
 
-- [ ] 1. 데이터 모델 확장
-  - [ ] 1.1 ExternalLink 타입 정의
+- [x] 1. 데이터 모델 확장
+  - [x] 1.1 ExternalLink 타입 정의
     - `src/types/index.ts`에 ExternalLink, ExternalLinkType 타입 추가
     - LINK_TYPE_CONFIG 상수 정의 (아이콘, 색상, 라벨)
     - _Requirements: 2.1, 2.2_
-  - [ ] 1.2 Spot 모델에 externalLinks 필드 추가
+  - [x] 1.2 Spot 모델에 externalLinks 필드 추가
     - `externalLinks?: ExternalLink[]` 필드 추가
     - 기존 Spot 인터페이스 확장
     - _Requirements: 2.1_
-  - [ ] 1.3 카테고리별 섹션 매핑 상수 정의
+  - [x] 1.3 카테고리별 섹션 매핑 상수 정의
     - CATEGORY_SECTIONS 상수 정의
     - SECTION_HEADERS 상수 정의
     - _Requirements: 1.1, 1.2, 5.1, 5.2_
