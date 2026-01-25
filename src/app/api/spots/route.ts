@@ -2,7 +2,38 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCollection } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { SpotPin, SpotCategory, CreateSpotInput, RelatedContent } from '@/types'
-import { randomUUID } from 'crypto'
+
+/**
+ * 다음 스팟 ID 생성 (SPOT-{숫자} 형식)
+ * 기존 스팟 중 가장 큰 번호를 찾아서 +1
+ */
+async function generateSpotId(): Promise<string> {
+  const collection = await getCollection<SpotDocument>('spots')
+
+  // SPOT-{숫자} 형식의 ID만 조회
+  const spots = await collection
+    .find({ id: { $regex: /^SPOT-\d+$/ } })
+    .project({ id: 1 })
+    .toArray()
+
+  if (spots.length === 0) {
+    return 'SPOT-001'
+  }
+
+  // 가장 큰 번호 찾기
+  const maxNumber = spots.reduce((max, spot) => {
+    const match = spot.id.match(/^SPOT-(\d+)$/)
+    if (match) {
+      const num = parseInt(match[1], 10)
+      return num > max ? num : max
+    }
+    return max
+  }, 0)
+
+  // 다음 번호 생성 (3자리 패딩)
+  const nextNumber = maxNumber + 1
+  return `SPOT-${nextNumber.toString().padStart(3, '0')}`
+}
 
 // MongoDB document interface
 interface SpotDocument {
@@ -135,8 +166,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // 새 스팟 문서 생성
     const now = new Date()
+    const spotId = await generateSpotId()
     const newSpot: SpotDocument = {
-      id: randomUUID(),
+      id: spotId,
       name: body.name.trim(),
       description: body.description.trim(),
       photos: body.photos || [],
