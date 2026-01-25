@@ -8,7 +8,7 @@ import {
   useToggleLike,
   useCreateScene,
 } from '@/hooks/useScenes'
-import { Scene } from '@/types'
+import { Scene, SpotCategory, SECTION_HEADERS, SECTION_ICONS } from '@/types'
 import SceneImageModal from './SceneImageModal'
 
 interface SceneCardProps {
@@ -532,9 +532,14 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
 
 interface SceneGalleryProps {
   spotId: string
+  /** 스팟 카테고리 (아이콘/헤더 텍스트 결정용) */
+  category?: SpotCategory
 }
 
-export default function SceneGallery({ spotId }: SceneGalleryProps) {
+export default function SceneGallery({
+  spotId,
+  category = 'animation',
+}: SceneGalleryProps) {
   useSession() // 세션 상태 유지 (향후 확장용)
   const { data: scenes, isLoading, error } = useScenesBySpot(spotId)
   const toggleLike = useToggleLike()
@@ -615,13 +620,28 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
     setImageModalIndex(null)
   }
 
+  // 카테고리별 헤더 텍스트와 아이콘 (Requirements 5.3)
+  const headerText = SECTION_HEADERS.scenes[category] || '작품 속 장면'
+  const headerIcon =
+    category === 'game'
+      ? '🎮'
+      : category === 'movie_drama'
+        ? '🎥'
+        : SECTION_ICONS.scenes
+
+  // 카테고리별 설명 텍스트
+  const descriptionText =
+    category === 'game'
+      ? '이 장소가 등장한 게임 장면들입니다. 마음에 드는 장면에 좋아요를 눌러주세요!'
+      : '이 장소가 등장한 작품 속 장면들입니다. 마음에 드는 장면에 좋아요를 눌러주세요!'
+
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
       <div className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🎬</span>
-            <h2 className="text-2xl font-bold text-gray-900">작품 속 장면</h2>
+            <span className="text-2xl">{headerIcon}</span>
+            <h2 className="text-2xl font-bold text-gray-900">{headerText}</h2>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
@@ -645,8 +665,7 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
         </div>
 
         <p className="mb-4 text-sm text-gray-500">
-          이 장소가 등장한 애니메이션 장면들입니다. 마음에 드는 장면에 좋아요를
-          눌러주세요! (다시 클릭하면 취소됩니다)
+          {descriptionText} (다시 클릭하면 취소됩니다)
         </p>
 
         {isLoading || isLoadingLikes ? (
@@ -657,7 +676,7 @@ export default function SceneGallery({ spotId }: SceneGalleryProps) {
           </div>
         ) : !scenes || scenes.length === 0 ? (
           <div className="py-8 text-center">
-            <div className="mb-3 text-3xl">🎬</div>
+            <div className="mb-3 text-3xl">{headerIcon}</div>
             <p className="text-gray-600">아직 등록된 장면이 없습니다</p>
             <p className="mt-1 text-sm text-gray-500">
               첫 번째 장면을 추가해보세요!
