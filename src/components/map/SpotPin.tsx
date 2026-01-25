@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import { Marker } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
@@ -10,6 +10,13 @@ import { useUIStore } from '@/stores/uiStore'
 interface SpotPinProps {
   spot: SpotPinType
   onSelect?: (spotId: string) => void
+}
+
+// Z-Index 상수
+const Z_INDEX = {
+  base: 0,
+  selected: 500,
+  hovered: 1000,
 }
 
 // 핀 크기 상수
@@ -209,7 +216,26 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const { openPreview } = useUIStore()
   const [isHovered, setIsHovered] = useState(false)
 
+  // Debounce를 위한 타이머 ref
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const isSelected = selectedSpotId === spot.id
+
+  // Z-Index 계산: 호버 > 선택 > 기본
+  const zIndexOffset = isHovered
+    ? Z_INDEX.hovered
+    : isSelected
+      ? Z_INDEX.selected
+      : Z_INDEX.base
 
   // 아이콘을 메모이제이션하여 불필요한 재생성 방지 (카테고리 색상/아이콘 적용)
   const icon = useMemo(
@@ -234,18 +260,35 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
     onSelect?.(spot.id)
   }, [spot.id, setSelectedSpot, openPreview, onSelect])
 
+  // Debounced 호버 핸들러 (50ms)
   const handleMouseOver = useCallback(() => {
-    setIsHovered(true)
+    // 기존 타이머 취소
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+    }
+    // 50ms 후 호버 상태 설정
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(true)
+    }, 50)
   }, [])
 
+  // Debounced 호버 아웃 핸들러 (50ms)
   const handleMouseOut = useCallback(() => {
-    setIsHovered(false)
+    // 기존 타이머 취소
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+    }
+    // 50ms 후 호버 상태 해제
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(false)
+    }, 50)
   }, [])
 
   return (
     <Marker
       position={spot.coordinates}
       icon={icon}
+      zIndexOffset={zIndexOffset}
       eventHandlers={{
         click: handleClick,
         mouseover: handleMouseOver,
