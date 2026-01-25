@@ -13,7 +13,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import NearbyFacilities from '@/components/spot/NearbyFacilities'
 import SpotCommunitySection from '@/components/spot/SpotCommunitySection'
-import SceneGallery from '@/components/spot/SceneGallery'
+import { SpotContentSection } from '@/components/spot/SpotContentSection'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -231,8 +231,12 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         </div>
       )}
 
-      {/* Scene Gallery - 전체 너비로 더 큰 이미지 표시 */}
-      <SceneGallery spotId={spot.id} />
+      {/* Category-specific Content Section - 카테고리별 콘텐츠 (Requirements 1.1, 1.2) */}
+      <SpotContentSection
+        spotId={spot.id}
+        category={(spot.category as SpotCategory) || 'other'}
+        externalLinks={spot.externalLinks}
+      />
 
       {/* Location Map */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">

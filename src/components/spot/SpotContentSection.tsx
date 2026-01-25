@@ -49,7 +49,9 @@ export function SpotContentSection({
   return (
     <div className="space-y-6">
       {/* 작품 속 장면 섹션 (scenes) */}
-      {sections.includes('scenes') && <SceneGallery spotId={spotId} />}
+      {sections.includes('scenes') && (
+        <SceneGallery spotId={spotId} category={category} />
+      )}
 
       {/* 이벤트 정보 섹션 (events) */}
       {sections.includes('events') && isEventCategory(category) && (

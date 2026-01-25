@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { SpotCategory, RelatedContent } from '@/types'
+import { SpotCategory, RelatedContent, ExternalLink } from '@/types'
 
 // Types for spot data
 export interface SpotPin {
@@ -34,6 +34,7 @@ export interface SpotDetailData {
   category?: SpotCategory // 스팟 카테고리 (마이그레이션 전 optional)
   relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
   relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠 (Requirements 3.3)
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   // 작성자 정보 (마이그레이션 전 optional)
   authorId?: string
   authorName?: string
