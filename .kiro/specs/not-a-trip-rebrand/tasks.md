@@ -199,7 +199,7 @@
     - 마이그레이션 스크립트 실행
     - 데이터 무결성 확인
     - _Requirements: 3.4_
-  - [ ] 11.4 실제 스팟 데이터 추가
+  - [x] 11.4 실제 스팟 데이터 추가
     - `scripts/seed-real-spots.ts` 생성
     - 카테고리별 실제 존재하는 장소 데이터 추가
     - 애니메이션: 일본 성지순례 명소 (10개 이상)
@@ -223,10 +223,18 @@
     - 콘텐츠 타입별 아이콘
     - _Requirements: 3.3_
 
-- [ ] 13. Final Checkpoint - 전체 기능 완료 확인
-  - 모든 테스트 통과 확인
-  - 브랜딩 일관성 확인
-  - 사용자 피드백 최종 수렴
+- [ ] 13. SpotPin 호버 깜빡임 버그 수정
+  - [ ] 13.1 호버 상태 Debounce 적용
+    - `src/components/map/SpotPin.tsx` 수정
+    - `handleMouseOver`, `handleMouseOut`에 debounce 적용 (50ms)
+    - lodash debounce 또는 커스텀 훅 사용
+  - [ ] 13.2 호버 시 Z-Index 최상위 설정
+    - 호버된 핀의 zIndexOffset을 1000으로 설정
+    - 선택된 핀은 500, 기본 핀은 0
+    - `<Marker zIndexOffset={...} />` 적용
+  - [ ] 13.3 호버 효과 테스트
+    - 겹친 핀에서 호버 시 깜빡임 없는지 확인
+    - 호버된 핀이 최상위에 표시되는지 확인
 
 ## Notes
 
