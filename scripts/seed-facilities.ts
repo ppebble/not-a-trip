@@ -20,7 +20,199 @@ interface SeedFacility {
 }
 
 // ============================================
-// 애니메이션 스팟 주변 편의시설
+// 기존 스팟 (SPOT-001 ~ SPOT-005) 주변 편의시설
+// ============================================
+
+// SPOT-001: 너의 이름은 - 스가 신사 (도쿄 요츠야)
+const SPOT_001_FACILITIES: SeedFacility[] = [
+  {
+    name: 'セブン-イレブン 四谷三丁目店',
+    type: 'convenience_store',
+    address: '東京都新宿区四谷3丁目',
+    coordinates: { lat: 35.6878, lng: 139.7171 },
+    spotId: 'SPOT-001',
+  },
+  {
+    name: 'ファミリーマート 四谷三丁目店',
+    type: 'convenience_store',
+    address: '東京都新宿区四谷3丁目',
+    coordinates: { lat: 35.6875, lng: 139.7193 },
+    spotId: 'SPOT-001',
+  },
+  {
+    name: '山形うまいもん処 花笠庵',
+    type: 'restaurant',
+    address: '東京都新宿区四谷3丁目',
+    coordinates: { lat: 35.6875, lng: 139.7201 },
+    spotId: 'SPOT-001',
+  },
+  {
+    name: 'スターバックス 四谷三丁目店',
+    type: 'cafe',
+    address: '東京都新宿区四谷3丁目',
+    coordinates: { lat: 35.6876, lng: 139.7232 },
+    spotId: 'SPOT-001',
+  },
+  {
+    name: '四谷三丁目駅',
+    type: 'station',
+    address: '東京都新宿区四谷3丁目',
+    coordinates: { lat: 35.6879, lng: 139.7205 },
+    spotId: 'SPOT-001',
+  },
+]
+
+// SPOT-002: 슬램덩크 - 가마쿠라 건널목
+const SPOT_002_FACILITIES: SeedFacility[] = [
+  {
+    name: '吉野家 134号線江ノ島店',
+    type: 'restaurant',
+    address: '神奈川県鎌倉市腰越1丁目',
+    coordinates: { lat: 35.3082, lng: 139.4916 },
+    spotId: 'SPOT-002',
+  },
+  {
+    name: 'ケンタッキーフライドチキン 江ノ島店',
+    type: 'restaurant',
+    address: '神奈川県鎌倉市腰越1丁目',
+    coordinates: { lat: 35.3082, lng: 139.4919 },
+    spotId: 'SPOT-002',
+  },
+  {
+    name: 'フレッシュストアヤオミネ',
+    type: 'convenience_store',
+    address: '神奈川県鎌倉市腰越2丁目',
+    coordinates: { lat: 35.3094, lng: 139.4911 },
+    spotId: 'SPOT-002',
+  },
+  {
+    name: '腰越駅',
+    type: 'station',
+    address: '神奈川県鎌倉市腰越2丁目',
+    coordinates: { lat: 35.3083, lng: 139.4932 },
+    spotId: 'SPOT-002',
+  },
+  {
+    name: '鎌倉高校前駅',
+    type: 'station',
+    address: '神奈川県鎌倉市腰越1丁目',
+    coordinates: { lat: 35.3068, lng: 139.4962 },
+    spotId: 'SPOT-002',
+  },
+]
+
+// SPOT-003: 센과 치히로 - 지우펀 (대만)
+const SPOT_003_FACILITIES: SeedFacility[] = [
+  {
+    name: '阿妹茶樓',
+    type: 'restaurant',
+    address: '新北市瑞芳區基山街',
+    coordinates: { lat: 25.1085, lng: 121.8436 },
+    spotId: 'SPOT-003',
+  },
+  {
+    name: '芋仔番薯茶坊',
+    type: 'restaurant',
+    address: '新北市瑞芳區基山街',
+    coordinates: { lat: 25.1086, lng: 121.8437 },
+    spotId: 'SPOT-003',
+  },
+  {
+    name: '7-Eleven 九份門市',
+    type: 'convenience_store',
+    address: '新北市瑞芳區基山街',
+    coordinates: { lat: 25.1097, lng: 121.8453 },
+    spotId: 'SPOT-003',
+  },
+  {
+    name: '全家便利商店 九份店',
+    type: 'convenience_store',
+    address: '新北市瑞芳區基山街',
+    coordinates: { lat: 25.1102, lng: 121.8453 },
+    spotId: 'SPOT-003',
+  },
+  {
+    name: '九份茶坊',
+    type: 'cafe',
+    address: '新北市瑞芳區基山街142號',
+    coordinates: { lat: 25.1081, lng: 121.8435 },
+    spotId: 'SPOT-003',
+  },
+]
+
+// SPOT-004: 스즈메의 문단속 - 미야자키
+const SPOT_004_FACILITIES: SeedFacility[] = [
+  {
+    name: 'セブン-イレブン 宮崎駅前店',
+    type: 'convenience_store',
+    address: '宮崎県宮崎市錦町',
+    coordinates: { lat: 31.908, lng: 131.4205 },
+    spotId: 'SPOT-004',
+  },
+  {
+    name: 'ローソン 宮崎駅前店',
+    type: 'convenience_store',
+    address: '宮崎県宮崎市錦町',
+    coordinates: { lat: 31.9075, lng: 131.42 },
+    spotId: 'SPOT-004',
+  },
+  {
+    name: '宮崎牛レストラン',
+    type: 'restaurant',
+    address: '宮崎県宮崎市橘通西',
+    coordinates: { lat: 31.9082, lng: 131.421 },
+    spotId: 'SPOT-004',
+  },
+  {
+    name: 'スターバックス 宮崎店',
+    type: 'cafe',
+    address: '宮崎県宮崎市橘通西',
+    coordinates: { lat: 31.9078, lng: 131.4198 },
+    spotId: 'SPOT-004',
+  },
+  {
+    name: '宮崎駅',
+    type: 'station',
+    address: '宮崎県宮崎市錦町1-8',
+    coordinates: { lat: 31.9073, lng: 131.4245 },
+    spotId: 'SPOT-004',
+  },
+]
+
+// SPOT-005: 귀멸의 칼날 - 운젠 지옥
+const SPOT_005_FACILITIES: SeedFacility[] = [
+  {
+    name: '雲仙温泉 湯元ホテル',
+    type: 'restaurant',
+    address: '長崎県雲仙市小浜町雲仙',
+    coordinates: { lat: 32.7505, lng: 130.267 },
+    spotId: 'SPOT-005',
+  },
+  {
+    name: '雲仙地獄茶屋',
+    type: 'cafe',
+    address: '長崎県雲仙市小浜町雲仙',
+    coordinates: { lat: 32.75, lng: 130.2665 },
+    spotId: 'SPOT-005',
+  },
+  {
+    name: 'ファミリーマート 雲仙店',
+    type: 'convenience_store',
+    address: '長崎県雲仙市小浜町雲仙',
+    coordinates: { lat: 32.7508, lng: 130.2672 },
+    spotId: 'SPOT-005',
+  },
+  {
+    name: '雲仙温泉観光案内所',
+    type: 'other',
+    address: '長崎県雲仙市小浜町雲仙',
+    coordinates: { lat: 32.7502, lng: 130.2668 },
+    spotId: 'SPOT-005',
+  },
+]
+
+// ============================================
+// 애니메이션 스팟 주변 편의시설 (REAL-ANI-xxx)
 // ============================================
 
 // REAL-ANI-001: 스가 신사 (도쿄 요츠야)
@@ -1176,7 +1368,13 @@ const NINTENDO_WORLD_FACILITIES: SeedFacility[] = [
 // 모든 편의시설 데이터 합치기
 // ============================================
 const SEED_FACILITIES: SeedFacility[] = [
-  // 애니메이션
+  // 기존 스팟 (SPOT-001 ~ SPOT-005)
+  ...SPOT_001_FACILITIES,
+  ...SPOT_002_FACILITIES,
+  ...SPOT_003_FACILITIES,
+  ...SPOT_004_FACILITIES,
+  ...SPOT_005_FACILITIES,
+  // 애니메이션 (REAL-ANI-xxx)
   ...SUGA_SHRINE_FACILITIES,
   ...KAMAKURA_FACILITIES,
   ...JIUFEN_FACILITIES,
