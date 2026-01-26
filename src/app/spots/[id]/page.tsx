@@ -6,7 +6,6 @@ import { useSpotDetail, useNearbyFacilities } from '@/hooks/useSpotDetail'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useAuth } from '@/hooks/useAuth'
-import { canEditSpot, canDeleteSpot } from '@/lib/auth-utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { spotKeys } from '@/hooks/useSpots'
 import Image from 'next/image'
@@ -34,15 +33,17 @@ export default function SpotDetailPage() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const spotId = params.id as string
-  const { session } = useAuth()
+  const { user } = useAuth()
   const [isDeleting, setIsDeleting] = useState(false)
 
   const { data: spot, isLoading, error } = useSpotDetail(spotId)
   const { data: facilities = [] } = useNearbyFacilities(spotId)
 
-  // 수정/삭제 권한 확인 (관리자 또는 본인 스팟)
-  const hasEditPermission = canEditSpot(session, spot?.authorId)
-  const hasDeletePermission = canDeleteSpot(session, spot?.authorId)
+  // 수정/삭제 권한 확인: 관리자이거나 본인 스팟인 경우
+  const isAdmin = user?.role === 'admin'
+  const isOwner = spot?.authorId && user?.id && spot.authorId === user.id
+  const hasEditPermission = isAdmin || isOwner
+  const hasDeletePermission = isAdmin || isOwner
 
   // 스팟 삭제 핸들러
   const handleDelete = async () => {
