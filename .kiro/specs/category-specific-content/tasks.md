@@ -27,38 +27,38 @@
     - SECTION_HEADERS 상수 정의
     - _Requirements: 1.1, 1.2, 5.1, 5.2_
 
-- [ ] 2. 외부 링크 컴포넌트 구현
-  - [ ] 2.1 ExternalLinkCard 컴포넌트 생성
+- [x] 2. 외부 링크 컴포넌트 구현
+  - [x] 2.1 ExternalLinkCard 컴포넌트 생성
     - `src/components/spot/ExternalLinkCard.tsx` 생성
     - 링크 타입별 아이콘/색상 표시
     - 새 탭에서 열기 기능
     - _Requirements: 2.3, 2.4_
-  - [ ] 2.2 ExternalLinkForm 컴포넌트 생성
+  - [x] 2.2 ExternalLinkForm 컴포넌트 생성
     - `src/components/spot/ExternalLinkForm.tsx` 생성
     - 링크 타입 선택 드롭다운
     - URL 입력 및 유효성 검사
     - 링크 추가/삭제 기능
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-- [ ] 3. 이벤트 정보 섹션 구현
-  - [ ] 3.1 EventInfoSection 컴포넌트 생성
+- [x] 3. 이벤트 정보 섹션 구현
+  - [x] 3.1 EventInfoSection 컴포넌트 생성
     - `src/components/spot/EventInfoSection.tsx` 생성
     - 외부 링크 카드 그리드 레이아웃
     - 카테고리별 헤더 텍스트 (경기 일정/공연 정보)
     - 빈 상태 메시지 표시
     - _Requirements: 3.1, 3.2, 5.2, 5.4_
-  - [ ] 3.2 SpotContentSection 컨테이너 컴포넌트 생성
+  - [x] 3.2 SpotContentSection 컨테이너 컴포넌트 생성
     - `src/components/spot/SpotContentSection.tsx` 생성
     - 카테고리에 따라 SceneGallery 또는 EventInfoSection 렌더링
     - game 카테고리는 둘 다 표시
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 4. 스팟 상세 페이지 업데이트
-  - [ ] 4.1 스팟 상세 페이지에 SpotContentSection 적용
+- [x] 4. 스팟 상세 페이지 업데이트
+  - [x] 4.1 스팟 상세 페이지에 SpotContentSection 적용
     - `src/app/spots/[id]/page.tsx` 수정
     - 기존 SceneGallery를 SpotContentSection으로 교체
     - _Requirements: 1.1, 1.2_
-  - [ ] 4.2 카테고리별 섹션 아이콘 적용
+  - [x] 4.2 카테고리별 섹션 아이콘 적용
     - 섹션 헤더에 카테고리 아이콘 표시
     - _Requirements: 5.3_
 
