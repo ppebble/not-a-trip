@@ -117,6 +117,7 @@ export function useAuth() {
 
   return {
     user: session?.user,
+    session,
     isAuthenticated,
     isLoading: isLoading || isLoadingSession,
     error,

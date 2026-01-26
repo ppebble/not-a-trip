@@ -6,6 +6,7 @@ import { useSpotDetail, useNearbyFacilities } from '@/hooks/useSpotDetail'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useAuth } from '@/hooks/useAuth'
+import { canEditSpot, canDeleteSpot } from '@/lib/auth-utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { spotKeys } from '@/hooks/useSpots'
 import Image from 'next/image'
@@ -33,14 +34,15 @@ export default function SpotDetailPage() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const spotId = params.id as string
-  const { user } = useAuth()
+  const { session } = useAuth()
   const [isDeleting, setIsDeleting] = useState(false)
 
   const { data: spot, isLoading, error } = useSpotDetail(spotId)
   const { data: facilities = [] } = useNearbyFacilities(spotId)
 
-  // 본인 스팟 여부 확인 (Requirements 6.1)
-  const isOwner = spot?.authorId && user?.id && spot.authorId === user.id
+  // 수정/삭제 권한 확인 (관리자 또는 본인 스팟)
+  const hasEditPermission = canEditSpot(session, spot?.authorId)
+  const hasDeletePermission = canDeleteSpot(session, spot?.authorId)
 
   // 스팟 삭제 핸들러
   const handleDelete = async () => {
@@ -119,22 +121,26 @@ export default function SpotDetailPage() {
               </h1>
             </div>
 
-            {/* 수정/삭제 버튼 - 본인 스팟인 경우에만 표시 (Requirements 6.1, 6.5) */}
-            {isOwner && (
+            {/* 수정/삭제 버튼 - 관리자 또는 본인 스팟인 경우 표시 */}
+            {(hasEditPermission || hasDeletePermission) && (
               <div className="flex gap-2">
-                <Link
-                  href={`/spots/${spotId}/edit`}
-                  className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
-                >
-                  수정
-                </Link>
-                <button
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isDeleting ? '삭제 중...' : '삭제'}
-                </button>
+                {hasEditPermission && (
+                  <Link
+                    href={`/spots/${spotId}/edit`}
+                    className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+                  >
+                    수정
+                  </Link>
+                )}
+                {hasDeletePermission && (
+                  <button
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isDeleting ? '삭제 중...' : '삭제'}
+                  </button>
+                )}
               </div>
             )}
           </div>
