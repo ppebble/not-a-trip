@@ -62,12 +62,12 @@
     - 섹션 헤더에 카테고리 아이콘 표시
     - _Requirements: 5.3_
 
-- [ ] 5. 스팟 등록/수정 폼 업데이트
-  - [ ] 5.1 SpotForm에 외부 링크 섹션 추가
+- [x] 5. 스팟 등록/수정 폼 업데이트
+  - [x] 5.1 SpotForm에 외부 링크 섹션 추가
     - `src/components/spot/SpotForm.tsx` 수정
     - sports/music 카테고리 선택 시 외부 링크 폼 표시
     - _Requirements: 4.1_
-  - [ ] 5.2 외부 링크 유효성 검사 추가
+  - [x] 5.2 외부 링크 유효성 검사 추가
     - URL 형식 검증 (https:// 필수)
     - 최대 10개 링크 제한
     - 중복 URL 방지

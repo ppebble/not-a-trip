@@ -3,9 +3,15 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { SpotCategory, RelatedContent, UpdateSpotInput } from '@/types'
+import {
+  SpotCategory,
+  RelatedContent,
+  ExternalLink,
+  UpdateSpotInput,
+} from '@/types'
 import { SpotFormData } from './useSpotRegistration'
 import { spotKeys } from './useSpots'
+import { validateExternalLinks } from '@/lib/external-link-validation'
 
 // 스팟 상세 데이터 인터페이스 (수정용)
 interface SpotEditData {
@@ -17,6 +23,7 @@ interface SpotEditData {
   coordinates: [number, number]
   category?: SpotCategory
   relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   authorId?: string
   authorName?: string
 }
@@ -56,6 +63,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
     category: '',
     photos: [],
     relatedContent: [],
+    externalLinks: [],
   })
   const [errors, setErrors] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -87,6 +95,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
         category: spot.category || '',
         photos: spot.photos || [],
         relatedContent: spot.relatedContent || [],
+        externalLinks: spot.externalLinks || [],
       })
     }
   }, [spot])
@@ -132,6 +141,18 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
       validationErrors.push('지도에서 위치를 선택해주세요')
     }
 
+    // 외부 링크 유효성 검사 (스포츠/음악/게임 카테고리에서만)
+    if (
+      formData.category &&
+      ['sports', 'music', 'game'].includes(formData.category) &&
+      formData.externalLinks.length > 0
+    ) {
+      const linkValidation = validateExternalLinks(formData.externalLinks)
+      if (!linkValidation.isValid) {
+        validationErrors.push(...linkValidation.errors)
+      }
+    }
+
     return validationErrors
   }, [formData])
 
@@ -158,6 +179,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
           category: formData.category as SpotCategory,
           photos: formData.photos,
           relatedContent: formData.relatedContent,
+          externalLinks: formData.externalLinks,
         }
 
         const response = await fetch(`/api/spots/${spotId}`, {
