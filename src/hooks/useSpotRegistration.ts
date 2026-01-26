@@ -6,8 +6,10 @@ import {
   SpotCategory,
   Coordinates,
   RelatedContent,
+  ExternalLink,
   CreateSpotInput,
 } from '@/types'
+import { validateExternalLinks } from '@/lib/external-link-validation'
 
 // 폼 상태 인터페이스
 export interface SpotFormData {
@@ -18,6 +20,7 @@ export interface SpotFormData {
   category: SpotCategory | ''
   photos: string[]
   relatedContent: RelatedContent[]
+  externalLinks: ExternalLink[]
 }
 
 // 초기 폼 상태
@@ -29,6 +32,7 @@ export const initialFormData: SpotFormData = {
   category: '',
   photos: [],
   relatedContent: [],
+  externalLinks: [],
 }
 
 interface UseSpotRegistrationReturn {
@@ -99,6 +103,18 @@ export function useSpotRegistration(): UseSpotRegistrationReturn {
       validationErrors.push('지도에서 위치를 선택해주세요')
     }
 
+    // 외부 링크 유효성 검사 (스포츠/음악/게임 카테고리에서만)
+    if (
+      formData.category &&
+      ['sports', 'music', 'game'].includes(formData.category) &&
+      formData.externalLinks.length > 0
+    ) {
+      const linkValidation = validateExternalLinks(formData.externalLinks)
+      if (!linkValidation.isValid) {
+        validationErrors.push(...linkValidation.errors)
+      }
+    }
+
     return validationErrors
   }, [formData])
 
@@ -126,6 +142,7 @@ export function useSpotRegistration(): UseSpotRegistrationReturn {
           category: formData.category as SpotCategory,
           photos: formData.photos,
           relatedContent: formData.relatedContent,
+          externalLinks: formData.externalLinks,
         }
 
         const response = await fetch('/api/spots', {
