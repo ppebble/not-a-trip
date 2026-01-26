@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { canEditSpot, canDeleteSpot } from '@/lib/auth-utils'
 import {
   SpotResponse,
   MediaInfo,
@@ -112,8 +113,8 @@ export async function PUT(
       )
     }
 
-    // 본인 스팟 여부 검증 (Requirements 6.2)
-    if (spot.authorId && spot.authorId !== session.user.id) {
+    // 본인 스팟 또는 관리자 여부 검증 (Requirements 6.2)
+    if (!canEditSpot(session, spot.authorId)) {
       return NextResponse.json(
         { error: '수정 권한이 없습니다' },
         { status: 403 }
@@ -210,8 +211,8 @@ export async function DELETE(
       )
     }
 
-    // 본인 스팟 여부 검증
-    if (spot.authorId && spot.authorId !== session.user.id) {
+    // 본인 스팟 또는 관리자 여부 검증
+    if (!canDeleteSpot(session, spot.authorId)) {
       return NextResponse.json(
         { error: '삭제 권한이 없습니다' },
         { status: 403 }
