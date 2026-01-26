@@ -2,7 +2,14 @@ import { MongoClient, Db, Collection, Document } from 'mongodb'
 
 // MongoDB connection configuration
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
-const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
+
+// URI에서 DB 이름 추출 (예: mongodb://localhost:27017/not-a-trip -> not-a-trip)
+function extractDbNameFromUri(uri: string): string {
+  const match = uri.match(/\/([^/?]+)(\?|$)/)
+  return match ? match[1] : 'not-a-trip'
+}
+
+const MONGODB_DB = process.env.MONGODB_DB || extractDbNameFromUri(MONGODB_URI)
 
 // Global connection cache to prevent multiple connections in development
 let cachedClient: MongoClient | null = null
