@@ -70,12 +70,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       if (user) {
         token.id = user.id
         token.provider = account?.provider || 'credentials'
         token.role = user.role || 'user'
       }
+
+      // 세션 업데이트 시 또는 기존 토큰에 role이 없으면 DB에서 가져오기
+      if (trigger === 'update' || !token.role) {
+        try {
+          const db = await getDb()
+          const dbUser = await db.collection('users').findOne({
+            email: token.email,
+          })
+          if (dbUser) {
+            token.role = dbUser.role || 'user'
+          }
+        } catch {
+          // DB 조회 실패 시 기본값 사용
+          token.role = token.role || 'user'
+        }
+      }
+
       return token
     },
     async session({ session, token }) {
