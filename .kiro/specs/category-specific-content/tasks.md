@@ -73,27 +73,48 @@
     - 중복 URL 방지
     - _Requirements: 3.4_
 
-- [ ] 6. API 업데이트
-  - [ ] 6.1 스팟 등록/수정 API에 externalLinks 처리 추가
+- [ ] 6. 관리자 계정 및 권한 시스템
+  - [ ] 6.1 User 모델에 role 필드 추가
+    - `src/types/index.ts`에 UserRole 타입 추가 ('user' | 'admin')
+    - User 인터페이스에 role 필드 추가
+    - _Requirements: 신규_
+  - [ ] 6.2 관리자 권한 확인 유틸리티 함수 생성
+    - `src/lib/auth-utils.ts` 생성
+    - isAdmin() 함수 구현
+    - canEditSpot(), canDeleteSpot() 권한 확인 함수 구현
+    - _Requirements: 신규_
+  - [ ] 6.3 스팟 수정/삭제 API에 관리자 권한 처리 추가
+    - `src/app/api/spots/[id]/route.ts` 수정 (PUT, DELETE)
+    - 관리자는 모든 스팟 수정/삭제 가능
+    - 일반 사용자는 본인 스팟만 수정/삭제 가능
+    - _Requirements: 신규_
+  - [ ] 6.4 스팟 상세 페이지에서 관리자 수정/삭제 버튼 표시
+    - `src/app/spots/[id]/page.tsx` 수정
+    - 관리자 계정으로 로그인 시 모든 스팟에 수정/삭제 버튼 표시
+    - _Requirements: 신규_
+
+- [ ] 7. API 업데이트
+  - [ ] 7.1 스팟 등록/수정 API에 externalLinks 처리 추가
     - `src/app/api/spots/route.ts` 수정 (POST)
     - `src/app/api/spots/[id]/route.ts` 수정 (PUT)
     - externalLinks 필드 저장
     - _Requirements: 3.3_
-  - [ ] 6.2 외부 링크 유효성 검사 미들웨어
+  - [ ] 7.2 외부 링크 유효성 검사 미들웨어
     - URL 형식 검증
     - 링크 개수 제한 (최대 10개)
     - _Requirements: 3.4_
 
-- [ ] 7. 기존 스팟 데이터에 샘플 외부 링크 추가
-  - [ ] 7.1 seed-real-spots.ts 업데이트
+- [ ] 8. 기존 스팟 데이터에 샘플 외부 링크 추가
+  - [ ] 8.1 seed-real-spots.ts 업데이트
     - 스포츠 스팟에 공식 홈페이지, 티켓 예매 링크 추가
     - 음악 스팟에 공연장 홈페이지, 예매 링크 추가
     - _Requirements: 2.1, 3.1, 3.2_
 
-- [ ] 8. Checkpoint - 카테고리별 콘텐츠 섹션 확인
+- [ ] 9. Checkpoint - 카테고리별 콘텐츠 섹션 확인
   - 애니메이션/영화 스팟에서 작품 속 장면 섹션 표시 확인
   - 스포츠/음악 스팟에서 이벤트 정보 섹션 표시 확인
   - 외부 링크 추가/삭제 기능 테스트
+  - 관리자 계정으로 모든 스팟 수정/삭제 가능 확인
   - 사용자 피드백 수렴
 
 ## Notes
