@@ -70,15 +70,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    async jwt({ token, user, account, trigger }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id
         token.provider = account?.provider || 'credentials'
-        token.role = user.role || 'user'
       }
 
-      // 세션 업데이트 시 또는 기존 토큰에 role이 없으면 DB에서 가져오기
-      if (trigger === 'update' || !token.role) {
+      // 매번 DB에서 role 조회 (role 변경 즉시 반영)
+      if (token.email) {
         try {
           const db = await getDb()
           const dbUser = await db.collection('users').findOne({
@@ -86,9 +85,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           })
           if (dbUser) {
             token.role = dbUser.role || 'user'
+            // eslint-disable-next-line no-console
+            console.log(`[Auth] User ${token.email} role: ${token.role}`)
+          } else {
+            token.role = 'user'
+            // eslint-disable-next-line no-console
+            console.log(
+              `[Auth] User ${token.email} not found, default role: user`
+            )
           }
-        } catch {
-          // DB 조회 실패 시 기본값 사용
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('[Auth] DB lookup error:', error)
           token.role = token.role || 'user'
         }
       }
