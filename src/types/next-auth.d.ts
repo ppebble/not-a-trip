@@ -1,5 +1,6 @@
 import 'next-auth'
 import { DefaultSession } from 'next-auth'
+import { UserRole } from './index'
 
 declare module 'next-auth' {
   interface Session {
@@ -7,6 +8,7 @@ declare module 'next-auth' {
       id: string
       provider: string
       nickname?: string
+      role: UserRole
     } & DefaultSession['user']
   }
 
@@ -14,6 +16,7 @@ declare module 'next-auth' {
     id: string
     provider?: string
     nickname?: string
+    role?: UserRole
   }
 }
 
@@ -22,5 +25,6 @@ declare module 'next-auth/jwt' {
     id: string
     provider: string
     nickname?: string
+    role: UserRole
   }
 }

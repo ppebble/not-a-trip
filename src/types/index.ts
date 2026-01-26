@@ -384,6 +384,8 @@ export interface UpdateSpotInput {
 // User & Auth Types
 // ============================================
 
+export type UserRole = 'user' | 'admin'
+
 export interface User {
   id: string
   email: string
@@ -391,6 +393,7 @@ export interface User {
   nickname?: string
   image?: string
   provider: 'credentials' | 'google' | 'kakao' | 'naver'
+  role: UserRole // 사용자 역할 (기본값: 'user')
   createdAt: Date
   updatedAt: Date
 }
