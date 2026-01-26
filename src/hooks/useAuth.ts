@@ -18,8 +18,10 @@ export function useAuth() {
   const { data: session, status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const isAuthenticated = status === 'authenticated'
+  // 낙관적 업데이트: 로그아웃 중이면 인증되지 않은 것으로 처리
+  const isAuthenticated = status === 'authenticated' && !isLoggingOut
   const isLoadingSession = status === 'loading'
 
   // 이메일/비밀번호 로그인
@@ -100,14 +102,12 @@ export function useAuth() {
     [loginWithCredentials]
   )
 
-  // 로그아웃
+  // 로그아웃 (낙관적 업데이트 적용)
   const logout = useCallback(async () => {
-    setIsLoading(true)
-    try {
-      await signOut({ callbackUrl: '/' })
-    } finally {
-      setIsLoading(false)
-    }
+    // 즉시 로그아웃 상태로 전환하여 UI 업데이트
+    setIsLoggingOut(true)
+    // 백그라운드에서 실제 로그아웃 처리
+    signOut({ callbackUrl: '/' })
   }, [])
 
   // 에러 초기화
@@ -116,10 +116,11 @@ export function useAuth() {
   }, [])
 
   return {
-    user: session?.user,
-    session,
+    user: isLoggingOut ? null : session?.user,
+    session: isLoggingOut ? null : session,
     isAuthenticated,
     isLoading: isLoading || isLoadingSession,
+    isLoggingOut,
     error,
     loginWithCredentials,
     loginWithProvider,
