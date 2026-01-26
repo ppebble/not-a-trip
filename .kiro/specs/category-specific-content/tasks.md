@@ -73,22 +73,22 @@
     - 중복 URL 방지
     - _Requirements: 3.4_
 
-- [ ] 6. 관리자 계정 및 권한 시스템
-  - [ ] 6.1 User 모델에 role 필드 추가
+- [-] 6. 관리자 계정 및 권한 시스템
+  - [x] 6.1 User 모델에 role 필드 추가
     - `src/types/index.ts`에 UserRole 타입 추가 ('user' | 'admin')
     - User 인터페이스에 role 필드 추가
     - _Requirements: 신규_
-  - [ ] 6.2 관리자 권한 확인 유틸리티 함수 생성
+  - [x] 6.2 관리자 권한 확인 유틸리티 함수 생성
     - `src/lib/auth-utils.ts` 생성
     - isAdmin() 함수 구현
     - canEditSpot(), canDeleteSpot() 권한 확인 함수 구현
     - _Requirements: 신규_
-  - [ ] 6.3 스팟 수정/삭제 API에 관리자 권한 처리 추가
+  - [x] 6.3 스팟 수정/삭제 API에 관리자 권한 처리 추가
     - `src/app/api/spots/[id]/route.ts` 수정 (PUT, DELETE)
     - 관리자는 모든 스팟 수정/삭제 가능
     - 일반 사용자는 본인 스팟만 수정/삭제 가능
     - _Requirements: 신규_
-  - [ ] 6.4 스팟 상세 페이지에서 관리자 수정/삭제 버튼 표시
+  - [x] 6.4 스팟 상세 페이지에서 관리자 수정/삭제 버튼 표시
     - `src/app/spots/[id]/page.tsx` 수정
     - 관리자 계정으로 로그인 시 모든 스팟에 수정/삭제 버튼 표시
     - _Requirements: 신규_
@@ -116,6 +116,25 @@
   - 외부 링크 추가/삭제 기능 테스트
   - 관리자 계정으로 모든 스팟 수정/삭제 가능 확인
   - 사용자 피드백 수렴
+
+- [ ] 10. 코드 리팩토링
+  - [ ] 10.1 주석 정리
+    - 불필요한 주석 제거
+    - 필요한 주석은 명확하게 작성
+    - _Requirements: 코드 품질_
+  - [ ] 10.2 삼항연산자 정리
+    - 복잡한 삼항연산자를 조건문 또는 early return으로 변경
+    - 가독성 향상을 위한 코드 스타일 개선
+    - 코드 스타일 예시는 사용자가 제공 예정
+    - _Requirements: 코드 품질_
+  - [ ] 10.3 API URL 상수화
+    - `src/lib/constants.ts` 또는 `src/lib/api-routes.ts` 생성
+    - 직접 문자열로 작성된 API URL을 상수로 관리
+    - _Requirements: 유지보수성_
+  - [ ] 10.4 커스텀 훅 정리 및 적용
+    - 사용자가 제공하는 useQuery, axios 관련 훅 수정/보완
+    - 기존 fetch 로직을 커스텀 훅으로 교체
+    - _Requirements: 코드 재사용성_
 
 ## Notes
 
