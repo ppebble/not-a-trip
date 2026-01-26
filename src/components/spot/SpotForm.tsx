@@ -10,7 +10,9 @@ import {
   SpotCategory,
   Coordinates,
   RelatedContent,
+  ExternalLink,
 } from '@/types'
+import { ExternalLinkForm } from '@/components/spot/ExternalLinkForm'
 
 // LocationPicker는 Leaflet을 사용하므로 SSR 비활성화
 const LocationPicker = dynamic(
@@ -37,6 +39,7 @@ export interface SpotFormData {
   category: SpotCategory | ''
   photos: string[]
   relatedContent: RelatedContent[]
+  externalLinks: ExternalLink[]
 }
 
 /**
@@ -399,6 +402,24 @@ export function SpotForm({
             }}
           />
         </div>
+
+        {/* 외부 링크 섹션 (스포츠/음악/게임 카테고리에서만 표시) */}
+        {formData.category &&
+          ['sports', 'music', 'game'].includes(formData.category) && (
+            <div className="border-b border-navy-100 pb-6">
+              <ExternalLinkForm
+                links={formData.externalLinks}
+                onChange={(links) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    externalLinks: links,
+                  }))
+                }}
+                category={formData.category as SpotCategory}
+                disabled={isSubmitting || isDeleting}
+              />
+            </div>
+          )}
 
         {/* 버튼 영역 */}
         <div
