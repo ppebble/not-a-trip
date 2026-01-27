@@ -12,20 +12,20 @@
 
 ## Tasks
 
-- [ ] 1. 좋아요 상태 전역 관리
-  - [ ] 1.1 likeStore 생성
+- [x] 1. 좋아요 상태 전역 관리
+  - [x] 1.1 likeStore 생성
     - `src/stores/likeStore.ts` 생성
     - likedSceneIds, isLoadingLikes 상태 정의
     - setLikedSceneIds, addLikedScene, removeLikedScene, toggleLikedScene 액션 구현
     - selector 함수 제공 (useLikedSceneIds, useIsLoadingLikes)
     - _Requirements: 1.1_
-  - [ ] 1.2 SceneGallery에 likeStore 적용
+  - [x] 1.2 SceneGallery에 likeStore 적용
     - `src/components/spot/SceneGallery.tsx` 수정
     - 로컬 상태 likedSceneIds, isLoadingLikes를 likeStore로 교체
     - useEffect에서 likeStore.setLikedSceneIds 호출
     - handleLike에서 likeStore.toggleLikedScene 호출
     - _Requirements: 1.2, 1.3_
-  - [ ] 1.3 SceneImageModal에 likeStore 적용
+  - [x] 1.3 SceneImageModal에 likeStore 적용
     - `src/components/spot/SceneImageModal.tsx` 수정
     - props로 받던 likedSceneIds를 likeStore에서 직접 참조
     - _Requirements: 1.2_
