@@ -2,17 +2,11 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 interface UIStore {
-  // Preview state
   isPreviewOpen: boolean
   previewSpotId: string | null
-
-  // Mobile menu state
   isMobileMenuOpen: boolean
-
-  // Loading states
   isMapLoading: boolean
 
-  // Actions
   openPreview: (spotId: string) => void
   closePreview: () => void
   toggleMobileMenu: () => void
@@ -24,19 +18,16 @@ interface UIStore {
 export const useUIStore = create<UIStore>()(
   devtools(
     (set) => ({
-      // Initial state
       isPreviewOpen: false,
       previewSpotId: null,
       isMobileMenuOpen: false,
       isMapLoading: true,
 
-      // Actions
       openPreview: (spotId) =>
         set(
           {
             isPreviewOpen: true,
             previewSpotId: spotId,
-            // Close mobile menu when opening preview
             isMobileMenuOpen: false,
           },
           false,
@@ -57,7 +48,6 @@ export const useUIStore = create<UIStore>()(
         set(
           (state) => ({
             isMobileMenuOpen: !state.isMobileMenuOpen,
-            // Close preview when opening mobile menu
             isPreviewOpen: state.isMobileMenuOpen ? state.isPreviewOpen : false,
             previewSpotId: state.isMobileMenuOpen ? state.previewSpotId : null,
           }),
@@ -89,7 +79,7 @@ export const useUIStore = create<UIStore>()(
   )
 )
 
-// Selectors for optimized re-renders
+// Selectors
 export const useIsPreviewOpen = () => useUIStore((state) => state.isPreviewOpen)
 export const usePreviewSpotId = () => useUIStore((state) => state.previewSpotId)
 export const useIsMobileMenuOpen = () =>
