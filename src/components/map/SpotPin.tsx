@@ -46,22 +46,31 @@ const createImagePinIcon = (
   category?: SpotCategory
 ) => {
   // 핀 크기 설정 (호버/선택 상태에 따라 확대)
-  let size: number = PIN_SIZES.base
-  if (isSelected) size = PIN_SIZES.selected
-  else if (isHovered) size = PIN_SIZES.hovered
+  const getSize = () => {
+    if (isSelected) return PIN_SIZES.selected
+    if (isHovered) return PIN_SIZES.hovered
+    return PIN_SIZES.base
+  }
+  const size = getSize()
 
   // 카테고리별 색상 적용
   const categoryColor = getCategoryColor(category)
   const categoryIcon = getCategoryIcon(category)
 
   // 테두리 색상 및 스타일 (카테고리 색상 적용)
-  const borderColor = isSelected
-    ? '#fbbf24'
-    : isHovered
-      ? '#60a5fa'
-      : categoryColor
-  const borderWidth = isSelected ? 4 : isHovered ? 3 : 3
-  const shadowIntensity = isSelected ? 0.5 : isHovered ? 0.45 : 0.3
+  const getBorderColor = () => {
+    if (isSelected) return '#fbbf24'
+    if (isHovered) return '#60a5fa'
+    return categoryColor
+  }
+  const borderColor = getBorderColor()
+  const borderWidth = isSelected ? 4 : 3
+  const getShadowIntensity = () => {
+    if (isSelected) return 0.5
+    if (isHovered) return 0.45
+    return 0.3
+  }
+  const shadowIntensity = getShadowIntensity()
 
   // 호버 시 글로우 효과
   const glowEffect =
@@ -231,11 +240,12 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const isSelected = selectedSpotId === spot.id
 
   // Z-Index 계산: 호버 > 선택 > 기본
-  const zIndexOffset = isHovered
-    ? Z_INDEX.hovered
-    : isSelected
-      ? Z_INDEX.selected
-      : Z_INDEX.base
+  const getZIndexOffset = () => {
+    if (isHovered) return Z_INDEX.hovered
+    if (isSelected) return Z_INDEX.selected
+    return Z_INDEX.base
+  }
+  const zIndexOffset = getZIndexOffset()
 
   // 아이콘을 메모이제이션하여 불필요한 재생성 방지 (카테고리 색상/아이콘 적용)
   const icon = useMemo(
