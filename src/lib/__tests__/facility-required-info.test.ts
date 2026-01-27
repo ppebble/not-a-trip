@@ -1,13 +1,11 @@
 import fc from 'fast-check'
 import { NearbyFacility, FacilityType } from '@/types'
 
-// Feature: anime-pilgrimage-map, Property 5: 편의시설 필수 정보 포함
-// Validates: Requirements 4.1
-
 /**
- * 편의시설 렌더링에 필수 정보가 포함되어 있는지 검증하는 함수
- * NearbyFacilities 컴포넌트의 FacilityCard가 표시해야 하는 정보를 검증
+ * Property 5: 편의시설 필수 정보 포함
+ * Validates: Requirements 4.1
  */
+
 export function validateFacilityRequiredInfo(facility: NearbyFacility): {
   hasName: boolean
   hasType: boolean
@@ -38,22 +36,13 @@ export function validateFacilityRequiredInfo(facility: NearbyFacility): {
   }
 }
 
-/**
- * 거리를 사용자 친화적 형태로 변환 (NearbyFacilities 컴포넌트와 동일한 로직)
- */
 export function formatDistance(meters: number): string {
   if (meters < 1000) {
     return `${Math.round(meters)}m`
-  } else {
-    return `${(meters / 1000).toFixed(1)}km`
   }
+  return `${(meters / 1000).toFixed(1)}km`
 }
 
-/**
- * Generators for property-based testing
- */
-
-// Generate valid facility type
 const facilityTypeArbitrary: fc.Arbitrary<FacilityType> = fc.constantFrom(
   'restaurant',
   'convenience_store',
@@ -62,13 +51,11 @@ const facilityTypeArbitrary: fc.Arbitrary<FacilityType> = fc.constantFrom(
   'other'
 )
 
-// Generate valid coordinates tuple
 const coordinatesTupleArbitrary: fc.Arbitrary<[number, number]> = fc.tuple(
   fc.double({ min: -90, max: 90, noNaN: true }),
   fc.double({ min: -180, max: 180, noNaN: true })
 )
 
-// Generate valid NearbyFacility object
 const nearbyFacilityArbitrary: fc.Arbitrary<NearbyFacility> = fc.record({
   id: fc.uuid(),
   name: fc

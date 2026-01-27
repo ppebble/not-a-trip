@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { spotKeys, SpotDetailData } from './useSpots'
+import { API_ROUTES } from '@/lib/api-routes'
 
 /**
  * Hook to fetch detailed spot information
@@ -13,7 +14,7 @@ export function useSpotDetail(spotId: string | null) {
         throw new Error('Spot ID is required')
       }
 
-      const response = await fetch(`/api/spots/${spotId}`)
+      const response = await fetch(API_ROUTES.SPOTS.DETAIL(spotId))
 
       if (!response.ok) {
         throw new Error(
@@ -58,7 +59,7 @@ export function useNearbyFacilities(spotId: string | null) {
         throw new Error('Spot ID is required')
       }
 
-      const response = await fetch(`/api/spots/${spotId}/facilities`)
+      const response = await fetch(API_ROUTES.SPOTS.FACILITIES(spotId))
 
       if (!response.ok) {
         throw new Error(

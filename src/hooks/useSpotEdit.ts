@@ -12,6 +12,7 @@ import {
 import { SpotFormData } from './useSpotRegistration'
 import { spotKeys } from './useSpots'
 import { validateExternalLinks } from '@/lib/external-link-validation'
+import { API_ROUTES } from '@/lib/api-routes'
 
 // 스팟 상세 데이터 인터페이스 (수정용)
 interface SpotEditData {
@@ -73,7 +74,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
   const { data: spot, isLoading } = useQuery({
     queryKey: spotKeys.detail(spotId),
     queryFn: async (): Promise<SpotEditData> => {
-      const response = await fetch(`/api/spots/${spotId}`)
+      const response = await fetch(API_ROUTES.SPOTS.DETAIL(spotId))
       if (!response.ok) {
         throw new Error('스팟을 불러올 수 없습니다')
       }
@@ -182,7 +183,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
           externalLinks: formData.externalLinks,
         }
 
-        const response = await fetch(`/api/spots/${spotId}`, {
+        const response = await fetch(API_ROUTES.SPOTS.DETAIL(spotId), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody),
@@ -227,7 +228,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
     setIsDeleting(true)
 
     try {
-      const response = await fetch(`/api/spots/${spotId}`, {
+      const response = await fetch(API_ROUTES.SPOTS.DETAIL(spotId), {
         method: 'DELETE',
       })
 

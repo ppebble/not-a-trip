@@ -10,6 +10,7 @@ import {
   CreateSpotInput,
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
+import { API_ROUTES } from '@/lib/api-routes'
 
 // 폼 상태 인터페이스
 export interface SpotFormData {
@@ -145,7 +146,7 @@ export function useSpotRegistration(): UseSpotRegistrationReturn {
           externalLinks: formData.externalLinks,
         }
 
-        const response = await fetch('/api/spots', {
+        const response = await fetch(API_ROUTES.SPOTS.BASE, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody),

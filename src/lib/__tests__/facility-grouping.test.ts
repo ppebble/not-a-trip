@@ -2,14 +2,11 @@ import fc from 'fast-check'
 import { NearbyFacility, FacilityType } from '@/types'
 import { groupFacilitiesByType, VALID_FACILITY_TYPES } from '../facility-utils'
 
-// Feature: anime-pilgrimage-map, Property 4: 편의시설 타입별 분류
-// Validates: Requirements 3.4, 4.2
-
 /**
- * Generators for property-based testing
+ * Property 4: 편의시설 타입별 분류
+ * Validates: Requirements 3.4, 4.2
  */
 
-// Generate valid facility type
 const facilityTypeArbitrary: fc.Arbitrary<FacilityType> = fc.constantFrom(
   'restaurant',
   'convenience_store',
@@ -18,13 +15,11 @@ const facilityTypeArbitrary: fc.Arbitrary<FacilityType> = fc.constantFrom(
   'other'
 )
 
-// Generate valid coordinates tuple
 const coordinatesTupleArbitrary: fc.Arbitrary<[number, number]> = fc.tuple(
   fc.double({ min: -90, max: 90, noNaN: true }),
   fc.double({ min: -180, max: 180, noNaN: true })
 )
 
-// Generate valid NearbyFacility object
 const nearbyFacilityArbitrary: fc.Arbitrary<NearbyFacility> = fc.record({
   id: fc.uuid(),
   name: fc
@@ -38,7 +33,6 @@ const nearbyFacilityArbitrary: fc.Arbitrary<NearbyFacility> = fc.record({
   coordinates: coordinatesTupleArbitrary,
 })
 
-// Generate array of NearbyFacility objects
 const facilitiesArrayArbitrary = fc.array(nearbyFacilityArbitrary, {
   minLength: 0,
   maxLength: 50,

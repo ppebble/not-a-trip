@@ -93,48 +93,68 @@
     - 관리자 계정으로 로그인 시 모든 스팟에 수정/삭제 버튼 표시
     - _Requirements: 신규_
 
-- [ ] 7. API 업데이트
-  - [ ] 7.1 스팟 등록/수정 API에 externalLinks 처리 추가
+- [x] 7. API 업데이트
+  - [x] 7.1 스팟 등록/수정 API에 externalLinks 처리 추가
     - `src/app/api/spots/route.ts` 수정 (POST)
     - `src/app/api/spots/[id]/route.ts` 수정 (PUT)
     - externalLinks 필드 저장
     - _Requirements: 3.3_
-  - [ ] 7.2 외부 링크 유효성 검사 미들웨어
+  - [x] 7.2 외부 링크 유효성 검사 미들웨어
     - URL 형식 검증
     - 링크 개수 제한 (최대 10개)
     - _Requirements: 3.4_
 
-- [ ] 8. 기존 스팟 데이터에 샘플 외부 링크 추가
-  - [ ] 8.1 seed-real-spots.ts 업데이트
+- [x] 8. 기존 스팟 데이터에 샘플 외부 링크 추가
+  - [x] 8.1 seed-real-spots.ts 업데이트
     - 스포츠 스팟에 공식 홈페이지, 티켓 예매 링크 추가
     - 음악 스팟에 공연장 홈페이지, 예매 링크 추가
     - _Requirements: 2.1, 3.1, 3.2_
 
-- [ ] 9. Checkpoint - 카테고리별 콘텐츠 섹션 확인
+- [x] 9. Checkpoint - 카테고리별 콘텐츠 섹션 확인
   - 애니메이션/영화 스팟에서 작품 속 장면 섹션 표시 확인
   - 스포츠/음악 스팟에서 이벤트 정보 섹션 표시 확인
   - 외부 링크 추가/삭제 기능 테스트
   - 관리자 계정으로 모든 스팟 수정/삭제 가능 확인
   - 사용자 피드백 수렴
 
-- [ ] 10. 코드 리팩토링
-  - [ ] 10.1 주석 정리
+- [x] 10. 코드 리팩토링
+  - [x] 10.1 주석 정리
     - 불필요한 주석 제거
     - 필요한 주석은 명확하게 작성
     - _Requirements: 코드 품질_
-  - [ ] 10.2 삼항연산자 정리
+  - [x] 10.2 삼항연산자 정리
     - 복잡한 삼항연산자를 조건문 또는 early return으로 변경
     - 가독성 향상을 위한 코드 스타일 개선
-    - 코드 스타일 예시는 사용자가 제공 예정
+    - 코드 스타일 예시: `.kiro/steering/code-example/`
     - _Requirements: 코드 품질_
-  - [ ] 10.3 API URL 상수화
-    - `src/lib/constants.ts` 또는 `src/lib/api-routes.ts` 생성
+  - [x] 10.3 API URL 상수화
+    - `src/lib/api-routes.ts` 생성
     - 직접 문자열로 작성된 API URL을 상수로 관리
     - _Requirements: 유지보수성_
-  - [ ] 10.4 커스텀 훅 정리 및 적용
-    - 사용자가 제공하는 useQuery, axios 관련 훅 수정/보완
-    - 기존 fetch 로직을 커스텀 훅으로 교체
+  - [x] 10.4 커스텀 훅 useFetchQuery 생성
+    - `src/hooks/useFetchQuery.ts` 생성
+    - useQuery 래퍼 훅으로 공통 fetch 로직 추상화
     - _Requirements: 코드 재사용성_
+  - [x] 10.5 SceneGallery 컴포넌트 분리
+    - `src/components/spot/scene/` 디렉토리 생성
+    - SceneCard, SceneCarousel, AddSceneModal 분리
+    - index.ts로 export 관리
+    - _Requirements: 코드 품질_
+  - [x] 10.6 SpotForm 하위 컴포넌트 분리
+    - `src/components/spot/form/` 디렉토리 생성
+    - ErrorMessages, UserInfoBanner, PhotoUploadSection 분리
+    - index.ts로 export 관리
+    - _Requirements: 코드 품질_
+  - [x] 10.7 hooks 파일 early return 패턴 적용
+    - usePosts.ts 삼항연산자 정리
+    - useScenes.ts 삼항연산자 정리
+    - _Requirements: 코드 품질_
+  - [x] 10.8 타입 파일 분리
+    - `src/types/spot.ts` - 스팟 관련 타입
+    - `src/types/community.ts` - 커뮤니티 관련 타입
+    - `src/types/api.ts` - API 응답 타입
+    - index.ts에서 re-export
+    - _Requirements: 코드 품질_
 
 ## Notes
 

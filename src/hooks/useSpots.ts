@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { SpotCategory, RelatedContent, ExternalLink } from '@/types'
+import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 
 // Types for spot data
 export interface SpotPin {
@@ -31,11 +32,11 @@ export interface SpotDetailData {
   photos: string[]
   address: string
   coordinates: [number, number]
-  category?: SpotCategory // 스팟 카테고리 (마이그레이션 전 optional)
-  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
-  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠 (Requirements 3.3)
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
-  // 작성자 정보 (마이그레이션 전 optional)
+  category?: SpotCategory
+  /** @deprecated relatedContent 사용 권장 */
+  relatedMedia?: MediaInfo[]
+  relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
@@ -99,13 +100,9 @@ export function useSpots(categories?: SpotCategory[]) {
   return useQuery({
     queryKey: spotKeys.list({ categories }),
     queryFn: async (): Promise<SpotPin[]> => {
-      // 카테고리 필터 쿼리 파라미터 생성
-      const params = new URLSearchParams()
-      if (categories && categories.length > 0) {
-        params.set('category', categories.join(','))
-      }
-
-      const url = `/api/spots${params.toString() ? `?${params.toString()}` : ''}`
+      const url = buildUrl(API_ROUTES.SPOTS.BASE, {
+        category: categories?.length ? categories.join(',') : undefined,
+      })
       const response = await fetch(url)
 
       if (!response.ok) {
@@ -134,7 +131,7 @@ export function useSpotPreview(spotId: string | null) {
         throw new Error('Spot ID is required')
       }
 
-      const response = await fetch(`/api/spots/${spotId}`)
+      const response = await fetch(API_ROUTES.SPOTS.DETAIL(spotId))
 
       if (!response.ok) {
         throw new Error(
@@ -168,7 +165,7 @@ export function useSpotCommunitySummary() {
   return useQuery({
     queryKey: spotKeys.communitySummary(),
     queryFn: async (): Promise<SpotCommunitySummary[]> => {
-      const response = await fetch('/api/spots/community-summary')
+      const response = await fetch(API_ROUTES.SPOTS.COMMUNITY_SUMMARY)
 
       if (!response.ok) {
         throw new Error(
@@ -193,7 +190,7 @@ export function useMediaCommunitySummary() {
   return useQuery({
     queryKey: mediaKeys.communitySummary(),
     queryFn: async (): Promise<MediaCommunitySummary[]> => {
-      const response = await fetch('/api/media/community-summary')
+      const response = await fetch(API_ROUTES.MEDIA.COMMUNITY_SUMMARY)
 
       if (!response.ok) {
         throw new Error(
