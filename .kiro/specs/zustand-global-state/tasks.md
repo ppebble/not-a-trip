@@ -30,14 +30,14 @@
     - props로 받던 likedSceneIds를 likeStore에서 직접 참조
     - _Requirements: 1.2_
 
-- [ ] 2. 인증 UI 상태 전역 관리
-  - [ ] 2.1 authStore 생성
+- [x] 2. 인증 UI 상태 전역 관리
+  - [x] 2.1 authStore 생성
     - `src/stores/authStore.ts` 생성
     - isLoggingOut, authError 상태 정의
     - setLoggingOut, setAuthError, clearAuthError 액션 구현
     - selector 함수 제공
     - _Requirements: 2.1, 2.2_
-  - [ ] 2.2 useAuth 훅에 authStore 적용
+  - [x] 2.2 useAuth 훅에 authStore 적용
     - `src/hooks/useAuth.ts` 수정
     - 로컬 상태 isLoggingOut, error를 authStore로 교체
     - 기존 인터페이스 유지 (하위 호환성)

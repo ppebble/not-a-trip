@@ -3,6 +3,7 @@
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import { API_ROUTES } from '@/lib/api-routes'
+import { useAuthStore } from '@/stores/authStore'
 
 interface RegisterData {
   email: string
@@ -18,8 +19,13 @@ interface AuthError {
 export function useAuth() {
   const { data: session, status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  // 전역 스토어에서 인증 UI 상태 가져오기
+  const isLoggingOut = useAuthStore((state) => state.isLoggingOut)
+  const error = useAuthStore((state) => state.authError)
+  const setLoggingOut = useAuthStore((state) => state.setLoggingOut)
+  const setAuthError = useAuthStore((state) => state.setAuthError)
+  const clearAuthError = useAuthStore((state) => state.clearAuthError)
 
   // 낙관적 업데이트: 로그아웃 중이면 인증되지 않은 것으로 처리
   const isAuthenticated = status === 'authenticated' && !isLoggingOut
@@ -29,7 +35,7 @@ export function useAuth() {
   const loginWithCredentials = useCallback(
     async (email: string, password: string) => {
       setIsLoading(true)
-      setError(null)
+      clearAuthError()
 
       try {
         const result = await signIn('credentials', {
@@ -39,43 +45,43 @@ export function useAuth() {
         })
 
         if (result?.error) {
-          setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+          setAuthError('이메일 또는 비밀번호가 올바르지 않습니다.')
           return false
         }
 
         return true
       } catch {
-        setError('로그인 중 오류가 발생했습니다.')
+        setAuthError('로그인 중 오류가 발생했습니다.')
         return false
       } finally {
         setIsLoading(false)
       }
     },
-    []
+    [clearAuthError, setAuthError]
   )
 
   // 소셜 로그인
   const loginWithProvider = useCallback(
     async (provider: 'google' | 'kakao' | 'naver') => {
       setIsLoading(true)
-      setError(null)
+      clearAuthError()
 
       try {
         await signIn(provider, { callbackUrl: '/' })
       } catch {
-        setError('소셜 로그인 중 오류가 발생했습니다.')
+        setAuthError('소셜 로그인 중 오류가 발생했습니다.')
       } finally {
         setIsLoading(false)
       }
     },
-    []
+    [clearAuthError, setAuthError]
   )
 
   // 회원가입
   const register = useCallback(
     async (data: RegisterData) => {
       setIsLoading(true)
-      setError(null)
+      clearAuthError()
 
       try {
         const response = await fetch(API_ROUTES.AUTH.REGISTER, {
@@ -87,34 +93,36 @@ export function useAuth() {
         const result = await response.json()
 
         if (!response.ok) {
-          setError((result as AuthError).error || '회원가입에 실패했습니다.')
+          setAuthError(
+            (result as AuthError).error || '회원가입에 실패했습니다.'
+          )
           return false
         }
 
         // 회원가입 성공 후 자동 로그인
         return await loginWithCredentials(data.email, data.password)
       } catch {
-        setError('회원가입 중 오류가 발생했습니다.')
+        setAuthError('회원가입 중 오류가 발생했습니다.')
         return false
       } finally {
         setIsLoading(false)
       }
     },
-    [loginWithCredentials]
+    [loginWithCredentials, clearAuthError, setAuthError]
   )
 
   // 로그아웃 (낙관적 업데이트 적용)
   const logout = useCallback(async () => {
     // 즉시 로그아웃 상태로 전환하여 UI 업데이트
-    setIsLoggingOut(true)
+    setLoggingOut(true)
     // 백그라운드에서 실제 로그아웃 처리
     signOut({ callbackUrl: '/' })
-  }, [])
+  }, [setLoggingOut])
 
   // 에러 초기화
   const clearError = useCallback(() => {
-    setError(null)
-  }, [])
+    clearAuthError()
+  }, [clearAuthError])
 
   return {
     user: isLoggingOut ? null : session?.user,
