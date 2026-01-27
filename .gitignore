@@ -46,3 +46,6 @@ velog-post.md
 
 # user uploaded files
 /public/uploads/
+
+# code example files (steering reference only)
+.kiro/steering/code-example/
