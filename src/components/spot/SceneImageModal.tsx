@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { Scene } from '@/types'
+import { useLikedSceneIds } from '@/stores/likeStore'
 
 interface SceneImageModalProps {
   scenes: Scene[]
   initialIndex: number
   onClose: () => void
   onLike: (sceneId: string) => void
-  likedSceneIds: Set<string>
 }
 
 /**
@@ -24,8 +24,9 @@ export default function SceneImageModal({
   initialIndex,
   onClose,
   onLike,
-  likedSceneIds,
 }: SceneImageModalProps) {
+  // likeStore에서 직접 참조
+  const likedSceneIds = useLikedSceneIds()
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [scale, setScale] = useState(1)
   const [showLikeAnimation, setShowLikeAnimation] = useState(false)

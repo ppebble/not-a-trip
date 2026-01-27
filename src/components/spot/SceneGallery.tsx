@@ -175,7 +175,6 @@ export default function SceneGallery({
           initialIndex={imageModalIndex}
           onClose={closeImageModal}
           onLike={handleLike}
-          likedSceneIds={likedSceneIds}
         />
       )}
     </div>
