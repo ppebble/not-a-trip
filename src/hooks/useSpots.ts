@@ -31,11 +31,11 @@ export interface SpotDetailData {
   photos: string[]
   address: string
   coordinates: [number, number]
-  category?: SpotCategory // 스팟 카테고리 (마이그레이션 전 optional)
-  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
-  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠 (Requirements 3.3)
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
-  // 작성자 정보 (마이그레이션 전 optional)
+  category?: SpotCategory
+  /** @deprecated relatedContent 사용 권장 */
+  relatedMedia?: MediaInfo[]
+  relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
