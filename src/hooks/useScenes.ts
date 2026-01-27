@@ -24,19 +24,26 @@ export const sceneKeys = {
 }
 
 /**
+ * deviceId 헤더 생성 (Content-Type 없음)
+ */
+function getDeviceIdHeaders(): HeadersInit {
+  const deviceId = getDeviceId()
+  if (!deviceId) return {}
+  return { 'X-Device-Id': deviceId }
+}
+
+/**
  * deviceId 헤더를 포함한 fetch 옵션 생성
  */
 function getHeadersWithDeviceId(): HeadersInit {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  }
-
   const deviceId = getDeviceId()
-  if (deviceId) {
-    headers['X-Device-Id'] = deviceId
+  if (!deviceId) {
+    return { 'Content-Type': 'application/json' }
   }
-
-  return headers
+  return {
+    'Content-Type': 'application/json',
+    'X-Device-Id': deviceId,
+  }
 }
 
 /**
@@ -82,13 +89,9 @@ export function useLikeStatus(sceneId: string | null) {
         throw new Error('Scene ID is required')
       }
 
-      const deviceId = getDeviceId()
-      const headers: HeadersInit = {}
-      if (deviceId) {
-        headers['X-Device-Id'] = deviceId
-      }
-
-      const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), { headers })
+      const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), {
+        headers: getDeviceIdHeaders(),
+      })
 
       if (!response.ok) {
         throw new Error('Failed to fetch like status')
@@ -141,15 +144,9 @@ export function useToggleLike() {
 
   return useMutation({
     mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
-      const deviceId = getDeviceId()
-      const headers: HeadersInit = {}
-      if (deviceId) {
-        headers['X-Device-Id'] = deviceId
-      }
-
       const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), {
         method: 'POST',
-        headers,
+        headers: getDeviceIdHeaders(),
       })
 
       if (!response.ok) {
@@ -183,15 +180,9 @@ export function useUnlikeScene() {
 
   return useMutation({
     mutationFn: async (sceneId: string): Promise<LikeToggleResponse> => {
-      const deviceId = getDeviceId()
-      const headers: HeadersInit = {}
-      if (deviceId) {
-        headers['X-Device-Id'] = deviceId
-      }
-
       const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), {
         method: 'DELETE',
-        headers,
+        headers: getDeviceIdHeaders(),
       })
 
       if (!response.ok) {
@@ -216,12 +207,7 @@ export function useUnlikeScene() {
 export async function fetchLikeStatuses(
   sceneIds: string[]
 ): Promise<Map<string, boolean>> {
-  const deviceId = getDeviceId()
-  const headers: HeadersInit = {}
-  if (deviceId) {
-    headers['X-Device-Id'] = deviceId
-  }
-
+  const headers = getDeviceIdHeaders()
   const results = new Map<string, boolean>()
 
   await Promise.all(
