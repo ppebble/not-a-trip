@@ -43,19 +43,19 @@
     - 기존 인터페이스 유지 (하위 호환성)
     - _Requirements: 2.3_
 
-- [ ] 3. 카테고리 필터 상태 전역 관리
-  - [ ] 3.1 filterStore 생성
+- [x] 3. 카테고리 필터 상태 전역 관리
+  - [x] 3.1 filterStore 생성
     - `src/stores/filterStore.ts` 생성
     - selectedCategories 상태 정의
     - setSelectedCategories, toggleCategory, clearCategories 액션 구현
     - selector 함수 제공
     - _Requirements: 3.1_
-  - [ ] 3.2 CategoryFilter에 filterStore 적용
+  - [x] 3.2 CategoryFilter에 filterStore 적용
     - `src/components/map/CategoryFilter.tsx` 수정
     - props로 받던 selectedCategories를 filterStore로 교체
     - onChange 콜백 대신 filterStore.toggleCategory 직접 호출
     - _Requirements: 3.2_
-  - [ ] 3.3 PilgrimageMap에 filterStore 적용
+  - [x] 3.3 PilgrimageMap에 filterStore 적용
     - `src/components/map/PilgrimageMap.tsx` 수정
     - 로컬 상태 selectedCategories를 filterStore로 교체
     - useSpots 훅에 filterStore.selectedCategories 전달

@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSpots } from '@/hooks/useSpots'
 import SpotPreview from '@/components/map/SpotPreview'
 import CategoryFilter from '@/components/map/CategoryFilter'
-import { SpotCategory } from '@/types'
+import { useSelectedCategories } from '@/stores/filterStore'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -91,12 +90,11 @@ function SpotErrorDisplay({
  * - 반응형 레이아웃 지원
  * - 실제 API 데이터 연동 (Task 6.2)
  * - 카테고리 필터링 지원 (Requirements 2.2)
+ * - filterStore 전역 상태 사용 (Requirements 3.3)
  */
 export default function Home() {
-  // 카테고리 필터 상태 관리
-  const [selectedCategories, setSelectedCategories] = useState<SpotCategory[]>(
-    []
-  )
+  // filterStore에서 카테고리 필터 상태 가져오기
+  const selectedCategories = useSelectedCategories()
 
   // 실제 API에서 스팟 데이터 가져오기 (카테고리 필터 적용)
   const {
@@ -152,10 +150,7 @@ export default function Home() {
         {/* 카테고리 필터 (하단 중앙 플로팅 바) */}
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
           <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
-            <CategoryFilter
-              selectedCategories={selectedCategories}
-              onChange={setSelectedCategories}
-            />
+            <CategoryFilter />
           </div>
         </div>
 
