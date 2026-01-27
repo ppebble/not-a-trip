@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection } from '@/lib/db'
 import { auth } from '@/lib/auth'
-import { SpotPin, SpotCategory, CreateSpotInput, RelatedContent } from '@/types'
+import {
+  SpotPin,
+  SpotCategory,
+  CreateSpotInput,
+  RelatedContent,
+  ExternalLink,
+} from '@/types'
+import { validateExternalLinks } from '@/lib/external-link-validation'
 
 /**
  * 다음 스팟 ID 생성 (SPOT-{숫자} 형식)
@@ -53,6 +60,7 @@ interface SpotDocument {
     year?: number
   }[]
   relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
@@ -155,6 +163,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       errors.push('위치 좌표는 필수입니다')
     }
 
+    // 외부 링크 유효성 검사 (Requirements 3.3, 3.4)
+    if (body.externalLinks && body.externalLinks.length > 0) {
+      const linkValidation = validateExternalLinks(body.externalLinks)
+      if (!linkValidation.isValid) {
+        errors.push(...linkValidation.errors)
+      }
+    }
+
     if (errors.length > 0) {
       return NextResponse.json(
         { error: '유효성 검사 실패', details: errors },
@@ -180,6 +196,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       category: body.category,
       relatedMedia: [], // 기존 호환성 유지
       relatedContent: body.relatedContent || [],
+      externalLinks: body.externalLinks || [],
       authorId: session.user.id,
       authorName:
         session.user.name || session.user.email?.split('@')[0] || '익명',
