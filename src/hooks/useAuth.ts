@@ -2,6 +2,7 @@
 
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useCallback, useState } from 'react'
+import { API_ROUTES } from '@/lib/api-routes'
 
 interface RegisterData {
   email: string
@@ -77,7 +78,7 @@ export function useAuth() {
       setError(null)
 
       try {
-        const response = await fetch('/api/auth/register', {
+        const response = await fetch(API_ROUTES.AUTH.REGISTER, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

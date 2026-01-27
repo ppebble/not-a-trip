@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 
 // Types for post data
 export interface Post {
@@ -98,13 +99,12 @@ export function usePosts(filters?: {
   return useQuery({
     queryKey: getQueryKey(),
     queryFn: async (): Promise<Post[]> => {
-      const params = new URLSearchParams()
-      if (spotId) params.set('spotId', spotId)
-      if (mediaTitle) params.set('mediaTitle', mediaTitle)
-      if (type) params.set('type', type)
-      if (search) params.set('search', search)
-
-      const url = `/api/posts${params.toString() ? `?${params.toString()}` : ''}`
+      const url = buildUrl(API_ROUTES.POSTS.BASE, {
+        spotId,
+        mediaTitle,
+        type,
+        search,
+      })
       const response = await fetch(url)
 
       if (!response.ok) {
@@ -138,7 +138,7 @@ export function usePostsBySpot(spotId: string | null) {
         throw new Error('Spot ID is required')
       }
 
-      const response = await fetch(`/api/posts?spotId=${spotId}`)
+      const response = await fetch(buildUrl(API_ROUTES.POSTS.BASE, { spotId }))
 
       if (!response.ok) {
         throw new Error(
@@ -173,7 +173,7 @@ export function usePostsByMedia(mediaTitle: string | null) {
       }
 
       const response = await fetch(
-        `/api/posts?mediaTitle=${encodeURIComponent(mediaTitle)}`
+        buildUrl(API_ROUTES.POSTS.BASE, { mediaTitle })
       )
 
       if (!response.ok) {
@@ -207,7 +207,7 @@ export function usePostDetail(postId: string | null) {
         throw new Error('Post ID is required')
       }
 
-      const response = await fetch(`/api/posts/${postId}`)
+      const response = await fetch(API_ROUTES.POSTS.DETAIL(postId))
 
       if (!response.ok) {
         throw new Error(
@@ -239,7 +239,7 @@ export function useComments(postId: string | null) {
         throw new Error('Post ID is required')
       }
 
-      const response = await fetch(`/api/posts/${postId}/comments`)
+      const response = await fetch(API_ROUTES.POSTS.COMMENTS(postId))
 
       if (!response.ok) {
         throw new Error(
@@ -271,7 +271,7 @@ export function useCreatePost() {
 
   return useMutation({
     mutationFn: async (data: CreatePostInput): Promise<Post> => {
-      const response = await fetch('/api/posts', {
+      const response = await fetch(API_ROUTES.POSTS.BASE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -316,7 +316,7 @@ export function useCreateComment() {
 
   return useMutation({
     mutationFn: async (data: CreateCommentInput): Promise<Comment> => {
-      const response = await fetch(`/api/posts/${data.postId}/comments`, {
+      const response = await fetch(API_ROUTES.POSTS.COMMENTS(data.postId), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -373,7 +373,7 @@ export function useDeleteComment() {
       password?: string
     }): Promise<void> => {
       const response = await fetch(
-        `/api/posts/${data.postId}/comments/${data.commentId}`,
+        API_ROUTES.POSTS.COMMENT_DETAIL(data.postId, data.commentId),
         {
           method: 'DELETE',
           headers: {
@@ -419,7 +419,7 @@ export function useUpdatePost() {
     mutationFn: async (
       data: UpdatePostInput & { password?: string }
     ): Promise<Post> => {
-      const response = await fetch(`/api/posts/${data.postId}`, {
+      const response = await fetch(API_ROUTES.POSTS.DETAIL(data.postId), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -472,7 +472,7 @@ export function useDeletePost() {
       postId: string
       password?: string
     }): Promise<void> => {
-      const response = await fetch(`/api/posts/${data.postId}`, {
+      const response = await fetch(API_ROUTES.POSTS.DETAIL(data.postId), {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

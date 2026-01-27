@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Scene, CreateSceneInput, UserLikeStatus } from '@/types'
 import { getDeviceId } from '@/lib/device-id'
+import { API_ROUTES } from '@/lib/api-routes'
 
 // API response type
 interface ScenesResponse {
@@ -49,7 +50,7 @@ export function useScenesBySpot(spotId: string | null) {
         throw new Error('Spot ID is required')
       }
 
-      const response = await fetch(`/api/spots/${spotId}/scenes`)
+      const response = await fetch(API_ROUTES.SPOTS.SCENES(spotId))
 
       if (!response.ok) {
         throw new Error(
@@ -87,7 +88,7 @@ export function useLikeStatus(sceneId: string | null) {
         headers['X-Device-Id'] = deviceId
       }
 
-      const response = await fetch(`/api/scenes/${sceneId}/like`, { headers })
+      const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), { headers })
 
       if (!response.ok) {
         throw new Error('Failed to fetch like status')
@@ -109,7 +110,7 @@ export function useCreateScene() {
 
   return useMutation({
     mutationFn: async (input: CreateSceneInput): Promise<Scene> => {
-      const response = await fetch(`/api/spots/${input.spotId}/scenes`, {
+      const response = await fetch(API_ROUTES.SPOTS.SCENES(input.spotId), {
         method: 'POST',
         headers: getHeadersWithDeviceId(),
         body: JSON.stringify(input),
@@ -146,7 +147,7 @@ export function useToggleLike() {
         headers['X-Device-Id'] = deviceId
       }
 
-      const response = await fetch(`/api/scenes/${sceneId}/like`, {
+      const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), {
         method: 'POST',
         headers,
       })
@@ -188,7 +189,7 @@ export function useUnlikeScene() {
         headers['X-Device-Id'] = deviceId
       }
 
-      const response = await fetch(`/api/scenes/${sceneId}/like`, {
+      const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), {
         method: 'DELETE',
         headers,
       })
@@ -226,7 +227,9 @@ export async function fetchLikeStatuses(
   await Promise.all(
     sceneIds.map(async (sceneId) => {
       try {
-        const response = await fetch(`/api/scenes/${sceneId}/like`, { headers })
+        const response = await fetch(API_ROUTES.SCENES.LIKE(sceneId), {
+          headers,
+        })
         if (response.ok) {
           const data = await response.json()
           results.set(sceneId, data.liked)
