@@ -7,6 +7,11 @@ import { SpotCategory, SECTION_HEADERS, SECTION_ICONS } from '@/types'
 import SceneImageModal from './SceneImageModal'
 import { API_ROUTES } from '@/lib/api-routes'
 import { SceneCarousel, AddSceneModal, SceneGallerySkeleton } from './scene'
+import {
+  useLikeStore,
+  useLikedSceneIds,
+  useIsLoadingLikes,
+} from '@/stores/likeStore'
 
 interface SceneGalleryProps {
   spotId: string
@@ -22,8 +27,11 @@ export default function SceneGallery({
   const toggleLike = useToggleLike()
   const [showAddModal, setShowAddModal] = useState(false)
   const [imageModalIndex, setImageModalIndex] = useState<number | null>(null)
-  const [likedSceneIds, setLikedSceneIds] = useState<Set<string>>(new Set())
-  const [isLoadingLikes, setIsLoadingLikes] = useState(false)
+
+  // likeStore 전역 상태 사용
+  const likedSceneIds = useLikedSceneIds()
+  const isLoadingLikes = useIsLoadingLikes()
+  const { setLikedSceneIds, toggleLikedScene, setLoadingLikes } = useLikeStore()
 
   useEffect(() => {
     const fetchLikeStatuses = async () => {
@@ -32,7 +40,7 @@ export default function SceneGallery({
         return
       }
 
-      setIsLoadingLikes(true)
+      setLoadingLikes(true)
       try {
         const { getDeviceId } = await import('@/lib/device-id')
         const deviceId = getDeviceId()
@@ -60,30 +68,22 @@ export default function SceneGallery({
       } catch {
         // 에러 시 빈 상태 유지
       } finally {
-        setIsLoadingLikes(false)
+        setLoadingLikes(false)
       }
     }
 
     fetchLikeStatuses()
-  }, [scenes])
+  }, [scenes, setLikedSceneIds, setLoadingLikes])
 
   const handleLike = useCallback(
     (sceneId: string) => {
       toggleLike.mutate(sceneId, {
-        onSuccess: (data) => {
-          setLikedSceneIds((prev) => {
-            const newSet = new Set(prev)
-            if (data.liked) {
-              newSet.add(sceneId)
-            } else {
-              newSet.delete(sceneId)
-            }
-            return newSet
-          })
+        onSuccess: () => {
+          toggleLikedScene(sceneId)
         },
       })
     },
-    [toggleLike]
+    [toggleLike, toggleLikedScene]
   )
 
   const handleSceneClick = (index: number) => {
