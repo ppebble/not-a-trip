@@ -57,6 +57,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.name,
           image: user.image,
+          role: user.role || 'user',
         }
       },
     }),
@@ -74,12 +75,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id
         token.provider = account?.provider || 'credentials'
       }
+
+      // 매번 DB에서 role 조회 (role 변경 즉시 반영)
+      if (token.email) {
+        try {
+          const db = await getDb()
+          const dbUser = await db.collection('users').findOne({
+            email: token.email,
+          })
+          if (dbUser) {
+            token.role = dbUser.role || 'user'
+            // eslint-disable-next-line no-console
+            console.log(`[Auth] User ${token.email} role: ${token.role}`)
+          } else {
+            token.role = 'user'
+            // eslint-disable-next-line no-console
+            console.log(
+              `[Auth] User ${token.email} not found, default role: user`
+            )
+          }
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('[Auth] DB lookup error:', error)
+          token.role = token.role || 'user'
+        }
+      }
+
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
         session.user.provider = token.provider as string
+        session.user.role = token.role as 'user' | 'admin'
       }
       return session
     },
