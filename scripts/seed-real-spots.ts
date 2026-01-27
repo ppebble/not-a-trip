@@ -19,7 +19,7 @@ import type {
 } from '../src/types'
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
-const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
+const MONGODB_DB = process.env.MONGODB_DB || 'not-a-trip'
 
 interface RelatedContent {
   name: string

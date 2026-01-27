@@ -19,7 +19,7 @@
 import { MongoClient, Document } from 'mongodb'
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
-const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
+const MONGODB_DB = process.env.MONGODB_DB || 'not-a-trip'
 
 // 기존 MediaInfo 타입 (마이그레이션 전)
 interface OldMediaInfo {
