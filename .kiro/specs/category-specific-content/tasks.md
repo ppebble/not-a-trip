@@ -117,7 +117,7 @@
   - 관리자 계정으로 모든 스팟 수정/삭제 가능 확인
   - 사용자 피드백 수렴
 
-- [-] 10. 코드 리팩토링
+- [x] 10. 코드 리팩토링
   - [x] 10.1 주석 정리
     - 불필요한 주석 제거
     - 필요한 주석은 명확하게 작성
@@ -127,29 +127,29 @@
     - 가독성 향상을 위한 코드 스타일 개선
     - 코드 스타일 예시: `.kiro/steering/code-example/`
     - _Requirements: 코드 품질_
-  - [ ] 10.3 API URL 상수화
+  - [x] 10.3 API URL 상수화
     - `src/lib/api-routes.ts` 생성
     - 직접 문자열로 작성된 API URL을 상수로 관리
     - _Requirements: 유지보수성_
-  - [ ] 10.4 커스텀 훅 useFetchQuery 생성
+  - [x] 10.4 커스텀 훅 useFetchQuery 생성
     - `src/hooks/useFetchQuery.ts` 생성
     - useQuery 래퍼 훅으로 공통 fetch 로직 추상화
     - _Requirements: 코드 재사용성_
-  - [ ] 10.5 SceneGallery 컴포넌트 분리
+  - [x] 10.5 SceneGallery 컴포넌트 분리
     - `src/components/spot/scene/` 디렉토리 생성
     - SceneCard, SceneCarousel, AddSceneModal 분리
     - index.ts로 export 관리
     - _Requirements: 코드 품질_
-  - [ ] 10.6 SpotForm 하위 컴포넌트 분리
+  - [x] 10.6 SpotForm 하위 컴포넌트 분리
     - `src/components/spot/form/` 디렉토리 생성
     - ErrorMessages, UserInfoBanner, PhotoUploadSection 분리
     - index.ts로 export 관리
     - _Requirements: 코드 품질_
-  - [ ] 10.7 hooks 파일 early return 패턴 적용
+  - [x] 10.7 hooks 파일 early return 패턴 적용
     - usePosts.ts 삼항연산자 정리
     - useScenes.ts 삼항연산자 정리
     - _Requirements: 코드 품질_
-  - [ ] 10.8 타입 파일 분리
+  - [x] 10.8 타입 파일 분리
     - `src/types/spot.ts` - 스팟 관련 타입
     - `src/types/community.ts` - 커뮤니티 관련 타입
     - `src/types/api.ts` - API 응답 타입
