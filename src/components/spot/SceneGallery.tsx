@@ -10,6 +10,7 @@ import {
 } from '@/hooks/useScenes'
 import { Scene, SpotCategory, SECTION_HEADERS, SECTION_ICONS } from '@/types'
 import SceneImageModal from './SceneImageModal'
+import { API_ROUTES } from '@/lib/api-routes'
 
 interface SceneCardProps {
   scene: Scene
@@ -348,7 +349,7 @@ function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
       const formData = new FormData()
       formData.append('file', imageFile)
 
-      const uploadResponse = await fetch('/api/upload', {
+      const uploadResponse = await fetch(API_ROUTES.UPLOAD, {
         method: 'POST',
         body: formData,
       })
@@ -567,7 +568,7 @@ export default function SceneGallery({
         }
 
         const likePromises = scenes.map(async (scene) => {
-          const response = await fetch(`/api/scenes/${scene.id}/like`, {
+          const response = await fetch(API_ROUTES.SCENES.LIKE(scene.id), {
             headers,
           })
           if (response.ok) {

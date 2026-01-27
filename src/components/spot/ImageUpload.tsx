@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, DragEvent, ChangeEvent } from 'react'
 import Image from 'next/image'
+import { API_ROUTES } from '@/lib/api-routes'
 
 /**
  * 업로드된 이미지 정보
@@ -89,7 +90,7 @@ export function ImageUpload({
       formData.append('file', image.file)
 
       try {
-        const response = await fetch('/api/upload', {
+        const response = await fetch(API_ROUTES.UPLOAD, {
           method: 'POST',
           body: formData,
         })
