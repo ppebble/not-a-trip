@@ -87,16 +87,16 @@ export function usePosts(filters?: {
 }) {
   const { spotId, mediaTitle, type, search } = filters || {}
 
+  const getQueryKey = () => {
+    if (search) return postKeys.bySearch(search, type)
+    if (spotId) return postKeys.bySpot(spotId)
+    if (mediaTitle) return postKeys.byMedia(mediaTitle)
+    if (type) return postKeys.byType(type)
+    return postKeys.lists()
+  }
+
   return useQuery({
-    queryKey: search
-      ? postKeys.bySearch(search, type)
-      : spotId
-        ? postKeys.bySpot(spotId)
-        : mediaTitle
-          ? postKeys.byMedia(mediaTitle)
-          : type
-            ? postKeys.byType(type)
-            : postKeys.lists(),
+    queryKey: getQueryKey(),
     queryFn: async (): Promise<Post[]> => {
       const params = new URLSearchParams()
       if (spotId) params.set('spotId', spotId)
