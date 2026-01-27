@@ -12,8 +12,8 @@ export type ExternalLinkType =
 export interface ExternalLink {
   id: string
   type: ExternalLinkType
-  label: string // "공식 홈페이지", "티켓 예매" 등
-  url: string // https://...
+  label: string
+  url: string
 }
 
 export interface LinkTypeConfig {
@@ -35,21 +35,21 @@ export const LINK_TYPE_CONFIG: Record<ExternalLinkType, LinkTypeConfig> = {
 // ============================================
 
 export type SpotCategory =
-  | 'animation' // 애니메이션/만화
-  | 'sports' // 스포츠 (축구, 야구 등)
-  | 'movie_drama' // 영화/드라마
-  | 'music' // 음악/콘서트
-  | 'game' // 게임/e스포츠
-  | 'other' // 기타
+  | 'animation'
+  | 'sports'
+  | 'movie_drama'
+  | 'music'
+  | 'game'
+  | 'other'
 
 export type ContentType =
-  | 'anime' // 애니메이션
-  | 'movie' // 영화
-  | 'drama' // 드라마
-  | 'sports_team' // 스포츠 팀
-  | 'artist' // 아티스트/가수
-  | 'game' // 게임
-  | 'other' // 기타
+  | 'anime'
+  | 'movie'
+  | 'drama'
+  | 'sports_team'
+  | 'artist'
+  | 'game'
+  | 'other'
 
 export interface CategoryConfig {
   icon: string
@@ -72,14 +72,13 @@ export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
 
 export type SectionType = 'scenes' | 'events' | 'info'
 
-// 카테고리별 표시할 섹션
 export const CATEGORY_SECTIONS: Record<SpotCategory, SectionType[]> = {
-  animation: ['scenes'], // 작품 속 장면
-  movie_drama: ['scenes'], // 작품 속 장면
-  sports: ['events'], // 이벤트 정보 (경기 일정)
-  music: ['events'], // 이벤트 정보 (공연 정보)
-  game: ['scenes', 'events'], // 둘 다
-  other: ['info'], // 일반 정보
+  animation: ['scenes'],
+  movie_drama: ['scenes'],
+  sports: ['events'],
+  music: ['events'],
+  game: ['scenes', 'events'],
+  other: ['info'],
 }
 
 // 섹션별 헤더 텍스트
@@ -124,12 +123,15 @@ export interface MediaInfo {
   year?: number
 }
 
-// 확장된 관련 콘텐츠 인터페이스 (다양한 콘텐츠 타입 지원)
+/**
+ * 확장된 관련 콘텐츠 인터페이스
+ * 작품명, 팀명, 아티스트명 등 다양한 콘텐츠 타입 지원
+ */
 export interface RelatedContent {
-  name: string // 콘텐츠 이름 (작품명, 팀명, 아티스트명 등)
-  type: ContentType // 콘텐츠 타입
-  year?: number // 연도 (선택)
-  additionalInfo?: string // 추가 정보 (에피소드, 시즌 등)
+  name: string
+  type: ContentType
+  year?: number
+  additionalInfo?: string
 }
 
 export interface Spot {
@@ -139,17 +141,17 @@ export interface Spot {
   photos: string[]
   address: string
   coordinates: Coordinates
-  category?: SpotCategory // 스팟 카테고리 (마이그레이션 전 optional)
-  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
-  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠 (마이그레이션 후 사용)
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
+  category?: SpotCategory
+  /** @deprecated relatedContent 사용 권장 */
+  relatedMedia?: MediaInfo[]
+  relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   createdAt: Date
   updatedAt: Date
-  // 작성자 정보 (마이그레이션 전 optional)
-  authorId?: string // 회원 작성자 ID
-  authorName?: string // 작성자 이름
-  isGuestSpot?: boolean // 비회원 등록 여부
-  password?: string // 비회원 수정/삭제용 (해시)
+  authorId?: string
+  authorName?: string
+  isGuestSpot?: boolean
+  password?: string
 }
 
 export interface SpotPin {
@@ -157,7 +159,7 @@ export interface SpotPin {
   name: string
   coordinates: [number, number]
   thumbnailUrl: string
-  category?: SpotCategory // 마이그레이션 전 optional
+  category?: SpotCategory
 }
 
 export interface SpotPreviewData {
@@ -175,12 +177,12 @@ export interface SpotDetailData {
   photos: string[]
   address: string
   coordinates: [number, number]
-  category?: SpotCategory // 마이그레이션 전 optional
-  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
-  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
+  category?: SpotCategory
+  /** @deprecated relatedContent 사용 권장 */
+  relatedMedia?: MediaInfo[]
+  relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   nearbyFacilities: NearbyFacility[]
-  // 작성자 정보 (마이그레이션 전 optional)
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
@@ -201,7 +203,8 @@ export interface NearbyFacility {
   id: string
   name: string
   type: FacilityType
-  distance: number // meters
+  /** 거리 (미터 단위) */
+  distance: number
   address: string
   coordinates: [number, number]
 }
@@ -227,12 +230,11 @@ export interface Post {
   updatedAt: Date
   viewCount: number
   commentCount: number
-  spotId?: string // 연결된 스팟 ID (optional)
-  mediaTitle?: string // 연결된 작품 제목 (optional)
-  // 비회원/회원 구분 필드
-  password?: string // 비회원용 비밀번호 (해시 저장)
-  userId?: string // 회원용 사용자 ID (optional)
-  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
+  spotId?: string
+  mediaTitle?: string
+  password?: string
+  userId?: string
+  isGuest: boolean
 }
 
 export interface Comment {
@@ -241,34 +243,33 @@ export interface Comment {
   content: string
   author: string
   createdAt: Date
-  // 비회원/회원 구분 필드
-  password?: string // 비회원용 비밀번호 (해시 저장)
-  userId?: string // 회원용 사용자 ID (optional)
-  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
+  password?: string
+  userId?: string
+  isGuest: boolean
 }
 
 export interface CreatePostInput {
   title: string
   content: string
-  author?: string // 비회원: 닉네임 입력, 회원: 자동 설정
-  password?: string // 비회원용 비밀번호 (필수)
-  spotId?: string // 연결된 스팟 ID (optional)
-  mediaTitle?: string // 연결된 작품 제목 (optional)
+  author?: string
+  password?: string
+  spotId?: string
+  mediaTitle?: string
 }
 
 export interface UpdatePostInput {
   title?: string
   content?: string
-  spotId?: string | null // null로 연결 해제 가능
-  mediaTitle?: string | null // null로 연결 해제 가능
-  password?: string // 비회원 수정 시 비밀번호 확인용
+  spotId?: string | null
+  mediaTitle?: string | null
+  password?: string
 }
 
 export interface CreateCommentInput {
   postId: string
   content: string
-  author?: string // 비회원: 닉네임 입력, 회원: 자동 설정
-  password?: string // 비회원용 비밀번호 (필수)
+  author?: string
+  password?: string
 }
 
 // ============================================
@@ -280,7 +281,7 @@ export interface Scene {
   spotId: string
   imageUrl: string
   animeTitle: string
-  episodeInfo?: string // 예: "1화", "OVA" 등
+  episodeInfo?: string
   description?: string
   likeCount: number
   createdAt: Date
@@ -343,16 +344,16 @@ export interface SpotResponse {
   photos: string[]
   address: string
   coordinates: [number, number]
-  category?: SpotCategory // 마이그레이션 전 optional
-  relatedMedia?: MediaInfo[] // 기존 호환성 유지 (deprecated)
-  relatedContent?: RelatedContent[] // 새로운 관련 콘텐츠
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
+  category?: SpotCategory
+  /** @deprecated relatedContent 사용 권장 */
+  relatedMedia?: MediaInfo[]
+  relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
 }
 
-// 스팟 등록 Input
 export interface CreateSpotInput {
   name: string
   description: string
@@ -361,13 +362,11 @@ export interface CreateSpotInput {
   category: SpotCategory
   photos?: string[]
   relatedContent?: RelatedContent[]
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
-  // 작성자 정보
-  authorName?: string // 비회원용 닉네임
-  password?: string // 비회원용 비밀번호
+  externalLinks?: ExternalLink[]
+  authorName?: string
+  password?: string
 }
 
-// 스팟 수정 Input
 export interface UpdateSpotInput {
   name?: string
   description?: string
@@ -376,8 +375,8 @@ export interface UpdateSpotInput {
   category?: SpotCategory
   photos?: string[]
   relatedContent?: RelatedContent[]
-  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
-  password?: string // 비회원 수정 시 비밀번호 확인용
+  externalLinks?: ExternalLink[]
+  password?: string
 }
 
 // ============================================
@@ -393,7 +392,7 @@ export interface User {
   nickname?: string
   image?: string
   provider: 'credentials' | 'google' | 'kakao' | 'naver'
-  role: UserRole // 사용자 역할 (기본값: 'user')
+  role: UserRole
   createdAt: Date
   updatedAt: Date
 }
