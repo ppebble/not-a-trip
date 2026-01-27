@@ -1,20 +1,16 @@
 import fc from 'fast-check'
 import { Spot, MediaInfo, Coordinates } from '@/types'
 
-// Feature: anime-pilgrimage-map, Property 9: 스팟 데이터 직렬화 라운드트립
-// Validates: Requirements 6.3
-
 /**
- * Generators for property-based testing
+ * Property 9: 스팟 데이터 직렬화 라운드트립
+ * Validates: Requirements 6.3
  */
 
-// Generate valid coordinates (excluding NaN and infinite values)
 const coordinatesArbitrary = fc.record({
   lat: fc.double({ min: -90, max: 90, noNaN: true }),
   lng: fc.double({ min: -180, max: 180, noNaN: true }),
 })
 
-// Generate valid media info
 const mediaInfoArbitrary = fc.record({
   title: fc.string({ minLength: 1, maxLength: 100 }),
   type: fc.constantFrom('anime', 'drama', 'movie', 'other') as fc.Arbitrary<
@@ -23,7 +19,6 @@ const mediaInfoArbitrary = fc.record({
   year: fc.option(fc.integer({ min: 1900, max: 2030 }), { nil: undefined }),
 })
 
-// Generate valid dates (excluding invalid dates)
 const validDateArbitrary = fc
   .date({
     min: new Date('2000-01-01'),
@@ -31,7 +26,6 @@ const validDateArbitrary = fc
   })
   .filter((date) => !isNaN(date.getTime()))
 
-// Generate valid Spot objects (with valid dates and no NaN values)
 const spotArbitrary = fc.record({
   id: fc
     .string({ minLength: 1, maxLength: 50 })
@@ -87,17 +81,12 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
   test('Property 9: 스팟 데이터 직렬화 라운드트립', () => {
     fc.assert(
       fc.property(spotArbitrary, (originalSpot: Spot) => {
-        // Serialize the Spot object to JSON
         const serialized = JSON.stringify(originalSpot)
-
-        // Deserialize back to Spot object
         const deserialized: Spot = JSON.parse(serialized)
 
-        // Convert date strings back to Date objects (JSON.parse doesn't handle dates)
         deserialized.createdAt = new Date(deserialized.createdAt)
         deserialized.updatedAt = new Date(deserialized.updatedAt)
 
-        // The deserialized object should be equivalent to the original
         return spotsAreEquivalent(originalSpot, deserialized)
       }),
       { numRuns: 100 }
@@ -113,22 +102,21 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
           description: fc
             .string({ minLength: 1 })
             .filter((s) => s.trim().length > 0),
-          photos: fc.constant([] as string[]), // Empty photos array
+          photos: fc.constant([] as string[]),
           address: fc
             .string({ minLength: 1 })
             .filter((s) => s.trim().length > 0),
           coordinates: coordinatesArbitrary,
-          relatedMedia: fc.constant([] as MediaInfo[]), // Empty related media array
-          createdAt: validDateArbitrary, // Use validDateArbitrary instead of fc.date
-          updatedAt: validDateArbitrary, // Use validDateArbitrary instead of fc.date
+          relatedMedia: fc.constant([] as MediaInfo[]),
+          createdAt: validDateArbitrary,
+          updatedAt: validDateArbitrary,
         }),
         (originalSpot: Spot) => {
-          // Additional validation to ensure dates are valid
           if (
             isNaN(originalSpot.createdAt.getTime()) ||
             isNaN(originalSpot.updatedAt.getTime())
           ) {
-            return true // Skip invalid dates
+            return true
           }
 
           const serialized = JSON.stringify(originalSpot)
@@ -137,12 +125,11 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
           deserialized.createdAt = new Date(deserialized.createdAt)
           deserialized.updatedAt = new Date(deserialized.updatedAt)
 
-          // Additional validation after deserialization
           if (
             isNaN(deserialized.createdAt.getTime()) ||
             isNaN(deserialized.updatedAt.getTime())
           ) {
-            return false // Fail if deserialization produces invalid dates
+            return false
           }
 
           return spotsAreEquivalent(originalSpot, deserialized)
@@ -179,7 +166,7 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
               ) as fc.Arbitrary<MediaInfo['type']>,
               year: fc.option(fc.integer({ min: 1900, max: 2030 }), {
                 nil: undefined,
-              }), // Use option for proper undefined handling
+              }),
             }),
             { minLength: 1, maxLength: 3 }
           ),
@@ -187,12 +174,11 @@ describe('Spot Data Serialization Round-trip Property Tests', () => {
           updatedAt: validDateArbitrary,
         }),
         (originalSpot: Spot) => {
-          // Ensure dates are valid before serialization
           if (
             isNaN(originalSpot.createdAt.getTime()) ||
             isNaN(originalSpot.updatedAt.getTime())
           ) {
-            return true // Skip invalid dates
+            return true
           }
 
           const serialized = JSON.stringify(originalSpot)

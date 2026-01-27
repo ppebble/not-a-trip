@@ -2,14 +2,11 @@ import fc from 'fast-check'
 import { validatePostInput } from '@/lib/post-validation'
 import { CreatePostInput } from '@/types'
 
-// Feature: anime-pilgrimage-map, Property 7: 게시글 유효성 검사
-// Validates: Requirements 5.2
-
 /**
- * Generators for property-based testing
+ * Property 7: 게시글 유효성 검사
+ * Validates: Requirements 5.2
  */
 
-// 공백만 포함된 문자열 생성기
 const whitespaceOnlyArbitrary = fc
   .array(fc.constantFrom(' ', '\t', '\n', '\r', '\u00A0'), {
     minLength: 0,
@@ -17,15 +14,11 @@ const whitespaceOnlyArbitrary = fc
   })
   .map((chars) => chars.join(''))
 
-// 유효한 문자열 생성기 (공백이 아닌 문자 포함)
 const validStringArbitrary = fc
   .string({ minLength: 1, maxLength: 500 })
   .filter((s) => s.trim().length > 0)
 
 describe('Post Validation Property Tests', () => {
-  // Property 7: 게시글 유효성 검사
-  // For any 제목 또는 내용이 비어있거나 공백만 있는 CreatePostInput은 거부되어야 함
-
   test('Property 7: 빈 제목은 거부되어야 함', () => {
     fc.assert(
       fc.property(
