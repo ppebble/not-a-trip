@@ -1,0 +1,232 @@
+// ============================================
+// External Link Types (외부 링크)
+// ============================================
+
+export type ExternalLinkType =
+  | 'official'
+  | 'ticket'
+  | 'schedule'
+  | 'sns'
+  | 'other'
+
+export interface ExternalLink {
+  id: string
+  type: ExternalLinkType
+  label: string
+  url: string
+}
+
+export interface LinkTypeConfig {
+  label: string
+  icon: string
+  color: string
+}
+
+export const LINK_TYPE_CONFIG: Record<ExternalLinkType, LinkTypeConfig> = {
+  official: { label: '공식 홈페이지', icon: '🏠', color: '#3B82F6' },
+  ticket: { label: '티켓 예매', icon: '🎫', color: '#10B981' },
+  schedule: { label: '일정 확인', icon: '📅', color: '#F59E0B' },
+  sns: { label: 'SNS', icon: '📱', color: '#8B5CF6' },
+  other: { label: '기타', icon: '🔗', color: '#6B7280' },
+}
+
+// ============================================
+// Spot Category & Content Types
+// ============================================
+
+export type SpotCategory =
+  | 'animation'
+  | 'sports'
+  | 'movie_drama'
+  | 'music'
+  | 'game'
+  | 'other'
+
+export type ContentType =
+  | 'anime'
+  | 'movie'
+  | 'drama'
+  | 'sports_team'
+  | 'artist'
+  | 'game'
+  | 'other'
+
+export interface CategoryConfig {
+  icon: string
+  color: string
+  label: string
+}
+
+export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
+  animation: { icon: '🎬', color: '#FF6B6B', label: '애니메이션' },
+  sports: { icon: '⚽', color: '#4ECDC4', label: '스포츠' },
+  movie_drama: { icon: '🎥', color: '#45B7D1', label: '영화/드라마' },
+  music: { icon: '🎵', color: '#96CEB4', label: '음악/콘서트' },
+  game: { icon: '🎮', color: '#DDA0DD', label: '게임' },
+  other: { icon: '📍', color: '#95A5A6', label: '기타' },
+}
+
+// ============================================
+// Category Section Mapping (카테고리별 섹션 매핑)
+// ============================================
+
+export type SectionType = 'scenes' | 'events' | 'info'
+
+export const CATEGORY_SECTIONS: Record<SpotCategory, SectionType[]> = {
+  animation: ['scenes'],
+  movie_drama: ['scenes'],
+  sports: ['events'],
+  music: ['events'],
+  game: ['scenes', 'events'],
+  other: ['info'],
+}
+
+export const SECTION_HEADERS: Record<
+  SectionType,
+  Partial<Record<SpotCategory, string>>
+> = {
+  scenes: {
+    animation: '작품 속 장면',
+    movie_drama: '작품 속 장면',
+    game: '게임 속 장면',
+  },
+  events: {
+    sports: '경기 일정',
+    music: '공연 정보',
+    game: 'e스포츠 경기',
+  },
+  info: {
+    other: '정보',
+  },
+}
+
+export const SECTION_ICONS: Record<SectionType, string> = {
+  scenes: '🎬',
+  events: '📅',
+  info: '📍',
+}
+
+// ============================================
+// Spot Types
+// ============================================
+
+export interface Coordinates {
+  lat: number
+  lng: number
+}
+
+export interface MediaInfo {
+  title: string
+  type: 'anime' | 'drama' | 'movie' | 'other'
+  year?: number
+}
+
+export interface RelatedContent {
+  name: string
+  type: ContentType
+  year?: number
+  additionalInfo?: string
+}
+
+export interface Spot {
+  id: string
+  name: string
+  description: string
+  photos: string[]
+  address: string
+  coordinates: Coordinates
+  category?: SpotCategory
+  /** @deprecated relatedContent 사용 권장 */
+  relatedMedia?: MediaInfo[]
+  relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
+  createdAt: Date
+  updatedAt: Date
+  authorId?: string
+  authorName?: string
+  isGuestSpot?: boolean
+  password?: string
+}
+
+export interface SpotPin {
+  id: string
+  name: string
+  coordinates: [number, number]
+  thumbnailUrl: string
+  category?: SpotCategory
+}
+
+export interface SpotPreviewData {
+  id: string
+  name: string
+  description: string
+  photoUrl: string
+  address: string
+}
+
+// ============================================
+// Facility Types
+// ============================================
+
+export type FacilityType =
+  | 'restaurant'
+  | 'convenience_store'
+  | 'cafe'
+  | 'station'
+  | 'other'
+
+export interface NearbyFacility {
+  id: string
+  name: string
+  type: FacilityType
+  distance: number
+  address: string
+  coordinates: [number, number]
+}
+
+export interface Facility {
+  id: string
+  name: string
+  type: FacilityType
+  address: string
+  coordinates: Coordinates
+}
+
+// ============================================
+// Scene Types (작품 속 장면)
+// ============================================
+
+export interface Scene {
+  id: string
+  spotId: string
+  imageUrl: string
+  animeTitle: string
+  episodeInfo?: string
+  description?: string
+  likeCount: number
+  createdAt: Date
+}
+
+export interface CreateSceneInput {
+  spotId: string
+  imageUrl: string
+  animeTitle: string
+  episodeInfo?: string
+  description?: string
+}
+
+// ============================================
+// User Like Types (사용자 좋아요)
+// ============================================
+
+export interface UserLike {
+  id: string
+  userId: string
+  sceneId: string
+  createdAt: Date
+}
+
+export interface UserLikeStatus {
+  liked: boolean
+  likeCount: number
+}
