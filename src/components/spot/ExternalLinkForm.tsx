@@ -269,12 +269,12 @@ export function ExternalLinkForm({
   }
 
   // 카테고리별 섹션 제목
-  const sectionTitle =
-    category === 'sports'
-      ? '경기/이벤트 관련 링크'
-      : category === 'music'
-        ? '공연/이벤트 관련 링크'
-        : '관련 링크'
+  const getSectionTitle = () => {
+    if (category === 'sports') return '경기/이벤트 관련 링크'
+    if (category === 'music') return '공연/이벤트 관련 링크'
+    return '관련 링크'
+  }
+  const sectionTitle = getSectionTitle()
 
   return (
     <div className="space-y-4">
