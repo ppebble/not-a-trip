@@ -11,7 +11,12 @@
  */
 
 import { MongoClient } from 'mongodb'
-import type { SpotCategory, ContentType } from '../src/types'
+import type {
+  SpotCategory,
+  ContentType,
+  ExternalLink,
+  ExternalLinkType,
+} from '../src/types'
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
 const MONGODB_DB = process.env.MONGODB_DB || 'anime-pilgrimage-map'
@@ -32,10 +37,21 @@ interface SeedSpot {
   coordinates: { lat: number; lng: number }
   category: SpotCategory
   relatedContent: RelatedContent[]
+  externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   authorName: string
   isGuestSpot: boolean
   createdAt: Date
   updatedAt: Date
+}
+
+// 외부 링크 생성 헬퍼 함수
+function createExternalLink(
+  id: string,
+  type: ExternalLinkType,
+  label: string,
+  url: string
+): ExternalLink {
+  return { id, type, label, url }
 }
 
 // ============================================
@@ -255,6 +271,26 @@ const SPORTS_SPOTS: SeedSpot[] = [
     relatedContent: [
       { name: 'FC 바르셀로나', type: 'sports_team', additionalInfo: '라리가' },
     ],
+    externalLinks: [
+      createExternalLink(
+        'spo-001-1',
+        'official',
+        'FC 바르셀로나 공식',
+        'https://www.fcbarcelona.com'
+      ),
+      createExternalLink(
+        'spo-001-2',
+        'ticket',
+        '티켓 예매',
+        'https://www.fcbarcelona.com/en/tickets'
+      ),
+      createExternalLink(
+        'spo-001-3',
+        'schedule',
+        '경기 일정',
+        'https://www.fcbarcelona.com/en/football/first-team/schedule'
+      ),
+    ],
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -275,6 +311,26 @@ const SPORTS_SPOTS: SeedSpot[] = [
         type: 'sports_team',
         additionalInfo: '프리미어리그',
       },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'spo-002-1',
+        'official',
+        '맨유 공식',
+        'https://www.manutd.com'
+      ),
+      createExternalLink(
+        'spo-002-2',
+        'ticket',
+        '티켓 예매',
+        'https://www.manutd.com/en/tickets-and-hospitality'
+      ),
+      createExternalLink(
+        'spo-002-3',
+        'schedule',
+        '경기 일정',
+        'https://www.manutd.com/en/matches/first-team'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -297,6 +353,26 @@ const SPORTS_SPOTS: SeedSpot[] = [
         additionalInfo: '일본프로야구 센트럴리그',
       },
     ],
+    externalLinks: [
+      createExternalLink(
+        'spo-003-1',
+        'official',
+        '한신 타이거스 공식',
+        'https://hanshintigers.jp'
+      ),
+      createExternalLink(
+        'spo-003-2',
+        'ticket',
+        '티켓 예매',
+        'https://hanshintigers.jp/ticket/'
+      ),
+      createExternalLink(
+        'spo-003-3',
+        'schedule',
+        '경기 일정',
+        'https://hanshintigers.jp/game/schedule/'
+      ),
+    ],
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -313,6 +389,26 @@ const SPORTS_SPOTS: SeedSpot[] = [
     category: 'sports',
     relatedContent: [
       { name: '레알 마드리드', type: 'sports_team', additionalInfo: '라리가' },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'spo-004-1',
+        'official',
+        '레알 마드리드 공식',
+        'https://www.realmadrid.com'
+      ),
+      createExternalLink(
+        'spo-004-2',
+        'ticket',
+        '티켓 예매',
+        'https://www.realmadrid.com/en/tickets'
+      ),
+      createExternalLink(
+        'spo-004-3',
+        'schedule',
+        '경기 일정',
+        'https://www.realmadrid.com/en/football/schedule'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -331,6 +427,26 @@ const SPORTS_SPOTS: SeedSpot[] = [
     relatedContent: [
       { name: 'LG 트윈스', type: 'sports_team', additionalInfo: 'KBO 리그' },
       { name: '두산 베어스', type: 'sports_team', additionalInfo: 'KBO 리그' },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'spo-005-1',
+        'official',
+        'KBO 리그 공식',
+        'https://www.koreabaseball.com'
+      ),
+      createExternalLink(
+        'spo-005-2',
+        'ticket',
+        '티켓링크 예매',
+        'https://www.ticketlink.co.kr'
+      ),
+      createExternalLink(
+        'spo-005-3',
+        'schedule',
+        '경기 일정',
+        'https://www.koreabaseball.com/Schedule/Schedule.aspx'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -352,6 +468,26 @@ const SPORTS_SPOTS: SeedSpot[] = [
         type: 'sports_team',
         additionalInfo: '프리미어리그',
       },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'spo-006-1',
+        'official',
+        '리버풀 FC 공식',
+        'https://www.liverpoolfc.com'
+      ),
+      createExternalLink(
+        'spo-006-2',
+        'ticket',
+        '티켓 예매',
+        'https://www.liverpoolfc.com/tickets'
+      ),
+      createExternalLink(
+        'spo-006-3',
+        'schedule',
+        '경기 일정',
+        'https://www.liverpoolfc.com/fixtures'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -479,6 +615,20 @@ const MUSIC_SPOTS: SeedSpot[] = [
     coordinates: { lat: 51.532, lng: -0.178 },
     category: 'music',
     relatedContent: [{ name: '비틀즈 (The Beatles)', type: 'artist' }],
+    externalLinks: [
+      createExternalLink(
+        'mus-001-1',
+        'official',
+        'Abbey Road Studios',
+        'https://www.abbeyroad.com'
+      ),
+      createExternalLink(
+        'mus-001-2',
+        'other',
+        '실시간 웹캠',
+        'https://www.abbeyroad.com/crossing'
+      ),
+    ],
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -497,6 +647,26 @@ const MUSIC_SPOTS: SeedSpot[] = [
       { name: 'BTS', type: 'artist' },
       { name: '블랙핑크', type: 'artist' },
     ],
+    externalLinks: [
+      createExternalLink(
+        'mus-002-1',
+        'official',
+        '도쿄돔 공식',
+        'https://www.tokyo-dome.co.jp'
+      ),
+      createExternalLink(
+        'mus-002-2',
+        'schedule',
+        '이벤트 일정',
+        'https://www.tokyo-dome.co.jp/dome/schedule/'
+      ),
+      createExternalLink(
+        'mus-002-3',
+        'ticket',
+        '티켓 예매 (e+)',
+        'https://eplus.jp'
+      ),
+    ],
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -513,6 +683,20 @@ const MUSIC_SPOTS: SeedSpot[] = [
     category: 'music',
     relatedContent: [
       { name: '엘비스 프레슬리 (Elvis Presley)', type: 'artist' },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'mus-003-1',
+        'official',
+        '그레이스랜드 공식',
+        'https://www.graceland.com'
+      ),
+      createExternalLink(
+        'mus-003-2',
+        'ticket',
+        '투어 예매',
+        'https://www.graceland.com/tours'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -532,6 +716,26 @@ const MUSIC_SPOTS: SeedSpot[] = [
       { name: 'BTS', type: 'artist' },
       { name: '세븐틴', type: 'artist' },
     ],
+    externalLinks: [
+      createExternalLink(
+        'mus-004-1',
+        'official',
+        'HYBE 인사이트 공식',
+        'https://www.hybeinsight.com'
+      ),
+      createExternalLink(
+        'mus-004-2',
+        'ticket',
+        '예약하기',
+        'https://www.hybeinsight.com/reservation'
+      ),
+      createExternalLink(
+        'mus-004-3',
+        'sns',
+        '인스타그램',
+        'https://www.instagram.com/hlobal_official'
+      ),
+    ],
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -550,6 +754,20 @@ const MUSIC_SPOTS: SeedSpot[] = [
       { name: 'EXO', type: 'artist' },
       { name: 'NCT', type: 'artist' },
       { name: '에스파', type: 'artist' },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'mus-005-1',
+        'official',
+        'SM타운 공식',
+        'https://www.smtown.com'
+      ),
+      createExternalLink(
+        'mus-005-2',
+        'sns',
+        '트위터',
+        'https://twitter.com/SMTOWN'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -571,6 +789,26 @@ const MUSIC_SPOTS: SeedSpot[] = [
         type: 'other',
         additionalInfo: '다양한 아티스트',
       },
+    ],
+    externalLinks: [
+      createExternalLink(
+        'mus-006-1',
+        'official',
+        'KSPO DOME 공식',
+        'https://www.ksponco.or.kr'
+      ),
+      createExternalLink(
+        'mus-006-2',
+        'ticket',
+        '인터파크 티켓',
+        'https://tickets.interpark.com'
+      ),
+      createExternalLink(
+        'mus-006-3',
+        'ticket',
+        '멜론티켓',
+        'https://ticket.melon.com'
+      ),
     ],
     authorName: 'System',
     isGuestSpot: false,
