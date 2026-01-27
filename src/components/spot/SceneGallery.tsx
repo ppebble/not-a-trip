@@ -7,11 +7,7 @@ import { SpotCategory, SECTION_HEADERS, SECTION_ICONS } from '@/types'
 import SceneImageModal from './SceneImageModal'
 import { API_ROUTES } from '@/lib/api-routes'
 import { SceneCarousel, AddSceneModal, SceneGallerySkeleton } from './scene'
-import {
-  useLikeStore,
-  useLikedSceneIds,
-  useIsLoadingLikes,
-} from '@/stores/likeStore'
+import { useLikeStore, useIsLoadingLikes } from '@/stores/likeStore'
 
 interface SceneGalleryProps {
   spotId: string
@@ -29,7 +25,6 @@ export default function SceneGallery({
   const [imageModalIndex, setImageModalIndex] = useState<number | null>(null)
 
   // likeStore 전역 상태 사용
-  const likedSceneIds = useLikedSceneIds()
   const isLoadingLikes = useIsLoadingLikes()
   const { setLikedSceneIds, toggleLikedScene, setLoadingLikes } = useLikeStore()
 
@@ -160,7 +155,6 @@ export default function SceneGallery({
             onLike={handleLike}
             isLiking={toggleLike.isPending}
             onSceneClick={handleSceneClick}
-            likedSceneIds={likedSceneIds}
           />
         )}
       </div>
