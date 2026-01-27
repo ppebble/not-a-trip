@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Scene } from '@/types'
+import { useLikedSceneIds } from '@/stores/likeStore'
 
 interface SceneCardProps {
   scene: Scene
   onLike: (sceneId: string) => void
   isLiking: boolean
   onClick: () => void
-  initialLiked?: boolean
 }
 
 /**
@@ -22,26 +22,30 @@ export function SceneCard({
   onLike,
   isLiking,
   onClick,
-  initialLiked = false,
 }: SceneCardProps) {
-  const [liked, setLiked] = useState(initialLiked)
-  const [localLikeCount, setLocalLikeCount] = useState(scene.likeCount)
+  // likeStore에서 직접 참조
+  const likedSceneIds = useLikedSceneIds()
+  const liked = likedSceneIds.has(scene.id)
 
+  // 낙관적 업데이트를 위한 로컬 좋아요 수 관리
+  const [localLikeCount, setLocalLikeCount] = useState(scene.likeCount)
+  const [prevLiked, setPrevLiked] = useState(liked)
+
+  // liked 상태가 변경되면 localLikeCount 업데이트 (낙관적 업데이트)
   useEffect(() => {
-    setLiked(initialLiked)
-  }, [initialLiked])
+    if (liked !== prevLiked) {
+      if (liked) {
+        setLocalLikeCount((prev) => prev + 1)
+      } else {
+        setLocalLikeCount((prev) => Math.max(0, prev - 1))
+      }
+      setPrevLiked(liked)
+    }
+  }, [liked, prevLiked])
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (isLiking) return
-
-    if (liked) {
-      setLiked(false)
-      setLocalLikeCount((prev) => Math.max(0, prev - 1))
-    } else {
-      setLiked(true)
-      setLocalLikeCount((prev) => prev + 1)
-    }
     onLike(scene.id)
   }
 

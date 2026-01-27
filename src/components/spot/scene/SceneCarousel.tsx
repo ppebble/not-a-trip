@@ -9,7 +9,6 @@ interface SceneCarouselProps {
   onLike: (sceneId: string) => void
   isLiking: boolean
   onSceneClick: (index: number) => void
-  likedSceneIds: Set<string>
 }
 
 /**
@@ -20,7 +19,6 @@ export function SceneCarousel({
   onLike,
   isLiking,
   onSceneClick,
-  likedSceneIds,
 }: SceneCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(1)
@@ -72,7 +70,6 @@ export function SceneCarousel({
               onLike={onLike}
               isLiking={isLiking}
               onClick={() => onSceneClick(startIdx + idx)}
-              initialLiked={likedSceneIds.has(scene.id)}
             />
           ))}
         </div>
