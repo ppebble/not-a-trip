@@ -8,7 +8,9 @@ import {
   SpotCategory,
   RelatedContent,
   UpdateSpotInput,
+  ExternalLink,
 } from '@/types'
+import { validateExternalLinks } from '@/lib/external-link-validation'
 
 // MongoDB document interface
 interface SpotDocument {
@@ -28,6 +30,7 @@ interface SpotDocument {
     year?: number
   }[]
   relatedContent?: RelatedContent[]
+  externalLinks?: ExternalLink[]
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
@@ -66,6 +69,7 @@ export async function GET(
         year: media.year,
       })),
       relatedContent: spot.relatedContent,
+      externalLinks: spot.externalLinks,
       authorId: spot.authorId,
       authorName: spot.authorName,
       isGuestSpot: spot.isGuestSpot,
@@ -139,6 +143,14 @@ export async function PUT(
       errors.push('위치 좌표는 필수입니다')
     }
 
+    // 외부 링크 유효성 검사 (Requirements 3.3, 3.4)
+    if (body.externalLinks && body.externalLinks.length > 0) {
+      const linkValidation = validateExternalLinks(body.externalLinks)
+      if (!linkValidation.isValid) {
+        errors.push(...linkValidation.errors)
+      }
+    }
+
     if (errors.length > 0) {
       return NextResponse.json(
         { error: '유효성 검사 실패', details: errors },
@@ -163,6 +175,8 @@ export async function PUT(
     if (body.category) updateFields.category = body.category
     if (body.photos) updateFields.photos = body.photos
     if (body.relatedContent) updateFields.relatedContent = body.relatedContent
+    if (body.externalLinks !== undefined)
+      updateFields.externalLinks = body.externalLinks
 
     await collection.updateOne({ id }, { $set: updateFields })
 
