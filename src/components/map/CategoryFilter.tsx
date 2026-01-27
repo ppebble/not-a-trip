@@ -1,46 +1,31 @@
 'use client'
 
 import { SpotCategory, CATEGORY_CONFIG } from '@/types'
-
-interface CategoryFilterProps {
-  selectedCategories: SpotCategory[]
-  onChange: (categories: SpotCategory[]) => void
-}
-
-const ALL_CATEGORIES: SpotCategory[] = [
-  'animation',
-  'sports',
-  'movie_drama',
-  'music',
-  'game',
-  'other',
-]
+import {
+  useFilterStore,
+  useSelectedCategories,
+  ALL_CATEGORIES,
+} from '@/stores/filterStore'
 
 /**
  * 카테고리 필터 컴포넌트
  * Requirements 2.2: 카테고리별 스팟 필터링 UI
+ * Requirements 3.2: filterStore 전역 상태 사용
  */
-export default function CategoryFilter({
-  selectedCategories,
-  onChange,
-}: CategoryFilterProps) {
+export default function CategoryFilter() {
+  const selectedCategories = useSelectedCategories()
+  const { toggleCategory, selectAllCategories, clearCategories } =
+    useFilterStore()
+
   const handleCategoryToggle = (category: SpotCategory) => {
-    if (selectedCategories.includes(category)) {
-      // 카테고리 제거
-      onChange(selectedCategories.filter((c) => c !== category))
-    } else {
-      // 카테고리 추가
-      onChange([...selectedCategories, category])
-    }
+    toggleCategory(category)
   }
 
   const handleSelectAll = () => {
     if (selectedCategories.length === ALL_CATEGORIES.length) {
-      // 모두 선택된 상태면 전체 해제
-      onChange([])
+      clearCategories()
     } else {
-      // 전체 선택
-      onChange([...ALL_CATEGORIES])
+      selectAllCategories()
     }
   }
 
