@@ -55,7 +55,7 @@
     - **Validates: Requirements 2.1**
 
 - [ ] 6. SearchInput 컴포넌트 구현
-  - [ ] 6.1 SearchInput 기본 컴포넌트 생성
+  - [x] 6.1 SearchInput 기본 컴포넌트 생성
     - 검색어 입력 필드
     - 초기화 버튼 (X)
     - 플레이스홀더 텍스트
