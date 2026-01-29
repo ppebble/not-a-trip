@@ -6,8 +6,8 @@
 
 ## Tasks
 
-- [ ] 1. filterStore 검색 상태 확장
-  - [ ] 1.1 filterStore에 searchQuery 상태 및 액션 추가
+- [x] 1. filterStore 검색 상태 확장
+  - [x] 1.1 filterStore에 searchQuery 상태 및 액션 추가
     - searchQuery: string 필드 추가
     - setSearchQuery, clearSearchQuery 액션 추가
     - useSearchQuery 셀렉터 추가
@@ -16,8 +16,8 @@
     - **Property 10: 스토어 검색어 상태 독립성**
     - **Validates: Requirements 4.1, 4.3, 4.4**
 
-- [ ] 2. 자동완성 API 구현
-  - [ ] 2.1 /api/content-names 엔드포인트 생성
+- [x] 2. 자동완성 API 구현
+  - [x] 2.1 /api/content-names 엔드포인트 생성
     - GET 메서드로 중복 제거된 콘텐츠명 목록 반환
     - search 쿼리 파라미터로 서버 사이드 필터링
     - 각 항목에 category, count 정보 포함
@@ -29,8 +29,8 @@
     - **Property 11: 자동완성 API 중복 제거**
     - **Validates: Requirements 2.2, 2.6, 5.2, 5.3**
 
-- [ ] 3. 스팟 API 검색 필터 통합
-  - [ ] 3.1 /api/spots에 search 쿼리 파라미터 추가
+- [x] 3. 스팟 API 검색 필터 통합
+  - [x] 3.1 /api/spots에 search 쿼리 파라미터 추가
     - relatedContent.name 부분 일치 검색 (대소문자 무시)
     - category와 AND 조건 결합
     - 빈 문자열 시 필터 미적용

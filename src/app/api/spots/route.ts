@@ -11,6 +11,14 @@ import {
 import { validateExternalLinks } from '@/lib/external-link-validation'
 
 /**
+ * 정규식 특수문자 이스케이프 처리
+ * MongoDB $regex에서 안전하게 사용하기 위함
+ */
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, (match) => '\\' + match)
+}
+
+/**
  * 다음 스팟 ID 생성 (SPOT-{숫자} 형식)
  * 기존 스팟 중 가장 큰 번호를 찾아서 +1
  */
@@ -71,25 +79,42 @@ interface SpotDocument {
 /**
  * GET /api/spots - 모든 스팟 목록 조회 (핀 표시용)
  * Requirements: 1.2, 6.2, 2.2 (카테고리 필터링)
+ * Requirements: 6.1, 6.2, 6.3, 6.4 (검색 필터링)
  * Query params:
  *   - category: 카테고리 필터 (쉼표로 구분, 예: animation,sports)
+ *   - search: 검색어 필터 (relatedContent.name 부분 일치, 대소문자 무시)
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const collection = await getCollection<SpotDocument>('spots')
 
-    // 카테고리 필터 파라미터 파싱
+    // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url)
     const categoryParam = searchParams.get('category')
+    const searchParam = searchParams.get('search')
 
     // MongoDB 쿼리 조건 생성
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: Record<string, any> = {}
 
+    // 카테고리 필터 (Requirements 2.2)
     if (categoryParam) {
       const categories = categoryParam.split(',').filter(Boolean)
       if (categories.length > 0) {
         query.category = { $in: categories }
+      }
+    }
+
+    // 검색 필터 (Requirements 6.1, 6.2, 6.3, 6.4)
+    // - 빈 문자열이 아닌 경우에만 필터 적용 (6.4)
+    // - relatedContent.name 부분 일치 검색 (6.2)
+    // - 대소문자 무시 (6.2)
+    // - category와 AND 조건 결합 (6.3)
+    if (searchParam && searchParam.trim() !== '') {
+      const escapedSearch = escapeRegex(searchParam.trim())
+      query['relatedContent.name'] = {
+        $regex: escapedSearch,
+        $options: 'i', // 대소문자 무시
       }
     }
 

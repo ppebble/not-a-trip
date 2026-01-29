@@ -61,17 +61,17 @@
     - useSpots 훅에 filterStore.selectedCategories 전달
     - _Requirements: 3.3_
 
-- [ ] 4. 코드 정리 및 검증
-  - [ ] 4.1 불필요한 로컬 상태 코드 제거
+- [x] 4. 코드 정리 및 검증
+  - [x] 4.1 불필요한 로컬 상태 코드 제거
     - 마이그레이션 완료된 컴포넌트에서 사용하지 않는 로컬 상태 제거
     - 불필요한 props 제거
     - _Requirements: 코드 품질_
-  - [ ] 4.2 스토어 index.ts 생성
+  - [x] 4.2 스토어 index.ts 생성
     - `src/stores/index.ts` 생성
     - 모든 스토어 re-export
     - _Requirements: 코드 품질_
 
-- [ ] 5. Checkpoint - 전역 상태 관리 검증
+- [x] 5. Checkpoint - 전역 상태 관리 검증
   - 좋아요 상태가 페이지 이동 후에도 유지되는지 확인
   - 카테고리 필터가 지도와 동기화되는지 확인
   - 로그아웃 상태가 전역으로 관리되는지 확인
