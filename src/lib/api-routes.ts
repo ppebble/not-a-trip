@@ -37,6 +37,9 @@ export const API_ROUTES = {
     COMMUNITY_SUMMARY: '/api/media/community-summary',
   },
 
+  // Content Names (자동완성)
+  CONTENT_NAMES: '/api/content-names',
+
   // Upload
   UPLOAD: '/api/upload',
 } as const
