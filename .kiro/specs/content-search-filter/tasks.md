@@ -45,7 +45,7 @@
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 5. useAutocomplete 훅 구현
-  - [ ] 5.1 useAutocomplete 커스텀 훅 생성
+  - [x] 5.1 useAutocomplete 커스텀 훅 생성
     - 2글자 이상 입력 시 API 호출
     - 300ms 디바운스 적용
     - suggestions, isLoading, error 반환
