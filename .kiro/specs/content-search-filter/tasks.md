@@ -78,8 +78,8 @@
     - **Property 5: 제안 항목 선택 시 검색어 설정 및 필터 적용**
     - **Validates: Requirements 2.3, 2.4**
 
-- [ ] 8. ContentSearchFilter 통합 컴포넌트 구현
-  - [ ] 8.1 ContentSearchFilter 컴포넌트 생성
+- [x] 8. ContentSearchFilter 통합 컴포넌트 구현
+  - [x] 8.1 ContentSearchFilter 컴포넌트 생성
     - SearchInput + AutocompleteDropdown 결합
     - 자동완성 드롭다운 표시/숨김 로직
     - _Requirements: 1.1, 2.7_
