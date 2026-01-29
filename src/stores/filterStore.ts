@@ -13,18 +13,22 @@ const ALL_CATEGORIES: SpotCategory[] = [
 
 interface FilterStore {
   selectedCategories: SpotCategory[]
+  searchQuery: string
 
   setSelectedCategories: (categories: SpotCategory[]) => void
   toggleCategory: (category: SpotCategory) => void
   selectAllCategories: () => void
   clearCategories: () => void
   resetFilterState: () => void
+  setSearchQuery: (query: string) => void
+  clearSearchQuery: () => void
 }
 
 export const useFilterStore = create<FilterStore>()(
   devtools(
     (set) => ({
       selectedCategories: [...ALL_CATEGORIES],
+      searchQuery: '',
 
       setSelectedCategories: (categories) =>
         set(
@@ -63,10 +67,16 @@ export const useFilterStore = create<FilterStore>()(
 
       resetFilterState: () =>
         set(
-          { selectedCategories: [...ALL_CATEGORIES] },
+          { selectedCategories: [...ALL_CATEGORIES], searchQuery: '' },
           false,
           'filterStore/resetFilterState'
         ),
+
+      setSearchQuery: (query) =>
+        set({ searchQuery: query }, false, 'filterStore/setSearchQuery'),
+
+      clearSearchQuery: () =>
+        set({ searchQuery: '' }, false, 'filterStore/clearSearchQuery'),
     }),
     {
       name: 'filter-store',
@@ -77,6 +87,8 @@ export const useFilterStore = create<FilterStore>()(
 // Selectors
 export const useSelectedCategories = () =>
   useFilterStore((state) => state.selectedCategories)
+
+export const useSearchQuery = () => useFilterStore((state) => state.searchQuery)
 
 // Constants export
 export { ALL_CATEGORIES }

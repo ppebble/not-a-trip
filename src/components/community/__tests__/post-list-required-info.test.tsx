@@ -3,7 +3,7 @@
  */
 
 import fc from 'fast-check'
-import { render, cleanup } from '@testing-library/react'
+import { render, cleanup, act } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Post } from '@/hooks/usePosts'
 import PostList from '../PostList'
@@ -20,7 +20,7 @@ afterEach(() => {
  * Generators for property-based testing
  */
 
-// Generate valid Post objects
+// Generate valid Post objects with dates in the past (relative to now)
 const postArbitrary = fc.record({
   id: fc
     .string({ minLength: 1, maxLength: 50 })
@@ -34,7 +34,10 @@ const postArbitrary = fc.record({
   author: fc
     .string({ minLength: 1, maxLength: 100 })
     .filter((s) => s.trim().length > 0),
-  createdAt: fc.date({ min: new Date('2020-01-01'), max: new Date() }),
+  // Generate dates that are always in the past (1 hour to 365 days ago)
+  createdAt: fc
+    .integer({ min: 1, max: 365 * 24 })
+    .map((hoursAgo) => new Date(Date.now() - hoursAgo * 60 * 60 * 1000)),
   viewCount: fc.nat({ max: 100000 }),
   commentCount: fc.nat({ max: 1000 }),
 })
@@ -68,16 +71,15 @@ function containsRequiredInfo(container: HTMLElement, post: Post): boolean {
     content.includes(viewCountStr) || content.includes(formattedViewCount)
 
   // Check if date is present (in some format)
-  // Date can be displayed as relative time or formatted date
+  // Date can be displayed as relative time or formatted date (Korean format)
+  // formatRelativeDate returns: "방금 전", "N분 전", "N시간 전", "어제", "N일 전", or "YYYY년 M월 D일"
   const hasDate =
     content.includes('분 전') ||
     content.includes('시간 전') ||
     content.includes('일 전') ||
     content.includes('어제') ||
     content.includes('방금 전') ||
-    content.includes(post.createdAt.getFullYear().toString()) ||
-    content.includes('년') ||
-    content.includes('월')
+    content.includes('년')
 
   return hasTitle && hasAuthor && hasViewCount && hasDate
 }
@@ -137,16 +139,20 @@ describe('PostList Required Information Property Tests', () => {
         // Set mock data for the hook
         mockPostsData = posts
 
-        // Render the PostList component
-        const { container } = render(
-          <QueryClientProvider client={queryClient}>
-            <PostList />
-          </QueryClientProvider>
-        )
+        // Render the PostList component wrapped in act
+        let container: HTMLElement
+        act(() => {
+          const result = render(
+            <QueryClientProvider client={queryClient}>
+              <PostList />
+            </QueryClientProvider>
+          )
+          container = result.container
+        })
 
         // Verify that all required information is present for each post
         // Requirements 5.1: 제목, 작성자, 날짜, 조회수 표시
-        return posts.every((post) => containsRequiredInfo(container, post))
+        return posts.every((post) => containsRequiredInfo(container!, post))
       }),
       { numRuns: 100 }
     )
