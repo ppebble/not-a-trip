@@ -3,12 +3,13 @@
 import { useState, useCallback } from 'react'
 import AutocompleteDropdown from '@/components/map/AutocompleteDropdown'
 import SearchInput from '@/components/map/SearchInput'
+import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useAutocomplete } from '@/hooks/useAutocomplete'
 import { useFilterStore, useSearchQuery } from '@/stores/filterStore'
 import type { AutocompleteItem } from '@/hooks/useAutocomplete'
 
 /**
- * AutocompleteDropdown 컴포넌트 테스트 페이지
+ * 검색 컴포넌트 테스트 페이지
  */
 export default function AutocompleteTestPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -45,15 +46,26 @@ export default function AutocompleteTestPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="mb-6 text-2xl font-bold text-gray-900">
-          AutocompleteDropdown 테스트
+      <div className="mx-auto max-w-2xl space-y-8">
+        <h1 className="text-2xl font-bold text-gray-900">
+          검색 컴포넌트 테스트
         </h1>
 
-        {/* 테스트 영역 */}
+        {/* ContentSearchFilter 통합 컴포넌트 테스트 */}
         <div className="rounded-lg bg-white p-6 shadow-lg">
           <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            검색 입력 + 자동완성
+            ContentSearchFilter (통합 컴포넌트)
+          </h2>
+          <ContentSearchFilter className="w-full" />
+          <p className="mt-2 text-sm text-gray-500">
+            SearchInput + AutocompleteDropdown 결합된 완성형 컴포넌트
+          </p>
+        </div>
+
+        {/* 개별 컴포넌트 테스트 영역 */}
+        <div className="rounded-lg bg-white p-6 shadow-lg">
+          <h2 className="mb-4 text-lg font-semibold text-gray-800">
+            개별 컴포넌트 (SearchInput + AutocompleteDropdown)
           </h2>
 
           <div className="relative">
