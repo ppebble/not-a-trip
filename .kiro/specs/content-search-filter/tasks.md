@@ -66,8 +66,8 @@
     - **Property 2: 초기화 버튼 클릭 시 검색어 리셋**
     - **Validates: Requirements 1.3, 1.5**
 
-- [ ] 7. AutocompleteDropdown 컴포넌트 구현
-  - [ ] 7.1 AutocompleteDropdown 컴포넌트 생성
+- [-] 7. AutocompleteDropdown 컴포넌트 구현
+  - [x] 7.1 AutocompleteDropdown 컴포넌트 생성
     - 제안 항목 목록 표시
     - 카테고리 아이콘 및 스팟 개수 표시
     - 항목 클릭 시 선택 처리
