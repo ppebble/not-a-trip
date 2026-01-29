@@ -8,6 +8,7 @@ import type { AutocompleteItem } from '@/hooks/useAutocomplete'
  * AutocompleteDropdown 컴포넌트 Props
  */
 interface AutocompleteDropdownProps {
+  id?: string
   items: AutocompleteItem[]
   isLoading: boolean
   onSelect: (item: AutocompleteItem) => void
@@ -40,6 +41,7 @@ function getCategoryLabel(category: SpotCategory): string {
  * - 2.7: SearchInput 외부 클릭 시 닫힘
  */
 export default function AutocompleteDropdown({
+  id,
   items,
   isLoading,
   onSelect,
@@ -100,6 +102,7 @@ export default function AutocompleteDropdown({
 
   return (
     <div
+      id={id}
       ref={dropdownRef}
       className="absolute left-0 top-full z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
       role="listbox"
