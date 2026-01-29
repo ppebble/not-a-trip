@@ -30,5 +30,6 @@ export { useAuthStore, useIsLoggingOut, useAuthError } from './authStore'
 export {
   useFilterStore,
   useSelectedCategories,
+  useSearchQuery,
   ALL_CATEGORIES,
 } from './filterStore'
