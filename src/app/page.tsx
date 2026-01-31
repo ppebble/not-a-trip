@@ -100,15 +100,20 @@ export default function Home() {
   const searchQuery = useSearchQuery()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
 
+  // 카테고리가 전부 해제되었는지 확인
+  const isNoCategorySelected = selectedCategories.length === 0
+
   // 실제 API에서 스팟 데이터 가져오기 (카테고리 + 검색 필터 적용)
+  // 카테고리가 전부 해제되면 API 호출하지 않음 (빈 결과 표시)
   const {
     data: spots,
     isLoading,
     error,
     refetch,
   } = useSpots(
-    selectedCategories.length > 0 ? selectedCategories : undefined,
-    searchQuery || undefined
+    isNoCategorySelected ? undefined : selectedCategories,
+    searchQuery || undefined,
+    !isNoCategorySelected // 카테고리가 전부 해제되면 쿼리 비활성화
   )
 
   /**
@@ -139,8 +144,15 @@ export default function Home() {
   }
 
   // 스팟 데이터가 없을 때 빈 배열 사용
-  const spotData = spots || []
+  // 카테고리가 전부 해제되면 빈 배열 강제 적용
+  const spotData = isNoCategorySelected ? [] : spots || []
   const spotCount = spotData.length
+
+  // 빈 상태 확인:
+  // 1. 검색어가 있고 결과가 없을 때
+  // 2. 카테고리가 전부 해제되었을 때
+  const isEmptySearchResult = searchQuery && spotCount === 0
+  const isEmptyFilterResult = isNoCategorySelected
 
   return (
     <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-navy-900">
@@ -153,6 +165,70 @@ export default function Home() {
           spots={spotData}
           onSpotSelect={handleSpotSelect}
         />
+
+        {/* 검색 결과 없음 오버레이 (Requirements 3.4) */}
+        {isEmptySearchResult && (
+          <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
+            <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-navy-100">
+                <svg
+                  className="h-8 w-8 text-navy-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-navy-800">
+                검색 결과가 없습니다
+              </p>
+              <p className="mt-2 text-sm text-navy-500">
+                &quot;{searchQuery}&quot;에 해당하는 스팟을 찾을 수 없습니다
+              </p>
+              <p className="mt-1 text-xs text-navy-400">
+                다른 검색어를 입력하거나 필터를 조정해 보세요
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* 카테고리 필터 전체 해제 시 빈 상태 오버레이 */}
+        {isEmptyFilterResult && !isEmptySearchResult && (
+          <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
+            <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-navy-100">
+                <svg
+                  className="h-8 w-8 text-navy-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-navy-800">
+                카테고리를 선택해주세요
+              </p>
+              <p className="mt-2 text-sm text-navy-500">
+                표시할 스팟 카테고리가 선택되지 않았습니다
+              </p>
+              <p className="mt-1 text-xs text-navy-400">
+                아래 필터에서 원하는 카테고리를 선택하세요
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* 필터 영역 (하단 중앙 플로팅 바) */}
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">

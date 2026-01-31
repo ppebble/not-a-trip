@@ -96,9 +96,14 @@ export const mediaKeys = {
  * Hook to fetch all spots for map pins
  * @param categories - 필터링할 카테고리 배열 (선택사항)
  * @param search - 검색어 (선택사항) - relatedContent.name 부분 일치 검색
+ * @param enabled - 쿼리 활성화 여부 (기본값: true)
  * Requirements: 3.3 - filterStore의 searchQuery를 API 호출에 포함
  */
-export function useSpots(categories?: SpotCategory[], search?: string) {
+export function useSpots(
+  categories?: SpotCategory[],
+  search?: string,
+  enabled: boolean = true
+) {
   return useQuery({
     queryKey: spotKeys.list({ categories, search }),
     queryFn: async (): Promise<SpotPin[]> => {
@@ -117,6 +122,7 @@ export function useSpots(categories?: SpotCategory[], search?: string) {
       const data: SpotsResponse = await response.json()
       return data.spots
     },
+    enabled,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   })
