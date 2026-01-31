@@ -226,8 +226,31 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const { openPreview } = useUIStore()
   const [isHovered, setIsHovered] = useState(false)
 
+  // 모바일 터치 관련 상태 (Requirements: 4.1, 4.2, 4.3)
+  const [touchCount, setTouchCount] = useState(0)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
+
   // Debounce를 위한 타이머 ref
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  // 터치 리셋 타이머 ref
+  const touchResetTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // 터치 디바이스 감지
+  useEffect(() => {
+    const checkTouchDevice = () => {
+      const hasTouch =
+        'ontouchstart' in window ||
+        window.matchMedia('(hover: none)').matches ||
+        navigator.maxTouchPoints > 0
+      setIsTouchDevice(hasTouch)
+    }
+
+    checkTouchDevice()
+
+    // 윈도우 리사이즈 시 재확인 (태블릿 등 하이브리드 디바이스 대응)
+    window.addEventListener('resize', checkTouchDevice)
+    return () => window.removeEventListener('resize', checkTouchDevice)
+  }, [])
 
   // 컴포넌트 언마운트 시 타이머 정리
   useEffect(() => {
@@ -235,10 +258,32 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current)
       }
+      if (touchResetTimeoutRef.current) {
+        clearTimeout(touchResetTimeoutRef.current)
+      }
     }
   }, [])
 
   const isSelected = selectedSpotId === spot.id
+
+  // 다른 곳 터치 시 툴팁 숨김 및 터치 카운트 리셋 (Requirements: 4.2)
+  useEffect(() => {
+    if (!isTouchDevice) return
+
+    const handleOutsideTouch = (e: TouchEvent) => {
+      // 마커 외부 터치 시 상태 리셋
+      const target = e.target as HTMLElement
+      const isMarkerTouch = target.closest('.custom-image-spot-pin')
+
+      if (!isMarkerTouch && touchCount > 0) {
+        setTouchCount(0)
+        setIsHovered(false)
+      }
+    }
+
+    document.addEventListener('touchstart', handleOutsideTouch)
+    return () => document.removeEventListener('touchstart', handleOutsideTouch)
+  }, [isTouchDevice, touchCount])
 
   // Z-Index 계산: 호버 > 선택 > 기본
   const getZIndexOffset = () => {
@@ -261,6 +306,31 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   )
 
   const handleClick = useCallback(() => {
+    // 모바일 터치 디바이스 처리 (Requirements: 4.1, 4.3)
+    if (isTouchDevice) {
+      // 기존 터치 리셋 타이머 취소
+      if (touchResetTimeoutRef.current) {
+        clearTimeout(touchResetTimeoutRef.current)
+      }
+
+      if (touchCount === 0) {
+        // 첫 번째 터치: 툴팁 표시
+        setTouchCount(1)
+        setIsHovered(true)
+
+        // 3초 후 터치 카운트 리셋 (사용자가 다른 작업 중일 수 있음)
+        touchResetTimeoutRef.current = setTimeout(() => {
+          setTouchCount(0)
+          setIsHovered(false)
+        }, 3000)
+        return
+      }
+
+      // 두 번째 터치: SpotPreview 열기
+      setTouchCount(0)
+      setIsHovered(false)
+    }
+
     // 클릭 시 호버 상태 해제 (툴팁 숨김)
     setIsHovered(false)
 
@@ -277,7 +347,14 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
 
     // 외부 콜백 호출
     onSelect?.(spot.id)
-  }, [spot.id, setSelectedSpot, openPreview, onSelect])
+  }, [
+    spot.id,
+    setSelectedSpot,
+    openPreview,
+    onSelect,
+    isTouchDevice,
+    touchCount,
+  ])
 
   // Debounced 호버 핸들러 (50ms)
   const handleMouseOver = useCallback(() => {
