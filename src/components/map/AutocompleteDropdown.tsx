@@ -104,7 +104,7 @@ export default function AutocompleteDropdown({
     <div
       id={id}
       ref={dropdownRef}
-      className="absolute left-0 top-full z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
+      className="absolute bottom-full left-0 z-50 mb-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
       role="listbox"
       aria-label="자동완성 제안 목록"
     >
