@@ -50,25 +50,25 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   return (
     <div
       ref={previewRef}
-      className={`animate-fade-in-up absolute bottom-4 right-4 z-[900] w-80 rounded-xl bg-white shadow-xl ${className}`}
+      className={`animate-fade-in-up absolute bottom-20 left-4 z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
       role="tooltip"
       aria-labelledby="spot-preview-title"
       onMouseEnter={(e) => e.stopPropagation()}
     >
       {/* 로딩 상태 */}
       {isLoading && (
-        <div className="flex h-32 items-center justify-center">
+        <div className="flex h-40 items-center justify-center">
           <div className="text-center">
-            <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-navy-200 border-t-navy-600"></div>
-            <p className="mt-2 text-xs text-navy-600">로딩 중...</p>
+            <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-navy-200 border-t-navy-600"></div>
+            <p className="mt-2 text-sm text-navy-600">로딩 중...</p>
           </div>
         </div>
       )}
 
       {/* 에러 상태 */}
       {error && (
-        <div className="flex h-32 flex-col items-center justify-center p-4">
-          <div className="mb-2 text-2xl">😢</div>
+        <div className="flex h-40 flex-col items-center justify-center p-4">
+          <div className="mb-2 text-3xl">😢</div>
           <p className="text-center text-sm text-navy-600">
             정보를 불러올 수 없습니다
           </p>
@@ -81,11 +81,11 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
           {/* 닫기 버튼 */}
           <button
             onClick={closePreview}
-            className="absolute right-2 top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60"
+            className="absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60"
             aria-label="닫기"
           >
             <svg
-              className="h-3.5 w-3.5"
+              className="h-4 w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -100,38 +100,38 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
           </button>
 
           {/* 스팟 사진 */}
-          <div className="relative h-32 w-full overflow-hidden rounded-t-xl">
+          <div className="relative h-44 w-full overflow-hidden rounded-t-xl">
             {spot.photoUrl ? (
               <Image
                 src={spot.photoUrl}
                 alt={spot.name}
                 fill
                 className="object-cover"
-                sizes="320px"
+                sizes="384px"
                 priority
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-navy-100">
-                <span className="text-3xl">🗾</span>
+                <span className="text-4xl">🗾</span>
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           </div>
 
           {/* 스팟 정보 */}
-          <div className="p-3">
+          <div className="p-4">
             {/* 스팟 이름 */}
             <h2
               id="spot-preview-title"
-              className="mb-1 truncate text-base font-bold text-navy-800"
+              className="mb-2 truncate text-lg font-bold text-navy-800"
             >
               {spot.name}
             </h2>
 
             {/* 스팟 주소 */}
-            <div className="mb-2 flex items-start space-x-1 text-xs text-navy-600">
+            <div className="mb-2 flex items-start space-x-1.5 text-sm text-navy-600">
               <svg
-                className="mt-0.5 h-3 w-3 flex-shrink-0"
+                className="mt-0.5 h-4 w-4 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -153,18 +153,18 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
             </div>
 
             {/* 스팟 설명 */}
-            <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-navy-700">
+            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-navy-700">
               {spot.description}
             </p>
 
             {/* 상세보기 버튼 (Requirements 2.4) */}
             <button
               onClick={handleDetailClick}
-              className="flex w-full items-center justify-center space-x-1 rounded-lg bg-navy-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-navy-700"
+              className="flex w-full items-center justify-center space-x-1.5 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
             >
               <span>자세히 보기</span>
               <svg
-                className="h-3 w-3"
+                className="h-4 w-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
