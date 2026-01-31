@@ -6,7 +6,6 @@ import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore } from '@/stores/uiStore'
-import HoverTooltip from './HoverTooltip'
 
 interface SpotPinProps {
   spot: SpotPinType
@@ -223,7 +222,7 @@ const createImagePinIcon = (
 
 export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const { selectedSpotId, setSelectedSpot } = useMapStore()
-  const { openPreview } = useUIStore()
+  const { openPreview, closePreview } = useUIStore()
   const [isHovered, setIsHovered] = useState(false)
 
   // 모바일 터치 관련 상태 (Requirements: 4.1, 4.2, 4.3)
@@ -314,36 +313,27 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
       }
 
       if (touchCount === 0) {
-        // 첫 번째 터치: 툴팁 표시
+        // 첫 번째 터치: SpotPreview 열기
         setTouchCount(1)
         setIsHovered(true)
+        setSelectedSpot(spot.id)
+        openPreview(spot.id)
 
-        // 3초 후 터치 카운트 리셋 (사용자가 다른 작업 중일 수 있음)
+        // 3초 후 터치 카운트 리셋
         touchResetTimeoutRef.current = setTimeout(() => {
           setTouchCount(0)
-          setIsHovered(false)
         }, 3000)
         return
       }
 
-      // 두 번째 터치: SpotPreview 열기
+      // 두 번째 터치: 추후 상세 모달 구현 예정
       setTouchCount(0)
       setIsHovered(false)
     }
 
-    // 클릭 시 호버 상태 해제 (툴팁 숨김)
-    setIsHovered(false)
-
-    // 기존 호버 타이머 취소
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
-    }
-
-    // 스팟 선택 상태 업데이트
+    // 데스크톱 클릭: 추후 상세 모달 구현 예정
+    // 현재는 스팟 선택만 처리
     setSelectedSpot(spot.id)
-
-    // 미리보기 팝업 열기 (SpotPreview 컴포넌트가 표시됨)
-    openPreview(spot.id)
 
     // 외부 콜백 호출
     onSelect?.(spot.id)
@@ -356,29 +346,38 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
     touchCount,
   ])
 
-  // Debounced 호버 핸들러 (50ms)
+  // Debounced 호버 핸들러 (50ms) - 호버 시 SpotPreview 열기
   const handleMouseOver = useCallback(() => {
+    // 터치 디바이스에서는 호버 이벤트 무시
+    if (isTouchDevice) return
+
     // 기존 타이머 취소
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 50ms 후 호버 상태 설정
+    // 50ms 후 호버 상태 설정 및 SpotPreview 열기
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(true)
+      setSelectedSpot(spot.id)
+      openPreview(spot.id)
     }, 50)
-  }, [])
+  }, [isTouchDevice, spot.id, setSelectedSpot, openPreview])
 
-  // Debounced 호버 아웃 핸들러 (50ms)
+  // Debounced 호버 아웃 핸들러 (50ms) - 호버 아웃 시 SpotPreview 닫기
   const handleMouseOut = useCallback(() => {
+    // 터치 디바이스에서는 호버 이벤트 무시
+    if (isTouchDevice) return
+
     // 기존 타이머 취소
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 50ms 후 호버 상태 해제
+    // 50ms 후 호버 상태 해제 및 SpotPreview 닫기
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(false)
+      closePreview()
     }, 50)
-  }, [])
+  }, [isTouchDevice, closePreview])
 
   return (
     <Marker
@@ -390,9 +389,6 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
         mouseover: handleMouseOver,
         mouseout: handleMouseOut,
       }}
-    >
-      {/* 호버 시 툴팁 표시 (Requirements: 1.1, 2.1, 2.2) */}
-      <HoverTooltip spot={spot} isVisible={isHovered && !isSelected} />
-    </Marker>
+    />
   )
 }
