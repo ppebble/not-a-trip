@@ -44,7 +44,7 @@ export default function HoverTooltip({ spot, isVisible }: HoverTooltipProps) {
     <Tooltip
       permanent
       direction="top"
-      offset={[0, -60]}
+      offset={[0, -10]}
       className="hover-tooltip"
     >
       <div className="hover-tooltip-content">
