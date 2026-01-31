@@ -8,11 +8,13 @@ import AutocompleteDropdown from './AutocompleteDropdown'
 interface ContentSearchFilterProps {
   placeholder?: string
   className?: string
+  onExpandChange?: (expanded: boolean) => void
 }
 
 export default function ContentSearchFilter({
   placeholder = '작품명, 팀명, 아티스트명 검색...',
   className = '',
+  onExpandChange,
 }: ContentSearchFilterProps) {
   const dropdownId = useId()
   const searchQuery = useSearchQuery()
@@ -26,22 +28,21 @@ export default function ContentSearchFilter({
 
   useEffect(() => {
     setInputValue(searchQuery)
-    // 검색어가 있으면 확장 상태 유지
     if (searchQuery) {
       setIsExpanded(true)
+      onExpandChange?.(true)
     }
-  }, [searchQuery])
+  }, [searchQuery, onExpandChange])
 
-  // 외부 클릭 시 검색창 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        // 검색어가 없으면 접기
-        if (!inputValue) {
+        if (!inputValue && !searchQuery) {
           setIsExpanded(false)
+          onExpandChange?.(false)
         }
         setIsDropdownOpen(false)
       }
@@ -49,16 +50,16 @@ export default function ContentSearchFilter({
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [inputValue])
+  }, [inputValue, searchQuery, onExpandChange])
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
       setInputValue(value)
-      setSearchQuery(value)
+      // 입력 시에는 자동완성만 열고, 실제 검색은 하지 않음
       setIsDropdownOpen(value.length >= 2)
     },
-    [setSearchQuery]
+    []
   )
 
   const handleClear = useCallback(() => {
@@ -66,7 +67,8 @@ export default function ContentSearchFilter({
     clearSearchQuery()
     setIsDropdownOpen(false)
     setIsExpanded(false)
-  }, [clearSearchQuery])
+    onExpandChange?.(false)
+  }, [clearSearchQuery, onExpandChange])
 
   const handleSelect = useCallback(
     (item: AutocompleteItem) => {
@@ -91,26 +93,31 @@ export default function ContentSearchFilter({
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Escape') {
         if (inputValue) {
-          handleClear()
+          setInputValue('')
+          setIsDropdownOpen(false)
         } else {
-          setIsExpanded(false)
+          handleClear()
         }
       } else if (e.key === 'Enter') {
+        // Enter 키 입력 시에만 검색 적용
+        if (inputValue.trim()) {
+          setSearchQuery(inputValue.trim())
+        }
         setIsDropdownOpen(false)
       }
     },
-    [handleClear, inputValue]
+    [handleClear, inputValue, setSearchQuery]
   )
 
   const handleToggleExpand = useCallback(() => {
-    setIsExpanded((prev) => !prev)
-    // 확장 시 input에 포커스
-    if (!isExpanded) {
+    const newExpanded = !isExpanded
+    setIsExpanded(newExpanded)
+    onExpandChange?.(newExpanded)
+    if (newExpanded) {
       setTimeout(() => inputRef.current?.focus(), 100)
     }
-  }, [isExpanded])
+  }, [isExpanded, onExpandChange])
 
-  // 접힌 상태: 돋보기 버튼만 표시
   if (!isExpanded) {
     return (
       <button
@@ -136,7 +143,6 @@ export default function ContentSearchFilter({
     )
   }
 
-  // 확장된 상태: 검색 입력창 표시
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">

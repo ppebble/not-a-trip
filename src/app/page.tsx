@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSpots } from '@/hooks/useSpots'
 import SpotPreview from '@/components/map/SpotPreview'
@@ -97,6 +98,7 @@ export default function Home() {
   // filterStore에서 필터 상태 가져오기
   const selectedCategories = useSelectedCategories()
   const searchQuery = useSearchQuery()
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false)
 
   // 실제 API에서 스팟 데이터 가져오기 (카테고리 + 검색 필터 적용)
   const {
@@ -156,11 +158,13 @@ export default function Home() {
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
           <div className="flex items-center gap-2">
             {/* 콘텐츠 검색 필터 (토글 버튼) */}
-            <ContentSearchFilter />
-            {/* 카테고리 필터 */}
-            <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
-              <CategoryFilter />
-            </div>
+            <ContentSearchFilter onExpandChange={setIsSearchExpanded} />
+            {/* 카테고리 필터 - 검색창이 열리면 숨김 */}
+            {!isSearchExpanded && (
+              <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
+                <CategoryFilter />
+              </div>
+            )}
           </div>
         </div>
 
