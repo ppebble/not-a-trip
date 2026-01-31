@@ -6,13 +6,13 @@
 
 ## Tasks
 
-- [ ] 1. HoverTooltip 컴포넌트 구현
-  - [ ] 1.1 HoverTooltip 컴포넌트 생성
+- [x] 1. HoverTooltip 컴포넌트 구현
+  - [x] 1.1 HoverTooltip 컴포넌트 생성
     - `src/components/map/HoverTooltip.tsx` 파일 생성
     - react-leaflet의 Tooltip 컴포넌트 래핑
     - 스팟 이름, 카테고리 아이콘/라벨, 썸네일 표시
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
-  - [ ] 1.2 HoverTooltip 스타일링 추가
+  - [x] 1.2 HoverTooltip 스타일링 추가
     - 페이드인/아웃 애니메이션 (150ms)
     - navy 테마 색상 적용
     - 마커 위쪽 위치 및 화살표 스타일
