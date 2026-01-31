@@ -84,11 +84,11 @@
     - 자동완성 드롭다운 표시/숨김 로직
     - _Requirements: 1.1, 2.7_
 
-- [ ] 9. 지도 페이지 통합
-  - [ ] 9.1 CategoryFilter 옆에 ContentSearchFilter 배치
+- [x] 9. 지도 페이지 통합
+  - [x] 9.1 CategoryFilter 옆에 ContentSearchFilter 배치
     - 필터 영역 레이아웃 조정
     - _Requirements: 1.1_
-  - [ ] 9.2 useSpots 훅에 searchQuery 연동
+  - [x] 9.2 useSpots 훅에 searchQuery 연동
     - filterStore의 searchQuery를 API 호출에 포함
     - _Requirements: 3.3_
 
