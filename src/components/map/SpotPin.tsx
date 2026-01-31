@@ -6,6 +6,7 @@ import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore } from '@/stores/uiStore'
+import HoverTooltip from './HoverTooltip'
 
 interface SpotPinProps {
   spot: SpotPinType
@@ -260,6 +261,14 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   )
 
   const handleClick = useCallback(() => {
+    // 클릭 시 호버 상태 해제 (툴팁 숨김)
+    setIsHovered(false)
+
+    // 기존 호버 타이머 취소
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+    }
+
     // 스팟 선택 상태 업데이트
     setSelectedSpot(spot.id)
 
@@ -304,6 +313,9 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
         mouseover: handleMouseOver,
         mouseout: handleMouseOut,
       }}
-    />
+    >
+      {/* 호버 시 툴팁 표시 (Requirements: 1.1, 2.1, 2.2) */}
+      <HoverTooltip spot={spot} isVisible={isHovered && !isSelected} />
+    </Marker>
   )
 }
