@@ -4,7 +4,8 @@ import dynamic from 'next/dynamic'
 import { useSpots } from '@/hooks/useSpots'
 import SpotPreview from '@/components/map/SpotPreview'
 import CategoryFilter from '@/components/map/CategoryFilter'
-import { useSelectedCategories } from '@/stores/filterStore'
+import ContentSearchFilter from '@/components/map/ContentSearchFilter'
+import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -93,16 +94,20 @@ function SpotErrorDisplay({
  * - filterStore 전역 상태 사용 (Requirements 3.3)
  */
 export default function Home() {
-  // filterStore에서 카테고리 필터 상태 가져오기
+  // filterStore에서 필터 상태 가져오기
   const selectedCategories = useSelectedCategories()
+  const searchQuery = useSearchQuery()
 
-  // 실제 API에서 스팟 데이터 가져오기 (카테고리 필터 적용)
+  // 실제 API에서 스팟 데이터 가져오기 (카테고리 + 검색 필터 적용)
   const {
     data: spots,
     isLoading,
     error,
     refetch,
-  } = useSpots(selectedCategories.length > 0 ? selectedCategories : undefined)
+  } = useSpots(
+    selectedCategories.length > 0 ? selectedCategories : undefined,
+    searchQuery || undefined
+  )
 
   /**
    * 스팟 선택 핸들러
@@ -147,10 +152,17 @@ export default function Home() {
           onSpotSelect={handleSpotSelect}
         />
 
-        {/* 카테고리 필터 (하단 중앙 플로팅 바) */}
+        {/* 필터 영역 (하단 중앙 플로팅 바) */}
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
-          <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
-            <CategoryFilter />
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            {/* 콘텐츠 검색 필터 */}
+            <div className="w-64 sm:w-72">
+              <ContentSearchFilter />
+            </div>
+            {/* 카테고리 필터 */}
+            <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
+              <CategoryFilter />
+            </div>
           </div>
         </div>
 
