@@ -107,15 +107,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // 검색 필터 (Requirements 6.1, 6.2, 6.3, 6.4)
     // - 빈 문자열이 아닌 경우에만 필터 적용 (6.4)
-    // - relatedContent.name 부분 일치 검색 (6.2)
+    // - name 또는 relatedContent.name 부분 일치 검색 (6.2)
     // - 대소문자 무시 (6.2)
     // - category와 AND 조건 결합 (6.3)
     if (searchParam && searchParam.trim() !== '') {
       const escapedSearch = escapeRegex(searchParam.trim())
-      query['relatedContent.name'] = {
-        $regex: escapedSearch,
-        $options: 'i', // 대소문자 무시
-      }
+      query.$or = [
+        { name: { $regex: escapedSearch, $options: 'i' } },
+        { 'relatedContent.name': { $regex: escapedSearch, $options: 'i' } },
+      ]
     }
 
     // Get spots from database with filter
