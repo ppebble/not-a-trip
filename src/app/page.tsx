@@ -154,11 +154,9 @@ export default function Home() {
 
         {/* 필터 영역 (하단 중앙 플로팅 바) */}
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
-            {/* 콘텐츠 검색 필터 */}
-            <div className="w-64 sm:w-72">
-              <ContentSearchFilter />
-            </div>
+          <div className="flex items-center gap-2">
+            {/* 콘텐츠 검색 필터 (토글 버튼) */}
+            <ContentSearchFilter />
             {/* 카테고리 필터 */}
             <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
               <CategoryFilter />
