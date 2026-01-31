@@ -142,6 +142,9 @@ export default function Home() {
   const spotData = spots || []
   const spotCount = spotData.length
 
+  // 검색 결과 없음 상태 확인 (검색어가 있고 결과가 없을 때)
+  const isEmptySearchResult = searchQuery && spotCount === 0
+
   return (
     <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-navy-900">
       {/* 메인 지도 영역 - 전체 화면 인터랙티브 지도 */}
@@ -153,6 +156,38 @@ export default function Home() {
           spots={spotData}
           onSpotSelect={handleSpotSelect}
         />
+
+        {/* 검색 결과 없음 오버레이 (Requirements 3.4) */}
+        {isEmptySearchResult && (
+          <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
+            <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-navy-100">
+                <svg
+                  className="h-8 w-8 text-navy-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-navy-800">
+                검색 결과가 없습니다
+              </p>
+              <p className="mt-2 text-sm text-navy-500">
+                &quot;{searchQuery}&quot;에 해당하는 스팟을 찾을 수 없습니다
+              </p>
+              <p className="mt-1 text-xs text-navy-400">
+                다른 검색어를 입력하거나 필터를 조정해 보세요
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* 필터 영역 (하단 중앙 플로팅 바) */}
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
