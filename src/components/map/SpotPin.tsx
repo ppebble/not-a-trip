@@ -227,6 +227,12 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const isPreviewHovered = useIsPreviewHovered()
   const [isHovered, setIsHovered] = useState(false)
 
+  // isPreviewHovered의 최신 값을 참조하기 위한 ref
+  const isPreviewHoveredRef = useRef(isPreviewHovered)
+  useEffect(() => {
+    isPreviewHoveredRef.current = isPreviewHovered
+  }, [isPreviewHovered])
+
   // 마커의 화면 좌표 계산
   const getMarkerScreenPosition = useCallback(() => {
     const point = map.latLngToContainerPoint(spot.coordinates)
@@ -377,7 +383,7 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
     getMarkerScreenPosition,
   ])
 
-  // Debounced 호버 아웃 핸들러 (50ms) - 호버 아웃 시 SpotPreview 닫기
+  // Debounced 호버 아웃 핸들러 - 호버 아웃 시 SpotPreview 닫기
   const handleMouseOut = useCallback(() => {
     // 터치 디바이스에서는 호버 이벤트 무시
     if (isTouchDevice) return
@@ -386,14 +392,14 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 100ms 후 호버 상태 해제 (툴팁 위로 마우스 이동 시간 확보)
+    // 150ms 후 호버 상태 해제 (툴팁 위로 마우스 이동 시간 확보)
     hoverTimeoutRef.current = setTimeout(() => {
-      // 툴팁 위에 마우스가 있으면 닫지 않음
-      if (isPreviewHovered) return
+      // 툴팁 위에 마우스가 있으면 닫지 않음 (ref로 최신 값 참조)
+      if (isPreviewHoveredRef.current) return
       setIsHovered(false)
       closePreview()
-    }, 100)
-  }, [isTouchDevice, closePreview, isPreviewHovered])
+    }, 150)
+  }, [isTouchDevice, closePreview])
 
   return (
     <Marker
