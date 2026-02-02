@@ -36,7 +36,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   const isPreviewOpen = useIsPreviewOpen()
   const previewSpotId = usePreviewSpotId()
   const previewPosition = usePreviewPosition()
-  const { closePreview } = useUIStore()
+  const { closePreview, setPreviewHovered } = useUIStore()
 
   // 스팟 미리보기 데이터 조회
   const { data: spot, isLoading, error } = useSpotPreview(previewSpotId)
@@ -98,6 +98,16 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
 
   const position = calculatePosition()
 
+  // 툴팁 위에 마우스가 올라가면 닫히지 않도록 처리
+  const handleMouseEnter = () => {
+    setPreviewHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setPreviewHovered(false)
+    closePreview()
+  }
+
   return (
     <div
       ref={previewRef}
@@ -108,7 +118,8 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
       }}
       role="tooltip"
       aria-labelledby="spot-preview-title"
-      onMouseEnter={(e) => e.stopPropagation()}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* 로딩 상태 */}
       {isLoading && (

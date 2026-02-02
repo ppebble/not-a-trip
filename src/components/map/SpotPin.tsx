@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
-import { Marker } from 'react-leaflet'
+import { Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useMapStore } from '@/stores/mapStore'
-import { useUIStore } from '@/stores/uiStore'
+import { useUIStore, useIsPreviewHovered } from '@/stores/uiStore'
 
 interface SpotPinProps {
   spot: SpotPinType
@@ -221,9 +221,17 @@ const createImagePinIcon = (
 }
 
 export default function SpotPin({ spot, onSelect }: SpotPinProps) {
+  const map = useMap()
   const { selectedSpotId, setSelectedSpot } = useMapStore()
   const { openPreview, closePreview } = useUIStore()
+  const isPreviewHovered = useIsPreviewHovered()
   const [isHovered, setIsHovered] = useState(false)
+
+  // 마커의 화면 좌표 계산
+  const getMarkerScreenPosition = useCallback(() => {
+    const point = map.latLngToContainerPoint(spot.coordinates)
+    return { x: point.x, y: point.y }
+  }, [map, spot.coordinates])
 
   // 모바일 터치 관련 상태 (Requirements: 4.1, 4.2, 4.3)
   const [touchCount, setTouchCount] = useState(0)
@@ -317,7 +325,7 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
         setTouchCount(1)
         setIsHovered(true)
         setSelectedSpot(spot.id)
-        openPreview(spot.id)
+        openPreview(spot.id, getMarkerScreenPosition())
 
         // 3초 후 터치 카운트 리셋
         touchResetTimeoutRef.current = setTimeout(() => {
@@ -359,9 +367,15 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(true)
       setSelectedSpot(spot.id)
-      openPreview(spot.id)
+      openPreview(spot.id, getMarkerScreenPosition())
     }, 50)
-  }, [isTouchDevice, spot.id, setSelectedSpot, openPreview])
+  }, [
+    isTouchDevice,
+    spot.id,
+    setSelectedSpot,
+    openPreview,
+    getMarkerScreenPosition,
+  ])
 
   // Debounced 호버 아웃 핸들러 (50ms) - 호버 아웃 시 SpotPreview 닫기
   const handleMouseOut = useCallback(() => {
@@ -372,12 +386,14 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 50ms 후 호버 상태 해제 및 SpotPreview 닫기
+    // 100ms 후 호버 상태 해제 (툴팁 위로 마우스 이동 시간 확보)
     hoverTimeoutRef.current = setTimeout(() => {
+      // 툴팁 위에 마우스가 있으면 닫지 않음
+      if (isPreviewHovered) return
       setIsHovered(false)
       closePreview()
-    }, 50)
-  }, [isTouchDevice, closePreview])
+    }, 100)
+  }, [isTouchDevice, closePreview, isPreviewHovered])
 
   return (
     <Marker
