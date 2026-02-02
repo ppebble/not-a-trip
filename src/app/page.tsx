@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSpots } from '@/hooks/useSpots'
-import SpotPreview from '@/components/map/SpotPreview'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
@@ -262,9 +261,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* 스팟 미리보기 툴팁 (지도 내부에 표시) */}
-        <SpotPreview />
       </div>
     </main>
   )

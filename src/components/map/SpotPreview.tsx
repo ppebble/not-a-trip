@@ -7,6 +7,7 @@ import {
   useUIStore,
   useIsPreviewOpen,
   usePreviewSpotId,
+  usePreviewPosition,
 } from '@/stores/uiStore'
 import { useSpotPreview } from '@/hooks/useSpots'
 
@@ -14,11 +15,15 @@ interface SpotPreviewProps {
   className?: string
 }
 
+// 툴팁 크기 상수
+const TOOLTIP_WIDTH = 384 // w-96
+const TOOLTIP_HEIGHT = 340 // 대략적인 높이
+
 /**
  * SpotPreview 컴포넌트
  *
  * 스팟 핀 호버 시 표시되는 미리보기 툴팁입니다.
- * 지도 우측 하단에 고정되어 표시됩니다.
+ * 핀 위치 근처에 동적으로 표시됩니다.
  *
  * Requirements:
  * - 2.2: 스팟 이름, 사진, 설명, 주소 표시
@@ -30,6 +35,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
 
   const isPreviewOpen = useIsPreviewOpen()
   const previewSpotId = usePreviewSpotId()
+  const previewPosition = usePreviewPosition()
   const { closePreview } = useUIStore()
 
   // 스팟 미리보기 데이터 조회
@@ -47,10 +53,59 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
     return null
   }
 
+  // 툴팁 위치 계산 (핀 오른쪽에 표시, 화면 밖으로 나가면 조정)
+  const calculatePosition = () => {
+    if (!previewPosition) {
+      return { left: 16, top: 100 } // 기본 위치
+    }
+
+    const { x, y } = previewPosition
+    const padding = 16
+    const pinOffset = 30 // 핀에서 떨어진 거리
+
+    // 부모 컨테이너 크기 (지도 컨테이너)
+    const containerWidth =
+      previewRef.current?.parentElement?.clientWidth || window.innerWidth
+    const containerHeight =
+      previewRef.current?.parentElement?.clientHeight || window.innerHeight
+
+    // 기본: 핀 오른쪽에 표시
+    let left = x + pinOffset
+    let top = y - TOOLTIP_HEIGHT / 2
+
+    // 오른쪽 화면 밖으로 나가면 왼쪽에 표시
+    if (left + TOOLTIP_WIDTH > containerWidth - padding) {
+      left = x - TOOLTIP_WIDTH - pinOffset
+    }
+
+    // 왼쪽 화면 밖으로 나가면 최소 padding 유지
+    if (left < padding) {
+      left = padding
+    }
+
+    // 위쪽 화면 밖으로 나가면 조정
+    if (top < padding) {
+      top = padding
+    }
+
+    // 아래쪽 화면 밖으로 나가면 조정
+    if (top + TOOLTIP_HEIGHT > containerHeight - padding) {
+      top = containerHeight - TOOLTIP_HEIGHT - padding
+    }
+
+    return { left, top }
+  }
+
+  const position = calculatePosition()
+
   return (
     <div
       ref={previewRef}
-      className={`animate-fade-in-up absolute bottom-20 left-4 z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
+      className={`animate-fade-in-up absolute z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
+      style={{
+        left: position.left,
+        top: position.top,
+      }}
       role="tooltip"
       aria-labelledby="spot-preview-title"
       onMouseEnter={(e) => e.stopPropagation()}
