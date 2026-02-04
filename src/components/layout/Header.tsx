@@ -35,7 +35,7 @@ export function Header() {
             스팟 등록
           </Link>
           <Link
-            href="/test/hover-tooltip"
+            href="/test/related-content-item"
             className="text-sm text-yellow-400 transition hover:text-yellow-300"
           >
             🧪 테스트
