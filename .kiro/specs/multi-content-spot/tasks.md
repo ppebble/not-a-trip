@@ -21,8 +21,8 @@
     - **Property 3: 순서 변경 불변성**
     - **Validates: Requirements 4.1, 4.3, 1.3, 2.1**
 
-- [ ] 2. RelatedContentItem 컴포넌트 구현
-  - [ ] 2.1 RelatedContentItem 컴포넌트 생성
+- [x] 2. RelatedContentItem 컴포넌트 구현
+  - [x] 2.1 RelatedContentItem 컴포넌트 생성
     - `src/components/spot/RelatedContentItem.tsx` 파일 생성
     - 개별 콘텐츠 항목 표시 (타입 아이콘, 이름, 연도, 추가정보)
     - 삭제 버튼 구현
