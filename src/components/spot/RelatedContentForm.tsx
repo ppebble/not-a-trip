@@ -2,10 +2,17 @@
 
 import { useState } from 'react'
 import { RelatedContent, ContentType } from '@/types'
+import { RelatedContentItem } from './RelatedContentItem'
+import {
+  isDuplicateContent,
+  reorderContents,
+  removeContentAtIndex,
+} from '@/lib/content-utils'
 
 interface RelatedContentFormProps {
   value: RelatedContent[]
   onChange: (contents: RelatedContent[]) => void
+  maxItems?: number
 }
 
 // 콘텐츠 타입 설정
@@ -26,11 +33,22 @@ const CONTENT_TYPE_CONFIG: Record<
  * 관련 콘텐츠 폼 컴포넌트
  *
  * Requirements:
- * - 4.3: 선택 필드 (관련 콘텐츠)
+ * - 1.1: 콘텐츠 추가 후 즉시 새로운 콘텐츠 추가 버튼 표시
+ * - 1.2: 추가된 모든 콘텐츠를 목록으로 표시
+ * - 1.3: 특정 항목만 삭제하고 나머지 유지
+ * - 1.4: 추가된 콘텐츠 개수 표시
+ * - 2.1: 드래그 앤 드롭으로 순서 변경
+ * - 2.2: 변경된 순서 즉시 반영
+ * - 2.3: 드래그 핸들 표시
+ * - 4.1: 중복 경고 메시지 표시
+ * - 4.2: 강제 추가 옵션 제공
+ * - 4.3: 대소문자 무시, 공백 제거하여 비교
+ * - 6.3: 빈 상태 안내 메시지 표시
  */
 export function RelatedContentForm({
   value,
   onChange,
+  maxItems = 20,
 }: RelatedContentFormProps) {
   const [isAdding, setIsAdding] = useState(false)
   const [newContent, setNewContent] = useState<Partial<RelatedContent>>({
@@ -39,10 +57,21 @@ export function RelatedContentForm({
     year: undefined,
     additionalInfo: '',
   })
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+  const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null)
 
   // 콘텐츠 추가
-  const handleAdd = () => {
+  const handleAdd = (forceAdd = false) => {
     if (!newContent.name?.trim()) return
+
+    // 중복 검사
+    if (!forceAdd && isDuplicateContent(value, newContent.name)) {
+      setDuplicateWarning(
+        `"${newContent.name.trim()}"과(와) 유사한 콘텐츠가 이미 추가되어 있습니다.`
+      )
+      return
+    }
 
     const content: RelatedContent = {
       name: newContent.name.trim(),
@@ -52,6 +81,11 @@ export function RelatedContentForm({
     }
 
     onChange([...value, content])
+    resetForm()
+  }
+
+  // 폼 초기화
+  const resetForm = () => {
     setNewContent({
       name: '',
       type: 'anime',
@@ -59,68 +93,75 @@ export function RelatedContentForm({
       additionalInfo: '',
     })
     setIsAdding(false)
+    setDuplicateWarning(null)
   }
 
   // 콘텐츠 삭제
   const handleRemove = (index: number) => {
-    onChange(value.filter((_, i) => i !== index))
+    onChange(removeContentAtIndex(value, index))
+  }
+
+  // 드래그 시작
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index)
+  }
+
+  // 드래그 오버
+  const handleDragOver = (index: number) => {
+    if (draggedIndex !== null && draggedIndex !== index) {
+      setDragOverIndex(index)
+    }
+  }
+
+  // 드래그 종료
+  const handleDragEnd = () => {
+    if (draggedIndex !== null && dragOverIndex !== null) {
+      onChange(reorderContents(value, draggedIndex, dragOverIndex))
+    }
+    setDraggedIndex(null)
+    setDragOverIndex(null)
   }
 
   // 취소
   const handleCancel = () => {
-    setNewContent({
-      name: '',
-      type: 'anime',
-      year: undefined,
-      additionalInfo: '',
-    })
-    setIsAdding(false)
+    resetForm()
   }
+
+  // 최대 개수 도달 여부
+  const isMaxReached = value.length >= maxItems
 
   return (
     <div className="space-y-4">
-      {/* 추가된 콘텐츠 목록 */}
+      {/* 콘텐츠 개수 표시 */}
+      {value.length > 0 && (
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-navy-700">
+            추가된 콘텐츠{' '}
+            <span className="text-navy-500">({value.length}개)</span>
+          </span>
+          {isMaxReached && (
+            <span className="text-xs text-amber-600">
+              최대 {maxItems}개까지 추가 가능합니다
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* 추가된 콘텐츠 목록 - RelatedContentItem 사용 */}
       {value.length > 0 && (
         <div className="space-y-2">
           {value.map((content, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between rounded-lg border border-navy-200 bg-white p-3"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-lg">
-                  {CONTENT_TYPE_CONFIG[content.type]?.icon || '📍'}
-                </span>
-                <div>
-                  <p className="font-medium text-navy-800">{content.name}</p>
-                  <p className="text-xs text-navy-500">
-                    {CONTENT_TYPE_CONFIG[content.type]?.label || '기타'}
-                    {content.year && ` · ${content.year}년`}
-                    {content.additionalInfo && ` · ${content.additionalInfo}`}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleRemove(index)}
-                className="rounded p-1 text-navy-400 transition-colors hover:bg-red-50 hover:text-red-500"
-                aria-label="삭제"
-              >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
+            <RelatedContentItem
+              key={`${content.name}-${index}`}
+              content={content}
+              index={index}
+              onRemove={() => handleRemove(index)}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
+              isDragging={draggedIndex === index}
+              isDragOver={dragOverIndex === index}
+            />
           ))}
         </div>
       )}
@@ -163,9 +204,10 @@ export function RelatedContentForm({
               <input
                 type="text"
                 value={newContent.name}
-                onChange={(e) =>
+                onChange={(e) => {
                   setNewContent({ ...newContent, name: e.target.value })
-                }
+                  setDuplicateWarning(null)
+                }}
                 placeholder="작품명, 팀명, 아티스트명 등"
                 className="w-full rounded-lg border border-navy-200 px-3 py-2 text-sm text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
               />
@@ -212,6 +254,20 @@ export function RelatedContentForm({
             </div>
           </div>
 
+          {/* 중복 경고 메시지 */}
+          {duplicateWarning && (
+            <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+              <p className="text-sm text-amber-700">{duplicateWarning}</p>
+              <button
+                type="button"
+                onClick={() => handleAdd(true)}
+                className="mt-2 text-sm font-medium text-amber-700 underline hover:text-amber-800"
+              >
+                그래도 추가하기
+              </button>
+            </div>
+          )}
+
           {/* 버튼 */}
           <div className="mt-4 flex justify-end gap-2">
             <button
@@ -223,7 +279,7 @@ export function RelatedContentForm({
             </button>
             <button
               type="button"
-              onClick={handleAdd}
+              onClick={() => handleAdd(false)}
               disabled={!newContent.name?.trim()}
               className="rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -232,29 +288,31 @@ export function RelatedContentForm({
           </div>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => setIsAdding(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-navy-200 bg-navy-50 px-4 py-3 text-sm font-medium text-navy-600 transition-colors hover:border-navy-300 hover:bg-navy-100"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        !isMaxReached && (
+          <button
+            type="button"
+            onClick={() => setIsAdding(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-navy-200 bg-navy-50 px-4 py-3 text-sm font-medium text-navy-600 transition-colors hover:border-navy-300 hover:bg-navy-100"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          관련 콘텐츠 추가
-        </button>
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            관련 콘텐츠 추가
+          </button>
+        )
       )}
 
-      {/* 안내 메시지 */}
+      {/* 빈 상태 안내 메시지 */}
       {value.length === 0 && !isAdding && (
         <p className="text-center text-xs text-navy-400">
           이 스팟과 관련된 작품, 팀, 아티스트 등을 추가할 수 있습니다
