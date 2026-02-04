@@ -162,6 +162,8 @@ export interface RelatedContent {
   type: ContentType
   year?: number
   additionalInfo?: string
+  /** 대표 이미지 URL (관리자만 설정 가능) */
+  imageUrl?: string
 }
 
 export interface Spot {
