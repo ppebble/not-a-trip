@@ -6,6 +6,7 @@ import {
   useSelectedCategories,
   ALL_CATEGORIES,
 } from '@/stores/filterStore'
+import { CategoryIcon } from '@/components/common'
 
 /**
  * 카테고리 필터 컴포넌트
@@ -63,7 +64,7 @@ export default function CategoryFilter() {
               backgroundColor: isSelected ? config.color : undefined,
             }}
           >
-            <span>{config.icon}</span>
+            <CategoryIcon category={category} size="sm" />
             <span>{config.label}</span>
           </button>
         )

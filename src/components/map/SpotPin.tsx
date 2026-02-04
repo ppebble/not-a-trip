@@ -32,10 +32,24 @@ const getCategoryColor = (category?: SpotCategory): string => {
   return CATEGORY_CONFIG[category]?.color || '#2d4a6f'
 }
 
-// 카테고리별 아이콘 가져오기
-const getCategoryIcon = (category?: SpotCategory): string => {
-  if (!category) return '📍' // 기본 아이콘
-  return CATEGORY_CONFIG[category]?.icon || '📍'
+// 카테고리별 아이콘 가져오기 (SVG 이미지 경로 또는 fallback 이모티콘)
+const getCategoryIcon = (
+  category?: SpotCategory
+): { path: string; fallback: string } => {
+  const fallbackIcons: Record<SpotCategory, string> = {
+    animation: '🎬',
+    sports: '⚽',
+    movie_drama: '🎥',
+    music: '🎵',
+    game: '🎮',
+    other: '📍',
+  }
+
+  if (!category) return { path: '/icons/categories/other.svg', fallback: '📍' }
+  return {
+    path: CATEGORY_CONFIG[category]?.icon || '/icons/categories/other.svg',
+    fallback: fallbackIcons[category] || '📍',
+  }
 }
 
 // 작품 이미지 핀 아이콘 생성
@@ -55,7 +69,7 @@ const createImagePinIcon = (
 
   // 카테고리별 색상 적용
   const categoryColor = getCategoryColor(category)
-  const categoryIcon = getCategoryIcon(category)
+  const categoryIconData = getCategoryIcon(category)
 
   // 테두리 색상 및 스타일 (카테고리 색상 적용)
   const getBorderColor = () => {
@@ -101,9 +115,13 @@ const createImagePinIcon = (
         border-radius: 50%;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
       ">
-        ${categoryIcon}
+        <img 
+          src="${categoryIconData.path}" 
+          alt="category" 
+          style="width: 24px; height: 24px;"
+          onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px>${categoryIconData.fallback}</span>';"
+        />
       </div>`
     : `<div style="
         width: 100%;
@@ -113,9 +131,13 @@ const createImagePinIcon = (
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
       ">
-        ${categoryIcon}
+        <img 
+          src="${categoryIconData.path}" 
+          alt="category" 
+          style="width: 24px; height: 24px;"
+          onerror="this.style.display='none'; this.parentElement.innerHTML+='<span style=font-size:24px>${categoryIconData.fallback}</span>';"
+        />
       </div>`
 
   // 호버 상태 클래스
