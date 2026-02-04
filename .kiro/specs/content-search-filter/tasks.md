@@ -92,8 +92,8 @@
     - filterStore의 searchQuery를 API 호출에 포함
     - _Requirements: 3.3_
 
-- [ ] 10. 빈 상태 및 에러 처리
-  - [ ] 10.1 검색 결과 없음 UI 구현
+- [x] 10. 빈 상태 및 에러 처리
+  - [x] 10.1 검색 결과 없음 UI 구현
     - 지도에 빈 상태 메시지 표시
     - _Requirements: 3.4_
 
