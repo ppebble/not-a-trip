@@ -3,19 +3,17 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { RelatedContent, ContentType } from '@/types'
+import { ContentTypeIcon } from '@/components/common'
 
-// 콘텐츠 타입 설정
-const CONTENT_TYPE_CONFIG: Record<
-  ContentType,
-  { label: string; icon: string }
-> = {
-  anime: { label: '애니메이션', icon: '🎬' },
-  movie: { label: '영화', icon: '🎥' },
-  drama: { label: '드라마', icon: '📺' },
-  sports_team: { label: '스포츠 팀', icon: '⚽' },
-  artist: { label: '아티스트', icon: '🎵' },
-  game: { label: '게임', icon: '🎮' },
-  other: { label: '기타', icon: '📍' },
+// 콘텐츠 타입 라벨 설정
+const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
+  anime: '애니메이션',
+  movie: '영화',
+  drama: '드라마',
+  sports_team: '스포츠 팀',
+  artist: '아티스트',
+  game: '게임',
+  other: '기타',
 }
 
 interface RelatedContentSectionProps {
@@ -121,20 +119,18 @@ interface RelatedContentCardProps {
  * Requirements 3.4: 타입 아이콘, 이름, 연도, 추가정보 표시
  */
 function RelatedContentCard({ content }: RelatedContentCardProps) {
-  const typeConfig =
-    CONTENT_TYPE_CONFIG[content.type] || CONTENT_TYPE_CONFIG.other
+  const typeLabel =
+    CONTENT_TYPE_LABELS[content.type] || CONTENT_TYPE_LABELS.other
 
   return (
     <div className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-lg" role="img" aria-label={typeConfig.label}>
-            {typeConfig.icon}
-          </span>
+          <ContentTypeIcon type={content.type} size="lg" />
           <h3 className="font-semibold text-gray-900">{content.name}</h3>
         </div>
         <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-          {typeConfig.label}
+          {typeLabel}
         </span>
       </div>
       {(content.year || content.additionalInfo) && (
