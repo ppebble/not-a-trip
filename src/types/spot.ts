@@ -23,11 +23,27 @@ export interface LinkTypeConfig {
 }
 
 export const LINK_TYPE_CONFIG: Record<ExternalLinkType, LinkTypeConfig> = {
-  official: { label: '공식 홈페이지', icon: '🏠', color: '#3B82F6' },
-  ticket: { label: '티켓 예매', icon: '🎫', color: '#10B981' },
-  schedule: { label: '일정 확인', icon: '📅', color: '#F59E0B' },
-  sns: { label: 'SNS', icon: '📱', color: '#8B5CF6' },
-  other: { label: '기타', icon: '🔗', color: '#6B7280' },
+  official: {
+    label: '공식 홈페이지',
+    icon: '/icons/link-types/official.svg',
+    color: '#3B82F6',
+  },
+  ticket: {
+    label: '티켓 예매',
+    icon: '/icons/link-types/ticket.svg',
+    color: '#10B981',
+  },
+  schedule: {
+    label: '일정 확인',
+    icon: '/icons/link-types/schedule.svg',
+    color: '#F59E0B',
+  },
+  sns: { label: 'SNS', icon: '/icons/link-types/sns.svg', color: '#8B5CF6' },
+  other: {
+    label: '기타',
+    icon: '/icons/link-types/other.svg',
+    color: '#6B7280',
+  },
 }
 
 // ============================================
@@ -58,12 +74,32 @@ export interface CategoryConfig {
 }
 
 export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
-  animation: { icon: '🎬', color: '#FF6B6B', label: '애니메이션' },
-  sports: { icon: '⚽', color: '#4ECDC4', label: '스포츠' },
-  movie_drama: { icon: '🎥', color: '#45B7D1', label: '영화/드라마' },
-  music: { icon: '🎵', color: '#96CEB4', label: '음악/콘서트' },
-  game: { icon: '🎮', color: '#DDA0DD', label: '게임' },
-  other: { icon: '📍', color: '#95A5A6', label: '기타' },
+  animation: {
+    icon: '/icons/categories/animation.svg',
+    color: '#FF6B6B',
+    label: '애니메이션',
+  },
+  sports: {
+    icon: '/icons/categories/sports.svg',
+    color: '#4ECDC4',
+    label: '스포츠',
+  },
+  movie_drama: {
+    icon: '/icons/categories/movie_drama.svg',
+    color: '#45B7D1',
+    label: '영화/드라마',
+  },
+  music: {
+    icon: '/icons/categories/music.svg',
+    color: '#96CEB4',
+    label: '음악/콘서트',
+  },
+  game: { icon: '/icons/categories/game.svg', color: '#DDA0DD', label: '게임' },
+  other: {
+    icon: '/icons/categories/other.svg',
+    color: '#95A5A6',
+    label: '기타',
+  },
 }
 
 // ============================================
