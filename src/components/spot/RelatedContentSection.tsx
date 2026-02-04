@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { RelatedContent, ContentType } from '@/types'
 import { ContentTypeIcon } from '@/components/common'
 
@@ -125,8 +126,20 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
   return (
     <div className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <ContentTypeIcon type={content.type} size="lg" />
+        <div className="flex items-center gap-3">
+          {/* 대표 이미지가 있으면 원형 뱃지로 표시, 없으면 기본 아이콘 */}
+          {content.imageUrl ? (
+            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-200">
+              <Image
+                src={content.imageUrl}
+                alt={content.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <ContentTypeIcon type={content.type} size="lg" />
+          )}
           <h3 className="font-semibold text-gray-900">{content.name}</h3>
         </div>
         <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">

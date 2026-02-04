@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { RelatedContent, ContentType } from '@/types'
 import { ContentTypeIcon } from '@/components/common'
 
@@ -80,7 +81,19 @@ export function RelatedContentItem({
 
       {/* 콘텐츠 정보 */}
       <div className="flex flex-1 items-center gap-3">
-        <ContentTypeIcon type={content.type} size="lg" />
+        {/* 대표 이미지가 있으면 원형 뱃지로 표시, 없으면 기본 아이콘 */}
+        {content.imageUrl ? (
+          <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border-2 border-navy-200">
+            <Image
+              src={content.imageUrl}
+              alt={content.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <ContentTypeIcon type={content.type} size="lg" />
+        )}
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium text-navy-800">{content.name}</p>
           <p className="truncate text-xs text-navy-500">
