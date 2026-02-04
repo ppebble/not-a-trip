@@ -50,6 +50,9 @@ interface UseSpotEditReturn {
  * 스팟 수정 훅
  *
  * Requirements:
+ * - 5.1: 스팟 수정 페이지 로드 시 기존 relatedContent 표시
+ * - 5.2: 기존 콘텐츠를 수정하지 않고 저장 시 그대로 유지
+ * - 5.3: 새 콘텐츠 추가 시 기존 콘텐츠와 함께 저장
  * - 6.1: 스팟 수정 페이지에서 기존 데이터 로드 및 수정
  * - 6.2: 인증된 사용자만 본인 스팟 수정 가능
  */
@@ -83,7 +86,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
     enabled: !!spotId,
   })
 
-  // 스팟 데이터가 로드되면 폼에 설정
+  // 스팟 데이터가 로드되면 폼에 설정 (Requirements 5.1)
   useEffect(() => {
     if (spot) {
       setFormData({
@@ -95,6 +98,7 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
           : null,
         category: spot.category || '',
         photos: spot.photos || [],
+        // Requirements 5.1: 기존 relatedContent 배열을 폼에 로드
         relatedContent: spot.relatedContent || [],
         externalLinks: spot.externalLinks || [],
       })
@@ -172,6 +176,9 @@ export function useSpotEdit(spotId: string): UseSpotEditReturn {
       setIsSubmitting(true)
 
       try {
+        // Requirements 5.2, 5.3: 전체 relatedContent 배열 전송
+        // - 변경 없이 저장 시 기존 콘텐츠 유지
+        // - 새 콘텐츠 추가 시 기존 + 새 콘텐츠 모두 저장
         const requestBody: UpdateSpotInput = {
           name: formData.name.trim(),
           description: formData.description.trim(),
