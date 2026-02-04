@@ -76,9 +76,11 @@ function containsRequiredInfo(
 jest.mock('@/stores/uiStore', () => ({
   useUIStore: () => ({
     closePreview: jest.fn(),
+    setPreviewHovered: jest.fn(),
   }),
   useIsPreviewOpen: () => true, // Always open for testing
   usePreviewSpotId: () => 'test-spot-id', // Mock spot ID
+  usePreviewPosition: () => ({ x: 100, y: 100 }), // Mock position
 }))
 
 /**

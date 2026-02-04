@@ -6,6 +6,7 @@ import { Map as LeafletMap } from 'leaflet'
 import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
+import SpotPreview from './SpotPreview'
 import './map.css'
 
 interface PilgrimageMapProps {
@@ -158,6 +159,9 @@ export default function PilgrimageMap({
       <div className="absolute bottom-2 left-2 z-[1000] rounded bg-navy-800/80 px-2 py-1 text-xs text-white">
         Anime Pilgrim
       </div>
+
+      {/* 스팟 미리보기 툴팁 (지도 컨테이너 내부에 표시) */}
+      <SpotPreview />
     </div>
   )
 }

@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
-import { Marker } from 'react-leaflet'
+import { Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useMapStore } from '@/stores/mapStore'
-import { useUIStore } from '@/stores/uiStore'
+import { useUIStore, useIsPreviewHovered } from '@/stores/uiStore'
 
 interface SpotPinProps {
   spot: SpotPinType
@@ -221,12 +221,49 @@ const createImagePinIcon = (
 }
 
 export default function SpotPin({ spot, onSelect }: SpotPinProps) {
+  const map = useMap()
   const { selectedSpotId, setSelectedSpot } = useMapStore()
-  const { openPreview } = useUIStore()
+  const { openPreview, closePreview } = useUIStore()
+  const isPreviewHovered = useIsPreviewHovered()
   const [isHovered, setIsHovered] = useState(false)
+
+  // isPreviewHovered의 최신 값을 참조하기 위한 ref
+  const isPreviewHoveredRef = useRef(isPreviewHovered)
+  useEffect(() => {
+    isPreviewHoveredRef.current = isPreviewHovered
+  }, [isPreviewHovered])
+
+  // 마커의 화면 좌표 계산
+  const getMarkerScreenPosition = useCallback(() => {
+    const point = map.latLngToContainerPoint(spot.coordinates)
+    return { x: point.x, y: point.y }
+  }, [map, spot.coordinates])
+
+  // 모바일 터치 관련 상태 (Requirements: 4.1, 4.2, 4.3)
+  const [touchCount, setTouchCount] = useState(0)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
 
   // Debounce를 위한 타이머 ref
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  // 터치 리셋 타이머 ref
+  const touchResetTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // 터치 디바이스 감지
+  useEffect(() => {
+    const checkTouchDevice = () => {
+      const hasTouch =
+        'ontouchstart' in window ||
+        window.matchMedia('(hover: none)').matches ||
+        navigator.maxTouchPoints > 0
+      setIsTouchDevice(hasTouch)
+    }
+
+    checkTouchDevice()
+
+    // 윈도우 리사이즈 시 재확인 (태블릿 등 하이브리드 디바이스 대응)
+    window.addEventListener('resize', checkTouchDevice)
+    return () => window.removeEventListener('resize', checkTouchDevice)
+  }, [])
 
   // 컴포넌트 언마운트 시 타이머 정리
   useEffect(() => {
@@ -234,10 +271,32 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current)
       }
+      if (touchResetTimeoutRef.current) {
+        clearTimeout(touchResetTimeoutRef.current)
+      }
     }
   }, [])
 
   const isSelected = selectedSpotId === spot.id
+
+  // 다른 곳 터치 시 툴팁 숨김 및 터치 카운트 리셋 (Requirements: 4.2)
+  useEffect(() => {
+    if (!isTouchDevice) return
+
+    const handleOutsideTouch = (e: TouchEvent) => {
+      // 마커 외부 터치 시 상태 리셋
+      const target = e.target as HTMLElement
+      const isMarkerTouch = target.closest('.custom-image-spot-pin')
+
+      if (!isMarkerTouch && touchCount > 0) {
+        setTouchCount(0)
+        setIsHovered(false)
+      }
+    }
+
+    document.addEventListener('touchstart', handleOutsideTouch)
+    return () => document.removeEventListener('touchstart', handleOutsideTouch)
+  }, [isTouchDevice, touchCount])
 
   // Z-Index 계산: 호버 > 선택 > 기본
   const getZIndexOffset = () => {
@@ -260,39 +319,87 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   )
 
   const handleClick = useCallback(() => {
-    // 스팟 선택 상태 업데이트
-    setSelectedSpot(spot.id)
+    // 모바일 터치 디바이스 처리 (Requirements: 4.1, 4.3)
+    if (isTouchDevice) {
+      // 기존 터치 리셋 타이머 취소
+      if (touchResetTimeoutRef.current) {
+        clearTimeout(touchResetTimeoutRef.current)
+      }
 
-    // 미리보기 팝업 열기 (SpotPreview 컴포넌트가 표시됨)
-    openPreview(spot.id)
+      if (touchCount === 0) {
+        // 첫 번째 터치: SpotPreview 열기
+        setTouchCount(1)
+        setIsHovered(true)
+        setSelectedSpot(spot.id)
+        openPreview(spot.id, getMarkerScreenPosition())
+
+        // 3초 후 터치 카운트 리셋
+        touchResetTimeoutRef.current = setTimeout(() => {
+          setTouchCount(0)
+        }, 3000)
+        return
+      }
+
+      // 두 번째 터치: 추후 상세 모달 구현 예정
+      setTouchCount(0)
+      setIsHovered(false)
+    }
+
+    // 데스크톱 클릭: 추후 상세 모달 구현 예정
+    // 현재는 스팟 선택만 처리
+    setSelectedSpot(spot.id)
 
     // 외부 콜백 호출
     onSelect?.(spot.id)
-  }, [spot.id, setSelectedSpot, openPreview, onSelect])
+  }, [
+    spot.id,
+    setSelectedSpot,
+    openPreview,
+    onSelect,
+    isTouchDevice,
+    touchCount,
+  ])
 
-  // Debounced 호버 핸들러 (50ms)
+  // Debounced 호버 핸들러 (50ms) - 호버 시 SpotPreview 열기
   const handleMouseOver = useCallback(() => {
+    // 터치 디바이스에서는 호버 이벤트 무시
+    if (isTouchDevice) return
+
     // 기존 타이머 취소
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 50ms 후 호버 상태 설정
+    // 50ms 후 호버 상태 설정 및 SpotPreview 열기
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(true)
+      setSelectedSpot(spot.id)
+      openPreview(spot.id, getMarkerScreenPosition())
     }, 50)
-  }, [])
+  }, [
+    isTouchDevice,
+    spot.id,
+    setSelectedSpot,
+    openPreview,
+    getMarkerScreenPosition,
+  ])
 
-  // Debounced 호버 아웃 핸들러 (50ms)
+  // Debounced 호버 아웃 핸들러 - 호버 아웃 시 SpotPreview 닫기
   const handleMouseOut = useCallback(() => {
+    // 터치 디바이스에서는 호버 이벤트 무시
+    if (isTouchDevice) return
+
     // 기존 타이머 취소
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 50ms 후 호버 상태 해제
+    // 150ms 후 호버 상태 해제 (툴팁 위로 마우스 이동 시간 확보)
     hoverTimeoutRef.current = setTimeout(() => {
+      // 툴팁 위에 마우스가 있으면 닫지 않음 (ref로 최신 값 참조)
+      if (isPreviewHoveredRef.current) return
       setIsHovered(false)
-    }, 50)
-  }, [])
+      closePreview()
+    }, 150)
+  }, [isTouchDevice, closePreview])
 
   return (
     <Marker

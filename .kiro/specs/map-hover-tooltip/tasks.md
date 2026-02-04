@@ -18,13 +18,13 @@
     - 마커 위쪽 위치 및 화살표 스타일
     - _Requirements: 3.1, 3.2, 3.3, 5.1, 5.2, 5.4_
 
-- [ ] 2. SpotPin 컴포넌트 수정
-  - [ ] 2.1 HoverTooltip 통합
+- [x] 2. SpotPin 컴포넌트 수정
+  - [x] 2.1 HoverTooltip 통합
     - SpotPin에 HoverTooltip 조건부 렌더링 추가
     - isHovered 상태에 따라 툴팁 표시/숨김
     - 클릭 시 툴팁 숨김 처리
     - _Requirements: 1.1, 2.1, 2.2_
-  - [ ] 2.2 모바일 터치 로직 구현
+  - [x] 2.2 모바일 터치 로직 구현
     - 터치 디바이스 감지 로직 추가
     - 터치 카운트 상태 관리
     - 첫 터치: 툴팁 표시, 두 번째 터치: SpotPreview 열기

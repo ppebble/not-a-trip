@@ -1,14 +1,22 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
+interface PreviewPosition {
+  x: number
+  y: number
+}
+
 interface UIStore {
   isPreviewOpen: boolean
   previewSpotId: string | null
+  previewPosition: PreviewPosition | null
+  isPreviewHovered: boolean
   isMobileMenuOpen: boolean
   isMapLoading: boolean
 
-  openPreview: (spotId: string) => void
+  openPreview: (spotId: string, position?: PreviewPosition) => void
   closePreview: () => void
+  setPreviewHovered: (hovered: boolean) => void
   toggleMobileMenu: () => void
   closeMobileMenu: () => void
   setMapLoading: (loading: boolean) => void
@@ -20,14 +28,17 @@ export const useUIStore = create<UIStore>()(
     (set) => ({
       isPreviewOpen: false,
       previewSpotId: null,
+      previewPosition: null,
+      isPreviewHovered: false,
       isMobileMenuOpen: false,
       isMapLoading: true,
 
-      openPreview: (spotId) =>
+      openPreview: (spotId, position) =>
         set(
           {
             isPreviewOpen: true,
             previewSpotId: spotId,
+            previewPosition: position || null,
             isMobileMenuOpen: false,
           },
           false,
@@ -39,10 +50,15 @@ export const useUIStore = create<UIStore>()(
           {
             isPreviewOpen: false,
             previewSpotId: null,
+            previewPosition: null,
+            isPreviewHovered: false,
           },
           false,
           'uiStore/closePreview'
         ),
+
+      setPreviewHovered: (hovered) =>
+        set({ isPreviewHovered: hovered }, false, 'uiStore/setPreviewHovered'),
 
       toggleMobileMenu: () =>
         set(
@@ -66,6 +82,8 @@ export const useUIStore = create<UIStore>()(
           {
             isPreviewOpen: false,
             previewSpotId: null,
+            previewPosition: null,
+            isPreviewHovered: false,
             isMobileMenuOpen: false,
             isMapLoading: true,
           },
@@ -82,6 +100,10 @@ export const useUIStore = create<UIStore>()(
 // Selectors
 export const useIsPreviewOpen = () => useUIStore((state) => state.isPreviewOpen)
 export const usePreviewSpotId = () => useUIStore((state) => state.previewSpotId)
+export const usePreviewPosition = () =>
+  useUIStore((state) => state.previewPosition)
+export const useIsPreviewHovered = () =>
+  useUIStore((state) => state.isPreviewHovered)
 export const useIsMobileMenuOpen = () =>
   useUIStore((state) => state.isMobileMenuOpen)
 export const useIsMapLoading = () => useUIStore((state) => state.isMapLoading)
