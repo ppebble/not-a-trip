@@ -1,0 +1,168 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { RelatedContent, ContentType } from '@/types'
+
+// 콘텐츠 타입 설정
+const CONTENT_TYPE_CONFIG: Record<
+  ContentType,
+  { label: string; icon: string }
+> = {
+  anime: { label: '애니메이션', icon: '🎬' },
+  movie: { label: '영화', icon: '🎥' },
+  drama: { label: '드라마', icon: '📺' },
+  sports_team: { label: '스포츠 팀', icon: '⚽' },
+  artist: { label: '아티스트', icon: '🎵' },
+  game: { label: '게임', icon: '🎮' },
+  other: { label: '기타', icon: '📍' },
+}
+
+interface RelatedContentSectionProps {
+  contents: RelatedContent[]
+  initialDisplayCount?: number // 기본값: 3
+}
+
+/**
+ * 스팟 상세 페이지에서 관련 콘텐츠를 표시하는 섹션 컴포넌트
+ *
+ * Requirements:
+ * - 3.1: 모든 관련 콘텐츠를 그리드 형태로 표시
+ * - 3.2: 4개 이상일 때 처음 3개만 표시하고 "더보기" 버튼 제공
+ * - 3.3: "더보기" 클릭 시 나머지 모든 콘텐츠 표시
+ * - 6.2: 빈 배열일 때 섹션 숨김
+ */
+export function RelatedContentSection({
+  contents,
+  initialDisplayCount = 3,
+}: RelatedContentSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  // 빈 배열일 때 섹션 숨김 (Requirements 6.2)
+  if (!contents || contents.length === 0) {
+    return null
+  }
+
+  const hasMoreContents = contents.length > initialDisplayCount
+  const displayedContents = isExpanded
+    ? contents
+    : contents.slice(0, initialDisplayCount)
+  const remainingCount = contents.length - initialDisplayCount
+
+  return (
+    <div className="overflow-hidden rounded-lg bg-white shadow-md">
+      <div className="p-6">
+        <h2 className="mb-4 text-2xl font-bold text-gray-900">관련 콘텐츠</h2>
+
+        {/* 콘텐츠 그리드 (Requirements 3.1) */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {displayedContents.map((content, index) => (
+            <RelatedContentCard key={index} content={content} />
+          ))}
+        </div>
+
+        {/* 더보기/접기 버튼 (Requirements 3.2, 3.3) */}
+        {hasMoreContents && (
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="inline-flex items-center gap-2 rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+            >
+              {isExpanded ? (
+                <>
+                  <span>접기</span>
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                </>
+              ) : (
+                <>
+                  <span>더보기 (+{remainingCount})</span>
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+interface RelatedContentCardProps {
+  content: RelatedContent
+}
+
+/**
+ * 개별 관련 콘텐츠 카드 컴포넌트
+ * Requirements 3.4: 타입 아이콘, 이름, 연도, 추가정보 표시
+ */
+function RelatedContentCard({ content }: RelatedContentCardProps) {
+  const typeConfig =
+    CONTENT_TYPE_CONFIG[content.type] || CONTENT_TYPE_CONFIG.other
+
+  return (
+    <div className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-lg" role="img" aria-label={typeConfig.label}>
+            {typeConfig.icon}
+          </span>
+          <h3 className="font-semibold text-gray-900">{content.name}</h3>
+        </div>
+        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+          {typeConfig.label}
+        </span>
+      </div>
+      {(content.year || content.additionalInfo) && (
+        <p className="mt-1 text-sm text-gray-600">
+          {content.year && `${content.year}년`}
+          {content.year && content.additionalInfo && ' · '}
+          {content.additionalInfo}
+        </p>
+      )}
+      <Link
+        href={`/community/media/${encodeURIComponent(content.name)}`}
+        className="mt-3 inline-flex items-center gap-1 text-sm text-navy-600 transition-colors hover:text-navy-800"
+      >
+        <span>커뮤니티 보기</span>
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </Link>
+    </div>
+  )
+}
