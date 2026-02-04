@@ -33,8 +33,8 @@
 
 ## 진행 중인 Tasks
 
-- [ ] 5. RelatedContentSection 컴포넌트 구현
-  - [ ] 5.1 RelatedContentSection 컴포넌트 생성
+- [x] 5. RelatedContentSection 컴포넌트 구현
+  - [x] 5.1 RelatedContentSection 컴포넌트 생성
     - `src/components/spot/RelatedContentSection.tsx` 파일 생성
     - 관련 콘텐츠 그리드 레이아웃 구현
     - 초기 3개 표시 및 "더보기" 버튼 구현
@@ -42,46 +42,46 @@
     - 빈 배열일 때 섹션 숨김
     - _Requirements: 3.1, 3.2, 3.3, 6.2_
 
-- [ ] 6. 스팟 상세 페이지 연동
-  - [ ] 6.1 SpotDetailPage에 RelatedContentSection 통합
+- [x] 6. 스팟 상세 페이지 연동
+  - [x] 6.1 SpotDetailPage에 RelatedContentSection 통합
     - 스팟 상세 페이지에 RelatedContentSection 추가
     - relatedContent 배열 전달
     - 기존 단일 콘텐츠 표시 로직 제거
     - _Requirements: 3.1, 3.4_
 
-- [ ] 7. 빈 콘텐츠 처리
-  - [ ] 7.1 빈 relatedContent 배열 처리 구현
+- [x] 7. 빈 콘텐츠 처리
+  - [x] 7.1 빈 relatedContent 배열 처리 구현
     - 스팟 등록 시 빈 배열 허용
     - 스팟 상세 페이지에서 빈 배열 시 섹션 숨김
     - _Requirements: 6.1, 6.2_
 
-- [ ] 8. 콘텐츠 타입 아이콘 이미지 전환
-  - [ ] 8.1 아이콘 이미지 에셋 준비
+- [x] 8. 콘텐츠 타입 아이콘 이미지 전환
+  - [x] 8.1 아이콘 이미지 에셋 준비
     - `public/icons/content-types/` 디렉토리 생성
     - 각 ContentType별 SVG 아이콘 파일 생성 (anime, movie, drama, sports_team, artist, game, other)
     - 각 SpotCategory별 SVG 아이콘 파일 생성 (animation, sports, movie_drama, music, game, other)
     - 각 ExternalLinkType별 SVG 아이콘 파일 생성 (official, ticket, schedule, sns, other)
     - _New Requirement_
 
-  - [ ] 8.2 ContentTypeIcon 컴포넌트 생성
+  - [x] 8.2 ContentTypeIcon 컴포넌트 생성
     - `src/components/common/ContentTypeIcon.tsx` 파일 생성
     - ContentType을 받아 해당 SVG 아이콘을 렌더링
     - size prop으로 크기 조절 가능
     - fallback으로 기존 이모티콘 표시
     - _New Requirement_
 
-  - [ ] 8.3 기존 이모티콘 사용 부분 교체
+  - [x] 8.3 기존 이모티콘 사용 부분 교체
     - `RelatedContentItem.tsx`의 이모티콘을 ContentTypeIcon으로 교체
     - `RelatedContentForm.tsx`의 이모티콘을 ContentTypeIcon으로 교체
     - `CATEGORY_CONFIG`, `CONTENT_TYPE_CONFIG`, `LINK_TYPE_CONFIG`의 icon 필드를 이미지 경로로 변경
     - _New Requirement_
 
-  - [ ] 8.4 SpotCategory 아이콘 이미지 적용
+  - [x] 8.4 SpotCategory 아이콘 이미지 적용
     - 지도 마커, 카테고리 필터 등에서 사용하는 카테고리 아이콘 교체
     - CategoryIcon 컴포넌트 생성 또는 ContentTypeIcon 확장
     - _New Requirement_
 
-- [ ] 9. Checkpoint - 전체 기능 검증
+- [x] 9. Checkpoint - 전체 기능 검증
   - 스팟 등록/수정/상세 페이지 전체 플로우 확인
   - 아이콘 이미지 렌더링 확인
   - 사용자에게 질문이 있으면 문의
