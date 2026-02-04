@@ -6,8 +6,8 @@
 
 ## Tasks
 
-- [ ] 1. 유틸리티 함수 및 타입 정의
-  - [ ] 1.1 콘텐츠 관련 유틸리티 함수 구현
+- [x] 1. 유틸리티 함수 및 타입 정의
+  - [x] 1.1 콘텐츠 관련 유틸리티 함수 구현
     - `src/lib/content-utils.ts` 파일 생성
     - `normalizeContentName` 함수 구현 (대소문자 무시, 공백 제거)
     - `isDuplicateContent` 함수 구현 (중복 검사)
