@@ -14,6 +14,8 @@ import dynamic from 'next/dynamic'
 import NearbyFacilities from '@/components/spot/NearbyFacilities'
 import SpotCommunitySection from '@/components/spot/SpotCommunitySection'
 import { SpotContentSection } from '@/components/spot/SpotContentSection'
+import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
+import { CategoryIcon } from '@/components/common'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -182,7 +184,10 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
                   color: categoryConfig.color,
                 }}
               >
-                <span>{categoryConfig.icon}</span>
+                <CategoryIcon
+                  category={spot.category as SpotCategory}
+                  size="sm"
+                />
                 <span>{categoryConfig.label}</span>
               </span>
             </div>
@@ -274,113 +279,9 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         <SpotCommunitySection spotId={spot.id} spotName={spot.name} />
       </div>
 
-      {/* Related Content - 맨 아래 (Requirements 3.3) */}
-      {/* relatedContent 우선, 없으면 relatedMedia 표시 (하위 호환성) */}
-      {((spot.relatedContent && spot.relatedContent.length > 0) ||
-        (spot.relatedMedia && spot.relatedMedia.length > 0)) && (
-        <div className="overflow-hidden rounded-lg bg-white shadow-md">
-          <div className="p-6">
-            <h2 className="mb-4 text-2xl font-bold text-gray-900">
-              관련 콘텐츠
-            </h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {/* relatedContent 표시 (새로운 형식) */}
-              {spot.relatedContent && spot.relatedContent.length > 0
-                ? spot.relatedContent.map((content, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">
-                            {getContentTypeIcon(content.type)}
-                          </span>
-                          <h3 className="font-semibold text-gray-900">
-                            {content.name}
-                          </h3>
-                        </div>
-                        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-                          {getContentTypeLabel(content.type)}
-                        </span>
-                      </div>
-                      {(content.year || content.additionalInfo) && (
-                        <p className="mt-1 text-sm text-gray-600">
-                          {content.year && `${content.year}년`}
-                          {content.year && content.additionalInfo && ' · '}
-                          {content.additionalInfo}
-                        </p>
-                      )}
-                      <Link
-                        href={`/community/media/${encodeURIComponent(content.name)}`}
-                        className="mt-3 inline-flex items-center gap-1 text-sm text-navy-600 transition-colors hover:text-navy-800"
-                      >
-                        <span>커뮤니티 보기</span>
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  ))
-                : /* relatedMedia 표시 (기존 형식 - 하위 호환성) */
-                  spot.relatedMedia?.map((media, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">
-                            {getContentTypeIcon(media.type)}
-                          </span>
-                          <h3 className="font-semibold text-gray-900">
-                            {media.title}
-                          </h3>
-                        </div>
-                        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-                          {getMediaTypeLabel(media.type)}
-                        </span>
-                      </div>
-                      {media.year && (
-                        <p className="mt-1 text-sm text-gray-600">
-                          {media.year}년
-                        </p>
-                      )}
-                      <Link
-                        href={`/community/media/${encodeURIComponent(media.title)}`}
-                        className="mt-3 inline-flex items-center gap-1 text-sm text-navy-600 transition-colors hover:text-navy-800"
-                      >
-                        <span>커뮤니티 보기</span>
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Related Content - 맨 아래 (Requirements 3.1, 3.4) */}
+      {/* RelatedContentSection 컴포넌트 사용 - 빈 배열일 때 자동으로 섹션 숨김 */}
+      <RelatedContentSection contents={spot.relatedContent || []} />
     </div>
   )
 }
@@ -503,42 +404,4 @@ function SpotNotFound() {
       </div>
     </div>
   )
-}
-
-function getMediaTypeLabel(type: string): string {
-  const labels: Record<string, string> = {
-    anime: '애니메이션',
-    drama: '드라마',
-    movie: '영화',
-    other: '기타',
-  }
-  return labels[type] || type
-}
-
-// 콘텐츠 타입별 아이콘 (Requirements 3.3)
-function getContentTypeIcon(type: string): string {
-  const icons: Record<string, string> = {
-    anime: '🎬',
-    movie: '🎥',
-    drama: '📺',
-    sports_team: '⚽',
-    artist: '🎵',
-    game: '🎮',
-    other: '📍',
-  }
-  return icons[type] || '📍'
-}
-
-// 콘텐츠 타입별 라벨 (Requirements 3.3)
-function getContentTypeLabel(type: string): string {
-  const labels: Record<string, string> = {
-    anime: '애니메이션',
-    movie: '영화',
-    drama: '드라마',
-    sports_team: '스포츠 팀',
-    artist: '아티스트',
-    game: '게임',
-    other: '기타',
-  }
-  return labels[type] || type
 }
