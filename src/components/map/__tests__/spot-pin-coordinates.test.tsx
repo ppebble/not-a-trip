@@ -76,7 +76,9 @@ jest.mock('@/stores/mapStore', () => ({
 jest.mock('@/stores/uiStore', () => ({
   useUIStore: () => ({
     openPreview: jest.fn(),
+    closePreview: jest.fn(),
   }),
+  useIsPreviewHovered: () => false,
 }))
 
 /**
@@ -100,6 +102,9 @@ jest.mock('react-leaflet', () => ({
   MapContainer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="map-container">{children}</div>
   ),
+  useMap: () => ({
+    latLngToContainerPoint: jest.fn(() => ({ x: 100, y: 100 })),
+  }),
 }))
 
 jest.mock('leaflet', () => ({
