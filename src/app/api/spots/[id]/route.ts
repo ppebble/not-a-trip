@@ -174,7 +174,11 @@ export async function PUT(
     }
     if (body.category) updateFields.category = body.category
     if (body.photos) updateFields.photos = body.photos
-    if (body.relatedContent) updateFields.relatedContent = body.relatedContent
+    // Requirements 5.2, 5.3: relatedContent 배열 전체 저장
+    // - 빈 배열도 저장하여 기존 콘텐츠 삭제 가능
+    // - 기존 + 새 콘텐츠 모두 포함된 배열 저장
+    if (body.relatedContent !== undefined)
+      updateFields.relatedContent = body.relatedContent
     if (body.externalLinks !== undefined)
       updateFields.externalLinks = body.externalLinks
 
