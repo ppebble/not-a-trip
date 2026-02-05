@@ -5,7 +5,12 @@
 import fc from 'fast-check'
 import { render, cleanup } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { SpotDetailData, MediaInfo, NearbyFacility } from '@/types'
+import {
+  SpotDetailData,
+  RelatedContent,
+  NearbyFacility,
+  ContentType,
+} from '@/types'
 import SpotDetailPage from '../page'
 
 // Cleanup after each test to prevent DOM element accumulation
@@ -20,15 +25,24 @@ afterEach(() => {
  * Generators for property-based testing
  */
 
-// Generate valid MediaInfo objects
-const mediaInfoArbitrary = fc.record({
-  title: fc
+// Generate valid RelatedContent objects
+const relatedContentArbitrary = fc.record({
+  name: fc
     .string({ minLength: 1, maxLength: 100 })
     .filter((s) => s.trim().length > 0),
-  type: fc.constantFrom('anime', 'drama', 'movie', 'other') as fc.Arbitrary<
-    MediaInfo['type']
-  >,
+  type: fc.constantFrom(
+    'anime',
+    'movie',
+    'drama',
+    'sports_team',
+    'artist',
+    'game',
+    'other'
+  ) as fc.Arbitrary<ContentType>,
   year: fc.option(fc.integer({ min: 1900, max: 2030 }), { nil: undefined }),
+  additionalInfo: fc.option(fc.string({ minLength: 1, maxLength: 100 }), {
+    nil: undefined,
+  }),
 })
 
 // Generate valid SpotDetailData objects
@@ -50,13 +64,16 @@ const spotDetailDataArbitrary = fc.record({
     fc.double({ min: -90, max: 90, noNaN: true }),
     fc.double({ min: -180, max: 180, noNaN: true })
   ) as fc.Arbitrary<[number, number]>,
-  relatedMedia: fc.array(mediaInfoArbitrary, { minLength: 1, maxLength: 5 }),
+  relatedContent: fc.array(relatedContentArbitrary, {
+    minLength: 1,
+    maxLength: 5,
+  }),
   nearbyFacilities: fc.constant([]) as fc.Arbitrary<NearbyFacility[]>, // Not tested in this property
 })
 
 /**
  * Helper function to check if rendered content contains required information
- * Requirements 3.2: 스팟 이름, 사진들, 전체 설명, 주소, 관련 미디어 정보 표시
+ * Requirements 3.2: 스팟 이름, 사진들, 전체 설명, 주소, 관련 콘텐츠 정보 표시
  */
 function containsRequiredInfo(
   container: HTMLElement,
@@ -81,14 +98,16 @@ function containsRequiredInfo(
     container.querySelector('img') !== null ||
     content.includes('사진')
 
-  // Check if related media information is present
-  const hasRelatedMedia =
-    !spotData.relatedMedia ||
-    spotData.relatedMedia.length === 0 ||
-    spotData.relatedMedia.some((media) => content.includes(media.title)) ||
-    content.includes('관련 작품')
+  // Check if related content information is present
+  const hasRelatedContent =
+    !spotData.relatedContent ||
+    spotData.relatedContent.length === 0 ||
+    spotData.relatedContent.some((c) => content.includes(c.name)) ||
+    content.includes('관련 콘텐츠')
 
-  return hasName && hasAddress && hasDescription && hasPhotos && hasRelatedMedia
+  return (
+    hasName && hasAddress && hasDescription && hasPhotos && hasRelatedContent
+  )
 }
 
 /**
@@ -277,7 +296,7 @@ describe('SpotDetail Required Information Property Tests', () => {
             fc.double({ min: -90, max: 90, noNaN: true }),
             fc.double({ min: -180, max: 180, noNaN: true })
           ) as fc.Arbitrary<[number, number]>,
-          relatedMedia: fc.array(mediaInfoArbitrary, {
+          relatedContent: fc.array(relatedContentArbitrary, {
             minLength: 1,
             maxLength: 3,
           }),
@@ -299,13 +318,13 @@ describe('SpotDetail Required Information Property Tests', () => {
 
           const content = container.textContent || ''
 
-          // Even with empty photos, name, address, description, and related media should still be present
+          // Even with empty photos, name, address, description, and related content should still be present
           const hasName = content.includes(spotData.name)
           const hasAddress = content.includes(spotData.address)
           const hasDescription = content.includes(spotData.description)
-          const hasRelatedMedia =
-            !spotData.relatedMedia ||
-            spotData.relatedMedia.some((media) => content.includes(media.title))
+          const hasRelatedContent =
+            !spotData.relatedContent ||
+            spotData.relatedContent.some((c) => content.includes(c.name))
 
           // Photos section should not be rendered when photos array is empty
           const photosSection = container.querySelector('h2')
@@ -316,7 +335,7 @@ describe('SpotDetail Required Information Property Tests', () => {
             hasName &&
             hasAddress &&
             hasDescription &&
-            hasRelatedMedia &&
+            hasRelatedContent &&
             !hasPhotosSection
           )
         }
@@ -325,7 +344,7 @@ describe('SpotDetail Required Information Property Tests', () => {
     )
   })
 
-  test('Property 3 Edge Case: Empty related media array handling', () => {
+  test('Property 3 Edge Case: Empty related content array handling', () => {
     fc.assert(
       fc.property(
         fc.record({
@@ -342,7 +361,7 @@ describe('SpotDetail Required Information Property Tests', () => {
             fc.double({ min: -90, max: 90, noNaN: true }),
             fc.double({ min: -180, max: 180, noNaN: true })
           ) as fc.Arbitrary<[number, number]>,
-          relatedMedia: fc.constant([]) as fc.Arbitrary<MediaInfo[]>, // Empty related media array
+          relatedContent: fc.constant([]) as fc.Arbitrary<RelatedContent[]>, // Empty related content array
           nearbyFacilities: fc.constant([]) as fc.Arbitrary<NearbyFacility[]>,
         }),
         (spotData: SpotDetailData) => {
@@ -361,7 +380,7 @@ describe('SpotDetail Required Information Property Tests', () => {
 
           const pageContent = container.textContent || ''
 
-          // Even with empty related media, name, address, description, and photos should still be present
+          // Even with empty related content, name, address, description, and photos should still be present
           const hasName = pageContent.includes(spotData.name)
           const hasAddress = pageContent.includes(spotData.address)
           const hasDescription = pageContent.includes(spotData.description)
@@ -370,15 +389,15 @@ describe('SpotDetail Required Information Property Tests', () => {
           const hasPhotos =
             spotData.photos.length === 0 || pageContent.includes('사진')
 
-          // Related media section should not be rendered when relatedMedia array is empty
-          const hasRelatedMediaSection = pageContent.includes('관련 작품')
+          // Related content section should not be rendered when relatedContent array is empty
+          const hasRelatedContentSection = pageContent.includes('관련 콘텐츠')
 
           return (
             hasName &&
             hasAddress &&
             hasDescription &&
             hasPhotos &&
-            !hasRelatedMediaSection
+            !hasRelatedContentSection
           )
         }
       ),
@@ -405,10 +424,10 @@ describe('SpotDetail Required Information Property Tests', () => {
             fc.double({ min: -90, max: 90, noNaN: true }),
             fc.double({ min: -180, max: 180, noNaN: true })
           ) as fc.Arbitrary<[number, number]>,
-          relatedMedia: fc.array(mediaInfoArbitrary, {
+          relatedContent: fc.array(relatedContentArbitrary, {
             minLength: 3,
             maxLength: 5,
-          }), // Many related media
+          }), // Many related content
           nearbyFacilities: fc.constant([]) as fc.Arbitrary<NearbyFacility[]>,
         }),
         (spotData: SpotDetailData) => {
@@ -455,21 +474,28 @@ describe('SpotDetail Required Information Property Tests', () => {
             fc.double({ min: -90, max: 90, noNaN: true }),
             fc.double({ min: -180, max: 180, noNaN: true })
           ) as fc.Arbitrary<[number, number]>,
-          relatedMedia: fc.array(
+          relatedContent: fc.array(
             fc.record({
-              title: fc
+              name: fc
                 .string({ minLength: 1 })
                 .filter((s) => s.trim().length > 0)
                 .map((s) => s + ' アニメ & < > " \''), // Add Japanese and special characters
               type: fc.constantFrom(
                 'anime',
-                'drama',
                 'movie',
+                'drama',
+                'sports_team',
+                'artist',
+                'game',
                 'other'
-              ) as fc.Arbitrary<MediaInfo['type']>,
+              ) as fc.Arbitrary<ContentType>,
               year: fc.option(fc.integer({ min: 1900, max: 2030 }), {
                 nil: undefined,
               }),
+              additionalInfo: fc.option(
+                fc.string({ minLength: 1, maxLength: 50 }),
+                { nil: undefined }
+              ),
             }),
             { minLength: 1, maxLength: 3 }
           ),
