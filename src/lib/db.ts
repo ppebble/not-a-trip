@@ -86,6 +86,7 @@ export const COLLECTIONS = {
   SCENES: 'scenes',
   USERS: 'users',
   USER_LIKES: 'user_likes',
+  CONTENT_MASTERS: 'content_masters',
 } as const
 
 /**
