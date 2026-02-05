@@ -97,19 +97,19 @@
     - 이미지 없으면 기존 ContentTypeIcon 표시
     - _New Requirement_
 
-  - [ ] 10.3 관리자 전용 콘텐츠 이미지 관리 페이지 구현
+  - [x] 10.3 관리자 전용 콘텐츠 이미지 관리 페이지 구현
     - `src/app/admin/content-images/page.tsx` 생성
     - 콘텐츠 목록 조회 및 이미지 업로드 UI
     - 관리자 권한 체크 (role === 'admin')
     - _New Requirement_
 
-  - [ ] 10.4 콘텐츠 이미지 업로드 API 구현
+  - [x] 10.4 콘텐츠 이미지 업로드 API 구현
     - `src/app/api/admin/content-images/route.ts` 생성
     - 관리자 권한 검증
     - 이미지 업로드 및 콘텐츠 imageUrl 업데이트
     - _New Requirement_
 
-  - [ ] 10.5 콘텐츠 마스터 데이터 관리
+  - [x] 10.5 콘텐츠 마스터 데이터 관리
     - 콘텐츠 이름별 대표 이미지 저장 (MongoDB 컬렉션)
     - 스팟 등록 시 기존 콘텐츠 이미지 자동 적용
     - _New Requirement_
