@@ -86,6 +86,34 @@
   - 아이콘 이미지 렌더링 확인
   - 사용자에게 질문이 있으면 문의
 
+- [ ] 10. 관련 콘텐츠 대표 이미지 기능
+  - [x] 10.1 RelatedContent 타입에 imageUrl 필드 추가
+    - `src/types/spot.ts`의 RelatedContent 인터페이스에 imageUrl 필드 추가
+    - _New Requirement_
+
+  - [x] 10.2 대표 이미지 원형 뱃지 표시 구현
+    - RelatedContentSection에서 이미지가 있으면 원형 뱃지로 표시
+    - RelatedContentItem에서도 이미지 표시 지원
+    - 이미지 없으면 기존 ContentTypeIcon 표시
+    - _New Requirement_
+
+  - [ ] 10.3 관리자 전용 콘텐츠 이미지 관리 페이지 구현
+    - `src/app/admin/content-images/page.tsx` 생성
+    - 콘텐츠 목록 조회 및 이미지 업로드 UI
+    - 관리자 권한 체크 (role === 'admin')
+    - _New Requirement_
+
+  - [ ] 10.4 콘텐츠 이미지 업로드 API 구현
+    - `src/app/api/admin/content-images/route.ts` 생성
+    - 관리자 권한 검증
+    - 이미지 업로드 및 콘텐츠 imageUrl 업데이트
+    - _New Requirement_
+
+  - [ ] 10.5 콘텐츠 마스터 데이터 관리
+    - 콘텐츠 이름별 대표 이미지 저장 (MongoDB 컬렉션)
+    - 스팟 등록 시 기존 콘텐츠 이미지 자동 적용
+    - _New Requirement_
+
 ## 선택적 테스트 Tasks
 
 - [ ]\* T1. 유틸리티 함수 속성 테스트 작성
