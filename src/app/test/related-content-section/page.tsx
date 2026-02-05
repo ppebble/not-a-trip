@@ -6,7 +6,20 @@ import { RelatedContent } from '@/types'
 
 // 테스트용 샘플 데이터
 const SAMPLE_CONTENTS: RelatedContent[] = [
-  { name: '도쿄구울', type: 'anime', year: 2014, additionalInfo: '시즌 1' },
+  {
+    name: '청춘 돼지는 바니걸 선배의 꿈을 꾸지 않는다',
+    type: 'anime',
+    year: 2018,
+    additionalInfo: '시즌 1',
+    imageUrl: 'https://cdn.myanimelist.net/images/anime/1301/93586.jpg',
+  },
+  {
+    name: '도쿄구울',
+    type: 'anime',
+    year: 2014,
+    additionalInfo: '시즌 1',
+    imageUrl: 'https://cdn.myanimelist.net/images/anime/5/64449.jpg',
+  },
   { name: '원피스', type: 'anime', year: 1999 },
   { name: '너의 이름은', type: 'movie', year: 2016 },
   { name: 'FC 도쿄', type: 'sports_team', additionalInfo: 'J리그' },
@@ -58,10 +71,10 @@ export default function RelatedContentSectionTestPage() {
               4개 (더보기 표시)
             </button>
             <button
-              onClick={() => setContentCount(6)}
-              className={`rounded px-3 py-1.5 text-sm ${contentCount === 6 ? 'bg-navy-600 text-white' : 'bg-navy-100 text-navy-700 hover:bg-navy-200'}`}
+              onClick={() => setContentCount(7)}
+              className={`rounded px-3 py-1.5 text-sm ${contentCount === 7 ? 'bg-navy-600 text-white' : 'bg-navy-100 text-navy-700 hover:bg-navy-200'}`}
             >
-              6개 (전체)
+              7개 (전체)
             </button>
           </div>
           <p className="mt-3 text-sm text-navy-500">

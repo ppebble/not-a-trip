@@ -76,3 +76,15 @@
 1. WHEN 사용자가 관련 콘텐츠 없이 스팟을 등록할 때 THEN THE SpotForm SHALL 정상적으로 스팟을 저장한다
 2. WHEN 스팟에 관련 콘텐츠가 없을 때 THEN THE SpotDetailPage SHALL "관련 콘텐츠" 섹션을 표시하지 않는다
 3. WHEN 스팟에 관련 콘텐츠가 없을 때 THEN THE RelatedContentForm SHALL 콘텐츠 추가를 유도하는 안내 메시지를 표시한다
+
+### Requirement 7: 관련 콘텐츠 대표 이미지 관리
+
+**User Story:** As a 관리자, I want 관련 콘텐츠에 대표 이미지를 설정할 수 있기를, so that 사용자가 콘텐츠를 시각적으로 쉽게 인식할 수 있습니다.
+
+#### Acceptance Criteria
+
+1. WHEN 관련 콘텐츠에 대표 이미지가 설정되어 있을 때 THEN THE SpotDetailPage SHALL 기본 아이콘 대신 원형 뱃지 형태로 대표 이미지를 표시한다
+2. WHEN 관련 콘텐츠에 대표 이미지가 없을 때 THEN THE SpotDetailPage SHALL 기존 ContentType 아이콘을 표시한다
+3. WHEN 관리자가 콘텐츠 이미지 관리 페이지에 접근할 때 THEN THE System SHALL 관리자 권한을 확인한다
+4. WHEN 관리자가 콘텐츠 대표 이미지를 업로드할 때 THEN THE System SHALL 해당 콘텐츠 이름에 이미지를 연결하여 저장한다
+5. WHEN 사용자가 스팟에 콘텐츠를 추가할 때 THEN THE System SHALL 기존에 등록된 콘텐츠 이미지가 있으면 자동으로 적용한다

@@ -1,19 +1,18 @@
 'use client'
 
+import Image from 'next/image'
 import { RelatedContent, ContentType } from '@/types'
+import { ContentTypeIcon } from '@/components/common'
 
-// 콘텐츠 타입 설정
-const CONTENT_TYPE_CONFIG: Record<
-  ContentType,
-  { label: string; icon: string }
-> = {
-  anime: { label: '애니메이션', icon: '🎬' },
-  movie: { label: '영화', icon: '🎥' },
-  drama: { label: '드라마', icon: '📺' },
-  sports_team: { label: '스포츠 팀', icon: '⚽' },
-  artist: { label: '아티스트', icon: '🎵' },
-  game: { label: '게임', icon: '🎮' },
-  other: { label: '기타', icon: '📍' },
+// 콘텐츠 타입 라벨 설정
+const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
+  anime: '애니메이션',
+  movie: '영화',
+  drama: '드라마',
+  sports_team: '스포츠 팀',
+  artist: '아티스트',
+  game: '게임',
+  other: '기타',
 }
 
 interface RelatedContentItemProps {
@@ -46,8 +45,8 @@ export function RelatedContentItem({
   isDragging,
   isDragOver,
 }: RelatedContentItemProps) {
-  const typeConfig =
-    CONTENT_TYPE_CONFIG[content.type] || CONTENT_TYPE_CONFIG.other
+  const typeLabel =
+    CONTENT_TYPE_LABELS[content.type] || CONTENT_TYPE_LABELS.other
 
   return (
     <div
@@ -82,13 +81,23 @@ export function RelatedContentItem({
 
       {/* 콘텐츠 정보 */}
       <div className="flex flex-1 items-center gap-3">
-        <span className="text-lg" role="img" aria-label={typeConfig.label}>
-          {typeConfig.icon}
-        </span>
+        {/* 대표 이미지가 있으면 원형 뱃지로 표시, 없으면 기본 아이콘 */}
+        {content.imageUrl ? (
+          <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border-2 border-navy-200">
+            <Image
+              src={content.imageUrl}
+              alt={content.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <ContentTypeIcon type={content.type} size="lg" />
+        )}
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium text-navy-800">{content.name}</p>
           <p className="truncate text-xs text-navy-500">
-            {typeConfig.label}
+            {typeLabel}
             {content.year && ` · ${content.year}년`}
             {content.additionalInfo && ` · ${content.additionalInfo}`}
           </p>
