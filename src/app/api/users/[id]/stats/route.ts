@@ -17,18 +17,18 @@ export async function GET(
       COLLECTIONS.USER_STATS
     )
 
-    let stats = await statsCollection.findOne({ userId })
+    const stats = await statsCollection.findOne({ userId })
 
     // 통계가 없으면 기본값 반환
     if (!stats) {
-      stats = {
+      return NextResponse.json({
         userId,
         totalCheckIns: 0,
         uniqueSpots: 0,
         badgeCount: 0,
         contentProgress: [],
         updatedAt: new Date(),
-      }
+      })
     }
 
     return NextResponse.json(stats)
