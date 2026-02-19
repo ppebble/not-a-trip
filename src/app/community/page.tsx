@@ -14,9 +14,9 @@ import {
 import { usePosts } from '@/hooks/usePosts'
 
 /**
- * 커뮤니티 카테고리 타입 (전체 카테고리 제거)
+ * 커뮤니티 카테고리 타입 (자유게시판 → 공지사항으로 변경)
  */
-type CommunityCategory = 'media' | 'spot' | 'general'
+type CommunityCategory = 'media' | 'spot' | 'notice'
 
 interface CategoryTab {
   id: CommunityCategory
@@ -47,7 +47,7 @@ const categoryTabs: CategoryTab[] = [
         />
       </svg>
     ),
-    description: '애니메이션/드라마별 게시글',
+    description: '애니메이션/드라마별 성지 및 인증 현황',
   },
   {
     id: 'spot',
@@ -73,11 +73,11 @@ const categoryTabs: CategoryTab[] = [
         />
       </svg>
     ),
-    description: '특별한 여행지별 게시글',
+    description: '특별한 여행지별 인증 갤러리',
   },
   {
-    id: 'general',
-    label: '자유게시판',
+    id: 'notice',
+    label: '공지사항',
     icon: (
       <svg
         className="h-4 w-4"
@@ -89,11 +89,11 @@ const categoryTabs: CategoryTab[] = [
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
         />
       </svg>
     ),
-    description: '자유로운 이야기',
+    description: '서비스 공지사항 및 FAQ',
   },
 ]
 
@@ -173,8 +173,12 @@ function CommunityPageContent() {
 
   // URL 쿼리 파라미터로 초기 탭 설정 (삭제 후 돌아올 때 사용)
   const getInitialTab = (): CommunityCategory => {
-    if (tabParam === 'general' || tabParam === 'spot' || tabParam === 'media') {
+    if (tabParam === 'notice' || tabParam === 'spot' || tabParam === 'media') {
       return tabParam
+    }
+    // 기존 general 파라미터는 notice로 리다이렉트
+    if (tabParam === 'general') {
+      return 'notice'
     }
     return 'media' // 기본값
   }
@@ -211,12 +215,17 @@ function CommunityPageContent() {
   // 현재 카테고리에 맞는 글쓰기 링크 생성
   const getWriteLink = () => {
     const params = new URLSearchParams()
-    if (activeCategory === 'general') {
+    if (activeCategory === 'notice') {
       params.set('type', 'general')
     }
     const queryString = params.toString()
     return `/community/write${queryString ? `?${queryString}` : ''}`
   }
+
+  // 글쓰기 버튼 표시 여부 (공지사항은 관리자만)
+  const { data: session } = useSession()
+  const isAdmin = session?.user?.role === 'admin'
+  const showWriteButton = activeCategory !== 'notice' || isAdmin
 
   return (
     <main className="min-h-screen bg-navy-50">
@@ -310,28 +319,30 @@ function CommunityPageContent() {
               </p>
             </div>
 
-            {/* 글쓰기 버튼 */}
-            <div className="mb-4 flex justify-end">
-              <Link
-                href={getWriteLink()}
-                className="flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            {/* 글쓰기 버튼 (공지사항은 관리자만) */}
+            {showWriteButton && (
+              <div className="mb-4 flex justify-end">
+                <Link
+                  href={getWriteLink()}
+                  className="flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                글쓰기
-              </Link>
-            </div>
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  글쓰기
+                </Link>
+              </div>
+            )}
           </>
         )}
 
@@ -350,9 +361,7 @@ function CommunityPageContent() {
             <>
               {activeCategory === 'media' && <MediaCategorySection />}
               {activeCategory === 'spot' && <SpotCategorySection />}
-              {activeCategory === 'general' && (
-                <PostList filterType="general" />
-              )}
+              {activeCategory === 'notice' && <NoticeCategorySection />}
             </>
           )}
         </div>
@@ -456,7 +465,7 @@ function SpotCategorySection() {
             />
           </svg>
           <h2 className="text-lg font-semibold text-navy-800">
-            스팟별 커뮤니티
+            스팟별 인증 갤러리
           </h2>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -511,7 +520,7 @@ function SpotCategorySection() {
             />
           </svg>
           <h2 className="text-lg font-semibold text-navy-800">
-            스팟별 커뮤니티
+            스팟별 인증 갤러리
           </h2>
         </div>
         <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -553,10 +562,12 @@ function SpotCategorySection() {
             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-        <h2 className="text-lg font-semibold text-navy-800">스팟별 커뮤니티</h2>
+        <h2 className="text-lg font-semibold text-navy-800">
+          스팟별 인증 갤러리
+        </h2>
       </div>
       <p className="mb-6 text-sm text-navy-500">
-        특별한 여행지를 선택하여 해당 장소에 대한 게시글을 확인하세요.
+        특별한 여행지를 선택하여 인증샷 갤러리를 확인하세요.
       </p>
 
       {/* 스팟 카드 그리드 */}
@@ -571,8 +582,9 @@ function SpotCategorySection() {
 
 /**
  * 스팟 카드 컴포넌트
- * 스팟 이미지, 이름, 게시글 수를 표시
- * 클릭 시 스팟 커뮤니티 페이지로 이동 (디테일 페이지가 아님)
+ * 스팟 이미지, 이름, 인증 수를 표시
+ * 클릭 시 스팟 상세 페이지로 이동 (인증 갤러리 포함)
+ * Requirements: 6.2 - 스팟별 게시판을 인증 갤러리로 전환
  */
 function SpotCard({
   spot,
@@ -583,7 +595,7 @@ function SpotCard({
 
   return (
     <Link
-      href={`/community/spot/${spot.id}`}
+      href={`/spots/${spot.id}`}
       className="group block overflow-hidden rounded-lg border border-navy-100 bg-white transition-all hover:border-navy-300 hover:shadow-md"
     >
       {/* 스팟 이미지 */}
@@ -638,10 +650,16 @@ function SpotCard({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          <span>게시글 {spot.postCount}개</span>
+          <span>인증샷 보기</span>
         </div>
       </div>
     </Link>
@@ -876,5 +894,37 @@ function MediaCard({ media }: { media: MediaCommunitySummary }) {
         <span>게시글 {media.postCount}개</span>
       </div>
     </Link>
+  )
+}
+
+/**
+ * 공지사항 카테고리 섹션
+ * 서비스 공지사항 및 FAQ 게시글 표시
+ * Requirements: 6.1 - 자유게시판을 공지사항/FAQ 용도로만 제한
+ */
+function NoticeCategorySection() {
+  return (
+    <div className="rounded-lg bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-center gap-2">
+        <svg
+          className="h-5 w-5 text-navy-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+          />
+        </svg>
+        <h2 className="text-lg font-semibold text-navy-800">공지사항</h2>
+      </div>
+      <p className="mb-6 text-sm text-navy-500">
+        서비스 관련 공지사항 및 자주 묻는 질문을 확인하세요.
+      </p>
+      <PostList filterType="general" />
+    </div>
   )
 }
