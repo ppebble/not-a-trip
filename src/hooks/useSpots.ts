@@ -9,6 +9,8 @@ export interface SpotPin {
   coordinates: [number, number]
   thumbnailUrl: string
   category?: SpotCategory
+  /** 인증 수 (인기 스팟 표시용) */
+  checkInCount?: number
 }
 
 export interface SpotPreviewData {

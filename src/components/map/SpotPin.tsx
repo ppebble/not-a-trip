@@ -57,7 +57,8 @@ const createImagePinIcon = (
   thumbnailUrl: string,
   isSelected: boolean = false,
   isHovered: boolean = false,
-  category?: SpotCategory
+  category?: SpotCategory,
+  checkInCount?: number
 ) => {
   // 핀 크기 설정 (호버/선택 상태에 따라 확대)
   const getSize = () => {
@@ -91,6 +92,24 @@ const createImagePinIcon = (
     isHovered && !isSelected
       ? 'box-shadow: 0 0 12px 2px rgba(96, 165, 250, 0.4);'
       : ''
+
+  // 인기 스팟 뱃지 (인증 수 10개 이상)
+  const isPopular = checkInCount && checkInCount >= 10
+  const popularBadge = isPopular
+    ? `<div style="
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 4px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 10;
+      ">🔥${checkInCount}</div>`
+    : ''
 
   // 이미지 URL이 있으면 이미지 핀, 없으면 기본 아이콘
   const hasImage = thumbnailUrl && thumbnailUrl.length > 0
@@ -234,6 +253,8 @@ const createImagePinIcon = (
         `
             : ''
         }
+        
+        ${popularBadge}
       </div>
     `,
     iconSize: [size, size + 12],
@@ -335,9 +356,10 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
         spot.thumbnailUrl,
         isSelected,
         isHovered,
-        spot.category
+        spot.category,
+        spot.checkInCount
       ),
-    [spot.thumbnailUrl, spot.category, isSelected, isHovered]
+    [spot.thumbnailUrl, spot.category, spot.checkInCount, isSelected, isHovered]
   )
 
   const handleClick = useCallback(() => {
