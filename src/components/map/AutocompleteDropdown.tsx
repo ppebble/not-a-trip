@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useCallback } from 'react'
-import { CATEGORY_CONFIG, SpotCategory } from '@/types'
+import { SpotCategory } from '@/types'
+import { CategoryIcon } from '@/components/common'
 import type { AutocompleteItem } from '@/hooks/useAutocomplete'
 
 /**
@@ -17,17 +18,18 @@ interface AutocompleteDropdownProps {
 }
 
 /**
- * 카테고리 아이콘 가져오기
- */
-function getCategoryIcon(category: SpotCategory): string {
-  return CATEGORY_CONFIG[category]?.icon || '📍'
-}
-
-/**
  * 카테고리 라벨 가져오기
  */
 function getCategoryLabel(category: SpotCategory): string {
-  return CATEGORY_CONFIG[category]?.label || '기타'
+  const labels: Record<SpotCategory, string> = {
+    animation: '애니메이션',
+    sports: '스포츠',
+    movie_drama: '영화/드라마',
+    music: '음악/콘서트',
+    game: '게임',
+    other: '기타',
+  }
+  return labels[category] || '기타'
 }
 
 /**
@@ -138,13 +140,11 @@ export default function AutocompleteDropdown({
             >
               <div className="flex items-center gap-2">
                 {/* 카테고리 아이콘 (Requirements 2.6) */}
-                <span
-                  className="text-base"
-                  role="img"
-                  aria-label={getCategoryLabel(item.category)}
-                >
-                  {getCategoryIcon(item.category)}
-                </span>
+                <CategoryIcon
+                  category={item.category}
+                  size="md"
+                  className="flex-shrink-0"
+                />
                 {/* 콘텐츠명 */}
                 <span className="text-sm font-medium text-gray-900">
                   {item.name}
