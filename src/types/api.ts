@@ -126,3 +126,25 @@ export interface UIStore {
   closePreview: () => void
   toggleMobileMenu: () => void
 }
+
+// ============================================
+// Content Master Types (콘텐츠 마스터 데이터)
+// ============================================
+
+export interface ContentMaster {
+  id: string
+  /** 정규화된 콘텐츠 이름 (소문자, 공백 제거) */
+  normalizedName: string
+  /** 원본 콘텐츠 이름 (표시용) */
+  displayName: string
+  /** 대표 이미지 URL */
+  imageUrl?: string
+  /** 콘텐츠 타입 */
+  type?: import('./spot').ContentType
+  /** 연도 */
+  year?: number
+  /** 등록된 스팟 수 */
+  spotCount: number
+  createdAt: Date
+  updatedAt: Date
+}

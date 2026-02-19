@@ -77,3 +77,44 @@ export function removeContentAtIndex(
 
   return contents.filter((_, i) => i !== index)
 }
+
+/**
+ * 콘텐츠 마스터 데이터에서 이미지 URL 조회
+ * 스팟 등록 시 기존 콘텐츠 이미지 자동 적용에 사용
+ * @param contentMasters - 콘텐츠 마스터 데이터 맵 (정규화된 이름 -> imageUrl)
+ * @param contentName - 조회할 콘텐츠 이름
+ * @returns 이미지 URL 또는 undefined
+ */
+export function getContentImageUrl(
+  contentMasters: Map<string, string>,
+  contentName: string
+): string | undefined {
+  const normalizedName = normalizeContentName(contentName)
+  return contentMasters.get(normalizedName)
+}
+
+/**
+ * RelatedContent 배열에 마스터 이미지 자동 적용
+ * 스팟 등록/수정 시 기존 콘텐츠 이미지를 자동으로 적용
+ * @param contents - RelatedContent 배열
+ * @param contentMasters - 콘텐츠 마스터 데이터 맵 (정규화된 이름 -> imageUrl)
+ * @returns 이미지가 적용된 새 배열 (원본 불변)
+ */
+export function applyMasterImages(
+  contents: RelatedContent[],
+  contentMasters: Map<string, string>
+): RelatedContent[] {
+  return contents.map((content) => {
+    // 이미 이미지가 있으면 유지
+    if (content.imageUrl) {
+      return content
+    }
+
+    const imageUrl = getContentImageUrl(contentMasters, content.name)
+    if (imageUrl) {
+      return { ...content, imageUrl }
+    }
+
+    return content
+  })
+}

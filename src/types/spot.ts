@@ -67,6 +67,50 @@ export type ContentType =
   | 'game'
   | 'other'
 
+export interface ContentTypeConfig {
+  icon: string
+  color: string
+  label: string
+}
+
+export const CONTENT_TYPE_CONFIG: Record<ContentType, ContentTypeConfig> = {
+  anime: {
+    icon: '/icons/content-types/anime.svg',
+    color: '#FF6B6B',
+    label: '애니메이션',
+  },
+  movie: {
+    icon: '/icons/content-types/movie.svg',
+    color: '#45B7D1',
+    label: '영화',
+  },
+  drama: {
+    icon: '/icons/content-types/drama.svg',
+    color: '#9B59B6',
+    label: '드라마',
+  },
+  sports_team: {
+    icon: '/icons/content-types/sports_team.svg',
+    color: '#4ECDC4',
+    label: '스포츠 팀',
+  },
+  artist: {
+    icon: '/icons/content-types/artist.svg',
+    color: '#96CEB4',
+    label: '아티스트',
+  },
+  game: {
+    icon: '/icons/content-types/game.svg',
+    color: '#DDA0DD',
+    label: '게임',
+  },
+  other: {
+    icon: '/icons/content-types/other.svg',
+    color: '#95A5A6',
+    label: '기타',
+  },
+}
+
 export interface CategoryConfig {
   icon: string
   color: string

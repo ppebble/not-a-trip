@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PostList from '@/components/community/PostList'
@@ -653,7 +654,9 @@ function SpotCard({
  * Requirements: 5.1
  */
 function MediaCategorySection() {
+  const { data: session } = useSession()
   const { data: mediaList, isLoading, error } = useMediaCommunitySummary()
+  const isAdmin = session?.user?.role === 'admin'
 
   if (isLoading) {
     return (
@@ -744,21 +747,46 @@ function MediaCategorySection() {
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
-      <div className="mb-4 flex items-center gap-2">
-        <svg
-          className="h-5 w-5 text-navy-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
-          />
-        </svg>
-        <h2 className="text-lg font-semibold text-navy-800">작품별 커뮤니티</h2>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <svg
+            className="h-5 w-5 text-navy-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
+            />
+          </svg>
+          <h2 className="text-lg font-semibold text-navy-800">
+            작품별 커뮤니티
+          </h2>
+        </div>
+        {isAdmin && (
+          <Link
+            href="/admin/content-images"
+            className="flex items-center gap-1.5 rounded-lg bg-navy-100 px-3 py-1.5 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-200"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            이미지 관리
+          </Link>
+        )}
       </div>
       <p className="mb-6 text-sm text-navy-500">
         애니메이션, 드라마, 영화 등 작품을 선택하여 관련 게시글을 확인하세요.
