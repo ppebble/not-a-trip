@@ -1,4 +1,4 @@
-# Not A Trip - Spec 우선순위 로드맵
+# Not A Trip - Spec 로드맵
 
 ## 서비스 방향성
 
@@ -8,16 +8,35 @@
 
 ---
 
-## 🎯 Phase 1: MVP 핵심 기능 (최우선)
+## ✅ 완료된 Spec (00-06)
 
-### 1. [pilgrimage-checkin](./pilgrimage-checkin/) - 성지순례 인증 시스템
+| #   | Spec                                                         | 설명                      | 상태    |
+| --- | ------------------------------------------------------------ | ------------------------- | ------- |
+| 00  | [anime-pilgrimage-map](./00-anime-pilgrimage-map/)           | 초기 프로젝트 설정        | ✅ 완료 |
+| 01  | [not-a-trip-rebrand](./01-not-a-trip-rebrand/)               | 리브랜딩 및 카테고리 확장 | ✅ 완료 |
+| 02  | [zustand-global-state](./02-zustand-global-state/)           | 전역 상태 관리            | ✅ 완료 |
+| 03  | [category-specific-content](./03-category-specific-content/) | 카테고리별 콘텐츠 섹션    | ✅ 완료 |
+| 04  | [content-search-filter](./04-content-search-filter/)         | 콘텐츠 검색 필터          | ✅ 완료 |
+| 05  | [map-hover-tooltip](./05-map-hover-tooltip/)                 | 지도 호버 툴팁            | ✅ 완료 |
+| 06  | [multi-content-spot](./06-multi-content-spot/)               | 다중 작품 연결 스팟       | ✅ 완료 |
+
+---
+
+## 🎯 Phase 1: MVP 핵심 기능 (07-08)
+
+| #   | Spec                                           | 설명                 | 상태      |
+| --- | ---------------------------------------------- | -------------------- | --------- |
+| 07  | [pilgrimage-checkin](./07-pilgrimage-checkin/) | 성지순례 인증 시스템 | 📋 계획됨 |
+| 08  | [mobile-first-ux](./08-mobile-first-ux/)       | 모바일 퍼스트 UX     | 📋 계획됨 |
+
+### 07. pilgrimage-checkin 주요 기능
 
 - 씬 인증샷 업로드 및 비교 뷰어
 - 유저 프로필 및 트로피 룸
 - 뱃지/업적 시스템
 - **기존 자유게시판 → 인증 갤러리로 전환**
 
-### 2. [mobile-first-ux](./mobile-first-ux/) - 모바일 퍼스트 UX
+### 08. mobile-first-ux 주요 기능
 
 - 모바일 지도 UX 개선 (Bottom Sheet, 제스처)
 - 빠른 인증 플로우
@@ -26,43 +45,20 @@
 
 ---
 
-## 🚀 Phase 2: 성장 기능
+## 🚀 Phase 2: 성장 기능 (09-10)
 
-### 3. [spot-report-wiki](./spot-report-wiki/) - 성지 제보 시스템
-
-- 유저 성지 제보 기능
-- 최초 제보자 명예 시스템
-- 스팟 상태 관리 (소실/변경 신고)
-- 관리자 검토 시스템
-
-### 4. [pilgrimage-route](./pilgrimage-route/) - 성지순례 코스/루트
-
-- 코스 생성 및 공유
-- 코스 따라가기 모드
-- 추천 코스 큐레이션
+| #   | Spec                                       | 설명               | 상태      |
+| --- | ------------------------------------------ | ------------------ | --------- |
+| 09  | [spot-report-wiki](./09-spot-report-wiki/) | 성지 제보 시스템   | 📋 계획됨 |
+| 10  | [pilgrimage-route](./10-pilgrimage-route/) | 성지순례 코스/루트 | 📋 계획됨 |
 
 ---
 
-## 🎁 Phase 3: 부가 기능
+## 🎁 Phase 3: 부가 기능 (11+)
 
-### 5. [otaku-facilities](./otaku-facilities/) - 덕후 친화적 편의시설
-
-- 코인 로커, 혼밥 식당, 굿즈샵 정보
-- 편의시설 유저 제보
-
----
-
-## 📋 기존 완료된 Spec
-
-| Spec                      | 상태    | 설명                      |
-| ------------------------- | ------- | ------------------------- |
-| anime-pilgrimage-map      | ✅ 완료 | 초기 프로젝트 설정        |
-| not-a-trip-rebrand        | ✅ 완료 | 리브랜딩 및 카테고리 확장 |
-| category-specific-content | ✅ 완료 | 카테고리별 콘텐츠 섹션    |
-| content-search-filter     | ✅ 완료 | 콘텐츠 검색 필터          |
-| map-hover-tooltip         | ✅ 완료 | 지도 호버 툴팁            |
-| multi-content-spot        | ✅ 완료 | 다중 작품 연결 스팟       |
-| zustand-global-state      | ✅ 완료 | 전역 상태 관리            |
+| #   | Spec                                       | 설명                 | 상태      |
+| --- | ------------------------------------------ | -------------------- | --------- |
+| 11  | [otaku-facilities](./11-otaku-facilities/) | 덕후 친화적 편의시설 | 📋 계획됨 |
 
 ---
 
@@ -92,5 +88,3 @@
 
 - Next.js SSR/SSG 적극 활용
 - "너의 이름은 계단 위치", "봇치더록 라이브하우스" 등 검색 키워드 최적화
-
-</content>
