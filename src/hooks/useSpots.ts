@@ -63,6 +63,8 @@ export interface MediaCommunitySummary {
   title: string
   type: 'anime' | 'drama' | 'movie' | 'other'
   postCount: number
+  /** 작품 대표 이미지 URL */
+  imageUrl?: string
 }
 
 // API response types
