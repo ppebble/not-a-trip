@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 import { SpotCategory, CATEGORY_CONFIG } from '@/types'
+import { normalizeContentName } from '@/lib/content-utils'
 
 interface SpotWithCheckIn {
   id: string
@@ -63,6 +64,29 @@ function useMediaSpots(mediaTitle: string) {
   })
 }
 
+/**
+ * 작품 이미지 조회 훅
+ */
+function useMediaImage(mediaTitle: string) {
+  return useQuery({
+    queryKey: ['content-image', mediaTitle],
+    queryFn: async (): Promise<string | null> => {
+      const response = await fetch(
+        `/api/content-images?names=${encodeURIComponent(mediaTitle)}`
+      )
+
+      if (!response.ok) {
+        return null
+      }
+
+      const data = await response.json()
+      const normalizedName = normalizeContentName(mediaTitle)
+      return data.images?.[normalizedName] || null
+    },
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
 interface PageProps {
   params: Promise<{ title: string }>
 }
@@ -75,6 +99,8 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
   const { title } = use(params)
   const mediaTitle = decodeURIComponent(title)
   const { data, isLoading, error } = useMediaSpots(mediaTitle)
+  const { data: imageUrl } = useMediaImage(mediaTitle)
+  const [bannerImageError, setBannerImageError] = useState(false)
 
   return (
     <main className="min-h-screen bg-navy-50">
@@ -97,23 +123,54 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
         {/* 작품 정보 배너 */}
-        <div className="mb-6 rounded-lg bg-gradient-to-r from-navy-700 to-navy-600 p-4 text-white shadow-md">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">🎬</span>
-              <div>
-                <h2 className="text-lg font-bold">{mediaTitle}</h2>
-                <p className="text-sm text-navy-200">
-                  성지순례 스팟을 확인하고 인증해보세요
-                </p>
-              </div>
+        <div className="relative mb-6 overflow-hidden rounded-lg bg-gradient-to-r from-navy-700 to-navy-600 shadow-md">
+          {/* 배경 이미지 (있는 경우) */}
+          {imageUrl && !bannerImageError && (
+            <div className="absolute inset-0">
+              <Image
+                src={imageUrl}
+                alt={mediaTitle}
+                fill
+                className="object-cover opacity-30"
+                onError={() => setBannerImageError(true)}
+                sizes="(max-width: 896px) 100vw, 896px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-navy-800/80 to-navy-700/60" />
             </div>
-            {data && (
-              <div className="text-right">
-                <div className="text-2xl font-bold">{data.totalCheckIns}</div>
-                <div className="text-sm text-navy-200">총 인증</div>
+          )}
+
+          <div className="relative p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* 작품 썸네일 */}
+                {imageUrl && !bannerImageError ? (
+                  <div className="relative h-16 w-12 flex-shrink-0 overflow-hidden rounded-md shadow-lg">
+                    <Image
+                      src={imageUrl}
+                      alt={mediaTitle}
+                      fill
+                      className="object-cover"
+                      onError={() => setBannerImageError(true)}
+                      sizes="48px"
+                    />
+                  </div>
+                ) : (
+                  <span className="text-3xl">🎬</span>
+                )}
+                <div>
+                  <h2 className="text-lg font-bold">{mediaTitle}</h2>
+                  <p className="text-sm text-navy-200">
+                    성지순례 스팟을 확인하고 인증해보세요
+                  </p>
+                </div>
               </div>
-            )}
+              {data && (
+                <div className="text-right">
+                  <div className="text-2xl font-bold">{data.totalCheckIns}</div>
+                  <div className="text-sm text-navy-200">총 인증</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
