@@ -858,40 +858,62 @@ function getMediaTypeLabel(type: MediaCommunitySummary['type']) {
  * Requirements: 5.1
  */
 function MediaCard({ media }: { media: MediaCommunitySummary }) {
+  const [imageError, setImageError] = useState(false)
+
   return (
     <Link
       href={`/community/media/${encodeURIComponent(media.title)}`}
-      className="group block overflow-hidden rounded-lg border border-navy-100 bg-white p-4 transition-all hover:border-navy-300 hover:shadow-md"
+      className="group block overflow-hidden rounded-lg border border-navy-100 bg-white transition-all hover:border-navy-300 hover:shadow-md"
     >
-      {/* 작품 아이콘 및 타입 */}
-      <div className="mb-3 flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-100 text-2xl transition-colors group-hover:bg-navy-200">
-          {getMediaTypeIcon(media.type)}
+      {/* 작품 이미지 또는 아이콘 */}
+      {media.imageUrl && !imageError ? (
+        <div className="relative h-32 w-full overflow-hidden bg-navy-100">
+          <Image
+            src={media.imageUrl}
+            alt={media.title}
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+            onError={() => setImageError(true)}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+          <div className="absolute right-2 top-2">
+            <span className="rounded-full bg-white/90 px-2 py-0.5 text-xs text-navy-600 shadow-sm">
+              {getMediaTypeLabel(media.type)}
+            </span>
+          </div>
         </div>
-        <span className="rounded-full bg-navy-50 px-2 py-0.5 text-xs text-navy-600">
-          {getMediaTypeLabel(media.type)}
-        </span>
-      </div>
+      ) : (
+        <div className="flex h-32 w-full items-center justify-center bg-navy-50">
+          <div className="text-center">
+            <div className="text-4xl">{getMediaTypeIcon(media.type)}</div>
+            <span className="mt-1 block text-xs text-navy-400">
+              {getMediaTypeLabel(media.type)}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* 작품 정보 */}
-      <h3 className="mb-2 truncate font-medium text-navy-800 group-hover:text-navy-600">
-        {media.title}
-      </h3>
-      <div className="flex items-center gap-1 text-sm text-navy-500">
-        <svg
-          className="h-4 w-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-          />
-        </svg>
-        <span>게시글 {media.postCount}개</span>
+      <div className="p-4">
+        <h3 className="mb-2 truncate font-medium text-navy-800 group-hover:text-navy-600">
+          {media.title}
+        </h3>
+        <div className="flex items-center gap-1 text-sm text-navy-500">
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+            />
+          </svg>
+          <span>게시글 {media.postCount}개</span>
+        </div>
       </div>
     </Link>
   )
