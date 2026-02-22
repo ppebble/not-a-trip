@@ -23,10 +23,10 @@ export function Header() {
             홈
           </Link>
           <Link
-            href="/community"
+            href="/gallery"
             className="text-sm text-slate-300 transition hover:text-white"
           >
-            커뮤니티
+            순례 갤러리
           </Link>
           <Link
             href="/spots/register"
