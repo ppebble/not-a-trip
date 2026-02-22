@@ -89,6 +89,7 @@ async function updateUserStats(userId: string): Promise<void> {
  * Query params:
  *   - spotId: 스팟별 필터
  *   - userId: 유저별 필터
+ *   - contentName: 작품명 필터 (해당 작품과 연결된 스팟의 체크인만 조회)
  *   - sortBy: 정렬 (latest | popular)
  *   - page: 페이지 번호
  *   - limit: 페이지당 개수
@@ -100,6 +101,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     )
 
     const { searchParams } = new URL(request.url)
+    const contentName = searchParams.get('contentName') || undefined
     const filter: CheckInFilter = {
       spotId: searchParams.get('spotId') || undefined,
       userId: searchParams.get('userId') || undefined,
@@ -113,6 +115,38 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const query: Record<string, any> = {}
     if (filter.spotId) query.spotId = filter.spotId
     if (filter.userId) query.userId = filter.userId
+
+    // contentName 필터: 해당 작품과 연결된 스팟의 체크인만 조회
+    // Requirements 3.5: 작품 선택 시 해당 작품 체크인만 필터링
+    if (contentName) {
+      const spotsCollection = await getCollection(COLLECTIONS.SPOTS)
+
+      // 해당 작품명을 relatedContent에 포함하는 스팟 ID 목록 조회
+      const matchingSpots = await spotsCollection
+        .find({
+          'relatedContent.name': {
+            $regex: `^${contentName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+            $options: 'i',
+          },
+        })
+        .project({ id: 1 })
+        .toArray()
+
+      const spotIds = matchingSpots.map((spot) => spot.id as string)
+
+      if (spotIds.length === 0) {
+        // 해당 작품과 연결된 스팟이 없으면 빈 결과 반환
+        return NextResponse.json({
+          checkins: [],
+          total: 0,
+          page: filter.page,
+          limit: filter.limit,
+          totalPages: 0,
+        })
+      }
+
+      query.spotId = { $in: spotIds }
+    }
 
     // 정렬 조건
     const sort: { [key: string]: 1 | -1 } =
