@@ -15,6 +15,7 @@ import NearbyFacilities from '@/components/spot/NearbyFacilities'
 import SpotCommunitySection from '@/components/spot/SpotCommunitySection'
 import { SpotContentSection } from '@/components/spot/SpotContentSection'
 import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
+import { SpotCheckInSection } from '@/components/spot/SpotCheckInSection'
 import { CategoryIcon } from '@/components/common'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
@@ -270,13 +271,17 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         </div>
       </div>
 
-      {/* Nearby Facilities and Community - 2 column layout */}
+      {/* Nearby Facilities and Check-in Section - 2 column layout */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Nearby Facilities */}
         <NearbyFacilities facilities={facilities} />
 
-        {/* Community Section */}
-        <SpotCommunitySection spotId={spot.id} spotName={spot.name} />
+        {/* Check-in Section (기존 Community Section 대체) */}
+        <SpotCheckInSection
+          spotId={spot.id}
+          spotName={spot.name}
+          sceneImageUrl={spot.photos?.[0]}
+        />
       </div>
 
       {/* Related Content - 맨 아래 (Requirements 3.1, 3.4) */}

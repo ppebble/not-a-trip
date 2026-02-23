@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { MediaCommunitySummary } from '@/types'
+import { normalizeContentName } from '@/lib/content-utils'
 
 interface SpotDocument {
   id: string
@@ -9,11 +10,22 @@ interface SpotDocument {
     type: 'anime' | 'drama' | 'movie' | 'other'
     year?: number
   }[]
+  relatedContent?: {
+    name: string
+    type: string
+    imageUrl?: string
+  }[]
 }
 
 interface PostDocument {
   spotId?: string
   mediaTitle?: string
+}
+
+interface ContentMasterDocument {
+  normalizedName: string
+  displayName: string
+  imageUrl?: string
 }
 
 /**
@@ -25,6 +37,9 @@ export async function GET(): Promise<NextResponse> {
   try {
     const spotsCollection = await getCollection<SpotDocument>(COLLECTIONS.SPOTS)
     const postsCollection = await getCollection<PostDocument>(COLLECTIONS.POSTS)
+    const contentMastersCollection = await getCollection<ContentMasterDocument>(
+      COLLECTIONS.CONTENT_MASTERS
+    )
 
     // 모든 스팟 조회
     const spots = await spotsCollection.find({}).toArray()
@@ -36,25 +51,60 @@ export async function GET(): Promise<NextResponse> {
         title: string
         type: 'anime' | 'drama' | 'movie' | 'other'
         spotIds: string[]
+        imageUrl?: string
       }
     >()
 
     spots.forEach((spot) => {
+      // relatedContent에서 이미지 URL 가져오기
+      const contentImageMap = new Map<string, string>()
+      if (spot.relatedContent && Array.isArray(spot.relatedContent)) {
+        spot.relatedContent.forEach((content) => {
+          if (content.imageUrl) {
+            contentImageMap.set(content.name, content.imageUrl)
+          }
+        })
+      }
+
       if (spot.relatedMedia && Array.isArray(spot.relatedMedia)) {
         spot.relatedMedia.forEach((media) => {
           if (media.title) {
             const existing = mediaToSpots.get(media.title)
+            const imageUrl = contentImageMap.get(media.title)
             if (existing) {
               existing.spotIds.push(spot.id)
+              // 이미지가 없으면 업데이트
+              if (!existing.imageUrl && imageUrl) {
+                existing.imageUrl = imageUrl
+              }
             } else {
               mediaToSpots.set(media.title, {
                 title: media.title,
                 type: media.type || 'other',
                 spotIds: [spot.id],
+                imageUrl,
               })
             }
           }
         })
+      }
+    })
+
+    // ContentMasters에서 이미지 URL 가져오기
+    const normalizedNames = Array.from(mediaToSpots.keys()).map(
+      normalizeContentName
+    )
+    const contentMasters = await contentMastersCollection
+      .find({
+        normalizedName: { $in: normalizedNames },
+        imageUrl: { $exists: true, $ne: '' },
+      })
+      .toArray()
+
+    const contentMasterImageMap = new Map<string, string>()
+    contentMasters.forEach((cm) => {
+      if (cm.imageUrl) {
+        contentMasterImageMap.set(cm.normalizedName, cm.imageUrl)
       }
     })
 
@@ -72,10 +122,16 @@ export async function GET(): Promise<NextResponse> {
           spotId: { $exists: false },
         })
 
+        // 이미지 URL 결정 (relatedContent > ContentMasters)
+        const normalizedName = normalizeContentName(media.title)
+        const imageUrl =
+          media.imageUrl || contentMasterImageMap.get(normalizedName)
+
         return {
           title: media.title,
           type: media.type,
           postCount: spotPostCount + directPostCount,
+          imageUrl,
         }
       })
     )

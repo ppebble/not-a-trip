@@ -87,6 +87,7 @@ interface SpotDocument {
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const collection = await getCollection<SpotDocument>('spots')
+    const checkinsCollection = await getCollection('checkins')
 
     // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url)
@@ -121,6 +122,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // Get spots from database with filter
     const spots = await collection.find(query).toArray()
 
+    // 각 스팟별 인증 수 집계 (인기 스팟 표시용)
+    const checkInCounts = await checkinsCollection
+      .aggregate<{
+        _id: string
+        count: number
+      }>([{ $group: { _id: '$spotId', count: { $sum: 1 } } }])
+      .toArray()
+
+    const checkInCountMap = new Map(
+      checkInCounts.map((item) => [item._id, item.count])
+    )
+
     // Transform to SpotPin format for map display
     const spotPins: SpotPin[] = spots.map((spot) => ({
       id: spot.id,
@@ -128,6 +141,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       coordinates: [spot.coordinates.lat, spot.coordinates.lng],
       thumbnailUrl: spot.photos[0] || '',
       category: spot.category,
+      checkInCount: checkInCountMap.get(spot.id) || 0,
     }))
 
     return NextResponse.json({ spots: spotPins, total: spotPins.length })

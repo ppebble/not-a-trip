@@ -87,6 +87,11 @@ export const COLLECTIONS = {
   USERS: 'users',
   USER_LIKES: 'user_likes',
   CONTENT_MASTERS: 'content_masters',
+  // 인증 시스템 컬렉션 (07-pilgrimage-checkin)
+  CHECKINS: 'checkins',
+  BADGES: 'badges',
+  USER_BADGES: 'user_badges',
+  USER_STATS: 'user_stats',
 } as const
 
 /**

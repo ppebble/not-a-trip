@@ -9,6 +9,8 @@ export interface SpotPin {
   coordinates: [number, number]
   thumbnailUrl: string
   category?: SpotCategory
+  /** 인증 수 (인기 스팟 표시용) */
+  checkInCount?: number
 }
 
 export interface SpotPreviewData {
@@ -61,6 +63,8 @@ export interface MediaCommunitySummary {
   title: string
   type: 'anime' | 'drama' | 'movie' | 'other'
   postCount: number
+  /** 작품 대표 이미지 URL */
+  imageUrl?: string
 }
 
 // API response types

@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  ExternalLink,
-  SpotCategory,
-  SECTION_HEADERS,
-  CATEGORY_CONFIG,
-} from '@/types'
+import { ExternalLink, SECTION_HEADERS, SECTION_ICONS } from '@/types'
 import { ExternalLinkCard } from './ExternalLinkCard'
 
 /**
@@ -38,7 +33,7 @@ export function EventInfoSection({
 }: EventInfoSectionProps) {
   // 카테고리별 헤더 텍스트
   const headerText = SECTION_HEADERS.events[category] || '이벤트 정보'
-  const categoryConfig = CATEGORY_CONFIG[category as SpotCategory]
+  const headerIcon = SECTION_ICONS.events
 
   // 카테고리별 빈 상태 메시지
   const emptyMessages: Record<string, { title: string; description: string }> =
@@ -64,7 +59,7 @@ export function EventInfoSection({
       <div className="p-6">
         {/* 헤더 */}
         <div className="mb-4 flex items-center gap-2">
-          <span className="text-2xl">{categoryConfig?.icon || '📅'}</span>
+          <span className="text-2xl">{headerIcon}</span>
           <h2 className="text-2xl font-bold text-gray-900">{headerText}</h2>
         </div>
 
