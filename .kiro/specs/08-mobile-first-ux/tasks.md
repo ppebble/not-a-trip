@@ -67,8 +67,8 @@
   - Service Worker 등록 확인
   - 빌드 오류 없음 확인
 
-- [ ] 4. 핵심 훅 구현
-  - [ ] 4.1 useNetworkStatus 훅 구현
+- [x] 4. 핵심 훅 구현
+  - [x] 4.1 useNetworkStatus 훅 구현
     - `navigator.onLine` 및 online/offline 이벤트 감지
     - Network Information API 활용 (지원 브라우저)
     - Zustand networkStore와 연동
@@ -78,7 +78,7 @@
     - **Property 6: 백그라운드 업로드 상태 독립성**
     - **Validates: Requirements 3.3**
 
-  - [ ] 4.3 useGeolocation 훅 구현
+  - [x] 4.3 useGeolocation 훅 구현
     - `navigator.geolocation.getCurrentPosition` 래핑
     - 권한 상태 관리 (granted/denied/prompt)
     - 에러 핸들링 및 폴백 상태 관리
@@ -88,7 +88,7 @@
     - **Property 3: GPS 폴백 UI 표시**
     - **Validates: Requirements 1.5**
 
-  - [ ] 4.5 useSwipeGesture 훅 구현
+  - [x] 4.5 useSwipeGesture 훅 구현
     - 터치 이벤트 (touchstart, touchmove, touchend) 처리
     - 스와이프 방향, 거리, 속도 계산
     - 임계값 기반 스와이프 감지
@@ -98,7 +98,7 @@
     - **Property 4: 갤러리 스와이프 인덱스 변화**
     - **Validates: Requirements 2.2**
 
-  - [ ] 4.7 useCamera 훅 구현
+  - [x] 4.7 useCamera 훅 구현
     - `navigator.mediaDevices.getUserMedia` 래핑
     - 전면/후면 카메라 전환
     - 사진 촬영 (canvas 캡처)
@@ -107,7 +107,7 @@
     - useEffect cleanup에서 모든 트랙 정리
     - _Requirements: 3.1, 3.4_
 
-- [ ] 5. Checkpoint - 훅 테스트 확인
+- [x] 5. Checkpoint - 훅 테스트 확인
   - 모든 훅 단위 테스트 통과 확인
   - 속성 테스트 통과 확인
 
