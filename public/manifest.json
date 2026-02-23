@@ -1,0 +1,37 @@
+{
+  "name": "Not a Trip - 특별한 여행지 탐색",
+  "short_name": "Not a Trip",
+  "description": "애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 장소를 탐색하세요",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4164a5",
+  "orientation": "portrait",
+  "categories": ["travel", "entertainment", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

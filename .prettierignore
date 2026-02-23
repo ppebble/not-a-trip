@@ -1,4 +1,18 @@
-node_module
+node_modules
 dist
 build
 coverage
+.next
+
+# 설정 파일
+*.config.js
+*.config.mjs
+*.config.ts
+tsconfig.json
+tsconfig.tsbuildinfo
+next-env.d.ts
+commitlint.config.mjs
+postcss.config.mjs
+
+# 마크다운
+*.md
