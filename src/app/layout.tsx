@@ -4,6 +4,7 @@ import './globals.css'
 import { Providers } from '@/lib/providers'
 import { Header } from '@/components/layout'
 import { ServiceWorkerRegistrar } from '@/components/mobile/ServiceWorkerRegistrar'
+import { IosPwaPrompt } from '@/components/mobile/IosPwaPrompt'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -56,6 +57,7 @@ export default function RootLayout({
           <Header />
           <main className="pt-14">{children}</main>
           <ServiceWorkerRegistrar />
+          <IosPwaPrompt />
         </Providers>
       </body>
     </html>
