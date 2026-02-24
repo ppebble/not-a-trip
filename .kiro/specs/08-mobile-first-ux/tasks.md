@@ -130,20 +130,20 @@
     - 압축 진행률 제공
     - _Requirements: 5.5_
 
-- [ ] 7. 백그라운드 업로드 시스템 구현
-  - [ ] 7.1 uploadQueueStore 구현 (src/stores/uploadQueueStore.ts)
+- [x] 7. 백그라운드 업로드 시스템 구현
+  - [x] 7.1 uploadQueueStore 구현 (src/stores/uploadQueueStore.ts)
     - 업로드 큐 관리 (추가, 제거, 상태 업데이트)
     - 재시도 로직 (지수 백오프)
     - 전체 진행률 계산
     - _Requirements: 3.3_
 
-  - [ ] 7.2 useBackgroundUpload 훅 구현
+  - [x] 7.2 useBackgroundUpload 훅 구현
     - uploadQueueStore 연동
     - 네트워크 상태에 따른 업로드 일시정지/재개
     - 업로드 완료 콜백
     - _Requirements: 3.3_
 
-- [ ] 8. Checkpoint - 이미지 처리 확인
+- [x] 8. Checkpoint - 이미지 처리 확인
   - 이미지 압축 테스트 통과 확인
   - 백그라운드 업로드 동작 확인
 
