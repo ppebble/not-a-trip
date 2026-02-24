@@ -35,7 +35,7 @@ export function Header() {
             스팟 등록
           </Link>
           <Link
-            href="/test/bottom-sheet"
+            href="/test/location-button"
             className="text-sm text-yellow-400 transition hover:text-yellow-300"
           >
             🧪 테스트

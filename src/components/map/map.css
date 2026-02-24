@@ -222,6 +222,12 @@
   .leaflet-control-zoom {
     transform: scale(0.9);
   }
+
+  /* 모바일 터치 이벤트 최적화 */
+  .leaflet-container {
+    touch-action: none; /* 브라우저 기본 제스처 방지 (Leaflet이 직접 처리) */
+    -webkit-tap-highlight-color: transparent; /* 탭 하이라이트 제거 */
+  }
 }
 
 /* ============================================
