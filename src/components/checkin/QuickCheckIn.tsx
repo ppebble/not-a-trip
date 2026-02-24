@@ -12,7 +12,6 @@
 
 import { useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
-import { useBackgroundUpload } from '@/hooks/useBackgroundUpload'
 import { ViewfinderOverlay } from '@/components/mobile/ViewfinderOverlay'
 import { CheckInInput, UserBadge } from '@/types'
 
@@ -46,26 +45,6 @@ export function QuickCheckIn({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  // 백그라운드 업로드 설정
-  const { enqueue: _enqueue, queue } = useBackgroundUpload({
-    uploadFn: async (file, onProgress) => {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!res.ok) throw new Error('업로드 실패')
-      onProgress(100)
-      return res.json()
-    },
-    onComplete: () => {
-      // 업로드 완료 시 별도 처리 없음 (submit에서 처리)
-    },
-  })
 
   // 파일 선택 처리
   const handleFileSelect = useCallback(
@@ -154,10 +133,6 @@ export function QuickCheckIn({
     setError(null)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
-
-  // 업로드 진행 상태
-  const activeUploads = queue.filter((item) => item.status === 'uploading')
-  const _hasActiveUploads = activeUploads.length > 0
 
   // 뷰파인더 모드
   if (showViewfinder && sceneImageUrl) {
