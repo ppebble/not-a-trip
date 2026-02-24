@@ -92,6 +92,8 @@ export const COLLECTIONS = {
   BADGES: 'badges',
   USER_BADGES: 'user_badges',
   USER_STATS: 'user_stats',
+  // 푸시 알림 컬렉션 (08-mobile-first-ux)
+  PUSH_SUBSCRIPTIONS: 'push_subscriptions',
 } as const
 
 /**
