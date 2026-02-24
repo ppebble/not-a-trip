@@ -206,14 +206,14 @@
     - **Property 1: 지도 제스처 줌 동작**
     - **Validates: Requirements 1.1**
 
-- [ ] 12. 스팟 상세 페이지 모바일 최적화
-  - [ ] 12.1 SwipeableGallery 컴포넌트 구현
+- [x] 12. 스팟 상세 페이지 모바일 최적화
+  - [x] 12.1 SwipeableGallery 컴포넌트 구현
     - 좌우 스와이프 제스처
     - 인디케이터 (현재 위치 표시)
     - 터치 슬라이드 애니메이션
     - _Requirements: 2.2_
 
-  - [ ] 12.2 DirectionsButton 컴포넌트 구현 (src/components/common/DirectionsButton.tsx)
+  - [x] 12.2 DirectionsButton 컴포넌트 구현 (src/components/common/DirectionsButton.tsx)
     - 플랫폼 감지 (iOS/Android/Web)
     - 지도 앱 선택 모달
     - 딥링크 URL 생성 및 열기
@@ -223,7 +223,7 @@
     - **Property 5: 길찾기 딥링크 URL 생성**
     - **Validates: Requirements 2.3**
 
-  - [ ] 12.4 스팟 상세 페이지 레이아웃 최적화
+  - [x] 12.4 스팟 상세 페이지 레이아웃 최적화
     - 핵심 정보 (사진, 위치, 작품명) 상단 배치
     - 스크롤 없이 핵심 정보 표시 (모바일 뷰포트)
     - SwipeableGallery 적용
@@ -235,8 +235,8 @@
   - 길찾기 버튼 동작 확인
   - 모바일 레이아웃 확인
 
-- [ ] 14. 빠른 인증 플로우 구현
-  - [ ] 14.1 ViewfinderOverlay 컴포넌트 구현
+- [x] 14. 빠른 인증 플로우 구현
+  - [x] 14.1 ViewfinderOverlay 컴포넌트 구현
     - 카메라 스트림 표시 (video 태그)
     - 씬 이미지 오버레이 (30~50% 투명도)
     - 투명도 조절 슬라이더
@@ -247,20 +247,20 @@
     - **Property 7: 뷰파인더 오버레이 투명도 범위**
     - **Validates: Requirements 3.4**
 
-  - [ ] 14.3 QuickCheckIn 컴포넌트 구현 (src/components/checkin/QuickCheckIn.tsx)
+  - [x] 14.3 QuickCheckIn 컴포넌트 구현 (src/components/checkin/QuickCheckIn.tsx)
     - 3단계 플로우 (사진 선택 → 코멘트 → 완료)
     - 카메라/갤러리 선택 옵션
     - 이미지 압축 적용
     - 백그라운드 업로드 연동
     - _Requirements: 3.1, 3.2, 3.3_
 
-  - [ ] 14.4 기존 CheckInModal 개선
+  - [x] 14.4 기존 CheckInModal 개선
     - QuickCheckIn 플로우 적용
     - ViewfinderOverlay 옵션 추가
     - 백그라운드 업로드 상태 표시
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 15. Checkpoint - 인증 플로우 확인
+- [x] 15. Checkpoint - 인증 플로우 확인
   - 카메라 접근 동작 확인
   - 뷰파인더 오버레이 동작 확인
   - 3단계 플로우 완료 확인
