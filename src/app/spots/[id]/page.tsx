@@ -16,6 +16,7 @@ import { SpotContentSection } from '@/components/spot/SpotContentSection'
 import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
 import { SpotCheckInSection } from '@/components/spot/SpotCheckInSection'
 import { CategoryIcon } from '@/components/common'
+import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/SkeletonUI'
 import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 import DirectionsButton from '@/components/common/DirectionsButton'
 
@@ -316,43 +317,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
 }
 
 function SpotDetailSkeleton() {
-  return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="border-b border-slate-200 bg-white px-4 py-4">
-        <div className="mx-auto max-w-7xl">
-          <div className="h-5 w-32 animate-pulse rounded bg-slate-200"></div>
-          <div className="mt-2 h-6 w-40 animate-pulse rounded bg-slate-200"></div>
-        </div>
-      </div>
-
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="space-y-8">
-          {/* Header Skeleton */}
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <div className="mb-4 h-8 w-64 animate-pulse rounded bg-gray-200"></div>
-            <div className="mb-4 h-4 w-48 animate-pulse rounded bg-gray-200"></div>
-            <div className="space-y-2">
-              <div className="h-4 w-full animate-pulse rounded bg-gray-200"></div>
-              <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200"></div>
-            </div>
-          </div>
-
-          {/* Photos Skeleton */}
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <div className="mb-4 h-6 w-16 animate-pulse rounded bg-gray-200"></div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="aspect-video animate-pulse rounded-lg bg-gray-200"
-                ></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  )
+  return <SpotDetailSkeletonUI />
 }
 
 interface SpotDetailErrorProps {
