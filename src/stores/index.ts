@@ -56,3 +56,12 @@ export {
   RETRY_CONFIG,
 } from './uploadQueueStore'
 export type { UploadItem, UploadStatus } from './uploadQueueStore'
+
+// Bottom Sheet Store - 바텀 시트 상태 관리
+export {
+  useBottomSheetStore,
+  useIsBottomSheetOpen,
+  useBottomSheetHeight,
+  useBottomSheetSpotId,
+} from './bottomSheetStore'
+export type { BottomSheetHeight } from './bottomSheetStore'

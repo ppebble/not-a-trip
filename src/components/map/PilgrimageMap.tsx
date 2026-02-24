@@ -7,6 +7,7 @@ import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
 import SpotPreview from './SpotPreview'
+import BottomSheet from '@/components/mobile/BottomSheet'
 import './map.css'
 
 interface PilgrimageMapProps {
@@ -160,8 +161,9 @@ export default function PilgrimageMap({
         Anime Pilgrim
       </div>
 
-      {/* 스팟 미리보기 툴팁 (지도 컨테이너 내부에 표시) */}
-      <SpotPreview />
+      {/* 스팟 미리보기 - 데스크탑: 툴팁, 모바일: Bottom Sheet */}
+      <SpotPreview className="hidden md:block" />
+      <BottomSheet />
     </div>
   )
 }

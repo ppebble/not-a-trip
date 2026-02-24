@@ -6,6 +6,7 @@ import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore, useIsPreviewHovered } from '@/stores/uiStore'
+import { useBottomSheetStore } from '@/stores/bottomSheetStore'
 
 interface SpotPinProps {
   spot: SpotPinType
@@ -268,6 +269,7 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   const { selectedSpotId, setSelectedSpot } = useMapStore()
   const { openPreview, closePreview } = useUIStore()
   const isPreviewHovered = useIsPreviewHovered()
+  const { open: openBottomSheet } = useBottomSheetStore()
   const [isHovered, setIsHovered] = useState(false)
 
   // isPreviewHovered의 최신 값을 참조하기 위한 ref
@@ -363,7 +365,7 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   )
 
   const handleClick = useCallback(() => {
-    // 모바일 터치 디바이스 처리 (Requirements: 4.1, 4.3)
+    // 모바일 터치 디바이스 처리 (Requirements: 1.2, 4.1, 4.3)
     if (isTouchDevice) {
       // 기존 터치 리셋 타이머 취소
       if (touchResetTimeoutRef.current) {
@@ -371,11 +373,11 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
       }
 
       if (touchCount === 0) {
-        // 첫 번째 터치: SpotPreview 열기
+        // 첫 번째 터치: Bottom Sheet 열기 (모바일)
         setTouchCount(1)
         setIsHovered(true)
         setSelectedSpot(spot.id)
-        openPreview(spot.id, getMarkerScreenPosition())
+        openBottomSheet(spot.id)
 
         // 3초 후 터치 카운트 리셋
         touchResetTimeoutRef.current = setTimeout(() => {
@@ -398,7 +400,7 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
   }, [
     spot.id,
     setSelectedSpot,
-    openPreview,
+    openBottomSheet,
     onSelect,
     isTouchDevice,
     touchCount,
