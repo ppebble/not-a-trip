@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
 import { useMapStore } from '@/stores/mapStore'
@@ -8,6 +8,8 @@ import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
 import SpotPreview from './SpotPreview'
 import BottomSheet from '@/components/mobile/BottomSheet'
+import LocationButton from '@/components/mobile/LocationButton'
+import GpsErrorFallback from '@/components/mobile/GpsErrorFallback'
 import './map.css'
 
 interface PilgrimageMapProps {
@@ -27,10 +29,33 @@ export default function PilgrimageMap({
 }: PilgrimageMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
   const { center, zoom, setCenter, setZoom } = useMapStore()
+  const [gpsError, setGpsError] = useState<{
+    code: string
+    message: string
+  } | null>(null)
 
   // Use props if provided, otherwise use store values
   const mapCenter = initialCenter || center
   const mapZoom = initialZoom || zoom
+
+  const handleLocationFound = useCallback((lat: number, lng: number) => {
+    setGpsError(null)
+    const map = mapRef.current
+    if (map) {
+      map.flyTo([lat, lng], 15, { duration: 1 })
+    }
+  }, [])
+
+  const handleGpsError = useCallback(
+    (error: { code: string; message: string }) => {
+      setGpsError(error)
+    },
+    []
+  )
+
+  const handleDismissGpsError = useCallback(() => {
+    setGpsError(null)
+  }, [])
 
   useEffect(() => {
     const map = mapRef.current
@@ -74,6 +99,7 @@ export default function PilgrimageMap({
         touchZoom={true}
         boxZoom={true}
         keyboard={true}
+        bounceAtZoomLimits={false} // 줌 한계에서 바운스 방지
         minZoom={2} // 최소 줌 레벨 제한 (세계 지도 반복 방지)
         maxBounds={[
           [-90, -180], // 남서쪽 경계
@@ -155,6 +181,18 @@ export default function PilgrimageMap({
           </svg>
         </button>
       </div>
+
+      {/* 현재 위치 버튼 - 하단 우측 (엄지 접근 용이) */}
+      <LocationButton
+        onLocationFound={handleLocationFound}
+        onError={handleGpsError}
+        className="absolute bottom-20 right-4 z-[1000] md:bottom-4"
+      />
+
+      {/* GPS 에러 폴백 UI */}
+      {gpsError && (
+        <GpsErrorFallback error={gpsError} onDismiss={handleDismissGpsError} />
+      )}
 
       {/* Map attribution with navy theme */}
       <div className="absolute bottom-2 left-2 z-[1000] rounded bg-navy-800/80 px-2 py-1 text-xs text-white">
