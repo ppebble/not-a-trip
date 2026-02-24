@@ -228,3 +228,56 @@ async function getCacheStats() {
   }
   return stats
 }
+
+// ============================================
+// 푸시 알림 이벤트 처리
+// @requirements 4.3
+// ============================================
+
+// push: 푸시 알림 수신 시 알림 표시
+self.addEventListener('push', (event) => {
+  if (!event.data) return
+
+  try {
+    const data = event.data.json()
+    const options = {
+      body: data.body || '',
+      icon: data.icon || '/icons/icon-192x192.png',
+      badge: data.badge || '/icons/icon-192x192.png',
+      tag: data.tag || 'default',
+      data: data.data || {},
+      actions: [],
+      vibrate: [200, 100, 200],
+    }
+
+    event.waitUntil(self.registration.showNotification(data.title, options))
+  } catch {
+    // JSON 파싱 실패 시 텍스트로 표시
+    const text = event.data.text()
+    event.waitUntil(
+      self.registration.showNotification('Not a Trip', { body: text })
+    )
+  }
+})
+
+// notificationclick: 알림 클릭 시 해당 페이지로 이동
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+
+  const url = event.notification.data?.url || '/'
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window' }).then((clientList) => {
+      // 이미 열린 탭이 있으면 포커스
+      for (const client of clientList) {
+        if (client.url.includes(url) && 'focus' in client) {
+          return client.focus()
+        }
+      }
+      // 없으면 새 탭 열기
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(url)
+      }
+    })
+  )
+})
