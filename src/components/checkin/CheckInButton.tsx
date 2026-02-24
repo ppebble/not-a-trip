@@ -1,21 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { CheckInModal } from './CheckInModal'
+import { QuickCheckIn } from './QuickCheckIn'
 import { LoginRequiredModal } from '@/components/common'
+import { UserBadge } from '@/types'
 
 interface CheckInButtonProps {
   spotId: string
   spotName: string
   sceneImageUrl?: string
-  onSuccess?: () => void
+  onSuccess?: (earnedBadges?: UserBadge[]) => void
   className?: string
 }
 
 /**
  * 순례 인증 버튼 컴포넌트
- * Requirements: 1.1
+ * 모바일: QuickCheckIn (3단계 빠른 플로우)
+ * 데스크탑: 기존 CheckInModal
+ *
+ * Requirements: 1.1, 3.1, 3.2, 3.3, 3.4
  */
 export function CheckInButton({
   spotId,
@@ -27,6 +32,14 @@ export function CheckInButton({
   const { data: session } = useSession()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const handleClick = () => {
     if (!session?.user) {
@@ -36,9 +49,9 @@ export function CheckInButton({
     setIsModalOpen(true)
   }
 
-  const handleSuccess = () => {
+  const handleSuccess = (earnedBadges?: UserBadge[]) => {
     setIsModalOpen(false)
-    onSuccess?.()
+    onSuccess?.(earnedBadges)
   }
 
   return (
@@ -69,14 +82,26 @@ export function CheckInButton({
         순례 인증
       </button>
 
-      <CheckInModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        spotId={spotId}
-        spotName={spotName}
-        sceneImageUrl={sceneImageUrl}
-        onSuccess={handleSuccess}
-      />
+      {/* 모바일: QuickCheckIn / 데스크탑: CheckInModal */}
+      {isModalOpen &&
+        (isMobile ? (
+          <QuickCheckIn
+            spotId={spotId}
+            spotName={spotName}
+            sceneImageUrl={sceneImageUrl}
+            onClose={() => setIsModalOpen(false)}
+            onSuccess={handleSuccess}
+          />
+        ) : (
+          <CheckInModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            spotId={spotId}
+            spotName={spotName}
+            sceneImageUrl={sceneImageUrl}
+            onSuccess={handleSuccess}
+          />
+        ))}
 
       <LoginRequiredModal
         isOpen={showLoginModal}
