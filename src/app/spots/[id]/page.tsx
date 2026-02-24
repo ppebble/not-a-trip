@@ -12,11 +12,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import NearbyFacilities from '@/components/spot/NearbyFacilities'
-import SpotCommunitySection from '@/components/spot/SpotCommunitySection'
 import { SpotContentSection } from '@/components/spot/SpotContentSection'
 import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
 import { SpotCheckInSection } from '@/components/spot/SpotCheckInSection'
 import { CategoryIcon } from '@/components/common'
+import SwipeableGallery from '@/components/mobile/SwipeableGallery'
+import DirectionsButton from '@/components/common/DirectionsButton'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -172,12 +173,19 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
 
   return (
     <div className="space-y-8">
-      {/* Spot Header */}
+      {/* 모바일: SwipeableGallery (edge-to-edge, 패딩 없음) - Requirements 2.1, 2.2 */}
+      {spot.photos && spot.photos.length > 0 && (
+        <div className="-mx-4 -mt-8 sm:-mx-6 md:hidden">
+          <SwipeableGallery images={spot.photos} />
+        </div>
+      )}
+
+      {/* Spot Header - 모바일 최적화 (Requirements 2.1) */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
-        <div className="p-6">
-          {/* 카테고리 배지 (Requirements 2.3) */}
+        <div className="p-4 md:p-6">
+          {/* 카테고리 배지 */}
           {categoryConfig && (
-            <div className="mb-3">
+            <div className="mb-2 md:mb-3">
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium"
                 style={{
@@ -193,39 +201,56 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
               </span>
             </div>
           )}
-          <h1 className="mb-4 text-3xl font-bold text-gray-900">{spot.name}</h1>
-          <div className="mb-4 flex items-center text-gray-600">
-            <svg
-              className="mr-2 h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <span>{spot.address}</span>
-          </div>
-          <p className="leading-relaxed text-gray-700">{spot.description}</p>
-        </div>
-      </div>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 md:mb-4 md:text-3xl">
+            {spot.name}
+          </h1>
 
-      {/* Photos */}
-      {spot.photos && spot.photos.length > 0 && (
-        <div className="overflow-hidden rounded-lg bg-white shadow-md">
-          <div className="p-6">
+          {/* 주소 + 길찾기 버튼 (Requirements 2.3) */}
+          <div className="mb-3 flex items-center justify-between gap-2 md:mb-4">
+            <div className="flex min-w-0 items-center text-gray-600">
+              <svg
+                className="mr-1.5 h-4 w-4 flex-shrink-0 md:mr-2 md:h-5 md:w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span className="truncate text-sm md:text-base">
+                {spot.address}
+              </span>
+            </div>
+            {spot.coordinates && (
+              <DirectionsButton
+                lat={spot.coordinates[0]}
+                lng={spot.coordinates[1]}
+                destinationName={spot.name}
+                className="flex-shrink-0"
+              />
+            )}
+          </div>
+
+          <p className="text-sm leading-relaxed text-gray-700 md:text-base">
+            {spot.description}
+          </p>
+        </div>
+
+        {/* 데스크탑: 기존 그리드 사진 레이아웃 (카드 내부) */}
+        {spot.photos && spot.photos.length > 0 && (
+          <div className="hidden border-t border-gray-100 p-6 md:block">
             <h2 className="mb-4 text-2xl font-bold text-gray-900">사진</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
               {spot.photos.map((photo, index) => (
                 <div
                   key={index}
@@ -241,8 +266,8 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
               ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Category-specific Content Section - 카테고리별 콘텐츠 (Requirements 1.1, 1.2) */}
       <SpotContentSection
@@ -285,7 +310,6 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
       </div>
 
       {/* Related Content - 맨 아래 (Requirements 3.1, 3.4) */}
-      {/* RelatedContentSection 컴포넌트 사용 - 빈 배열일 때 자동으로 섹션 숨김 */}
       <RelatedContentSection contents={spot.relatedContent || []} />
     </div>
   )
