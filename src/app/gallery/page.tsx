@@ -8,6 +8,11 @@ import { SpotSearchModal } from '@/components/gallery/SpotSearchModal'
 import { CheckInModal } from '@/components/checkin/CheckInModal'
 import { BadgeEarnedModal } from '@/components/checkin/BadgeEarnedModal'
 import { Spot, UserBadge } from '@/types'
+import {
+  GalleryPageSkeleton as GalleryPageSkeletonUI,
+  SkeletonBlock,
+  GalleryGridSkeleton,
+} from '@/components/common/SkeletonUI'
 
 /**
  * 갤러리 탭 타입
@@ -30,48 +35,7 @@ export default function GalleryPage() {
  * 갤러리 페이지 로딩 스켈레톤
  */
 function GalleryPageSkeleton() {
-  return (
-    <main className="min-h-screen bg-navy-50">
-      {/* 헤더 스켈레톤 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-6">
-        <div className="mx-auto max-w-6xl">
-          <div className="h-8 w-32 animate-pulse rounded bg-navy-200" />
-          <div className="mt-2 h-4 w-48 animate-pulse rounded bg-navy-100" />
-          <div className="mt-4 flex gap-4">
-            <div className="h-6 w-24 animate-pulse rounded bg-navy-100" />
-            <div className="h-6 w-24 animate-pulse rounded bg-navy-100" />
-          </div>
-        </div>
-      </div>
-
-      {/* 탭 스켈레톤 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-3">
-        <div className="mx-auto flex max-w-6xl gap-2">
-          <div className="h-10 w-28 animate-pulse rounded-lg bg-navy-200" />
-          <div className="h-10 w-28 animate-pulse rounded-lg bg-navy-200" />
-          <div className="h-10 w-28 animate-pulse rounded-lg bg-navy-200" />
-        </div>
-      </div>
-
-      {/* 콘텐츠 그리드 스켈레톤 */}
-      <div className="mx-auto max-w-6xl px-4 py-6">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div
-              key={i}
-              className="animate-pulse rounded-lg bg-white shadow-sm"
-            >
-              <div className="h-48 rounded-t-lg bg-navy-200" />
-              <div className="p-3">
-                <div className="mb-2 h-4 w-3/4 rounded bg-navy-200" />
-                <div className="h-3 w-1/2 rounded bg-navy-100" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
-  )
+  return <GalleryPageSkeletonUI />
 }
 
 /**
@@ -199,8 +163,8 @@ function HeaderSkeleton() {
   return (
     <div className="border-b border-navy-200 bg-white px-4 py-6">
       <div className="mx-auto max-w-6xl">
-        <div className="h-8 w-32 animate-pulse rounded bg-navy-200" />
-        <div className="mt-2 h-4 w-48 animate-pulse rounded bg-navy-100" />
+        <SkeletonBlock className="h-8 w-32" />
+        <SkeletonBlock className="mt-2 h-4 w-48 bg-navy-100" />
       </div>
     </div>
   )
@@ -213,9 +177,9 @@ function TabsSkeleton() {
   return (
     <div className="border-b border-navy-200 bg-white px-4 py-3">
       <div className="mx-auto flex max-w-6xl gap-2">
-        <div className="h-10 w-28 animate-pulse rounded-lg bg-navy-200" />
-        <div className="h-10 w-28 animate-pulse rounded-lg bg-navy-200" />
-        <div className="h-10 w-28 animate-pulse rounded-lg bg-navy-200" />
+        <SkeletonBlock className="h-10 w-28" />
+        <SkeletonBlock className="h-10 w-28" />
+        <SkeletonBlock className="h-10 w-28" />
       </div>
     </div>
   )
@@ -227,17 +191,7 @@ function TabsSkeleton() {
 function ContentSkeleton() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="animate-pulse rounded-lg bg-white shadow-sm">
-            <div className="h-48 rounded-t-lg bg-navy-200" />
-            <div className="p-3">
-              <div className="mb-2 h-4 w-3/4 rounded bg-navy-200" />
-              <div className="h-3 w-1/2 rounded bg-navy-100" />
-            </div>
-          </div>
-        ))}
-      </div>
+      <GalleryGridSkeleton count={4} />
     </div>
   )
 }

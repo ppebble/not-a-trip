@@ -13,6 +13,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { useSwipeGesture } from '@/hooks/useSwipeGesture'
+import { blurPlaceholderProps } from '@/lib/image-utils'
 
 export interface SwipeableGalleryProps {
   /** 이미지 URL 배열 */
@@ -165,6 +166,7 @@ export default function SwipeableGallery({
               className="h-full w-full object-cover"
               priority={index === 0}
               draggable={false}
+              {...(index === 0 ? {} : blurPlaceholderProps)}
             />
           </div>
         ))}

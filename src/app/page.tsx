@@ -6,27 +6,13 @@ import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
+import { MapSkeleton } from '@/components/common/SkeletonUI'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   ssr: false,
-  loading: () => <MapLoadingSkeleton />,
+  loading: () => <MapSkeleton />,
 })
-
-/**
- * 지도 로딩 중 표시되는 스켈레톤 컴포넌트
- * 네이비 테마를 적용한 로딩 인디케이터
- */
-function MapLoadingSkeleton() {
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-navy-800">
-      <div className="text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-navy-400 border-t-white"></div>
-        <p className="mt-4 text-navy-200">지도 로딩 중...</p>
-      </div>
-    </div>
-  )
-}
 
 /**
  * 스팟 데이터 로딩 중 표시되는 컴포넌트
