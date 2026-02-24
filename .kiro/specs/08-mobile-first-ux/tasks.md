@@ -278,8 +278,8 @@
     - 오프라인 상태에서 저장된 데이터 표시
     - _Requirements: 4.2_
 
-- [ ] 17. 푸시 알림 설정
-  - [ ] 17.1 푸시 알림 유틸리티 구현 (src/lib/push-notifications.ts)
+- [x] 17. 푸시 알림 설정
+  - [x] 17.1 푸시 알림 유틸리티 구현 (src/lib/push-notifications.ts)
     - 알림 권한 요청
     - 구독 등록/해제
     - 알림 페이로드 생성
@@ -289,7 +289,7 @@
     - **Property 9: 푸시 알림 페이로드 구조**
     - **Validates: Requirements 4.3**
 
-  - [ ] 17.3 푸시 알림 API 엔드포인트 구현
+  - [x] 17.3 푸시 알림 API 엔드포인트 구현
     - 구독 저장 API
     - 알림 발송 API (뱃지 획득, 제보 승인)
     - _Requirements: 4.3_
