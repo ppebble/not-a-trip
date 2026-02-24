@@ -19,6 +19,7 @@ import { CategoryIcon } from '@/components/common'
 import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/SkeletonUI'
 import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 import DirectionsButton from '@/components/common/DirectionsButton'
+import { blurPlaceholderProps } from '@/lib/image-utils'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -262,6 +263,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
                     alt={`${spot.name} 사진 ${index + 1}`}
                     fill
                     className="object-cover transition-transform duration-300 hover:scale-105"
+                    {...blurPlaceholderProps}
                   />
                 </div>
               ))}
