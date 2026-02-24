@@ -61,7 +61,16 @@ export function useBackgroundUpload(
   const { uploadFn, onComplete, onFailed, autoStart = true } = options
   const { isOnline } = useNetworkStatus()
 
-  const store = useUploadQueueStore()
+  // 개별 selector로 구독하여 불필요한 리렌더 방지
+  const queue = useUploadQueueStore((s) => s.queue)
+  const isPaused = useUploadQueueStore((s) => s.isPaused)
+  const addToQueue = useUploadQueueStore((s) => s.addToQueue)
+  const setPaused = useUploadQueueStore((s) => s.setPaused)
+  const removeFromQueue = useUploadQueueStore((s) => s.removeFromQueue)
+  const clearCompleted = useUploadQueueStore((s) => s.clearCompleted)
+  const incrementRetryAction = useUploadQueueStore((s) => s.incrementRetry)
+  const currentUploadId = useUploadQueueStore((s) => s.currentUploadId)
+
   const isProcessingRef = useRef(false)
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -141,22 +150,22 @@ export function useBackgroundUpload(
   // 네트워크 상태 변화에 따른 일시정지/재개
   useEffect(() => {
     if (!isOnline) {
-      store.setPaused(true)
-    } else if (store.isPaused) {
-      store.setPaused(false)
+      setPaused(true)
+    } else if (isPaused) {
+      setPaused(false)
     }
-  }, [isOnline, store])
+  }, [isOnline, isPaused, setPaused])
 
   // 큐 변경 또는 일시정지 해제 시 처리 시작
   useEffect(() => {
     if (!autoStart) return
-    if (store.isPaused) return
+    if (isPaused) return
 
-    const hasPending = store.queue.some((item) => item.status === 'pending')
+    const hasPending = queue.some((item) => item.status === 'pending')
     if (hasPending && !isProcessingRef.current) {
       processQueue()
     }
-  }, [store.queue, store.isPaused, autoStart, processQueue])
+  }, [queue, isPaused, autoStart, processQueue])
 
   // 클린업
   useEffect(() => {
@@ -169,26 +178,26 @@ export function useBackgroundUpload(
 
   const enqueue = useCallback(
     (file: File, metadata?: Record<string, unknown>) => {
-      return store.addToQueue(file, metadata)
+      return addToQueue(file, metadata)
     },
-    [store]
+    [addToQueue]
   )
 
-  const pause = useCallback(() => store.setPaused(true), [store])
-  const resume = useCallback(() => store.setPaused(false), [store])
+  const pause = useCallback(() => setPaused(true), [setPaused])
+  const resume = useCallback(() => setPaused(false), [setPaused])
 
   const retry = useCallback(
     (id: string) => {
-      store.incrementRetry(id)
+      incrementRetryAction(id)
     },
-    [store]
+    [incrementRetryAction]
   )
 
   const cancel = useCallback(
     (id: string) => {
-      store.removeFromQueue(id)
+      removeFromQueue(id)
     },
-    [store]
+    [removeFromQueue]
   )
 
   return {
@@ -197,9 +206,9 @@ export function useBackgroundUpload(
     resume,
     retry,
     cancel,
-    clearCompleted: store.clearCompleted,
-    queue: store.queue,
-    isPaused: store.isPaused,
-    currentUploadId: store.currentUploadId,
+    clearCompleted,
+    queue,
+    isPaused,
+    currentUploadId,
   }
 }
