@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 import { CheckInInput, UserBadge } from '@/types'
+import { useUploadQueueStore } from '@/stores/uploadQueueStore'
 
 interface CheckInModalProps {
   isOpen: boolean
@@ -35,6 +36,10 @@ export function CheckInModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const uploadQueue = useUploadQueueStore((state) => state.queue)
+  const activeUploads = uploadQueue.filter(
+    (item) => item.status === 'uploading'
+  )
 
   if (!isOpen) return null
 
@@ -65,7 +70,7 @@ export function CheckInModal({
       if (!res.ok) throw new Error('업로드 실패')
 
       const data = await res.json()
-      setPhotoUrl(data.url)
+      setPhotoUrl(data.imageUrl)
     } catch {
       setError('이미지 업로드에 실패했습니다')
       setPhotoPreview(null)
@@ -288,6 +293,28 @@ export function CheckInModal({
               {comment.length}/200
             </p>
           </div>
+
+          {/* 백그라운드 업로드 상태 표시 */}
+          {activeUploads.length > 0 && (
+            <div className="mb-4 rounded-lg bg-blue-50 p-3">
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                <span className="text-sm text-blue-700">
+                  {activeUploads.length}개 파일 업로드 중...
+                </span>
+              </div>
+              {activeUploads.map((item) => (
+                <div key={item.id} className="mt-2">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-blue-200">
+                    <div
+                      className="h-full rounded-full bg-blue-600 transition-all"
+                      style={{ width: `${item.progress}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* 에러 메시지 */}
           {error && (
