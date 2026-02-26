@@ -7,7 +7,7 @@ export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-slate-700 bg-slate-900/95 backdrop-blur-sm">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-slate-700 bg-slate-900/95 pt-safe-top backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* 로고 */}
         <Link href="/" className="flex items-center gap-2">
