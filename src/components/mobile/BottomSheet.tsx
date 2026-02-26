@@ -49,7 +49,7 @@ export default function BottomSheet() {
   return (
     <div
       ref={sheetRef}
-      className="fixed inset-x-0 bottom-0 z-[1000] rounded-t-2xl bg-white pb-safe-bottom shadow-2xl"
+      className="fixed inset-x-0 bottom-0 z-[1000] rounded-t-2xl bg-white pb-safe-bottom pl-safe-left pr-safe-right shadow-2xl"
       style={{
         height: `${Math.max(0, displayHeight)}px`,
         transition: isDragging ? 'none' : 'height 0.3s ease-out',
