@@ -37,6 +37,23 @@ export const API_ROUTES = {
     COMMUNITY_SUMMARY: '/api/media/community-summary',
   },
 
+  // Reports (성지 제보)
+  REPORTS: {
+    BASE: '/api/reports',
+    DETAIL: (id: string) => `/api/reports/${id}`,
+    NEARBY: '/api/reports/nearby',
+  },
+
+  // Spot Supplements (정보 보완)
+  SUPPLEMENTS: {
+    BASE: (spotId: string) => `/api/spots/${spotId}/supplements`,
+  },
+
+  // Spot Status Reports (상태 신고)
+  STATUS_REPORTS: {
+    BASE: (spotId: string) => `/api/spots/${spotId}/status-reports`,
+  },
+
   // Content Names (자동완성)
   CONTENT_NAMES: '/api/content-names',
 
