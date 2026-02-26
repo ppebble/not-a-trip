@@ -57,6 +57,15 @@ export {
 } from './uploadQueueStore'
 export type { UploadItem, UploadStatus } from './uploadQueueStore'
 
+// Report Store - 제보 폼 상태 관리
+export {
+  useReportStore,
+  useReportCurrentStep,
+  useReportFormData,
+  useNearbyCheckPassed,
+} from './reportStore'
+export type { ReportFormStep, ReportFormData } from './reportStore'
+
 // Bottom Sheet Store - 바텀 시트 상태 관리
 export {
   useBottomSheetStore,
