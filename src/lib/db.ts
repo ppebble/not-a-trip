@@ -94,6 +94,10 @@ export const COLLECTIONS = {
   USER_STATS: 'user_stats',
   // 푸시 알림 컬렉션 (08-mobile-first-ux)
   PUSH_SUBSCRIPTIONS: 'push_subscriptions',
+  // 성지 제보 시스템 컬렉션 (09-spot-report-wiki)
+  SPOT_REPORTS: 'spot_reports',
+  SPOT_SUPPLEMENTS: 'spot_supplements',
+  SPOT_STATUS_REPORTS: 'spot_status_reports',
 } as const
 
 /**
