@@ -1,3 +1,5 @@
+import { SpotStatus } from './report'
+
 // ============================================
 // External Link Types (외부 링크)
 // ============================================
@@ -228,6 +230,14 @@ export interface Spot {
   authorName?: string
   isGuestSpot?: boolean
   password?: string
+  /** 최초 제보자 ID (09-spot-report-wiki) */
+  firstReporterId?: string
+  /** 최초 제보자 이름 (09-spot-report-wiki) */
+  firstReporterName?: string
+  /** 현재 스팟 상태 (09-spot-report-wiki) */
+  spotStatus?: SpotStatus
+  /** 상태 신고 누적 수 (09-spot-report-wiki) */
+  statusReportCount?: number
 }
 
 export interface SpotPin {
