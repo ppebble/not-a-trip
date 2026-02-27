@@ -98,6 +98,10 @@ export const COLLECTIONS = {
   SPOT_REPORTS: 'spot_reports',
   SPOT_SUPPLEMENTS: 'spot_supplements',
   SPOT_STATUS_REPORTS: 'spot_status_reports',
+  // 성지순례 코스 시스템 컬렉션 (10-pilgrimage-route)
+  ROUTES: 'routes',
+  ROUTE_BOOKMARKS: 'route_bookmarks',
+  ROUTE_COMPLETIONS: 'route_completions',
 } as const
 
 /**
