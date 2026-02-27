@@ -253,6 +253,19 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
             </div>
           )}
 
+          {/* 최초 제보자 표시 - Requirements 2.1 */}
+          {spot.firstReporterId && spot.firstReporterName && (
+            <p className="mb-2 text-sm text-navy-500 md:mb-3">
+              📍 최초 제보:{' '}
+              <Link
+                href={`/profile/${spot.firstReporterId}`}
+                className="font-medium text-navy-600 hover:underline"
+              >
+                @{spot.firstReporterName}
+              </Link>
+            </p>
+          )}
+
           {/* 주소 + 길찾기 버튼 (Requirements 2.3) */}
           <div className="mb-3 flex items-center justify-between gap-2 md:mb-4">
             <div className="flex min-w-0 items-center text-gray-600">
