@@ -115,14 +115,17 @@ export function RouteFormContent({
     }
     setIsSearching(true)
     try {
-      const res = await fetch(
-        `/api/spots?search=${encodeURIComponent(query)}`
-      )
+      const res = await fetch(`/api/spots?search=${encodeURIComponent(query)}`)
       if (!res.ok) throw new Error()
       const data = await res.json()
       setSearchResults(
         data.spots.map(
-          (s: { id: string; name: string; thumbnailUrl: string; coordinates: number[] }) => ({
+          (s: {
+            id: string
+            name: string
+            thumbnailUrl: string
+            coordinates: number[]
+          }) => ({
             id: s.id,
             name: s.name,
             thumbnailUrl: s.thumbnailUrl,
@@ -205,8 +208,7 @@ export function RouteFormContent({
     if (!description.trim()) errs.push('설명은 필수입니다')
     if (!estimatedDuration || parseInt(estimatedDuration, 10) <= 0)
       errs.push('예상 소요시간은 필수입니다')
-    if (spots.length < 2)
-      errs.push('코스에는 최소 2개의 스팟이 필요합니다')
+    if (spots.length < 2) errs.push('코스에는 최소 2개의 스팟이 필요합니다')
     return errs
   }, [name, description, estimatedDuration, spots])
 
@@ -255,9 +257,18 @@ export function RouteFormContent({
       setIsSubmitting(false)
     }
   }, [
-    validate, name, description, estimatedDuration, difficulty,
-    spots, relatedContentNames, regionTag, isPublic,
-    isEditMode, initialRoute, router,
+    validate,
+    name,
+    description,
+    estimatedDuration,
+    difficulty,
+    spots,
+    relatedContentNames,
+    regionTag,
+    isPublic,
+    isEditMode,
+    initialRoute,
+    router,
   ])
 
   // 미리보기용 RouteSpot 변환
@@ -352,7 +363,9 @@ export function RouteFormContent({
 
           {/* 공개/비공개 */}
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-navy-700">공개 설정</label>
+            <label className="text-sm font-medium text-navy-700">
+              공개 설정
+            </label>
             <button
               type="button"
               onClick={() => setIsPublic(!isPublic)}
@@ -473,9 +486,7 @@ export function RouteFormContent({
                 </div>
               ) : (
                 searchResults.map((result) => {
-                  const alreadyAdded = spots.some(
-                    (s) => s.spotId === result.id
-                  )
+                  const alreadyAdded = spots.some((s) => s.spotId === result.id)
                   return (
                     <button
                       key={result.id}
@@ -551,11 +562,7 @@ export function RouteFormContent({
           disabled={isSubmitting}
           className="flex-1 rounded-lg bg-navy-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-700 disabled:bg-navy-300"
         >
-          {isSubmitting
-            ? '저장 중...'
-            : isEditMode
-              ? '코스 수정'
-              : '코스 생성'}
+          {isSubmitting ? '저장 중...' : isEditMode ? '코스 수정' : '코스 생성'}
         </button>
       </div>
     </div>
