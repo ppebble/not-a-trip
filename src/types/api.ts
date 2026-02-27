@@ -6,6 +6,7 @@ import type {
   Coordinates,
   NearbyFacility,
 } from './spot'
+import type { SpotStatus } from './report'
 
 // ============================================
 // API Response Types
@@ -49,6 +50,8 @@ export interface SpotDetailData {
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
+  /** 현재 스팟 상태 (09-spot-report-wiki) */
+  spotStatus?: SpotStatus
 }
 
 export interface CreateSpotInput {
