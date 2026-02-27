@@ -17,6 +17,8 @@ import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
 import { SpotCheckInSection } from '@/components/spot/SpotCheckInSection'
 import { SupplementForm } from '@/components/report/SupplementForm'
 import { ContributorList } from '@/components/report/ContributorList'
+import { StatusReportForm } from '@/components/report/StatusReportForm'
+import { SpotStatusIndicator } from '@/components/report/SpotStatusIndicator'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { CategoryIcon } from '@/components/common'
 import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/SkeletonUI'
@@ -174,7 +176,11 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
   const { isAuthenticated } = useAuth()
   const router = useRouter()
   const [showSupplementForm, setShowSupplementForm] = useState(false)
+  const [showStatusReportForm, setShowStatusReportForm] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [loginModalContext, setLoginModalContext] = useState<
+    'supplement' | 'status'
+  >('supplement')
   const [supplementKey, setSupplementKey] = useState(0)
 
   // 카테고리 정보 가져오기 (Requirements 2.3)
@@ -184,10 +190,20 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
 
   const handleSupplementClick = () => {
     if (!isAuthenticated) {
+      setLoginModalContext('supplement')
       setShowLoginModal(true)
       return
     }
     setShowSupplementForm((prev) => !prev)
+  }
+
+  const handleStatusReportClick = () => {
+    if (!isAuthenticated) {
+      setLoginModalContext('status')
+      setShowLoginModal(true)
+      return
+    }
+    setShowStatusReportForm((prev) => !prev)
   }
 
   const handleSupplementSuccess = () => {
@@ -229,6 +245,26 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
           <h1 className="mb-2 text-2xl font-bold text-gray-900 md:mb-4 md:text-3xl">
             {spot.name}
           </h1>
+
+          {/* 스팟 상태 표시 - Requirements 4.4 */}
+          {spot.spotStatus && spot.spotStatus !== 'normal' && (
+            <div className="mb-2 md:mb-3">
+              <SpotStatusIndicator status={spot.spotStatus} size="md" />
+            </div>
+          )}
+
+          {/* 최초 제보자 표시 - Requirements 2.1 */}
+          {spot.firstReporterId && spot.firstReporterName && (
+            <p className="mb-2 text-sm text-navy-500 md:mb-3">
+              📍 최초 제보:{' '}
+              <Link
+                href={`/profile/${spot.firstReporterId}`}
+                className="font-medium text-navy-600 hover:underline"
+              >
+                @{spot.firstReporterName}
+              </Link>
+            </p>
+          )}
 
           {/* 주소 + 길찾기 버튼 (Requirements 2.3) */}
           <div className="mb-3 flex items-center justify-between gap-2 md:mb-4">
@@ -364,11 +400,50 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         </div>
       </div>
 
+      {/* 스팟 상태 신고 섹션 - Requirements 4.1, 4.4 */}
+      <div className="overflow-hidden rounded-lg bg-white shadow-md">
+        <div className="p-4 md:p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-bold text-gray-900 md:text-xl">
+              현재 상태 신고
+            </h2>
+            <button
+              onClick={handleStatusReportClick}
+              className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              {showStatusReportForm ? '닫기' : '상태 신고'}
+            </button>
+          </div>
+
+          {/* 현재 상태 표시 */}
+          {spot.spotStatus && (
+            <div className="mb-3 flex items-center gap-2">
+              <span className="text-sm text-gray-600">현재 상태:</span>
+              <SpotStatusIndicator status={spot.spotStatus} />
+            </div>
+          )}
+
+          {showStatusReportForm && (
+            <div className="rounded-lg border border-amber-100 p-4">
+              <StatusReportForm
+                spotId={spot.id}
+                onSuccess={() => setShowStatusReportForm(false)}
+                onCancel={() => setShowStatusReportForm(false)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* 로그인 필요 모달 */}
       <LoginRequiredModal
         isOpen={showLoginModal}
         title="로그인이 필요합니다"
-        description="정보 보완 제보를 하려면 로그인이 필요합니다."
+        description={
+          loginModalContext === 'status'
+            ? '상태 신고를 하려면 로그인이 필요합니다.'
+            : '정보 보완 제보를 하려면 로그인이 필요합니다.'
+        }
         onConfirm={() => router.push('/auth/login')}
       />
 

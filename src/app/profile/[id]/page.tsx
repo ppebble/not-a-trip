@@ -7,6 +7,7 @@ import { UserStats, UserBadge, ContentProgress } from '@/types'
 import { CheckInGallery } from '@/components/checkin'
 import { TrophyRoom } from '@/components/profile/TrophyRoom'
 import { ContentProgressCard } from '@/components/profile/ContentProgressCard'
+import { API_ROUTES } from '@/lib/api-routes'
 
 interface UserProfilePageProps {
   params: Promise<{ id: string }>
@@ -26,12 +27,15 @@ interface UserInfo {
 export default function UserProfilePage({ params }: UserProfilePageProps) {
   const { id: userId } = use(params)
   const [activeTab, setActiveTab] = useState<
-    'checkins' | 'badges' | 'progress'
+    'checkins' | 'badges' | 'progress' | 'reports'
   >('checkins')
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   const [stats, setStats] = useState<UserStats | null>(null)
   const [badges, setBadges] = useState<UserBadge[]>([])
   const [progress, setProgress] = useState<ContentProgress[]>([])
+  const [reportedSpots, setReportedSpots] = useState<
+    { id: string; name: string; address: string }[]
+  >([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -65,6 +69,23 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
           name: '순례자',
           image: undefined,
         })
+
+        // 제보한 스팟 목록 조회 (firstReporterId로 필터)
+        const spotsRes = await fetch(
+          `${API_ROUTES.SPOTS.BASE}?firstReporterId=${userId}`
+        )
+        if (spotsRes.ok) {
+          const spotsData = await spotsRes.json()
+          setReportedSpots(
+            (spotsData.spots || []).map(
+              (s: { id: string; name: string; address?: string }) => ({
+                id: s.id,
+                name: s.name,
+                address: s.address || '',
+              })
+            )
+          )
+        }
       } catch (error) {
         console.error('Error fetching profile data:', error)
       } finally {
@@ -180,6 +201,16 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
           >
             진행 현황
           </button>
+          <button
+            onClick={() => setActiveTab('reports')}
+            className={`rounded-lg px-4 py-2 font-medium ${
+              activeTab === 'reports'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            제보한 스팟
+          </button>
         </div>
 
         {/* 탭 콘텐츠 */}
@@ -206,6 +237,37 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
                     className="mt-2 inline-block text-blue-600 hover:underline"
                   >
                     성지 탐색하러 가기
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'reports' && (
+            <div className="space-y-3">
+              {reportedSpots.length > 0 ? (
+                reportedSpots.map((spot) => (
+                  <Link
+                    key={spot.id}
+                    href={`/spots/${spot.id}`}
+                    className="block rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50"
+                  >
+                    <p className="font-medium text-gray-900">{spot.name}</p>
+                    {spot.address && (
+                      <p className="mt-1 text-sm text-gray-500">
+                        📍 {spot.address}
+                      </p>
+                    )}
+                  </Link>
+                ))
+              ) : (
+                <div className="py-12 text-center">
+                  <p className="text-gray-500">아직 제보한 스팟이 없습니다</p>
+                  <Link
+                    href="/reports/new"
+                    className="mt-2 inline-block text-blue-600 hover:underline"
+                  >
+                    성지 제보하러 가기
                   </Link>
                 </div>
               )}

@@ -93,6 +93,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const { searchParams } = new URL(request.url)
     const categoryParam = searchParams.get('category')
     const searchParam = searchParams.get('search')
+    const firstReporterIdParam = searchParams.get('firstReporterId')
 
     // MongoDB 쿼리 조건 생성
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,6 +118,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         { name: { $regex: escapedSearch, $options: 'i' } },
         { 'relatedContent.name': { $regex: escapedSearch, $options: 'i' } },
       ]
+    }
+
+    // 최초 제보자 필터 (Requirements 2.2)
+    if (firstReporterIdParam) {
+      query.firstReporterId = firstReporterIdParam
     }
 
     // Get spots from database with filter
