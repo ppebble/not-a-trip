@@ -15,6 +15,9 @@ import NearbyFacilities from '@/components/spot/NearbyFacilities'
 import { SpotContentSection } from '@/components/spot/SpotContentSection'
 import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
 import { SpotCheckInSection } from '@/components/spot/SpotCheckInSection'
+import { SupplementForm } from '@/components/report/SupplementForm'
+import { ContributorList } from '@/components/report/ContributorList'
+import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { CategoryIcon } from '@/components/common'
 import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/SkeletonUI'
 import SwipeableGallery from '@/components/mobile/SwipeableGallery'
@@ -168,10 +171,30 @@ interface SpotDetailContentProps {
 }
 
 function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
+  const [showSupplementForm, setShowSupplementForm] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [supplementKey, setSupplementKey] = useState(0)
+
   // 카테고리 정보 가져오기 (Requirements 2.3)
   const categoryConfig = spot.category
     ? CATEGORY_CONFIG[spot.category as SpotCategory]
     : null
+
+  const handleSupplementClick = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true)
+      return
+    }
+    setShowSupplementForm((prev) => !prev)
+  }
+
+  const handleSupplementSuccess = () => {
+    setShowSupplementForm(false)
+    // ContributorList 리프레시를 위해 key 변경
+    setSupplementKey((prev) => prev + 1)
+  }
 
   return (
     <div className="space-y-8">
@@ -311,6 +334,43 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
           sceneImageUrl={spot.photos?.[0]}
         />
       </div>
+
+      {/* 정보 보완 섹션 - Requirements 3.1, 3.3 */}
+      <div className="overflow-hidden rounded-lg bg-white shadow-md">
+        <div className="p-4 md:p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-bold text-gray-900 md:text-xl">
+              정보 보완
+            </h2>
+            <button
+              onClick={handleSupplementClick}
+              className="rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+            >
+              {showSupplementForm ? '닫기' : '정보 수정 제안'}
+            </button>
+          </div>
+
+          {showSupplementForm && (
+            <div className="mb-4 rounded-lg border border-navy-100 p-4">
+              <SupplementForm
+                spotId={spot.id}
+                onSuccess={handleSupplementSuccess}
+                onCancel={() => setShowSupplementForm(false)}
+              />
+            </div>
+          )}
+
+          <ContributorList key={supplementKey} spotId={spot.id} />
+        </div>
+      </div>
+
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        title="로그인이 필요합니다"
+        description="정보 보완 제보를 하려면 로그인이 필요합니다."
+        onConfirm={() => router.push('/auth/login')}
+      />
 
       {/* Related Content - 맨 아래 (Requirements 3.1, 3.4) */}
       <RelatedContentSection contents={spot.relatedContent || []} />
