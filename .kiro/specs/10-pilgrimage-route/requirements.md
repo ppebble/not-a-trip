@@ -21,7 +21,7 @@
 1. WHEN 유저가 "코스 만들기" 버튼을 클릭할 때 THEN THE System SHALL 코스 생성 페이지를 표시한다
 2. WHEN 유저가 코스를 생성할 때 THEN THE System SHALL 다음 정보를 입력받는다: 코스명, 설명, 예상 소요시간, 난이도, 스팟 목록(순서)
 3. WHEN 스팟을 추가할 때 THEN THE System SHALL 지도에서 선택하거나 검색하여 추가할 수 있도록 한다
-4. THE System SHALL 스팟 간 이동 수단(도보/전철/버스)과 예상 이동시간을 표시한다
+4. THE System SHALL 스팟 간의 직선거리(Haversine)를 기반으로 한 대략적인 도보 이동 시간(예: 반경 1km 내)을 우선 제공하고, 유저가 필요 시 '경로 탐색' 버튼을 눌러 외부 지도 앱(구글맵/야후재팬맵)으로 연결하여 정확한 대중교통 시간을 확인하도록 유도한다
 5. THE System SHALL 코스를 공개/비공개로 설정할 수 있도록 한다
 
 ### Requirement 2: 코스 조회 및 탐색
@@ -45,6 +45,8 @@
 2. WHEN 유저가 스팟에 도착하면 THEN THE System SHALL 해당 스팟 정보와 인증 버튼을 표시한다
 3. THE System SHALL 다음 스팟까지의 거리와 예상 시간을 실시간으로 표시한다
 4. THE System SHALL 코스 진행률(완료한 스팟 수/전체 스팟 수)을 표시한다
+5. WHEN 유저가 코스 내의 모든 스팟 인증(Check-in)을 완료하면 THEN THE System SHALL 해당 코스의 '완주 기념 뱃지' 또는 특별한 시각적 이펙트를 제공하고 프로필에 기록한다
+6. WHEN 유저가 특정 코스를 '저장(북마크)'하거나 '시작'할 때 THEN THE System SHALL 해당 코스에 포함된 모든 스팟의 기본 정보(위치, 캡처 이미지 등)를 기기에 오프라인 캐싱(Service Worker)하여 네트워크 연결 없이도 조회할 수 있도록 한다
 
 ### Requirement 4: 추천 코스 (큐레이션)
 
