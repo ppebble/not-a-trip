@@ -45,6 +45,10 @@ export interface SpotDetailData {
   isGuestSpot?: boolean
   /** 현재 스팟 상태 (09-spot-report-wiki) */
   spotStatus?: SpotStatus
+  /** 최초 제보자 ID (09-spot-report-wiki) */
+  firstReporterId?: string
+  /** 최초 제보자 이름 (09-spot-report-wiki) */
+  firstReporterName?: string
 }
 
 // API response types
