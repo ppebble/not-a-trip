@@ -98,7 +98,9 @@ export function SpotOrderList({ spots, onSpotsChange }: SpotOrderListProps) {
         <p className="text-sm text-navy-400">
           스팟을 검색하여 코스에 추가해주세요
         </p>
-        <p className="mt-1 text-xs text-navy-300">최소 2개의 스팟이 필요합니다</p>
+        <p className="mt-1 text-xs text-navy-300">
+          최소 2개의 스팟이 필요합니다
+        </p>
       </div>
     )
   }
@@ -192,7 +194,9 @@ export function SpotOrderList({ spots, onSpotsChange }: SpotOrderListProps) {
             <div className="flex flex-shrink-0 gap-1">
               <button
                 type="button"
-                onClick={() => setEditingNoteIndex(editingNoteIndex === idx ? null : idx)}
+                onClick={() =>
+                  setEditingNoteIndex(editingNoteIndex === idx ? null : idx)
+                }
                 className="rounded p-1.5 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-600"
                 title="메모"
               >
