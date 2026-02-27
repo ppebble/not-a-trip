@@ -20,10 +20,11 @@
 #### Acceptance Criteria
 
 1. WHEN 유저가 지도에서 특정 위치를 길게 누르거나 "성지 제보" 버튼을 클릭할 때 THEN THE System SHALL 제보 폼을 표시한다
-2. WHEN 유저가 제보 폼을 작성할 때 THEN THE System SHALL 다음 정보를 입력받는다: 위치(핀), 장소명, 작품명, 에피소드/타임스탬프, 설명, 참고 이미지
-3. WHEN 제보가 제출되면 THEN THE System SHALL 관리자 검토 대기 상태로 저장한다
-4. WHEN 관리자가 제보를 승인하면 THEN THE System SHALL 해당 스팟을 지도에 추가하고 최초 제보자 정보를 표시한다
-5. THE System SHALL 제보 상태(대기중/승인/반려)를 유저에게 알린다
+2. WHEN 유저가 제보 폼을 작성할 때 THEN THE System SHALL 다음 정보를 필수로 입력받는다: 정확한 위치(핀), 장소명, 작품명, 에피소드/타임스탬프, 설명, **애니메이션 원본 캡처 이미지와 현장 사진(또는 로드뷰 캡처)을 반드시 쌍으로 등록**하도록 강제한다
+3. WHEN 유저가 지도에 제보 핀을 등록할 때 THEN THE System SHALL 반경 50m 이내에 이미 등록된 스팟이나 대기 중인 제보가 있는지 검사하여, 있을 경우 "근처에 이미 등록된 스팟이 있습니다"라는 경고와 함께 기존 스팟 목록을 보여준다
+4. WHEN 제보가 제출되면 THEN THE System SHALL 관리자 검토 대기 상태로 저장한다
+5. WHEN 관리자가 제보를 승인하면 THEN THE System SHALL 해당 스팟을 지도에 추가하고 최초 제보자 정보를 표시한다
+6. THE System SHALL 제보 상태(대기중/승인/반려)를 유저에게 알린다
 
 ### Requirement 2: 최초 제보자 명예 시스템
 
@@ -53,7 +54,7 @@
 
 1. WHEN 유저가 "현재 상태 신고" 버튼을 클릭할 때 THEN THE System SHALL 상태 신고 폼을 표시한다
 2. THE System SHALL 다음 상태를 선택할 수 있도록 한다: 정상, 일부 변경, 공사중, 소실됨, 접근 불가
-3. WHEN 상태 신고가 일정 수 이상 누적되면 THEN THE System SHALL 해당 스팟에 경고 표시를 추가한다
+3. WHEN 상태 신고가 일정 수(예: 3회) 이상 누적되거나, **신고 시 현장 사진(소실/공사중임을 증명하는 사진)을 첨부한 경우** THEN THE System SHALL 해당 스팟을 자동으로 '검토 중(경고)' 상태로 전환하여 지도에 시각적으로 표시한다
 4. THE System SHALL 지도에서 소실/변경된 스팟을 시각적으로 구분하여 표시한다
 
 ### Requirement 5: 제보 검토 시스템 (관리자)
