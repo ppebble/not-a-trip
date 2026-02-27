@@ -29,6 +29,12 @@ export function Header() {
             순례 갤러리
           </Link>
           <Link
+            href="/routes"
+            className="text-sm text-slate-300 transition hover:text-white"
+          >
+            순례 코스
+          </Link>
+          <Link
             href="/spots/register"
             className="text-sm text-slate-300 transition hover:text-white"
           >
