@@ -299,33 +299,33 @@
   - 오프라인 페이지 고도화 확인
   - 푸시 알림 권한 요청 확인
 
-- [ ] 19. 성능 최적화
-  - [ ] 19.1 스켈레톤 UI 컴포넌트 구현 (src/components/common/SkeletonUI.tsx)
+- [x] 19. 성능 최적화
+  - [x] 19.1 스켈레톤 UI 컴포넌트 구현 (src/components/common/SkeletonUI.tsx)
     - 스팟 카드 스켈레톤
     - 갤러리 스켈레톤
     - 지도 스켈레톤
     - _Requirements: 5.4_
 
-  - [ ] 19.2 기존 컴포넌트에 스켈레톤 UI 적용
+  - [x] 19.2 기존 컴포넌트에 스켈레톤 UI 적용
     - 스팟 상세 페이지
     - 갤러리 페이지
     - 메인 지도 페이지
     - _Requirements: 5.4_
 
-  - [ ] 19.3 이미지 최적화 설정 확인
+  - [x] 19.3 이미지 최적화 설정 확인
     - Next.js Image 컴포넌트 WebP 변환 확인
     - 이미지 크기 최적화 확인
     - blur placeholder 적용
     - _Requirements: 5.1_
 
-- [ ] 20. SafeAreaWrapper 컴포넌트 구현
-  - [ ] 20.1 SafeAreaWrapper 컴포넌트 구현 (src/components/mobile/SafeAreaWrapper.tsx)
+- [x] 20. SafeAreaWrapper 컴포넌트 구현
+  - [x] 20.1 SafeAreaWrapper 컴포넌트 구현 (src/components/mobile/SafeAreaWrapper.tsx)
     - env(safe-area-inset-\*) CSS 변수 활용
     - 방향별 패딩 적용 옵션
     - 추가 패딩 옵션
     - _Requirements: 4.4_
 
-  - [ ] 20.2 하단 네비게이션에 Safe Area 적용
+  - [x] 20.2 하단 네비게이션에 Safe Area 적용
     - Header 컴포넌트 Safe Area 적용
     - Bottom Sheet Safe Area 적용
     - _Requirements: 4.4_
