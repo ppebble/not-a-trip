@@ -153,7 +153,7 @@ export async function POST(
       content: body.content.trim(),
       sceneInfo: body.sceneInfo,
       photos: body.photos || [],
-      approved: false,
+      status: 'pending',
       createdAt: now,
     }
 
