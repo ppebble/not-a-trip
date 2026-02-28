@@ -6,6 +6,13 @@ import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import type { Route, RouteDifficulty } from '@/types/route'
+import {
+  getTravelMode,
+  getTravelModeLabel,
+  getTravelModeIcon,
+  getGoogleMapsDirectionsUrl,
+  calculateStartToFirstSpot,
+} from '@/lib/route-utils'
 
 const RouteMap = dynamic(() => import('@/components/route/RouteMap'), {
   ssr: false,
@@ -36,19 +43,6 @@ function formatDuration(minutes: number): string {
 function formatDistance(meters: number): string {
   if (meters < 1000) return `${meters}m`
   return `${(meters / 1000).toFixed(1)}km`
-}
-
-/** 외부 지도 앱 URL 생성 */
-function getExternalMapUrl(
-  lat: number,
-  lng: number,
-  name: string,
-  app: 'google' | 'yahoo'
-): string {
-  if (app === 'google') {
-    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${encodeURIComponent(name)}`
-  }
-  return `https://map.yahoo.co.jp/route/walk?lat=${lat}&lon=${lng}&name=${encodeURIComponent(name)}`
 }
 
 /**
@@ -147,10 +141,17 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         )}
 
         {/* 지역 태그 */}
-        {route.regionTag && (
-          <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-blue-600">
-            📍 {route.regionTag}
-          </span>
+        {route.regionTags && route.regionTags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {route.regionTags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-blue-600"
+              >
+                📍 {tag}
+              </span>
+            ))}
+          </div>
         )}
 
         {/* 작성자 정보 */}
@@ -191,7 +192,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       {/* 코스 지도 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
         <h2 className="mb-3 text-lg font-semibold text-navy-900">코스 지도</h2>
-        <RouteMap spots={route.spots} />
+        <RouteMap spots={route.spots} startPoint={route.startPoint} />
       </div>
 
       {/* 스팟 순서 목록 */}
@@ -200,6 +201,65 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           코스 순서 ({availableSpots.length}곳)
         </h2>
         <ol className="space-y-0">
+          {/* 시작 지점 표시 */}
+          {route.startPoint &&
+            route.spots.length > 0 &&
+            (() => {
+              const info = calculateStartToFirstSpot(
+                route.startPoint,
+                route.spots[0]
+              )
+              const mode = info ? getTravelMode(info.distance) : null
+              return (
+                <li>
+                  <div className="flex items-center gap-3 rounded-lg bg-blue-50 p-3">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm text-white">
+                      🏠
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-navy-900">
+                        {route.startPoint.name}
+                      </p>
+                      <p className="truncate text-xs text-navy-400">
+                        {route.startPoint.address}
+                      </p>
+                    </div>
+                  </div>
+                  {info && mode && (
+                    <div className="flex items-center gap-2 py-2 pl-8">
+                      <div className="h-4 w-px bg-navy-200" />
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs text-navy-400">
+                          ↓ {formatDistance(info.distance)}
+                          {' · '}
+                          {getTravelModeIcon(mode)}{' '}
+                          {mode === 'walking' && info.walkTime !== null
+                            ? `도보 약 ${info.walkTime}분`
+                            : getTravelModeLabel(mode)}
+                        </span>
+                        {mode !== 'walking' && (
+                          <a
+                            href={getGoogleMapsDirectionsUrl(
+                              route.startPoint.coordinates.lat,
+                              route.startPoint.coordinates.lng,
+                              route.spots[0].coordinates.lat,
+                              route.spots[0].coordinates.lng,
+                              mode
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                          >
+                            🗺️ 구글맵 길찾기
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              )
+            })()}
+
           {route.spots.map((spot, idx) => {
             const isUnavailable = spot.isAvailable === false
             return (
@@ -208,11 +268,38 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                 {idx > 0 && spot.distanceFromPrev && (
                   <div className="flex items-center gap-2 py-2 pl-8">
                     <div className="h-4 w-px bg-navy-200" />
-                    <span className="text-xs text-navy-400">
-                      ↓ {formatDistance(spot.distanceFromPrev)}
-                      {spot.walkTimeFromPrev &&
-                        ` · 도보 약 ${spot.walkTimeFromPrev}분`}
-                    </span>
+                    {(() => {
+                      const mode = getTravelMode(spot.distanceFromPrev)
+                      const prev = route.spots[idx - 1]
+                      return (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-xs text-navy-400">
+                            ↓ {formatDistance(spot.distanceFromPrev)}
+                            {' · '}
+                            {getTravelModeIcon(mode)}{' '}
+                            {mode === 'walking' && spot.walkTimeFromPrev
+                              ? `도보 약 ${spot.walkTimeFromPrev}분`
+                              : getTravelModeLabel(mode)}
+                          </span>
+                          {mode !== 'walking' && prev.isAvailable !== false && (
+                            <a
+                              href={getGoogleMapsDirectionsUrl(
+                                prev.coordinates.lat,
+                                prev.coordinates.lng,
+                                spot.coordinates.lat,
+                                spot.coordinates.lng,
+                                mode
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                            >
+                              🗺️ 구글맵 길찾기
+                            </a>
+                          )}
+                        </div>
+                      )
+                    })()}
                   </div>
                 )}
 
@@ -267,39 +354,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                     )}
                   </div>
 
-                  {/* 외부 지도 앱 버튼 */}
-                  {!isUnavailable && (
-                    <div className="flex flex-shrink-0 gap-1">
-                      <a
-                        href={getExternalMapUrl(
-                          spot.coordinates.lat,
-                          spot.coordinates.lng,
-                          spot.spotName,
-                          'google'
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded bg-navy-50 px-2 py-1 text-xs text-navy-500 transition-colors hover:bg-navy-100"
-                        title="구글맵에서 경로 탐색"
-                      >
-                        🗺️
-                      </a>
-                      <a
-                        href={getExternalMapUrl(
-                          spot.coordinates.lat,
-                          spot.coordinates.lng,
-                          spot.spotName,
-                          'yahoo'
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded bg-navy-50 px-2 py-1 text-xs text-navy-500 transition-colors hover:bg-navy-100"
-                        title="야후재팬맵에서 경로 탐색"
-                      >
-                        🇯🇵
-                      </a>
-                    </div>
-                  )}
+                  {/* 외부 지도 앱 버튼 - 제거됨 (코스 상세에서 불필요) */}
                 </div>
               </li>
             )
