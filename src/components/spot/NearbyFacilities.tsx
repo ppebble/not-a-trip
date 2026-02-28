@@ -38,6 +38,32 @@ const FACILITY_CONFIG: Record<
     icon: '📍',
     color: 'bg-gray-100 text-gray-800 border-gray-200',
   },
+  // Otaku_Category
+  coin_locker: {
+    label: '코인 로커',
+    icon: '🔐',
+    color: 'bg-purple-100 text-purple-800 border-purple-200',
+  },
+  solo_dining: {
+    label: '혼밥 식당',
+    icon: '🍜',
+    color: 'bg-rose-100 text-rose-800 border-rose-200',
+  },
+  charging_cafe: {
+    label: '충전/와이파이',
+    icon: '🔌',
+    color: 'bg-cyan-100 text-cyan-800 border-cyan-200',
+  },
+  public_restroom: {
+    label: '화장실',
+    icon: '🚻',
+    color: 'bg-teal-100 text-teal-800 border-teal-200',
+  },
+  goods_shop: {
+    label: '굿즈/잡화',
+    icon: '🛍️',
+    color: 'bg-pink-100 text-pink-800 border-pink-200',
+  },
 }
 
 // 기본 표시 개수
