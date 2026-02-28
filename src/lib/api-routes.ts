@@ -34,6 +34,7 @@ export const API_ROUTES = {
 
   // Facilities
   FACILITIES: {
+    REPORT: '/api/facilities/report',
     VOTE: (id: string) => `/api/facilities/${id}/vote`,
   },
 
