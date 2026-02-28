@@ -13,6 +13,10 @@ interface PlaceResult {
   googlePlaceId: string
 }
 
+interface Suggestion {
+  placePrediction: google.maps.places.PlacePrediction
+}
+
 interface GooglePlacesSearchProps {
   onSelect: (place: PlaceResult) => void
   /** 검색 바이어스 중심 좌표 */
@@ -20,11 +24,12 @@ interface GooglePlacesSearchProps {
 }
 
 /**
- * 구글 Places Autocomplete 검색 컴포넌트 (비용 최적화)
+ * 구글 Places Autocomplete 검색 컴포넌트 (New API - 비용 최적화)
  *
+ * - AutocompleteSuggestion API (2025년 3월~ 신규 고객 필수)
  * - Session Token: 타이핑~선택까지 1회 과금으로 묶음
  * - Debouncing: 500ms 디바운스로 불필요한 API 호출 방지
- * - Field Masking: name, geometry, formatted_address, place_id만 요청
+ * - Field Masking: displayName, formattedAddress, location만 요청
  */
 export default function GooglePlacesSearch({
   onSelect,
@@ -38,35 +43,20 @@ export default function GooglePlacesSearch({
   })
 
   const [query, setQuery] = useState('')
-  const [predictions, setPredictions] = useState<
-    google.maps.places.AutocompletePrediction[]
-  >([])
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [selectedPlace, setSelectedPlace] = useState<PlaceResult | null>(null)
   const [isSearching, setIsSearching] = useState(false)
 
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const autocompleteRef = useRef<google.maps.places.AutocompleteService | null>(
-    null
-  )
-  const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null)
   const sessionTokenRef =
     useRef<google.maps.places.AutocompleteSessionToken | null>(null)
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const dummyDivRef = useRef<HTMLDivElement | null>(null)
+  const requestIdRef = useRef(0)
 
-  // 서비스 초기화
+  // 세션 토큰 초기화
   useEffect(() => {
     if (!isLoaded) return
-    autocompleteRef.current = new google.maps.places.AutocompleteService()
     sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
-
-    // PlacesService는 DOM 요소가 필요
-    if (!dummyDivRef.current) {
-      dummyDivRef.current = document.createElement('div')
-    }
-    placesServiceRef.current = new google.maps.places.PlacesService(
-      dummyDivRef.current
-    )
   }, [isLoaded])
 
   // 새 세션 토큰 발급
@@ -74,46 +64,54 @@ export default function GooglePlacesSearch({
     sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
   }, [])
 
-  // 디바운스된 자동완성 검색
-  const fetchPredictions = useCallback(
-    (input: string) => {
-      if (
-        !autocompleteRef.current ||
-        !sessionTokenRef.current ||
-        !input.trim()
-      ) {
-        setPredictions([])
+  // 디바운스된 자동완성 검색 (New API: AutocompleteSuggestion)
+  const fetchSuggestions = useCallback(
+    async (input: string) => {
+      if (!sessionTokenRef.current || !input.trim()) {
+        setSuggestions([])
         return
       }
 
+      const currentRequestId = ++requestIdRef.current
       setIsSearching(true)
 
-      const request: google.maps.places.AutocompletionRequest = {
-        input,
-        sessionToken: sessionTokenRef.current,
-        language: 'ja',
-      }
-
-      // 바이어스 중심이 있으면 위치 기반 검색
-      if (biasCenter) {
-        request.location = new google.maps.LatLng(
-          biasCenter.lat,
-          biasCenter.lng
-        )
-        request.radius = 5000
-      }
-
-      autocompleteRef.current.getPlacePredictions(
-        request,
-        (results, status) => {
-          setIsSearching(false)
-          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            setPredictions(results)
-          } else {
-            setPredictions([])
-          }
+      try {
+        const request: google.maps.places.AutocompleteRequest = {
+          input,
+          sessionToken: sessionTokenRef.current,
+          language: 'ja',
         }
-      )
+
+        // 바이어스 중심이 있으면 위치 기반 검색
+        if (biasCenter) {
+          request.locationBias = new google.maps.Circle({
+            center: new google.maps.LatLng(biasCenter.lat, biasCenter.lng),
+            radius: 5000,
+          })
+        }
+
+        const { suggestions: results } =
+          await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions(
+            request
+          )
+
+        // 레이스 컨디션 방지: 최신 요청만 반영
+        if (currentRequestId !== requestIdRef.current) return
+
+        setSuggestions(
+          results.filter(
+            (s): s is Suggestion => s.placePrediction !== undefined
+          )
+        )
+      } catch {
+        if (currentRequestId === requestIdRef.current) {
+          setSuggestions([])
+        }
+      } finally {
+        if (currentRequestId === requestIdRef.current) {
+          setIsSearching(false)
+        }
+      }
     },
     [biasCenter]
   )
@@ -128,52 +126,48 @@ export default function GooglePlacesSearch({
       }
 
       if (!value.trim()) {
-        setPredictions([])
+        setSuggestions([])
         return
       }
 
       debounceTimerRef.current = setTimeout(() => {
-        fetchPredictions(value)
+        fetchSuggestions(value)
       }, DEBOUNCE_MS)
     },
-    [fetchPredictions]
+    [fetchSuggestions]
   )
 
-  // 장소 선택 → getDetails로 상세 정보 가져오기 (필드 마스킹)
-  const handleSelectPrediction = useCallback(
-    (prediction: google.maps.places.AutocompletePrediction) => {
-      if (!placesServiceRef.current || !sessionTokenRef.current) return
+  // 장소 선택 → toPlace() + fetchFields() (New API)
+  const handleSelectSuggestion = useCallback(
+    async (suggestion: Suggestion) => {
+      try {
+        const place = suggestion.placePrediction.toPlace()
 
-      placesServiceRef.current.getDetails(
-        {
-          placeId: prediction.place_id,
-          // ⭐ 필드 마스킹: 필요한 4개 필드만 요청 (비용 절감)
-          fields: ['name', 'geometry', 'formatted_address', 'place_id'],
-          sessionToken: sessionTokenRef.current,
-        },
-        (place, status) => {
-          if (status !== google.maps.places.PlacesServiceStatus.OK || !place)
-            return
+        // ⭐ 필드 마스킹: 필요한 필드만 요청 (비용 절감)
+        await place.fetchFields({
+          fields: ['displayName', 'formattedAddress', 'location', 'id'],
+        })
 
-          const location = place.geometry?.location
-          if (!location) return
+        const location = place.location
+        if (!location) return
 
-          const result: PlaceResult = {
-            name: place.name ?? '',
-            address: place.formatted_address ?? '',
-            coordinates: { lat: location.lat(), lng: location.lng() },
-            googlePlaceId: place.place_id ?? '',
-          }
-
-          setSelectedPlace(result)
-          setPredictions([])
-          setQuery('')
-          onSelect(result)
-
-          // 선택 완료 → 새 세션 토큰 발급 (다음 검색용)
-          refreshSessionToken()
+        const result: PlaceResult = {
+          name: place.displayName ?? '',
+          address: place.formattedAddress ?? '',
+          coordinates: { lat: location.lat(), lng: location.lng() },
+          googlePlaceId: place.id ?? '',
         }
-      )
+
+        setSelectedPlace(result)
+        setSuggestions([])
+        setQuery('')
+        onSelect(result)
+
+        // 선택 완료 → 새 세션 토큰 발급 (다음 검색용)
+        refreshSessionToken()
+      } catch {
+        // 장소 상세 조회 실패 시 무시
+      }
     },
     [onSelect, refreshSessionToken]
   )
@@ -182,7 +176,7 @@ export default function GooglePlacesSearch({
   const handleClear = useCallback(() => {
     setSelectedPlace(null)
     setQuery('')
-    setPredictions([])
+    setSuggestions([])
     refreshSessionToken()
     inputRef.current?.focus()
   }, [refreshSessionToken])
@@ -302,27 +296,30 @@ export default function GooglePlacesSearch({
       )}
 
       {/* 자동완성 드롭다운 */}
-      {predictions.length > 0 && (
+      {suggestions.length > 0 && (
         <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
-          {predictions.map((prediction) => (
-            <li key={prediction.place_id}>
-              <button
-                type="button"
-                onClick={() => handleSelectPrediction(prediction)}
-                className="flex w-full items-start gap-2 px-3 py-2.5 text-left transition-colors hover:bg-navy-50"
-              >
-                <span className="mt-0.5 flex-shrink-0 text-gray-400">📍</span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-gray-900">
-                    {prediction.structured_formatting.main_text}
-                  </p>
-                  <p className="truncate text-xs text-gray-500">
-                    {prediction.structured_formatting.secondary_text}
-                  </p>
-                </div>
-              </button>
-            </li>
-          ))}
+          {suggestions.map((suggestion, index) => {
+            const prediction = suggestion.placePrediction
+            return (
+              <li key={prediction.placeId ?? index}>
+                <button
+                  type="button"
+                  onClick={() => handleSelectSuggestion(suggestion)}
+                  className="flex w-full items-start gap-2 px-3 py-2.5 text-left transition-colors hover:bg-navy-50"
+                >
+                  <span className="mt-0.5 flex-shrink-0 text-gray-400">📍</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-gray-900">
+                      {prediction.mainText?.toString() ?? ''}
+                    </p>
+                    <p className="truncate text-xs text-gray-500">
+                      {prediction.secondaryText?.toString() ?? ''}
+                    </p>
+                  </div>
+                </button>
+              </li>
+            )
+          })}
         </ul>
       )}
     </div>
