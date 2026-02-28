@@ -139,8 +139,8 @@
     - 좌측: `AdminSupplementList`, 우측: `AdminSupplementReview`
     - _Requirements: 3.1, 3.2_
 
-- [ ] 8. 상태 신고 검토 UI 구현
-  - [ ] 8.1 `src/components/admin/AdminStatusReportList.tsx` 생성 — 상태 신고 목록 컴포넌트
+- [-] 8. 상태 신고 검토 UI 구현
+  - [x] 8.1 `src/components/admin/AdminStatusReportList.tsx` 생성 — 상태 신고 목록 컴포넌트
     - 기존 `AdminReportList` 패턴 동일하게 구현
     - reviewStatus별 필터 (전체/대기 중/확인 완료)
     - 신고 상태 유형별 필터 (전체/정상/일부 변경/공사중/소실됨/접근 불가)
@@ -149,7 +149,7 @@
     - 신고 상태, 신고자명, 대상 스팟명, reviewStatus 배지 표시
     - _Requirements: 5.1, 5.3_
 
-  - [ ] 8.2 `src/components/admin/AdminStatusReportReview.tsx` 생성 — 상태 신고 상세/검토 컴포넌트
+  - [x] 8.2 `src/components/admin/AdminStatusReportReview.tsx` 생성 — 상태 신고 상세/검토 컴포넌트
     - 기존 `AdminReportReview` 패턴 동일하게 구현
     - 신고 상태, 설명, 증거 사진, 신고자, 대상 스팟명, 현재 스팟 상태 상세 표시
     - 확인 처리 버튼: `PUT /api/admin/status-reports/[id]/review` 호출
@@ -157,7 +157,7 @@
     - API 호출 성공/실패 시 인라인 메시지 표시
     - _Requirements: 5.2, 5.4, 5.5_
 
-  - [ ] 8.3 `src/app/admin/status-reports/page.tsx` 생성 — 상태 신고 검토 페이지
+  - [x] 8.3 `src/app/admin/status-reports/page.tsx` 생성 — 상태 신고 검토 페이지
     - 기존 `AdminReportsPage` 패턴 동일 (Split-pane 레이아웃)
     - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
     - 좌측: `AdminStatusReportList`, 우측: `AdminStatusReportReview`
