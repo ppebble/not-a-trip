@@ -67,15 +67,16 @@ export function useRouteNavigation(): UseRouteNavigationReturn {
 
   // 네비게이션 활성 시 위치 감시
   const geo = useGeolocation({ enableHighAccuracy: true, timeout: 15000 })
+  const geoRef = useRef(geo)
+  geoRef.current = geo
 
   useEffect(() => {
     if (isNavigating) {
-      geo.watchPosition()
+      geoRef.current.watchPosition()
     } else {
-      geo.clearWatch()
+      geoRef.current.clearWatch()
     }
-    return () => geo.clearWatch()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => geoRef.current.clearWatch()
   }, [isNavigating])
 
   // 유효 스팟 목록 (isAvailable !== false)
