@@ -116,8 +116,8 @@
 - [x] 6. Checkpoint — 상태 신고 API 검증
   - Ensure all tests pass, ask the user if questions arise.
 
-- [x] 7. 정보 보완 검토 UI 구현
-  - [ ] 7.1 `src/components/admin/AdminSupplementList.tsx` 생성 — 정보 보완 목록 컴포넌트
+- [-] 7. 정보 보완 검토 UI 구현
+  - [x] 7.1 `src/components/admin/AdminSupplementList.tsx` 생성 — 정보 보완 목록 컴포넌트
     - 기존 `AdminReportList` 패턴 동일하게 구현
     - status별 필터 (미승인/승인/반려/전체)
     - 페이지네이션 (page, limit)
@@ -125,7 +125,7 @@
     - 보완 유형, 기여자명, 대상 스팟명, 상태 배지 표시
     - _Requirements: 3.1, 3.3_
 
-  - [ ] 7.2 `src/components/admin/AdminSupplementReview.tsx` 생성 — 정보 보완 상세/검토 컴포넌트
+  - [x] 7.2 `src/components/admin/AdminSupplementReview.tsx` 생성 — 정보 보완 상세/검토 컴포넌트
     - 기존 `AdminReportReview` 패턴 동일하게 구현
     - 보완 유형, 내용, 씬 정보, 사진, 기여자, 대상 스팟명 상세 표시
     - 승인 버튼: `PUT /api/admin/supplements/[id]/review` 호출 (`action: 'approve'`)
@@ -133,7 +133,7 @@
     - API 호출 성공/실패 시 인라인 메시지 표시
     - _Requirements: 3.2, 3.4, 3.5_
 
-  - [ ] 7.3 `src/app/admin/supplements/page.tsx` 생성 — 정보 보완 검토 페이지
+  - [-] 7.3 `src/app/admin/supplements/page.tsx` 생성 — 정보 보완 검토 페이지
     - 기존 `AdminReportsPage` 패턴 동일 (Split-pane 레이아웃)
     - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
     - 좌측: `AdminSupplementList`, 우측: `AdminSupplementReview`
