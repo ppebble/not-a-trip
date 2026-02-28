@@ -88,7 +88,7 @@
     - 단위 테스트: 중복 북마크 방지, 존재하지 않는 코스 북마크 에러, 빈 코스 완주 엣지 케이스
     - _Requirements: 2.4, 3.5_
 
-- [ ] 4. Checkpoint - 백엔드 검증
+- [x] 4. Checkpoint - 백엔드 검증
   - 모든 API 테스트 통과 확인, 유저에게 질문이 있으면 문의하세요.
 
 - [x] 5. Zustand 스토어 및 네비게이션 훅 구현
@@ -175,8 +175,8 @@
 - [x] 8. Checkpoint - 기본 UI 검증
   - 코스 목록/상세/생성/수정 페이지 동작 확인, 유저에게 질문이 있으면 문의하세요.
 
-- [ ] 9. 따라가기 모드 (네비게이션) 구현
-  - [ ] 9.1 NavigationPanel 컴포넌트 구현
+- [x] 9. 따라가기 모드 (네비게이션) 구현
+  - [x] 9.1 NavigationPanel 컴포넌트 구현
     - `src/components/route/NavigationPanel.tsx`에 따라가기 모드 하단 패널 구현
     - 현재 목표 스팟 정보, 다음 스팟까지 거리/시간
     - 진행률 바, 인증(Check-in) 버튼, 코스 종료 버튼
@@ -184,14 +184,14 @@
     - ⚠️ 오프라인 대응: 08번 스펙의 useNetworkStatus 훅을 활용하여 오프라인(isOnline === false) 상태일 경우 '외부 지도 앱 연결(경로 탐색)' 버튼을 disabled 처리하고 "오프라인 상태에서는 외부 앱 연결이 불가합니다" 안내 툴팁 표시
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 9.2 코스 상세 페이지에 따라가기 모드 통합
+  - [x] 9.2 코스 상세 페이지에 따라가기 모드 통합
     - 코스 상세 페이지에서 "코스 시작" 클릭 시 NavigationPanel 활성화
     - RouteMap에 현재 위치 마커 표시
     - useRouteNavigation 훅 연결
     - GPS 정확도 낮을 때(accuracy > 100m) 경고 표시
     - _Requirements: 3.1, 3.3_
 
-  - [ ] 9.3 완주 처리 및 뱃지/이펙트 구현
+  - [x] 9.3 완주 처리 및 뱃지/이펙트 구현
     - 모든 유효 스팟 인증 완료 시 완주 기념 시각적 이펙트 표시
     - `POST /api/routes/[id]/complete` 호출하여 완주 기록 저장
     - 프로필에 완주 기록 표시
@@ -228,7 +228,7 @@
     - `GET /api/routes/recommended?contentName=...` 활용
     - _Requirements: 4.3_
 
-- [ ] 12. Final Checkpoint - 전체 기능 검증
+- [x] 12. Final Checkpoint - 전체 기능 검증
   - 모든 테스트 통과 확인, 유저에게 질문이 있으면 문의하세요.
 
 ## Notes
