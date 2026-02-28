@@ -61,32 +61,41 @@ export interface UseNetworkStatusReturn {
 }
 
 export function useNetworkStatus(): UseNetworkStatusReturn {
-  const store = useNetworkStore()
+  // 개별 selector로 구독하여 불필요한 리렌더 방지
+  const isOnline = useNetworkStore((s) => s.isOnline)
+  const connectionType = useNetworkStore((s) => s.connectionType)
+  const downlink = useNetworkStore((s) => s.downlink)
+  const rtt = useNetworkStore((s) => s.rtt)
+  const saveData = useNetworkStore((s) => s.saveData)
+
+  // store 액션은 안정적 참조 (zustand은 액션 참조를 유지)
+  const setOnline = useNetworkStore((s) => s.setOnline)
+  const setConnectionInfo = useNetworkStore((s) => s.setConnectionInfo)
 
   const updateConnectionInfo = useCallback(() => {
     const connection = getConnection()
     if (!connection) return
 
-    store.setConnectionInfo({
+    setConnectionInfo({
       connectionType: parseEffectiveType(connection.effectiveType),
       downlink: connection.downlink ?? null,
       rtt: connection.rtt ?? null,
       saveData: connection.saveData ?? false,
     })
-  }, [store])
+  }, [setConnectionInfo])
 
   useEffect(() => {
     const handleOnline = () => {
-      store.setOnline(true)
+      setOnline(true)
       updateConnectionInfo()
     }
 
     const handleOffline = () => {
-      store.setOnline(false)
+      setOnline(false)
     }
 
     // 초기 상태 동기화
-    store.setOnline(navigator.onLine)
+    setOnline(navigator.onLine)
     updateConnectionInfo()
 
     window.addEventListener('online', handleOnline)
@@ -105,21 +114,21 @@ export function useNetworkStatus(): UseNetworkStatusReturn {
         connection.removeEventListener('change', updateConnectionInfo)
       }
     }
-  }, [store, updateConnectionInfo])
+  }, [setOnline, updateConnectionInfo])
 
   const isSlowConnection =
-    !store.isOnline ||
-    store.connectionType === '2g' ||
-    store.connectionType === 'slow-2g' ||
-    store.connectionType === '3g' ||
-    (store.rtt !== null && store.rtt > 500)
+    !isOnline ||
+    connectionType === '2g' ||
+    connectionType === 'slow-2g' ||
+    connectionType === '3g' ||
+    (rtt !== null && rtt > 500)
 
   return {
-    isOnline: store.isOnline,
-    connectionType: store.connectionType,
-    downlink: store.downlink,
-    rtt: store.rtt,
-    saveData: store.saveData,
+    isOnline,
+    connectionType,
+    downlink,
+    rtt,
+    saveData,
     isSlowConnection,
   }
 }

@@ -1,10 +1,13 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
+import { useRouteNavigation } from '@/hooks/useRouteNavigation'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
+import { NavigationPanel } from '@/components/route/NavigationPanel'
+import { CompletionEffect } from '@/components/route/CompletionEffect'
 import type { Route, RouteDifficulty } from '@/types/route'
 import {
   getTravelMode,
@@ -58,7 +61,23 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
   const [isBookmarking, setIsBookmarking] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
 
+  const nav = useRouteNavigation()
+
+  const [showCompletionEffect, setShowCompletionEffect] = useState(false)
+
   const availableSpots = route.spots.filter((s) => s.isAvailable !== false)
+
+  // 완주 감지 시 이펙트 표시
+  const completionShownRef = useRef(false)
+  useEffect(() => {
+    if (nav.isCompleted && nav.isNavigating && !completionShownRef.current) {
+      completionShownRef.current = true
+      setShowCompletionEffect(true)
+    }
+    if (!nav.isNavigating) {
+      completionShownRef.current = false
+    }
+  }, [nav.isCompleted, nav.isNavigating])
 
   /** 북마크 토글 */
   const handleBookmark = useCallback(async () => {
@@ -86,15 +105,21 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
   }, [isAuthenticated, isBookmarking, route.id])
 
   /** 코스 시작 */
-  const handleStartRoute = useCallback(() => {
-    if (!isAuthenticated) {
+  const handleStartRoute = useCallback(async () => {
+    if (!isAuthenticated || !user) {
       setShowLoginModal(true)
       return
     }
-    // 코스 상세 페이지에서 따라가기 모드 활성화 (Task 9에서 구현)
-    // 현재는 알림만 표시
-    alert('따라가기 모드는 준비 중입니다')
-  }, [isAuthenticated])
+    await nav.startRoute(route, user.id)
+  }, [isAuthenticated, user, nav, route])
+
+  /** 스팟 인증 (Check-in 페이지로 이동) */
+  const handleCheckIn = useCallback(
+    (spotId: string) => {
+      router.push(`/spots/${spotId}`)
+    },
+    [router]
+  )
 
   return (
     <div className="space-y-6">
@@ -161,38 +186,54 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       </div>
 
       {/* 액션 버튼 */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleStartRoute}
-          className="flex-1 rounded-lg bg-navy-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-700"
-        >
-          🚶 코스 시작
-        </button>
-        <button
-          onClick={handleBookmark}
-          disabled={isBookmarking}
-          className={`rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
-            isBookmarked
-              ? 'border-amber-400 bg-amber-50 text-amber-700'
-              : 'border-navy-200 bg-white text-navy-600 hover:bg-navy-50'
-          }`}
-        >
-          {isBookmarked ? '🔖 저장됨' : '🔖 저장'}
-        </button>
-        {user && route.authorId === user.id && (
+      {!nav.isNavigating && (
+        <div className="flex gap-3">
           <button
-            onClick={() => router.push(`/routes/${route.id}/edit`)}
-            className="rounded-lg border-2 border-navy-200 bg-white px-4 py-3 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+            onClick={handleStartRoute}
+            className="flex-1 rounded-lg bg-navy-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-700"
           >
-            ✏️ 수정
+            🚶 코스 시작
           </button>
-        )}
-      </div>
+          <button
+            onClick={handleBookmark}
+            disabled={isBookmarking}
+            className={`rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
+              isBookmarked
+                ? 'border-amber-400 bg-amber-50 text-amber-700'
+                : 'border-navy-200 bg-white text-navy-600 hover:bg-navy-50'
+            }`}
+          >
+            {isBookmarked ? '🔖 저장됨' : '🔖 저장'}
+          </button>
+          {user && route.authorId === user.id && (
+            <button
+              onClick={() => router.push(`/routes/${route.id}/edit`)}
+              className="rounded-lg border-2 border-navy-200 bg-white px-4 py-3 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+            >
+              ✏️ 수정
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* GPS 정확도 경고 */}
+      {nav.isNavigating && nav.accuracy !== null && nav.accuracy > 100 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          ⚠️ GPS 정확도가 낮습니다 ({Math.round(nav.accuracy)}m). 실외로
+          이동하면 정확도가 개선됩니다.
+        </div>
+      )}
 
       {/* 코스 지도 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
         <h2 className="mb-3 text-lg font-semibold text-navy-900">코스 지도</h2>
-        <RouteMap spots={route.spots} startPoint={route.startPoint} />
+        <RouteMap
+          spots={route.spots}
+          startPoint={route.startPoint}
+          currentPosition={nav.isNavigating ? nav.currentPosition : undefined}
+          currentSpotIndex={nav.isNavigating ? nav.currentSpotIndex : undefined}
+          checkedSpotIds={nav.isNavigating ? nav.checkedSpotIds : undefined}
+        />
       </div>
 
       {/* 스팟 순서 목록 */}
@@ -368,6 +409,34 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         title="로그인이 필요합니다"
         description="코스 시작 및 저장 기능을 사용하려면 로그인이 필요합니다."
         onConfirm={() => router.push('/auth/signin')}
+      />
+
+      {/* 따라가기 모드 하단 패널 */}
+      {nav.isNavigating && nav.activeRoute && (
+        <NavigationPanel
+          currentSpot={nav.activeRoute.spots[nav.currentSpotIndex]}
+          currentSpotIndex={nav.currentSpotIndex}
+          spots={nav.activeRoute.spots}
+          progress={nav.progress}
+          distanceToNext={nav.distanceToNext}
+          estimatedTimeToNext={nav.estimatedTimeToNext}
+          checkedSpotIds={nav.checkedSpotIds}
+          currentPosition={nav.currentPosition}
+          isCompleted={nav.isCompleted}
+          onCheckIn={handleCheckIn}
+          onMoveToNext={nav.moveToNextSpot}
+          onEndRoute={nav.endRoute}
+        />
+      )}
+
+      {/* 네비게이션 모드 시 하단 패널 높이만큼 여백 */}
+      {nav.isNavigating && <div className="h-44" />}
+
+      {/* 완주 축하 이펙트 */}
+      <CompletionEffect
+        isVisible={showCompletionEffect}
+        routeName={route.name}
+        onClose={() => setShowCompletionEffect(false)}
       />
     </div>
   )
