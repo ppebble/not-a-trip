@@ -91,15 +91,15 @@
 - [ ] 4. Checkpoint - 백엔드 검증
   - 모든 API 테스트 통과 확인, 유저에게 질문이 있으면 문의하세요.
 
-- [ ] 5. Zustand 스토어 및 네비게이션 훅 구현
-  - [ ] 5.1 courseProgressStore 구현
+- [x] 5. Zustand 스토어 및 네비게이션 훅 구현
+  - [x] 5.1 courseProgressStore 구현
     - `src/stores/courseProgressStore.ts`에 코스 진행 상태 관리 스토어 구현
     - 상태: activeRouteId, activeRoute, currentSpotIndex, checkedSpotIds(Set), startedAt, isNavigating
     - 액션: startRoute (기존 Check-in 기록 조회하여 자동 반영), checkInSpot, moveToNextSpot, endRoute, resetProgress
     - startRoute 시 `GET /api/checkins?userId=...` 호출하여 이미 인증된 스팟 자동 포함
     - _Requirements: 3.1, 3.2, 3.4_
 
-  - [ ] 5.2 useRouteNavigation 훅 구현
+  - [x] 5.2 useRouteNavigation 훅 구현
     - `src/hooks/useRouteNavigation.ts`에 네비게이션 로직 훅 구현
     - courseProgressStore + useGeolocation 조합
     - 현재 위치 기반 다음 스팟까지 거리/시간 실시간 계산
@@ -118,31 +118,31 @@
     - 단위 테스트: 스팟 0개 엣지 케이스, 중복 인증 처리, endRoute 후 상태 초기화
     - _Requirements: 3.1, 3.4, 3.5_
 
-- [ ] 6. 코스 목록 및 상세 페이지 구현
-  - [ ] 6.1 RouteCard 컴포넌트 구현
+- [x] 6. 코스 목록 및 상세 페이지 구현
+  - [x] 6.1 RouteCard 컴포넌트 구현
     - `src/components/route/RouteCard.tsx`에 코스 카드 컴포넌트 구현
     - 코스명, 스팟 수, 예상 시간, 난이도, 북마크 수, 공식 추천 뱃지 표시
     - _Requirements: 2.1_
 
-  - [ ] 6.2 RouteFilterBar 컴포넌트 구현
+  - [x] 6.2 RouteFilterBar 컴포넌트 구현
     - `src/components/route/RouteFilterBar.tsx`에 필터 UI 구현
     - 작품별, 지역별, 소요시간별 필터 + 정렬 옵션 (인기순/최신순/소요시간순)
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 6.3 코스 목록 페이지 구현
+  - [x] 6.3 코스 목록 페이지 구현
     - `src/app/routes/page.tsx`에 코스 목록 페이지 구현
     - RouteCard + RouteFilterBar 조합
     - 무한 스크롤 페이지네이션
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 6.4 RouteMap 컴포넌트 구현
+  - [x] 6.4 RouteMap 컴포넌트 구현
     - `src/components/route/RouteMap.tsx`에 Leaflet 기반 코스 지도 구현
     - 스팟 마커 + 순서 번호 표시, 스팟 간 Polyline 연결
     - isAvailable:false 스팟은 회색 마커 + 취소선으로 표시
     - ⚠️ 주의: 코스 동선의 순서를 명확히 보여주기 위해 RouteMap에서는 마커 클러스터링(Marker Clustering) 플러그인을 반드시 비활성화해야 함 (마커가 합쳐지면 순서 파악 불가)
     - _Requirements: 2.3_
 
-  - [ ] 6.5 코스 상세 페이지 구현
+  - [x] 6.5 코스 상세 페이지 구현
     - `src/app/routes/[id]/page.tsx`에 코스 상세 페이지 구현
     - RouteMap + 스팟 순서 목록 + 스팟 간 이동 거리/시간 표시
     - "코스 시작" / "코스 저장" 버튼
@@ -150,14 +150,14 @@
     - 코스 제작자 정보 표시
     - _Requirements: 1.4, 2.3, 2.4, 3.1_
 
-- [ ] 7. 코스 생성/수정 페이지 구현
-  - [ ] 7.1 SpotOrderList 컴포넌트 구현
+- [x] 7. 코스 생성/수정 페이지 구현
+  - [x] 7.1 SpotOrderList 컴포넌트 구현
     - `src/components/route/SpotOrderList.tsx`에 스팟 순서 관리 컴포넌트 구현
     - 드래그 앤 드롭으로 스팟 순서 변경
     - 스팟 간 거리/시간 표시, 스팟별 메모 입력
     - _Requirements: 1.2, 1.3_
 
-  - [ ] 7.2 코스 생성 페이지 구현
+  - [x] 7.2 코스 생성 페이지 구현
     - `src/app/routes/create/page.tsx`에 코스 생성 페이지 구현
     - 기본 정보 입력 (코스명, 설명, 예상 소요시간, 난이도)
     - 스팟 검색/선택 UI (지도에서 선택 또는 검색)
@@ -166,13 +166,13 @@
     - 미리보기 기능
     - _Requirements: 1.1, 1.2, 1.3, 1.5_
 
-  - [ ] 7.3 코스 수정 페이지 구현
+  - [x] 7.3 코스 수정 페이지 구현
     - `src/app/routes/[id]/edit/page.tsx`에 코스 수정 페이지 구현
     - 생성 페이지와 동일한 폼을 기존 데이터로 프리필
     - 작성자만 접근 가능
     - _Requirements: 1.2_
 
-- [ ] 8. Checkpoint - 기본 UI 검증
+- [x] 8. Checkpoint - 기본 UI 검증
   - 코스 목록/상세/생성/수정 페이지 동작 확인, 유저에게 질문이 있으면 문의하세요.
 
 - [ ] 9. 따라가기 모드 (네비게이션) 구현

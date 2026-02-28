@@ -33,6 +33,53 @@ const DIFFICULTY_OPTIONS: { value: RouteDifficulty; label: string }[] = [
   { value: 'hard', label: '🔴 어려움' },
 ]
 
+/** 사전 정의된 지역 태그 목록 */
+const REGION_TAG_OPTIONS = [
+  '도쿄',
+  '가마쿠라/에노시마',
+  '교토',
+  '오사카',
+  '나고야',
+  '삿포로',
+  '후쿠오카',
+  '오키나와',
+  '기타',
+]
+
+/** 주소 키워드 → 지역 태그 매핑 (일본어/한국어 주소 대응) */
+const REGION_ADDRESS_MAP: { keywords: string[]; tag: string }[] = [
+  { keywords: ['東京', '도쿄', 'Tokyo'], tag: '도쿄' },
+  {
+    keywords: [
+      '鎌倉',
+      '가마쿠라',
+      '江ノ島',
+      '에노시마',
+      '藤沢',
+      'Kamakura',
+      'Enoshima',
+    ],
+    tag: '가마쿠라/에노시마',
+  },
+  { keywords: ['京都', '교토', 'Kyoto'], tag: '교토' },
+  { keywords: ['大阪', '오사카', 'Osaka'], tag: '오사카' },
+  { keywords: ['名古屋', '나고야', '愛知', 'Nagoya'], tag: '나고야' },
+  {
+    keywords: ['札幌', '삿포로', '北海道', 'Sapporo', 'Hokkaido'],
+    tag: '삿포로',
+  },
+  { keywords: ['福岡', '후쿠오카', 'Fukuoka'], tag: '후쿠오카' },
+  { keywords: ['沖縄', '오키나와', 'Okinawa'], tag: '오키나와' },
+]
+
+/** 주소 문자열에서 지역 태그 추출 */
+function extractRegionFromAddress(address: string): string | null {
+  for (const { keywords, tag } of REGION_ADDRESS_MAP) {
+    if (keywords.some((kw) => address.includes(kw))) return tag
+  }
+  return null
+}
+
 /** SpotOrderItem 배열에 거리/시간 재계산 적용 */
 function recalcDistances(spots: SpotOrderItem[]): SpotOrderItem[] {
   if (spots.length === 0) return spots
@@ -70,8 +117,29 @@ export function RouteFormContent({
   const [relatedContentNames, setRelatedContentNames] = useState<string[]>(
     initialRoute?.relatedContentNames || []
   )
-  const [regionTag, setRegionTag] = useState(initialRoute?.regionTag || '')
+  const [regionTags, setRegionTags] = useState<string[]>(
+    initialRoute?.regionTags || []
+  )
   const [contentInput, setContentInput] = useState('')
+  const [contentSuggestions, setContentSuggestions] = useState<string[]>([])
+  const [hasContentSearched, setHasContentSearched] = useState(false)
+  const contentDebounceRef = useRef<NodeJS.Timeout | null>(null)
+
+  // 시작 지점
+  const [startPointName, setStartPointName] = useState(
+    initialRoute?.startPoint?.name || ''
+  )
+  const [startPointAddress, setStartPointAddress] = useState(
+    initialRoute?.startPoint?.address || ''
+  )
+  const [startPointCoords, setStartPointCoords] = useState<{
+    lat: number
+    lng: number
+  } | null>(initialRoute?.startPoint?.coordinates || null)
+  const [isGeocoding, setIsGeocoding] = useState(false)
+  const [geocodeError, setGeocodeError] = useState('')
+  const [geocodeResults, setGeocodeResults] = useState<GeocodeSuggestion[]>([])
+  const [hasGeoSearched, setHasGeoSearched] = useState(false)
 
   // 스팟 목록
   const [spots, setSpots] = useState<SpotOrderItem[]>(() => {
@@ -92,7 +160,7 @@ export function RouteFormContent({
   // 스팟 검색
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<SpotSearchResult[]>([])
-  const [isSearching, setIsSearching] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
   // 제출 상태
@@ -111,9 +179,9 @@ export function RouteFormContent({
   const searchSpots = useCallback(async (query: string) => {
     if (!query.trim()) {
       setSearchResults([])
+      setHasSearched(false)
       return
     }
-    setIsSearching(true)
     try {
       const res = await fetch(`/api/spots?search=${encodeURIComponent(query)}`)
       if (!res.ok) throw new Error()
@@ -136,7 +204,7 @@ export function RouteFormContent({
     } catch {
       setSearchResults([])
     } finally {
-      setIsSearching(false)
+      setHasSearched(true)
     }
   }, [])
 
@@ -165,7 +233,9 @@ export function RouteFormContent({
         const newSpot: SpotOrderItem = {
           spotId: spot.id,
           spotName: spot.name,
-          coordinates: spot.coordinates,
+          coordinates: Array.isArray(spot.coordinates)
+            ? { lat: spot.coordinates[0], lng: spot.coordinates[1] }
+            : spot.coordinates,
           thumbnailUrl: spot.photos?.[0] || '',
           note: undefined,
           distanceFromPrev: null,
@@ -176,11 +246,37 @@ export function RouteFormContent({
         setSpots(newSpots)
         setSearchQuery('')
         setSearchResults([])
+        setHasSearched(false)
+
+        // 스팟의 relatedContent에서 작품명 자동 추출
+        if (spot.relatedContent && Array.isArray(spot.relatedContent)) {
+          const newNames = spot.relatedContent
+            .map((rc: { name: string }) => rc.name)
+            .filter(
+              (name: string) => name && !relatedContentNames.includes(name)
+            )
+          if (newNames.length > 0) {
+            setRelatedContentNames((prev) => [
+              ...new Set([...prev, ...newNames]),
+            ])
+          }
+        }
+
+        // 스팟 주소에서 지역 태그 자동 추출
+        const address = spot.address || ''
+        if (address) {
+          const extracted = extractRegionFromAddress(address)
+          if (extracted) {
+            setRegionTags((prev) =>
+              prev.includes(extracted) ? prev : [...prev, extracted]
+            )
+          }
+        }
       } catch {
         // 에러 무시
       }
     },
-    [spots]
+    [spots, relatedContentNames]
   )
 
   /** 스팟 순서 변경 시 거리 재계산 */
@@ -188,13 +284,110 @@ export function RouteFormContent({
     setSpots(recalcDistances(newSpots))
   }, [])
 
-  /** 작품명 추가 */
-  const handleAddContent = useCallback(() => {
-    const trimmed = contentInput.trim()
-    if (!trimmed || relatedContentNames.includes(trimmed)) return
-    setRelatedContentNames((prev) => [...prev, trimmed])
-    setContentInput('')
-  }, [contentInput, relatedContentNames])
+  /** 작품명 자동완성 검색 */
+  const searchContent = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setContentSuggestions([])
+      setHasContentSearched(false)
+      return
+    }
+    try {
+      const res = await fetch(
+        `/api/content-names?type=content&search=${encodeURIComponent(query)}`
+      )
+      if (!res.ok) throw new Error()
+      const data = await res.json()
+      setContentSuggestions(
+        data.items.map((item: { name: string }) => item.name)
+      )
+    } catch {
+      setContentSuggestions([])
+    } finally {
+      setHasContentSearched(true)
+    }
+  }, [])
+
+  /** 작품명 입력 디바운스 핸들러 */
+  const handleContentInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      setContentInput(value)
+      if (contentDebounceRef.current) clearTimeout(contentDebounceRef.current)
+      contentDebounceRef.current = setTimeout(() => searchContent(value), 300)
+    },
+    [searchContent]
+  )
+
+  /** Nominatim 주소 검색 (복수 결과) */
+  const handleGeocode = useCallback(async () => {
+    if (!startPointAddress.trim()) return
+    setIsGeocoding(true)
+    setGeocodeError('')
+    setGeocodeResults([])
+    setHasGeoSearched(false)
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(startPointAddress)}&limit=5&addressdetails=1`,
+        { headers: { 'Accept-Language': 'ja,ko,en' } }
+      )
+      const data = await res.json()
+      if (data.length > 0) {
+        setGeocodeResults(
+          data.map(
+            (item: {
+              lat: string
+              lon: string
+              display_name: string
+              type: string
+              class: string
+            }) => ({
+              lat: parseFloat(item.lat),
+              lng: parseFloat(item.lon),
+              displayName: item.display_name,
+              type: item.type,
+              placeClass: item.class,
+            })
+          )
+        )
+      } else {
+        setGeocodeError('검색 결과가 없습니다')
+      }
+    } catch {
+      setGeocodeError('주소 검색에 실패했습니다')
+    } finally {
+      setIsGeocoding(false)
+      setHasGeoSearched(true)
+    }
+  }, [startPointAddress])
+
+  /** 검색 결과에서 장소 선택 */
+  const handleSelectGeoResult = useCallback(
+    (result: GeocodeSuggestion) => {
+      setStartPointCoords({ lat: result.lat, lng: result.lng })
+      setStartPointAddress(result.displayName)
+      if (!startPointName.trim()) {
+        // 장소명이 비어있으면 display_name의 첫 부분을 자동 채움
+        const shortName = result.displayName.split(',')[0].trim()
+        setStartPointName(shortName)
+      }
+      setGeocodeResults([])
+      setHasGeoSearched(false)
+    },
+    [startPointName]
+  )
+
+  /** 자동완성에서 작품명 선택 */
+  const handleSelectContent = useCallback(
+    (name: string) => {
+      if (!relatedContentNames.includes(name)) {
+        setRelatedContentNames((prev) => [...prev, name])
+      }
+      setContentInput('')
+      setContentSuggestions([])
+      setHasContentSearched(false)
+    },
+    [relatedContentNames]
+  )
 
   /** 작품명 삭제 */
   const handleRemoveContent = useCallback((index: number) => {
@@ -222,14 +415,24 @@ export function RouteFormContent({
     setErrors([])
     setIsSubmitting(true)
 
+    const startPoint =
+      startPointName.trim() && startPointAddress.trim() && startPointCoords
+        ? {
+            name: startPointName.trim(),
+            address: startPointAddress.trim(),
+            coordinates: startPointCoords,
+          }
+        : undefined
+
     const body = {
       name: name.trim(),
       description: description.trim(),
       estimatedDuration: parseInt(estimatedDuration, 10),
       difficulty,
+      startPoint,
       spots: spots.map((s) => ({ spotId: s.spotId, note: s.note })),
       relatedContentNames,
-      regionTag: regionTag.trim() || undefined,
+      regionTags: regionTags.length > 0 ? regionTags : undefined,
       isPublic,
     }
 
@@ -264,7 +467,7 @@ export function RouteFormContent({
     difficulty,
     spots,
     relatedContentNames,
-    regionTag,
+    regionTags,
     isPublic,
     isEditMode,
     initialRoute,
@@ -290,7 +493,7 @@ export function RouteFormContent({
         </div>
       )}
 
-      {/* 기본 정보 */}
+      {/* Step 1: 기본 정보 (코스명 + 설명만) */}
       <section className="rounded-lg bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-navy-900">기본 정보</h2>
         <div className="space-y-4">
@@ -322,142 +525,10 @@ export function RouteFormContent({
               className="w-full resize-none rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
             />
           </div>
-
-          {/* 예상 소요시간 + 난이도 */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-navy-700">
-                예상 소요시간 (분) <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                value={estimatedDuration}
-                onChange={(e) => setEstimatedDuration(e.target.value)}
-                placeholder="120"
-                min={1}
-                className="w-full rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-navy-700">
-                난이도 <span className="text-red-500">*</span>
-              </label>
-              <div className="flex gap-2">
-                {DIFFICULTY_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setDifficulty(opt.value)}
-                    className={`flex-1 rounded-lg border px-2 py-2 text-sm transition-colors ${
-                      difficulty === opt.value
-                        ? 'border-navy-500 bg-navy-50 font-medium text-navy-700'
-                        : 'border-navy-200 text-navy-500 hover:border-navy-300'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* 공개/비공개 */}
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-navy-700">
-              공개 설정
-            </label>
-            <button
-              type="button"
-              onClick={() => setIsPublic(!isPublic)}
-              className={`relative h-6 w-11 rounded-full transition-colors ${
-                isPublic ? 'bg-navy-600' : 'bg-navy-200'
-              }`}
-              role="switch"
-              aria-checked={isPublic}
-            >
-              <span
-                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
-                  isPublic ? 'left-[22px]' : 'left-0.5'
-                }`}
-              />
-            </button>
-            <span className="text-sm text-navy-500">
-              {isPublic ? '공개' : '비공개'}
-            </span>
-          </div>
         </div>
       </section>
 
-      {/* 관련 작품 + 지역 태그 */}
-      <section className="rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-navy-900">태그 정보</h2>
-        <div className="space-y-4">
-          {/* 관련 작품 */}
-          <div>
-            <label className="mb-1 block text-sm font-medium text-navy-700">
-              관련 작품
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={contentInput}
-                onChange={(e) => setContentInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    handleAddContent()
-                  }
-                }}
-                placeholder="작품명 입력 후 추가"
-                className="flex-1 rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={handleAddContent}
-                disabled={!contentInput.trim()}
-                className="rounded-lg bg-navy-100 px-3 text-sm text-navy-600 hover:bg-navy-200 disabled:opacity-40"
-              >
-                추가
-              </button>
-            </div>
-            {relatedContentNames.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {relatedContentNames.map((c, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-1 rounded-full bg-navy-100 px-2.5 py-0.5 text-xs text-navy-600"
-                  >
-                    {c}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveContent(i)}
-                      className="text-navy-400 hover:text-red-500"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* 지역 태그 */}
-          <div>
-            <label className="mb-1 block text-sm font-medium text-navy-700">
-              지역 태그
-            </label>
-            <input
-              type="text"
-              value={regionTag}
-              onChange={(e) => setRegionTag(e.target.value)}
-              placeholder="예: 도쿄, 가마쿠라"
-              className="w-full rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* 스팟 관리 */}
+      {/* Step 2: 스팟 관리 (핵심) */}
       <section className="rounded-lg bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-navy-900">
           스팟 목록 <span className="text-red-500">*</span>
@@ -478,11 +549,11 @@ export function RouteFormContent({
           <span className="absolute left-3 top-2.5 text-navy-300">🔍</span>
 
           {/* 검색 결과 드롭다운 */}
-          {(searchResults.length > 0 || isSearching) && searchQuery && (
+          {searchQuery && hasSearched && (
             <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-lg border border-navy-200 bg-white shadow-lg">
-              {isSearching ? (
-                <div className="flex items-center justify-center py-4">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-navy-400 border-t-transparent" />
+              {searchResults.length === 0 ? (
+                <div className="px-4 py-4 text-center text-sm text-navy-400">
+                  &ldquo;{searchQuery}&rdquo;에 대한 검색 결과가 없습니다
                 </div>
               ) : (
                 searchResults.map((result) => {
@@ -525,7 +596,325 @@ export function RouteFormContent({
         </div>
 
         {/* 스팟 순서 목록 */}
-        <SpotOrderList spots={spots} onSpotsChange={handleSpotsChange} />
+        <SpotOrderList
+          spots={spots}
+          onSpotsChange={handleSpotsChange}
+          startPoint={
+            startPointName && startPointCoords
+              ? {
+                  name: startPointName,
+                  address: startPointAddress,
+                  coordinates: startPointCoords,
+                }
+              : undefined
+          }
+        />
+      </section>
+
+      {/* Step 3: 시작 지점 (선택) */}
+      <section className="rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="mb-1 text-lg font-semibold text-navy-900">
+          시작 지점
+          <span className="ml-2 text-sm font-normal text-navy-400">(선택)</span>
+        </h2>
+        <p className="mb-4 text-xs text-navy-400">
+          숙소, 역 등 출발 지점을 등록하면 첫 스팟까지의 거리/이동 정보가
+          표시됩니다.
+        </p>
+        <div className="space-y-3">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy-700">
+              출발지 별명
+            </label>
+            <input
+              type="text"
+              value={startPointName}
+              onChange={(e) => setStartPointName(e.target.value)}
+              placeholder="예: 우리 숙소, 신주쿠역 앞, 출발점"
+              className="w-full rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
+              maxLength={100}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy-700">
+              주소
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={startPointAddress}
+                onChange={(e) => {
+                  setStartPointAddress(e.target.value)
+                  setGeocodeError('')
+                  setGeocodeResults([])
+                  setHasGeoSearched(false)
+                  setStartPointCoords(null)
+                }}
+                placeholder="예: 東京都新宿区新宿3丁目"
+                className="flex-1 rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleGeocode()
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleGeocode}
+                disabled={isGeocoding || !startPointAddress.trim()}
+                className="flex-shrink-0 rounded-lg bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-700 disabled:bg-navy-300"
+              >
+                {isGeocoding ? '검색 중...' : '🔍 주소 검색'}
+              </button>
+            </div>
+            {geocodeError && (
+              <p className="mt-1 text-xs text-red-500">{geocodeError}</p>
+            )}
+            {!startPointCoords && (
+              <p className="mt-1.5 text-xs text-blue-500">
+                💡 검색이 잘 안 되나요? &apos;역&apos;, &apos;호텔&apos;을 빼고
+                핵심 키워드(예: 신주쿠)만 검색해 보세요.
+              </p>
+            )}
+            {hasGeoSearched &&
+              geocodeResults.length > 0 &&
+              !startPointCoords && (
+                <div className="mt-1 max-h-48 overflow-y-auto rounded-lg border border-navy-200 bg-white shadow-lg">
+                  {geocodeResults.map((result, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleSelectGeoResult(result)}
+                      className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-navy-50"
+                    >
+                      <img
+                        src={getPlaceIconPath(result.type, result.placeClass)}
+                        alt={result.type}
+                        className="h-5 w-5 flex-shrink-0"
+                      />
+                      <span className="truncate text-sm text-navy-800">
+                        {result.displayName}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+          </div>
+          {startPointCoords && (
+            <div className="flex items-center gap-2 rounded-lg bg-green-50 px-3 py-2">
+              <span className="text-sm text-green-700">
+                ✅ 좌표 확인: {startPointCoords.lat.toFixed(5)},{' '}
+                {startPointCoords.lng.toFixed(5)}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setStartPointName('')
+                  setStartPointAddress('')
+                  setStartPointCoords(null)
+                  setGeocodeError('')
+                }}
+                className="ml-auto text-xs text-red-400 hover:text-red-600"
+              >
+                초기화
+              </button>
+            </div>
+          )}
+          {startPointCoords && (
+            <div className="overflow-hidden rounded-lg border border-navy-200">
+              <iframe
+                title="선택된 출발지 위치"
+                width="100%"
+                height="200"
+                style={{ border: 0, pointerEvents: 'none' }}
+                loading="lazy"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${startPointCoords.lng - 0.005},${startPointCoords.lat - 0.003},${startPointCoords.lng + 0.005},${startPointCoords.lat + 0.003}&layer=mapnik&marker=${startPointCoords.lat},${startPointCoords.lng}`}
+              />
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Step 4: 코스 디테일 (태그 + 소요시간 + 난이도 + 공개설정) */}
+      <section className="rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-lg font-semibold text-navy-900">
+          코스 디테일
+        </h2>
+        <div className="space-y-4">
+          {/* 관련 작품 (자동완성) */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy-700">
+              관련 작품
+            </label>
+            <p className="mb-2 text-xs text-navy-400">
+              스팟 추가 시 작품명이 자동 추출됩니다. 검색하여 추가할 수도
+              있습니다.
+            </p>
+            <div className="relative">
+              <input
+                type="text"
+                value={contentInput}
+                onChange={handleContentInputChange}
+                placeholder="작품명 검색"
+                className="w-full rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
+              />
+              {contentInput &&
+                hasContentSearched &&
+                contentSuggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 overflow-y-auto rounded-lg border border-navy-200 bg-white shadow-lg">
+                    {contentSuggestions.map((suggestion) => {
+                      const alreadyAdded =
+                        relatedContentNames.includes(suggestion)
+                      return (
+                        <button
+                          key={suggestion}
+                          type="button"
+                          onClick={() => handleSelectContent(suggestion)}
+                          disabled={alreadyAdded}
+                          className="flex w-full items-center px-4 py-2 text-left text-sm text-navy-800 transition-colors hover:bg-navy-50 disabled:opacity-40"
+                        >
+                          <span className="truncate">{suggestion}</span>
+                          {alreadyAdded && (
+                            <span className="ml-auto text-xs text-navy-400">
+                              추가됨
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+            </div>
+            {relatedContentNames.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {relatedContentNames.map((c, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1 rounded-full bg-navy-100 px-2.5 py-0.5 text-xs text-navy-600"
+                  >
+                    {c}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveContent(i)}
+                      className="text-navy-400 hover:text-red-500"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 지역 태그 (복수 선택 토글) */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy-700">
+              지역 태그
+            </label>
+            <p className="mb-2 text-xs text-navy-400">
+              스팟 추가 시 주소에서 자동 추출됩니다. 직접 선택할 수도 있습니다.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {REGION_TAG_OPTIONS.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => {
+                    setRegionTags((prev) =>
+                      prev.includes(tag)
+                        ? prev.filter((t) => t !== tag)
+                        : [...prev, tag]
+                    )
+                  }}
+                  className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                    regionTags.includes(tag)
+                      ? 'border-navy-500 bg-navy-600 text-white'
+                      : 'border-navy-200 bg-white text-navy-600 hover:border-navy-300 hover:bg-navy-50'
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 예상 소요시간 + 이동시간 힌트 */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy-700">
+              예상 소요시간 (분) <span className="text-red-500">*</span>
+            </label>
+            {spots.length >= 2 &&
+              (() => {
+                const totalWalkTime = spots.reduce(
+                  (sum, s) => sum + (s.walkTimeFromPrev || 0),
+                  0
+                )
+                return totalWalkTime > 0 ? (
+                  <p className="mb-1.5 text-xs text-blue-500">
+                    💡 스팟 간 이동시간 합계: 약 {totalWalkTime}분 (도보 기준).
+                    관람 시간을 더해 입력해 주세요.
+                  </p>
+                ) : null
+              })()}
+            <input
+              type="number"
+              value={estimatedDuration}
+              onChange={(e) => setEstimatedDuration(e.target.value)}
+              placeholder="120"
+              min={1}
+              className="w-full rounded-lg border border-navy-200 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"
+            />
+          </div>
+
+          {/* 난이도 */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy-700">
+              난이도 <span className="text-red-500">*</span>
+            </label>
+            <div className="flex gap-2">
+              {DIFFICULTY_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setDifficulty(opt.value)}
+                  className={`flex-1 rounded-lg border px-2 py-2 text-sm transition-colors ${
+                    difficulty === opt.value
+                      ? 'border-navy-500 bg-navy-50 font-medium text-navy-700'
+                      : 'border-navy-200 text-navy-500 hover:border-navy-300'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 공개/비공개 */}
+          <div className="flex items-center gap-3">
+            <label className="text-sm font-medium text-navy-700">
+              공개 설정
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsPublic(!isPublic)}
+              className={`relative h-6 w-11 rounded-full transition-colors ${
+                isPublic ? 'bg-navy-600' : 'bg-navy-200'
+              }`}
+              role="switch"
+              aria-checked={isPublic}
+            >
+              <span
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  isPublic ? 'left-[22px]' : 'left-0.5'
+                }`}
+              />
+            </button>
+            <span className="text-sm text-navy-500">
+              {isPublic ? '공개' : '비공개'}
+            </span>
+          </div>
+        </div>
       </section>
 
       {/* 미리보기 */}
@@ -534,7 +923,18 @@ export function RouteFormContent({
           <h2 className="mb-3 text-lg font-semibold text-navy-900">
             코스 미리보기
           </h2>
-          <RouteMap spots={previewSpots} />
+          <RouteMap
+            spots={previewSpots}
+            startPoint={
+              startPointName && startPointCoords
+                ? {
+                    name: startPointName,
+                    address: startPointAddress,
+                    coordinates: startPointCoords,
+                  }
+                : undefined
+            }
+          />
         </section>
       )}
 
@@ -575,4 +975,29 @@ interface SpotSearchResult {
   name: string
   thumbnailUrl: string
   coordinates: number[]
+}
+
+/** Nominatim 검색 결과 타입 */
+interface GeocodeSuggestion {
+  lat: number
+  lng: number
+  displayName: string
+  type: string // e.g., "station", "stop", "administrative"
+  placeClass: string // e.g., "railway", "highway", "place"
+}
+
+/** Nominatim type/class → 아이콘 경로 매핑 */
+function getPlaceIconPath(type: string, placeClass: string): string {
+  if (placeClass === 'railway' && type === 'station')
+    return '/icons/start-point/station.svg'
+  if (placeClass === 'railway' && (type === 'stop' || type === 'halt'))
+    return '/icons/start-point/stop.svg'
+  if (
+    placeClass === 'highway' &&
+    (type === 'bus_stop' || type === 'bus_station')
+  )
+    return '/icons/start-point/bus.svg'
+  if (placeClass === 'tourism' || placeClass === 'amenity')
+    return '/icons/start-point/building.svg'
+  return '/icons/start-point/default.svg'
 }

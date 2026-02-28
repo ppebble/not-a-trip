@@ -222,7 +222,7 @@ export default function Home() {
             <ContentSearchFilter onExpandChange={setIsSearchExpanded} />
             {/* 카테고리 필터 - 검색창이 열리면 숨김 */}
             {!isSearchExpanded && (
-              <div className="rounded-full bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
+              <div className="rounded-2xl bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
                 <CategoryFilter />
               </div>
             )}

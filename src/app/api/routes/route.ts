@@ -130,10 +130,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       description: body.description.trim(),
       estimatedDuration: body.estimatedDuration,
       difficulty: body.difficulty,
+      startPoint: body.startPoint || undefined,
       spots: routeSpots,
       totalDistance,
       relatedContentNames: body.relatedContentNames || [],
-      regionTag: body.regionTag || undefined,
+      regionTags:
+        Array.isArray(body.regionTags) && body.regionTags.length > 0
+          ? body.regionTags
+          : undefined,
       isPublic: body.isPublic !== false,
       isOfficial: false,
       bookmarkCount: 0,
@@ -219,7 +223,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // 지역별 필터
     if (regionTag) {
-      query.regionTag = regionTag
+      query.regionTags = { $in: [regionTag] }
     }
 
     // 소요시간별 필터

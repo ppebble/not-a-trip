@@ -152,8 +152,10 @@ export async function PUT(
     if (body.difficulty) updateFields.difficulty = body.difficulty
     if (body.relatedContentNames !== undefined)
       updateFields.relatedContentNames = body.relatedContentNames
-    if (body.regionTag !== undefined) updateFields.regionTag = body.regionTag
+    if (body.regionTags !== undefined) updateFields.regionTags = body.regionTags
     if (body.isPublic !== undefined) updateFields.isPublic = body.isPublic
+    if (body.startPoint !== undefined)
+      updateFields.startPoint = body.startPoint || undefined
 
     // 스팟 목록 변경 시 거리/시간 재계산
     if (body.spots) {
