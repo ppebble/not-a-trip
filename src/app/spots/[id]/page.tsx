@@ -25,6 +25,7 @@ import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/
 import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 import DirectionsButton from '@/components/common/DirectionsButton'
 import { blurPlaceholderProps } from '@/lib/image-utils'
+import { RelatedRoutes } from '@/components/route/RelatedRoutes'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -446,6 +447,11 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         }
         onConfirm={() => router.push('/auth/login')}
       />
+
+      {/* 관련 순례 코스 - Requirements 4.3 */}
+      {spot.relatedContent && spot.relatedContent.length > 0 && (
+        <RelatedRoutes contentNames={spot.relatedContent.map((c) => c.name)} />
+      )}
 
       {/* Related Content - 맨 아래 (Requirements 3.1, 3.4) */}
       <RelatedContentSection contents={spot.relatedContent || []} />

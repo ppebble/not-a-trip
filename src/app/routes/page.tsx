@@ -3,6 +3,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { RouteListContent } from '@/components/route/RouteListContent'
+import { RecommendedRoutes } from '@/components/route/RecommendedRoutes'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
 
 /** 코스 목록 페이지 스켈레톤 */
@@ -56,6 +57,14 @@ export default function RoutesPage() {
           </Link>
         </div>
 
+        {/* 추천 코스 섹션 - Requirements: 4.1, 4.2 */}
+        <RecommendedRoutes />
+
+        {/* 구분선 */}
+        <div className="my-6 border-t border-navy-200" />
+
+        {/* 전체 코스 목록 */}
+        <h2 className="mb-4 text-lg font-bold text-navy-900">📋 전체 코스</h2>
         <Suspense fallback={<RouteListSkeleton />}>
           <RouteListContent />
         </Suspense>
