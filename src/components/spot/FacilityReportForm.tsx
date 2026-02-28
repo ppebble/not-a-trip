@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { FacilityType, OtakuFacilityType } from '@/types'
@@ -15,6 +15,9 @@ import {
 } from '@/types/facility'
 import { LoginRequiredModal } from '@/components/common'
 import { API_ROUTES } from '@/lib/api-routes'
+import GooglePlacesSearch from './GooglePlacesSearch'
+import LocationPickerMap from './LocationPickerMap'
+import { useGeolocation } from '@/hooks/useGeolocation'
 
 // ─── 타입 정의 ───
 
@@ -461,6 +464,8 @@ export default function FacilityReportForm({
   )
   const [serverError, setServerError] = useState('')
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [isMapOpen, setIsMapOpen] = useState(false)
+  const geo = useGeolocation()
 
   const resetForm = useCallback(() => {
     setFormData(getInitialFormData())
@@ -468,6 +473,7 @@ export default function FacilityReportForm({
     setInputMode(null)
     setSubmitResult(null)
     setServerError('')
+    setIsMapOpen(false)
   }, [])
 
   const handleClose = useCallback(() => {
@@ -561,10 +567,24 @@ export default function FacilityReportForm({
   // 직접 핀 모드에서 스팟 좌표를 기본값으로 사용
   const handlePinMode = () => {
     setInputMode('pin')
-    if (spotCoordinates && !formData.coordinates) {
-      setFormData((prev) => ({ ...prev, coordinates: spotCoordinates }))
-    }
   }
+
+  // 현재 위치로 좌표 설정
+  const handleCurrentLocation = () => {
+    geo.getCurrentPosition()
+  }
+
+  // geo 좌표가 업데이트되면 formData에 반영
+  const applyGeoCoordinates = useCallback(() => {
+    if (geo.coordinates) {
+      setFormData((prev) => ({ ...prev, coordinates: geo.coordinates }))
+      setErrors((prev) => ({ ...prev, coordinates: undefined }))
+    }
+  }, [geo.coordinates])
+
+  useEffect(() => {
+    applyGeoCoordinates()
+  }, [applyGeoCoordinates])
 
   if (!isOpen) return null
 
@@ -675,82 +695,70 @@ export default function FacilityReportForm({
 
                 {/* 구글맵 검색 모드 */}
                 {inputMode === 'search' && (
-                  <div className="rounded-md border border-dashed border-gray-300 bg-gray-50 p-4 text-center">
-                    <p className="text-sm text-gray-500">
-                      🔍 구글맵 Places Autocomplete
-                    </p>
-                    <p className="mt-1 text-xs text-gray-400">
-                      (Google Places API 연동 예정 — 현재는 직접 입력)
-                    </p>
-                    {/* 임시: 직접 입력 필드 */}
-                    <div className="mt-3 space-y-2 text-left">
-                      <input
-                        type="text"
-                        placeholder="장소 이름 검색..."
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            name: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-gray-200 px-3 py-2 text-sm"
-                      />
-                      <input
-                        type="text"
-                        placeholder="주소"
-                        value={formData.address}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            address: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-gray-200 px-3 py-2 text-sm"
-                      />
-                      <div className="flex gap-2">
-                        <input
-                          type="number"
-                          step="any"
-                          placeholder="위도 (lat)"
-                          value={formData.coordinates?.lat ?? ''}
-                          onChange={(e) => {
-                            const lat =
-                              e.target.value === ''
-                                ? null
-                                : Number(e.target.value)
-                            setFormData((prev) => ({
-                              ...prev,
-                              coordinates:
-                                lat !== null
-                                  ? { lat, lng: prev.coordinates?.lng ?? 0 }
-                                  : null,
-                            }))
-                          }}
-                          className="w-1/2 rounded border border-gray-200 px-3 py-2 text-sm"
-                        />
-                        <input
-                          type="number"
-                          step="any"
-                          placeholder="경도 (lng)"
-                          value={formData.coordinates?.lng ?? ''}
-                          onChange={(e) => {
-                            const lng =
-                              e.target.value === ''
-                                ? null
-                                : Number(e.target.value)
-                            setFormData((prev) => ({
-                              ...prev,
-                              coordinates:
-                                lng !== null
-                                  ? { lat: prev.coordinates?.lat ?? 0, lng }
-                                  : null,
-                            }))
-                          }}
-                          className="w-1/2 rounded border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </div>
-                    </div>
+                  <div className="space-y-3">
+                    <GooglePlacesSearch
+                      biasCenter={spotCoordinates}
+                      onSelect={(place) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          name: place.name,
+                          address: place.address,
+                          coordinates: place.coordinates,
+                          googlePlaceId: place.googlePlaceId,
+                        }))
+                        setErrors({})
+                      }}
+                    />
+
+                    {/* 현재 위치 버튼 */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleCurrentLocation()
+                        // geo 결과는 비동기이므로 effect로 처리
+                      }}
+                      disabled={geo.isLoading}
+                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                    >
+                      {geo.isLoading ? (
+                        <>
+                          <svg
+                            className="h-4 w-4 animate-spin"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            />
+                          </svg>
+                          위치 확인 중...
+                        </>
+                      ) : (
+                        <>🎯 내 현재 위치로 설정</>
+                      )}
+                    </button>
+                    {geo.error && (
+                      <p className="text-xs text-red-500">
+                        {geo.error.message}
+                      </p>
+                    )}
+                    {formData.coordinates && !formData.googlePlaceId && (
+                      <p className="text-xs text-green-600">
+                        ✅ 현재 위치가 설정되었습니다 (
+                        {formData.coordinates.lat.toFixed(4)},{' '}
+                        {formData.coordinates.lng.toFixed(4)})
+                      </p>
+                    )}
                   </div>
                 )}
 
@@ -802,60 +810,90 @@ export default function FacilityReportForm({
                       <label className="mb-1 block text-sm font-medium text-gray-700">
                         위치 <span className="text-red-500">*</span>
                       </label>
-                      <div className="flex gap-2">
-                        <input
-                          type="number"
-                          step="any"
-                          placeholder="위도 (lat)"
-                          value={formData.coordinates?.lat ?? ''}
-                          onChange={(e) => {
-                            const lat =
-                              e.target.value === ''
-                                ? null
-                                : Number(e.target.value)
-                            setFormData((prev) => ({
-                              ...prev,
-                              coordinates:
-                                lat !== null
-                                  ? { lat, lng: prev.coordinates?.lng ?? 0 }
-                                  : null,
-                            }))
-                          }}
-                          className={`w-1/2 rounded-lg border px-3 py-2 text-sm ${errors.coordinates ? 'border-red-400' : 'border-gray-200'}`}
-                        />
-                        <input
-                          type="number"
-                          step="any"
-                          placeholder="경도 (lng)"
-                          value={formData.coordinates?.lng ?? ''}
-                          onChange={(e) => {
-                            const lng =
-                              e.target.value === ''
-                                ? null
-                                : Number(e.target.value)
-                            setFormData((prev) => ({
-                              ...prev,
-                              coordinates:
-                                lng !== null
-                                  ? { lat: prev.coordinates?.lat ?? 0, lng }
-                                  : null,
-                            }))
-                          }}
-                          className={`w-1/2 rounded-lg border px-3 py-2 text-sm ${errors.coordinates ? 'border-red-400' : 'border-gray-200'}`}
-                        />
-                      </div>
-                      {errors.coordinates && (
+
+                      {/* 지도에서 위치 선택 버튼 */}
+                      <button
+                        type="button"
+                        onClick={() => setIsMapOpen(true)}
+                        className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-navy-300 bg-navy-50/50 py-3 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+                      >
+                        📍 지도에서 위치 선택하기
+                      </button>
+
+                      {/* 현재 위치 버튼 */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleCurrentLocation()
+                        }}
+                        disabled={geo.isLoading}
+                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                      >
+                        {geo.isLoading ? (
+                          <>
+                            <svg
+                              className="h-4 w-4 animate-spin"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                              />
+                            </svg>
+                            위치 확인 중...
+                          </>
+                        ) : (
+                          <>🎯 내 현재 위치로 설정</>
+                        )}
+                      </button>
+                      {geo.error && (
+                        <p className="mt-1 text-xs text-red-500">
+                          {geo.error.message}
+                        </p>
+                      )}
+
+                      {errors.coordinates && !formData.coordinates && (
                         <p className="mt-1 text-xs text-red-500">
                           {errors.coordinates}
                         </p>
                       )}
                       {formData.coordinates && (
-                        <p className="mt-1 text-xs text-gray-400">
-                          📍 {formData.coordinates.lat.toFixed(4)},{' '}
-                          {formData.coordinates.lng.toFixed(4)}
+                        <p className="mt-1 text-xs text-green-600">
+                          ✅ 위치가 선택되었습니다 (
+                          {formData.coordinates.lat.toFixed(4)},{' '}
+                          {formData.coordinates.lng.toFixed(4)})
                         </p>
                       )}
                     </div>
+
+                    {/* 지도 모달 */}
+                    <LocationPickerMap
+                      isOpen={isMapOpen}
+                      onClose={() => setIsMapOpen(false)}
+                      onConfirm={(coords) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          coordinates: coords,
+                        }))
+                        setErrors((prev) => ({
+                          ...prev,
+                          coordinates: undefined,
+                        }))
+                      }}
+                      center={
+                        spotCoordinates ?? { lat: 35.6812, lng: 139.7671 }
+                      }
+                    />
                   </div>
                 )}
 
