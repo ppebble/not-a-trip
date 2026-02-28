@@ -82,22 +82,22 @@
 - [ ] 4. Checkpoint — API 검증
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. FacilityFilter 컴포넌트 구현
-  - [ ] 5.1 `src/components/spot/FacilityFilter.tsx` 신규 생성 — 카테고리 필터 칩 UI
+- [x] 5. FacilityFilter 컴포넌트 구현
+  - [x] 5.1 `src/components/spot/FacilityFilter.tsx` 신규 생성 — 카테고리 필터 칩 UI
     - Legacy_Category + Otaku_Category 전체 카테고리 필터 칩 렌더링
     - "전체" 칩 포함, 복수 선택 지원
     - 칩 클릭 시 해당 카테고리 토글, 전체 해제 시 모든 카테고리 표시
     - 각 카테고리별 아이콘/라벨 표시 (FACILITY_CONFIG 활용)
     - _Requirements: 1.4, 1.5_
 
-  - [ ] 5.2 `src/components/spot/NearbyFacilities.tsx` 확장 — FACILITY_CONFIG 및 필터 통합
+  - [x] 5.2 `src/components/spot/NearbyFacilities.tsx` 확장 — FACILITY_CONFIG 및 필터 통합
     - `FACILITY_CONFIG`에 Otaku_Category 5개 추가 (아이콘, 라벨, 색상)
     - `FacilityFilter` 컴포넌트를 목록 상단에 통합
     - 선택된 카테고리에 따라 편의시설 목록 필터링 로직 추가
     - _Requirements: 1.2, 1.3, 1.4, 1.5_
 
-- [ ] 6. FacilityCard 카테고리별 상세 렌더링 확장
-  - [ ] 6.1 `src/components/spot/FacilityCard.tsx` 확장 — 카테고리별 상세 정보 렌더링
+- [x] 6. FacilityCard 카테고리별 상세 렌더링 확장
+  - [x] 6.1 `src/components/spot/FacilityCard.tsx` 확장 — 카테고리별 상세 정보 렌더링
     - `coin_locker`: 크기별 가격 테이블, 대형 로커 유무 배지, 이용 시간 표시, 미등록 시 "정보 미등록" 텍스트
     - `solo_dining`: "1인 OK" 태그, 카운터석/1인 메뉴 유무, 빠른 식사/심야 배지, 미등록 시 "정보 미등록" 텍스트
     - `charging_cafe`: 충전/와이파이 유무 아이콘 표시
@@ -112,8 +112,8 @@
     - 미등록 필드에 "정보 미등록" 텍스트가 표시되는지 확인
     - _Requirements: 2.4, 3.3, 6.7_
 
-- [ ] 7. MicroVoteButton 컴포넌트 구현
-  - [ ] 7.1 `src/components/spot/MicroVoteButton.tsx` 신규 생성 — 마이크로 투표 UI
+- [x] 7. MicroVoteButton 컴포넌트 구현
+  - [x] 7.1 `src/components/spot/MicroVoteButton.tsx` 신규 생성 — 마이크로 투표 UI
     - "이 정보가 정확한가요?" 텍스트와 👍/👎 버튼 렌더링
     - `POST /api/facilities/[id]/vote` API 호출 연동
     - 이미 투표한 경우 선택 상태 하이라이트 표시
@@ -121,7 +121,7 @@
     - 비로그인 유저에게 로그인 유도 메시지 표시
     - _Requirements: 5.10, 7.6_
 
-  - [ ] 7.2 `src/components/spot/FacilityCard.tsx`에 MicroVoteButton 통합
+  - [x] 7.2 `src/components/spot/FacilityCard.tsx`에 MicroVoteButton 통합
     - FacilityCard 하단에 MicroVoteButton 배치
     - _Requirements: 5.10_
 
@@ -130,18 +130,18 @@
     - 동일 유저가 동일 시설에 투표 시 `facility_votes`에 최대 1개 문서만 존재하는지 검증
     - **Validates: Requirements 7.8**
 
-- [ ] 8. Checkpoint — UI 컴포넌트 검증
+- [x] 8. Checkpoint — UI 컴포넌트 검증
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 9. FacilityReportForm 제보 폼 구현
-  - [ ] 9.1 `src/components/spot/FacilityReportForm.tsx` 신규 생성 — 제보 폼 모달 기본 구조
+- [x] 9. FacilityReportForm 제보 폼 구현
+  - [x] 9.1 `src/components/spot/FacilityReportForm.tsx` 신규 생성 — 제보 폼 모달 기본 구조
     - 모달 형태의 제보 폼 레이아웃
     - 장소 입력 방식 선택 UI (구글맵 검색 / 직접 핀 꽂기 투트랙)
     - 공통 필수 필드: 이름, 카테고리 선택 드롭다운, 위치(좌표)
     - 필수 필드 미입력 시 오류 메시지 표시
     - _Requirements: 5.1, 5.2, 5.8, 5.9_
 
-  - [ ] 9.2 FacilityReportForm 카테고리별 동적 필드 구현
+  - [x] 9.2 FacilityReportForm 카테고리별 동적 필드 구현
     - `coin_locker` 선택 시: 크기, 가격, 이용 시간, 대형 로커 유무 필드 표시
     - `solo_dining` 선택 시: 카운터석 유무, 1인 메뉴 유무, 빠른 식사 가능 여부, 심야 영업 여부 필드 표시
     - `goods_shop` 선택 시: 매장 유형(서브컬처/잡화), 영업시간 필드 표시
@@ -149,7 +149,7 @@
     - `public_restroom` 선택 시: 장애인 접근 가능 여부, 24시간 이용 가능 여부 필드 표시
     - _Requirements: 5.3, 5.4, 5.5, 5.6, 5.7_
 
-  - [ ] 9.3 FacilityReportForm API 연동 및 제출 처리
+  - [x] 9.3 FacilityReportForm API 연동 및 제출 처리
     - `POST /api/facilities/report` API 호출 연동
     - 성공 시 성공 메시지 표시 및 폼 초기화
     - 에러 시 서버 응답 기반 오류 메시지 표시
