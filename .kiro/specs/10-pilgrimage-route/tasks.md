@@ -197,14 +197,14 @@
     - 프로필에 완주 기록 표시
     - _Requirements: 3.5_
 
-- [ ] 10. 오프라인 캐싱 (Service Worker 확장) 구현
-  - [ ] 10.1 Service Worker 코스 캐시 확장
+- [x] 10. 오프라인 캐싱 (Service Worker 확장) 구현
+  - [x] 10.1 Service Worker 코스 캐시 확장
     - `public/sw.js`에 `ROUTE_CACHE` 추가
     - `PREFETCH_ROUTE` 메시지 핸들러 구현
     - 코스 상세 API, 스팟 상세 API, 썸네일 URL 프리패치
     - _Requirements: 3.6_
 
-  - [ ] 10.2 useRouteCache 훅 및 클라이언트 프리패치 유틸리티 구현
+  - [x] 10.2 useRouteCache 훅 및 클라이언트 프리패치 유틸리티 구현
     - `src/lib/route-cache.ts`에 `prefetchRouteForOffline` 함수 구현
     - `src/hooks/useRouteCache.ts`에 캐시 상태 관리 훅 구현
     - 코스 시작/저장 시 자동 프리패치 트리거
