@@ -5,8 +5,9 @@ const CACHE_VERSION = 2
 const STATIC_CACHE = `not-a-trip-static-v${CACHE_VERSION}`
 const TILE_CACHE = `not-a-trip-tiles-v${CACHE_VERSION}`
 const DATA_CACHE = `not-a-trip-data-v${CACHE_VERSION}`
+const ROUTE_CACHE = `not-a-trip-route-v${CACHE_VERSION}`
 
-const VALID_CACHES = [STATIC_CACHE, TILE_CACHE, DATA_CACHE]
+const VALID_CACHES = [STATIC_CACHE, TILE_CACHE, DATA_CACHE, ROUTE_CACHE]
 
 // App Shell 정적 자산
 const APP_SHELL_ASSETS = ['/', '/offline.html']
@@ -53,11 +54,29 @@ function isSpotDataRequest(url) {
 }
 
 /**
+ * 코스 API 요청인지 확인
+ */
+function isRouteDataRequest(url) {
+  return url.pathname.startsWith('/api/routes')
+}
+
+/**
  * 캐싱 가능한 데이터 API 요청인지 확인 (GET만)
  */
 function isCacheableDataRequest(request) {
   const url = new URL(request.url)
   return request.method === 'GET' && isSpotDataRequest(url)
+}
+
+/**
+ * 코스 캐시에서 응답 가능한 요청인지 확인 (GET만)
+ */
+function isRouteCacheableRequest(request) {
+  const url = new URL(request.url)
+  return (
+    request.method === 'GET' &&
+    (isRouteDataRequest(url) || isSpotDataRequest(url))
+  )
 }
 
 // install: 정적 자산 캐싱
@@ -97,6 +116,12 @@ self.addEventListener('fetch', (event) => {
   // 스팟 데이터 API: Stale While Revalidate 전략
   if (isCacheableDataRequest(event.request)) {
     event.respondWith(handleDataRequest(event.request))
+    return
+  }
+
+  // 코스/스팟 API: ROUTE_CACHE 폴백 (프리패치된 오프라인 데이터)
+  if (isRouteCacheableRequest(event.request)) {
+    event.respondWith(handleRouteCacheRequest(event.request))
     return
   }
 
@@ -195,6 +220,70 @@ async function handleStaticRequest(request) {
   }
 }
 
+/**
+ * 코스 캐시 요청 처리: Network First + ROUTE_CACHE 폴백
+ * - 네트워크 우선, 실패 시 프리패치된 ROUTE_CACHE에서 반환
+ */
+async function handleRouteCacheRequest(request) {
+  try {
+    const response = await fetch(request)
+    if (response.status === 200) {
+      const cache = await caches.open(ROUTE_CACHE)
+      cache.put(request, response.clone())
+    }
+    return response
+  } catch {
+    const cached = await caches.match(request)
+    if (cached) {
+      return cached
+    }
+    return new Response(JSON.stringify({ error: 'Offline', cached: false }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+}
+
+/**
+ * 코스 데이터 프리패치
+ * - 코스 상세 API, 각 스팟 상세 API, 썸네일 이미지를 ROUTE_CACHE에 저장
+ */
+async function prefetchRouteData(payload) {
+  const { routeId, spots } = payload
+  const cache = await caches.open(ROUTE_CACHE)
+
+  const requests = []
+
+  // 코스 상세 API
+  requests.push(`/api/routes/${routeId}`)
+
+  // 각 스팟 상세 API + 썸네일
+  for (const spot of spots) {
+    requests.push(`/api/spots/${spot.spotId}`)
+    if (spot.thumbnailUrl) {
+      requests.push(spot.thumbnailUrl)
+    }
+  }
+
+  const results = await Promise.allSettled(
+    requests.map(async (url) => {
+      try {
+        const response = await fetch(url)
+        if (response.ok) {
+          await cache.put(new Request(url), response)
+        }
+      } catch {
+        /* 오프라인이면 무시 */
+      }
+    })
+  )
+
+  return {
+    total: requests.length,
+    success: results.filter((r) => r.status === 'fulfilled').length,
+  }
+}
+
 // message: 캐시 관리 메시지 처리
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'CLEAR_CACHES') {
@@ -209,6 +298,26 @@ self.addEventListener('message', (event) => {
     getCacheStats().then((stats) => {
       event.ports[0].postMessage(stats)
     })
+  }
+
+  // 코스 프리패치 요청
+  if (event.data && event.data.type === 'PREFETCH_ROUTE') {
+    event.waitUntil(
+      prefetchRouteData(event.data.payload).then((result) => {
+        // 클라이언트에 완료 알림
+        self.clients.matchAll().then((clients) => {
+          clients.forEach((client) => {
+            client.postMessage({
+              type: 'ROUTE_PREFETCH_COMPLETE',
+              payload: {
+                routeId: event.data.payload.routeId,
+                ...result,
+              },
+            })
+          })
+        })
+      })
+    )
   }
 })
 
