@@ -77,6 +77,57 @@ const facilityIcons: Record<FacilityType, Icon> = {
     popupAnchor: [1, -28],
     shadowSize: [33, 33],
   }),
+  // Otaku_Category
+  coin_locker: new Icon({
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+    shadowUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [20, 33],
+    iconAnchor: [10, 33],
+    popupAnchor: [1, -28],
+    shadowSize: [33, 33],
+  }),
+  solo_dining: new Icon({
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    shadowUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [20, 33],
+    iconAnchor: [10, 33],
+    popupAnchor: [1, -28],
+    shadowSize: [33, 33],
+  }),
+  charging_cafe: new Icon({
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    shadowUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [20, 33],
+    iconAnchor: [10, 33],
+    popupAnchor: [1, -28],
+    shadowSize: [33, 33],
+  }),
+  public_restroom: new Icon({
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    shadowUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [20, 33],
+    iconAnchor: [10, 33],
+    popupAnchor: [1, -28],
+    shadowSize: [33, 33],
+  }),
+  goods_shop: new Icon({
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png',
+    shadowUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [20, 33],
+    iconAnchor: [10, 33],
+    popupAnchor: [1, -28],
+    shadowSize: [33, 33],
+  }),
 }
 
 // 편의시설 타입별 한글 라벨
@@ -86,6 +137,12 @@ const facilityTypeLabels: Record<FacilityType, string> = {
   cafe: '카페',
   station: '역/정류장',
   other: '기타',
+  // Otaku_Category
+  coin_locker: '코인 로커',
+  solo_dining: '혼밥 식당',
+  charging_cafe: '충전/와이파이',
+  public_restroom: '화장실',
+  goods_shop: '굿즈/잡화',
 }
 
 export default function SpotDetailMap({
@@ -254,6 +311,12 @@ function getFacilityColor(type: FacilityType): string {
     cafe: 'bg-green-500',
     station: 'bg-purple-500',
     other: 'bg-gray-500',
+    // Otaku_Category
+    coin_locker: 'bg-violet-500',
+    solo_dining: 'bg-rose-500',
+    charging_cafe: 'bg-cyan-500',
+    public_restroom: 'bg-teal-500',
+    goods_shop: 'bg-pink-500',
   }
   return colors[type] || 'bg-gray-500'
 }

@@ -9,11 +9,18 @@ export function groupFacilitiesByType(
   facilities: NearbyFacility[]
 ): Record<FacilityType, NearbyFacility[]> {
   const grouped: Record<FacilityType, NearbyFacility[]> = {
+    // Legacy_Category
     restaurant: [],
     convenience_store: [],
     cafe: [],
     station: [],
     other: [],
+    // Otaku_Category
+    coin_locker: [],
+    solo_dining: [],
+    charging_cafe: [],
+    public_restroom: [],
+    goods_shop: [],
   }
 
   facilities.forEach((facility) => {
@@ -31,9 +38,16 @@ export function groupFacilitiesByType(
  * 유효한 편의시설 타입 목록
  */
 export const VALID_FACILITY_TYPES: FacilityType[] = [
+  // Legacy_Category
   'restaurant',
   'convenience_store',
   'cafe',
   'station',
   'other',
+  // Otaku_Category
+  'coin_locker',
+  'solo_dining',
+  'charging_cafe',
+  'public_restroom',
+  'goods_shop',
 ]
