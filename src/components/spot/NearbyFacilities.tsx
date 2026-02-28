@@ -4,6 +4,7 @@ import { NearbyFacility, FacilityType } from '@/types'
 import { useCallback, useMemo, useState } from 'react'
 import { groupFacilitiesByType } from '@/lib/facility-utils'
 import FacilityFilter from './FacilityFilter'
+import FacilityCard from './FacilityCard'
 
 interface NearbyFacilitiesProps {
   facilities: NearbyFacility[]
@@ -298,116 +299,6 @@ export default function NearbyFacilities({
             </div>
           )
         })}
-      </div>
-    </div>
-  )
-}
-
-interface FacilityCardProps {
-  facility: NearbyFacility
-  config: { label: string; icon: string; color: string }
-}
-
-function FacilityCard({ facility, config }: FacilityCardProps) {
-  // 거리를 사용자 친화적 형태로 변환
-  const formatDistance = (meters: number): string => {
-    if (meters < 1000) {
-      return `${Math.round(meters)}m`
-    } else {
-      return `${(meters / 1000).toFixed(1)}km`
-    }
-  }
-
-  // 외부 지도 링크 생성 (Google Maps - 시설명으로 검색)
-  const handleMapClick = () => {
-    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.name)}`
-    window.open(googleMapsUrl, '_blank', 'noopener,noreferrer')
-  }
-
-  // 주소 표시 여부 (주소 정보 없음이면 숨김)
-  const showAddress = facility.address && facility.address !== '주소 정보 없음'
-
-  return (
-    <div className="rounded-lg border border-gray-200 p-4 transition-all hover:border-gray-300 hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <div className="min-w-0 flex-1">
-          <div className="mb-2 flex items-center space-x-2">
-            <h4 className="truncate font-semibold text-gray-900">
-              {facility.name}
-            </h4>
-            <span
-              className={`inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium ${config.color}`}
-            >
-              {config.label}
-            </span>
-          </div>
-
-          <div className="space-y-1 text-sm text-gray-600">
-            {showAddress && (
-              <div className="flex items-center space-x-1">
-                <svg
-                  className="h-4 w-4 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <span className="truncate">{facility.address}</span>
-              </div>
-            )}
-
-            <div className="flex items-center space-x-1">
-              <svg
-                className="h-4 w-4 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                />
-              </svg>
-              <span className="font-medium text-navy-600">
-                {formatDistance(facility.distance)}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <button
-          onClick={handleMapClick}
-          className="ml-2 flex-shrink-0 rounded-md bg-navy-50 p-2 text-navy-600 transition-colors hover:bg-navy-100 hover:text-navy-700"
-          title="지도에서 보기"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-        </button>
       </div>
     </div>
   )
