@@ -262,12 +262,23 @@ export interface SpotPreviewData {
 // Facility Types
 // ============================================
 
-export type FacilityType =
+import { FacilityStatus, OtakuFacilityDetails } from './facility'
+
+export type LegacyFacilityType =
   | 'restaurant'
   | 'convenience_store'
   | 'cafe'
   | 'station'
   | 'other'
+
+export type OtakuFacilityType =
+  | 'coin_locker'
+  | 'solo_dining'
+  | 'charging_cafe'
+  | 'public_restroom'
+  | 'goods_shop'
+
+export type FacilityType = LegacyFacilityType | OtakuFacilityType
 
 export interface NearbyFacility {
   id: string
@@ -276,6 +287,16 @@ export interface NearbyFacility {
   distance: number
   address: string
   coordinates: [number, number]
+  // 신규 필드 (Req 6.7~6.10)
+  status?: FacilityStatus
+  verificationScore?: number
+  upvotes?: number
+  downvotes?: number
+  googlePlaceId?: string
+  otakuDetails?: OtakuFacilityDetails
+  reportedBy?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface Facility {
@@ -284,6 +305,16 @@ export interface Facility {
   type: FacilityType
   address: string
   coordinates: Coordinates
+  // 신규 필드 (Req 6.7~6.10)
+  status?: FacilityStatus
+  verificationScore?: number
+  upvotes?: number
+  downvotes?: number
+  googlePlaceId?: string
+  otakuDetails?: OtakuFacilityDetails
+  reportedBy?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 // ============================================

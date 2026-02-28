@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { spotKeys, SpotDetailData } from './useSpots'
 import { API_ROUTES } from '@/lib/api-routes'
+import { NearbyFacility } from '@/types'
 
 /**
  * Hook to fetch detailed spot information
@@ -35,22 +36,6 @@ export function useSpotDetail(spotId: string | null) {
 /**
  * Hook to fetch nearby facilities for a specific spot
  */
-export interface NearbyFacility {
-  id: string
-  name: string
-  type: FacilityType
-  distance: number // meters
-  address: string
-  coordinates: [number, number]
-}
-
-export type FacilityType =
-  | 'restaurant'
-  | 'convenience_store'
-  | 'cafe'
-  | 'station'
-  | 'other'
-
 export function useNearbyFacilities(spotId: string | null) {
   return useQuery({
     queryKey: [...spotKeys.detail(spotId || ''), 'facilities'],
