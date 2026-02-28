@@ -3,11 +3,17 @@
 import { NearbyFacility, FacilityType } from '@/types'
 import { useCallback, useMemo, useState } from 'react'
 import { groupFacilitiesByType } from '@/lib/facility-utils'
+import { useInvalidateFacilities } from '@/hooks/useSpotDetail'
 import FacilityFilter from './FacilityFilter'
 import FacilityCard from './FacilityCard'
+import FacilityReportForm from './FacilityReportForm'
 
 interface NearbyFacilitiesProps {
   facilities: NearbyFacility[]
+  /** 스팟 ID — 제보 후 목록 갱신에 사용 */
+  spotId?: string
+  /** 스팟 좌표 — 제보 폼 기본 위치에 사용 */
+  spotCoordinates?: { lat: number; lng: number }
 }
 
 // 편의시설 타입별 한글 라벨과 아이콘
@@ -73,7 +79,12 @@ const DEFAULT_VISIBLE_COUNT = 3
 
 export default function NearbyFacilities({
   facilities,
+  spotId,
+  spotCoordinates,
 }: NearbyFacilitiesProps) {
+  const [showReportForm, setShowReportForm] = useState(false)
+  const { invalidate } = useInvalidateFacilities(spotId ?? null)
+
   // 카테고리 필터 상태 (빈 Set = 전체 표시)
   const [selectedTypes, setSelectedTypes] = useState<Set<FacilityType>>(
     new Set()
@@ -165,20 +176,42 @@ export default function NearbyFacilities({
   if (facilities.length === 0) {
     return (
       <div className="rounded-lg bg-white p-6 shadow-md">
-        <h2 className="mb-4 text-2xl font-bold text-gray-900">근처 편의시설</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900">근처 편의시설</h2>
+          <button
+            onClick={() => setShowReportForm(true)}
+            className="rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+          >
+            편의시설 제보
+          </button>
+        </div>
         <div className="py-8 text-center">
           <div className="mb-2 text-4xl">🏪</div>
           <p className="text-gray-500">근처에 등록된 편의시설이 없습니다.</p>
         </div>
+        <FacilityReportForm
+          isOpen={showReportForm}
+          onClose={() => setShowReportForm(false)}
+          onSuccess={invalidate}
+          spotCoordinates={spotCoordinates}
+        />
       </div>
     )
   }
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-md">
-      <h2 className="mb-6 text-2xl font-bold text-gray-900">
-        근처 편의시설 ({facilities.length}개)
-      </h2>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900">
+          근처 편의시설 ({facilities.length}개)
+        </h2>
+        <button
+          onClick={() => setShowReportForm(true)}
+          className="rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+        >
+          편의시설 제보
+        </button>
+      </div>
 
       <FacilityFilter
         availableTypes={availableTypes}
@@ -300,6 +333,13 @@ export default function NearbyFacilities({
           )
         })}
       </div>
+
+      <FacilityReportForm
+        isOpen={showReportForm}
+        onClose={() => setShowReportForm(false)}
+        onSuccess={invalidate}
+        spotCoordinates={spotCoordinates}
+      />
     </div>
   )
 }
