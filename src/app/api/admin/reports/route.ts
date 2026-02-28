@@ -37,7 +37,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: Record<string, any> = {}
     if (status !== 'all') {
-      query.status = status
+      if (status === 'pending') {
+        // 하위 호환: status 필드가 없는 기존 데이터도 pending으로 취급
+        query.$or = [{ status: 'pending' }, { status: { $exists: false } }]
+      } else {
+        query.status = status
+      }
     }
 
     const [reports, total] = await Promise.all([
