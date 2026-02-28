@@ -119,8 +119,10 @@ export interface SpotSupplement {
   }
   /** 추가 사진 */
   photos?: string[]
-  /** 승인 여부 */
-  approved: boolean
+  /** 처리 상태 (3-state) */
+  status: 'pending' | 'approved' | 'rejected'
+  /** 반려 사유 (status: 'rejected' 시 필수) */
+  rejectionReason?: string
   createdAt: Date
 }
 
@@ -158,6 +160,8 @@ export interface SpotStatusReport {
   description: string
   /** 증거 사진 (선택, 있으면 즉시 '검토 중' 전환 트리거) */
   photoUrl?: string
+  /** 처리 상태 */
+  reviewStatus: 'pending' | 'resolved'
   createdAt: Date
 }
 
@@ -181,4 +185,49 @@ export interface SpotReportExtension {
   spotStatus?: SpotStatus
   /** 상태 신고 누적 수 */
   statusReportCount?: number
+}
+
+// ============================================
+// 관리자 API 요청/응답 인터페이스 (13-admin-dashboard)
+// ============================================
+
+/** PUT /api/admin/supplements/[id]/review 요청 */
+export interface SupplementReviewRequest {
+  action: 'approve' | 'reject'
+  rejectionReason?: string
+}
+
+/** PUT /api/admin/status-reports/[id]/review 요청 */
+export interface StatusReportReviewRequest {
+  action: 'resolve'
+}
+
+/** PUT /api/admin/status-reports/spots/[spotId]/status 요청 */
+export interface SpotStatusUpdateRequest {
+  status: SpotStatus
+}
+
+/** GET /api/admin/dashboard/summary 응답 */
+export interface DashboardSummaryResponse {
+  pendingReports: number
+  pendingSupplements: number
+  pendingStatusReports: number
+}
+
+/** GET /api/admin/supplements 응답 */
+export interface AdminSupplementsResponse {
+  supplements: SpotSupplement[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
+/** GET /api/admin/status-reports 응답 */
+export interface AdminStatusReportsResponse {
+  reports: SpotStatusReport[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
 }
