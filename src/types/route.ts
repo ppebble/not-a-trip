@@ -34,6 +34,16 @@ export interface RouteSpot {
   isAvailable?: boolean
 }
 
+/** 시작 지점 (숙소, 역 등) */
+export interface RouteStartPoint {
+  /** 장소명 (예: "신주쿠역", "호텔 그레이서리 신주쿠") */
+  name: string
+  /** 주소 텍스트 */
+  address: string
+  /** 좌표 (Geocoding 결과) */
+  coordinates: { lat: number; lng: number }
+}
+
 /** 코스 문서 */
 export interface Route {
   id: string
@@ -45,14 +55,16 @@ export interface Route {
   estimatedDuration: number
   /** 난이도 */
   difficulty: RouteDifficulty
+  /** 시작 지점 (선택) */
+  startPoint?: RouteStartPoint
   /** 스팟 목록 (배열 인덱스 = 순서) */
   spots: RouteSpot[]
   /** 총 거리 (m) */
   totalDistance: number
   /** 관련 작품명 목록 */
   relatedContentNames: string[]
-  /** 지역 태그 (예: "도쿄", "가마쿠라") */
-  regionTag?: string
+  /** 지역 태그 목록 (예: ["도쿄", "가마쿠라"]) */
+  regionTags?: string[]
   /** 공개 여부 */
   isPublic: boolean
   /** 공식 추천 코스 여부 (관리자 설정) */
