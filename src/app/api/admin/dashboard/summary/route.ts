@@ -33,8 +33,18 @@ export async function GET(): Promise<NextResponse> {
     const [pendingReports, pendingSupplements, pendingStatusReports] =
       await Promise.all([
         reportsCol.countDocuments({ status: 'pending' }),
-        supplementsCol.countDocuments({ status: 'pending' }),
-        statusReportsCol.countDocuments({ reviewStatus: 'pending' }),
+        supplementsCol.countDocuments({
+          $or: [
+            { status: 'pending' },
+            { status: { $exists: false }, approved: { $ne: true } },
+          ],
+        }),
+        statusReportsCol.countDocuments({
+          $or: [
+            { reviewStatus: 'pending' },
+            { reviewStatus: { $exists: false } },
+          ],
+        }),
       ])
 
     const response: DashboardSummaryResponse = {
