@@ -362,7 +362,15 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
       {/* Nearby Facilities and Check-in Section - 2 column layout */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Nearby Facilities */}
-        <NearbyFacilities facilities={facilities} />
+        <NearbyFacilities
+          facilities={facilities}
+          spotId={spot.id}
+          spotCoordinates={
+            spot.coordinates
+              ? { lat: spot.coordinates[0], lng: spot.coordinates[1] }
+              : undefined
+          }
+        />
 
         {/* Check-in Section (기존 Community Section 대체) */}
         <SpotCheckInSection
