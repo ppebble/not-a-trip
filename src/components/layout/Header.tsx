@@ -43,7 +43,7 @@ export function Header() {
             스팟 등록
           </Link>
           <Link
-            href="/test/status-report"
+            href="/test/navigation"
             className="text-sm text-yellow-400 transition hover:text-yellow-300"
           >
             🧪 테스트
@@ -147,7 +147,7 @@ export function Header() {
               스팟 등록
             </Link>
             <Link
-              href="/test/status-report"
+              href="/test/navigation"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block rounded-lg px-3 py-2 text-sm text-yellow-400 transition hover:bg-slate-800 hover:text-yellow-300"
             >
