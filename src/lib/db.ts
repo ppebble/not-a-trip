@@ -102,6 +102,8 @@ export const COLLECTIONS = {
   ROUTES: 'routes',
   ROUTE_BOOKMARKS: 'route_bookmarks',
   ROUTE_COMPLETIONS: 'route_completions',
+  // 편의시설 투표 컬렉션 (11-otaku-facilities)
+  FACILITY_VOTES: 'facility_votes',
 } as const
 
 /**
