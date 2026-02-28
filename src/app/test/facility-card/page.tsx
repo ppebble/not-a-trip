@@ -207,6 +207,7 @@ export default function FacilityCardTestPage() {
             <li>• 굿즈샵: 매장 유형 배지, 영업시간</li>
             <li>• 미등록 필드에 &quot;정보 미등록&quot; 텍스트 확인</li>
             <li>• 신뢰도 점수 및 투표 수 표시 확인</li>
+            <li>• 마이크로 투표 버튼 (👍/👎) 표시 및 클릭 확인</li>
           </ul>
         </div>
 

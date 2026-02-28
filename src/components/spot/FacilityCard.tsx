@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { NearbyFacility, OtakuFacilityType } from '@/types'
 import {
   CoinLockerDetails,
@@ -9,6 +10,7 @@ import {
   GoodsShopDetails,
   LockerSize,
 } from '@/types/facility'
+import MicroVoteButton from './MicroVoteButton'
 
 interface FacilityCardProps {
   facility: NearbyFacility
@@ -276,6 +278,12 @@ function VerificationBadge({ facility }: { facility: NearbyFacility }) {
 // ─── 메인 FacilityCard ───
 
 export default function FacilityCard({ facility, config }: FacilityCardProps) {
+  const [voteData, setVoteData] = useState({
+    verificationScore: facility.verificationScore,
+    upvotes: facility.upvotes,
+    downvotes: facility.downvotes,
+  })
+
   const formatDistance = (meters: number): string => {
     if (meters < 1000) {
       return `${Math.round(meters)}m`
@@ -288,8 +296,19 @@ export default function FacilityCard({ facility, config }: FacilityCardProps) {
     window.open(googleMapsUrl, '_blank', 'noopener,noreferrer')
   }
 
+  const handleVoteComplete = (result: {
+    verificationScore: number
+    upvotes: number
+    downvotes: number
+  }) => {
+    setVoteData(result)
+  }
+
   const showAddress = facility.address && facility.address !== '주소 정보 없음'
   const isOtaku = OTAKU_TYPES.includes(facility.type as OtakuFacilityType)
+
+  // VerificationBadge에 실시간 투표 데이터 반영
+  const displayFacility = isOtaku ? { ...facility, ...voteData } : facility
 
   return (
     <div className="rounded-lg border border-gray-200 p-4 transition-all hover:border-gray-300 hover:shadow-md">
@@ -378,8 +397,16 @@ export default function FacilityCard({ facility, config }: FacilityCardProps) {
       {/* Otaku_Category 상세 정보 */}
       {isOtaku && <OtakuDetailsSection facility={facility} />}
 
-      {/* 신뢰도 점수 + 투표 수 */}
-      {isOtaku && <VerificationBadge facility={facility} />}
+      {/* 신뢰도 점수 + 투표 수 (실시간 반영) */}
+      {isOtaku && <VerificationBadge facility={displayFacility} />}
+
+      {/* 마이크로 투표 버튼 */}
+      {isOtaku && (
+        <MicroVoteButton
+          facilityId={facility.id}
+          onVoteComplete={handleVoteComplete}
+        />
+      )}
     </div>
   )
 }

@@ -32,6 +32,11 @@ export const API_ROUTES = {
       `/api/posts/${postId}/comments/${commentId}`,
   },
 
+  // Facilities
+  FACILITIES: {
+    VOTE: (id: string) => `/api/facilities/${id}/vote`,
+  },
+
   // Media
   MEDIA: {
     COMMUNITY_SUMMARY: '/api/media/community-summary',
