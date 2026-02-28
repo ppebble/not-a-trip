@@ -1,7 +1,14 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
-import type { RouteSpot } from '@/types/route'
+import type { RouteSpot, RouteStartPoint } from '@/types/route'
+import {
+  getTravelMode,
+  getTravelModeLabel,
+  getTravelModeIcon,
+  getGoogleMapsDirectionsUrl,
+  calculateStartToFirstSpot,
+} from '@/lib/route-utils'
 
 /** 스팟 순서 관리용 아이템 (생성/수정 폼에서 사용) */
 export interface SpotOrderItem {
@@ -18,6 +25,8 @@ export interface SpotOrderItem {
 interface SpotOrderListProps {
   spots: SpotOrderItem[]
   onSpotsChange: (spots: SpotOrderItem[]) => void
+  /** 시작 지점 (선택) */
+  startPoint?: RouteStartPoint
 }
 
 /** 거리 포맷 */
@@ -31,7 +40,11 @@ function formatDistance(meters: number): string {
  * 드래그 앤 드롭으로 순서 변경, 거리/시간 표시, 메모 입력
  * Requirements: 1.2, 1.3
  */
-export function SpotOrderList({ spots, onSpotsChange }: SpotOrderListProps) {
+export function SpotOrderList({
+  spots,
+  onSpotsChange,
+  startPoint,
+}: SpotOrderListProps) {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [editingNoteIndex, setEditingNoteIndex] = useState<number | null>(null)
@@ -107,17 +120,92 @@ export function SpotOrderList({ spots, onSpotsChange }: SpotOrderListProps) {
 
   return (
     <div className="space-y-0">
+      {/* 시작 지점 → 첫 스팟 이동 정보 */}
+      {startPoint &&
+        spots.length > 0 &&
+        (() => {
+          const info = calculateStartToFirstSpot(startPoint, spots[0])
+          if (!info) return null
+          const mode = getTravelMode(info.distance)
+          return (
+            <div className="mb-1">
+              <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2">
+                <span className="text-sm">🏠</span>
+                <span className="text-xs font-medium text-navy-700">
+                  {startPoint.name}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 py-1.5 pl-8">
+                <div className="h-4 w-px bg-navy-200" />
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-navy-400">
+                    ↓ {formatDistance(info.distance)}
+                    {' · '}
+                    {getTravelModeIcon(mode)}{' '}
+                    {mode === 'walking' && info.walkTime !== null
+                      ? `도보 약 ${info.walkTime}분`
+                      : getTravelModeLabel(mode)}
+                  </span>
+                  {mode !== 'walking' && (
+                    <a
+                      href={getGoogleMapsDirectionsUrl(
+                        startPoint.coordinates.lat,
+                        startPoint.coordinates.lng,
+                        spots[0].coordinates.lat,
+                        spots[0].coordinates.lng,
+                        mode
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                    >
+                      길찾기 →
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })()}
+
       {spots.map((spot, idx) => (
         <div key={`${spot.spotId}-${idx}`}>
           {/* 이동 거리/시간 표시 (첫 스팟 제외) */}
           {idx > 0 && spot.distanceFromPrev !== null && (
             <div className="flex items-center gap-2 py-1.5 pl-8">
               <div className="h-4 w-px bg-navy-200" />
-              <span className="text-xs text-navy-400">
-                ↓ {formatDistance(spot.distanceFromPrev)}
-                {spot.walkTimeFromPrev !== null &&
-                  ` · 도보 약 ${spot.walkTimeFromPrev}분`}
-              </span>
+              {(() => {
+                const mode = getTravelMode(spot.distanceFromPrev)
+                const prev = spots[idx - 1]
+                return (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-navy-400">
+                      ↓ {formatDistance(spot.distanceFromPrev)}
+                      {' · '}
+                      {getTravelModeIcon(mode)}{' '}
+                      {mode === 'walking' && spot.walkTimeFromPrev !== null
+                        ? `도보 약 ${spot.walkTimeFromPrev}분`
+                        : getTravelModeLabel(mode)}
+                    </span>
+                    {mode !== 'walking' && (
+                      <a
+                        href={getGoogleMapsDirectionsUrl(
+                          prev.coordinates.lat,
+                          prev.coordinates.lng,
+                          spot.coordinates.lat,
+                          spot.coordinates.lng,
+                          mode
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                      >
+                        길찾기 →
+                      </a>
+                    )}
+                  </div>
+                )
+              })()}
             </div>
           )}
 
