@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection } from '@/lib/db'
-import { NearbyFacility, FacilityType } from '@/types'
+import {
+  NearbyFacility,
+  FacilityType,
+  FacilityStatus,
+  OtakuFacilityDetails,
+} from '@/types'
+import { VALID_FACILITY_TYPES } from '@/lib/facility-utils'
 
 // MongoDB document interfaces
 interface SpotDocument {
@@ -21,6 +27,15 @@ interface FacilityDocument {
     lat: number
     lng: number
   }
+  status?: FacilityStatus
+  verificationScore?: number
+  upvotes?: number
+  downvotes?: number
+  googlePlaceId?: string
+  otakuDetails?: OtakuFacilityDetails
+  reportedBy?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 /**
@@ -50,7 +65,7 @@ function calculateDistance(
 
 /**
  * GET /api/spots/[id]/facilities - 근처 편의시설 조회
- * Requirements: 4.1, 4.2
+ * Requirements: 4.1, 4.2, 7.1, 7.2, 7.5
  */
 export async function GET(
   request: NextRequest,
@@ -61,6 +76,7 @@ export async function GET(
     const { searchParams } = new URL(request.url)
     const radiusKm = parseFloat(searchParams.get('radius') || '2') // Default 2km radius
     const maxResults = parseInt(searchParams.get('limit') || '50') // Default 50 results
+    const typeFilter = searchParams.get('type')
 
     // Get spot coordinates using custom id field
     const spotsCollection = await getCollection<SpotDocument>('spots')
@@ -73,10 +89,23 @@ export async function GET(
       return NextResponse.json({ error: 'Spot not found' }, { status: 404 })
     }
 
-    // Get all facilities (in a real app, you'd use geospatial queries)
+    // Build MongoDB query filter
+    // Req 7.2: status가 'hidden'인 시설 자동 제외
+    const query: Record<string, unknown> = {
+      status: { $ne: 'hidden' },
+    }
+
+    // Req 7.1: type 파라미터로 특정 카테고리 필터링
+    if (
+      typeFilter &&
+      VALID_FACILITY_TYPES.includes(typeFilter as FacilityType)
+    ) {
+      query.type = typeFilter
+    }
+
     const facilitiesCollection =
       await getCollection<FacilityDocument>('facilities')
-    const allFacilities = await facilitiesCollection.find({}).toArray()
+    const allFacilities = await facilitiesCollection.find(query).toArray()
 
     // Calculate distances and filter by radius
     const nearbyFacilities: NearbyFacility[] = allFacilities
@@ -98,6 +127,15 @@ export async function GET(
             number,
             number,
           ],
+          status: facility.status,
+          verificationScore: facility.verificationScore,
+          upvotes: facility.upvotes,
+          downvotes: facility.downvotes,
+          googlePlaceId: facility.googlePlaceId,
+          otakuDetails: facility.otakuDetails,
+          reportedBy: facility.reportedBy,
+          createdAt: facility.createdAt?.toISOString(),
+          updatedAt: facility.updatedAt?.toISOString(),
         }
       })
       .filter((facility) => facility.distance <= radiusKm * 1000) // Convert km to meters
