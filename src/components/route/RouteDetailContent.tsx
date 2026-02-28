@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouteNavigation } from '@/hooks/useRouteNavigation'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { NavigationPanel } from '@/components/route/NavigationPanel'
+import { CompletionEffect } from '@/components/route/CompletionEffect'
 import type { Route, RouteDifficulty } from '@/types/route'
 import {
   getTravelMode,
@@ -62,7 +63,21 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
   const nav = useRouteNavigation()
 
+  const [showCompletionEffect, setShowCompletionEffect] = useState(false)
+
   const availableSpots = route.spots.filter((s) => s.isAvailable !== false)
+
+  // 완주 감지 시 이펙트 표시
+  const completionShownRef = useRef(false)
+  useEffect(() => {
+    if (nav.isCompleted && nav.isNavigating && !completionShownRef.current) {
+      completionShownRef.current = true
+      setShowCompletionEffect(true)
+    }
+    if (!nav.isNavigating) {
+      completionShownRef.current = false
+    }
+  }, [nav.isCompleted, nav.isNavigating])
 
   /** 북마크 토글 */
   const handleBookmark = useCallback(async () => {
@@ -416,6 +431,13 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
       {/* 네비게이션 모드 시 하단 패널 높이만큼 여백 */}
       {nav.isNavigating && <div className="h-44" />}
+
+      {/* 완주 축하 이펙트 */}
+      <CompletionEffect
+        isVisible={showCompletionEffect}
+        routeName={route.name}
+        onClose={() => setShowCompletionEffect(false)}
+      />
     </div>
   )
 }
