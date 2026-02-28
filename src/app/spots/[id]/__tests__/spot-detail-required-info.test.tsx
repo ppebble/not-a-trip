@@ -140,6 +140,9 @@ jest.mock('@/hooks/useSpotDetail', () => ({
     isLoading: false,
     error: null,
   }),
+  useInvalidateFacilities: () => ({
+    invalidate: jest.fn(),
+  }),
 }))
 
 /**
