@@ -116,6 +116,7 @@ export async function POST(
       status: body.status,
       description: body.description.trim(),
       photoUrl: body.photoUrl || undefined,
+      reviewStatus: 'pending' as const,
       createdAt: now,
     }
 
