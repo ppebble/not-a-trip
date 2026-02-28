@@ -155,14 +155,14 @@
     - 에러 시 서버 응답 기반 오류 메시지 표시
     - _Requirements: 5.8, 5.9, 7.3_
 
-- [ ] 10. 통합 및 와이어링
-  - [ ] 10.1 `src/hooks/useSpotDetail.ts` 확장 — useFacilities 훅에 필터/투표 기능 추가
+- [x] 10. 통합 및 와이어링
+  - [x] 10.1 `src/hooks/useSpotDetail.ts` 확장 — useFacilities 훅에 필터/투표 기능 추가
     - `type` 파라미터를 활용한 카테고리별 조회 지원
     - 투표 API 호출 함수 추가
     - 제보 후 목록 갱신 로직 추가
     - _Requirements: 1.3, 1.4, 7.1_
 
-  - [ ] 10.2 Spot Detail 페이지에 "편의시설 제보" 버튼 및 FacilityReportForm 연결
+  - [x] 10.2 Spot Detail 페이지에 "편의시설 제보" 버튼 및 FacilityReportForm 연결
     - NearbyFacilities 영역에 "편의시설 제보" 버튼 추가
     - 버튼 클릭 시 FacilityReportForm 모달 열기
     - 제보 완료 후 편의시설 목록 자동 갱신
