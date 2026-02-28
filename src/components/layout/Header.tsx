@@ -48,6 +48,14 @@ export function Header() {
           >
             🧪 테스트
           </Link>
+          {isAuthenticated && user?.role === 'admin' && (
+            <Link
+              href="/admin"
+              className="text-sm text-orange-400 transition hover:text-orange-300"
+            >
+              ⚙️ 관리자
+            </Link>
+          )}
         </nav>
 
         {/* 인증 영역 + 모바일 메뉴 버튼 */}
@@ -153,6 +161,15 @@ export function Header() {
             >
               🧪 테스트
             </Link>
+            {isAuthenticated && user?.role === 'admin' && (
+              <Link
+                href="/admin"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-sm text-orange-400 transition hover:bg-slate-800 hover:text-orange-300"
+              >
+                ⚙️ 관리자
+              </Link>
+            )}
           </div>
         </nav>
       )}
