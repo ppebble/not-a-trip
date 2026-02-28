@@ -1,8 +1,9 @@
 'use client'
 
 import { NearbyFacility, FacilityType } from '@/types'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { groupFacilitiesByType } from '@/lib/facility-utils'
+import FacilityFilter from './FacilityFilter'
 
 interface NearbyFacilitiesProps {
   facilities: NearbyFacility[]
@@ -72,9 +73,36 @@ const DEFAULT_VISIBLE_COUNT = 3
 export default function NearbyFacilities({
   facilities,
 }: NearbyFacilitiesProps) {
+  // 카테고리 필터 상태 (빈 Set = 전체 표시)
+  const [selectedTypes, setSelectedTypes] = useState<Set<FacilityType>>(
+    new Set()
+  )
+
+  const handleToggleFilter = useCallback((type: FacilityType) => {
+    setSelectedTypes((prev) => {
+      const next = new Set(prev)
+      if (next.has(type)) {
+        next.delete(type)
+      } else {
+        next.add(type)
+      }
+      return next
+    })
+  }, [])
+
+  const handleSelectAll = useCallback(() => {
+    setSelectedTypes(new Set())
+  }, [])
+
+  // 필터 적용된 편의시설 목록
+  const filteredFacilities = useMemo(() => {
+    if (selectedTypes.size === 0) return facilities
+    return facilities.filter((f) => selectedTypes.has(f.type))
+  }, [facilities, selectedTypes])
+
   // 편의시설을 타입별로 분류 (공유 유틸리티 함수 사용)
   const facilitiesByType = useMemo(() => {
-    const grouped = groupFacilitiesByType(facilities)
+    const grouped = groupFacilitiesByType(filteredFacilities)
 
     // 각 타입별로 거리순 정렬
     Object.keys(grouped).forEach((type) => {
@@ -82,9 +110,16 @@ export default function NearbyFacilities({
     })
 
     return grouped
+  }, [filteredFacilities])
+
+  // 시설이 존재하는 카테고리 (필터 칩 표시용 — 전체 기준)
+  const availableTypes = useMemo(() => {
+    return Object.entries(groupFacilitiesByType(facilities))
+      .filter(([, items]) => items.length > 0)
+      .map(([type]) => type as FacilityType)
   }, [facilities])
 
-  // 타입 순서 (시설이 있는 타입만)
+  // 타입 순서 (필터 적용 후 시설이 있는 타입만)
   const orderedTypes = useMemo(() => {
     return Object.entries(facilitiesByType)
       .filter(([, items]) => items.length > 0)
@@ -143,6 +178,14 @@ export default function NearbyFacilities({
       <h2 className="mb-6 text-2xl font-bold text-gray-900">
         근처 편의시설 ({facilities.length}개)
       </h2>
+
+      <FacilityFilter
+        availableTypes={availableTypes}
+        selectedTypes={selectedTypes}
+        onToggle={handleToggleFilter}
+        onSelectAll={handleSelectAll}
+        config={FACILITY_CONFIG}
+      />
 
       <div className="space-y-3">
         {orderedTypes.map((type) => {
