@@ -29,7 +29,17 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-geist-sans), sans-serif;
+  font-family:
+    var(--font-pretendard),
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
+}
+
+code,
+pre {
+  font-family: 'Courier New', Courier, monospace;
 }
 
 /* Smooth scrolling */
