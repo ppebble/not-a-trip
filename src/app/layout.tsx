@@ -1,21 +1,16 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { Providers } from '@/lib/providers'
 import { Header } from '@/components/layout'
 import { ServiceWorkerRegistrar } from '@/components/mobile/ServiceWorkerRegistrar'
 import { IosPwaPrompt } from '@/components/mobile/IosPwaPrompt'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
+  variable: '--font-pretendard',
   display: 'swap',
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-  display: 'swap',
+  weight: '45 920',
 })
 
 export const viewport: Viewport = {
@@ -52,9 +47,7 @@ export default function RootLayout({
         />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${pretendard.variable} antialiased`}>
         <Providers>
           <Header />
           <main className="pt-14">{children}</main>
