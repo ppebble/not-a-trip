@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
