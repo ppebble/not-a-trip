@@ -134,8 +134,6 @@ export function useSpots(
       return data.spots
     },
     enabled,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
   })
 }
 
@@ -173,6 +171,7 @@ export function useSpotPreview(spotId: string | null) {
     },
     enabled: !!spotId,
     staleTime: 10 * 60 * 1000, // 10 minutes for individual spots
+    gcTime: 15 * 60 * 1000, // 15 minutes cache time
   })
 }
 
