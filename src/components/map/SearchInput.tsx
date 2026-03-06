@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import { useFilterStore, useSearchQuery } from '@/stores/filterStore'
 
 /**
@@ -24,9 +25,13 @@ export default function SearchInput({
   placeholder = '작품명, 팀명, 아티스트명 검색...',
   className = '',
 }: SearchInputProps) {
-  // filterStore에서 검색어 상태 가져오기
   const searchQuery = useSearchQuery()
-  const { setSearchQuery, clearSearchQuery } = useFilterStore()
+  const { setSearchQuery, clearSearchQuery } = useFilterStore(
+    useShallow((state) => ({
+      setSearchQuery: state.setSearchQuery,
+      clearSearchQuery: state.clearSearchQuery,
+    }))
+  )
 
   // 로컬 입력 상태 (실시간 반영용)
   const [inputValue, setInputValue] = useState(searchQuery)

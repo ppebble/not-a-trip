@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useShallow } from 'zustand/react/shallow'
 import {
   useUIStore,
   useIsPreviewOpen,
@@ -36,7 +37,12 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   const isPreviewOpen = useIsPreviewOpen()
   const previewSpotId = usePreviewSpotId()
   const previewPosition = usePreviewPosition()
-  const { closePreview, setPreviewHovered } = useUIStore()
+  const { closePreview, setPreviewHovered } = useUIStore(
+    useShallow((state) => ({
+      closePreview: state.closePreview,
+      setPreviewHovered: state.setPreviewHovered,
+    }))
+  )
 
   // 스팟 미리보기 데이터 조회
   const { data: spot, isLoading, error } = useSpotPreview(previewSpotId)

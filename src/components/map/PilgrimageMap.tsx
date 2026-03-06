@@ -5,6 +5,7 @@ import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { useShallow } from 'zustand/react/shallow'
 import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
@@ -30,7 +31,14 @@ export default function PilgrimageMap({
   onSpotSelect,
 }: PilgrimageMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
-  const { center, zoom, setCenter, setZoom } = useMapStore()
+  const { center, zoom, setCenter, setZoom } = useMapStore(
+    useShallow((state) => ({
+      center: state.center,
+      zoom: state.zoom,
+      setCenter: state.setCenter,
+      setZoom: state.setZoom,
+    }))
+  )
   const [gpsError, setGpsError] = useState<{
     code: string
     message: string
