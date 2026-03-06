@@ -25,8 +25,8 @@ export function Providers({ children }: ProvidersProps) {
             // Retry delay with exponential backoff
             retryDelay: (attemptIndex) =>
               Math.min(1000 * 2 ** attemptIndex, 30000),
-            // Refetch on window focus for fresh data
-            refetchOnWindowFocus: true,
+            // Refetch on window focus disabled for performance
+            refetchOnWindowFocus: false,
             // Don't refetch on reconnect to avoid excessive requests
             refetchOnReconnect: false,
           },

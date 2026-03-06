@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import Link from 'next/link'
 import { OptimizedImage } from '@/components/common'
 import type { Route, RouteDifficulty } from '@/types/route'
@@ -37,7 +38,7 @@ function formatDistance(meters: number): string {
  * 코스 목록에서 각 코스를 카드 형태로 표시
  * Requirements: 2.1
  */
-export function RouteCard({ route }: RouteCardProps) {
+export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
   const difficulty = DIFFICULTY_CONFIG[route.difficulty]
   const availableSpots = route.spots.filter((s) => s.isAvailable !== false)
 
@@ -126,4 +127,4 @@ export function RouteCard({ route }: RouteCardProps) {
       </article>
     </Link>
   )
-}
+})

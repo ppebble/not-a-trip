@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { ExternalLink, LINK_TYPE_CONFIG } from '@/types'
 
 /**
@@ -22,7 +23,10 @@ interface ExternalLinkCardProps {
  * - 2.3: 외부 링크를 클릭 가능한 버튼/카드로 표시
  * - 2.4: 새 탭에서 열기
  */
-export function ExternalLinkCard({ link, onClick }: ExternalLinkCardProps) {
+export const ExternalLinkCard = memo(function ExternalLinkCard({
+  link,
+  onClick,
+}: ExternalLinkCardProps) {
   const config = LINK_TYPE_CONFIG[link.type]
 
   const handleClick = () => {
@@ -70,4 +74,4 @@ export function ExternalLinkCard({ link, onClick }: ExternalLinkCardProps) {
       </svg>
     </button>
   )
-}
+})

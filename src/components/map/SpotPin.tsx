@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useState, useCallback, useMemo, useRef, useEffect, memo } from 'react'
 import { Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
+import { useShallow } from 'zustand/react/shallow'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore, useIsPreviewHovered } from '@/stores/uiStore'
 import { useBottomSheetStore } from '@/stores/bottomSheetStore'
@@ -264,12 +265,24 @@ const createImagePinIcon = (
   })
 }
 
-export default function SpotPin({ spot, onSelect }: SpotPinProps) {
+export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
   const map = useMap()
-  const { selectedSpotId, setSelectedSpot } = useMapStore()
-  const { openPreview, closePreview } = useUIStore()
+  const { selectedSpotId, setSelectedSpot } = useMapStore(
+    useShallow((state) => ({
+      selectedSpotId: state.selectedSpotId,
+      setSelectedSpot: state.setSelectedSpot,
+    }))
+  )
+  const { openPreview, closePreview } = useUIStore(
+    useShallow((state) => ({
+      openPreview: state.openPreview,
+      closePreview: state.closePreview,
+    }))
+  )
   const isPreviewHovered = useIsPreviewHovered()
-  const { open: openBottomSheet } = useBottomSheetStore()
+  const { open: openBottomSheet } = useBottomSheetStore(
+    useShallow((state) => ({ open: state.open }))
+  )
   const [isHovered, setIsHovered] = useState(false)
 
   // isPreviewHovered의 최신 값을 참조하기 위한 ref
@@ -459,4 +472,4 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
       }}
     />
   )
-}
+})

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef, useEffect, useId } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import { useFilterStore, useSearchQuery } from '@/stores/filterStore'
 import { useAutocomplete, AutocompleteItem } from '@/hooks/useAutocomplete'
 import AutocompleteDropdown from './AutocompleteDropdown'
@@ -18,7 +19,12 @@ export default function ContentSearchFilter({
 }: ContentSearchFilterProps) {
   const dropdownId = useId()
   const searchQuery = useSearchQuery()
-  const { setSearchQuery, clearSearchQuery } = useFilterStore()
+  const { setSearchQuery, clearSearchQuery } = useFilterStore(
+    useShallow((state) => ({
+      setSearchQuery: state.setSearchQuery,
+      clearSearchQuery: state.clearSearchQuery,
+    }))
+  )
   const [inputValue, setInputValue] = useState(searchQuery)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)

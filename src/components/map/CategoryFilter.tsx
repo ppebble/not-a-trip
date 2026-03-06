@@ -1,6 +1,7 @@
 'use client'
 
 import { SpotCategory, CATEGORY_CONFIG } from '@/types'
+import { useShallow } from 'zustand/react/shallow'
 import {
   useFilterStore,
   useSelectedCategories,
@@ -16,7 +17,13 @@ import { CategoryIcon } from '@/components/common'
 export default function CategoryFilter() {
   const selectedCategories = useSelectedCategories()
   const { toggleCategory, selectAllCategories, clearCategories } =
-    useFilterStore()
+    useFilterStore(
+      useShallow((state) => ({
+        toggleCategory: state.toggleCategory,
+        selectAllCategories: state.selectAllCategories,
+        clearCategories: state.clearCategories,
+      }))
+    )
 
   const handleCategoryToggle = (category: SpotCategory) => {
     toggleCategory(category)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { NearbyFacility, OtakuFacilityType } from '@/types'
 import {
   CoinLockerDetails,
@@ -277,7 +277,10 @@ function VerificationBadge({ facility }: { facility: NearbyFacility }) {
 
 // ─── 메인 FacilityCard ───
 
-export default function FacilityCard({ facility, config }: FacilityCardProps) {
+export default memo(function FacilityCard({
+  facility,
+  config,
+}: FacilityCardProps) {
   const [voteData, setVoteData] = useState({
     verificationScore: facility.verificationScore,
     upvotes: facility.upvotes,
@@ -409,4 +412,4 @@ export default function FacilityCard({ facility, config }: FacilityCardProps) {
       )}
     </div>
   )
-}
+})
