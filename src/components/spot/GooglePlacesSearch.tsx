@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { useLoadScript } from '@react-google-maps/api'
+import { useGooglePlacesLoader } from '@/hooks/useGooglePlacesLoader'
 
-const LIBRARIES: 'places'[] = ['places']
 const DEBOUNCE_MS = 500
 
 interface PlaceResult {
@@ -35,12 +34,7 @@ export default function GooglePlacesSearch({
   onSelect,
   biasCenter,
 }: GooglePlacesSearchProps) {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '',
-    libraries: LIBRARIES,
-    language: 'ja',
-    region: 'JP',
-  })
+  const { isLoaded, loadError, loadScript } = useGooglePlacesLoader()
 
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
@@ -200,23 +194,14 @@ export default function GooglePlacesSearch({
 
   if (!isLoaded) {
     return (
-      <div className="flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400">
-        <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          />
-        </svg>
-        구글맵 로딩 중...
+      <div className="relative">
+        <input
+          type="text"
+          onFocus={loadScript}
+          placeholder="장소 이름으로 검색 (포커스 시 구글맵 로드)"
+          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400 transition-colors focus:border-navy-400 focus:outline-none focus:ring-1 focus:ring-navy-400"
+          readOnly
+        />
       </div>
     )
   }
