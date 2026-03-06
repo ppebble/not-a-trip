@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
 import SpotPin from './SpotPin'
@@ -37,6 +39,11 @@ export default function PilgrimageMap({
   // Use props if provided, otherwise use store values
   const mapCenter = initialCenter || center
   const mapZoom = initialZoom || zoom
+
+  // Leaflet 마커 아이콘 경로 설정 (로컬 경로로 변경)
+  useEffect(() => {
+    L.Icon.Default.imagePath = '/leaflet/'
+  }, [])
 
   const handleLocationFound = useCallback((lat: number, lng: number) => {
     setGpsError(null)
