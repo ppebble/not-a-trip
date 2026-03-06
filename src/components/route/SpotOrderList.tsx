@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react'
 import type { RouteSpot, RouteStartPoint } from '@/types/route'
+import { OptimizedImage } from '@/components/common'
 import {
   getTravelMode,
   getTravelModeLabel,
@@ -235,10 +236,12 @@ export function SpotOrderList({
             {/* 썸네일 */}
             <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-navy-100">
               {spot.thumbnailUrl ? (
-                <img
+                <OptimizedImage
                   src={spot.thumbnailUrl}
                   alt={spot.spotName}
-                  className="h-full w-full object-cover"
+                  width={48}
+                  height={48}
+                  className="object-cover"
                 />
               ) : (
                 <div className="flex h-full items-center justify-center text-lg text-navy-300">

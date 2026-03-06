@@ -11,6 +11,7 @@ export interface ComparisonCardProps {
     name: string
   }
   badges?: Badge[]
+  isPriority?: boolean
   onClick?: () => void
 }
 
@@ -27,6 +28,7 @@ export function ComparisonCard({
   checkIn,
   spot,
   badges = [],
+  isPriority = false,
   onClick,
 }: ComparisonCardProps) {
   const [isHovered, setIsHovered] = useState(false)
@@ -65,6 +67,7 @@ export function ComparisonCard({
                 className="object-cover"
                 onError={() => setSceneImageError(true)}
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                priority={isPriority}
               />
               {/* 씬 라벨 */}
               <span className="absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-white">
@@ -81,6 +84,7 @@ export function ComparisonCard({
                 className="object-cover"
                 onError={() => setImageError(true)}
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                priority={isPriority}
               />
               {/* 인증샷 라벨 */}
               <span className="absolute bottom-2 right-2 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-white">
@@ -100,6 +104,7 @@ export function ComparisonCard({
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             onError={() => setImageError(true)}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={isPriority}
           />
         )}
 

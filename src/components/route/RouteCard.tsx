@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { OptimizedImage } from '@/components/common'
 import type { Route, RouteDifficulty } from '@/types/route'
 
 interface RouteCardProps {
@@ -46,10 +47,12 @@ export function RouteCard({ route }: RouteCardProps) {
         {/* 썸네일 영역 */}
         <div className="relative h-40 bg-navy-100">
           {route.spots[0]?.thumbnailUrl ? (
-            <img
+            <OptimizedImage
               src={route.spots[0].thumbnailUrl}
               alt={route.name}
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-4xl text-navy-300">

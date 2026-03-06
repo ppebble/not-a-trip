@@ -8,6 +8,7 @@ import { useRouteNavigation } from '@/hooks/useRouteNavigation'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { NavigationPanel } from '@/components/route/NavigationPanel'
 import { CompletionEffect } from '@/components/route/CompletionEffect'
+import { OptimizedImage } from '@/components/common'
 import type { Route, RouteDifficulty } from '@/types/route'
 import {
   getTravelMode,
@@ -362,10 +363,12 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                   {/* 썸네일 */}
                   <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-navy-100">
                     {spot.thumbnailUrl ? (
-                      <img
+                      <OptimizedImage
                         src={spot.thumbnailUrl}
                         alt={spot.spotName}
-                        className="h-full w-full object-cover"
+                        width={48}
+                        height={48}
+                        className="object-cover"
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center text-lg text-navy-300">

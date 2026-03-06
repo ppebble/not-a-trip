@@ -323,7 +323,9 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
                     alt={`${spot.name} 사진 ${index + 1}`}
                     fill
                     className="object-cover transition-transform duration-300 hover:scale-105"
-                    {...blurPlaceholderProps}
+                    priority={index === 0}
+                    sizes="(max-width: 1024px) 50vw, 33vw"
+                    {...(index === 0 ? {} : blurPlaceholderProps)}
                   />
                 </div>
               ))}
