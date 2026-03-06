@@ -10,6 +10,7 @@ import {
 } from '@/components/route/SpotOrderList'
 import { calculateRouteDistances } from '@/lib/route-utils'
 import type { Route, RouteDifficulty } from '@/types/route'
+import { OptimizedImage } from '@/components/common/OptimizedImage'
 
 const RouteMap = dynamic(() => import('@/components/route/RouteMap'), {
   ssr: false,
@@ -568,10 +569,12 @@ export function RouteFormContent({
                     >
                       <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-navy-100">
                         {result.thumbnailUrl ? (
-                          <img
+                          <OptimizedImage
                             src={result.thumbnailUrl}
                             alt={result.name}
-                            className="h-full w-full object-cover"
+                            width={32}
+                            height={32}
+                            className="object-cover"
                           />
                         ) : (
                           <div className="flex h-full items-center justify-center text-xs text-navy-300">
@@ -688,10 +691,13 @@ export function RouteFormContent({
                       onClick={() => handleSelectGeoResult(result)}
                       className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-navy-50"
                     >
-                      <img
+                      <OptimizedImage
                         src={getPlaceIconPath(result.type, result.placeClass)}
                         alt={result.type}
-                        className="h-5 w-5 flex-shrink-0"
+                        width={20}
+                        height={20}
+                        className="flex-shrink-0"
+                        disableBlur
                       />
                       <span className="truncate text-sm text-navy-800">
                         {result.displayName}
