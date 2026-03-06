@@ -115,7 +115,7 @@ export function FeedTab({ onCheckInClick }: FeedTabProps) {
     <div className="mx-auto max-w-6xl px-4 py-6">
       <MasonryGrid>
         {/* 체크인 카드 목록 */}
-        {checkIns.map((checkIn) => (
+        {checkIns.map((checkIn, index) => (
           <MasonryItem key={checkIn.id}>
             <ComparisonCard
               checkIn={checkIn}
@@ -123,6 +123,7 @@ export function FeedTab({ onCheckInClick }: FeedTabProps) {
                 checkIn.spot || { id: checkIn.spotId, name: '알 수 없는 스팟' }
               }
               badges={checkIn.badges}
+              isPriority={index < 4}
               onClick={() => onCheckInClick?.(checkIn)}
             />
           </MasonryItem>
