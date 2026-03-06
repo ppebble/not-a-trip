@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { Tooltip } from 'react-leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
+import { OptimizedImage } from '@/components/common'
 
 interface HoverTooltipProps {
   spot: SpotPinType
@@ -33,12 +35,15 @@ const getCategoryColor = (category?: SpotCategory): string => {
  * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5
  */
 export default function HoverTooltip({ spot, isVisible }: HoverTooltipProps) {
+  const [imgError, setImgError] = useState(false)
+
   if (!isVisible) return null
 
   const categoryIcon = getCategoryIcon(spot.category)
   const categoryLabel = getCategoryLabel(spot.category)
   const categoryColor = getCategoryColor(spot.category)
-  const hasThumbnail = spot.thumbnailUrl && spot.thumbnailUrl.length > 0
+  const hasThumbnail =
+    spot.thumbnailUrl && spot.thumbnailUrl.length > 0 && !imgError
 
   return (
     <Tooltip
@@ -49,30 +54,29 @@ export default function HoverTooltip({ spot, isVisible }: HoverTooltipProps) {
     >
       <div className="hover-tooltip-content">
         {/* 썸네일 또는 카테고리 아이콘 */}
-        <div className="hover-tooltip-image">
+        <div className="hover-tooltip-image" style={{ position: 'relative' }}>
           {hasThumbnail ? (
-            <img
-              src={spot.thumbnailUrl}
+            <OptimizedImage
+              src={spot.thumbnailUrl!}
               alt={spot.name}
+              fill
+              sizes="44px"
               className="hover-tooltip-thumbnail"
-              onError={(e) => {
-                // 이미지 로드 실패 시 카테고리 아이콘으로 대체
-                const target = e.target as HTMLImageElement
-                target.style.display = 'none'
-                const fallback = target.nextElementSibling as HTMLElement
-                if (fallback) fallback.style.display = 'flex'
-              }}
+              onError={() => setImgError(true)}
             />
-          ) : null}
-          <div
-            className="hover-tooltip-fallback"
-            style={{
-              display: hasThumbnail ? 'none' : 'flex',
-              backgroundColor: categoryColor,
-            }}
-          >
-            <span className="hover-tooltip-fallback-icon">{categoryIcon}</span>
-          </div>
+          ) : (
+            <div
+              className="hover-tooltip-fallback"
+              style={{
+                display: 'flex',
+                backgroundColor: categoryColor,
+              }}
+            >
+              <span className="hover-tooltip-fallback-icon">
+                {categoryIcon}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* 스팟 정보 */}
