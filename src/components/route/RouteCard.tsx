@@ -43,7 +43,7 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
   const availableSpots = route.spots.filter((s) => s.isAvailable !== false)
 
   return (
-    <Link href={`/routes/${route.id}`} className="block">
+    <Link href={`/routes/${route.id}`} prefetch={false} className="block">
       <article className="overflow-hidden rounded-lg border border-navy-200 bg-white shadow-sm transition-shadow hover:shadow-md">
         {/* 썸네일 영역 */}
         <div className="relative h-40 bg-navy-100">
