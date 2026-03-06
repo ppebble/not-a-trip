@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import Image from 'next/image'
 import { CheckIn, Badge } from '@/types'
 
@@ -24,7 +24,7 @@ export interface ComparisonCardProps {
  * - 2.3: 유저 닉네임, 스팟 이름, 뱃지 아이콘 표시
  * - 2.4: 호버 시 스케일 애니메이션 및 오버레이
  */
-export function ComparisonCard({
+export const ComparisonCard = memo(function ComparisonCard({
   checkIn,
   spot,
   badges = [],
@@ -188,4 +188,4 @@ export function ComparisonCard({
       </div>
     </div>
   )
-}
+})

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useState, useCallback, useMemo, useRef, useEffect, memo } from 'react'
 import { Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
@@ -265,7 +265,7 @@ const createImagePinIcon = (
   })
 }
 
-export default function SpotPin({ spot, onSelect }: SpotPinProps) {
+export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
   const map = useMap()
   const { selectedSpotId, setSelectedSpot } = useMapStore(
     useShallow((state) => ({
@@ -472,4 +472,4 @@ export default function SpotPin({ spot, onSelect }: SpotPinProps) {
       }}
     />
   )
-}
+})
