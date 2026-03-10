@@ -62,7 +62,7 @@ export function useAuth() {
 
   // 소셜 로그인
   const loginWithProvider = useCallback(
-    async (provider: 'google' | 'kakao' | 'naver') => {
+    async (provider: 'google' | 'kakao' | 'naver' | 'twitter') => {
       setIsLoading(true)
       clearAuthError()
 
