@@ -181,6 +181,7 @@ export function CheckInModal({
                   src={sceneImageUrl}
                   alt="참고 장면"
                   fill
+                  sizes="(max-width: 768px) 50vw, 256px"
                   className="object-cover"
                 />
               </div>
@@ -205,6 +206,7 @@ export function CheckInModal({
                   src={photoPreview}
                   alt="인증샷 미리보기"
                   fill
+                  sizes="(max-width: 768px) 50vw, 256px"
                   className="object-cover"
                 />
                 <button

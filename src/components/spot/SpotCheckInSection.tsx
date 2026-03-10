@@ -1,11 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   CheckInButton,
   CheckInGallery,
   BadgeEarnedModal,
 } from '@/components/checkin'
+import {
+  useCheckInCount,
+  useInvalidateCheckIns,
+  useInvalidateCheckInCount,
+} from '@/hooks/useGalleryQueries'
 import { UserBadge } from '@/types'
 
 interface SpotCheckInSectionProps {
@@ -23,31 +28,16 @@ export function SpotCheckInSection({
   spotName,
   sceneImageUrl,
 }: SpotCheckInSectionProps) {
-  const [checkInCount, setCheckInCount] = useState(0)
-  const [refreshKey, setRefreshKey] = useState(0)
+  const { data: checkInCount = 0 } = useCheckInCount(spotId)
+  const invalidateCheckIns = useInvalidateCheckIns()
+  const invalidateCheckInCount = useInvalidateCheckInCount(spotId)
   const [earnedBadges, setEarnedBadges] = useState<UserBadge[]>([])
 
-  // 인증 수 조회
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const res = await fetch(`/api/checkins?spotId=${spotId}&limit=1`)
-        if (res.ok) {
-          const data = await res.json()
-          setCheckInCount(data.total)
-        }
-      } catch (error) {
-        console.error('Error fetching checkin count:', error)
-      }
-    }
-    fetchCount()
-  }, [spotId, refreshKey])
-
   const handleCheckInSuccess = (badges?: UserBadge[]) => {
-    // 갤러리 새로고침
-    setRefreshKey((prev) => prev + 1)
+    // React Query 캐시 무효화로 갤러리 + 카운트 새로고침
+    invalidateCheckIns()
+    invalidateCheckInCount()
 
-    // 뱃지 획득 시 모달 표시
     if (badges && badges.length > 0) {
       setEarnedBadges(badges)
     }
@@ -75,12 +65,7 @@ export function SpotCheckInSection({
         </div>
 
         {/* 인증 갤러리 */}
-        <CheckInGallery
-          key={refreshKey}
-          spotId={spotId}
-          limit={8}
-          showLoadMore={true}
-        />
+        <CheckInGallery spotId={spotId} limit={8} showLoadMore={true} />
       </div>
 
       {/* 뱃지 획득 모달 */}

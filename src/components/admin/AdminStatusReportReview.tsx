@@ -166,6 +166,7 @@ export function AdminStatusReportReview({
                 src={report.photoUrl}
                 alt="증거 사진"
                 fill
+                sizes="(max-width: 768px) 50vw, 384px"
                 className="object-cover"
               />
             </div>

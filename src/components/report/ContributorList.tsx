@@ -1,13 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { API_ROUTES } from '@/lib/api-routes'
-
-interface Contributor {
-  contributorId: string
-  contributorName: string
-  count: number
-}
+import { useContributors } from '@/hooks/useGalleryQueries'
 
 interface ContributorListProps {
   spotId: string
@@ -18,25 +11,7 @@ interface ContributorListProps {
  * Requirements: 3.3
  */
 export function ContributorList({ spotId }: ContributorListProps) {
-  const [contributors, setContributors] = useState<Contributor[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchContributors = async () => {
-      try {
-        const res = await fetch(API_ROUTES.SUPPLEMENTS.BASE(spotId))
-        if (!res.ok) return
-        const data = await res.json()
-        setContributors(data.contributors || [])
-      } catch {
-        // 조용히 실패
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchContributors()
-  }, [spotId])
+  const { data: contributors = [], isLoading } = useContributors(spotId)
 
   if (isLoading) {
     return (

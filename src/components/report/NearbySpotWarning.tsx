@@ -72,6 +72,7 @@ export function NearbySpotWarning({
                   src={item.thumbnailUrl}
                   alt={item.name}
                   fill
+                  sizes="48px"
                   className="object-cover"
                 />
               </div>

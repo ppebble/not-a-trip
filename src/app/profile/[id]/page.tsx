@@ -1,23 +1,20 @@
 'use client'
 
-import { useState, useEffect, use } from 'react'
+import { useState, use } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { UserStats, UserBadge, ContentProgress } from '@/types'
 import { CheckInGallery } from '@/components/checkin'
 import { TrophyRoom } from '@/components/profile/TrophyRoom'
 import { ContentProgressCard } from '@/components/profile/ContentProgressCard'
-import { API_ROUTES } from '@/lib/api-routes'
+import {
+  useUserStats,
+  useUserBadges,
+  useUserProgress,
+  useUserReportedSpots,
+} from '@/hooks/useUserQueries'
 
 interface UserProfilePageProps {
   params: Promise<{ id: string }>
-}
-
-interface UserInfo {
-  id: string
-  name: string
-  image?: string
-  email?: string
 }
 
 /**
@@ -29,72 +26,23 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
   const [activeTab, setActiveTab] = useState<
     'checkins' | 'badges' | 'progress' | 'reports'
   >('checkins')
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
-  const [stats, setStats] = useState<UserStats | null>(null)
-  const [badges, setBadges] = useState<UserBadge[]>([])
-  const [progress, setProgress] = useState<ContentProgress[]>([])
-  const [reportedSpots, setReportedSpots] = useState<
-    { id: string; name: string; address: string }[]
-  >([])
-  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      try {
-        // 유저 통계 조회
-        const statsRes = await fetch(`/api/users/${userId}/stats`)
-        if (statsRes.ok) {
-          const statsData = await statsRes.json()
-          setStats(statsData)
-        }
+  const { data: stats, isLoading: statsLoading } = useUserStats(userId)
+  const { data: badges = [], isLoading: badgesLoading } = useUserBadges(userId)
+  const { data: progress = [], isLoading: progressLoading } =
+    useUserProgress(userId)
+  const { data: reportedSpots = [], isLoading: spotsLoading } =
+    useUserReportedSpots(userId)
 
-        // 유저 뱃지 조회
-        const badgesRes = await fetch(`/api/users/${userId}/badges`)
-        if (badgesRes.ok) {
-          const badgesData = await badgesRes.json()
-          setBadges(badgesData.badges)
-        }
+  const isLoading =
+    statsLoading || badgesLoading || progressLoading || spotsLoading
 
-        // 콘텐츠별 진행률 조회
-        const progressRes = await fetch(`/api/users/${userId}/progress`)
-        if (progressRes.ok) {
-          const progressData = await progressRes.json()
-          setProgress(progressData.progress)
-        }
-
-        // TODO: 유저 정보 조회 API 필요
-        setUserInfo({
-          id: userId,
-          name: '순례자',
-          image: undefined,
-        })
-
-        // 제보한 스팟 목록 조회 (firstReporterId로 필터)
-        const spotsRes = await fetch(
-          `${API_ROUTES.SPOTS.BASE}?firstReporterId=${userId}`
-        )
-        if (spotsRes.ok) {
-          const spotsData = await spotsRes.json()
-          setReportedSpots(
-            (spotsData.spots || []).map(
-              (s: { id: string; name: string; address?: string }) => ({
-                id: s.id,
-                name: s.name,
-                address: s.address || '',
-              })
-            )
-          )
-        }
-      } catch (error) {
-        console.error('Error fetching profile data:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [userId])
+  // TODO: 유저 정보 조회 API 필요
+  const userInfo = {
+    id: userId,
+    name: '순례자',
+    image: undefined as string | undefined,
+  }
 
   if (isLoading) {
     return (
@@ -125,7 +73,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
         {/* 프로필 헤더 */}
         <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            {userInfo?.image ? (
+            {userInfo.image ? (
               <Image
                 src={userInfo.image}
                 alt={userInfo.name}
@@ -136,12 +84,12 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500">
                 <span className="text-3xl font-bold text-white">
-                  {userInfo?.name?.[0] || '?'}
+                  {userInfo.name?.[0] || '?'}
                 </span>
               </div>
             )}
             <div>
-              <h1 className="text-2xl font-bold">{userInfo?.name}</h1>
+              <h1 className="text-2xl font-bold">{userInfo.name}</h1>
               <p className="text-gray-500">성지순례 탐험가</p>
             </div>
           </div>

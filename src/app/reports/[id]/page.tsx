@@ -209,6 +209,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
                       src={pair.captureImageUrl}
                       alt={`캡처 ${i + 1}`}
                       fill
+                      sizes="(max-width: 768px) 50vw, 33vw"
                       className="object-cover"
                     />
                   </div>
@@ -220,6 +221,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
                       src={pair.realPhotoUrl}
                       alt={`현장 ${i + 1}`}
                       fill
+                      sizes="(max-width: 768px) 50vw, 33vw"
                       className="object-cover"
                     />
                   </div>

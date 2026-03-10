@@ -1,48 +1,34 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import Image from 'next/image'
 import { ContentTypeIcon } from '@/components/common'
 import { ContentType, CONTENT_TYPE_CONFIG } from '@/types'
-
-interface ContentMaster {
-  id: string
-  normalizedName: string
-  displayName: string
-  imageUrl?: string
-  type?: ContentType
-  year?: number
-  spotCount: number
-  createdAt: string
-  updatedAt: string
-}
-
-interface ContentMastersResponse {
-  items: ContentMaster[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}
+import {
+  useAdminContentImages,
+  useInvalidateAdminContentImages,
+} from '@/hooks/useAdminQueries'
 
 export default function AdminContentImagesPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const invalidateContentImages = useInvalidateAdminContentImages()
 
-  const [contents, setContents] = useState<ContentMaster[]>([])
-  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
   const [syncing, setSyncing] = useState(false)
 
   // 업로드 모달 상태
   const [showUploadModal, setShowUploadModal] = useState(false)
-  const [selectedContent, setSelectedContent] = useState<ContentMaster | null>(
-    null
-  )
+  const [selectedContent, setSelectedContent] = useState<{
+    id: string
+    normalizedName: string
+    displayName: string
+    type?: ContentType
+  } | null>(null)
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [uploadPreview, setUploadPreview] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
@@ -54,142 +40,111 @@ export default function AdminContentImagesPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // 콘텐츠 목록 조회
-  const fetchContents = useCallback(async () => {
-    try {
-      setLoading(true)
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '20',
-      })
-      if (search) {
-        params.set('search', search)
-      }
+  // React Query로 콘텐츠 목록 조회
+  const { data, isLoading } = useAdminContentImages(search, page)
+  const contents = data?.items ?? []
+  const totalPages = data?.totalPages ?? 1
 
-      const res = await fetch(`/api/admin/content-images?${params}`)
-      if (!res.ok) throw new Error('Failed to fetch')
-
-      const data: ContentMastersResponse = await res.json()
-      setContents(data.items)
-      setTotalPages(data.totalPages)
-    } catch (error) {
-      console.error('Error fetching contents:', error)
-    } finally {
-      setLoading(false)
+  // 권한 체크
+  useEffect(() => {
+    if (status === 'loading') return
+    if (!session?.user || session.user.role !== 'admin') {
+      router.push('/')
     }
-  }, [page, search])
+  }, [status, session, router])
 
-  // 콘텐츠 마스터 동기화
   const handleSync = async () => {
     if (syncing) return
-
     try {
       setSyncing(true)
       const res = await fetch('/api/admin/content-images/sync', {
         method: 'POST',
       })
-
       if (!res.ok) throw new Error('Sync failed')
-
       const data = await res.json()
       alert(data.message)
-      fetchContents()
-    } catch (error) {
-      console.error('Error syncing:', error)
+      invalidateContentImages()
+    } catch {
       alert('동기화에 실패했습니다')
     } finally {
       setSyncing(false)
     }
   }
 
-  // 이미지 업로드
   const handleUpload = async () => {
     if (uploading) return
-
     const contentName = selectedContent?.displayName || newContentName.trim()
     if (!contentName) {
       alert('콘텐츠 이름을 입력해주세요')
       return
     }
-
     if (!uploadFile && !selectedContent) {
       alert('이미지를 선택해주세요')
       return
     }
-
     try {
       setUploading(true)
       const formData = new FormData()
       formData.append('contentName', contentName)
-
-      if (uploadFile) {
-        formData.append('file', uploadFile)
-      }
-
+      if (uploadFile) formData.append('file', uploadFile)
       if (!selectedContent) {
         formData.append('contentType', newContentType)
-        if (newContentYear) {
-          formData.append('year', newContentYear)
-        }
+        if (newContentYear) formData.append('year', newContentYear)
       }
-
       const res = await fetch('/api/admin/content-images', {
         method: 'POST',
         body: formData,
       })
-
       if (!res.ok) {
         const error = await res.json()
         throw new Error(error.error || 'Upload failed')
       }
-
       alert('업로드 완료!')
       closeUploadModal()
-      fetchContents()
+      invalidateContentImages()
     } catch (error) {
-      console.error('Error uploading:', error)
       alert(error instanceof Error ? error.message : '업로드에 실패했습니다')
     } finally {
       setUploading(false)
     }
   }
 
-  // 이미지 삭제
   const handleDeleteImage = async (normalizedName: string) => {
     if (!confirm('이미지를 삭제하시겠습니까?')) return
-
     try {
       const res = await fetch(
         `/api/admin/content-images?normalizedName=${encodeURIComponent(normalizedName)}`,
         { method: 'DELETE' }
       )
-
       if (!res.ok) throw new Error('Delete failed')
-
       alert('이미지가 삭제되었습니다')
-      fetchContents()
-    } catch (error) {
-      console.error('Error deleting:', error)
+      invalidateContentImages()
+    } catch {
       alert('삭제에 실패했습니다')
     }
   }
 
-  // 파일 선택 핸들러
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setUploadFile(file)
       const reader = new FileReader()
-      reader.onloadend = () => {
-        setUploadPreview(reader.result as string)
-      }
+      reader.onloadend = () => setUploadPreview(reader.result as string)
       reader.readAsDataURL(file)
     }
   }
 
-  // 업로드 모달 열기
-  const openUploadModal = (content?: ContentMaster) => {
-    setSelectedContent(content || null)
+  const openUploadModal = (content?: {
+    id: string
+    normalizedName: string
+    displayName: string
+    type?: string
+  }) => {
+    setSelectedContent(
+      content
+        ? { ...content, type: content.type as ContentType | undefined }
+        : null
+    )
     setUploadFile(null)
     setUploadPreview(null)
     setNewContentName('')
@@ -198,7 +153,6 @@ export default function AdminContentImagesPage() {
     setShowUploadModal(true)
   }
 
-  // 업로드 모달 닫기
   const closeUploadModal = () => {
     setShowUploadModal(false)
     setSelectedContent(null)
@@ -209,33 +163,7 @@ export default function AdminContentImagesPage() {
     setNewContentYear('')
   }
 
-  // 권한 체크 및 데이터 로드
-  useEffect(() => {
-    if (status === 'loading') return
-
-    if (!session?.user || session.user.role !== 'admin') {
-      router.push('/')
-      return
-    }
-
-    fetchContents()
-  }, [status, session, router, fetchContents])
-
-  // 검색 디바운스
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPage(1)
-      fetchContents()
-    }, 300)
-
-    return () => clearTimeout(timer)
-  }, [search, fetchContents])
-
-  // 로딩 중
-  if (
-    status === 'loading' ||
-    (status === 'authenticated' && loading && contents.length === 0)
-  ) {
+  if (status === 'loading') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-gray-500">로딩 중...</div>
@@ -243,7 +171,6 @@ export default function AdminContentImagesPage() {
     )
   }
 
-  // 권한 없음
   if (!session?.user || session.user.role !== 'admin') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -260,7 +187,6 @@ export default function AdminContentImagesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-6xl px-4 py-8">
-        {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">
@@ -287,19 +213,20 @@ export default function AdminContentImagesPage() {
           </div>
         </div>
 
-        {/* 검색 */}
         <div className="mb-6">
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value)
+              setPage(1)
+            }}
             placeholder="콘텐츠 이름으로 검색..."
             className="w-full max-w-md rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        {/* 콘텐츠 목록 */}
-        {loading ? (
+        {isLoading ? (
           <div className="py-12 text-center text-gray-500">로딩 중...</div>
         ) : contents.length === 0 ? (
           <div className="py-12 text-center">
@@ -323,7 +250,6 @@ export default function AdminContentImagesPage() {
                 className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
               >
                 <div className="flex items-start gap-3">
-                  {/* 이미지 또는 아이콘 */}
                   <div className="flex-shrink-0">
                     {content.imageUrl ? (
                       <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-gray-200">
@@ -331,27 +257,31 @@ export default function AdminContentImagesPage() {
                           src={content.imageUrl}
                           alt={content.displayName}
                           fill
+                          sizes="64px"
                           className="object-cover"
                         />
                       </div>
                     ) : (
                       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
                         <ContentTypeIcon
-                          type={content.type || 'other'}
+                          type={(content.type || 'other') as ContentType}
                           size="lg"
                         />
                       </div>
                     )}
                   </div>
-
-                  {/* 정보 */}
                   <div className="min-w-0 flex-1">
                     <h3 className="truncate font-medium text-gray-800">
                       {content.displayName}
                     </h3>
                     <div className="mt-1 flex items-center gap-2 text-sm text-gray-500">
                       {content.type && (
-                        <span>{CONTENT_TYPE_CONFIG[content.type]?.label}</span>
+                        <span>
+                          {
+                            CONTENT_TYPE_CONFIG[content.type as ContentType]
+                              ?.label
+                          }
+                        </span>
                       )}
                       {content.year && <span>({content.year})</span>}
                     </div>
@@ -360,8 +290,6 @@ export default function AdminContentImagesPage() {
                     </p>
                   </div>
                 </div>
-
-                {/* 액션 버튼 */}
                 <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
                   <button
                     onClick={() => openUploadModal(content)}
@@ -383,7 +311,6 @@ export default function AdminContentImagesPage() {
           </div>
         )}
 
-        {/* 페이지네이션 */}
         {totalPages > 1 && (
           <div className="mt-8 flex justify-center gap-2">
             <button
@@ -407,15 +334,12 @@ export default function AdminContentImagesPage() {
         )}
       </div>
 
-      {/* 업로드 모달 */}
       {showUploadModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
             <h2 className="mb-4 text-xl font-bold text-gray-800">
               {selectedContent ? '이미지 업로드' : '새 콘텐츠 추가'}
             </h2>
-
-            {/* 기존 콘텐츠 선택 시 */}
             {selectedContent ? (
               <div className="mb-4 rounded-lg bg-gray-50 p-3">
                 <p className="font-medium">{selectedContent.displayName}</p>
@@ -426,7 +350,6 @@ export default function AdminContentImagesPage() {
                 )}
               </div>
             ) : (
-              /* 새 콘텐츠 입력 */
               <div className="mb-4 space-y-4">
                 <div>
                   <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -474,8 +397,6 @@ export default function AdminContentImagesPage() {
                 </div>
               </div>
             )}
-
-            {/* 이미지 업로드 */}
             <div className="mb-6">
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 대표 이미지 {!selectedContent && '(선택)'}
@@ -497,6 +418,7 @@ export default function AdminContentImagesPage() {
                       src={uploadPreview}
                       alt="Preview"
                       fill
+                      sizes="96px"
                       className="object-cover"
                     />
                   </div>
@@ -510,8 +432,6 @@ export default function AdminContentImagesPage() {
                 )}
               </div>
             </div>
-
-            {/* 버튼 */}
             <div className="flex gap-3">
               <button
                 onClick={closeUploadModal}

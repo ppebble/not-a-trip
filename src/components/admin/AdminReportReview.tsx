@@ -174,6 +174,7 @@ export function AdminReportReview({
                           src={pair.captureImageUrl}
                           alt={`캡처 ${idx + 1}`}
                           fill
+                          sizes="(max-width: 768px) 50vw, 33vw"
                           className="object-cover"
                         />
                       </div>
@@ -185,6 +186,7 @@ export function AdminReportReview({
                           src={pair.realPhotoUrl}
                           alt={`현장 ${idx + 1}`}
                           fill
+                          sizes="(max-width: 768px) 50vw, 33vw"
                           className="object-cover"
                         />
                       </div>

@@ -160,3 +160,36 @@ export function useInvalidateCheckInCount(spotId: string) {
     qc.invalidateQueries({ queryKey: galleryKeys.checkinCount(spotId) })
   }, [qc, spotId])
 }
+
+// ── Contributor Types ───────────────────────────────────────
+
+interface Contributor {
+  contributorId: string
+  contributorName: string
+  count: number
+}
+
+// ── Contributor Query Keys ──────────────────────────────────
+
+export const contributorKeys = {
+  all: ['contributors'] as const,
+  list: (spotId: string) => [...contributorKeys.all, spotId] as const,
+}
+
+/**
+ * 스팟 정보 보완 기여자 목록 조회 훅
+ * Requirements: 8.3
+ */
+export function useContributors(spotId: string) {
+  return useQuery({
+    queryKey: contributorKeys.list(spotId),
+    queryFn: async (): Promise<Contributor[]> => {
+      const res = await fetch(API_ROUTES.SUPPLEMENTS.BASE(spotId))
+      if (!res.ok) throw new Error('기여자 목록 조회 실패')
+      const data = await res.json()
+      return data.contributors || []
+    },
+    enabled: !!spotId,
+    staleTime: 5 * 60 * 1000,
+  })
+}

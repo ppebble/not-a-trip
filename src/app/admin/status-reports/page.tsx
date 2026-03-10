@@ -6,13 +6,12 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { AdminStatusReportList } from '@/components/admin/AdminStatusReportList'
 import { AdminStatusReportReview } from '@/components/admin/AdminStatusReportReview'
+import { useInvalidateAdminStatusReports } from '@/hooks/useAdminQueries'
 import type { SpotStatusReport } from '@/types/report'
 
 /**
  * 관리자 상태 신고 검토 페이지
- * Requirements: 5.1, 5.2
- * - Split-pane 레이아웃 (좌측 목록 + 우측 상세)
- * - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
+ * Requirements: 5.1, 5.2, 8.3
  */
 export default function AdminStatusReportsPage() {
   const { data: session, status } = useSession()
@@ -20,7 +19,7 @@ export default function AdminStatusReportsPage() {
   const [selectedReport, setSelectedReport] = useState<SpotStatusReport | null>(
     null
   )
-  const [refreshKey, setRefreshKey] = useState(0)
+  const invalidateStatusReports = useInvalidateAdminStatusReports()
 
   useEffect(() => {
     if (status === 'loading') return
@@ -35,8 +34,8 @@ export default function AdminStatusReportsPage() {
 
   const handleReviewComplete = useCallback(() => {
     setSelectedReport(null)
-    setRefreshKey((k) => k + 1)
-  }, [])
+    invalidateStatusReports()
+  }, [invalidateStatusReports])
 
   if (status === 'loading') {
     return (
@@ -61,7 +60,6 @@ export default function AdminStatusReportsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
       <div className="border-b border-gray-200 bg-white px-6 py-4">
         <h1 className="text-xl font-bold text-gray-800">상태 신고 검토</h1>
         <p className="mt-0.5 text-sm text-gray-500">
@@ -69,18 +67,14 @@ export default function AdminStatusReportsPage() {
         </p>
       </div>
 
-      {/* 메인 레이아웃: 좌측 목록 + 우측 상세 */}
       <div className="flex h-[calc(100vh-theme(spacing.14)-73px)]">
-        {/* 좌측: 상태 신고 목록 */}
         <div className="w-96 flex-shrink-0 border-r border-gray-200 bg-white">
           <AdminStatusReportList
             onSelectReport={handleSelectReport}
             selectedReportId={selectedReport?.id}
-            refreshKey={refreshKey}
           />
         </div>
 
-        {/* 우측: 상태 신고 상세/검토 */}
         <div className="flex-1 bg-gray-50">
           {selectedReport ? (
             <AdminStatusReportReview
