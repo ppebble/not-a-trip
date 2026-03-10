@@ -15,9 +15,23 @@ import NearbyFacilities from '@/components/spot/NearbyFacilities'
 import { SpotContentSection } from '@/components/spot/SpotContentSection'
 import { RelatedContentSection } from '@/components/spot/RelatedContentSection'
 import { SpotCheckInSection } from '@/components/spot/SpotCheckInSection'
-import { SupplementForm } from '@/components/report/SupplementForm'
 import { ContributorList } from '@/components/report/ContributorList'
-import { StatusReportForm } from '@/components/report/StatusReportForm'
+
+const SupplementForm = dynamic(
+  () =>
+    import('@/components/report/SupplementForm').then(
+      (mod) => mod.SupplementForm
+    ),
+  { loading: () => null }
+)
+
+const StatusReportForm = dynamic(
+  () =>
+    import('@/components/report/StatusReportForm').then(
+      (mod) => mod.StatusReportForm
+    ),
+  { loading: () => null }
+)
 import { SpotStatusIndicator } from '@/components/report/SpotStatusIndicator'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { CategoryIcon } from '@/components/common'

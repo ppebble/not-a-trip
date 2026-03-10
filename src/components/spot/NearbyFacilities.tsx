@@ -4,9 +4,13 @@ import { NearbyFacility, FacilityType } from '@/types'
 import { useCallback, useMemo, useState } from 'react'
 import { groupFacilitiesByType } from '@/lib/facility-utils'
 import { useInvalidateFacilities } from '@/hooks/useSpotDetail'
+import dynamic from 'next/dynamic'
 import FacilityFilter from './FacilityFilter'
 import FacilityCard from './FacilityCard'
-import FacilityReportForm from './FacilityReportForm'
+
+const FacilityReportForm = dynamic(() => import('./FacilityReportForm'), {
+  loading: () => null,
+})
 
 interface NearbyFacilitiesProps {
   facilities: NearbyFacility[]
