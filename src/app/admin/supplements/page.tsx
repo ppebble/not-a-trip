@@ -6,20 +6,19 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { AdminSupplementList } from '@/components/admin/AdminSupplementList'
 import { AdminSupplementReview } from '@/components/admin/AdminSupplementReview'
+import { useInvalidateAdminSupplements } from '@/hooks/useAdminQueries'
 import type { SpotSupplement } from '@/types/report'
 
 /**
  * 관리자 정보 보완 검토 페이지
- * Requirements: 3.1, 3.2
- * - Split-pane 레이아웃 (좌측 목록 + 우측 상세)
- * - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
+ * Requirements: 3.1, 3.2, 8.3
  */
 export default function AdminSupplementsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [selectedSupplement, setSelectedSupplement] =
     useState<SpotSupplement | null>(null)
-  const [refreshKey, setRefreshKey] = useState(0)
+  const invalidateSupplements = useInvalidateAdminSupplements()
 
   useEffect(() => {
     if (status === 'loading') return
@@ -34,8 +33,8 @@ export default function AdminSupplementsPage() {
 
   const handleReviewComplete = useCallback(() => {
     setSelectedSupplement(null)
-    setRefreshKey((k) => k + 1)
-  }, [])
+    invalidateSupplements()
+  }, [invalidateSupplements])
 
   if (status === 'loading') {
     return (
@@ -60,7 +59,6 @@ export default function AdminSupplementsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
       <div className="border-b border-gray-200 bg-white px-6 py-4">
         <h1 className="text-xl font-bold text-gray-800">정보 보완 검토</h1>
         <p className="mt-0.5 text-sm text-gray-500">
@@ -68,18 +66,14 @@ export default function AdminSupplementsPage() {
         </p>
       </div>
 
-      {/* 메인 레이아웃: 좌측 목록 + 우측 상세 */}
       <div className="flex h-[calc(100vh-theme(spacing.14)-73px)]">
-        {/* 좌측: 정보 보완 목록 */}
         <div className="w-96 flex-shrink-0 border-r border-gray-200 bg-white">
           <AdminSupplementList
             onSelectSupplement={handleSelectSupplement}
             selectedSupplementId={selectedSupplement?.id}
-            refreshKey={refreshKey}
           />
         </div>
 
-        {/* 우측: 정보 보완 상세/검토 */}
         <div className="flex-1 bg-gray-50">
           {selectedSupplement ? (
             <AdminSupplementReview

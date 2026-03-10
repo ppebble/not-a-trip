@@ -6,21 +6,19 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { AdminReportList } from '@/components/admin/AdminReportList'
 import { AdminReportReview } from '@/components/admin/AdminReportReview'
+import { useInvalidateAdminReports } from '@/hooks/useAdminQueries'
 import type { SpotReport } from '@/types/report'
 
 /**
  * 관리자 제보 관리 페이지
- * Requirements: 5.1, 5.2
- * - AdminReportList + AdminReportReview 통합
- * - 관리자 권한 검사 (미인증/비관리자 접근 차단)
+ * Requirements: 5.1, 5.2, 8.3
  */
 export default function AdminReportsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [selectedReport, setSelectedReport] = useState<SpotReport | null>(null)
-  const [refreshKey, setRefreshKey] = useState(0)
+  const invalidateReports = useInvalidateAdminReports()
 
-  // 권한 체크
   useEffect(() => {
     if (status === 'loading') return
     if (!session?.user || session.user.role !== 'admin') {
@@ -34,10 +32,9 @@ export default function AdminReportsPage() {
 
   const handleReviewComplete = useCallback(() => {
     setSelectedReport(null)
-    setRefreshKey((k) => k + 1)
-  }, [])
+    invalidateReports()
+  }, [invalidateReports])
 
-  // 로딩
   if (status === 'loading') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -46,7 +43,6 @@ export default function AdminReportsPage() {
     )
   }
 
-  // 권한 없음
   if (!session?.user || session.user.role !== 'admin') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -62,7 +58,6 @@ export default function AdminReportsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
       <div className="border-b border-gray-200 bg-white px-6 py-4">
         <h1 className="text-xl font-bold text-gray-800">제보 관리</h1>
         <p className="mt-0.5 text-sm text-gray-500">
@@ -70,18 +65,14 @@ export default function AdminReportsPage() {
         </p>
       </div>
 
-      {/* 메인 레이아웃: 좌측 목록 + 우측 상세 */}
       <div className="flex h-[calc(100vh-theme(spacing.14)-73px)]">
-        {/* 좌측: 제보 목록 */}
         <div className="w-96 flex-shrink-0 border-r border-gray-200 bg-white">
           <AdminReportList
             onSelectReport={handleSelectReport}
             selectedReportId={selectedReport?.id}
-            refreshKey={refreshKey}
           />
         </div>
 
-        {/* 우측: 제보 상세/검토 */}
         <div className="flex-1 bg-gray-50">
           {selectedReport ? (
             <AdminReportReview
