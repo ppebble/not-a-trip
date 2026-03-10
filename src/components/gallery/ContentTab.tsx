@@ -1,12 +1,13 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { CheckIn } from '@/types'
 import { ContentGrid, ContentSummary } from './ContentGrid'
 import { MasonryGrid, MasonryItem } from './MasonryGrid'
 import { ComparisonCard } from './ComparisonCard'
 import { useCheckInFeed } from '@/hooks/useCheckInFeed'
+import { useContentList as useContentListQuery } from '@/hooks/useGalleryQueries'
 
 /**
  * ContentTab 컴포넌트
@@ -15,6 +16,7 @@ import { useCheckInFeed } from '@/hooks/useCheckInFeed'
  * Requirements:
  * - 3.4: 작품별 탭에서 작품 포스터를 대형 카드로 그리드 레이아웃에 표시
  * - 3.5: 작품 선택 시 해당 작품 체크인만 필터링
+ * - 8.3: React Query 전환
  */
 
 export interface ContentTabProps {
@@ -22,9 +24,6 @@ export interface ContentTabProps {
   onCheckInClick?: (checkIn: CheckIn) => void
 }
 
-/**
- * 로딩 스켈레톤 컴포넌트
- */
 function LoadingSkeleton() {
   return (
     <>
@@ -46,9 +45,6 @@ function LoadingSkeleton() {
   )
 }
 
-/**
- * 빈 상태 컴포넌트 (필터링된 결과가 없을 때)
- */
 function EmptyFilteredState({ contentName }: { contentName: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -63,9 +59,6 @@ function EmptyFilteredState({ contentName }: { contentName: string }) {
   )
 }
 
-/**
- * 에러 상태 컴포넌트
- */
 function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -84,9 +77,6 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   )
 }
 
-/**
- * 콘텐츠 그리드 로딩 스켈레톤
- */
 function ContentGridSkeleton() {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -103,9 +93,6 @@ function ContentGridSkeleton() {
   )
 }
 
-/**
- * 필터링된 피드 헤더 (뒤로가기 버튼 포함)
- */
 function FilteredFeedHeader({
   contentName,
   onBack,
@@ -140,52 +127,6 @@ function FilteredFeedHeader({
   )
 }
 
-/**
- * useContentList 훅 - 작품 목록 조회
- */
-function useContentList() {
-  const [contents, setContents] = useState<ContentSummary[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchContents = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      // content-names API에서 작품 목록 조회 (type=content로 작품명만)
-      const res = await fetch('/api/content-names?type=content')
-      if (!res.ok) {
-        throw new Error('작품 목록 조회 실패')
-      }
-
-      const data = await res.json()
-
-      // API 응답을 ContentSummary 형식으로 변환
-      const contentSummaries: ContentSummary[] = data.items.map(
-        (item: { name: string; count: number }) => ({
-          title: item.name,
-          imageUrl: undefined, // 이미지 URL은 별도 API 필요
-          checkInCount: item.count,
-          spotCount: 0, // 스팟 수는 별도 계산 필요
-        })
-      )
-
-      setContents(contentSummaries)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '알 수 없는 오류')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchContents()
-  }, [fetchContents])
-
-  return { contents, isLoading, error, refresh: fetchContents }
-}
-
 export function ContentTab({
   selectedContent,
   onCheckInClick,
@@ -193,13 +134,21 @@ export function ContentTab({
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // 작품 목록 조회
+  // React Query로 작품 목록 조회
   const {
-    contents,
+    data: contentData,
     isLoading: isLoadingContents,
     error: contentsError,
-    refresh: refreshContents,
-  } = useContentList()
+    refetch: refreshContents,
+  } = useContentListQuery()
+
+  // API 응답을 ContentSummary 형식으로 변환
+  const contents: ContentSummary[] = (contentData?.items ?? []).map((item) => ({
+    title: item.name,
+    imageUrl: undefined,
+    checkInCount: item.count,
+    spotCount: 0,
+  }))
 
   // 필터링된 체크인 피드 (작품 선택 시에만 활성화)
   const {
@@ -217,10 +166,6 @@ export function ContentTab({
     enabled: !!selectedContent,
   })
 
-  /**
-   * 작품 선택 핸들러
-   * URL 쿼리 파라미터로 선택된 작품 관리 (Requirements 3.5)
-   */
   const handleSelectContent = useCallback(
     (contentName: string) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -231,9 +176,6 @@ export function ContentTab({
     [router, searchParams]
   )
 
-  /**
-   * 작품 목록으로 돌아가기
-   */
   const handleBack = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     params.set('tab', 'content')
@@ -243,7 +185,6 @@ export function ContentTab({
 
   // 작품이 선택된 경우: 필터링된 체크인 피드 표시
   if (selectedContent) {
-    // 에러 상태
     if (checkInsError && checkIns.length === 0) {
       return (
         <div className="mx-auto max-w-6xl px-4 py-6">
@@ -256,7 +197,6 @@ export function ContentTab({
       )
     }
 
-    // 빈 상태
     if (!isLoadingCheckIns && checkIns.length === 0) {
       return (
         <div className="mx-auto max-w-6xl px-4 py-6">
@@ -272,7 +212,6 @@ export function ContentTab({
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
         <FilteredFeedHeader contentName={selectedContent} onBack={handleBack} />
-
         <MasonryGrid>
           {checkIns.map((checkIn) => (
             <MasonryItem key={checkIn.id}>
@@ -289,11 +228,8 @@ export function ContentTab({
               />
             </MasonryItem>
           ))}
-
           {isLoadingCheckIns && <LoadingSkeleton />}
         </MasonryGrid>
-
-        {/* 무한 스크롤 트리거 영역 */}
         <div
           ref={loadMoreRef}
           className="flex h-20 items-center justify-center"
@@ -314,16 +250,14 @@ export function ContentTab({
   }
 
   // 작품이 선택되지 않은 경우: 작품 목록 그리드 표시
-  // 에러 상태
   if (contentsError) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
-        <ErrorState onRetry={refreshContents} />
+        <ErrorState onRetry={() => refreshContents()} />
       </div>
     )
   }
 
-  // 로딩 상태
   if (isLoadingContents) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
