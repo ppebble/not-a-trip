@@ -1,17 +1,15 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { RouteCard } from '@/components/route/RouteCard'
 import {
   RouteFilterBar,
   type RouteFilters,
 } from '@/components/route/RouteFilterBar'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
+import { useRouteList } from '@/hooks/useRouteQueries'
 import type { Route } from '@/types/route'
 
-const PAGE_LIMIT = 12
-
-/** 코스 카드 스켈레톤 */
 function RouteCardSkeleton() {
   return (
     <div className="overflow-hidden rounded-lg border border-navy-200 bg-white shadow-sm">
@@ -30,17 +28,9 @@ function RouteCardSkeleton() {
   )
 }
 
-interface RoutesResponse {
-  routes: Route[]
-  total: number
-  page: number
-  totalPages: number
-}
-
 /**
  * RouteListContent - 코스 목록 콘텐츠
- * RouteCard + RouteFilterBar + 무한 스크롤
- * Requirements: 2.1, 2.2
+ * Requirements: 2.1, 2.2, 8.3
  */
 export function RouteListContent() {
   const [filters, setFilters] = useState<RouteFilters>({
@@ -48,74 +38,42 @@ export function RouteListContent() {
     contentName: '',
     regionTag: '',
   })
-  const [routes, setRoutes] = useState<Route[]>([])
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [allRoutes, setAllRoutes] = useState<Route[]>([])
   const observerRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<NodeJS.Timeout | undefined>(undefined)
+  const [debouncedFilters, setDebouncedFilters] = useState(filters)
 
-  /** API 호출 */
-  const fetchRoutes = useCallback(
-    async (pageNum: number, append: boolean) => {
-      if (append) setIsLoadingMore(true)
-      else setIsLoading(true)
-
-      try {
-        const params = new URLSearchParams({
-          sort: filters.sort,
-          page: String(pageNum),
-          limit: String(PAGE_LIMIT),
-        })
-        if (filters.contentName) params.set('contentName', filters.contentName)
-        if (filters.regionTag) params.set('regionTag', filters.regionTag)
-        if (filters.minDuration)
-          params.set('minDuration', String(filters.minDuration))
-        if (filters.maxDuration)
-          params.set('maxDuration', String(filters.maxDuration))
-
-        const res = await fetch(`/api/routes?${params}`)
-        if (!res.ok) throw new Error('fetch failed')
-        const data: RoutesResponse = await res.json()
-
-        if (append) {
-          setRoutes((prev) => [...prev, ...data.routes])
-        } else {
-          setRoutes(data.routes)
-        }
-        setTotalPages(data.totalPages)
-      } catch {
-        // 에러 시 빈 상태 유지
-      } finally {
-        setIsLoading(false)
-        setIsLoadingMore(false)
-      }
-    },
-    [filters]
-  )
-
-  /** 필터 변경 시 디바운스 후 리셋 */
+  // 필터 디바운스
   useEffect(() => {
     clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
+      setDebouncedFilters(filters)
       setPage(1)
-      fetchRoutes(1, false)
+      setAllRoutes([])
     }, 300)
     return () => clearTimeout(debounceRef.current)
-  }, [fetchRoutes])
+  }, [filters])
 
-  /** 무한 스크롤 IntersectionObserver */
+  const { data, isLoading } = useRouteList(debouncedFilters, page)
+
+  const currentPageRoutes = data?.routes ?? []
+  const totalPages = data?.totalPages ?? 1
+
+  // 페이지 변경 시 누적
+  const routes =
+    page === 1 ? currentPageRoutes : [...allRoutes, ...currentPageRoutes]
+
+  // 무한 스크롤 IntersectionObserver
   useEffect(() => {
     const el = observerRef.current
     if (!el) return
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !isLoadingMore && page < totalPages) {
-          const nextPage = page + 1
-          setPage(nextPage)
-          fetchRoutes(nextPage, true)
+        if (entries[0].isIntersecting && !isLoading && page < totalPages) {
+          setAllRoutes(routes)
+          setPage((p) => p + 1)
         }
       },
       { threshold: 0.1 }
@@ -123,14 +81,13 @@ export function RouteListContent() {
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [page, totalPages, isLoadingMore, fetchRoutes])
+  }, [page, totalPages, isLoading, routes])
 
   return (
     <div className="space-y-6">
       <RouteFilterBar filters={filters} onFiltersChange={setFilters} />
 
-      {/* 코스 그리드 */}
-      {isLoading ? (
+      {isLoading && routes.length === 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }, (_, i) => (
             <RouteCardSkeleton key={i} />
@@ -151,10 +108,9 @@ export function RouteListContent() {
             ))}
           </div>
 
-          {/* 무한 스크롤 트리거 */}
           {page < totalPages && (
             <div ref={observerRef} className="flex justify-center py-4">
-              {isLoadingMore && (
+              {isLoading && (
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy-200 border-t-navy-600" />
               )}
             </div>

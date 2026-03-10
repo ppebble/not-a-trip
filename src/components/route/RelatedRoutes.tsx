@@ -1,18 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useRelatedRoutes } from '@/hooks/useRouteQueries'
 import { RouteCard } from '@/components/route/RouteCard'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
-import type { Route } from '@/types/route'
 
 interface RelatedRoutesProps {
   /** 관련 작품명 목록 */
   contentNames: string[]
-}
-
-interface RecommendedData {
-  official: Route[]
-  popular: Route[]
 }
 
 /**
@@ -21,38 +15,7 @@ interface RecommendedData {
  * Requirements: 4.3
  */
 export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
-  const [routes, setRoutes] = useState<Route[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    if (contentNames.length === 0) {
-      setIsLoading(false)
-      return
-    }
-
-    async function fetchRelatedRoutes() {
-      try {
-        // 첫 번째 작품명으로 추천 코스 조회
-        const res = await fetch(
-          `/api/routes/recommended?contentName=${encodeURIComponent(contentNames[0])}&limit=4`
-        )
-        if (!res.ok) throw new Error('fetch failed')
-        const data: RecommendedData = await res.json()
-
-        // 공식 + 인기 합쳐서 중복 제거
-        const allRoutes = [...data.official, ...data.popular]
-        const unique = allRoutes.filter(
-          (r, i, arr) => arr.findIndex((x) => x.id === r.id) === i
-        )
-        setRoutes(unique)
-      } catch {
-        // 에러 시 섹션 숨김
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchRelatedRoutes()
-  }, [contentNames])
+  const { data: routes = [], isLoading } = useRelatedRoutes(contentNames)
 
   if (isLoading) {
     return (
@@ -80,9 +43,7 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
     )
   }
 
-  if (routes.length === 0) {
-    return null
-  }
+  if (routes.length === 0) return null
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
