@@ -60,8 +60,48 @@ export const API_ROUTES = {
     BASE: (spotId: string) => `/api/spots/${spotId}/status-reports`,
   },
 
+  // Check-ins (순례 인증)
+  CHECKINS: {
+    BASE: '/api/checkins',
+    DETAIL: (id: string) => `/api/checkins/${id}`,
+    RANKING: '/api/checkins/ranking',
+    STATS: '/api/checkins/stats',
+  },
+
+  // Routes (순례 코스)
+  ROUTES: {
+    BASE: '/api/routes',
+    DETAIL: (id: string) => `/api/routes/${id}`,
+    RECOMMENDED: '/api/routes/recommended',
+    BOOKMARK: (id: string) => `/api/routes/${id}/bookmark`,
+    COMPLETE: (id: string) => `/api/routes/${id}/complete`,
+  },
+
+  // Users (유저)
+  USERS: {
+    STATS: (id: string) => `/api/users/${id}/stats`,
+    BADGES: (id: string) => `/api/users/${id}/badges`,
+    PROGRESS: (id: string) => `/api/users/${id}/progress`,
+  },
+
+  // Admin
+  ADMIN: {
+    REPORTS: '/api/admin/reports',
+    REPORT_DETAIL: (id: string) => `/api/admin/reports/${id}`,
+    STATUS_REPORTS: '/api/admin/status-reports',
+    STATUS_REPORT_DETAIL: (id: string) => `/api/admin/status-reports/${id}`,
+    SUPPLEMENTS: '/api/admin/supplements',
+    SUPPLEMENT_DETAIL: (id: string) => `/api/admin/supplements/${id}`,
+    CONTENT_IMAGES: '/api/admin/content-images',
+    CONTENT_IMAGES_SYNC: '/api/admin/content-images/sync',
+    DASHBOARD_SUMMARY: '/api/admin/dashboard/summary',
+  },
+
   // Content Names (자동완성)
   CONTENT_NAMES: '/api/content-names',
+
+  // Content Images (콘텐츠 이미지)
+  CONTENT_IMAGES: '/api/content-images',
 
   // Upload
   UPLOAD: '/api/upload',
