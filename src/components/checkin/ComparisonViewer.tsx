@@ -81,6 +81,7 @@ export function ComparisonViewer({
               src={sceneImageUrl}
               alt="작품 속 장면"
               fill
+              sizes="(max-width: 768px) 50vw, 384px"
               className="object-cover"
             />
             <span className="absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-xs text-white">
@@ -92,6 +93,7 @@ export function ComparisonViewer({
               src={userPhotoUrl}
               alt="인증샷"
               fill
+              sizes="(max-width: 768px) 50vw, 384px"
               className="object-cover"
             />
             <span className="absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-xs text-white">
@@ -133,6 +135,7 @@ export function ComparisonViewer({
             src={userPhotoUrl}
             alt="인증샷"
             fill
+            sizes="(max-width: 768px) 50vw, 384px"
             className="object-cover"
             draggable={false}
           />
@@ -151,6 +154,7 @@ export function ComparisonViewer({
               src={sceneImageUrl}
               alt="작품 속 장면"
               fill
+              sizes="(max-width: 768px) 50vw, 384px"
               className="object-cover"
               draggable={false}
             />

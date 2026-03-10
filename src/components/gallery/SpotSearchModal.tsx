@@ -282,6 +282,7 @@ export function SpotSearchModal({
                           src={spot.thumbnailUrl}
                           alt={spot.name}
                           fill
+                          sizes="48px"
                           className="object-cover"
                         />
                       ) : (

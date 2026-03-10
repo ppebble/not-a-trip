@@ -103,6 +103,7 @@ function ReportCard({ report }: { report: SpotReport }) {
             src={thumbnail}
             alt={report.name}
             fill
+            sizes="56px"
             className="object-cover"
           />
         </div>

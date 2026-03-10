@@ -262,6 +262,7 @@ export function EvidencePairUpload({
                     src={pair.capturePreview}
                     alt="작품 캡처"
                     fill
+                    sizes="96px"
                     className="object-cover"
                   />
                   <button
@@ -335,6 +336,7 @@ export function EvidencePairUpload({
                     src={pair.realPhotoPreview}
                     alt="현장 사진"
                     fill
+                    sizes="96px"
                     className="object-cover"
                   />
                   <button

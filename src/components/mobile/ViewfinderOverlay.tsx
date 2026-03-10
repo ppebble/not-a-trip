@@ -185,6 +185,7 @@ export function ViewfinderOverlay({
             src={sceneImageUrl}
             alt="씬 이미지 가이드"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />

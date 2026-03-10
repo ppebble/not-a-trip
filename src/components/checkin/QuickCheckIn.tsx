@@ -316,6 +316,7 @@ export function QuickCheckIn({
                     src={photoPreview}
                     alt="인증샷 미리보기"
                     fill
+                    sizes="128px"
                     className="object-cover"
                   />
                   <button

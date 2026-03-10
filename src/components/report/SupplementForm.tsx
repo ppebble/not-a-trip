@@ -260,6 +260,7 @@ export function SupplementForm({
                   src={capturePreview}
                   alt="캡처 이미지"
                   fill
+                  sizes="128px"
                   className="object-cover"
                 />
                 <button
@@ -340,6 +341,7 @@ export function SupplementForm({
                 src={photoPreview}
                 alt="첨부 사진"
                 fill
+                sizes="128px"
                 className="object-cover"
               />
               <button

@@ -181,6 +181,7 @@ export function AdminSupplementReview({
                       src={supplement.sceneInfo.captureImageUrl}
                       alt="씬 캡처"
                       fill
+                      sizes="(max-width: 768px) 50vw, 33vw"
                       className="object-cover"
                     />
                   </div>
@@ -206,6 +207,7 @@ export function AdminSupplementReview({
                     src={photo}
                     alt={`첨부 사진 ${idx + 1}`}
                     fill
+                    sizes="(max-width: 768px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </div>

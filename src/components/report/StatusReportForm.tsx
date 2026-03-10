@@ -208,6 +208,7 @@ export function StatusReportForm({
                 src={photoPreview}
                 alt="증거 사진"
                 fill
+                sizes="128px"
                 className="object-cover"
               />
               <button
