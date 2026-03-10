@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { CheckIn } from '@/types'
-import { ComparisonViewer } from './ComparisonViewer'
+import { useCheckInGallery } from '@/hooks/useGalleryQueries'
+import { CheckInDetailModal } from './CheckInDetailModal'
 
 interface CheckInGalleryProps {
   spotId?: string
@@ -15,7 +16,7 @@ interface CheckInGalleryProps {
 
 /**
  * 인증샷 갤러리 컴포넌트
- * Requirements: 1.5, 5.3
+ * Requirements: 1.5, 5.3, 8.3
  */
 export function CheckInGallery({
   spotId,
@@ -24,52 +25,35 @@ export function CheckInGallery({
   showLoadMore = true,
   className = '',
 }: CheckInGalleryProps) {
-  const [checkins, setCheckins] = useState<CheckIn[]>([])
-  const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest')
-  const [isLoading, setIsLoading] = useState(true)
+  const [allCheckins, setAllCheckins] = useState<CheckIn[]>([])
   const [selectedCheckIn, setSelectedCheckIn] = useState<CheckIn | null>(null)
 
-  const fetchCheckins = async (pageNum: number, append = false) => {
-    setIsLoading(true)
-    try {
-      const params = new URLSearchParams({
-        page: pageNum.toString(),
-        limit: limit.toString(),
-        sortBy,
-      })
-      if (spotId) params.set('spotId', spotId)
-      if (userId) params.set('userId', userId)
+  const { data, isLoading } = useCheckInGallery(
+    spotId,
+    userId,
+    sortBy,
+    page,
+    limit
+  )
 
-      const res = await fetch(`/api/checkins?${params}`)
-      if (!res.ok) throw new Error('Failed to fetch')
-
-      const data = await res.json()
-
-      if (append) {
-        setCheckins((prev) => [...prev, ...data.checkins])
-      } else {
-        setCheckins(data.checkins)
-      }
-      setTotal(data.total)
-    } catch (error) {
-      console.error('Error fetching checkins:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    setPage(1)
-    fetchCheckins(1)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [spotId, userId, sortBy, limit])
+  // 페이지 변경 시 누적 데이터 관리
+  const checkins =
+    page === 1
+      ? (data?.checkins ?? [])
+      : [...allCheckins, ...(data?.checkins ?? [])]
+  const total = data?.total ?? 0
 
   const handleLoadMore = () => {
-    const nextPage = page + 1
-    setPage(nextPage)
-    fetchCheckins(nextPage, true)
+    setAllCheckins(checkins)
+    setPage((p) => p + 1)
+  }
+
+  const handleSortChange = (newSort: 'latest' | 'popular') => {
+    setSortBy(newSort)
+    setPage(1)
+    setAllCheckins([])
   }
 
   const formatDate = (date: Date) => {
@@ -126,7 +110,7 @@ export function CheckInGallery({
         <p className="text-sm text-gray-500">총 {total}개의 인증</p>
         <div className="flex gap-2">
           <button
-            onClick={() => setSortBy('latest')}
+            onClick={() => handleSortChange('latest')}
             className={`rounded-lg px-3 py-1 text-sm ${
               sortBy === 'latest'
                 ? 'bg-blue-100 text-blue-600'
@@ -136,7 +120,7 @@ export function CheckInGallery({
             최신순
           </button>
           <button
-            onClick={() => setSortBy('popular')}
+            onClick={() => handleSortChange('popular')}
             className={`rounded-lg px-3 py-1 text-sm ${
               sortBy === 'popular'
                 ? 'bg-blue-100 text-blue-600'
@@ -160,6 +144,7 @@ export function CheckInGallery({
               src={checkin.photoUrl}
               alt={`${checkin.userName}의 인증샷`}
               fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -193,128 +178,6 @@ export function CheckInGallery({
           onClose={() => setSelectedCheckIn(null)}
         />
       )}
-    </div>
-  )
-}
-
-/**
- * 인증 상세 모달
- */
-function CheckInDetailModal({
-  checkIn,
-  onClose,
-}: {
-  checkIn: CheckIn
-  onClose: () => void
-}) {
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-      onClick={onClose}
-    >
-      <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* 헤더 */}
-        <div className="flex items-center justify-between border-b p-4">
-          <div className="flex items-center gap-3">
-            {checkIn.userImage ? (
-              <Image
-                src={checkIn.userImage}
-                alt={checkIn.userName}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-            ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
-                <span className="text-lg font-medium text-gray-600">
-                  {checkIn.userName[0]}
-                </span>
-              </div>
-            )}
-            <div>
-              <p className="font-medium">{checkIn.userName}</p>
-              <p className="text-sm text-gray-500">
-                {formatDate(checkIn.visitedAt)}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="rounded-full p-1 hover:bg-gray-100"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* 이미지 */}
-        <div className="p-4">
-          {checkIn.sceneImageUrl ? (
-            <ComparisonViewer
-              sceneImageUrl={checkIn.sceneImageUrl}
-              userPhotoUrl={checkIn.photoUrl}
-            />
-          ) : (
-            <div className="relative aspect-video overflow-hidden rounded-lg">
-              <Image
-                src={checkIn.photoUrl}
-                alt="인증샷"
-                fill
-                className="object-cover"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* 코멘트 */}
-        {checkIn.comment && (
-          <div className="border-t px-4 py-3">
-            <p className="text-gray-700">{checkIn.comment}</p>
-          </div>
-        )}
-
-        {/* 좋아요 */}
-        <div className="border-t px-4 py-3">
-          <div className="flex items-center gap-1 text-gray-500">
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span className="text-sm">{checkIn.likeCount}</span>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
