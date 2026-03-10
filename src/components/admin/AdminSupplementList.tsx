@@ -1,15 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
+import { useAdminSupplements } from '@/hooks/useAdminQueries'
+import { SupplementSummaryCard } from './SupplementSummaryCard'
 import type { SpotSupplement } from '@/types/report'
-
-interface AdminSupplementsResponse {
-  supplements: SpotSupplement[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}
 
 const STATUS_FILTERS: { value: string; label: string }[] = [
   { value: 'pending', label: '대기중' },
@@ -18,69 +12,27 @@ const STATUS_FILTERS: { value: string; label: string }[] = [
   { value: 'rejected', label: '반려' },
 ]
 
-const SUPPLEMENT_TYPE_LABELS: Record<string, string> = {
-  scene_info: '씬 정보',
-  description: '설명',
-  photo: '사진',
-  other: '기타',
-}
-
 interface AdminSupplementListProps {
   onSelectSupplement: (supplement: SpotSupplement) => void
   selectedSupplementId?: string
-  refreshKey?: number
 }
 
 /**
  * 관리자 정보 보완 목록 컴포넌트
- * Requirements: 3.1, 3.3
- * - status별 필터 (대기중/승인/반려/전체)
- * - 페이지네이션 (page, limit)
- * - 보완 유형, 기여자명, 대상 스팟명, 상태 배지 표시
+ * Requirements: 3.1, 3.3, 8.3
  */
 export function AdminSupplementList({
   onSelectSupplement,
   selectedSupplementId,
-  refreshKey = 0,
 }: AdminSupplementListProps) {
-  const [supplements, setSupplements] = useState<SpotSupplement[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState('pending')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
 
-  const fetchSupplements = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        status: statusFilter,
-        page: page.toString(),
-        limit: '20',
-      })
+  const { data, isLoading, error } = useAdminSupplements(statusFilter, page)
 
-      const res = await fetch(`/api/admin/supplements?${params}`)
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || '정보 보완 목록 조회 실패')
-      }
-
-      const data: AdminSupplementsResponse = await res.json()
-      setSupplements(data.supplements)
-      setTotalPages(data.totalPages)
-      setTotal(data.total)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '오류가 발생했습니다')
-    } finally {
-      setLoading(false)
-    }
-  }, [statusFilter, page])
-
-  useEffect(() => {
-    fetchSupplements()
-  }, [fetchSupplements, refreshKey])
+  const supplements = data?.supplements ?? []
+  const totalPages = data?.totalPages ?? 1
+  const total = data?.total ?? 0
 
   const handleFilterChange = (value: string) => {
     setStatusFilter(value)
@@ -90,7 +42,7 @@ export function AdminSupplementList({
   if (error) {
     return (
       <div className="rounded-lg bg-red-50 p-4 text-center text-sm text-red-600">
-        {error}
+        {error instanceof Error ? error.message : '오류가 발생했습니다'}
       </div>
     )
   }
@@ -119,7 +71,7 @@ export function AdminSupplementList({
 
       {/* 목록 */}
       <div className="flex-1 overflow-y-auto">
-        {loading ? (
+        {isLoading ? (
           <div className="space-y-2 p-3">
             {[1, 2, 3, 4].map((i) => (
               <div
@@ -171,80 +123,5 @@ export function AdminSupplementList({
         </div>
       )}
     </div>
-  )
-}
-
-function SupplementStatusBadge({ status }: { status: string }) {
-  const config: Record<
-    string,
-    { label: string; bgColor: string; textColor: string }
-  > = {
-    pending: {
-      label: '대기중',
-      bgColor: 'bg-amber-100',
-      textColor: 'text-amber-700',
-    },
-    approved: {
-      label: '승인',
-      bgColor: 'bg-green-100',
-      textColor: 'text-green-700',
-    },
-    rejected: {
-      label: '반려',
-      bgColor: 'bg-red-100',
-      textColor: 'text-red-700',
-    },
-  }
-  const c = config[status] || config.pending
-
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${c.bgColor} ${c.textColor}`}
-    >
-      {c.label}
-    </span>
-  )
-}
-
-function SupplementSummaryCard({
-  supplement,
-  isSelected,
-  onClick,
-}: {
-  supplement: SpotSupplement
-  isSelected: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full rounded-lg border p-3 text-left transition-colors ${
-        isSelected
-          ? 'border-navy-400 bg-navy-50'
-          : 'border-gray-200 bg-white hover:bg-gray-50'
-      }`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
-              {SUPPLEMENT_TYPE_LABELS[supplement.type] || supplement.type}
-            </span>
-            <SupplementStatusBadge status={supplement.status} />
-          </div>
-          <p className="mt-1.5 truncate text-sm font-medium text-gray-800">
-            {supplement.content.slice(0, 50)}
-            {supplement.content.length > 50 ? '...' : ''}
-          </p>
-          <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
-            <span>{supplement.contributorName}</span>
-            <span>·</span>
-            <span>
-              {new Date(supplement.createdAt).toLocaleDateString('ko-KR')}
-            </span>
-          </div>
-        </div>
-      </div>
-    </button>
   )
 }
