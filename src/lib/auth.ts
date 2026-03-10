@@ -76,6 +76,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Credentials 로그인은 authorize()에서 처리하므로 통과
+      if (account?.provider === 'credentials') {
+        return true
+      }
+
+      // OAuth 이메일 미제공 시 기존 계정과 충돌 없이 새 계정 생성 허용
+      // Auth.js 기본 동작: 이메일이 없으면 OAuthAccountNotLinked 체크를 건너뜀
+      if (!user.email) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[Auth] OAuth 이메일 미제공 — 프로바이더: ${account?.provider}, 프로필 ID: ${profile?.sub || 'unknown'}`
+        )
+        return true
+      }
+
+      // Auth.js 기본 보안 정책 준수:
+      // 동일 이메일이 다른 프로바이더로 이미 존재하면 OAuthAccountNotLinked 에러 자동 발생
+      // allowDangerousEmailAccountLinking을 사용하지 않으므로 자동 Account Linking 차단됨
+      return true
+    },
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id

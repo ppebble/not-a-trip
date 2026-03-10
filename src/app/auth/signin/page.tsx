@@ -5,10 +5,22 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
 
+const oauthErrorMessages: Record<string, string> = {
+  OAuthAccountNotLinked:
+    '이미 다른 로그인 방식으로 가입된 이메일입니다. 기존 방식으로 로그인한 후 계정 설정에서 소셜 계정을 연결해주세요.',
+  OAuthSignin: '소셜 로그인 시작 중 오류가 발생했습니다.',
+  OAuthCallback: '소셜 로그인 처리 중 오류가 발생했습니다.',
+  OAuthCreateAccount: '소셜 계정 생성 중 오류가 발생했습니다.',
+  Callback: '콜백 처리 중 오류가 발생했습니다.',
+  AccessDenied: '접근이 거부되었습니다.',
+  Configuration: '서버 설정에 문제가 있습니다. 관리자에게 문의하세요.',
+}
+
 function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/'
+  const urlError = searchParams.get('error')
   const {
     loginWithCredentials,
     loginWithProvider,
@@ -19,6 +31,9 @@ function SignInForm() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  // OAuth 에러 파라미터가 URL에 있으면 해당 메시지 표시
+  const oauthError = urlError ? oauthErrorMessages[urlError] : null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -101,12 +116,14 @@ function SignInForm() {
 
       {/* 이메일 로그인 폼 */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
+        {(error || oauthError) && (
           <div className="rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-400">
-            {error}
-            <button onClick={clearError} className="ml-2 underline">
-              닫기
-            </button>
+            {oauthError || error}
+            {error && !oauthError && (
+              <button onClick={clearError} className="ml-2 underline">
+                닫기
+              </button>
+            )}
           </div>
         )}
 
