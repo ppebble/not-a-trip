@@ -2,8 +2,10 @@ import NextAuth from 'next-auth'
 import Google from 'next-auth/providers/google'
 import Kakao from 'next-auth/providers/kakao'
 import Naver from 'next-auth/providers/naver'
+import Twitter from 'next-auth/providers/twitter'
 import Credentials from 'next-auth/providers/credentials'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
+import { ObjectId } from 'mongodb'
 import bcrypt from 'bcryptjs'
 import clientPromise from './mongodb-client'
 import { getDb } from './db'
@@ -22,6 +24,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Naver({
       clientId: process.env.NAVER_CLIENT_ID!,
       clientSecret: process.env.NAVER_CLIENT_SECRET!,
+    }),
+    Twitter({
+      clientId: process.env.TWITTER_CLIENT_ID!,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET!,
     }),
     Credentials({
       name: 'credentials',
@@ -77,21 +83,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       // 매번 DB에서 role 조회 (role 변경 즉시 반영)
-      if (token.email) {
+      if (token.email || token.id) {
         try {
           const db = await getDb()
-          const dbUser = await db.collection('users').findOne({
-            email: token.email,
-          })
+          const query = token.email
+            ? { email: token.email }
+            : { _id: new ObjectId(token.id as string) }
+          const dbUser = await db.collection('users').findOne(query)
           if (dbUser) {
             token.role = dbUser.role || 'user'
             // eslint-disable-next-line no-console
-            console.log(`[Auth] User ${token.email} role: ${token.role}`)
+            console.log(
+              `[Auth] User ${token.email || token.id} role: ${token.role}`
+            )
           } else {
             token.role = 'user'
             // eslint-disable-next-line no-console
             console.log(
-              `[Auth] User ${token.email} not found, default role: user`
+              `[Auth] User ${token.email || token.id} not found, default role: user`
             )
           }
         } catch (error) {
