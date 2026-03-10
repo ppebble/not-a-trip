@@ -15,7 +15,7 @@ const errorMessages: Record<string, string> = {
   EmailCreateAccount: '이메일 계정 생성 중 오류가 발생했습니다.',
   Callback: '콜백 처리 중 오류가 발생했습니다.',
   OAuthAccountNotLinked:
-    '이미 다른 방법으로 가입된 이메일입니다. 기존 로그인 방법을 사용해주세요.',
+    '이미 다른 로그인 방식으로 가입된 이메일입니다. 기존 방식으로 로그인한 후 계정 설정에서 소셜 계정을 연결해주세요.',
   EmailSignin: '이메일 전송 중 오류가 발생했습니다.',
   CredentialsSignin: '이메일 또는 비밀번호가 올바르지 않습니다.',
   SessionRequired: '이 페이지에 접근하려면 로그인이 필요합니다.',
