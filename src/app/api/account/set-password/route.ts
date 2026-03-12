@@ -6,7 +6,7 @@ import { getDb } from '@/lib/db'
 
 /**
  * POST /api/account/set-password
- * 소셜 전용 계정에 비밀번호 설정
+ * 소셜 전용 계정에 이메일(ID) + 비밀번호 설정
  * Requirements: 5.8, 6.3
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -16,7 +16,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: '인증이 필요합니다.' }, { status: 401 })
     }
 
-    const { password } = await request.json()
+    const { email, password } = await request.json()
+
+    // 이메일 검증
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+      return NextResponse.json(
+        { error: '유효한 이메일 주소를 입력해주세요.' },
+        { status: 400 }
+      )
+    }
 
     // 비밀번호 최소 6자 검증
     if (!password || typeof password !== 'string' || password.length < 6) {
@@ -29,21 +37,26 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const db = await getDb()
     const userId = new ObjectId(session.user.id)
 
-    // 이미 비밀번호가 설정되어 있는지 확인
-    const user = await db
+    // 이미 비밀번호가 설정된 경우
+    const currentUser = await db
       .collection('users')
       .findOne({ _id: userId }, { projection: { password: 1 } })
 
-    if (!user) {
+    if (currentUser?.password) {
       return NextResponse.json(
-        { error: '사용자를 찾을 수 없습니다.' },
-        { status: 404 }
+        { error: '이미 비밀번호가 설정되어 있습니다.' },
+        { status: 409 }
       )
     }
 
-    if (user.password) {
+    // 이메일 중복 확인 (다른 사용자가 이미 사용 중인지)
+    const emailDuplicate = await db
+      .collection('users')
+      .findOne({ email, _id: { $ne: userId } }, { projection: { _id: 1 } })
+
+    if (emailDuplicate) {
       return NextResponse.json(
-        { error: '이미 비밀번호가 설정되어 있습니다.' },
+        { error: '이미 사용 중인 이메일(ID)입니다.' },
         { status: 409 }
       )
     }
@@ -55,14 +68,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { _id: userId },
       {
         $set: {
+          email,
           password: hashedPassword,
           updatedAt: new Date(),
         },
       }
     )
 
-    return NextResponse.json({ message: '비밀번호가 설정되었습니다.' })
+    // eslint-disable-next-line no-console
+    console.log(`[Account] 이메일/비밀번호 설정 — userId: ${session.user.id}`)
+
+    return NextResponse.json({ message: '이메일과 비밀번호가 설정되었습니다.' })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('[Account] 비밀번호 설정 실패:', error)
     return NextResponse.json(
       { error: '처리 중 오류가 발생했습니다.' },
