@@ -71,6 +71,14 @@ import { POST } from '../set-password/route'
 const providerArb = fc.constantFrom('google', 'kakao', 'naver', 'twitter')
 const providerAccountIdArb = fc.string({ minLength: 5, maxLength: 30 })
 const validPasswordArb = fc.string({ minLength: 6, maxLength: 72 })
+const validEmailArb = fc
+  .tuple(
+    fc
+      .string({ minLength: 3, maxLength: 10, unit: 'grapheme' })
+      .filter((s) => !s.includes('@') && s.trim().length > 0),
+    fc.constantFrom('test.com', 'example.com', 'mail.org')
+  )
+  .map(([local, domain]) => `${local}@${domain}`)
 
 // --- Helpers ---
 function createDeleteRequest(body: Record<string, unknown>): NextRequest {
@@ -313,47 +321,57 @@ describe('Property 6: 마지막 로그인 수단 보호', () => {
 describe('Property 7: 비밀번호 설정 라운드 트립', () => {
   test('POST — 소셜 전용 계정에 비밀번호 설정 성공', async () => {
     await fc.assert(
-      fc.asyncProperty(validPasswordArb, async (password) => {
-        mockSession = { user: { id: '507f1f77bcf86cd799439011' } }
+      fc.asyncProperty(
+        validEmailArb,
+        validPasswordArb,
+        async (email, password) => {
+          mockSession = { user: { id: '507f1f77bcf86cd799439011' } }
 
-        // 비밀번호 미설정 사용자
-        mockUsersFindOne.mockResolvedValue({
-          _id: '507f1f77bcf86cd799439011',
-          password: null,
-        })
-        mockUsersUpdateOne.mockResolvedValue({ modifiedCount: 1 })
+          // 비밀번호 미설정 사용자
+          mockUsersFindOne
+            .mockResolvedValueOnce({
+              _id: '507f1f77bcf86cd799439011',
+              password: null,
+            })
+            .mockResolvedValueOnce(null) // 이메일 중복 없음
+          mockUsersUpdateOne.mockResolvedValue({ modifiedCount: 1 })
 
-        const req = createPostRequest({ password })
-        const res = await POST(req)
-        const data = await res.json()
+          const req = createPostRequest({ email, password })
+          const res = await POST(req)
+          const data = await res.json()
 
-        expect(res.status).toBe(200)
-        expect(data.message).toBe('비밀번호가 설정되었습니다.')
-        expect(mockUsersUpdateOne).toHaveBeenCalled()
-      }),
+          expect(res.status).toBe(200)
+          expect(data.message).toBe('이메일과 비밀번호가 설정되었습니다.')
+          expect(mockUsersUpdateOne).toHaveBeenCalled()
+        }
+      ),
       { numRuns: 100 }
     )
   })
 
   test('POST — 이미 비밀번호가 설정된 경우 409 반환', async () => {
     await fc.assert(
-      fc.asyncProperty(validPasswordArb, async (password) => {
-        mockSession = { user: { id: '507f1f77bcf86cd799439011' } }
+      fc.asyncProperty(
+        validEmailArb,
+        validPasswordArb,
+        async (email, password) => {
+          mockSession = { user: { id: '507f1f77bcf86cd799439011' } }
 
-        // 이미 비밀번호 설정된 사용자
-        mockUsersFindOne.mockResolvedValue({
-          _id: '507f1f77bcf86cd799439011',
-          password: '$2a$12$existinghash',
-        })
+          // 이미 비밀번호 설정된 사용자
+          mockUsersFindOne.mockResolvedValue({
+            _id: '507f1f77bcf86cd799439011',
+            password: '$2a$12$existinghash',
+          })
 
-        const req = createPostRequest({ password })
-        const res = await POST(req)
-        const data = await res.json()
+          const req = createPostRequest({ email, password })
+          const res = await POST(req)
+          const data = await res.json()
 
-        expect(res.status).toBe(409)
-        expect(data.error).toBe('이미 비밀번호가 설정되어 있습니다.')
-        expect(mockUsersUpdateOne).not.toHaveBeenCalled()
-      }),
+          expect(res.status).toBe(409)
+          expect(data.error).toBe('이미 비밀번호가 설정되어 있습니다.')
+          expect(mockUsersUpdateOne).not.toHaveBeenCalled()
+        }
+      ),
       { numRuns: 100 }
     )
   })
@@ -362,16 +380,20 @@ describe('Property 7: 비밀번호 설정 라운드 트립', () => {
     const shortPasswordArb = fc.string({ minLength: 1, maxLength: 5 })
 
     await fc.assert(
-      fc.asyncProperty(shortPasswordArb, async (password) => {
-        mockSession = { user: { id: '507f1f77bcf86cd799439011' } }
+      fc.asyncProperty(
+        validEmailArb,
+        shortPasswordArb,
+        async (email, password) => {
+          mockSession = { user: { id: '507f1f77bcf86cd799439011' } }
 
-        const req = createPostRequest({ password })
-        const res = await POST(req)
-        const data = await res.json()
+          const req = createPostRequest({ email, password })
+          const res = await POST(req)
+          const data = await res.json()
 
-        expect(res.status).toBe(400)
-        expect(data.error).toBe('비밀번호는 최소 6자 이상이어야 합니다.')
-      }),
+          expect(res.status).toBe(400)
+          expect(data.error).toBe('비밀번호는 최소 6자 이상이어야 합니다.')
+        }
+      ),
       { numRuns: 100 }
     )
   })
