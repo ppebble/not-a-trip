@@ -92,6 +92,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return true
       }
 
+      // 수동 Account Linking 보안 검증 (Requirements: 8.2, 8.3, 8.4)
+      // user.id가 존재하면 기존 사용자에 대한 계정 연결 시도 (Account Linking)
+      if (user.id) {
+        // email_verified: false인 프로바이더의 계정 연결 거부
+        const emailVerified =
+          profile?.email_verified ??
+          (profile as Record<string, unknown>)?.verified_email
+        if (emailVerified === false) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[Account Linking] 거부 — email_verified=false, userId: ${user.id}, provider: ${account?.provider}`
+          )
+          return '/auth/error?error=EmailNotVerified'
+        }
+
+        // Account Linking 이벤트 로그 기록
+        // eslint-disable-next-line no-console
+        console.log(
+          `[Account Linking] 연결 — userId: ${user.id}, provider: ${account?.provider}`
+        )
+      }
+
       // Auth.js 기본 보안 정책 준수:
       // 동일 이메일이 다른 프로바이더로 이미 존재하면 OAuthAccountNotLinked 에러 자동 발생
       // allowDangerousEmailAccountLinking을 사용하지 않으므로 자동 Account Linking 차단됨
