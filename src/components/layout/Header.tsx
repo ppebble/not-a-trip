@@ -64,9 +64,26 @@ export function Header() {
             <div className="h-8 w-20 animate-pulse rounded bg-slate-700" />
           ) : isAuthenticated && user ? (
             <div className="flex items-center gap-3">
-              <span className="hidden text-sm text-slate-300 sm:block">
-                {user.name || user.email}
-              </span>
+              <Link
+                href="/settings/account"
+                className="flex items-center gap-2 rounded-lg px-2 py-1 transition hover:bg-slate-700"
+              >
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name || '프로필'}
+                    className="h-7 w-7 rounded-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                    {(user.name || user.email || '?').charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="hidden text-sm text-slate-300 sm:block">
+                  {user.name || user.email}
+                </span>
+              </Link>
               <button
                 onClick={() => logout()}
                 className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm text-white transition hover:bg-slate-600"
@@ -168,6 +185,15 @@ export function Header() {
                 className="block rounded-lg px-3 py-2 text-sm text-orange-400 transition hover:bg-slate-800 hover:text-orange-300"
               >
                 ⚙️ 관리자
+              </Link>
+            )}
+            {isAuthenticated && (
+              <Link
+                href="/settings/account"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+              >
+                👤 계정 설정
               </Link>
             )}
           </div>

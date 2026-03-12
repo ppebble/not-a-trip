@@ -107,6 +107,11 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
 
+  // http/https 이외의 스킴(chrome-extension 등)은 캐싱 불가 — 무시
+  if (!url.protocol.startsWith('http')) {
+    return
+  }
+
   // 지도 타일: Cache First 전략
   if (isTileRequest(url)) {
     event.respondWith(handleTileRequest(event.request))

@@ -26,7 +26,7 @@ export async function GET(): Promise<NextResponse> {
         .toArray(),
       db
         .collection('users')
-        .findOne({ _id: userId }, { projection: { password: 1 } }),
+        .findOne({ _id: userId }, { projection: { password: 1, email: 1 } }),
     ])
 
     const linkedAccounts = accounts.map((account) => ({
@@ -37,6 +37,7 @@ export async function GET(): Promise<NextResponse> {
     return NextResponse.json({
       accounts: linkedAccounts,
       hasPassword: !!user?.password,
+      email: user?.email || null,
     })
   } catch (error) {
     // eslint-disable-next-line no-console
