@@ -84,6 +84,12 @@ export const API_ROUTES = {
     PROGRESS: (id: string) => `/api/users/${id}/progress`,
   },
 
+  // Account
+  ACCOUNT: {
+    LINKED_ACCOUNTS: '/api/account/linked-accounts',
+    SET_PASSWORD: '/api/account/set-password',
+  },
+
   // Admin
   ADMIN: {
     REPORTS: '/api/admin/reports',
