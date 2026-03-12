@@ -114,6 +114,59 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         )
       }
 
+      // 기존 소셜 로그인 사용자 정합성 확인 (Requirements: 9.1, 9.2, 9.3)
+      // 레거시 사용자의 accounts 컬렉션에 연결 정보가 없으면 자동 생성
+      if (user.id && account) {
+        try {
+          const db = await getDb()
+          const userId = new ObjectId(user.id)
+
+          const existingAccount = await db
+            .collection('accounts')
+            .findOne({ userId, provider: account.provider })
+
+          if (!existingAccount) {
+            await db.collection('accounts').insertOne({
+              userId,
+              type: account.type || 'oauth',
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+              access_token: account.access_token,
+              refresh_token: account.refresh_token,
+              expires_at: account.expires_at,
+              token_type: account.token_type,
+              scope: account.scope,
+              id_token: account.id_token,
+            })
+            // eslint-disable-next-line no-console
+            console.log(
+              `[Auth] 레거시 계정 정합성 복구 — userId: ${user.id}, provider: ${account.provider}`
+            )
+          }
+
+          // users 컬렉션의 provider 필드 정합성 유지
+          const dbUser = await db
+            .collection('users')
+            .findOne({ _id: userId }, { projection: { provider: 1 } })
+          if (dbUser && !dbUser.provider) {
+            await db
+              .collection('users')
+              .updateOne(
+                { _id: userId },
+                { $set: { provider: account.provider } }
+              )
+            // eslint-disable-next-line no-console
+            console.log(
+              `[Auth] 레거시 사용자 provider 필드 설정 — userId: ${user.id}, provider: ${account.provider}`
+            )
+          }
+        } catch (error) {
+          // 정합성 복구 실패해도 로그인은 허용
+          // eslint-disable-next-line no-console
+          console.error('[Auth] 레거시 계정 정합성 복구 실패:', error)
+        }
+      }
+
       // Auth.js 기본 보안 정책 준수:
       // 동일 이메일이 다른 프로바이더로 이미 존재하면 OAuthAccountNotLinked 에러 자동 발생
       // allowDangerousEmailAccountLinking을 사용하지 않으므로 자동 Account Linking 차단됨
