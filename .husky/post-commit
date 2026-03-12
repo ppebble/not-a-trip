@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 # 커밋 후 로그 / 알림 등
 
-echo "✅ Commit 완료! 수고했다😎"
+echo "✅ Commit 완료!"
