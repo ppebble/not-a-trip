@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLinkedAccounts } from '@/hooks/useLinkedAccounts'
 
 // 지원하는 OAuth 프로바이더 목록
@@ -199,6 +200,8 @@ function SetPasswordForm({
 // ── 메인 콘텐츠 ─────────────────────────────────────────────
 
 function AccountSettingsContent() {
+  const { data: session } = useSession()
+  const user = session?.user
   const {
     accounts,
     hasPassword,
@@ -234,12 +237,29 @@ function AccountSettingsContent() {
   return (
     <div className="min-h-screen bg-slate-900 px-4 pb-20 pt-20">
       <div className="mx-auto max-w-lg space-y-6">
-        {/* 헤더 */}
-        <div>
-          <h1 className="text-2xl font-bold text-white">계정 설정</h1>
-          <p className="mt-1 text-sm text-slate-400">
-            연결된 소셜 계정을 관리하고 로그인 수단을 설정합니다.
-          </p>
+        {/* 프로필 카드 */}
+        <div className="flex items-center gap-4 rounded-lg bg-slate-800 p-6">
+          {user?.image ? (
+            <Image
+              src={user.image}
+              alt={user.name || '프로필'}
+              width={64}
+              height={64}
+              className="h-16 w-16 rounded-full object-cover"
+              referrerPolicy="no-referrer"
+              unoptimized
+            />
+          ) : (
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl font-bold text-white">
+              {(user?.name || user?.email || '?').charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div>
+            <h1 className="text-xl font-bold text-white">
+              {user?.name || '사용자'}
+            </h1>
+            <p className="text-sm text-slate-400">{user?.email || ''}</p>
+          </div>
         </div>
 
         {/* 에러 메시지 */}
