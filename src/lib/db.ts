@@ -104,6 +104,8 @@ export const COLLECTIONS = {
   ROUTE_COMPLETIONS: 'route_completions',
   // 편의시설 투표 컬렉션 (11-otaku-facilities)
   FACILITY_VOTES: 'facility_votes',
+  // 인증 시스템 계정 연동 컬렉션 (15-oauth-integration)
+  ACCOUNTS: 'accounts',
 } as const
 
 /**
