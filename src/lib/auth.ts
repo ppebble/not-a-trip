@@ -164,4 +164,41 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session
     },
   },
+  events: {
+    // 소셜 계정 최초 가입 시 provider 필드 설정 (Requirements: 7.1, 7.3)
+    async createUser({ user }) {
+      if (!user.id) return
+      try {
+        const db = await getDb()
+        // 최초 가입 시 연결된 account에서 프로바이더 정보 조회
+        const account = await db
+          .collection('accounts')
+          .findOne({ userId: new ObjectId(user.id) })
+        if (account?.provider) {
+          await db
+            .collection('users')
+            .updateOne(
+              { _id: new ObjectId(user.id) },
+              { $set: { provider: account.provider } }
+            )
+          // eslint-disable-next-line no-console
+          console.log(
+            `[Auth] 신규 사용자 provider 설정 — userId: ${user.id}, provider: ${account.provider}`
+          )
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('[Auth] createUser 이벤트 처리 실패:', error)
+      }
+    },
+    // Account Linking 시 기존 프로필 보존 확인 로그 (Requirements: 7.2, 7.3)
+    async linkAccount({ user, account }) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `[Account Linking] 계정 연결 완료 — userId: ${user.id}, provider: ${account.provider}`
+      )
+      // 기존 프로필 정보는 MongoDBAdapter가 변경하지 않으므로 자동 보존됨
+      // provider 필드는 Primary_Account(최초 가입) 프로바이더를 유지
+    },
+  },
 })
