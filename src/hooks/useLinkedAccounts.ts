@@ -15,6 +15,7 @@ interface LinkedAccount {
 interface LinkedAccountsResponse {
   accounts: LinkedAccount[]
   hasPassword: boolean
+  email: string | null
 }
 
 interface UnlinkError {
@@ -75,13 +76,19 @@ export function useLinkedAccounts() {
     },
   })
 
-  // 비밀번호 설정 mutation
+  // 이메일/비밀번호 설정 mutation
   const setPasswordMutation = useMutation({
-    mutationFn: async (password: string) => {
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string
+      password: string
+    }) => {
       const res = await fetch(API_ROUTES.ACCOUNT.SET_PASSWORD, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       })
       if (!res.ok) {
         const data: UnlinkError = await res.json()
@@ -109,8 +116,8 @@ export function useLinkedAccounts() {
 
   // 비밀번호 설정 래퍼
   const setPassword = useCallback(
-    async (password: string) => {
-      await setPasswordMutation.mutateAsync(password)
+    async (email: string, password: string) => {
+      await setPasswordMutation.mutateAsync({ email, password })
     },
     [setPasswordMutation]
   )
@@ -118,6 +125,7 @@ export function useLinkedAccounts() {
   return {
     accounts: data?.accounts ?? [],
     hasPassword: data?.hasPassword ?? false,
+    email: data?.email ?? null,
     isLoading,
     error,
     linkAccount,
