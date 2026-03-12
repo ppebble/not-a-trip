@@ -19,6 +19,8 @@ const errorMessages: Record<string, string> = {
   EmailSignin: '이메일 전송 중 오류가 발생했습니다.',
   CredentialsSignin: '이메일 또는 비밀번호가 올바르지 않습니다.',
   SessionRequired: '이 페이지에 접근하려면 로그인이 필요합니다.',
+  EmailNotVerified:
+    '이메일이 검증되지 않은 소셜 계정은 연결할 수 없습니다. 해당 소셜 서비스에서 이메일 인증을 완료한 후 다시 시도해주세요.',
 }
 
 function ErrorContent() {

@@ -92,6 +92,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return true
       }
 
+      // 수동 Account Linking 보안 검증 (Requirements: 8.2, 8.3, 8.4)
+      // user.id가 존재하면 기존 사용자에 대한 계정 연결 시도 (Account Linking)
+      if (user.id) {
+        // email_verified: false인 프로바이더의 계정 연결 거부
+        const emailVerified =
+          profile?.email_verified ??
+          (profile as Record<string, unknown>)?.verified_email
+        if (emailVerified === false) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[Account Linking] 거부 — email_verified=false, userId: ${user.id}, provider: ${account?.provider}`
+          )
+          return '/auth/error?error=EmailNotVerified'
+        }
+
+        // Account Linking 이벤트 로그 기록
+        // eslint-disable-next-line no-console
+        console.log(
+          `[Account Linking] 연결 — userId: ${user.id}, provider: ${account?.provider}`
+        )
+      }
+
       // Auth.js 기본 보안 정책 준수:
       // 동일 이메일이 다른 프로바이더로 이미 존재하면 OAuthAccountNotLinked 에러 자동 발생
       // allowDangerousEmailAccountLinking을 사용하지 않으므로 자동 Account Linking 차단됨
@@ -140,6 +162,43 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.role = token.role as 'user' | 'admin'
       }
       return session
+    },
+  },
+  events: {
+    // 소셜 계정 최초 가입 시 provider 필드 설정 (Requirements: 7.1, 7.3)
+    async createUser({ user }) {
+      if (!user.id) return
+      try {
+        const db = await getDb()
+        // 최초 가입 시 연결된 account에서 프로바이더 정보 조회
+        const account = await db
+          .collection('accounts')
+          .findOne({ userId: new ObjectId(user.id) })
+        if (account?.provider) {
+          await db
+            .collection('users')
+            .updateOne(
+              { _id: new ObjectId(user.id) },
+              { $set: { provider: account.provider } }
+            )
+          // eslint-disable-next-line no-console
+          console.log(
+            `[Auth] 신규 사용자 provider 설정 — userId: ${user.id}, provider: ${account.provider}`
+          )
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('[Auth] createUser 이벤트 처리 실패:', error)
+      }
+    },
+    // Account Linking 시 기존 프로필 보존 확인 로그 (Requirements: 7.2, 7.3)
+    async linkAccount({ user, account }) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `[Account Linking] 계정 연결 완료 — userId: ${user.id}, provider: ${account.provider}`
+      )
+      // 기존 프로필 정보는 MongoDBAdapter가 변경하지 않으므로 자동 보존됨
+      // provider 필드는 Primary_Account(최초 가입) 프로바이더를 유지
     },
   },
 })
