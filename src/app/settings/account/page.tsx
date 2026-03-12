@@ -102,11 +102,14 @@ function SetPasswordForm({
   onSubmit,
   isPending,
   error,
+  defaultEmail,
 }: {
-  onSubmit: (password: string) => Promise<void>
+  onSubmit: (email: string, password: string) => Promise<void>
   isPending: boolean
   error: string | null
+  defaultEmail: string
 }) {
+  const [email, setEmail] = useState(defaultEmail)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [validationError, setValidationError] = useState<string | null>(null)
@@ -117,6 +120,10 @@ function SetPasswordForm({
     setValidationError(null)
     setSuccess(false)
 
+    if (!email || !email.includes('@')) {
+      setValidationError('유효한 이메일 주소를 입력해주세요.')
+      return
+    }
     if (password.length < 6) {
       setValidationError('비밀번호는 최소 6자 이상이어야 합니다.')
       return
@@ -127,7 +134,7 @@ function SetPasswordForm({
     }
 
     try {
-      await onSubmit(password)
+      await onSubmit(email, password)
       setPassword('')
       setConfirmPassword('')
       setSuccess(true)
@@ -138,6 +145,23 @@ function SetPasswordForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label
+          htmlFor="set-email"
+          className="mb-1 block text-sm font-medium text-slate-300"
+        >
+          이메일 (로그인 ID)
+        </label>
+        <input
+          id="set-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full rounded-lg border border-slate-600 bg-slate-700 px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="example@email.com"
+        />
+      </div>
       <div>
         <label
           htmlFor="new-password"
@@ -182,7 +206,7 @@ function SetPasswordForm({
       )}
       {success && (
         <p className="rounded-lg border border-green-500 bg-green-500/20 p-3 text-sm text-green-400">
-          비밀번호가 설정되었습니다.
+          이메일과 비밀번호가 설정되었습니다.
         </p>
       )}
 
@@ -191,7 +215,7 @@ function SetPasswordForm({
         disabled={isPending}
         className="w-full rounded-lg bg-blue-600 py-3 text-white transition hover:bg-blue-700 disabled:opacity-50"
       >
-        {isPending ? '설정 중...' : '비밀번호 설정'}
+        {isPending ? '설정 중...' : '이메일/비밀번호 설정'}
       </button>
     </form>
   )
@@ -205,6 +229,7 @@ function AccountSettingsContent() {
   const {
     accounts,
     hasPassword,
+    email: accountEmail,
     isLoading,
     linkAccount,
     unlinkAccount,
@@ -342,15 +367,17 @@ function AccountSettingsContent() {
         {!hasPassword && (
           <div className="rounded-lg bg-slate-800 p-6">
             <h2 className="mb-2 text-lg font-semibold text-white">
-              비밀번호 설정
+              이메일/비밀번호 설정
             </h2>
             <p className="mb-4 text-sm text-slate-400">
-              비밀번호를 설정하면 이메일/비밀번호로도 로그인할 수 있습니다.
+              이메일(ID)과 비밀번호를 설정하면 이메일/비밀번호로도 로그인할 수
+              있습니다.
             </p>
             <SetPasswordForm
               onSubmit={setPassword}
               isPending={isSettingPassword}
               error={setPasswordError}
+              defaultEmail={accountEmail || user?.email || ''}
             />
           </div>
         )}
