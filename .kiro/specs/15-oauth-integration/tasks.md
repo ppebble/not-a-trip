@@ -63,7 +63,7 @@ X(Twitter) OAuth 프로바이더 추가, Auth.js 기본 보안 정책 준수(자
     - 오류 페이지에 로그인 페이지 링크 존재 (example: 10.2)
     - _Requirements: 10.1, 10.2, 10.3_
 
-- [ ] 4. Checkpoint — 기본 OAuth 플로우 검증
+- [x] 4. Checkpoint — 기본 OAuth 플로우 검증
   - Ensure all tests pass, ask the user if questions arise.
 
 - [x] 5. 계정 연동 API 엔드포인트 구현

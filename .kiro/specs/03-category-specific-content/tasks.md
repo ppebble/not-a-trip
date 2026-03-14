@@ -73,7 +73,7 @@
     - 중복 URL 방지
     - _Requirements: 3.4_
 
-- [-] 6. 관리자 계정 및 권한 시스템
+- [x] 6. 관리자 계정 및 권한 시스템
   - [x] 6.1 User 모델에 role 필드 추가
     - `src/types/index.ts`에 UserRole 타입 추가 ('user' | 'admin')
     - User 인터페이스에 role 필드 추가
