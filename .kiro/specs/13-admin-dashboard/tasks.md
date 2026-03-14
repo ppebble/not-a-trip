@@ -116,7 +116,7 @@
 - [x] 6. Checkpoint — 상태 신고 API 검증
   - Ensure all tests pass, ask the user if questions arise.
 
-- [-] 7. 정보 보완 검토 UI 구현
+- [x] 7. 정보 보완 검토 UI 구현
   - [x] 7.1 `src/components/admin/AdminSupplementList.tsx` 생성 — 정보 보완 목록 컴포넌트
     - 기존 `AdminReportList` 패턴 동일하게 구현
     - status별 필터 (미승인/승인/반려/전체)
@@ -133,13 +133,13 @@
     - API 호출 성공/실패 시 인라인 메시지 표시
     - _Requirements: 3.2, 3.4, 3.5_
 
-  - [-] 7.3 `src/app/admin/supplements/page.tsx` 생성 — 정보 보완 검토 페이지
+  - [x] 7.3 `src/app/admin/supplements/page.tsx` 생성 — 정보 보완 검토 페이지
     - 기존 `AdminReportsPage` 패턴 동일 (Split-pane 레이아웃)
     - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
     - 좌측: `AdminSupplementList`, 우측: `AdminSupplementReview`
     - _Requirements: 3.1, 3.2_
 
-- [-] 8. 상태 신고 검토 UI 구현
+- [x] 8. 상태 신고 검토 UI 구현
   - [x] 8.1 `src/components/admin/AdminStatusReportList.tsx` 생성 — 상태 신고 목록 컴포넌트
     - 기존 `AdminReportList` 패턴 동일하게 구현
     - reviewStatus별 필터 (전체/대기 중/확인 완료)
@@ -166,14 +166,14 @@
 - [ ] 9. Checkpoint — 검토 UI 검증
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 10. 관리자 대시보드 랜딩 페이지 구현 및 통합
-  - [ ] 10.1 `src/components/admin/AdminDashboardCard.tsx` 생성 — 대시보드 네비게이션 카드 컴포넌트
+- [x] 10. 관리자 대시보드 랜딩 페이지 구현 및 통합
+  - [x] 10.1 `src/components/admin/AdminDashboardCard.tsx` 생성 — 대시보드 네비게이션 카드 컴포넌트
     - props: `title`, `description`, `icon`, `pendingCount`, `href`
     - 카드 클릭 시 해당 관리 페이지로 이동 (Next.js Link)
     - 대기 중 항목 수 배지 표시
     - _Requirements: 1.1, 1.4_
 
-  - [ ] 10.2 `src/app/admin/page.tsx` 생성 — 대시보드 랜딩 페이지
+  - [x] 10.2 `src/app/admin/page.tsx` 생성 — 대시보드 랜딩 페이지
     - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
     - `GET /api/admin/dashboard/summary` 호출하여 대기 항목 수 로드
     - 4개 `AdminDashboardCard` 렌더링:

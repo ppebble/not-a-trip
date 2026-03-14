@@ -86,7 +86,7 @@
   - 아이콘 이미지 렌더링 확인
   - 사용자에게 질문이 있으면 문의
 
-- [ ] 10. 관련 콘텐츠 대표 이미지 기능
+- [x] 10. 관련 콘텐츠 대표 이미지 기능
   - [x] 10.1 RelatedContent 타입에 imageUrl 필드 추가
     - `src/types/spot.ts`의 RelatedContent 인터페이스에 imageUrl 필드 추가
     - _New Requirement_
