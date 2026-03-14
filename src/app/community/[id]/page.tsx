@@ -1,43 +1,61 @@
-'use client'
+import type { Metadata } from 'next'
+import { ObjectId } from 'mongodb'
+import { getCollection, COLLECTIONS } from '@/lib/db'
+import {
+  generatePostMetadata,
+  getDefaultMetadata,
+  type PostSeoData,
+} from '@/lib/seo/metadata'
+import PostDetailClient from '@/components/community/PostDetailClient'
 
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import PostDetail from '@/components/community/PostDetail'
-import CommentSection from '@/components/community/CommentSection'
+/** 경량 projection으로 게시글 SEO 데이터 조회 */
+async function getPostSeoData(id: string): Promise<PostSeoData | null> {
+  try {
+    if (!ObjectId.isValid(id)) return null
 
-/**
- * 게시글 상세 페이지
- * Requirements 5.3: 게시글 전체 내용 표시 및 댓글 허용
- */
-export default function PostDetailPage() {
-  const params = useParams()
-  const postId = params.id as string
+    const collection = await getCollection(COLLECTIONS.POSTS)
+    const post = await collection.findOne(
+      { _id: new ObjectId(id) },
+      {
+        projection: {
+          title: 1,
+          content: 1,
+        },
+      }
+    )
 
-  return (
-    <main className="min-h-screen bg-navy-50">
-      {/* 페이지 타이틀 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-4">
-        <div className="mx-auto max-w-4xl">
-          <div className="flex items-center gap-2">
-            <Link
-              href="/community"
-              className="text-navy-500 hover:text-navy-700"
-            >
-              ← 커뮤니티
-            </Link>
-          </div>
-          <h1 className="mt-2 text-xl font-bold text-navy-800">게시글</h1>
-        </div>
-      </div>
+    if (!post) return null
 
-      {/* 메인 콘텐츠 */}
-      <div className="mx-auto max-w-4xl px-4 py-6">
-        {/* 게시글 상세 */}
-        <PostDetail postId={postId} className="mb-6" />
+    return {
+      id: post._id.toString(),
+      title: (post.title as string) || '',
+      content: (post.content as string) || '',
+    }
+  } catch {
+    return null
+  }
+}
 
-        {/* 댓글 섹션 */}
-        <CommentSection postId={postId} />
-      </div>
-    </main>
-  )
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const post = await getPostSeoData(id)
+
+  if (!post) {
+    return getDefaultMetadata()
+  }
+
+  return generatePostMetadata(post)
+}
+
+export default async function PostDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  await params
+  return <PostDetailClient />
 }
