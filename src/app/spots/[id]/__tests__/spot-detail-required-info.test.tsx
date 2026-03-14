@@ -11,7 +11,7 @@ import {
   NearbyFacility,
   ContentType,
 } from '@/types'
-import SpotDetailPage from '../page'
+import SpotDetailPage from '@/components/spot/SpotDetailClient'
 
 // Cleanup after each test to prevent DOM element accumulation
 afterEach(() => {
