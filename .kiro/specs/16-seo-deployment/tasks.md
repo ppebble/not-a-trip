@@ -55,27 +55,27 @@
     - Server Component에서 `<SpotDetailClient />` import 및 렌더링
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 4. Checkpoint - 스팟 페이지 SEO 검증
+- [x] 4. Checkpoint - 스팟 페이지 SEO 검증
   - Ensure all tests pass, ask the user if questions arise.
   - 스팟 상세 페이지에서 메타데이터와 JSON-LD가 정상 렌더링되는지 확인
 
-- [ ] 5. 코스/커뮤니티 페이지 Server/Client Component 분리 및 SEO 적용
-  - [ ] 5.1 코스 상세 페이지 리팩토링 — Server Component 래퍼 + Client Component 분리
+- [x] 5. 코스/커뮤니티 페이지 Server/Client Component 분리 및 SEO 적용
+  - [x] 5.1 코스 상세 페이지 리팩토링 — Server Component 래퍼 + Client Component 분리
     - 기존 `src/app/routes/[id]/page.tsx`의 UI 로직을 `src/components/route/RouteDetailClient.tsx`로 추출 (`'use client'` 유지)
     - `src/app/routes/[id]/page.tsx`를 Server Component로 변환
     - `generateMetadata` 함수 구현 — MongoDB에서 경량 projection으로 코스 SEO 데이터 조회, `generateRouteMetadata()` 호출
     - Server Component에서 `JsonLd` 컴포넌트로 코스 JSON-LD 렌더링
     - _Requirements: 2.1, 2.2, 2.5, 8.1, 8.2, 8.3, 8.4_
 
-  - [ ] 5.2 커뮤니티 게시글 상세 페이지 리팩토링 — Server Component 래퍼 + Client Component 분리
+  - [x] 5.2 커뮤니티 게시글 상세 페이지 리팩토링 — Server Component 래퍼 + Client Component 분리
     - 기존 `src/app/community/[id]/page.tsx`의 UI 로직을 `src/components/community/PostDetailClient.tsx`로 추출 (`'use client'` 유지)
     - `src/app/community/[id]/page.tsx`를 Server Component로 변환
     - `generateMetadata` 함수 구현 — MongoDB에서 경량 projection으로 게시글 SEO 데이터 조회, `generatePostMetadata()` 호출
     - `ObjectId.isValid()` 검증 후 잘못된 ID 시 기본 메타데이터 반환
     - _Requirements: 2.3, 2.4, 2.5_
 
-- [ ] 6. 정적 페이지 메타데이터 및 WebSite JSON-LD 적용
-  - [ ] 6.1 정적 페이지 메타데이터 설정 — 공통 템플릿 + 페이지별 분리
+- [x] 6. 정적 페이지 메타데이터 및 WebSite JSON-LD 적용
+  - [x] 6.1 정적 페이지 메타데이터 설정 — 공통 템플릿 + 페이지별 분리
     - 루트 `src/app/layout.tsx`의 metadata를 공통 템플릿으로 변경: `title: { template: '%s | Not a Trip', default: 'Not a Trip - 팬들만 아는 특별한 여행지' }`, 공통 description, 공통 openGraph 설정
     - 메인 페이지(`/`): `src/app/(home)/layout.tsx` Route Group 생성 또는 `src/app/page.tsx`와 짝을 이루는 별도 metadata export 방식으로 메인 전용 메타데이터 설정 (루트 layout에 메인 페이지 메타데이터를 하드코딩하면 하위 페이지가 상속받아 원치 않는 메타데이터가 노출될 수 있으므로 분리)
     - 갤러리(`/gallery`): `src/app/gallery/layout.tsx` 생성, metadata export
@@ -85,12 +85,12 @@
     - 참고: `page.tsx`가 `'use client'`여도 같은 디렉토리의 `layout.tsx`에서 metadata를 export할 수 있음
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 6.2 루트 레이아웃에 WebSite JSON-LD 삽입
+  - [x] 6.2 루트 레이아웃에 WebSite JSON-LD 삽입
     - `src/app/layout.tsx`에 `JsonLd` 컴포넌트로 `generateWebSiteJsonLd()` 결과 렌더링
     - SearchAction의 target URL 패턴 설정
     - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 7. Checkpoint - 전체 메타데이터 검증
+- [x] 7. Checkpoint - 전체 메타데이터 검증
   - Ensure all tests pass, ask the user if questions arise.
   - 모든 동적/정적 페이지의 메타데이터, JSON-LD가 정상 동작하는지 확인
 
