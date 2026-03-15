@@ -58,27 +58,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const spotEntries: MetadataRoute.Sitemap = spots.map((spot) => ({
       url: `${baseUrl}/spots/${spot.id}`,
-      lastModified: spot.updatedAt
-        ? new Date(spot.updatedAt as string)
-        : new Date(),
+      lastModified: spot.updatedAt ? new Date(spot.updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     }))
 
     const routeEntries: MetadataRoute.Sitemap = routes.map((route) => ({
       url: `${baseUrl}/routes/${route.id}`,
-      lastModified: route.updatedAt
-        ? new Date(route.updatedAt as string)
-        : new Date(),
+      lastModified: route.updatedAt ? new Date(route.updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
 
     const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
       url: `${baseUrl}/community/${post._id.toString()}`,
-      lastModified: post.updatedAt
-        ? new Date(post.updatedAt as string)
-        : new Date(),
+      lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     }))
