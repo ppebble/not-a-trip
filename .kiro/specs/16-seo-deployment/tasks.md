@@ -94,8 +94,8 @@
   - Ensure all tests pass, ask the user if questions arise.
   - 모든 동적/정적 페이지의 메타데이터, JSON-LD가 정상 동작하는지 확인
 
-- [ ] 8. OG 이미지 동적 생성 구현
-  - [ ] 8.1 OG 이미지 API 라우트 구현
+- [-] 8. OG 이미지 동적 생성 구현
+  - [x] 8.1 OG 이미지 API 라우트 구현
     - `src/app/api/og/route.tsx` 생성
     - `export const runtime = 'nodejs'` 설정
     - `next/og`의 `ImageResponse` API 사용하여 1200×630px 이미지 생성
@@ -109,7 +109,7 @@
     - 폰트 로드 실패 시 시스템 기본 폰트 폴백
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 8.2 각 페이지 메타데이터에 OG 이미지 URL 연결
+  - [x] 8.2 각 페이지 메타데이터에 OG 이미지 URL 연결
     - `generateSpotMetadata()`의 openGraph.images에 `/api/og?type=spot&id=xxx` URL 설정
     - `generateRouteMetadata()`의 openGraph.images에 `/api/og?type=route&id=xxx` URL 설정
     - 정적 페이지 metadata의 openGraph.images에 `/api/og?type=default` URL 설정
