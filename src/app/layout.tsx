@@ -6,6 +6,7 @@ import { Header } from '@/components/layout'
 import { ServiceWorkerRegistrar } from '@/components/mobile/ServiceWorkerRegistrar'
 import { IosPwaPrompt } from '@/components/mobile/IosPwaPrompt'
 import JsonLd from '@/components/seo/JsonLd'
+import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
 import { getBaseUrl } from '@/lib/seo/metadata'
 
@@ -67,6 +68,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body className={`${pretendard.variable} antialiased`}>
+        <GoogleAnalytics />
         <JsonLd data={generateWebSiteJsonLd()} />
         <Providers>
           <Header />
