@@ -94,7 +94,7 @@
   - Ensure all tests pass, ask the user if questions arise.
   - 모든 동적/정적 페이지의 메타데이터, JSON-LD가 정상 동작하는지 확인
 
-- [-] 8. OG 이미지 동적 생성 구현
+- [x] 8. OG 이미지 동적 생성 구현
   - [x] 8.1 OG 이미지 API 라우트 구현
     - `src/app/api/og/route.tsx` 생성
     - `export const runtime = 'nodejs'` 설정
@@ -141,12 +141,12 @@
     - **Property 7: 사이트맵 비공개 경로 제외** — 어떤 엔트리 URL도 /admin, /auth, /test, /api 경로를 포함하지 않음 검증
     - **Validates: Requirements 5.7**
 
-- [ ] 10. Checkpoint - OG 이미지 및 사이트맵 검증
+- [x] 10. Checkpoint - OG 이미지 및 사이트맵 검증
   - Ensure all tests pass, ask the user if questions arise.
   - OG 이미지 API 응답, 사이트맵 XML, robots.txt 정상 동작 확인
 
-- [ ] 11. 배포 설정 및 GA4 연동
-  - [ ] 11.1 GA4 컴포넌트 구현 및 환경 변수 추가
+- [x] 11. 배포 설정 및 GA4 연동
+  - [x] 11.1 GA4 컴포넌트 구현 및 환경 변수 추가
     - `.env.example`에 `NEXT_PUBLIC_GA_MEASUREMENT_ID` 추가 (`NEXT_PUBLIC_BASE_URL`은 Task 1.1에서 이미 추가됨)
     - `src/components/seo/GoogleAnalytics.tsx` 생성
     - `NEXT_PUBLIC_GA_MEASUREMENT_ID` 환경 변수 확인, 미설정 시 `null` 반환
@@ -155,7 +155,7 @@
     - `src/app/layout.tsx`에 `GoogleAnalytics` 컴포넌트 삽입
     - _Requirements: 10.3, 10.4, 12.1, 12.2, 12.3, 12.4, 12.5_
 
-- [ ] 12. Final Checkpoint - 전체 빌드 및 최종 검증
+- [x] 12. Final Checkpoint - 전체 빌드 및 최종 검증
   - Ensure all tests pass, ask the user if questions arise.
   - `npm run build` 성공 확인
   - 모든 페이지의 메타데이터, JSON-LD, OG 이미지, 사이트맵, robots.txt 정상 동작 확인
