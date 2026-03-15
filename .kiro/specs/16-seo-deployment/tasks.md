@@ -115,8 +115,8 @@
     - 정적 페이지 metadata의 openGraph.images에 `/api/og?type=default` URL 설정
     - _Requirements: 1.3, 1.4, 4.1, 4.2_
 
-- [ ] 9. 사이트맵 및 robots.txt 구현
-  - [ ] 9.1 사이트맵 생성 구현
+- [x] 9. 사이트맵 및 robots.txt 구현
+  - [x] 9.1 사이트맵 생성 구현
     - `src/app/sitemap.ts` 생성 — Next.js App Router `sitemap.ts` 규약 사용
     - 정적 페이지 URL 포함 (메인, 갤러리, 코스 목록)
     - MongoDB에서 모든 공개 스팟, 공개 코스, 게시글 ID 조회 (경량 projection)
@@ -126,7 +126,7 @@
     - DB 연결 실패 시 정적 페이지만 포함한 최소 사이트맵 반환
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7_
 
-  - [ ] 9.2 robots.txt 생성 구현
+  - [x] 9.2 robots.txt 생성 구현
     - `src/app/robots.ts` 생성 — Next.js App Router `robots.ts` 규약 사용
     - `/api/*`, `/admin/*`, `/auth/*`, `/test/*` 크롤링 차단
     - 공개 페이지 크롤링 허용
