@@ -45,12 +45,14 @@ export const metadata: Metadata = {
     title: 'Not a Trip - 팬들만 아는 특별한 여행지',
     description:
       '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+    images: [`${baseUrl}/api/og?type=default`],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Not a Trip - 팬들만 아는 특별한 여행지',
     description:
       '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+    images: [`${baseUrl}/api/og?type=default`],
   },
 }
 

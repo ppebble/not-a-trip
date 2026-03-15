@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/community`,
     type: 'website',
     siteName: 'Not a Trip',
+    images: [`${baseUrl}/api/og?type=default`],
   },
 }
 
