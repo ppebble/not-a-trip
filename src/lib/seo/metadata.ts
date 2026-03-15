@@ -40,6 +40,7 @@ export function getBaseUrl(): string {
 /** 기본 메타데이터 생성 (조회 실패 시 폴백용) */
 export function getDefaultMetadata(): Metadata {
   const baseUrl = getBaseUrl()
+  const ogImage = `${baseUrl}/api/og?type=default`
   return {
     title: 'Not a Trip - 팬들만 아는 특별한 여행지',
     description:
@@ -48,6 +49,7 @@ export function getDefaultMetadata(): Metadata {
       title: 'Not a Trip - 팬들만 아는 특별한 여행지',
       description:
         '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+      images: [ogImage],
       url: baseUrl,
       type: 'website',
       siteName: 'Not a Trip',
@@ -57,6 +59,7 @@ export function getDefaultMetadata(): Metadata {
       title: 'Not a Trip - 팬들만 아는 특별한 여행지',
       description:
         '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+      images: [ogImage],
     },
   }
 }
@@ -79,7 +82,7 @@ export function generateSpotMetadata(spot: SpotSeoData): Metadata {
 
   const url = `${baseUrl}/spots/${spot.id}`
   const ogImage = `${baseUrl}/api/og?type=spot&id=${spot.id}`
-  const images = spot.photos.length > 0 ? [spot.photos[0]] : [ogImage]
+  const twitterImages = spot.photos.length > 0 ? [spot.photos[0]] : [ogImage]
 
   return {
     title,
@@ -87,7 +90,7 @@ export function generateSpotMetadata(spot: SpotSeoData): Metadata {
     openGraph: {
       title,
       description,
-      images,
+      images: [ogImage],
       url,
       type: 'website',
       siteName: 'Not a Trip',
@@ -96,7 +99,7 @@ export function generateSpotMetadata(spot: SpotSeoData): Metadata {
       card: 'summary_large_image',
       title,
       description,
-      images,
+      images: twitterImages,
     },
   }
 }
