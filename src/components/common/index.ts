@@ -10,3 +10,7 @@ export {
   GalleryPageSkeleton,
 } from './SkeletonUI'
 export { OptimizedImage } from './OptimizedImage'
+export { SpotLoadingSkeleton } from './SpotLoadingSkeleton'
+export { SpotErrorDisplay } from './SpotErrorDisplay'
+export { EmptySearchOverlay } from './EmptySearchOverlay'
+export { EmptyFilterOverlay } from './EmptyFilterOverlay'

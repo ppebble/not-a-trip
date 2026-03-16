@@ -7,67 +7,16 @@ import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
 import { MapSkeleton } from '@/components/common/SkeletonUI'
+import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
+import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
+import { EmptySearchOverlay } from '@/components/common/EmptySearchOverlay'
+import { EmptyFilterOverlay } from '@/components/common/EmptyFilterOverlay'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   ssr: false,
   loading: () => <MapSkeleton />,
 })
-
-/**
- * 스팟 데이터 로딩 중 표시되는 컴포넌트
- */
-function SpotLoadingSkeleton() {
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-navy-800">
-      <div className="text-center">
-        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-navy-400 border-t-white"></div>
-        <p className="mt-2 text-sm text-navy-200">스팟 데이터 로딩 중...</p>
-      </div>
-    </div>
-  )
-}
-
-/**
- * 스팟 데이터 로딩 에러 표시 컴포넌트
- */
-function SpotErrorDisplay({
-  error,
-  onRetry,
-}: {
-  error: Error
-  onRetry: () => void
-}) {
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-navy-800">
-      <div className="text-center">
-        <div className="mx-auto h-12 w-12 rounded-full bg-red-100 p-3">
-          <svg
-            className="h-6 w-6 text-red-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-            />
-          </svg>
-        </div>
-        <p className="mt-4 text-navy-200">스팟 데이터를 불러올 수 없습니다</p>
-        <p className="mt-1 text-xs text-navy-400">{error.message}</p>
-        <button
-          onClick={onRetry}
-          className="mt-3 rounded bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-500"
-        >
-          다시 시도
-        </button>
-      </div>
-    </div>
-  )
-}
 
 /**
  * 메인 페이지 컴포넌트
@@ -153,67 +102,11 @@ export default function Home() {
 
         {/* 검색 결과 없음 오버레이 (Requirements 3.4) */}
         {isEmptySearchResult && (
-          <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
-            <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-navy-100">
-                <svg
-                  className="h-8 w-8 text-navy-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-              <p className="text-lg font-semibold text-navy-800">
-                검색 결과가 없습니다
-              </p>
-              <p className="mt-2 text-sm text-navy-500">
-                &quot;{searchQuery}&quot;에 해당하는 스팟을 찾을 수 없습니다
-              </p>
-              <p className="mt-1 text-xs text-navy-400">
-                다른 검색어를 입력하거나 필터를 조정해 보세요
-              </p>
-            </div>
-          </div>
+          <EmptySearchOverlay searchQuery={searchQuery} />
         )}
 
         {/* 카테고리 필터 전체 해제 시 빈 상태 오버레이 */}
-        {isEmptyFilterResult && !isEmptySearchResult && (
-          <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
-            <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-navy-100">
-                <svg
-                  className="h-8 w-8 text-navy-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                  />
-                </svg>
-              </div>
-              <p className="text-lg font-semibold text-navy-800">
-                카테고리를 선택해주세요
-              </p>
-              <p className="mt-2 text-sm text-navy-500">
-                표시할 스팟 카테고리가 선택되지 않았습니다
-              </p>
-              <p className="mt-1 text-xs text-navy-400">
-                아래 필터에서 원하는 카테고리를 선택하세요
-              </p>
-            </div>
-          </div>
-        )}
+        {isEmptyFilterResult && !isEmptySearchResult && <EmptyFilterOverlay />}
 
         {/* 필터 영역 (하단 중앙 플로팅 바) */}
         <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
