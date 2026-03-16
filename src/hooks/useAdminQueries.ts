@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 import type {
+  DashboardSummaryResponse,
   SpotReport,
   SpotStatusReport,
   SpotSupplement,
@@ -57,6 +58,8 @@ interface ContentMastersResponse {
 
 export const adminKeys = {
   all: ['admin'] as const,
+  dashboard: () => [...adminKeys.all, 'dashboard'] as const,
+  dashboardSummary: () => [...adminKeys.dashboard(), 'summary'] as const,
   reports: () => [...adminKeys.all, 'reports'] as const,
   reportList: (statusFilter: string, page: number) =>
     [...adminKeys.reports(), { statusFilter, page }] as const,
@@ -79,6 +82,24 @@ export const adminKeys = {
 }
 
 // ── Hooks ───────────────────────────────────────────────────
+
+/**
+ * 관리자 대시보드 요약 데이터 조회 훅
+ * Requirements: 5.1, 5.2
+ */
+export function useAdminDashboardSummary() {
+  return useQuery({
+    queryKey: adminKeys.dashboardSummary(),
+    queryFn: async (): Promise<DashboardSummaryResponse> => {
+      const res = await fetch(API_ROUTES.ADMIN.DASHBOARD_SUMMARY)
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || '대시보드 요약 데이터 조회 실패')
+      }
+      return res.json()
+    },
+  })
+}
 
 /**
  * 관리자 제보 목록 조회 훅
@@ -179,6 +200,14 @@ export function useAdminContentImages(search: string, page: number) {
 }
 
 // ── Invalidation Hooks ──────────────────────────────────────
+
+/** 대시보드 요약 캐시 무효화 */
+export function useInvalidateAdminDashboard() {
+  const qc = useQueryClient()
+  return useCallback(() => {
+    qc.invalidateQueries({ queryKey: adminKeys.dashboard() })
+  }, [qc])
+}
 
 /** 제보 목록 캐시 무효화 */
 export function useInvalidateAdminReports() {
