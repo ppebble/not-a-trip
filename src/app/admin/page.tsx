@@ -1,58 +1,25 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useAdminAuth } from '@/hooks/useAdminAuth'
+import { useAdminDashboardSummary } from '@/hooks/useAdminQueries'
 import { AdminDashboardCard } from '@/components/admin/AdminDashboardCard'
-import type { DashboardSummaryResponse } from '@/types/report'
 
 /**
  * 관리자 대시보드 랜딩 페이지
- * Requirements: 1.1, 1.2, 1.3, 1.4
- * - 관리자 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
- * - GET /api/admin/dashboard/summary 호출하여 대기 항목 수 로드
+ * Requirements: 4.5, 5.1
+ * - useAdminAuth 훅으로 권한 검사 (미인증/비관리자 → 메인 페이지 리다이렉트)
+ * - useAdminDashboardSummary 훅으로 대기 항목 수 로드
  * - 4개 AdminDashboardCard 렌더링
  */
 export default function AdminDashboardPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const [summary, setSummary] = useState<DashboardSummaryResponse | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { isLoading: authLoading, isAuthorized } = useAdminAuth()
+  const {
+    data: summary,
+    isLoading: dataLoading,
+    error,
+  } = useAdminDashboardSummary()
 
-  // 권한 체크
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session?.user || session.user.role !== 'admin') {
-      router.push('/')
-    }
-  }, [status, session, router])
-
-  // 대시보드 요약 데이터 로드
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session?.user || session.user.role !== 'admin') return
-
-    const fetchSummary = async () => {
-      try {
-        setLoading(true)
-        const res = await fetch('/api/admin/dashboard/summary')
-        if (!res.ok) throw new Error('요약 데이터를 불러올 수 없습니다')
-        const data: DashboardSummaryResponse = await res.json()
-        setSummary(data)
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : '서버 오류가 발생했습니다'
-        )
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchSummary()
-  }, [status, session])
-
-  if (status === 'loading') {
+  if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-gray-500">로딩 중...</div>
@@ -60,7 +27,7 @@ export default function AdminDashboardPage() {
     )
   }
 
-  if (!session?.user || session.user.role !== 'admin') {
+  if (!isAuthorized) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -87,11 +54,13 @@ export default function AdminDashboardPage() {
       <div className="mx-auto max-w-4xl px-6 py-8">
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            {error}
+            {error instanceof Error
+              ? error.message
+              : '서버 오류가 발생했습니다'}
           </div>
         )}
 
-        {loading ? (
+        {dataLoading ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {[...Array(4)].map((_, i) => (
               <div
