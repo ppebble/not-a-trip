@@ -23,6 +23,7 @@ export const routeKeys = {
   lists: () => [...routeKeys.all, 'list'] as const,
   list: (filters: Record<string, unknown>) =>
     [...routeKeys.lists(), filters] as const,
+  detail: (routeId: string) => [...routeKeys.all, 'detail', routeId] as const,
   related: (contentName: string) =>
     [...routeKeys.all, 'related', contentName] as const,
 }
