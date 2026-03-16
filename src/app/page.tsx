@@ -7,26 +7,13 @@ import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
 import { MapSkeleton } from '@/components/common/SkeletonUI'
+import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   ssr: false,
   loading: () => <MapSkeleton />,
 })
-
-/**
- * 스팟 데이터 로딩 중 표시되는 컴포넌트
- */
-function SpotLoadingSkeleton() {
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-navy-800">
-      <div className="text-center">
-        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-navy-400 border-t-white"></div>
-        <p className="mt-2 text-sm text-navy-200">스팟 데이터 로딩 중...</p>
-      </div>
-    </div>
-  )
-}
 
 /**
  * 스팟 데이터 로딩 에러 표시 컴포넌트

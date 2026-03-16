@@ -10,3 +10,4 @@ export {
   GalleryPageSkeleton,
 } from './SkeletonUI'
 export { OptimizedImage } from './OptimizedImage'
+export { SpotLoadingSkeleton } from './SpotLoadingSkeleton'
