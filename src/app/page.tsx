@@ -8,53 +8,13 @@ import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
 import { MapSkeleton } from '@/components/common/SkeletonUI'
 import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
+import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   ssr: false,
   loading: () => <MapSkeleton />,
 })
-
-/**
- * 스팟 데이터 로딩 에러 표시 컴포넌트
- */
-function SpotErrorDisplay({
-  error,
-  onRetry,
-}: {
-  error: Error
-  onRetry: () => void
-}) {
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-navy-800">
-      <div className="text-center">
-        <div className="mx-auto h-12 w-12 rounded-full bg-red-100 p-3">
-          <svg
-            className="h-6 w-6 text-red-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-            />
-          </svg>
-        </div>
-        <p className="mt-4 text-navy-200">스팟 데이터를 불러올 수 없습니다</p>
-        <p className="mt-1 text-xs text-navy-400">{error.message}</p>
-        <button
-          onClick={onRetry}
-          className="mt-3 rounded bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-500"
-        >
-          다시 시도
-        </button>
-      </div>
-    </div>
-  )
-}
 
 /**
  * 메인 페이지 컴포넌트
