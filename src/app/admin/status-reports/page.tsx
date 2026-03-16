@@ -1,32 +1,22 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useAdminAuth } from '@/hooks/useAdminAuth'
+import { useInvalidateAdminStatusReports } from '@/hooks/useAdminQueries'
 import { AdminStatusReportList } from '@/components/admin/AdminStatusReportList'
 import { AdminStatusReportReview } from '@/components/admin/AdminStatusReportReview'
-import { useInvalidateAdminStatusReports } from '@/hooks/useAdminQueries'
 import type { SpotStatusReport } from '@/types/report'
 
 /**
  * 관리자 상태 신고 검토 페이지
- * Requirements: 5.1, 5.2, 8.3
+ * Requirements: 4.8, 5.4, 5.5
  */
 export default function AdminStatusReportsPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { isLoading, isAuthorized } = useAdminAuth()
   const [selectedReport, setSelectedReport] = useState<SpotStatusReport | null>(
     null
   )
   const invalidateStatusReports = useInvalidateAdminStatusReports()
-
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session?.user || session.user.role !== 'admin') {
-      router.push('/')
-    }
-  }, [status, session, router])
 
   const handleSelectReport = useCallback((report: SpotStatusReport) => {
     setSelectedReport(report)
@@ -37,7 +27,7 @@ export default function AdminStatusReportsPage() {
     invalidateStatusReports()
   }, [invalidateStatusReports])
 
-  if (status === 'loading') {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-gray-500">로딩 중...</div>
@@ -45,7 +35,7 @@ export default function AdminStatusReportsPage() {
     )
   }
 
-  if (!session?.user || session.user.role !== 'admin') {
+  if (!isAuthorized) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
