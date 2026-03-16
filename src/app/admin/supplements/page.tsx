@@ -1,31 +1,21 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useAdminAuth } from '@/hooks/useAdminAuth'
+import { useInvalidateAdminSupplements } from '@/hooks/useAdminQueries'
 import { AdminSupplementList } from '@/components/admin/AdminSupplementList'
 import { AdminSupplementReview } from '@/components/admin/AdminSupplementReview'
-import { useInvalidateAdminSupplements } from '@/hooks/useAdminQueries'
 import type { SpotSupplement } from '@/types/report'
 
 /**
  * 관리자 정보 보완 검토 페이지
- * Requirements: 3.1, 3.2, 8.3
+ * Requirements: 4.7, 5.4, 5.5
  */
 export default function AdminSupplementsPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { isLoading, isAuthorized } = useAdminAuth()
   const [selectedSupplement, setSelectedSupplement] =
     useState<SpotSupplement | null>(null)
   const invalidateSupplements = useInvalidateAdminSupplements()
-
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session?.user || session.user.role !== 'admin') {
-      router.push('/')
-    }
-  }, [status, session, router])
 
   const handleSelectSupplement = useCallback((supplement: SpotSupplement) => {
     setSelectedSupplement(supplement)
@@ -36,7 +26,7 @@ export default function AdminSupplementsPage() {
     invalidateSupplements()
   }, [invalidateSupplements])
 
-  if (status === 'loading') {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-gray-500">로딩 중...</div>
@@ -44,7 +34,7 @@ export default function AdminSupplementsPage() {
     )
   }
 
-  if (!session?.user || session.user.role !== 'admin') {
+  if (!isAuthorized) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">

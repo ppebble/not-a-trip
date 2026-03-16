@@ -1,30 +1,20 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useAdminAuth } from '@/hooks/useAdminAuth'
+import { useInvalidateAdminReports } from '@/hooks/useAdminQueries'
 import { AdminReportList } from '@/components/admin/AdminReportList'
 import { AdminReportReview } from '@/components/admin/AdminReportReview'
-import { useInvalidateAdminReports } from '@/hooks/useAdminQueries'
 import type { SpotReport } from '@/types/report'
 
 /**
  * 관리자 제보 관리 페이지
- * Requirements: 5.1, 5.2, 8.3
+ * Requirements: 4.6, 5.4, 5.5
  */
 export default function AdminReportsPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { isLoading, isAuthorized } = useAdminAuth()
   const [selectedReport, setSelectedReport] = useState<SpotReport | null>(null)
   const invalidateReports = useInvalidateAdminReports()
-
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session?.user || session.user.role !== 'admin') {
-      router.push('/')
-    }
-  }, [status, session, router])
 
   const handleSelectReport = useCallback((report: SpotReport) => {
     setSelectedReport(report)
@@ -35,7 +25,7 @@ export default function AdminReportsPage() {
     invalidateReports()
   }, [invalidateReports])
 
-  if (status === 'loading') {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-gray-500">로딩 중...</div>
@@ -43,7 +33,7 @@ export default function AdminReportsPage() {
     )
   }
 
-  if (!session?.user || session.user.role !== 'admin') {
+  if (!isAuthorized) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
