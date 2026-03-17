@@ -1,7 +1,10 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useSpotDetail, useNearbyFacilities } from '@/hooks/useSpotDetail'
+import {
+  useSpotDetailSuspense,
+  useNearbyFacilities,
+} from '@/hooks/useSpotDetail'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, CATEGORY_CONFIG, SpotCategory } from '@/types'
 import { useSpotDetailViewModel } from '@/hooks/useSpotDetailViewModel'
@@ -33,6 +36,7 @@ import { SpotStatusIndicator } from '@/components/report/SpotStatusIndicator'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { CategoryIcon } from '@/components/common'
 import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/SkeletonUI'
+import { AsyncBoundary } from '@/components/common/AsyncBoundary'
 import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 import DirectionsButton from '@/components/common/DirectionsButton'
 import { blurPlaceholderProps } from '@/lib/image-utils'
@@ -56,20 +60,34 @@ const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
   ),
 })
 
+/**
+ * SpotDetailClient: AsyncBoundary로 감싸는 최상위 래퍼
+ * pendingFallback으로 스켈레톤, rejectedFallback으로 에러 UI 표시
+ * Requirements: 2.3, 2.5, 2.6
+ */
 export default function SpotDetailClient() {
   const params = useParams()
   const spotId = params.id as string
 
-  const { data: spot, isLoading, error } = useSpotDetail(spotId)
+  return (
+    <AsyncBoundary
+      pendingFallback={<SpotDetailSkeletonUI />}
+      rejectedFallback={({ error, reset }) => (
+        <SpotDetailError error={error} onRetry={reset} />
+      )}
+    >
+      <SpotDetailInner spotId={spotId} />
+    </AsyncBoundary>
+  )
+}
+
+/**
+ * SpotDetailInner: useSuspenseQuery로 데이터를 가져오는 내부 컴포넌트
+ * AsyncBoundary 내부에서만 사용 — 로딩/에러 상태는 경계로 위임
+ */
+function SpotDetailInner({ spotId }: { spotId: string }) {
+  const { data: spot } = useSpotDetailSuspense(spotId)
   const { data: facilities = [] } = useNearbyFacilities(spotId)
-
-  if (isLoading) {
-    return <SpotDetailSkeleton />
-  }
-
-  if (error) {
-    return <SpotDetailError error={error} />
-  }
 
   if (!spot) {
     return <SpotNotFound />
@@ -206,7 +224,6 @@ function SpotDetailContent({
   supplementKey,
   router,
 }: SpotDetailContentProps) {
-  // 카테고리 정보 가져오기
   const categoryConfig = spot.category
     ? CATEGORY_CONFIG[spot.category as SpotCategory]
     : null
@@ -447,15 +464,12 @@ function SpotDetailContent({
   )
 }
 
-function SpotDetailSkeleton() {
-  return <SpotDetailSkeletonUI />
-}
-
 interface SpotDetailErrorProps {
   error: Error
+  onRetry?: () => void
 }
 
-function SpotDetailError({ error }: SpotDetailErrorProps) {
+function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
@@ -467,12 +481,22 @@ function SpotDetailError({ error }: SpotDetailErrorProps) {
             오류가 발생했습니다
           </h2>
           <p className="mb-4 text-gray-600">{error.message}</p>
-          <Link
-            href="/"
-            className="inline-flex items-center rounded-md bg-navy-600 px-4 py-2 text-white transition-colors hover:bg-navy-700"
-          >
-            메인으로 돌아가기
-          </Link>
+          <div className="flex justify-center gap-3">
+            {onRetry && (
+              <button
+                onClick={onRetry}
+                className="inline-flex items-center rounded-md bg-navy-600 px-4 py-2 text-white transition-colors hover:bg-navy-700"
+              >
+                다시 시도
+              </button>
+            )}
+            <Link
+              href="/"
+              className="inline-flex items-center rounded-md border border-navy-300 px-4 py-2 text-navy-600 transition-colors hover:bg-navy-50"
+            >
+              메인으로 돌아가기
+            </Link>
+          </div>
         </div>
       </div>
     </div>
