@@ -135,6 +135,9 @@ jest.mock('@/hooks/useSpotDetail', () => ({
     isLoading: false,
     error: null,
   }),
+  useSpotDetailSuspense: () => ({
+    data: mockSpotData,
+  }),
   useNearbyFacilities: () => ({
     data: [],
     isLoading: false,
@@ -238,6 +241,38 @@ jest.mock('@/components/spot/SpotCommunitySection', () => {
     return <div data-testid="spot-community-section">커뮤니티 섹션</div>
   }
 })
+
+/**
+ * Mock useSpotDetailViewModel hook
+ */
+jest.mock('@/hooks/useSpotDetailViewModel', () => ({
+  useSpotDetailViewModel: () => ({
+    hasEditPermission: false,
+    hasDeletePermission: false,
+    isDeleting: false,
+    handleDelete: jest.fn(),
+    showSupplementForm: false,
+    handleSupplementClick: jest.fn(),
+    handleSupplementSuccess: jest.fn(),
+    closeSupplementForm: jest.fn(),
+    supplementKey: 0,
+    showStatusReportForm: false,
+    handleStatusReportClick: jest.fn(),
+    closeStatusReportForm: jest.fn(),
+    showLoginModal: false,
+    loginModalContext: 'supplement' as const,
+  }),
+}))
+
+/**
+ * Mock useAuth hook
+ */
+jest.mock('@/hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: null,
+    isAuthenticated: false,
+  }),
+}))
 
 describe('SpotDetail Required Information Property Tests', () => {
   let queryClient: QueryClient
