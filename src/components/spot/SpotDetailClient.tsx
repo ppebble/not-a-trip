@@ -1,13 +1,10 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
 import { useSpotDetail, useNearbyFacilities } from '@/hooks/useSpotDetail'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, CATEGORY_CONFIG, SpotCategory } from '@/types'
-import { useAuth } from '@/hooks/useAuth'
-import { useQueryClient } from '@tanstack/react-query'
-import { spotKeys } from '@/hooks/useSpots'
+import { useSpotDetailViewModel } from '@/hooks/useSpotDetailViewModel'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -40,6 +37,11 @@ import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 import DirectionsButton from '@/components/common/DirectionsButton'
 import { blurPlaceholderProps } from '@/lib/image-utils'
 import { RelatedRoutes } from '@/components/route/RelatedRoutes'
+import {
+  ArrowLeftIcon,
+  MapPinIcon,
+  AlertTriangleIcon,
+} from '@/components/icons'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -56,54 +58,10 @@ const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
 
 export default function SpotDetailClient() {
   const params = useParams()
-  const router = useRouter()
-  const queryClient = useQueryClient()
   const spotId = params.id as string
-  const { user } = useAuth()
-  const [isDeleting, setIsDeleting] = useState(false)
 
   const { data: spot, isLoading, error } = useSpotDetail(spotId)
   const { data: facilities = [] } = useNearbyFacilities(spotId)
-
-  // 수정/삭제 권한 확인: 관리자이거나 본인 스팟인 경우
-  const isAdmin = user?.role === 'admin'
-  const isOwner = spot?.authorId && user?.id && spot.authorId === user.id
-  const hasEditPermission = isAdmin || isOwner
-  const hasDeletePermission = isAdmin || isOwner
-
-  // 스팟 삭제 핸들러
-  const handleDelete = async () => {
-    if (
-      !confirm(
-        '정말로 이 스팟을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.'
-      )
-    ) {
-      return
-    }
-
-    setIsDeleting(true)
-    try {
-      const response = await fetch(`/api/spots/${spotId}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        alert(data.error || '스팟 삭제에 실패했습니다')
-        return
-      }
-
-      // 캐시 무효화
-      queryClient.invalidateQueries({ queryKey: spotKeys.all })
-
-      // 메인 페이지로 이동 (Requirements 6.5)
-      router.push('/')
-    } catch {
-      alert('스팟 삭제에 실패했습니다. 다시 시도해주세요.')
-    } finally {
-      setIsDeleting(false)
-    }
-  }
 
   if (isLoading) {
     return <SpotDetailSkeleton />
@@ -117,6 +75,39 @@ export default function SpotDetailClient() {
     return <SpotNotFound />
   }
 
+  return <SpotDetailPage spot={spot} spotId={spotId} facilities={facilities} />
+}
+
+interface SpotDetailPageProps {
+  spot: SpotDetailData
+  spotId: string
+  facilities: NearbyFacility[]
+}
+
+/**
+ * SpotDetailPage: spot 데이터가 확정된 후 ViewModel을 사용하는 래퍼
+ * useSpotDetailViewModel은 authorId가 필요하므로 spot 로드 후 호출
+ */
+function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
+  const {
+    hasEditPermission,
+    hasDeletePermission,
+    isDeleting,
+    handleDelete,
+    showSupplementForm,
+    handleSupplementClick,
+    handleSupplementSuccess,
+    closeSupplementForm,
+    showStatusReportForm,
+    handleStatusReportClick,
+    closeStatusReportForm,
+    showLoginModal,
+    loginModalContext,
+    supplementKey,
+  } = useSpotDetailViewModel({ spotId, authorId: spot.authorId })
+
+  const router = useRouter()
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* 페이지 타이틀 */}
@@ -128,19 +119,7 @@ export default function SpotDetailClient() {
                 href="/"
                 className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
+                <ArrowLeftIcon size="md" />
                 <span>지도로 돌아가기</span>
               </Link>
               <h1 className="mt-2 text-xl font-bold text-navy-800">
@@ -176,7 +155,21 @@ export default function SpotDetailClient() {
 
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <SpotDetailContent spot={spot} facilities={facilities} />
+        <SpotDetailContent
+          spot={spot}
+          facilities={facilities}
+          showSupplementForm={showSupplementForm}
+          handleSupplementClick={handleSupplementClick}
+          handleSupplementSuccess={handleSupplementSuccess}
+          closeSupplementForm={closeSupplementForm}
+          showStatusReportForm={showStatusReportForm}
+          handleStatusReportClick={handleStatusReportClick}
+          closeStatusReportForm={closeStatusReportForm}
+          showLoginModal={showLoginModal}
+          loginModalContext={loginModalContext}
+          supplementKey={supplementKey}
+          router={router}
+        />
       </main>
     </div>
   )
@@ -185,58 +178,49 @@ export default function SpotDetailClient() {
 interface SpotDetailContentProps {
   spot: SpotDetailData
   facilities: NearbyFacility[]
+  showSupplementForm: boolean
+  handleSupplementClick: () => void
+  handleSupplementSuccess: () => void
+  closeSupplementForm: () => void
+  showStatusReportForm: boolean
+  handleStatusReportClick: () => void
+  closeStatusReportForm: () => void
+  showLoginModal: boolean
+  loginModalContext: 'supplement' | 'status'
+  supplementKey: number
+  router: ReturnType<typeof useRouter>
 }
 
-function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
-  const { isAuthenticated } = useAuth()
-  const router = useRouter()
-  const [showSupplementForm, setShowSupplementForm] = useState(false)
-  const [showStatusReportForm, setShowStatusReportForm] = useState(false)
-  const [showLoginModal, setShowLoginModal] = useState(false)
-  const [loginModalContext, setLoginModalContext] = useState<
-    'supplement' | 'status'
-  >('supplement')
-  const [supplementKey, setSupplementKey] = useState(0)
-
-  // 카테고리 정보 가져오기 (Requirements 2.3)
+function SpotDetailContent({
+  spot,
+  facilities,
+  showSupplementForm,
+  handleSupplementClick,
+  handleSupplementSuccess,
+  closeSupplementForm,
+  showStatusReportForm,
+  handleStatusReportClick,
+  closeStatusReportForm,
+  showLoginModal,
+  loginModalContext,
+  supplementKey,
+  router,
+}: SpotDetailContentProps) {
+  // 카테고리 정보 가져오기
   const categoryConfig = spot.category
     ? CATEGORY_CONFIG[spot.category as SpotCategory]
     : null
 
-  const handleSupplementClick = () => {
-    if (!isAuthenticated) {
-      setLoginModalContext('supplement')
-      setShowLoginModal(true)
-      return
-    }
-    setShowSupplementForm((prev) => !prev)
-  }
-
-  const handleStatusReportClick = () => {
-    if (!isAuthenticated) {
-      setLoginModalContext('status')
-      setShowLoginModal(true)
-      return
-    }
-    setShowStatusReportForm((prev) => !prev)
-  }
-
-  const handleSupplementSuccess = () => {
-    setShowSupplementForm(false)
-    // ContributorList 리프레시를 위해 key 변경
-    setSupplementKey((prev) => prev + 1)
-  }
-
   return (
     <div className="space-y-8">
-      {/* 모바일: SwipeableGallery (edge-to-edge, 패딩 없음) - Requirements 2.1, 2.2 */}
+      {/* 모바일: SwipeableGallery (edge-to-edge, 패딩 없음) */}
       {spot.photos && spot.photos.length > 0 && (
         <div className="-mx-4 -mt-8 sm:-mx-6 md:hidden">
           <SwipeableGallery images={spot.photos} />
         </div>
       )}
 
-      {/* Spot Header - 모바일 최적화 (Requirements 2.1) */}
+      {/* Spot Header - 모바일 최적화 */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-4 md:p-6">
           {/* 카테고리 배지 */}
@@ -261,14 +245,14 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
             {spot.name}
           </h1>
 
-          {/* 스팟 상태 표시 - Requirements 4.4 */}
+          {/* 스팟 상태 표시 */}
           {spot.spotStatus && spot.spotStatus !== 'normal' && (
             <div className="mb-2 md:mb-3">
               <SpotStatusIndicator status={spot.spotStatus} size="md" />
             </div>
           )}
 
-          {/* 최초 제보자 표시 - Requirements 2.1 */}
+          {/* 최초 제보자 표시 */}
           {spot.firstReporterId && spot.firstReporterName && (
             <p className="mb-2 text-sm text-navy-500 md:mb-3">
               📍 최초 제보:{' '}
@@ -281,28 +265,12 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
             </p>
           )}
 
-          {/* 주소 + 길찾기 버튼 (Requirements 2.3) */}
+          {/* 주소 + 길찾기 버튼 */}
           <div className="mb-3 flex items-center justify-between gap-2 md:mb-4">
             <div className="flex min-w-0 items-center text-gray-600">
-              <svg
-                className="mr-1.5 h-4 w-4 flex-shrink-0 md:mr-2 md:h-5 md:w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+              <span className="mr-1.5 flex-shrink-0 md:mr-2">
+                <MapPinIcon size="md" />
+              </span>
               <span className="truncate text-sm md:text-base">
                 {spot.address}
               </span>
@@ -348,7 +316,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         )}
       </div>
 
-      {/* Category-specific Content Section - 카테고리별 콘텐츠 (Requirements 1.1, 1.2) */}
+      {/* Category-specific Content Section */}
       <SpotContentSection
         spotId={spot.id}
         category={(spot.category as SpotCategory) || 'other'}
@@ -377,7 +345,6 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
 
       {/* Nearby Facilities and Check-in Section - 2 column layout */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* Nearby Facilities */}
         <NearbyFacilities
           facilities={facilities}
           spotId={spot.id}
@@ -387,8 +354,6 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
               : undefined
           }
         />
-
-        {/* Check-in Section (기존 Community Section 대체) */}
         <SpotCheckInSection
           spotId={spot.id}
           spotName={spot.name}
@@ -396,7 +361,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         />
       </div>
 
-      {/* 정보 보완 섹션 - Requirements 3.1, 3.3 */}
+      {/* 정보 보완 섹션 */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
@@ -416,7 +381,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
               <SupplementForm
                 spotId={spot.id}
                 onSuccess={handleSupplementSuccess}
-                onCancel={() => setShowSupplementForm(false)}
+                onCancel={closeSupplementForm}
               />
             </div>
           )}
@@ -425,7 +390,7 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         </div>
       </div>
 
-      {/* 스팟 상태 신고 섹션 - Requirements 4.1, 4.4 */}
+      {/* 스팟 상태 신고 섹션 */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
@@ -440,7 +405,6 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
             </button>
           </div>
 
-          {/* 현재 상태 표시 */}
           {spot.spotStatus && (
             <div className="mb-3 flex items-center gap-2">
               <span className="text-sm text-gray-600">현재 상태:</span>
@@ -452,8 +416,8 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
             <div className="rounded-lg border border-amber-100 p-4">
               <StatusReportForm
                 spotId={spot.id}
-                onSuccess={() => setShowStatusReportForm(false)}
-                onCancel={() => setShowStatusReportForm(false)}
+                onSuccess={closeStatusReportForm}
+                onCancel={closeStatusReportForm}
               />
             </div>
           )}
@@ -472,12 +436,12 @@ function SpotDetailContent({ spot, facilities }: SpotDetailContentProps) {
         onConfirm={() => router.push('/auth/login')}
       />
 
-      {/* 관련 순례 코스 - Requirements 4.3 */}
+      {/* 관련 순례 코스 */}
       {spot.relatedContent && spot.relatedContent.length > 0 && (
         <RelatedRoutes contentNames={spot.relatedContent.map((c) => c.name)} />
       )}
 
-      {/* Related Content - 맨 아래 (Requirements 3.1, 3.4) */}
+      {/* Related Content - 맨 아래 */}
       <RelatedContentSection contents={spot.relatedContent || []} />
     </div>
   )
@@ -496,19 +460,9 @@ function SpotDetailError({ error }: SpotDetailErrorProps) {
     <div className="flex min-h-screen items-center justify-center bg-slate-50">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <div className="text-center">
-          <svg
-            className="mx-auto mb-4 h-16 w-16 text-red-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-            />
-          </svg>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-red-500">
+            <AlertTriangleIcon size={64} />
+          </div>
           <h2 className="mb-2 text-xl font-bold text-gray-900">
             오류가 발생했습니다
           </h2>
@@ -530,25 +484,9 @@ function SpotNotFound() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <div className="text-center">
-          <svg
-            className="mx-auto mb-4 h-16 w-16 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-gray-400">
+            <MapPinIcon size={64} />
+          </div>
           <h2 className="mb-2 text-xl font-bold text-gray-900">
             스팟을 찾을 수 없습니다
           </h2>
