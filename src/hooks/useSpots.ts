@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { SpotCategory, RelatedContent, ExternalLink } from '@/types'
 import type { SpotStatus } from '@/types/report'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
@@ -134,6 +134,35 @@ export function useSpots(
       return data.spots
     },
     enabled,
+  })
+}
+
+/**
+ * Suspense 모드로 스팟 목록을 가져오는 훅
+ * AsyncBoundary 내부에서 사용 — 로딩/에러 상태는 경계로 위임
+ * @param categories - 필터링할 카테고리 배열 (선택사항)
+ * @param search - 검색어 (선택사항)
+ * Requirements: 2.1, 2.5
+ */
+export function useSpotsSuspense(categories?: SpotCategory[], search?: string) {
+  return useSuspenseQuery({
+    queryKey: spotKeys.list({ categories, search }),
+    queryFn: async (): Promise<SpotPin[]> => {
+      const url = buildUrl(API_ROUTES.SPOTS.BASE, {
+        category: categories?.length ? categories.join(',') : undefined,
+        search: search || undefined,
+      })
+      const response = await fetch(url)
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch spots: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const data: SpotsResponse = await response.json()
+      return data.spots
+    },
   })
 }
 
