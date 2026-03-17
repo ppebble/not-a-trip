@@ -24,11 +24,13 @@ interface UseSpotDetailViewModelReturn {
   showSupplementForm: boolean
   handleSupplementClick: () => void
   handleSupplementSuccess: () => void
+  closeSupplementForm: () => void
   supplementKey: number
 
   // 상태 신고 폼
   showStatusReportForm: boolean
   handleStatusReportClick: () => void
+  closeStatusReportForm: () => void
 
   // 로그인 모달
   showLoginModal: boolean
@@ -115,6 +117,16 @@ export function useSpotDetailViewModel({
     setSupplementKey((prev) => prev + 1)
   }, [])
 
+  // 정보 보완 폼 닫기
+  const closeSupplementForm = useCallback(() => {
+    setShowSupplementForm(false)
+  }, [])
+
+  // 상태 신고 폼 닫기
+  const closeStatusReportForm = useCallback(() => {
+    setShowStatusReportForm(false)
+  }, [])
+
   // 상태 신고 클릭 핸들러
   const handleStatusReportClick = useCallback(() => {
     if (!isAuthenticated) {
@@ -133,9 +145,11 @@ export function useSpotDetailViewModel({
     showSupplementForm,
     handleSupplementClick,
     handleSupplementSuccess,
+    closeSupplementForm,
     supplementKey,
     showStatusReportForm,
     handleStatusReportClick,
+    closeStatusReportForm,
     showLoginModal,
     loginModalContext,
   }
