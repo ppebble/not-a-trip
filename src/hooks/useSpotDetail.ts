@@ -1,5 +1,9 @@
 import { useCallback } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useSuspenseQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { spotKeys, SpotDetailData } from './useSpots'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 import { NearbyFacility, FacilityType } from '@/types'
@@ -74,6 +78,31 @@ export function useNearbyFacilities(
     enabled: !!spotId,
     staleTime: 15 * 60 * 1000,
     gcTime: 20 * 60 * 1000,
+  })
+}
+
+/**
+ * Suspense 모드 스팟 상세 훅
+ * AsyncBoundary 내부에서 사용 — 로딩/에러 상태를 Suspense/ErrorBoundary로 위임
+ * Requirements: 2.3, 2.5
+ */
+export function useSpotDetailSuspense(spotId: string) {
+  return useSuspenseQuery({
+    queryKey: spotKeys.detail(spotId),
+    queryFn: async (): Promise<SpotDetailData> => {
+      const response = await fetch(API_ROUTES.SPOTS.DETAIL(spotId))
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch spot detail: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const data: SpotDetailData = await response.json()
+      return data
+    },
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   })
 }
 
