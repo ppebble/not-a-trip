@@ -122,32 +122,32 @@ export interface CategoryConfig {
 export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
   animation: {
     icon: '/icons/categories/animation.webp',
-    color: '#FF6B6B',
+    color: '#E04848',
     label: '애니메이션',
   },
   sports: {
     icon: '/icons/categories/sports.webp',
-    color: '#4ECDC4',
+    color: '#2BA89E',
     label: '스포츠',
   },
   movie_drama: {
     icon: '/icons/categories/movie_drama.webp',
-    color: '#45B7D1',
+    color: '#2E8FAB',
     label: '영화/드라마',
   },
   music: {
     icon: '/icons/categories/music.webp',
-    color: '#96CEB4',
+    color: '#5A9E7C',
     label: '음악/콘서트',
   },
   game: {
     icon: '/icons/categories/game.webp',
-    color: '#DDA0DD',
+    color: '#9B6B9B',
     label: '게임',
   },
   other: {
     icon: '/icons/categories/other.webp',
-    color: '#95A5A6',
+    color: '#6B7B8A',
     label: '기타',
   },
 }
