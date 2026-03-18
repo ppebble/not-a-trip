@@ -28,16 +28,16 @@ export function useAdminAuth(): UseAdminAuthReturn {
   const router = useRouter()
 
   const isLoading = status === 'loading'
-  const isAuthorized =
-    !isLoading && !!session?.user && session.user.role === 'admin'
+  const isAdmin = !!session?.user && session.user.role === 'admin'
 
-  // 비관리자 리다이렉트
+  // 비관리자 리다이렉트 — 리다이렉트 중에는 isAuthorized=false 유지
+  // 사용하는 쪽에서 !isAuthorized일 때 return null로 빈 화면 유지
   useEffect(() => {
     if (isLoading) return
-    if (!session?.user || session.user.role !== 'admin') {
+    if (!isAdmin) {
       router.push('/')
     }
-  }, [isLoading, session, router])
+  }, [isLoading, isAdmin, router])
 
-  return { isLoading, isAuthorized, session }
+  return { isLoading, isAuthorized: isAdmin, session }
 }

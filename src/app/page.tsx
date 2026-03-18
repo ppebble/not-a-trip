@@ -19,6 +19,15 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   loading: () => <MapSkeleton />,
 })
 
+/** Home 에러 fallback — 컴포넌트 외부 정의로 참조 안정성 확보 */
+const HomeErrorFallback = ({
+  error,
+  reset,
+}: {
+  error: Error
+  reset: () => void
+}) => <SpotErrorDisplay error={error} onRetry={reset} />
+
 /**
  * 메인 페이지 컴포넌트
  * Requirements 1.1, 1.4, 2.1, 2.2를 만족하는 지도 기반 메인 페이지
@@ -31,9 +40,7 @@ export default function Home() {
     <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-navy-900">
       <AsyncBoundary
         pendingFallback={<SpotLoadingSkeleton />}
-        rejectedFallback={({ error, reset }) => (
-          <SpotErrorDisplay error={error} onRetry={reset} />
-        )}
+        rejectedFallback={HomeErrorFallback}
       >
         <HomeContent />
       </AsyncBoundary>
