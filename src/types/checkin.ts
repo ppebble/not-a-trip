@@ -146,7 +146,7 @@ export const DEFAULT_BADGE_DEFINITIONS: Omit<Badge, 'id' | 'createdAt'>[] = [
     code: DEFAULT_BADGES.FIRST_STEP,
     name: '첫 발자국',
     description: '첫 인증샷을 업로드했습니다',
-    iconUrl: '/icons/badges/first-step.svg',
+    iconUrl: '/icons/badges/first-step.webp',
     type: 'achievement',
     condition: {
       type: 'first_action',
@@ -156,7 +156,7 @@ export const DEFAULT_BADGE_DEFINITIONS: Omit<Badge, 'id' | 'createdAt'>[] = [
     code: DEFAULT_BADGES.EXPLORER_10,
     name: '탐험가',
     description: '10개의 스팟을 인증했습니다',
-    iconUrl: '/icons/badges/explorer-10.svg',
+    iconUrl: '/icons/badges/explorer-10.webp',
     type: 'achievement',
     condition: {
       type: 'checkin_count',
@@ -167,7 +167,7 @@ export const DEFAULT_BADGE_DEFINITIONS: Omit<Badge, 'id' | 'createdAt'>[] = [
     code: DEFAULT_BADGES.EXPLORER_50,
     name: '베테랑 탐험가',
     description: '50개의 스팟을 인증했습니다',
-    iconUrl: '/icons/badges/explorer-50.svg',
+    iconUrl: '/icons/badges/explorer-50.webp',
     type: 'achievement',
     condition: {
       type: 'checkin_count',
@@ -192,7 +192,7 @@ export function createContentBadge(
     code,
     name: `${contentName} ${isComplete ? '정복자' : '탐험가'}`,
     description: `${contentName}의 성지를 ${isComplete ? '모두' : '50%'} 인증했습니다`,
-    iconUrl: `/icons/badges/content-${isComplete ? 'complete' : 'half'}.svg`,
+    iconUrl: `/icons/badges/content-${isComplete ? 'complete' : 'half'}.webp`,
     type: 'content',
     contentName,
     condition: {

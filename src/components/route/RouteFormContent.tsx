@@ -995,15 +995,15 @@ interface GeocodeSuggestion {
 /** Nominatim type/class → 아이콘 경로 매핑 */
 function getPlaceIconPath(type: string, placeClass: string): string {
   if (placeClass === 'railway' && type === 'station')
-    return '/icons/start-point/station.svg'
+    return '/icons/start-point/station.webp'
   if (placeClass === 'railway' && (type === 'stop' || type === 'halt'))
-    return '/icons/start-point/stop.svg'
+    return '/icons/start-point/stop.webp'
   if (
     placeClass === 'highway' &&
     (type === 'bus_stop' || type === 'bus_station')
   )
-    return '/icons/start-point/bus.svg'
+    return '/icons/start-point/bus.webp'
   if (placeClass === 'tourism' || placeClass === 'amenity')
-    return '/icons/start-point/building.svg'
-  return '/icons/start-point/default.svg'
+    return '/icons/start-point/building.webp'
+  return '/icons/start-point/default.webp'
 }

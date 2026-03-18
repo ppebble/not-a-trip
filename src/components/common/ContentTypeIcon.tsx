@@ -8,30 +8,30 @@ import { ContentType, SpotCategory, ExternalLinkType } from '@/types'
 // ============================================
 
 const CONTENT_TYPE_ICON_PATH: Record<ContentType, string> = {
-  anime: '/icons/content-types/anime.svg',
-  movie: '/icons/content-types/movie.svg',
-  drama: '/icons/content-types/drama.svg',
-  sports_team: '/icons/content-types/sports_team.svg',
-  artist: '/icons/content-types/artist.svg',
-  game: '/icons/content-types/game.svg',
-  other: '/icons/content-types/other.svg',
+  anime: '/icons/content-types/anime.webp',
+  movie: '/icons/content-types/movie.webp',
+  drama: '/icons/content-types/drama.webp',
+  sports_team: '/icons/content-types/sports_team.webp',
+  artist: '/icons/content-types/artist.webp',
+  game: '/icons/content-types/game.webp',
+  other: '/icons/content-types/other.webp',
 }
 
 const CATEGORY_ICON_PATH: Record<SpotCategory, string> = {
-  animation: '/icons/categories/animation.svg',
-  sports: '/icons/categories/sports.svg',
-  movie_drama: '/icons/categories/movie_drama.svg',
-  music: '/icons/categories/music.svg',
-  game: '/icons/categories/game.svg',
-  other: '/icons/categories/other.svg',
+  animation: '/icons/categories/animation.webp',
+  sports: '/icons/categories/sports.webp',
+  movie_drama: '/icons/categories/movie_drama.webp',
+  music: '/icons/categories/music.webp',
+  game: '/icons/categories/game.webp',
+  other: '/icons/categories/other.webp',
 }
 
 const LINK_TYPE_ICON_PATH: Record<ExternalLinkType, string> = {
-  official: '/icons/link-types/official.svg',
-  ticket: '/icons/link-types/ticket.svg',
-  schedule: '/icons/link-types/schedule.svg',
-  sns: '/icons/link-types/sns.svg',
-  other: '/icons/link-types/other.svg',
+  official: '/icons/link-types/official.webp',
+  ticket: '/icons/link-types/ticket.webp',
+  schedule: '/icons/link-types/schedule.webp',
+  sns: '/icons/link-types/sns.webp',
+  other: '/icons/link-types/other.webp',
 }
 
 // ============================================
