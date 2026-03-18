@@ -78,7 +78,7 @@ export interface ContentTypeConfig {
 export const CONTENT_TYPE_CONFIG: Record<ContentType, ContentTypeConfig> = {
   anime: {
     icon: '/icons/content-types/anime.webp',
-    color: '#FF6B6B',
+    color: '#5B6ABF',
     label: '애니메이션',
   },
   movie: {
@@ -122,7 +122,7 @@ export interface CategoryConfig {
 export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
   animation: {
     icon: '/icons/categories/animation.webp',
-    color: '#E04848',
+    color: '#5B6ABF',
     label: '애니메이션',
   },
   sports: {
