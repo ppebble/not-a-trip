@@ -65,6 +65,16 @@ const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
  * pendingFallback으로 스켈레톤, rejectedFallback으로 에러 UI 표시
  * Requirements: 2.3, 2.5, 2.6
  */
+
+/** SpotDetail 에러 fallback — 컴포넌트 외부 정의로 참조 안정성 확보 */
+const SpotDetailErrorFallback = ({
+  error,
+  reset,
+}: {
+  error: Error
+  reset: () => void
+}) => <SpotDetailError error={error} onRetry={reset} />
+
 export default function SpotDetailClient() {
   const params = useParams()
   const spotId = params.id as string
@@ -72,9 +82,7 @@ export default function SpotDetailClient() {
   return (
     <AsyncBoundary
       pendingFallback={<SpotDetailSkeletonUI />}
-      rejectedFallback={({ error, reset }) => (
-        <SpotDetailError error={error} onRetry={reset} />
-      )}
+      rejectedFallback={SpotDetailErrorFallback}
     >
       <SpotDetailInner spotId={spotId} />
     </AsyncBoundary>

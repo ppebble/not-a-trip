@@ -78,9 +78,7 @@ export default function RouteDetailClient() {
   return (
     <AsyncBoundary
       pendingFallback={<RouteDetailSkeleton />}
-      rejectedFallback={({ error, reset }) => (
-        <RouteDetailError error={error} reset={reset} />
-      )}
+      rejectedFallback={RouteDetailError}
     >
       <RouteDetailInner routeId={routeId} />
     </AsyncBoundary>
