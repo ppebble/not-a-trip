@@ -35,17 +35,9 @@ export default function AdminStatusReportsPage() {
     )
   }
 
+  // 비관리자는 useAdminAuth가 자동 리다이렉트 — 리다이렉트 완료까지 빈 화면 유지
   if (!isAuthorized) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="mb-2 text-2xl font-bold text-gray-800">
-            접근 권한 없음
-          </h1>
-          <p className="text-gray-600">관리자만 접근할 수 있습니다.</p>
-        </div>
-      </div>
-    )
+    return null
   }
 
   return (
