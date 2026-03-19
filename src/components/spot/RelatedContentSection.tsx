@@ -139,7 +139,7 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
               />
             </div>
           ) : (
-            <ContentTypeIcon type={content.type} size="lg" />
+            <ContentTypeIcon type={content.type} size="3xl" />
           )}
           <h3 className="font-semibold text-gray-900">{content.name}</h3>
         </div>
