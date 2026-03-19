@@ -47,9 +47,9 @@ const getCategoryIcon = (
     other: '📍',
   }
 
-  if (!category) return { path: '/icons/categories/other.svg', fallback: '📍' }
+  if (!category) return { path: '/icons/categories/other.webp', fallback: '📍' }
   return {
-    path: CATEGORY_CONFIG[category]?.icon || '/icons/categories/other.svg',
+    path: CATEGORY_CONFIG[category]?.icon || '/icons/categories/other.webp',
     fallback: fallbackIcons[category] || '📍',
   }
 }
