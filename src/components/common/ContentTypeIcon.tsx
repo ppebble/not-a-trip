@@ -69,12 +69,15 @@ const LINK_TYPE_FALLBACK: Record<ExternalLinkType, string> = {
 // 사이즈 설정
 // ============================================
 
-type IconSize = 'sm' | 'md' | 'lg'
+type IconSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
 
 const SIZE_MAP: Record<IconSize, number> = {
   sm: 16,
   md: 20,
   lg: 24,
+  xl: 28,
+  '2xl': 40,
+  '3xl': 48,
 }
 
 // ============================================
