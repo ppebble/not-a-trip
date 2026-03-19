@@ -44,7 +44,7 @@ export default function CategoryFilter() {
       {/* 전체 선택 버튼 */}
       <button
         onClick={handleSelectAll}
-        className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+        className={`h-9 rounded-full px-4 text-sm font-medium transition-all ${
           isAllSelected
             ? 'bg-navy-600 text-white'
             : 'bg-white/80 text-navy-700 hover:bg-white'
@@ -62,7 +62,7 @@ export default function CategoryFilter() {
           <button
             key={category}
             onClick={() => handleCategoryToggle(category)}
-            className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all ${
+            className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full px-4 text-sm font-medium transition-all ${
               isSelected
                 ? 'text-white shadow-md'
                 : 'bg-white/80 text-navy-700 hover:bg-white'
@@ -71,7 +71,10 @@ export default function CategoryFilter() {
               backgroundColor: isSelected ? config.color : undefined,
             }}
           >
-            <CategoryIcon category={category} size="md" />
+            <CategoryIcon
+              category={category}
+              size={category === 'animation' ? '2xl' : 'lg'}
+            />
             <span>{config.label}</span>
           </button>
         )
