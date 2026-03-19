@@ -260,7 +260,7 @@ function SpotDetailContent({
               >
                 <CategoryIcon
                   category={spot.category as SpotCategory}
-                  size="sm"
+                  size="2xl"
                 />
                 <span>{categoryConfig.label}</span>
               </span>
