@@ -20,7 +20,6 @@
  */
 
 import fc from 'fast-check'
-import type { RouteSpot } from '@/types/route'
 
 // ============================================
 // Mocks
@@ -33,13 +32,11 @@ jest.mock('leaflet', () => ({
     iconAnchor: [14, 14],
     popupAnchor: [0, -16],
   })),
-  DivIcon: jest
-    .fn()
-    .mockImplementation(() => ({
-      iconSize: [28, 28],
-      iconAnchor: [14, 14],
-      popupAnchor: [0, -16],
-    })),
+  DivIcon: jest.fn().mockImplementation(() => ({
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -16],
+  })),
   LatLngBounds: jest
     .fn()
     .mockImplementation(() => ({ extend: jest.fn().mockReturnThis() })),
@@ -111,18 +108,6 @@ jest.mock('@/lib/route-utils', () => ({
 // ============================================
 // Generators
 // ============================================
-
-function createMockRouteSpot(idx: number): RouteSpot {
-  return {
-    spotId: `spot-${idx}`,
-    spotName: `스팟 ${idx}`,
-    coordinates: { lat: 35.6762 + idx * 0.01, lng: 139.6503 + idx * 0.01 },
-    thumbnailUrl: `https://example.com/thumb-${idx}.jpg`,
-    distanceFromPrev: idx === 0 ? null : 500,
-    walkTimeFromPrev: idx === 0 ? null : 7,
-    isAvailable: true,
-  }
-}
 
 const spotCountArbitrary = fc.integer({ min: 2, max: 10 })
 
