@@ -31,6 +31,7 @@ export default function PilgrimageMap({
   onSpotSelect,
 }: PilgrimageMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const { center, zoom, setCenter, setZoom } = useMapStore(
     useShallow((state) => ({
       center: state.center,
@@ -72,16 +73,32 @@ export default function PilgrimageMap({
     setGpsError(null)
   }, [])
 
+  // ResizeObserver 기반 invalidateSize - setTimeout 대신 컨테이너 크기 변경 감지
+  useEffect(() => {
+    const map = mapRef.current
+    const container = containerRef.current
+    if (!map || !container) return
+
+    let rafId: number | null = null
+    const observer = new ResizeObserver(() => {
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        map.invalidateSize()
+      })
+    })
+    observer.observe(container)
+
+    return () => {
+      observer.disconnect()
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
+  }, [])
+
+  // Update store when map view changes
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
 
-    // 지도 크기 재계산 (중요!)
-    setTimeout(() => {
-      map.invalidateSize()
-    }, 100)
-
-    // Update store when map view changes
     const handleMoveEnd = () => {
       const newCenter = map.getCenter()
       setCenter([newCenter.lat, newCenter.lng])
@@ -101,7 +118,7 @@ export default function PilgrimageMap({
   }, [setCenter, setZoom])
 
   return (
-    <div className={`relative h-full w-full ${className}`}>
+    <div ref={containerRef} className={`relative h-full w-full ${className}`}>
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}
@@ -122,10 +139,8 @@ export default function PilgrimageMap({
         ]}
         maxBoundsViscosity={1.0} // 경계 밖으로 드래그 완전 방지
         whenReady={() => {
-          // 지도가 준비되면 크기 재계산
-          setTimeout(() => {
-            mapRef.current?.invalidateSize()
-          }, 100)
+          // 지도가 준비되면 즉시 크기 재계산 (ResizeObserver가 이후 변경 감지)
+          mapRef.current?.invalidateSize()
         }}
       >
         <TileLayer

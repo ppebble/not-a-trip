@@ -151,9 +151,9 @@
 
 ## Bug 1 Fix: MapContainer 재사용 에러 수정
 
-- [ ] 9. Fix for MapContainer 재사용 에러
+- [x] 9. Fix for MapContainer 재사용 에러
 
-  - [ ] 9.1 Implement the fix - PilgrimageMap.tsx
+  - [x] 9.1 Implement the fix - PilgrimageMap.tsx
     - MapContainer에 동적 key prop이 사용되지 않도록 보장 (spots 등 데이터 의존 key 금지)
     - spots 배열은 오직 자식 컴포넌트(SpotPin)로만 전달되어 마커 DOM만 업데이트되도록 유지
     - dynamic import의 `ssr: false` 설정과 부모 컴포넌트 리렌더링 패턴 점검
@@ -166,7 +166,7 @@
     - _Preservation: 전체 스팟 표시, 줌/드래그, GPS 위치 이동 기존 동작 유지_
     - _Requirements: 2.1, 2.2, 3.1, 3.2, 3.9_
 
-  - [ ] 9.2 Verify bug condition exploration test now passes
+  - [x] 9.2 Verify bug condition exploration test now passes
     - **Property 1: Expected Behavior** - MapContainer 안정성
     - **IMPORTANT**: Re-run the SAME test from task 1 - do NOT write a new test
     - The test from task 1 encodes the expected behavior
@@ -175,7 +175,7 @@
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 9.3 Verify preservation tests still pass
+  - [x] 9.3 Verify preservation tests still pass
     - **Property 2: Preservation** - 전체 스팟 표시 및 기본 인터랙션 보존
     - **IMPORTANT**: Re-run the SAME tests from task 2 - do NOT write new tests
     - Run preservation property tests from step 2
