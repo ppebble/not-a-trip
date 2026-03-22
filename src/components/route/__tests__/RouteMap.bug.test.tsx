@@ -160,7 +160,9 @@ describe('RouteMap Bug Condition Exploration - 타일 정렬', () => {
       'utf-8'
     )
 
-    const hasResizeObserver = /ResizeObserver/.test(sourceCode)
+    // 직접 사용 또는 useResizeObserver 훅을 통한 간접 사용 모두 허용
+    const hasResizeObserver =
+      /ResizeObserver/.test(sourceCode) || /useResizeObserver/.test(sourceCode)
     expect(hasResizeObserver).toBe(true)
   })
 
@@ -177,12 +179,26 @@ describe('RouteMap Bug Condition Exploration - 타일 정렬', () => {
     const fs = require('fs')
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const path = require('path')
-    const sourceCode = fs.readFileSync(
+
+    // 컴포넌트 소스 또는 useResizeObserver 훅에서 disconnect 확인
+    const componentCode = fs.readFileSync(
       path.resolve(__dirname, '../RouteMap.tsx'),
       'utf-8'
     )
+    const hookPath = path.resolve(
+      __dirname,
+      '../../../hooks/useResizeObserver.ts'
+    )
+    let hookCode = ''
+    try {
+      hookCode = fs.readFileSync(hookPath, 'utf-8')
+    } catch {
+      /* hook 미존재 시 무시 */
+    }
 
-    const hasDisconnect = /disconnect\s*\(\s*\)/.test(sourceCode)
+    const hasDisconnect =
+      /disconnect\s*\(\s*\)/.test(componentCode) ||
+      /disconnect\s*\(\s*\)/.test(hookCode)
     expect(hasDisconnect).toBe(true)
   })
 

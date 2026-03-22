@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef, useCallback } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Map as LeafletMap, Icon } from 'leaflet'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, FacilityType } from '@/types'
+import { useResizeObserver } from '@/hooks/useResizeObserver'
 import './map.css'
 
 interface SpotDetailMapProps {
@@ -151,6 +152,7 @@ export default function SpotDetailMap({
   className = '',
 }: SpotDetailMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
 
   // 스팟 좌표가 유효한지 확인
   const hasValidCoordinates = spot.coordinates && spot.coordinates.length === 2
@@ -162,37 +164,38 @@ export default function SpotDetailMap({
   const mapCenter: [number, number] = [lat, lng]
   const mapZoom = 15 // 상세 페이지에서는 더 가까운 줌 레벨 사용
 
-  useEffect(() => {
+  // ResizeObserver 기반 invalidateSize + bounds 맞추기
+  const fitMapBounds = useCallback(() => {
     const map = mapRef.current
     if (!map) return
 
-    // 지도가 완전히 로드된 후 실행
-    const timer = setTimeout(() => {
-      map.invalidateSize()
+    map.invalidateSize()
 
-      // 스팟과 편의시설을 모두 포함하는 영역으로 지도 조정
-      if (hasValidCoordinates && facilities.length > 0) {
-        const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
+    // 스팟과 편의시설을 모두 포함하는 영역으로 지도 조정
+    if (hasValidCoordinates && facilities.length > 0) {
+      const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
 
-        // Leaflet의 LatLngBounds 사용
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const L = (window as any).L
-        if (L) {
-          const bounds = allPoints.reduce((bounds, point) => {
-            return bounds.extend(point)
-          }, new L.LatLngBounds())
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const L = (window as any).L
+      if (L) {
+        const latLngBounds = new L.LatLngBounds()
+        allPoints.forEach((point: number[]) => {
+          latLngBounds.extend(point)
+        })
 
-          // 적절한 패딩을 추가하여 지도 영역 조정
-          map.fitBounds(bounds, { padding: [20, 20] })
-        }
+        map.fitBounds(latLngBounds, { padding: [20, 20] })
       }
-    }, 300)
-
-    return () => clearTimeout(timer)
+    }
   }, [lat, lng, facilities, hasValidCoordinates])
 
+  useResizeObserver(containerRef, fitMapBounds)
+
   return (
-    <div className={`relative w-full ${className}`} style={{ height: '384px' }}>
+    <div
+      ref={containerRef}
+      className={`relative w-full ${className}`}
+      style={{ height: '384px' }}
+    >
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}
@@ -207,10 +210,8 @@ export default function SpotDetailMap({
         boxZoom={true}
         keyboard={true}
         whenReady={() => {
-          // 지도가 준비되면 크기 재계산
-          setTimeout(() => {
-            mapRef.current?.invalidateSize()
-          }, 100)
+          // 지도가 준비되면 즉시 크기 재계산 (ResizeObserver가 이후 변경 감지)
+          mapRef.current?.invalidateSize()
         }}
       >
         <TileLayer

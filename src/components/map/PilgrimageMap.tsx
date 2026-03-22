@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 import { useShallow } from 'zustand/react/shallow'
 import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
@@ -13,6 +12,7 @@ import SpotPreview from './SpotPreview'
 import BottomSheet from '@/components/mobile/BottomSheet'
 import LocationButton from '@/components/mobile/LocationButton'
 import GpsErrorFallback from '@/components/mobile/GpsErrorFallback'
+import { useResizeObserver } from '@/hooks/useResizeObserver'
 import './map.css'
 
 interface PilgrimageMapProps {
@@ -74,25 +74,10 @@ export default function PilgrimageMap({
   }, [])
 
   // ResizeObserver 기반 invalidateSize - setTimeout 대신 컨테이너 크기 변경 감지
-  useEffect(() => {
-    const map = mapRef.current
-    const container = containerRef.current
-    if (!map || !container) return
-
-    let rafId: number | null = null
-    const observer = new ResizeObserver(() => {
-      if (rafId !== null) cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        map.invalidateSize()
-      })
-    })
-    observer.observe(container)
-
-    return () => {
-      observer.disconnect()
-      if (rafId !== null) cancelAnimationFrame(rafId)
-    }
+  const handleResize = useCallback(() => {
+    mapRef.current?.invalidateSize()
   }, [])
+  useResizeObserver(containerRef, handleResize)
 
   // Update store when map view changes
   useEffect(() => {

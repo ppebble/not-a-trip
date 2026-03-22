@@ -444,8 +444,9 @@ describe('PilgrimageMap Bug Condition Exploration - MapContainer 안정성', () 
       'utf-8'
     )
 
-    // ResizeObserver 사용 여부 확인
-    const hasResizeObserver = /ResizeObserver/.test(sourceCode)
+    // 직접 사용 또는 useResizeObserver 훅을 통한 간접 사용 모두 허용
+    const hasResizeObserver =
+      /ResizeObserver/.test(sourceCode) || /useResizeObserver/.test(sourceCode)
 
     // 수정 후에는 ResizeObserver가 사용되어야 함
     // 수정 전에는 ResizeObserver가 없으므로 테스트 FAIL

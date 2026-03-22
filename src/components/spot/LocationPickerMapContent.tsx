@@ -3,7 +3,6 @@
 import { useCallback } from 'react'
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import { Icon, LeafletMouseEvent } from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 
 interface LocationPickerMapContentProps {
   center: { lat: number; lng: number }
