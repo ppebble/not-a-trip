@@ -104,16 +104,6 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
 
   const position = calculatePosition()
 
-  // 툴팁 위에 마우스가 올라가면 닫히지 않도록 처리
-  const handleMouseEnter = () => {
-    setPreviewHovered(true)
-  }
-
-  const handleMouseLeave = () => {
-    setPreviewHovered(false)
-    closePreview()
-  }
-
   return (
     <div
       ref={previewRef}
@@ -124,8 +114,11 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
       }}
       role="tooltip"
       aria-labelledby="spot-preview-title"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setPreviewHovered(true)}
+      onMouseLeave={() => {
+        setPreviewHovered(false)
+        closePreview()
+      }}
     >
       {/* 로딩 상태 */}
       {isLoading && (

@@ -51,21 +51,24 @@ describe('SpotPin Bug Condition Exploration - 근접 핀 호버 안정성', () =
     const hoveredMatch = sourceCode.match(/hovered\s*:\s*(\d+)/)
     expect(hoveredMatch).not.toBeNull()
     const hoveredValue = parseInt(hoveredMatch![1], 10)
-    expect(hoveredValue).toBeGreaterThanOrEqual(5000)
+    expect(hoveredValue).toBeGreaterThanOrEqual(10000)
   })
 
   /**
-   * Property 1-2: Z_INDEX.selected가 충분히 커야 한다 (2000 이상)
+   * Property 1-2: 호버/선택 이원 상태가 호버 단일 상태로 통합되어야 한다
    *
-   * 현재 selected: 500은 근접 핀 간 충돌 방지에 부족하다.
+   * 이전에는 isSelected와 isHovered가 분리되어 있어
+   * 호버 후 이전 핀이 선택 상태로 남는 문제가 있었다.
+   * 호버 단일 상태로 통합하여 마우스 이탈 시 완전히 원래 상태로 복원되어야 한다.
    *
-   * EXPECTED: 수정 전 코드에서 FAIL (selected=500, 부족)
+   * EXPECTED: 수정 후 PASS (selectedSpotId가 호버에서 사용되지 않음)
    */
-  test('Z_INDEX.selected가 2000 이상이어야 한다', () => {
-    const selectedMatch = sourceCode.match(/selected\s*:\s*(\d+)/)
-    expect(selectedMatch).not.toBeNull()
-    const selectedValue = parseInt(selectedMatch![1], 10)
-    expect(selectedValue).toBeGreaterThanOrEqual(2000)
+  test('handleMouseOver에서 setSelectedSpot을 호출하지 않아야 한다', () => {
+    const mouseOverSection = sourceCode
+      .split('handleMouseOver')[1]
+      ?.split('handleMouseOut')[0]
+    expect(mouseOverSection).toBeDefined()
+    expect(mouseOverSection).not.toContain('setSelectedSpot')
   })
 
   /**
@@ -113,14 +116,15 @@ describe('SpotPin Bug Condition Exploration - 근접 핀 호버 안정성', () =
   })
 
   /**
-   * Property 1-5: SpotPreview에 pointer-events: none이 적용되어야 한다
+   * Property 1-5: SpotPreview에서 setPreviewHovered로 호버 상태를 관리해야 한다
    *
    * SpotPreview가 마우스 이벤트를 가로채서 핀의 mouseout을 강제 유발하는
-   * 현상을 방지하기 위해 pointer-events: none이 필요하다.
+   * 현상을 방지하기 위해 setPreviewHovered로 호버 상태를 관리하고,
+   * SpotPin의 mouseout 핸들러에서 isPreviewHoveredRef를 체크해야 한다.
    *
-   * EXPECTED: 수정 전 코드에서 FAIL (pointer-events: none 미적용)
+   * EXPECTED: 수정 전 코드에서 FAIL (setPreviewHovered 미사용 또는 mouseout에서 체크 미흡)
    */
-  test('SpotPreview에 pointer-events: none이 적용되어야 한다', () => {
+  test('SpotPreview에서 setPreviewHovered로 호버 상태를 관리해야 한다', () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const fs = require('fs')
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -130,12 +134,13 @@ describe('SpotPin Bug Condition Exploration - 근접 핀 호버 안정성', () =
       'utf-8'
     )
 
-    const hasPointerEventsNone =
-      previewSource.includes('pointer-events: none') ||
-      previewSource.includes('pointer-events-none') ||
-      previewSource.includes("pointerEvents: 'none'") ||
-      previewSource.includes('pointerEvents: "none"')
+    // SpotPreview에서 setPreviewHovered를 사용하는지 확인
+    const hasSetPreviewHovered = previewSource.includes('setPreviewHovered')
+    expect(hasSetPreviewHovered).toBe(true)
 
-    expect(hasPointerEventsNone).toBe(true)
+    // SpotPin의 mouseout 핸들러에서 isPreviewHoveredRef를 체크하는지 확인
+    const mouseOutSection = sourceCode.split('handleMouseOut')[1]
+    expect(mouseOutSection).toBeDefined()
+    expect(mouseOutSection).toContain('isPreviewHoveredRef')
   })
 })

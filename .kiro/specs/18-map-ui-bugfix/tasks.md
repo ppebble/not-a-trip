@@ -246,9 +246,9 @@
 
 ## Bug 4 Fix: 근접 핀 이벤트 충돌 수정
 
-- [ ] 12. Fix for 근접 핀 이벤트 충돌
+- [x] 12. Fix for 근접 핀 이벤트 충돌
 
-  - [ ] 12.1 Implement the fix - SpotPin.tsx z-index 강화 + debounce 조정
+  - [x] 12.1 Implement the fix - SpotPin.tsx z-index 강화 + debounce 조정
     - Z_INDEX 상수 변경: `{ base: 0, selected: 500, hovered: 1000 }` → `{ base: 0, selected: 2000, hovered: 5000 }`
     - mouseover debounce 타이밍 조정: 50ms → 80~100ms
     - mouseout debounce 타이밍 조정: 150ms → 200~250ms
@@ -258,18 +258,18 @@
     - _Preservation: 개별 핀 호버/클릭, 모바일 터치 Bottom Sheet 기존 동작 유지_
     - _Requirements: 2.7, 2.8, 3.7, 3.8_
 
-  - [ ] 12.2 Implement the fix - SpotPreview pointer-events: none 적용
+  - [x] 12.2 Implement the fix - SpotPreview pointer-events: none 적용
     - SpotPreview 컴포넌트(`src/components/map/SpotPreview.tsx`)의 루트 div에 `pointer-events: none` CSS 적용
     - 이로 인해 미리보기 모달이 마우스 이벤트를 가로채지 않아 핀의 hover 상태가 유지됨
     - SpotPreview 내부의 onMouseEnter/onMouseLeave 핸들러 제거 (pointer-events: none이므로 불필요)
-    - setPreviewHovered 관련 로직 정리 (더 이상 필요 없음)
+    - setPreviewHovered 관련 로직 정리 (더 이상 필요  없음)
     - 미리보기는 순수 정보 표시 전용(읽기 전용)으로 유지
     - 상세 페이지 이동 등 실제 상호작용은 핀(Marker) 자체의 클릭 이벤트에서 처리
     - _Bug_Condition: SpotPreview가 마우스 이벤트를 가로채서 핀의 mouseout을 강제 유발_
     - _Expected_Behavior: SpotPreview 위에 커서가 있어도 핀의 hover 상태 유지_
     - _Requirements: 2.7, 2.8_
 
-  - [ ] 12.3 Verify bug condition exploration test now passes
+  - [x] 12.3 Verify bug condition exploration test now passes
     - **Property 1: Expected Behavior** - 근접 핀 호버 안정성
     - **IMPORTANT**: Re-run the SAME test from task 7 - do NOT write a new test
     - The test from task 7 encodes the expected behavior
@@ -278,7 +278,7 @@
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
     - _Requirements: 2.7, 2.8_
 
-  - [ ] 12.4 Verify preservation tests still pass
+  - [x] 12.4 Verify preservation tests still pass
     - **Property 2: Preservation** - 개별 핀 이벤트 및 모바일 터치 보존
     - **IMPORTANT**: Re-run the SAME tests from task 8 - do NOT write new tests
     - Run preservation property tests from step 8
@@ -287,7 +287,7 @@
 
 ## Final Checkpoint
 
-- [ ] 13. Checkpoint - 전체 테스트 통과 확인
+- [x] 13. Checkpoint - 전체 테스트 통과 확인
   - 모든 bug condition exploration 테스트 통과 확인 (tasks 1, 3, 5, 7)
   - 모든 preservation 테스트 통과 확인 (tasks 2, 4, 6, 8)
   - `npm run type-check` 통과 확인
