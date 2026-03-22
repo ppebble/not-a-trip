@@ -19,7 +19,6 @@ interface SpotPinProps {
 // hovered를 충분히 높게 설정하여 항상 최상위에 표시
 const Z_INDEX = {
   base: 0,
-  selected: 3000,
   hovered: 10000,
 }
 
@@ -27,7 +26,6 @@ const Z_INDEX = {
 const PIN_SIZES = {
   base: 48,
   hovered: 54,
-  selected: 58,
 }
 
 // 카테고리별 색상 가져오기
@@ -59,42 +57,25 @@ const getCategoryIcon = (
 // 작품 이미지 핀 아이콘 생성
 const createImagePinIcon = (
   thumbnailUrl: string,
-  isSelected: boolean = false,
   isHovered: boolean = false,
   category?: SpotCategory,
   checkInCount?: number
 ) => {
-  // 핀 크기 설정 (호버/선택 상태에 따라 확대)
-  const getSize = () => {
-    if (isSelected) return PIN_SIZES.selected
-    if (isHovered) return PIN_SIZES.hovered
-    return PIN_SIZES.base
-  }
-  const size = getSize()
+  const size = isHovered ? PIN_SIZES.hovered : PIN_SIZES.base
 
   // 카테고리별 색상 적용
   const categoryColor = getCategoryColor(category)
   const categoryIconData = getCategoryIcon(category)
 
-  // 테두리 색상 및 스타일 (카테고리 색상 적용)
-  // 호버와 선택 모두 동일한 노란색 스타일 사용
-  const getBorderColor = () => {
-    if (isSelected || isHovered) return '#fbbf24'
-    return categoryColor
-  }
-  const borderColor = getBorderColor()
-  const borderWidth = isSelected || isHovered ? 4 : 3
-  const getShadowIntensity = () => {
-    if (isSelected || isHovered) return 0.5
-    return 0.3
-  }
-  const shadowIntensity = getShadowIntensity()
+  // 테두리 색상: 호버 시 노란색, 기본은 카테고리 색상
+  const borderColor = isHovered ? '#fbbf24' : categoryColor
+  const borderWidth = isHovered ? 4 : 3
+  const shadowIntensity = isHovered ? 0.5 : 0.3
 
-  // 호버/선택 시 글로우 효과 (노란색 통일)
-  const glowEffect =
-    isHovered || isSelected
-      ? 'box-shadow: 0 0 12px 2px rgba(251, 191, 36, 0.4);'
-      : ''
+  // 호버 시 글로우 효과
+  const glowEffect = isHovered
+    ? 'box-shadow: 0 0 12px 2px rgba(251, 191, 36, 0.4);'
+    : ''
 
   // 인기 스팟 뱃지 (인증 수 10개 이상)
   const isPopular = checkInCount && checkInCount >= 10
@@ -164,12 +145,11 @@ const createImagePinIcon = (
 
   // 호버 상태 클래스
   const hoverClass = isHovered ? 'is-hovered' : ''
-  const selectedClass = isSelected ? 'is-selected' : ''
 
   return L.divIcon({
-    className: `custom-image-spot-pin ${hoverClass} ${selectedClass}`,
+    className: `custom-image-spot-pin ${hoverClass}`,
     html: `
-      <div class="image-pin-container ${hoverClass} ${selectedClass}" style="
+      <div class="image-pin-container ${hoverClass}" style="
         width: ${size}px;
         height: ${size + 12}px;
         position: relative;
@@ -188,7 +168,6 @@ const createImagePinIcon = (
           box-shadow: 0 2px 8px rgba(0,0,0,0.2);
           transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
           ${glowEffect}
-          ${isSelected ? 'animation: image-pin-pulse 2s infinite;' : ''}
         ">
           ${imageContent}
         </div>
@@ -207,55 +186,6 @@ const createImagePinIcon = (
           transition: border-color 0.25s ease;
         "></div>
         
-        ${
-          isSelected
-            ? `
-          <!-- 선택 시 외곽 링 -->
-          <div class="selection-ring" style="
-            position: absolute;
-            top: -6px;
-            left: -6px;
-            width: ${size + 12}px;
-            height: ${size + 12}px;
-            border: 3px solid #fbbf24;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: ring-pulse 1.5s infinite;
-          "></div>
-          <!-- 선택 시 내부 글로우 -->
-          <div class="selection-glow" style="
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: ${size}px;
-            height: ${size}px;
-            border-radius: 50%;
-            box-shadow: inset 0 0 8px rgba(251, 191, 36, 0.3);
-            pointer-events: none;
-          "></div>
-        `
-            : ''
-        }
-        
-        ${
-          isHovered && !isSelected
-            ? `
-          <!-- 호버 시 외곽 링 -->
-          <div class="hover-ring" style="
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            width: ${size + 8}px;
-            height: ${size + 8}px;
-            border: 2px solid #60a5fa;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: hover-ring-pulse 1s infinite;
-          "></div>
-        `
-            : ''
-        }
-        
         ${popularBadge}
       </div>
     `,
@@ -267,9 +197,8 @@ const createImagePinIcon = (
 
 export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
   const map = useMap()
-  const { selectedSpotId, setSelectedSpot } = useMapStore(
+  const { setSelectedSpot } = useMapStore(
     useShallow((state) => ({
-      selectedSpotId: state.selectedSpotId,
       setSelectedSpot: state.setSelectedSpot,
     }))
   )
@@ -342,8 +271,6 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     }
   }, [])
 
-  const isSelected = selectedSpotId === spot.id
-
   // 다른 곳 터치 시 툴팁 숨김 및 터치 카운트 리셋 (Requirements: 4.2)
   useEffect(() => {
     if (!isTouchDevice) return
@@ -363,25 +290,19 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     return () => document.removeEventListener('touchstart', handleOutsideTouch)
   }, [isTouchDevice, touchCount])
 
-  // Z-Index 계산: 호버 > 선택 > 기본
-  const getZIndexOffset = () => {
-    if (isHovered) return Z_INDEX.hovered
-    if (isSelected) return Z_INDEX.selected
-    return Z_INDEX.base
-  }
-  const zIndexOffset = getZIndexOffset()
+  // Z-Index 계산: 호버 시 최상위
+  const zIndexOffset = isHovered ? Z_INDEX.hovered : Z_INDEX.base
 
   // 아이콘을 메모이제이션하여 불필요한 재생성 방지 (카테고리 색상/아이콘 적용)
   const icon = useMemo(
     () =>
       createImagePinIcon(
         spot.thumbnailUrl,
-        isSelected,
         isHovered,
         spot.category,
         spot.checkInCount
       ),
-    [spot.thumbnailUrl, spot.category, spot.checkInCount, isSelected, isHovered]
+    [spot.thumbnailUrl, spot.category, spot.checkInCount, isHovered]
   )
 
   const handleClick = useCallback(() => {
@@ -426,7 +347,7 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     touchCount,
   ])
 
-  // Debounced 호버 핸들러 (50ms) - 호버 시 SpotPreview 열기
+  // Debounced 호버 핸들러 - 호버 시 SpotPreview 열기
   const handleMouseOver = useCallback(() => {
     // 터치 디바이스에서는 호버 이벤트 무시
     if (isTouchDevice) return
@@ -438,16 +359,9 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     // 100ms 후 호버 상태 설정 및 SpotPreview 열기
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(true)
-      setSelectedSpot(spot.id)
       openPreview(spot.id, getMarkerScreenPosition())
     }, 100)
-  }, [
-    isTouchDevice,
-    spot.id,
-    setSelectedSpot,
-    openPreview,
-    getMarkerScreenPosition,
-  ])
+  }, [isTouchDevice, spot.id, openPreview, getMarkerScreenPosition])
 
   // Debounced 호버 아웃 핸들러 - 호버 아웃 시 SpotPreview 닫기
   const handleMouseOut = useCallback(() => {
