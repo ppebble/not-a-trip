@@ -374,12 +374,13 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     }
     // 250ms 후 호버 상태 해제 (핀 간 전환 시 안정성 확보)
     hoverTimeoutRef.current = setTimeout(() => {
-      // 툴팁 위에 마우스가 있으면 닫지 않음 (ref로 최신 값 참조)
+      // 자기 자신의 호버 상태는 항상 해제 (노란 테두리 잔류 방지)
+      setIsHovered(false)
+
+      // 프리뷰 닫기는 조건부로 처리
       if (isPreviewHoveredRef.current) return
-      // 다른 핀의 mouseover가 이미 트리거된 경우 closePreview 스킵
       if (previewSpotIdRef.current && previewSpotIdRef.current !== spot.id)
         return
-      setIsHovered(false)
       closePreview()
     }, 250)
   }, [isTouchDevice, closePreview, spot.id])
