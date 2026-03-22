@@ -51,7 +51,7 @@ describe('SpotPin Bug Condition Exploration - 근접 핀 호버 안정성', () =
     const hoveredMatch = sourceCode.match(/hovered\s*:\s*(\d+)/)
     expect(hoveredMatch).not.toBeNull()
     const hoveredValue = parseInt(hoveredMatch![1], 10)
-    expect(hoveredValue).toBeGreaterThanOrEqual(5000)
+    expect(hoveredValue).toBeGreaterThanOrEqual(10000)
   })
 
   /**
@@ -65,7 +65,7 @@ describe('SpotPin Bug Condition Exploration - 근접 핀 호버 안정성', () =
     const selectedMatch = sourceCode.match(/selected\s*:\s*(\d+)/)
     expect(selectedMatch).not.toBeNull()
     const selectedValue = parseInt(selectedMatch![1], 10)
-    expect(selectedValue).toBeGreaterThanOrEqual(2000)
+    expect(selectedValue).toBeGreaterThanOrEqual(3000)
   })
 
   /**
