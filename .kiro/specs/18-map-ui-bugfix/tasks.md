@@ -184,9 +184,9 @@
 
 ## Bug 2 Fix: 갤러리 피드 레이아웃 수정
 
-- [ ] 10. Fix for 갤러리 피드 레이아웃
+- [x] 10. Fix for 갤러리 피드 레이아웃
 
-  - [ ] 10.1 Implement the fix - CheckInGallery.tsx
+  - [x] 10.1 Implement the fix - CheckInGallery.tsx
     - 아이템 수가 1~3개일 때 그리드 아이템에 `max-w-[200px]` (또는 적절한 값) 클래스 적용
     - 아이템 수가 1~3개일 때 그리드 컨테이너에 `justify-items-start` 또는 flex 기반 레이아웃으로 전환하여 좌측 정렬
     - 아이템 4개 이상일 때는 기존 `grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4` 유지
@@ -196,7 +196,7 @@
     - _Preservation: 4개 이상 갤러리 grid-cols-2/3/4 유지, CheckInDetailModal 정상 표시_
     - _Requirements: 2.3, 2.4, 3.3, 3.4_
 
-  - [ ] 10.2 Verify bug condition exploration test now passes
+  - [x] 10.2 Verify bug condition exploration test now passes
     - **Property 1: Expected Behavior** - 갤러리 아이템 크기 제한
     - **IMPORTANT**: Re-run the SAME test from task 3 - do NOT write a new test
     - The test from task 3 encodes the expected behavior
@@ -205,7 +205,7 @@
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
     - _Requirements: 2.3, 2.4_
 
-  - [ ] 10.3 Verify preservation tests still pass
+  - [x] 10.3 Verify preservation tests still pass
     - **Property 2: Preservation** - 4개 이상 갤러리 그리드 및 모달 동작 보존
     - **IMPORTANT**: Re-run the SAME tests from task 4 - do NOT write new tests
     - Run preservation property tests from step 4
