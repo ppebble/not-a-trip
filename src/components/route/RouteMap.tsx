@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useMemo } from 'react'
+import { useEffect, useRef, useMemo, useCallback } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import { Map as LeafletMap, DivIcon } from 'leaflet'
 import type { RouteSpot, RouteStartPoint } from '@/types/route'
@@ -103,6 +103,8 @@ export default function RouteMap({
   className = '',
 }: RouteMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const rafIdRef = useRef<number | null>(null)
 
   // 유효 스팟 좌표로 지도 bounds 계산 (시작 지점 포함)
   const bounds = useMemo(() => {
@@ -169,37 +171,67 @@ export default function RouteMap({
 
   const checkedSet = useMemo(() => new Set(checkedSpotIds), [checkedSpotIds])
 
-  // 지도 bounds 맞추기
-  useEffect(() => {
+  // bounds를 지도에 적용하는 콜백
+  const fitMapBounds = useCallback(() => {
     const map = mapRef.current
     if (!map || !bounds || bounds.length === 0) return
 
-    const timer = setTimeout(() => {
-      map.invalidateSize()
-      if (bounds.length === 1) {
-        map.setView(bounds[0], 15)
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const L = (window as any).L
-        if (L) {
-          const latLngBounds = bounds.reduce(
-            (b: InstanceType<typeof L.LatLngBounds>, point: [number, number]) =>
-              b.extend(point),
-            new L.LatLngBounds()
-          )
-          map.fitBounds(latLngBounds, { padding: [30, 30] })
-        }
+    map.invalidateSize()
+    if (bounds.length === 1) {
+      map.setView(bounds[0], 15)
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const L = (window as any).L
+      if (L) {
+        const latLngBounds = bounds.reduce(
+          (b: InstanceType<typeof L.LatLngBounds>, point: [number, number]) =>
+            b.extend(point),
+          new L.LatLngBounds()
+        )
+        map.fitBounds(latLngBounds, { padding: [30, 30] })
       }
-    }, 300)
-
-    return () => clearTimeout(timer)
+    }
   }, [bounds])
+
+  // ResizeObserver 기반 컨테이너 크기 감지 + invalidateSize
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const observer = new ResizeObserver(() => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
+      rafIdRef.current = requestAnimationFrame(() => {
+        rafIdRef.current = null
+        fitMapBounds()
+      })
+    })
+
+    observer.observe(container)
+
+    return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
+      observer.disconnect()
+    }
+  }, [fitMapBounds])
+
+  // bounds 변경 시 즉시 적용
+  useEffect(() => {
+    fitMapBounds()
+  }, [fitMapBounds])
 
   const defaultCenter: [number, number] =
     bounds && bounds.length > 0 ? bounds[0] : [35.6762, 139.6503]
 
   return (
-    <div className={`relative w-full ${className}`} style={{ height: '400px' }}>
+    <div
+      ref={containerRef}
+      className={`relative w-full ${className}`}
+      style={{ height: '400px' }}
+    >
       <MapContainer
         center={defaultCenter}
         zoom={13}
