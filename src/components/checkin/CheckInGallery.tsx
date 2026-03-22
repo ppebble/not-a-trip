@@ -64,14 +64,18 @@ export function CheckInGallery({
     })
   }
 
+  const isFewItems = (count: number) => count >= 1 && count <= 3
+
   if (isLoading && checkins.length === 0) {
     return (
       <div className={`${className}`}>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        <div
+          className={`grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4${isFewItems(limit) ? 'justify-items-start' : ''}`}
+        >
           {Array.from({ length: limit }).map((_, i) => (
             <div
               key={i}
-              className="aspect-square animate-pulse rounded-lg bg-gray-200"
+              className={`aspect-square animate-pulse rounded-lg bg-gray-200${isFewItems(limit) ? 'max-w-[200px]' : ''}`}
             />
           ))}
         </div>
@@ -133,12 +137,14 @@ export function CheckInGallery({
       </div>
 
       {/* 갤러리 그리드 */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+      <div
+        className={`grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4${isFewItems(checkins.length) ? 'justify-items-start' : ''}`}
+      >
         {checkins.map((checkin) => (
           <button
             key={checkin.id}
             onClick={() => setSelectedCheckIn(checkin)}
-            className="group relative aspect-square overflow-hidden rounded-lg"
+            className={`group relative aspect-square overflow-hidden rounded-lg${isFewItems(checkins.length) ? 'max-w-[200px]' : ''}`}
           >
             <Image
               src={checkin.photoUrl}
