@@ -6,6 +6,7 @@ import { Map as LeafletMap, DivIcon } from 'leaflet'
 import type { RouteSpot, RouteStartPoint } from '@/types/route'
 import { getTravelMode } from '@/lib/route-utils'
 import { calculateDistance } from '@/lib/geo-utils'
+import { useResizeObserver } from '@/hooks/useResizeObserver'
 import '../map/map.css'
 
 interface RouteMapProps {
@@ -104,7 +105,6 @@ export default function RouteMap({
 }: RouteMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const rafIdRef = useRef<number | null>(null)
 
   // 유효 스팟 좌표로 지도 bounds 계산 (시작 지점 포함)
   const bounds = useMemo(() => {
@@ -194,29 +194,7 @@ export default function RouteMap({
   }, [bounds])
 
   // ResizeObserver 기반 컨테이너 크기 감지 + invalidateSize
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    const observer = new ResizeObserver(() => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current)
-      }
-      rafIdRef.current = requestAnimationFrame(() => {
-        rafIdRef.current = null
-        fitMapBounds()
-      })
-    })
-
-    observer.observe(container)
-
-    return () => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current)
-      }
-      observer.disconnect()
-    }
-  }, [fitMapBounds])
+  useResizeObserver(containerRef, fitMapBounds)
 
   // bounds 변경 시 즉시 적용
   useEffect(() => {

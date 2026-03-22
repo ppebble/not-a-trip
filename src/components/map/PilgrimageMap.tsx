@@ -13,6 +13,7 @@ import SpotPreview from './SpotPreview'
 import BottomSheet from '@/components/mobile/BottomSheet'
 import LocationButton from '@/components/mobile/LocationButton'
 import GpsErrorFallback from '@/components/mobile/GpsErrorFallback'
+import { useResizeObserver } from '@/hooks/useResizeObserver'
 import './map.css'
 
 interface PilgrimageMapProps {
@@ -74,25 +75,10 @@ export default function PilgrimageMap({
   }, [])
 
   // ResizeObserver 기반 invalidateSize - setTimeout 대신 컨테이너 크기 변경 감지
-  useEffect(() => {
-    const map = mapRef.current
-    const container = containerRef.current
-    if (!map || !container) return
-
-    let rafId: number | null = null
-    const observer = new ResizeObserver(() => {
-      if (rafId !== null) cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        map.invalidateSize()
-      })
-    })
-    observer.observe(container)
-
-    return () => {
-      observer.disconnect()
-      if (rafId !== null) cancelAnimationFrame(rafId)
-    }
+  const handleResize = useCallback(() => {
+    mapRef.current?.invalidateSize()
   }, [])
+  useResizeObserver(containerRef, handleResize)
 
   // Update store when map view changes
   useEffect(() => {
