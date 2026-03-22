@@ -178,11 +178,12 @@ export default function SpotDetailMap({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const L = (window as any).L
       if (L) {
-        const bounds = allPoints.reduce((b: unknown, point: number[]) => {
-          return (b as { extend: (p: number[]) => unknown }).extend(point)
-        }, new L.LatLngBounds())
+        const latLngBounds = new L.LatLngBounds()
+        allPoints.forEach((point: number[]) => {
+          latLngBounds.extend(point)
+        })
 
-        map.fitBounds(bounds, { padding: [20, 20] })
+        map.fitBounds(latLngBounds, { padding: [20, 20] })
       }
     }
   }, [lat, lng, facilities, hasValidCoordinates])
