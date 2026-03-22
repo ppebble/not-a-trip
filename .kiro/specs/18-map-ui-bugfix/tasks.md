@@ -214,9 +214,9 @@
 
 ## Bug 3 Fix: RouteMap 타일 깨짐 수정
 
-- [ ] 11. Fix for RouteMap 타일 깨짐
+- [x] 11. Fix for RouteMap 타일 깨짐
 
-  - [ ] 11.1 Implement the fix - RouteMap.tsx
+  - [x] 11.1 Implement the fix - RouteMap.tsx
     - `setTimeout(() => { map.invalidateSize() ... }, 300)` 패턴 완전 제거
     - 컨테이너 div에 ref를 연결하고 ResizeObserver로 크기 변경 감지
     - ResizeObserver 콜백에 debounce(requestAnimationFrame 또는 100ms) 적용하여 무한 루프(ResizeLoop Error) 방지
@@ -228,7 +228,7 @@
     - _Preservation: Polyline, 번호 마커, 시작 지점 마커, Popup 기존 스타일/동작 유지_
     - _Requirements: 2.5, 2.6, 3.5, 3.6_
 
-  - [ ] 11.2 Verify bug condition exploration test now passes
+  - [x] 11.2 Verify bug condition exploration test now passes
     - **Property 1: Expected Behavior** - RouteMap 타일 정렬
     - **IMPORTANT**: Re-run the SAME test from task 5 - do NOT write a new test
     - The test from task 5 encodes the expected behavior
@@ -237,7 +237,7 @@
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
     - _Requirements: 2.5, 2.6_
 
-  - [ ] 11.3 Verify preservation tests still pass
+  - [x] 11.3 Verify preservation tests still pass
     - **Property 2: Preservation** - Polyline, 마커, Popup 동작 보존
     - **IMPORTANT**: Re-run the SAME tests from task 6 - do NOT write new tests
     - Run preservation property tests from step 6
