@@ -77,24 +77,23 @@ const createImagePinIcon = (
   const categoryIconData = getCategoryIcon(category)
 
   // 테두리 색상 및 스타일 (카테고리 색상 적용)
+  // 호버와 선택 모두 동일한 노란색 스타일 사용
   const getBorderColor = () => {
-    if (isSelected) return '#fbbf24'
-    if (isHovered) return '#60a5fa'
+    if (isSelected || isHovered) return '#fbbf24'
     return categoryColor
   }
   const borderColor = getBorderColor()
-  const borderWidth = isSelected ? 4 : 3
+  const borderWidth = isSelected || isHovered ? 4 : 3
   const getShadowIntensity = () => {
-    if (isSelected) return 0.5
-    if (isHovered) return 0.45
+    if (isSelected || isHovered) return 0.5
     return 0.3
   }
   const shadowIntensity = getShadowIntensity()
 
-  // 호버 시 글로우 효과
+  // 호버/선택 시 글로우 효과 (노란색 통일)
   const glowEffect =
-    isHovered && !isSelected
-      ? 'box-shadow: 0 0 12px 2px rgba(96, 165, 250, 0.4);'
+    isHovered || isSelected
+      ? 'box-shadow: 0 0 12px 2px rgba(251, 191, 36, 0.4);'
       : ''
 
   // 인기 스팟 뱃지 (인증 수 10개 이상)
