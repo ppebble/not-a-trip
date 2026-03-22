@@ -3,7 +3,6 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useShallow } from 'zustand/react/shallow'
 import {
   useUIStore,
   useIsPreviewOpen,
@@ -37,12 +36,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   const isPreviewOpen = useIsPreviewOpen()
   const previewSpotId = usePreviewSpotId()
   const previewPosition = usePreviewPosition()
-  const { closePreview, setPreviewHovered } = useUIStore(
-    useShallow((state) => ({
-      closePreview: state.closePreview,
-      setPreviewHovered: state.setPreviewHovered,
-    }))
-  )
+  const closePreview = useUIStore((state) => state.closePreview)
 
   // 스팟 미리보기 데이터 조회
   const { data: spot, isLoading, error } = useSpotPreview(previewSpotId)
@@ -104,28 +98,16 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
 
   const position = calculatePosition()
 
-  // 툴팁 위에 마우스가 올라가면 닫히지 않도록 처리
-  const handleMouseEnter = () => {
-    setPreviewHovered(true)
-  }
-
-  const handleMouseLeave = () => {
-    setPreviewHovered(false)
-    closePreview()
-  }
-
   return (
     <div
       ref={previewRef}
-      className={`animate-fade-in-up absolute z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
+      className={`animate-fade-in-up pointer-events-none absolute z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
       style={{
         left: position.left,
         top: position.top,
       }}
       role="tooltip"
       aria-labelledby="spot-preview-title"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       {/* 로딩 상태 */}
       {isLoading && (
@@ -153,7 +135,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
           {/* 닫기 버튼 */}
           <button
             onClick={closePreview}
-            className="absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60"
+            className="pointer-events-auto absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60"
             aria-label="닫기"
           >
             <svg
@@ -232,7 +214,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
             {/* 상세보기 버튼 (Requirements 2.4) */}
             <button
               onClick={handleDetailClick}
-              className="flex w-full items-center justify-center space-x-1.5 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+              className="pointer-events-auto flex w-full items-center justify-center space-x-1.5 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
             >
               <span>자세히 보기</span>
               <svg
