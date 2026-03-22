@@ -14,11 +14,11 @@ interface SpotPinProps {
   onSelect?: (spotId: string) => void
 }
 
-// Z-Index 상수
+// Z-Index 상수 (근접 핀 간 z-index 충돌 방지를 위해 간격 확대)
 const Z_INDEX = {
   base: 0,
-  selected: 500,
-  hovered: 1000,
+  selected: 2000,
+  hovered: 5000,
 }
 
 // 핀 크기 상수
@@ -273,10 +273,11 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
       setSelectedSpot: state.setSelectedSpot,
     }))
   )
-  const { openPreview, closePreview } = useUIStore(
+  const { openPreview, closePreview, previewSpotId } = useUIStore(
     useShallow((state) => ({
       openPreview: state.openPreview,
       closePreview: state.closePreview,
+      previewSpotId: state.previewSpotId,
     }))
   )
   const isPreviewHovered = useIsPreviewHovered()
@@ -290,6 +291,12 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
   useEffect(() => {
     isPreviewHoveredRef.current = isPreviewHovered
   }, [isPreviewHovered])
+
+  // previewSpotId의 최신 값을 참조하기 위한 ref (다른 핀 호버 감지용)
+  const previewSpotIdRef = useRef(previewSpotId)
+  useEffect(() => {
+    previewSpotIdRef.current = previewSpotId
+  }, [previewSpotId])
 
   // 마커의 화면 좌표 계산
   const getMarkerScreenPosition = useCallback(() => {
@@ -428,12 +435,12 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 50ms 후 호버 상태 설정 및 SpotPreview 열기
+    // 100ms 후 호버 상태 설정 및 SpotPreview 열기
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(true)
       setSelectedSpot(spot.id)
       openPreview(spot.id, getMarkerScreenPosition())
-    }, 50)
+    }, 100)
   }, [
     isTouchDevice,
     spot.id,
@@ -451,14 +458,16 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
     }
-    // 150ms 후 호버 상태 해제 (툴팁 위로 마우스 이동 시간 확보)
+    // 250ms 후 호버 상태 해제 (핀 간 전환 시 안정성 확보)
     hoverTimeoutRef.current = setTimeout(() => {
       // 툴팁 위에 마우스가 있으면 닫지 않음 (ref로 최신 값 참조)
       if (isPreviewHoveredRef.current) return
+      // 다른 핀의 mouseover가 이미 트리거된 경우 closePreview 스킵
+      if (previewSpotIdRef.current && previewSpotIdRef.current !== spot.id) return
       setIsHovered(false)
       closePreview()
-    }, 150)
-  }, [isTouchDevice, closePreview])
+    }, 250)
+  }, [isTouchDevice, closePreview, spot.id])
 
   return (
     <Marker
