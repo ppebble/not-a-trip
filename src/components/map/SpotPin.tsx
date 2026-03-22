@@ -15,10 +15,12 @@ interface SpotPinProps {
 }
 
 // Z-Index 상수 (근접 핀 간 z-index 충돌 방지를 위해 간격 확대)
+// Leaflet은 위도 기반으로 ±1000 정도의 z-index를 자동 부여하므로
+// hovered를 충분히 높게 설정하여 항상 최상위에 표시
 const Z_INDEX = {
   base: 0,
-  selected: 2000,
-  hovered: 5000,
+  selected: 3000,
+  hovered: 10000,
 }
 
 // 핀 크기 상수
