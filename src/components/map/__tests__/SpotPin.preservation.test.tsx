@@ -160,12 +160,12 @@ describe('SpotPin Preservation - 핀 기존 동작 보존', () => {
   })
 
   /**
-   * Property 2-2: 핀 아이콘 크기가 상태별로 올바름 (base=48, hovered=54, selected=58)
+   * Property 2-2: 핀 아이콘 크기가 상태별로 올바름 (base=48, hovered=54)
    *
    * 소스코드에서 PIN_SIZES 상수가 올바른 값을 가지는지 검증한다.
    * EXPECTED: 수정 전/후 모두 PASS
    */
-  test('핀 아이콘 크기 상수가 올바르다 (base=48, hovered=54, selected=58)', () => {
+  test('핀 아이콘 크기 상수가 올바르다 (base=48, hovered=54)', () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const fs = require('fs')
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -175,14 +175,12 @@ describe('SpotPin Preservation - 핀 기존 동작 보존', () => {
       'utf-8'
     )
 
-    // PIN_SIZES 상수 확인
+    // PIN_SIZES 상수 확인 (호버 단일 상태로 변경됨)
     const baseMatch = sourceCode.match(/base\s*:\s*48/)
     const hoveredMatch = sourceCode.match(/hovered\s*:\s*54/)
-    const selectedMatch = sourceCode.match(/selected\s*:\s*58/)
 
     expect(baseMatch).not.toBeNull()
     expect(hoveredMatch).not.toBeNull()
-    expect(selectedMatch).not.toBeNull()
   })
 
   /**

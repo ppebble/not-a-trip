@@ -55,17 +55,20 @@ describe('SpotPin Bug Condition Exploration - 근접 핀 호버 안정성', () =
   })
 
   /**
-   * Property 1-2: Z_INDEX.selected가 충분히 커야 한다 (2000 이상)
+   * Property 1-2: 호버/선택 이원 상태가 호버 단일 상태로 통합되어야 한다
    *
-   * 현재 selected: 500은 근접 핀 간 충돌 방지에 부족하다.
+   * 이전에는 isSelected와 isHovered가 분리되어 있어
+   * 호버 후 이전 핀이 선택 상태로 남는 문제가 있었다.
+   * 호버 단일 상태로 통합하여 마우스 이탈 시 완전히 원래 상태로 복원되어야 한다.
    *
-   * EXPECTED: 수정 전 코드에서 FAIL (selected=500, 부족)
+   * EXPECTED: 수정 후 PASS (selectedSpotId가 호버에서 사용되지 않음)
    */
-  test('Z_INDEX.selected가 2000 이상이어야 한다', () => {
-    const selectedMatch = sourceCode.match(/selected\s*:\s*(\d+)/)
-    expect(selectedMatch).not.toBeNull()
-    const selectedValue = parseInt(selectedMatch![1], 10)
-    expect(selectedValue).toBeGreaterThanOrEqual(3000)
+  test('handleMouseOver에서 setSelectedSpot을 호출하지 않아야 한다', () => {
+    const mouseOverSection = sourceCode
+      .split('handleMouseOver')[1]
+      ?.split('handleMouseOut')[0]
+    expect(mouseOverSection).toBeDefined()
+    expect(mouseOverSection).not.toContain('setSelectedSpot')
   })
 
   /**
