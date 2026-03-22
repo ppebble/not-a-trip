@@ -175,7 +175,6 @@ const createImagePinIcon = (
         cursor: pointer;
         filter: drop-shadow(0 4px 8px rgba(0,0,0,${shadowIntensity}));
         transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        transform: ${isHovered && !isSelected ? 'translateY(-4px)' : 'translateY(0)'};
       ">
         <!-- 원형 이미지 컨테이너 -->
         <div class="image-circle" style="
@@ -463,7 +462,8 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
       // 툴팁 위에 마우스가 있으면 닫지 않음 (ref로 최신 값 참조)
       if (isPreviewHoveredRef.current) return
       // 다른 핀의 mouseover가 이미 트리거된 경우 closePreview 스킵
-      if (previewSpotIdRef.current && previewSpotIdRef.current !== spot.id) return
+      if (previewSpotIdRef.current && previewSpotIdRef.current !== spot.id)
+        return
       setIsHovered(false)
       closePreview()
     }, 250)
