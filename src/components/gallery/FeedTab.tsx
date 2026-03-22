@@ -1,13 +1,13 @@
 'use client'
 
+import { useState } from 'react'
+import Image from 'next/image'
 import { CheckIn } from '@/types'
-import { MasonryGrid, MasonryItem } from './MasonryGrid'
-import { ComparisonCard } from './ComparisonCard'
 import { useCheckInFeed } from '@/hooks/useCheckInFeed'
 
 /**
  * FeedTab 컴포넌트
- * 실시간 피드 탭 - 최신순 정렬된 체크인 목록을 무한 스크롤로 표시
+ * 인스타그램 탐색 스타일의 3열 정사각형 그리드로 체크인 목록 표시
  *
  * Requirements:
  * - 3.2: 실시간 피드 탭에서 최신순 정렬된 체크인 표시
@@ -19,36 +19,63 @@ export interface FeedTabProps {
   onCheckInClick?: (checkIn: CheckIn) => void
 }
 
-/**
- * 로딩 스켈레톤 컴포넌트
- */
+/** 검색바 컴포넌트 */
+function SearchBar({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (v: string) => void
+}) {
+  return (
+    <div className="sticky top-14 z-10 border-b bg-white px-4 py-3">
+      <div className="mx-auto max-w-4xl">
+        <div className="relative">
+          <svg
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            type="text"
+            placeholder="스팟 또는 유저 검색"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full rounded-lg bg-gray-100 py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** 로딩 스켈레톤 (3열 정사각형 그리드) */
 function LoadingSkeleton() {
   return (
     <>
-      {[1, 2, 3, 4].map((i) => (
-        <MasonryItem key={`skeleton-${i}`}>
-          <div className="animate-pulse rounded-xl bg-white shadow-md">
-            <div className="aspect-[4/5] rounded-t-xl bg-navy-200" />
-            <div className="p-3">
-              <div className="mb-2 flex items-center gap-2">
-                <div className="h-6 w-6 rounded-full bg-navy-200" />
-                <div className="h-4 w-20 rounded bg-navy-200" />
-              </div>
-              <div className="h-4 w-32 rounded bg-navy-100" />
-            </div>
-          </div>
-        </MasonryItem>
+      {Array.from({ length: 9 }, (_, i) => (
+        <div
+          key={`skeleton-${i}`}
+          className="aspect-square animate-pulse bg-navy-200"
+        />
       ))}
     </>
   )
 }
 
-/**
- * 빈 상태 컴포넌트
- */
+/** 빈 상태 컴포넌트 */
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
+    <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">📸</div>
       <p className="text-lg font-medium text-navy-700">아직 인증샷이 없어요</p>
       <p className="mt-2 text-sm text-navy-500">
@@ -58,12 +85,10 @@ function EmptyState() {
   )
 }
 
-/**
- * 에러 상태 컴포넌트
- */
+/** 에러 상태 컴포넌트 */
 function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
+    <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">😢</div>
       <p className="text-lg font-medium text-navy-700">
         데이터를 불러올 수 없습니다
@@ -79,7 +104,46 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   )
 }
 
+/** 그리드 아이템 (정사각형 + 호버 오버레이) */
+function FeedGridItem({
+  checkIn,
+  spotName,
+  isPriority,
+  onClick,
+}: {
+  checkIn: CheckIn & { spot?: { id: string; name: string } }
+  spotName: string
+  isPriority: boolean
+  onClick?: () => void
+}) {
+  return (
+    <button
+      type="button"
+      className="group relative aspect-square w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-navy-400"
+      onClick={onClick}
+      aria-label={`${checkIn.userName}님의 ${spotName} 인증샷`}
+    >
+      <Image
+        src={checkIn.photoUrl}
+        alt={`${checkIn.userName}의 인증샷`}
+        fill
+        className="object-cover"
+        sizes="(max-width: 896px) 33vw, 299px"
+        priority={isPriority}
+      />
+      {/* 호버 오버레이 */}
+      <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="flex gap-4 text-sm font-semibold text-white">
+          <span>❤️ {checkIn.likeCount ?? 0}</span>
+        </div>
+      </div>
+    </button>
+  )
+}
+
 export function FeedTab({ onCheckInClick }: FeedTabProps) {
+  const [searchQuery, setSearchQuery] = useState('')
+
   const {
     checkIns,
     isLoading,
@@ -89,65 +153,62 @@ export function FeedTab({ onCheckInClick }: FeedTabProps) {
     refresh,
     loadMoreRef,
   } = useCheckInFeed({
-    itemsPerPage: 20,
+    itemsPerPage: 21, // 3의 배수로 그리드 정렬
     sortBy: 'latest',
   })
 
-  // 에러 상태
-  if (error && checkIns.length === 0) {
-    return (
-      <div className="mx-auto max-w-6xl px-4 py-6">
-        <ErrorState onRetry={refresh} />
-      </div>
-    )
-  }
-
-  // 빈 상태
-  if (!isLoading && checkIns.length === 0) {
-    return (
-      <div className="mx-auto max-w-6xl px-4 py-6">
-        <EmptyState />
-      </div>
-    )
-  }
+  // 검색 필터링 (클라이언트 사이드)
+  const filtered = searchQuery
+    ? checkIns.filter(
+        (c) =>
+          c.userName?.includes(searchQuery) ||
+          c.spot?.name?.includes(searchQuery)
+      )
+    : checkIns
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
-      <MasonryGrid>
-        {/* 체크인 카드 목록 */}
-        {checkIns.map((checkIn, index) => (
-          <MasonryItem key={checkIn.id}>
-            <ComparisonCard
+    <div>
+      <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+      <div className="mx-auto max-w-4xl px-0.5 py-2">
+        <div className="grid grid-cols-3 gap-0.5">
+          {/* 에러 상태 */}
+          {error && filtered.length === 0 && <ErrorState onRetry={refresh} />}
+
+          {/* 빈 상태 */}
+          {!isLoading && filtered.length === 0 && !error && <EmptyState />}
+
+          {/* 체크인 그리드 */}
+          {filtered.map((checkIn, index) => (
+            <FeedGridItem
+              key={checkIn.id}
               checkIn={checkIn}
-              spot={
-                checkIn.spot || { id: checkIn.spotId, name: '알 수 없는 스팟' }
-              }
-              badges={checkIn.badges}
-              isPriority={index < 4}
+              spotName={checkIn.spot?.name ?? '알 수 없는 스팟'}
+              isPriority={index < 6}
               onClick={() => onCheckInClick?.(checkIn)}
             />
-          </MasonryItem>
-        ))}
+          ))}
 
-        {/* 초기 로딩 스켈레톤 */}
-        {isLoading && <LoadingSkeleton />}
-      </MasonryGrid>
+          {/* 초기 로딩 스켈레톤 */}
+          {isLoading && <LoadingSkeleton />}
+        </div>
 
-      {/* 무한 스크롤 트리거 영역 */}
-      <div
-        ref={loadMoreRef}
-        className="flex h-20 items-center justify-center"
-        aria-hidden="true"
-      >
-        {isLoadingMore && (
-          <div className="flex items-center gap-2 text-navy-500">
-            <div className="border-t-primary-500 h-5 w-5 animate-spin rounded-full border-2 border-navy-300" />
-            <span className="text-sm">더 불러오는 중...</span>
-          </div>
-        )}
-        {!hasMore && checkIns.length > 0 && (
-          <p className="text-sm text-navy-400">모든 인증샷을 불러왔습니다</p>
-        )}
+        {/* 무한 스크롤 트리거 영역 */}
+        <div
+          ref={loadMoreRef}
+          className="flex h-20 items-center justify-center"
+          aria-hidden="true"
+        >
+          {isLoadingMore && (
+            <div className="flex items-center gap-2 text-navy-500">
+              <div className="border-t-primary-500 h-5 w-5 animate-spin rounded-full border-2 border-navy-300" />
+              <span className="text-sm">더 불러오는 중...</span>
+            </div>
+          )}
+          {!hasMore && checkIns.length > 0 && (
+            <p className="text-sm text-navy-400">모든 인증샷을 불러왔습니다</p>
+          )}
+        </div>
       </div>
     </div>
   )
