@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SessionProvider } from 'next-auth/react'
 import { useState } from 'react'
+import { SentryUserManager } from '@/components/common'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -40,6 +41,7 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <SessionProvider>
+      <SentryUserManager />
       <QueryClientProvider client={queryClient}>
         {children}
         {/* Show React Query DevTools in development */}
