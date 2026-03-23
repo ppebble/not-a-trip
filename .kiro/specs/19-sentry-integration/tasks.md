@@ -63,8 +63,8 @@ Not a Trip 프로젝트에 `@sentry/nextjs` SDK를 통합하여 클라이언트/
     - Sentry mock 없이 ErrorBoundary에 에러 전달 시 `console.error` 호출 및 폴백 UI 렌더링 확인
     - **Validates: Requirements 3.5**
 
-- [ ] 4. 사용자 컨텍스트 설정
-  - [ ] 4.1 `SentryUserManager` 컴포넌트 생성
+- [x] 4. 사용자 컨텍스트 설정
+  - [x] 4.1 `SentryUserManager` 컴포넌트 생성
     - `src/components/common/SentryUserManager.tsx` 파일 생성
     - `useSession()`으로 세션 감지
     - 로그인 시 `Sentry.setUser({ id: session.user.id })` 호출
@@ -72,7 +72,7 @@ Not a Trip 프로젝트에 `@sentry/nextjs` SDK를 통합하여 클라이언트/
     - 이메일/이름 등 개인정보 절대 포함하지 않음
     - _Requirements: 7.1, 7.2, 7.3_
 
-  - [ ] 4.2 `Providers` 컴포넌트에 `SentryUserManager` 추가
+  - [x] 4.2 `Providers` 컴포넌트에 `SentryUserManager` 추가
     - `src/lib/providers.tsx`의 `SessionProvider` 하위에 `SentryUserManager` 배치
     - _Requirements: 7.1_
 
@@ -94,7 +94,7 @@ Not a Trip 프로젝트에 `@sentry/nextjs` SDK를 통합하여 클라이언트/
     - `fc.constantFrom(undefined, '', null)`로 falsy DSN 값에 대해 `isSentryEnabled`가 false 반환 확인
     - **Validates: Requirements 2.7**
 
-- [ ] 6. Final Checkpoint - 전체 통합 검증
+- [x] 6. Final Checkpoint - 전체 통합 검증
   - `npm run build`로 빌드 정상 동작 확인
   - `npm run type-check`로 타입 에러 없음 확인
   - `npm test`로 모든 테스트 통과 확인
