@@ -42,13 +42,13 @@ Not a Trip 프로젝트에 `@sentry/nextjs` SDK를 통합하여 클라이언트/
   - [x] 1.6 `.gitignore` 업데이트
     - `.env.sentry-build-plugin` 파일 제외 추가
 
-- [ ] 2. Checkpoint - 기본 설정 검증
+- [x] 2. Checkpoint - 기본 설정 검증
   - `npm run build`로 빌드 정상 동작 확인
   - `npm run type-check`로 타입 에러 없음 확인
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 3. ErrorBoundary 컴포넌트에 Sentry 보고 추가
-  - [ ] 3.1 `componentDidCatch`에서 `Sentry.captureException` 호출 추가
+- [x] 3. ErrorBoundary 컴포넌트에 Sentry 보고 추가
+  - [x] 3.1 `componentDidCatch`에서 `Sentry.captureException` 호출 추가
     - Sentry SDK 초기화 여부 확인 후 조건부 호출
     - 기존 `console.error` 동작 유지 (항상 실행)
     - _Requirements: 3.1, 3.5_
