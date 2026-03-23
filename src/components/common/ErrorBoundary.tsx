@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import * as Sentry from '@sentry/nextjs'
 import { AlertTriangleIcon } from '@/components/icons'
 
 interface ErrorBoundaryProps {
@@ -44,6 +45,12 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     console.error('[ErrorBoundary]', error, errorInfo)
+
+    if (Sentry.isInitialized()) {
+      Sentry.captureException(error, {
+        contexts: { react: { componentStack: errorInfo.componentStack } },
+      })
+    }
   }
 
   handleReset = () => {
