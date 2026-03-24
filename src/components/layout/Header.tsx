@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
+import { ThemeToggle } from '@/components/common/ThemeToggle'
 
 export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
@@ -99,6 +100,9 @@ export function Header() {
               로그인
             </Link>
           )}
+
+          {/* 테마 토글 */}
+          <ThemeToggle />
 
           {/* 모바일 햄버거 버튼 */}
           <button
