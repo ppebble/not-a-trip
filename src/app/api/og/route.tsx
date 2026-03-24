@@ -28,6 +28,16 @@ interface RouteOgData {
 
 const BRAND_COLOR = '#4164a5'
 const BRAND_BG = '#f0f4fa'
+
+// OG 이미지 서버사이드 렌더링용 카테고리 컬러 폴백 (CSS 변수 사용 불가)
+const OG_CATEGORY_COLORS: Record<SpotCategory, { bg: string; fg: string }> = {
+  animation: { bg: '#E8DEFC', fg: '#5D448E' },
+  sports: { bg: '#C7ECE8', fg: '#166E64' },
+  movie_drama: { bg: '#C7DEFC', fg: '#224982' },
+  music: { bg: '#D1EEDC', fg: '#226C3E' },
+  game: { bg: '#F5DAF0', fg: '#803070' },
+  other: { bg: '#E6E4E2', fg: '#4E4844' },
+}
 const IMAGE_WIDTH = 1200
 const IMAGE_HEIGHT = 630
 
@@ -156,9 +166,9 @@ function SpotOgImage({ spot }: { spot: SpotOgData }) {
   const categoryLabel = spot.category
     ? CATEGORY_CONFIG[spot.category].label
     : null
-  const categoryColor = spot.category
-    ? CATEGORY_CONFIG[spot.category].color
-    : '#6b7280'
+  const categoryColors = spot.category
+    ? OG_CATEGORY_COLORS[spot.category]
+    : { bg: '#E6E4E2', fg: '#4E4844' }
 
   return (
     <div
@@ -207,8 +217,8 @@ function SpotOgImage({ spot }: { spot: SpotOgData }) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: categoryColor,
-                color: '#ffffff',
+                backgroundColor: categoryColors.bg,
+                color: categoryColors.fg,
                 fontSize: '20px',
                 fontWeight: 700,
                 padding: '8px 20px',

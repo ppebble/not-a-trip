@@ -68,7 +68,7 @@ export default function CategoryFilter() {
                 : 'text-navy-700 bg-white/80 hover:bg-white'
             }`}
             style={{
-              backgroundColor: isSelected ? config.color : undefined,
+              backgroundColor: isSelected ? config.bgColor : undefined,
             }}
           >
             <CategoryIcon

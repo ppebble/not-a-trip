@@ -45,10 +45,11 @@ export const ExternalLinkCard = memo(function ExternalLinkCard({
       }}
     >
       {/* 아이콘 */}
-      <span
-        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-xl"
-        style={{ backgroundColor: `${config.color}15` }}
-      >
+      <span className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-xl">
+        <span
+          className="absolute inset-0 rounded-full"
+          style={{ backgroundColor: config.color, opacity: 0.08 }}
+        />
         {config.icon}
       </span>
 

@@ -25,7 +25,7 @@ const getCategoryLabel = (category?: SpotCategory): string => {
 // 카테고리별 색상 가져오기
 const getCategoryColor = (category?: SpotCategory): string => {
   if (!category) return '#2d4a6f'
-  return CATEGORY_CONFIG[category]?.color || '#2d4a6f'
+  return CATEGORY_CONFIG[category]?.bgColor || '#2d4a6f'
 }
 
 /**

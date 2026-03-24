@@ -322,8 +322,8 @@ function SpotItem({ spot }: { spot: SpotWithCheckIn }) {
           <span
             className="mt-1 inline-block rounded-full px-2 py-0.5 text-xs"
             style={{
-              backgroundColor: `${categoryConfig.color}20`,
-              color: categoryConfig.color,
+              backgroundColor: categoryConfig.bgColor,
+              color: categoryConfig.fgColor,
             }}
           >
             {categoryConfig.label}
