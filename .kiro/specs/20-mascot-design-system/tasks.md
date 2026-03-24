@@ -61,8 +61,8 @@
 - [ ] 3. Checkpoint — 토큰 시스템 기반 검증
   - 모든 테스트 통과 확인, 빌드 정상 여부 확인, 사용자에게 질문 사항 확인
 
-- [ ] 4. 다크 모드 팔레트 대응
-  - [ ] 4.1 globals.css 다크 모드 변수 재정의
+- [x] 4. 다크 모드 팔레트 대응
+  - [x] 4.1 globals.css 다크 모드 변수 재정의
     - `@media (prefers-color-scheme: dark)` 블록에서 모든 시맨틱 컬러 변수 재정의
     - 다크 모드 배경: 어두운 Primary 계열 (기존 `#0a0a0a` 교체)
     - 다크 모드 텍스트: 밝은 Neutral 계열 (기존 `#ededed` 교체)
@@ -81,8 +81,8 @@
     - 다크 모드 카테고리 bg/fg 쌍의 대비 비율이 WCAG AA 기준(4.5:1) 이상인지 검증
     - **Validates: Requirements 9.5**
 
-- [ ] 5. 글로벌 스타일 및 레이아웃 컴포넌트 마이그레이션
-  - [ ] 5.1 globals.css 글로벌 스타일 마이그레이션
+- [x] 5. 글로벌 스타일 및 레이아웃 컴포넌트 마이그레이션
+  - [x] 5.1 globals.css 글로벌 스타일 마이그레이션
     - `body` 스타일: `var(--foreground)` → 시맨틱 토큰 참조로 교체
     - 스크롤바 트랙: `var(--navy-100)` → 시맨틱 surface 컬러
     - 스크롤바 썸: `var(--navy-400)` → 시맨틱 muted 컬러
@@ -90,7 +90,7 @@
     - 로딩 shimmer 그라데이션: `var(--navy-200/100)` → Neutral 컬러
     - _Requirements: 11.1, 11.2, 11.3, 11.4_
 
-  - [ ] 5.2 Header 컴포넌트 마이그레이션
+  - [x] 5.2 Header 컴포넌트 마이그레이션
     - 배경색: `slate-900` 계열 → `bg-surface` 시맨틱 클래스
     - 텍스트: `slate-300/white` → `text-text-secondary` / `text-text-primary`
     - 호버 상태: Secondary 컬러 적용
@@ -99,14 +99,14 @@
     - 좌측 로고 영역에 마스코트 얼굴 아이콘 배치 (에셋 미존재 시 폴백 처리)
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-  - [ ] 5.3 BottomSheet/모바일 네비게이션 마이그레이션
+  - [x] 5.3 BottomSheet/모바일 네비게이션 마이그레이션
     - 배경색: `surface` 시맨틱 컬러 적용
     - 활성 아이콘: Primary 컬러
     - 비활성 아이콘: muted 컬러
     - 상단 보더: border 시맨틱 컬러
     - _Requirements: 10.1, 10.2, 10.3, 10.4_
 
-- [ ] 6. Checkpoint — 레이아웃 마이그레이션 검증
+- [x] 6. Checkpoint — 레이아웃 마이그레이션 검증
   - 모든 테스트 통과 확인, 사용자에게 질문 사항 확인
 
 - [ ] 7. 버튼/폼/카드 컴포넌트 마이그레이션
@@ -149,11 +149,39 @@
     - `:root`에서 CSS 변수 값 변경 시 해당 변수를 참조하는 Tailwind 유틸리티 클래스의 computed style이 변경된 값을 반영하는지 검증 (JSDOM 환경)
     - **Validates: Requirements 1.4, 2.6**
 
-- [ ] 9. Checkpoint — 컬러 마이그레이션 완료 검증
+- [ ] 9. 베이스 컬러 팔레트 확정 및 조정
+  - [ ] 9.1 사용자와 함께 기본 컬러 방향 확정
+    - 현재 적용된 보라 계열 Primary가 어색한 문제 해결
+    - 마스코트 캐릭터 레퍼런스 이미지 기반으로 Primary/Secondary/Neutral 기본색 후보 선정
+    - 사용자에게 후보 팔레트 제시 및 피드백 수렴
+    - _Requirements: 2.1, 2.2, 2.3_
+
+  - [ ] 9.2 확정된 컬러로 globals.css 팔레트 값 교체
+    - `:root` Primary 50~900 RGB 값 교체
+    - `:root` Secondary 50~900 RGB 값 교체
+    - `:root` Neutral 50~900 RGB 값 교체
+    - 시맨틱 역할 토큰 값 재조정 (background, surface, text 등)
+    - 카테고리/콘텐츠/링크 타입 컬러 값 재조정
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
+
+  - [ ] 9.3 다크 모드 팔레트 값 재조정
+    - `@media (prefers-color-scheme: dark)` 블록의 모든 변수 값을 새 팔레트에 맞게 재조정
+    - WCAG AA 대비 기준 충족 확인
+    - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
+
+  - [ ] 9.4 map.css 하드코딩 hex 값 새 팔레트에 맞게 교체
+    - Leaflet 줌 컨트롤, 팝업, 툴팁 등의 hex 값을 새 Primary 계열로 교체
+    - _Requirements: 2.1_
+
+  - [ ] 9.5 Checkpoint — 베이스 컬러 조정 검증
+    - 전체 UI 시각적 확인 (사용자 피드백)
+    - `npm run type-check` 및 `npm run build` 정상 확인
+
+- [ ] 10. Checkpoint — 컬러 마이그레이션 완료 검증
   - 모든 테스트 통과 확인, 빌드 정상 여부 확인, 사용자에게 질문 사항 확인
 
-- [ ] 10. Lottie 로딩 컴포넌트 구현
-  - [ ] 10.1 @lottiefiles/dotlottie-react 패키지 설치 및 LottieLoader 컴포넌트 생성
+- [ ] 11. Lottie 로딩 컴포넌트 구현
+  - [ ] 11.1 @lottiefiles/dotlottie-react 패키지 설치 및 LottieLoader 컴포넌트 생성
     - `npm install @lottiefiles/dotlottie-react`
     - `src/components/common/LottieLoader.tsx` 생성
     - `next/dynamic`으로 동적 임포트 (SSR 비활성화)
@@ -161,8 +189,8 @@
     - Lottie 에러 시 GIF 폴백 → CSS 스피너 최종 폴백 체인 구현
     - _Requirements: 13.3_
 
-- [ ] 11. 마스코트 에셋 기반 상태 화면 및 지도 마커 개편
-  - [ ] 11.1 상태 화면 컴포넌트 마스코트 일러스트 적용
+- [ ] 12. 마스코트 에셋 기반 상태 화면 및 지도 마커 개편
+  - [ ] 12.1 상태 화면 컴포넌트 마스코트 일러스트 적용
     - `EmptySearchOverlay`: 마스코트 일러스트 + 폴백 (기존 SearchIcon)
     - `EmptyFilterOverlay`: 마스코트 일러스트 + 폴백 (기존 FilterIcon)
     - `SpotErrorDisplay`: 마스코트 일러스트 + `accent-surface` 배경 + 폴백 (기존 AlertTriangleIcon)
@@ -171,21 +199,21 @@
     - `public/mascot/` 디렉토리 생성 및 플레이스홀더 에셋 경로 설정 (실제 에셋은 추후 추가)
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
 
-  - [ ] 11.2 SpotPin 지도 마커 마스코트 테마 적용
+  - [ ] 12.2 SpotPin 지도 마커 마스코트 테마 적용
     - 마스코트 테마 커스텀 마커 에셋 적용 (에셋 미존재 시 기존 SVG divIcon 폴백)
     - 카테고리별 마커 색상을 토큰(`--category-*-bg/fg`) 참조로 변경
     - _Requirements: 12.1, 12.2, 12.4_
 
-  - [ ] 11.3 CurrentLocationMarker 마스코트 에셋 적용
+  - [ ] 12.3 CurrentLocationMarker 마스코트 에셋 적용
     - 마스코트 얼굴/SD 캐릭터 에셋 적용 (에셋 미존재 시 기존 파란 점 + 펄스 폴백)
     - _Requirements: 12.3_
 
-  - [ ]* 11.4 Property 8 속성 테스트 — 카테고리별 마커 색상 분화
+  - [ ]* 12.4 Property 8 속성 테스트 — 카테고리별 마커 색상 분화
     - **Property 8: 카테고리별 마커 색상 분화**
     - 각 SpotCategory의 SpotPin 마커가 해당 카테고리의 토큰 색상을 사용하고, 서로 다른 카테고리의 마커가 시각적으로 구분 가능한지 검증
     - **Validates: Requirements 12.2**
 
-- [ ] 12. 최종 Checkpoint — 전체 통합 검증
+- [ ] 13. 최종 Checkpoint — 전체 통합 검증
   - 모든 속성 테스트 및 단위 테스트 통과 확인
   - `npm run type-check` 및 `npm run build` 정상 확인
   - 사용자에게 질문 사항 확인
