@@ -37,12 +37,12 @@
     - **Validates: Requirements 2.5**
 
 - [ ] 2. 디자인 토큰 타입 정의 및 Config 토큰화
-  - [ ] 2.1 디자인 토큰 타입 파일 생성
+  - [x] 2.1 디자인 토큰 타입 파일 생성
     - `src/types/design-tokens.ts` 생성
     - `SemanticColorRole`, `ColorShade`, `CategoryColorToken`, `CategoryConfig`, `ContentTypeConfig`, `LinkTypeConfig` 타입 정의
     - _Requirements: 1.5, 6.4_
 
-  - [ ] 2.2 CATEGORY_CONFIG, CONTENT_TYPE_CONFIG, LINK_TYPE_CONFIG 토큰화
+  - [-] 2.2 CATEGORY_CONFIG, CONTENT_TYPE_CONFIG, LINK_TYPE_CONFIG 토큰화
     - `src/types/spot.ts`의 `CategoryConfig` 인터페이스: `color` → `bgColor` + `fgColor` 변경
     - `ContentTypeConfig` 인터페이스: `color` → `bgColor` + `fgColor` 변경
     - `LinkTypeConfig` 인터페이스: `color` 필드를 CSS 변수 참조로 변경
