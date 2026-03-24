@@ -28,23 +28,27 @@ export const LINK_TYPE_CONFIG: Record<ExternalLinkType, LinkTypeConfig> = {
   official: {
     label: '공식 홈페이지',
     icon: '/icons/link-types/official.webp',
-    color: '#3B82F6',
+    color: 'rgb(var(--link-official))',
   },
   ticket: {
     label: '티켓 예매',
     icon: '/icons/link-types/ticket.webp',
-    color: '#10B981',
+    color: 'rgb(var(--link-ticket))',
   },
   schedule: {
     label: '일정 확인',
     icon: '/icons/link-types/schedule.webp',
-    color: '#F59E0B',
+    color: 'rgb(var(--link-schedule))',
   },
-  sns: { label: 'SNS', icon: '/icons/link-types/sns.webp', color: '#8B5CF6' },
+  sns: {
+    label: 'SNS',
+    icon: '/icons/link-types/sns.webp',
+    color: 'rgb(var(--link-sns))',
+  },
   other: {
     label: '기타',
     icon: '/icons/link-types/other.webp',
-    color: '#6B7280',
+    color: 'rgb(var(--link-other))',
   },
 }
 
@@ -71,83 +75,98 @@ export type ContentType =
 
 export interface ContentTypeConfig {
   icon: string
-  color: string
+  bgColor: string
+  fgColor: string
   label: string
 }
 
 export const CONTENT_TYPE_CONFIG: Record<ContentType, ContentTypeConfig> = {
   anime: {
     icon: '/icons/content-types/anime.webp',
-    color: '#8B91B8',
+    bgColor: 'rgb(var(--content-anime-bg))',
+    fgColor: 'rgb(var(--content-anime-fg))',
     label: '애니메이션',
   },
   movie: {
     icon: '/icons/content-types/movie.webp',
-    color: '#45B7D1',
+    bgColor: 'rgb(var(--content-movie-bg))',
+    fgColor: 'rgb(var(--content-movie-fg))',
     label: '영화',
   },
   drama: {
     icon: '/icons/content-types/drama.webp',
-    color: '#9B59B6',
+    bgColor: 'rgb(var(--content-drama-bg))',
+    fgColor: 'rgb(var(--content-drama-fg))',
     label: '드라마',
   },
   sports_team: {
     icon: '/icons/content-types/sports_team.webp',
-    color: '#4ECDC4',
+    bgColor: 'rgb(var(--content-sports-team-bg))',
+    fgColor: 'rgb(var(--content-sports-team-fg))',
     label: '스포츠 팀',
   },
   artist: {
     icon: '/icons/content-types/artist.webp',
-    color: '#96CEB4',
+    bgColor: 'rgb(var(--content-artist-bg))',
+    fgColor: 'rgb(var(--content-artist-fg))',
     label: '아티스트',
   },
   game: {
     icon: '/icons/content-types/game.webp',
-    color: '#DDA0DD',
+    bgColor: 'rgb(var(--content-game-bg))',
+    fgColor: 'rgb(var(--content-game-fg))',
     label: '게임',
   },
   other: {
     icon: '/icons/content-types/other.webp',
-    color: '#95A5A6',
+    bgColor: 'rgb(var(--content-other-bg))',
+    fgColor: 'rgb(var(--content-other-fg))',
     label: '기타',
   },
 }
 
 export interface CategoryConfig {
   icon: string
-  color: string
+  bgColor: string
+  fgColor: string
   label: string
 }
 
 export const CATEGORY_CONFIG: Record<SpotCategory, CategoryConfig> = {
   animation: {
     icon: '/icons/categories/animation.webp',
-    color: '#8B91B8',
+    bgColor: 'rgb(var(--category-anime-bg))',
+    fgColor: 'rgb(var(--category-anime-fg))',
     label: '애니메이션',
   },
   sports: {
     icon: '/icons/categories/sports.webp',
-    color: '#2BA89E',
+    bgColor: 'rgb(var(--category-sports-bg))',
+    fgColor: 'rgb(var(--category-sports-fg))',
     label: '스포츠',
   },
   movie_drama: {
     icon: '/icons/categories/movie_drama.webp',
-    color: '#2E8FAB',
+    bgColor: 'rgb(var(--category-movie-drama-bg))',
+    fgColor: 'rgb(var(--category-movie-drama-fg))',
     label: '영화/드라마',
   },
   music: {
     icon: '/icons/categories/music.webp',
-    color: '#5A9E7C',
+    bgColor: 'rgb(var(--category-music-bg))',
+    fgColor: 'rgb(var(--category-music-fg))',
     label: '음악/콘서트',
   },
   game: {
     icon: '/icons/categories/game.webp',
-    color: '#9B6B9B',
+    bgColor: 'rgb(var(--category-game-bg))',
+    fgColor: 'rgb(var(--category-game-fg))',
     label: '게임',
   },
   other: {
     icon: '/icons/categories/other.webp',
-    color: '#6B7B8A',
+    bgColor: 'rgb(var(--category-other-bg))',
+    fgColor: 'rgb(var(--category-other-fg))',
     label: '기타',
   },
 }

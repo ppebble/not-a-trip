@@ -31,7 +31,7 @@ const PIN_SIZES = {
 // 카테고리별 색상 가져오기
 const getCategoryColor = (category?: SpotCategory): string => {
   if (!category) return '#2d4a6f' // 기본 네이비 색상
-  return CATEGORY_CONFIG[category]?.color || '#2d4a6f'
+  return CATEGORY_CONFIG[category]?.bgColor || '#2d4a6f'
 }
 
 // 카테고리별 아이콘 가져오기 (SVG 이미지 경로 또는 fallback 이모티콘)

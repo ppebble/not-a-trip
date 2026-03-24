@@ -182,10 +182,11 @@ function LinkItem({
   return (
     <div className="border-navy-200 flex items-center gap-3 rounded-lg border bg-white p-3">
       {/* 아이콘 */}
-      <span
-        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-base"
-        style={{ backgroundColor: `${config.color}15` }}
-      >
+      <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-base">
+        <span
+          className="absolute inset-0 rounded-full"
+          style={{ backgroundColor: config.color, opacity: 0.08 }}
+        />
         {config.icon}
       </span>
 

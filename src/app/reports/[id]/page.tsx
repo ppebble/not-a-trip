@@ -162,8 +162,8 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
             <span
               className="rounded-full px-2.5 py-0.5 text-xs font-medium"
               style={{
-                backgroundColor: `${categoryConfig.color}20`,
-                color: categoryConfig.color,
+                backgroundColor: categoryConfig.bgColor,
+                color: categoryConfig.fgColor,
               }}
             >
               {categoryConfig.label}
