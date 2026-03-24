@@ -1,0 +1,42 @@
+'use client'
+
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <div className="h-9 w-9" />
+  }
+
+  const cycleTheme = () => {
+    if (theme === 'system') setTheme('light')
+    else if (theme === 'light') setTheme('dark')
+    else setTheme('system')
+  }
+
+  const icon = theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻'
+  const label =
+    theme === 'dark'
+      ? '다크 모드'
+      : theme === 'light'
+        ? '라이트 모드'
+        : '시스템 설정'
+
+  return (
+    <button
+      onClick={cycleTheme}
+      className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 transition hover:bg-slate-700 hover:text-white"
+      aria-label={`현재: ${label}. 클릭하여 테마 변경`}
+      title={label}
+    >
+      <span className="text-base">{icon}</span>
+    </button>
+  )
+}
