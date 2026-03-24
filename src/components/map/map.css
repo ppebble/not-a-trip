@@ -1,9 +1,9 @@
-/* Leaflet map styling with navy theme */
+/* Leaflet map styling with primary theme */
 /* 주의: Leaflet 기본 CSS가 CDN에서 로드된 후 적용됨 */
 
 /* 지도 컨테이너 기본 스타일 */
 .leaflet-container {
-  background: #d9e0ed; /* navy-100 */
+  background: #eeedfc; /* primary-50 */
   font-family: inherit;
   z-index: 0 !important;
 }
@@ -46,21 +46,21 @@
   filter: brightness(0.97) contrast(1.02);
 }
 
-/* 줌 컨트롤 스타일 - navy 테마 */
+/* 줌 컨트롤 스타일 - primary 테마 */
 .leaflet-control-zoom a {
-  background-color: #345084 !important; /* navy-600 */
-  border-color: #4164a5 !important; /* navy-500 */
+  background-color: #4c40a8 !important; /* primary-600 */
+  border-color: #5f52c8 !important; /* primary-500 */
   color: white !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background-color: #273c63 !important; /* navy-700 */
+  background-color: #3c328a !important; /* primary-700 */
 }
 
 /* 팝업 스타일 */
 .leaflet-popup-content-wrapper {
   background: white;
-  border: 1px solid #b3c1db; /* navy-200 */
+  border: 1px solid #bdb7f2; /* primary-200 */
   border-radius: 0.5rem;
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -73,13 +73,13 @@
 
 /* Attribution 스타일 */
 .leaflet-control-attribution {
-  background: rgba(26, 40, 66, 0.8) !important; /* navy-800/80 */
+  background: rgba(30, 24, 72, 0.8) !important; /* primary-900/80 */
   color: white !important;
   font-size: 0.75rem !important;
 }
 
 .leaflet-control-attribution a {
-  color: #b3c1db !important; /* navy-200 */
+  color: #bdb7f2 !important; /* primary-200 */
 }
 
 /* SpotPin 커스텀 마커 스타일 */
@@ -153,7 +153,7 @@
 /* 스팟 팝업 스타일 */
 .spot-popup .leaflet-popup-content-wrapper {
   background: white !important;
-  border: 2px solid #8da2c9 !important; /* navy-300 */
+  border: 2px solid #5f52c8 !important; /* primary-500 */
   border-radius: 0.75rem !important;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
   max-width: 350px !important;
@@ -228,8 +228,8 @@
 
 /* Leaflet Tooltip 기본 스타일 오버라이드 */
 .leaflet-tooltip.hover-tooltip {
-  background: #1a2842; /* navy-800 */
-  border: 1px solid #345084; /* navy-600 */
+  background: #1e1848; /* primary-900 */
+  border: 1px solid #4c40a8; /* primary-600 */
   border-radius: 8px;
   padding: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -261,7 +261,7 @@
   transform: translateX(-50%);
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid #1a2842; /* navy-800 */
+  border-top: 8px solid #1e1848; /* primary-900 */
 }
 
 /* 화살표 테두리 효과 */
@@ -273,7 +273,7 @@
   transform: translateX(-50%);
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
-  border-top: 9px solid #345084; /* navy-600 */
+  border-top: 9px solid #4c40a8; /* primary-600 */
   z-index: -1;
 }
 
@@ -294,7 +294,7 @@
   height: 44px;
   border-radius: 6px;
   overflow: hidden;
-  background: #273c63; /* navy-700 */
+  background: #3c328a; /* primary-700 */
 }
 
 /* 썸네일 이미지 */
@@ -349,7 +349,7 @@
 
 .hover-tooltip-category-label {
   font-size: 11px;
-  color: #b3c1db; /* navy-200 */
+  color: #bdb7f2; /* primary-200 */
 }
 
 /* 반응형 조정 */

@@ -63,11 +63,13 @@ export default function GpsErrorFallback({
           {config.icon}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-navy-800 text-sm font-medium">{error.message}</p>
-          <p className="text-navy-500 mt-1 text-xs">{config.hint}</p>
+          <p className="text-sm font-medium text-primary-800">
+            {error.message}
+          </p>
+          <p className="mt-1 text-xs text-primary-500">{config.hint}</p>
 
           {/* 수동 탐색 안내 */}
-          <p className="text-navy-400 mt-2 text-xs">
+          <p className="mt-2 text-xs text-muted">
             지도를 직접 드래그하여 원하는 위치를 탐색할 수 있습니다.
           </p>
         </div>
@@ -75,7 +77,7 @@ export default function GpsErrorFallback({
         {/* 닫기 버튼 */}
         <button
           onClick={onDismiss}
-          className="text-navy-400 hover:bg-navy-100 hover:text-navy-600 flex-shrink-0 rounded-full p-1 transition-colors"
+          className="flex-shrink-0 rounded-full p-1 text-muted transition-colors hover:bg-primary-100 hover:text-primary-600"
           aria-label="닫기"
         >
           <svg
