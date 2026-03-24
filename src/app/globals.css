@@ -3,89 +3,89 @@
 @tailwind utilities;
 
 :root {
-  /* === Primary (Crystal Blue 계열) === */
-  --color-primary-50: 230 240 255;
-  --color-primary-100: 199 222 252;
-  --color-primary-200: 163 200 248;
-  --color-primary-300: 122 174 240;
-  --color-primary-400: 86 148 230;
-  --color-primary-500: 58 117 196;
-  --color-primary-600: 45 95 165;
-  --color-primary-700: 34 73 130;
-  --color-primary-800: 24 52 96;
-  --color-primary-900: 15 32 62;
+  /* === Primary (Indigo — 마스코트 눈 색상 기반) === */
+  --color-primary-50: 238 237 252;
+  --color-primary-100: 218 214 248;
+  --color-primary-200: 189 183 242;
+  --color-primary-300: 155 146 232;
+  --color-primary-400: 124 112 218;
+  --color-primary-500: 95 82 200;
+  --color-primary-600: 76 64 168;
+  --color-primary-700: 60 50 138;
+  --color-primary-800: 44 36 108;
+  --color-primary-900: 30 24 72;
 
-  /* === Secondary (Lavender Bloom 계열) === */
-  --color-secondary-50: 245 240 255;
-  --color-secondary-100: 232 222 252;
-  --color-secondary-200: 213 196 248;
-  --color-secondary-300: 190 166 240;
-  --color-secondary-400: 168 139 230;
-  --color-secondary-500: 142 110 204;
-  --color-secondary-600: 118 88 175;
-  --color-secondary-700: 93 68 142;
-  --color-secondary-800: 68 48 108;
-  --color-secondary-900: 44 30 72;
+  /* === Secondary (Lavender — 마스코트 꽃 장식 기반) === */
+  --color-secondary-50: 248 244 255;
+  --color-secondary-100: 238 232 252;
+  --color-secondary-200: 222 212 248;
+  --color-secondary-300: 200 186 240;
+  --color-secondary-400: 178 160 228;
+  --color-secondary-500: 155 134 212;
+  --color-secondary-600: 130 108 184;
+  --color-secondary-700: 104 84 152;
+  --color-secondary-800: 78 60 118;
+  --color-secondary-900: 52 38 82;
 
-  /* === Neutral (Ghost Ivory / Soft Blush 계열) === */
-  --color-neutral-50: 255 253 247;
-  --color-neutral-100: 252 249 242;
-  --color-neutral-200: 247 242 235;
-  --color-neutral-300: 224 218 214;
-  --color-neutral-400: 180 172 168;
-  --color-neutral-500: 140 132 128;
-  --color-neutral-600: 108 100 96;
-  --color-neutral-700: 78 72 68;
-  --color-neutral-800: 52 48 44;
-  --color-neutral-900: 28 26 24;
+  /* === Neutral (Cream / Ivory — 마스코트 머리카락/피부 톤 기반) === */
+  --color-neutral-50: 255 255 255;
+  --color-neutral-100: 250 248 245;
+  --color-neutral-200: 243 240 236;
+  --color-neutral-300: 228 224 218;
+  --color-neutral-400: 186 180 172;
+  --color-neutral-500: 148 142 134;
+  --color-neutral-600: 112 106 100;
+  --color-neutral-700: 82 78 72;
+  --color-neutral-800: 54 50 46;
+  --color-neutral-900: 32 30 28;
 
   /* === 시맨틱 역할 토큰 (직접 RGB 값 저장 — 중첩 var() 회피) === */
-  --color-background: 255 253 247;
-  --color-surface: 252 249 242;
-  --color-accent-surface: 247 242 235;
-  --color-text: 15 32 62;
-  --color-text-secondary: 34 73 130;
-  --color-muted: 180 172 168;
-  --color-border: 224 218 214;
+  --color-background: 255 255 255;
+  --color-surface: 250 248 245;
+  --color-accent-surface: 243 240 252;
+  --color-text: 30 24 72;
+  --color-text-secondary: 82 78 72;
+  --color-muted: 186 180 172;
+  --color-border: 228 224 218;
   --color-danger: 220 38 38;
   --color-danger-surface: 254 242 242;
 
   /* === 카테고리 컬러 (bg/fg 쌍) === */
-  --category-anime-bg: 232 222 252;
-  --category-anime-fg: 93 68 142;
-  --category-sports-bg: 199 236 232;
-  --category-sports-fg: 22 110 100;
-  --category-movie-drama-bg: 199 222 252;
-  --category-movie-drama-fg: 34 73 130;
-  --category-music-bg: 209 238 220;
-  --category-music-fg: 34 108 62;
-  --category-game-bg: 245 218 240;
-  --category-game-fg: 128 48 112;
-  --category-other-bg: 230 228 226;
-  --category-other-fg: 78 72 68;
+  --category-anime-bg: 238 232 252;
+  --category-anime-fg: 76 64 168;
+  --category-sports-bg: 209 240 228;
+  --category-sports-fg: 20 108 88;
+  --category-movie-drama-bg: 218 228 248;
+  --category-movie-drama-fg: 42 68 128;
+  --category-music-bg: 218 242 228;
+  --category-music-fg: 28 100 58;
+  --category-game-bg: 248 228 242;
+  --category-game-fg: 138 42 108;
+  --category-other-bg: 236 234 232;
+  --category-other-fg: 82 78 72;
 
   /* === 콘텐츠 타입 컬러 (bg/fg 쌍) === */
-  --content-anime-bg: 232 222 252;
-  --content-anime-fg: 93 68 142;
-  --content-movie-bg: 199 222 252;
-  --content-movie-fg: 34 73 130;
-  --content-drama-bg: 238 218 248;
-  --content-drama-fg: 108 48 138;
-  --content-sports-team-bg: 199 236 232;
-  --content-sports-team-fg: 22 110 100;
-  --content-artist-bg: 209 238 220;
-  --content-artist-fg: 34 108 62;
-  --content-game-bg: 245 218 240;
-  --content-game-fg: 128 48 112;
-  --content-other-bg: 230 228 226;
-  --content-other-fg: 78 72 68;
+  --content-anime-bg: 238 232 252;
+  --content-anime-fg: 76 64 168;
+  --content-movie-bg: 218 228 248;
+  --content-movie-fg: 42 68 128;
+  --content-drama-bg: 242 228 250;
+  --content-drama-fg: 108 42 138;
+  --content-sports-team-bg: 209 240 228;
+  --content-sports-team-fg: 20 108 88;
+  --content-artist-bg: 218 242 228;
+  --content-artist-fg: 28 100 58;
+  --content-game-bg: 248 228 242;
+  --content-game-fg: 138 42 108;
+  --content-other-bg: 236 234 232;
+  --content-other-fg: 82 78 72;
 
   /* === 링크 타입 컬러 === */
-  --link-official: 58 117 196;
+  --link-official: 95 82 200;
   --link-ticket: 16 185 129;
   --link-schedule: 245 158 11;
-  --link-sns: 142 110 204;
-  --link-other: 140 132 128;
+  --link-sns: 155 134 212;
+  --link-other: 148 142 134;
 
   /* === Border Radius 토큰 === */
   --radius-sm: 0.5rem;
@@ -95,89 +95,89 @@
 }
 
 .dark {
-  /* === Primary (Crystal Blue 계열 — 다크 모드 채도/밝기 조정) === */
-  --color-primary-50: 10 18 32;
-  --color-primary-100: 15 28 52;
-  --color-primary-200: 22 42 78;
-  --color-primary-300: 30 58 108;
-  --color-primary-400: 42 82 148;
-  --color-primary-500: 86 148 230;
-  --color-primary-600: 122 174 240;
-  --color-primary-700: 163 200 248;
-  --color-primary-800: 199 222 252;
-  --color-primary-900: 230 240 255;
+  /* === Primary (Indigo — 다크 모드 밝기 반전) === */
+  --color-primary-50: 14 12 28;
+  --color-primary-100: 22 18 48;
+  --color-primary-200: 34 28 72;
+  --color-primary-300: 48 40 100;
+  --color-primary-400: 68 58 138;
+  --color-primary-500: 124 112 218;
+  --color-primary-600: 155 146 232;
+  --color-primary-700: 189 183 242;
+  --color-primary-800: 218 214 248;
+  --color-primary-900: 238 237 252;
 
-  /* === Secondary (Lavender Bloom 계열 — 다크 모드 채도/밝기 조정) === */
+  /* === Secondary (Lavender — 다크 모드 밝기 반전) === */
   --color-secondary-50: 18 14 28;
   --color-secondary-100: 30 22 48;
-  --color-secondary-200: 44 32 72;
-  --color-secondary-300: 62 44 98;
-  --color-secondary-400: 82 60 128;
-  --color-secondary-500: 142 110 204;
-  --color-secondary-600: 168 139 230;
-  --color-secondary-700: 190 166 240;
-  --color-secondary-800: 213 196 248;
-  --color-secondary-900: 245 240 255;
+  --color-secondary-200: 46 34 72;
+  --color-secondary-300: 64 48 100;
+  --color-secondary-400: 88 68 138;
+  --color-secondary-500: 155 134 212;
+  --color-secondary-600: 178 160 228;
+  --color-secondary-700: 200 186 240;
+  --color-secondary-800: 222 212 248;
+  --color-secondary-900: 248 244 255;
 
   /* === Neutral (다크 모드 — 밝기 반전) === */
-  --color-neutral-50: 18 16 14;
-  --color-neutral-100: 28 26 24;
-  --color-neutral-200: 42 40 38;
-  --color-neutral-300: 58 54 52;
-  --color-neutral-400: 108 100 96;
-  --color-neutral-500: 140 132 128;
-  --color-neutral-600: 180 172 168;
-  --color-neutral-700: 210 206 202;
-  --color-neutral-800: 235 232 228;
-  --color-neutral-900: 252 249 242;
+  --color-neutral-50: 20 18 16;
+  --color-neutral-100: 30 28 26;
+  --color-neutral-200: 44 42 40;
+  --color-neutral-300: 62 58 54;
+  --color-neutral-400: 112 106 100;
+  --color-neutral-500: 148 142 134;
+  --color-neutral-600: 186 180 172;
+  --color-neutral-700: 214 210 204;
+  --color-neutral-800: 236 234 230;
+  --color-neutral-900: 250 248 245;
 
   /* === 시맨틱 역할 토큰 (다크 모드) === */
-  --color-background: 18 22 36;
-  --color-surface: 26 32 50;
-  --color-accent-surface: 34 40 60;
-  --color-text: 240 238 235;
-  --color-text-secondary: 199 222 252;
-  --color-muted: 108 100 96;
-  --color-border: 52 48 44;
+  --color-background: 20 18 28;
+  --color-surface: 28 26 38;
+  --color-accent-surface: 38 34 52;
+  --color-text: 242 240 238;
+  --color-text-secondary: 200 196 190;
+  --color-muted: 112 106 100;
+  --color-border: 54 50 46;
   --color-danger: 248 113 113;
   --color-danger-surface: 60 20 20;
 
   /* === 카테고리 컬러 (다크 모드 — WCAG AA 대비 충족) === */
-  --category-anime-bg: 58 42 82;
-  --category-anime-fg: 213 196 248;
-  --category-sports-bg: 18 62 56;
-  --category-sports-fg: 160 228 218;
-  --category-movie-drama-bg: 24 52 96;
-  --category-movie-drama-fg: 163 200 248;
-  --category-music-bg: 22 68 42;
-  --category-music-fg: 170 228 190;
-  --category-game-bg: 72 28 62;
-  --category-game-fg: 238 180 228;
-  --category-other-bg: 48 44 42;
-  --category-other-fg: 200 196 192;
+  --category-anime-bg: 48 40 72;
+  --category-anime-fg: 218 214 248;
+  --category-sports-bg: 16 58 48;
+  --category-sports-fg: 168 232 212;
+  --category-movie-drama-bg: 28 42 78;
+  --category-movie-drama-fg: 178 198 238;
+  --category-music-bg: 18 62 38;
+  --category-music-fg: 172 232 192;
+  --category-game-bg: 68 28 58;
+  --category-game-fg: 238 186 228;
+  --category-other-bg: 48 46 44;
+  --category-other-fg: 204 200 196;
 
   /* === 콘텐츠 타입 컬러 (다크 모드) === */
-  --content-anime-bg: 58 42 82;
-  --content-anime-fg: 213 196 248;
-  --content-movie-bg: 24 52 96;
-  --content-movie-fg: 163 200 248;
-  --content-drama-bg: 62 32 78;
-  --content-drama-fg: 222 180 242;
-  --content-sports-team-bg: 18 62 56;
-  --content-sports-team-fg: 160 228 218;
-  --content-artist-bg: 22 68 42;
-  --content-artist-fg: 170 228 190;
-  --content-game-bg: 72 28 62;
-  --content-game-fg: 238 180 228;
-  --content-other-bg: 48 44 42;
-  --content-other-fg: 200 196 192;
+  --content-anime-bg: 48 40 72;
+  --content-anime-fg: 218 214 248;
+  --content-movie-bg: 28 42 78;
+  --content-movie-fg: 178 198 238;
+  --content-drama-bg: 58 32 72;
+  --content-drama-fg: 228 186 242;
+  --content-sports-team-bg: 16 58 48;
+  --content-sports-team-fg: 168 232 212;
+  --content-artist-bg: 18 62 38;
+  --content-artist-fg: 172 232 192;
+  --content-game-bg: 68 28 58;
+  --content-game-fg: 238 186 228;
+  --content-other-bg: 48 46 44;
+  --content-other-fg: 204 200 196;
 
   /* === 링크 타입 컬러 (다크 모드 — 밝기 상향) === */
-  --link-official: 122 174 240;
+  --link-official: 155 146 232;
   --link-ticket: 52 211 153;
   --link-schedule: 252 211 77;
-  --link-sns: 190 166 240;
-  --link-other: 180 172 168;
+  --link-sns: 200 186 240;
+  --link-other: 186 180 172;
 }
 
 body {
