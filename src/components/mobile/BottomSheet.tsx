@@ -49,7 +49,7 @@ export default function BottomSheet() {
   return (
     <div
       ref={sheetRef}
-      className="fixed inset-x-0 bottom-0 z-[1000] rounded-t-2xl bg-white pb-safe-bottom pl-safe-left pr-safe-right shadow-2xl"
+      className="fixed inset-x-0 bottom-0 z-[1000] rounded-t-2xl bg-surface pb-safe-bottom pl-safe-left pr-safe-right shadow-2xl"
       style={{
         height: `${Math.max(0, displayHeight)}px`,
         transition: isDragging ? 'none' : 'height 0.3s ease-out',
@@ -62,7 +62,7 @@ export default function BottomSheet() {
         data-drag-handle
         className="flex cursor-grab items-center justify-center py-3 active:cursor-grabbing"
       >
-        <div className="h-1.5 w-10 rounded-full bg-gray-300" />
+        <div className="h-1.5 w-10 rounded-full bg-muted" />
       </div>
 
       {/* 콘텐츠 영역 */}
@@ -73,7 +73,7 @@ export default function BottomSheet() {
         {/* 로딩 상태 */}
         {isLoading && (
           <div className="flex h-20 items-center justify-center">
-            <div className="border-navy-200 border-t-navy-600 h-6 w-6 animate-spin rounded-full border-2" />
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-primary" />
           </div>
         )}
 
@@ -81,7 +81,7 @@ export default function BottomSheet() {
         {error && (
           <div className="flex h-20 flex-col items-center justify-center">
             <span className="text-2xl">😢</span>
-            <p className="text-navy-600 mt-1 text-sm">
+            <p className="mt-1 text-sm text-text-secondary">
               정보를 불러올 수 없습니다
             </p>
           </div>
@@ -103,7 +103,7 @@ export default function BottomSheet() {
                     sizes="56px"
                   />
                 ) : (
-                  <div className="bg-navy-100 flex h-full w-full items-center justify-center">
+                  <div className="flex h-full w-full items-center justify-center bg-accent-surface">
                     <span className="text-xl">🗾</span>
                   </div>
                 )}
@@ -111,10 +111,10 @@ export default function BottomSheet() {
 
               {/* 이름 + 주소 */}
               <div className="min-w-0 flex-1">
-                <h3 className="text-navy-800 truncate text-base font-bold">
+                <h3 className="truncate text-base font-bold text-text-primary">
                   {spot.name}
                 </h3>
-                <p className="text-navy-500 truncate text-sm">{spot.address}</p>
+                <p className="truncate text-sm text-muted">{spot.address}</p>
               </div>
             </div>
 
@@ -135,14 +135,14 @@ export default function BottomSheet() {
                 )}
 
                 {/* 설명 */}
-                <p className="text-navy-700 mb-4 text-sm leading-relaxed">
+                <p className="mb-4 text-sm leading-relaxed text-text-secondary">
                   {spot.description}
                 </p>
 
                 {/* 상세보기 버튼 */}
                 <button
                   onClick={handleDetailClick}
-                  className="bg-navy-600 hover:bg-navy-700 flex w-full items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
                 >
                   <span>자세히 보기</span>
                   <svg
@@ -164,8 +164,8 @@ export default function BottomSheet() {
 
             {/* full: 주소 상세 */}
             {heightState === 'full' && (
-              <div className="bg-navy-50 mt-4 rounded-lg p-3">
-                <div className="text-navy-600 flex items-start gap-2 text-sm">
+              <div className="mt-4 rounded-lg bg-accent-surface p-3">
+                <div className="flex items-start gap-2 text-sm text-text-secondary">
                   <svg
                     className="mt-0.5 h-4 w-4 flex-shrink-0"
                     fill="none"
