@@ -3,32 +3,148 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* === Primary (Crystal Blue 계열) === */
+  --color-primary-50: 230 240 255;
+  --color-primary-100: 199 222 252;
+  --color-primary-200: 163 200 248;
+  --color-primary-300: 122 174 240;
+  --color-primary-400: 86 148 230;
+  --color-primary-500: 58 117 196;
+  --color-primary-600: 45 95 165;
+  --color-primary-700: 34 73 130;
+  --color-primary-800: 24 52 96;
+  --color-primary-900: 15 32 62;
 
-  /* Navy theme colors - Tailwind와 일치 */
-  --navy-50: #f0f3f9;
-  --navy-100: #d9e0ed;
-  --navy-200: #b3c1db;
-  --navy-300: #8da2c9;
-  --navy-400: #6783b7;
-  --navy-500: #4164a5;
-  --navy-600: #345084;
-  --navy-700: #273c63;
-  --navy-800: #1a2842;
-  --navy-900: #0d1421;
+  /* === Secondary (Lavender Bloom 계열) === */
+  --color-secondary-50: 245 240 255;
+  --color-secondary-100: 232 222 252;
+  --color-secondary-200: 213 196 248;
+  --color-secondary-300: 190 166 240;
+  --color-secondary-400: 168 139 230;
+  --color-secondary-500: 142 110 204;
+  --color-secondary-600: 118 88 175;
+  --color-secondary-700: 93 68 142;
+  --color-secondary-800: 68 48 108;
+  --color-secondary-900: 44 30 72;
+
+  /* === Neutral (Ghost Ivory / Soft Blush 계열) === */
+  --color-neutral-50: 255 255 255;
+  --color-neutral-100: 250 248 245;
+  --color-neutral-200: 245 240 238;
+  --color-neutral-300: 224 218 214;
+  --color-neutral-400: 180 172 168;
+  --color-neutral-500: 140 132 128;
+  --color-neutral-600: 108 100 96;
+  --color-neutral-700: 78 72 68;
+  --color-neutral-800: 52 48 44;
+  --color-neutral-900: 28 26 24;
+
+  /* === 시맨틱 역할 토큰 (직접 RGB 값 저장 — 중첩 var() 회피) === */
+  --color-background: 255 255 255;
+  --color-surface: 250 248 245;
+  --color-accent-surface: 245 240 238;
+  --color-text: 15 32 62;
+  --color-text-secondary: 34 73 130;
+  --color-muted: 180 172 168;
+  --color-border: 224 218 214;
+  --color-danger: 220 38 38;
+  --color-danger-surface: 254 242 242;
+
+  /* === 카테고리 컬러 (bg/fg 쌍) === */
+  --category-anime-bg: 232 222 252;
+  --category-anime-fg: 93 68 142;
+  --category-sports-bg: 199 236 232;
+  --category-sports-fg: 22 110 100;
+  --category-movie-drama-bg: 199 222 252;
+  --category-movie-drama-fg: 34 73 130;
+  --category-music-bg: 209 238 220;
+  --category-music-fg: 34 108 62;
+  --category-game-bg: 245 218 240;
+  --category-game-fg: 128 48 112;
+  --category-other-bg: 230 228 226;
+  --category-other-fg: 78 72 68;
+
+  /* === 콘텐츠 타입 컬러 (bg/fg 쌍) === */
+  --content-anime-bg: 232 222 252;
+  --content-anime-fg: 93 68 142;
+  --content-movie-bg: 199 222 252;
+  --content-movie-fg: 34 73 130;
+  --content-drama-bg: 238 218 248;
+  --content-drama-fg: 108 48 138;
+  --content-sports-team-bg: 199 236 232;
+  --content-sports-team-fg: 22 110 100;
+  --content-artist-bg: 209 238 220;
+  --content-artist-fg: 34 108 62;
+  --content-game-bg: 245 218 240;
+  --content-game-fg: 128 48 112;
+  --content-other-bg: 230 228 226;
+  --content-other-fg: 78 72 68;
+
+  /* === 링크 타입 컬러 === */
+  --link-official: 58 117 196;
+  --link-ticket: 16 185 129;
+  --link-schedule: 245 158 11;
+  --link-sns: 142 110 204;
+  --link-other: 140 132 128;
+
+  /* === Border Radius 토큰 === */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-background: 18 22 36;
+    --color-surface: 26 32 50;
+    --color-accent-surface: 34 40 60;
+    --color-text: 240 238 235;
+    --color-text-secondary: 199 222 252;
+    --color-muted: 108 100 96;
+    --color-border: 52 48 44;
+    --color-danger: 248 113 113;
+    --color-danger-surface: 60 20 20;
+
+    --category-anime-bg: 58 42 82;
+    --category-anime-fg: 213 196 248;
+    --category-sports-bg: 18 62 56;
+    --category-sports-fg: 160 228 218;
+    --category-movie-drama-bg: 24 52 96;
+    --category-movie-drama-fg: 163 200 248;
+    --category-music-bg: 22 68 42;
+    --category-music-fg: 170 228 190;
+    --category-game-bg: 72 28 62;
+    --category-game-fg: 238 180 228;
+    --category-other-bg: 48 44 42;
+    --category-other-fg: 200 196 192;
+
+    --content-anime-bg: 58 42 82;
+    --content-anime-fg: 213 196 248;
+    --content-movie-bg: 24 52 96;
+    --content-movie-fg: 163 200 248;
+    --content-drama-bg: 62 32 78;
+    --content-drama-fg: 222 180 242;
+    --content-sports-team-bg: 18 62 56;
+    --content-sports-team-fg: 160 228 218;
+    --content-artist-bg: 22 68 42;
+    --content-artist-fg: 170 228 190;
+    --content-game-bg: 72 28 62;
+    --content-game-fg: 238 180 228;
+    --content-other-bg: 48 44 42;
+    --content-other-fg: 200 196 192;
+
+    --link-official: 122 174 240;
+    --link-ticket: 52 211 153;
+    --link-schedule: 252 211 77;
+    --link-sns: 190 166 240;
+    --link-other: 180 172 168;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: rgb(var(--color-text));
+  background: rgb(var(--color-background));
   font-family:
     var(--font-pretendard),
     -apple-system,
@@ -54,27 +170,27 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--navy-100);
+  background: rgb(var(--color-surface));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--navy-400);
+  background: rgb(var(--color-muted));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--navy-500);
+  background: rgb(var(--color-primary-500));
 }
 
 /* Focus styles */
 *:focus {
-  outline: 2px solid var(--navy-500);
+  outline: 2px solid rgb(var(--color-primary-500));
   outline-offset: 2px;
 }
 
 /* Button focus styles */
 button:focus-visible {
-  outline: 2px solid var(--navy-500);
+  outline: 2px solid rgb(var(--color-primary-500));
   outline-offset: 2px;
 }
 
@@ -140,9 +256,9 @@ button:focus-visible {
 .loading-shimmer {
   background: linear-gradient(
     90deg,
-    var(--navy-200) 25%,
-    var(--navy-100) 50%,
-    var(--navy-200) 75%
+    rgb(var(--color-neutral-200)) 25%,
+    rgb(var(--color-neutral-100)) 50%,
+    rgb(var(--color-neutral-200)) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
