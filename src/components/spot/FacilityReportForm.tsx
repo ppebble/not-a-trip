@@ -640,7 +640,7 @@ export default function FacilityReportForm({
                 <button
                   type="button"
                   onClick={() => setInputMode('search')}
-                  className="hover:border-navy-300 hover:bg-navy-50/50 w-full rounded-lg border-2 border-gray-200 p-4 text-left transition-colors"
+                  className="w-full rounded-lg border-2 border-gray-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🔍</span>
@@ -657,7 +657,7 @@ export default function FacilityReportForm({
                 <button
                   type="button"
                   onClick={handlePinMode}
-                  className="hover:border-navy-300 hover:bg-navy-50/50 w-full rounded-lg border-2 border-gray-200 p-4 text-left transition-colors"
+                  className="w-full rounded-lg border-2 border-gray-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">📍</span>
@@ -815,7 +815,7 @@ export default function FacilityReportForm({
                       <button
                         type="button"
                         onClick={() => setIsMapOpen(true)}
-                        className="border-navy-300 bg-navy-50/50 text-navy-600 hover:bg-navy-50 mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed py-3 text-sm font-medium transition-colors"
+                        className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-surface/50 py-3 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
                       >
                         📍 지도에서 위치 선택하기
                       </button>
@@ -984,7 +984,7 @@ export default function FacilityReportForm({
                 <button
                   type="submit"
                   disabled={isSubmitting || submitResult === 'success'}
-                  className="bg-navy-600 hover:bg-navy-700 w-full rounded-lg py-2.5 text-sm font-medium text-white transition-colors disabled:opacity-50"
+                  className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:opacity-50"
                 >
                   {isSubmitting ? '제보 중...' : '제보하기'}
                 </button>

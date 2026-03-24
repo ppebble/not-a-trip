@@ -38,7 +38,7 @@ export const ExternalLinkCard = memo(function ExternalLinkCard({
     <button
       type="button"
       onClick={handleClick}
-      className="border-navy-200 hover:border-navy-300 group flex w-full items-center gap-3 rounded-lg border bg-white p-4 text-left transition-all hover:shadow-md"
+      className="group flex w-full items-center gap-3 rounded-lg border border-border bg-white p-4 text-left transition-all hover:border-primary-300 hover:shadow-md"
       style={{
         borderLeftWidth: '4px',
         borderLeftColor: config.color,
@@ -55,13 +55,13 @@ export const ExternalLinkCard = memo(function ExternalLinkCard({
 
       {/* 텍스트 영역 */}
       <div className="min-w-0 flex-1">
-        <p className="text-navy-800 truncate font-medium">{link.label}</p>
-        <p className="text-navy-500 truncate text-sm">{config.label}</p>
+        <p className="truncate font-medium text-text-primary">{link.label}</p>
+        <p className="truncate text-sm text-muted">{config.label}</p>
       </div>
 
       {/* 화살표 아이콘 */}
       <svg
-        className="text-navy-400 h-5 w-5 flex-shrink-0 transition-transform group-hover:translate-x-1"
+        className="h-5 w-5 flex-shrink-0 text-muted transition-transform group-hover:translate-x-1"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
