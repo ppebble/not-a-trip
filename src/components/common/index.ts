@@ -19,3 +19,5 @@ export { SentryUserManager } from './SentryUserManager'
 export type { ErrorBoundaryProps } from './ErrorBoundary'
 export { AsyncBoundary } from './AsyncBoundary'
 export type { AsyncBoundaryProps } from './AsyncBoundary'
+
+export { ThemeToggle } from './ThemeToggle'
