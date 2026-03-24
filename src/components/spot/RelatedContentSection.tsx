@@ -66,7 +66,7 @@ export function RelatedContentSection({
             <button
               type="button"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="border-navy-300 text-navy-600 hover:bg-navy-50 inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
             >
               {isExpanded ? (
                 <>
@@ -156,7 +156,7 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
       )}
       <Link
         href={`/community/media/${encodeURIComponent(content.name)}`}
-        className="text-navy-600 hover:text-navy-800 mt-3 inline-flex items-center gap-1 text-sm transition-colors"
+        className="mt-3 inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-primary-700"
       >
         <span>커뮤니티 보기</span>
         <svg

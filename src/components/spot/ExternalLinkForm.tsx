@@ -156,7 +156,7 @@ function AddLinkForm({
           type="button"
           onClick={handleSubmit}
           disabled={disabled}
-          className="bg-navy-600 hover:bg-navy-700 w-full rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           링크 추가
         </button>
@@ -314,8 +314,8 @@ export function ExternalLinkForm({
       )}
 
       {/* 도움말 */}
-      <div className="rounded-lg bg-blue-50 p-3">
-        <p className="text-sm text-blue-700">
+      <div className="rounded-lg bg-primary-50 p-3">
+        <p className="text-sm text-primary-700">
           💡 공식 홈페이지, 티켓 예매 사이트, 일정 페이지 등 방문자에게 유용한
           링크를 추가해주세요.
         </p>

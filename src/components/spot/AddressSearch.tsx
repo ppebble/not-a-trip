@@ -195,7 +195,7 @@ export function AddressSearch({
           type="button"
           onClick={handleSearchClick}
           disabled={isLoading}
-          className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-3 text-sm font-medium text-white transition-colors disabled:opacity-50"
+          className="rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:opacity-50"
         >
           검색
         </button>

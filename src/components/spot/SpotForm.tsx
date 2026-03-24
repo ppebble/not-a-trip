@@ -267,14 +267,14 @@ export function SpotForm({
             <button
               type="button"
               onClick={onCancel}
-              className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-6 py-2.5 text-sm font-medium transition-colors"
+              className="rounded-lg border border-border px-6 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={isSubmitting || isDeleting}
-              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-6 py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
