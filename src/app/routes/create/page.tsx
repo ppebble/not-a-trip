@@ -9,19 +9,19 @@ import { RouteFormContent } from '@/components/route/RouteFormContent'
  */
 export default function RouteCreatePage() {
   return (
-    <main className="min-h-screen bg-navy-50 pt-14">
+    <main className="bg-navy-50 min-h-screen pt-14">
       <div className="mx-auto max-w-3xl px-4 py-6">
         {/* 뒤로가기 */}
         <div className="mb-4">
           <Link
             href="/routes"
-            className="text-sm text-navy-500 transition-colors hover:text-navy-700"
+            className="text-navy-500 hover:text-navy-700 text-sm transition-colors"
           >
             ← 코스 목록으로
           </Link>
         </div>
 
-        <h1 className="mb-6 text-2xl font-bold text-navy-900">
+        <h1 className="text-navy-900 mb-6 text-2xl font-bold">
           🗺️ 새 코스 만들기
         </h1>
 

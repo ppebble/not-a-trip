@@ -8,16 +8,16 @@ export function EmptyFilterOverlay() {
   return (
     <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
       <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-navy-100">
+        <div className="bg-navy-100 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
           <FilterIcon size="lg" className="text-navy-400" />
         </div>
-        <p className="text-lg font-semibold text-navy-800">
+        <p className="text-navy-800 text-lg font-semibold">
           카테고리를 선택해주세요
         </p>
-        <p className="mt-2 text-sm text-navy-500">
+        <p className="text-navy-500 mt-2 text-sm">
           표시할 스팟 카테고리가 선택되지 않았습니다
         </p>
-        <p className="mt-1 text-xs text-navy-400">
+        <p className="text-navy-400 mt-1 text-xs">
           아래 필터에서 원하는 카테고리를 선택하세요
         </p>
       </div>

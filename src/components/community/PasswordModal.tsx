@@ -78,9 +78,9 @@ export default function PasswordModal({
       <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
         {/* 헤더 */}
         <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-100">
+          <div className="bg-navy-100 flex h-10 w-10 items-center justify-center rounded-full">
             <svg
-              className="h-6 w-6 text-navy-600"
+              className="text-navy-600 h-6 w-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -93,12 +93,12 @@ export default function PasswordModal({
               />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-navy-800">{title}</h3>
+          <h3 className="text-navy-800 text-lg font-semibold">{title}</h3>
         </div>
 
         {/* 설명 */}
         {description && (
-          <p className="mb-4 text-sm text-navy-600">{description}</p>
+          <p className="text-navy-600 mb-4 text-sm">{description}</p>
         )}
 
         {/* 에러 메시지 */}
@@ -113,7 +113,7 @@ export default function PasswordModal({
           <div className="mb-6">
             <label
               htmlFor="modal-password"
-              className="mb-2 block text-sm font-medium text-navy-700"
+              className="text-navy-700 mb-2 block text-sm font-medium"
             >
               비밀번호
             </label>
@@ -125,7 +125,7 @@ export default function PasswordModal({
               onChange={(e) => setPassword(e.target.value)}
               placeholder="게시글 작성 시 입력한 비밀번호"
               disabled={isLoading}
-              className="w-full rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20 disabled:bg-navy-50 disabled:opacity-50"
+              className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 disabled:bg-navy-50 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2 disabled:opacity-50"
               autoComplete="off"
             />
           </div>
@@ -136,14 +136,14 @@ export default function PasswordModal({
               type="button"
               onClick={onCancel}
               disabled={isLoading}
-              className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50 disabled:opacity-50"
+              className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={isLoading || !password.trim()}
-              className="rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">

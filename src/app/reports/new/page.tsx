@@ -20,7 +20,7 @@ export default function NewReportPage() {
       <div className="min-h-screen bg-slate-50">
         <div className="border-b border-slate-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-lg">
-            <div className="h-6 w-32 animate-pulse rounded bg-navy-100" />
+            <div className="bg-navy-100 h-6 w-32 animate-pulse rounded" />
           </div>
         </div>
         <div className="mx-auto max-w-lg px-4 py-8">
@@ -28,7 +28,7 @@ export default function NewReportPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-20 animate-pulse rounded-lg bg-navy-50"
+                className="bg-navy-50 h-20 animate-pulse rounded-lg"
               />
             ))}
           </div>
@@ -56,7 +56,7 @@ export default function NewReportPage() {
         <div className="mx-auto max-w-lg">
           <Link
             href="/reports"
-            className="flex items-center gap-2 text-sm text-navy-500 hover:text-navy-700"
+            className="text-navy-500 hover:text-navy-700 flex items-center gap-2 text-sm"
           >
             <svg
               className="h-4 w-4"
@@ -73,8 +73,8 @@ export default function NewReportPage() {
             </svg>
             내 제보 목록
           </Link>
-          <h1 className="mt-2 text-xl font-bold text-navy-800">새 성지 제보</h1>
-          <p className="mt-1 text-sm text-navy-400">
+          <h1 className="text-navy-800 mt-2 text-xl font-bold">새 성지 제보</h1>
+          <p className="text-navy-400 mt-1 text-sm">
             발견한 성지를 제보하여 다른 유저들과 공유하세요
           </p>
         </div>

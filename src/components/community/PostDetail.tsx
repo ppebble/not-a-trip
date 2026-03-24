@@ -14,16 +14,16 @@ import { formatFullDate } from '@/lib/date-utils'
 function PostDetailSkeleton() {
   return (
     <div className="animate-pulse">
-      <div className="mb-4 h-8 w-3/4 rounded bg-navy-200"></div>
+      <div className="bg-navy-200 mb-4 h-8 w-3/4 rounded"></div>
       <div className="mb-6 flex gap-4">
-        <div className="h-4 w-20 rounded bg-navy-100"></div>
-        <div className="h-4 w-32 rounded bg-navy-100"></div>
-        <div className="h-4 w-16 rounded bg-navy-100"></div>
+        <div className="bg-navy-100 h-4 w-20 rounded"></div>
+        <div className="bg-navy-100 h-4 w-32 rounded"></div>
+        <div className="bg-navy-100 h-4 w-16 rounded"></div>
       </div>
       <div className="space-y-3">
-        <div className="h-4 w-full rounded bg-navy-100"></div>
-        <div className="h-4 w-full rounded bg-navy-100"></div>
-        <div className="h-4 w-2/3 rounded bg-navy-100"></div>
+        <div className="bg-navy-100 h-4 w-full rounded"></div>
+        <div className="bg-navy-100 h-4 w-full rounded"></div>
+        <div className="bg-navy-100 h-4 w-2/3 rounded"></div>
       </div>
     </div>
   )
@@ -42,11 +42,11 @@ function PostDetailError({
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">😢</div>
-      <p className="mb-2 text-navy-700">게시글을 불러오는데 실패했습니다</p>
-      <p className="mb-4 text-sm text-navy-500">{error.message}</p>
+      <p className="text-navy-700 mb-2">게시글을 불러오는데 실패했습니다</p>
+      <p className="text-navy-500 mb-4 text-sm">{error.message}</p>
       <button
         onClick={onRetry}
-        className="rounded-lg bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-700"
+        className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm text-white transition-colors"
       >
         다시 시도
       </button>
@@ -104,13 +104,13 @@ function DeleteConfirmModal({
               />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-navy-800">게시글 삭제</h3>
+          <h3 className="text-navy-800 text-lg font-semibold">게시글 삭제</h3>
         </div>
 
-        <p className="mb-6 text-navy-600">
+        <p className="text-navy-600 mb-6">
           정말로 이 게시글을 삭제하시겠습니까?
           <br />
-          <span className="text-sm text-navy-500">
+          <span className="text-navy-500 text-sm">
             삭제된 게시글과 댓글은 복구할 수 없습니다.
           </span>
         </p>
@@ -120,7 +120,7 @@ function DeleteConfirmModal({
             type="button"
             onClick={onCancel}
             disabled={isDeleting}
-            className="rounded-lg border border-navy-300 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-50 disabled:opacity-50"
+            className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-4 py-2 text-sm transition-colors disabled:opacity-50"
           >
             취소
           </button>
@@ -259,11 +259,11 @@ function PostContent({ post }: PostContentProps) {
     <>
       <article className="rounded-lg bg-white p-6 shadow-sm">
         {/* 게시글 헤더 */}
-        <header className="mb-6 border-b border-navy-100 pb-4">
-          <h1 className="mb-4 text-2xl font-bold text-navy-800">
+        <header className="border-navy-100 mb-6 border-b pb-4">
+          <h1 className="text-navy-800 mb-4 text-2xl font-bold">
             {post.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-navy-500">
+          <div className="text-navy-500 flex flex-wrap items-center gap-4 text-sm">
             {/* 작성자 */}
             <span className="flex items-center gap-1">
               <svg
@@ -346,14 +346,14 @@ function PostContent({ post }: PostContentProps) {
 
         {/* 게시글 본문 */}
         <div className="prose prose-navy max-w-none">
-          <p className="whitespace-pre-wrap text-navy-700">{post.content}</p>
+          <p className="text-navy-700 whitespace-pre-wrap">{post.content}</p>
         </div>
 
         {/* 하단 네비게이션 */}
-        <footer className="mt-8 flex items-center justify-between border-t border-navy-100 pt-4">
+        <footer className="border-navy-100 mt-8 flex items-center justify-between border-t pt-4">
           <Link
             href="/community"
-            className="inline-flex items-center gap-2 text-sm text-navy-600 transition-colors hover:text-navy-800"
+            className="text-navy-600 hover:text-navy-800 inline-flex items-center gap-2 text-sm transition-colors"
           >
             <svg
               className="h-4 w-4"
@@ -378,7 +378,7 @@ function PostContent({ post }: PostContentProps) {
               <button
                 type="button"
                 onClick={handleEditClick}
-                className="inline-flex items-center gap-2 rounded-lg border border-navy-300 px-4 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+                className="border-navy-300 text-navy-600 hover:bg-navy-50 inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors"
               >
                 <svg
                   className="h-4 w-4"
@@ -482,7 +482,7 @@ export default function PostDetail({
   if (!post) {
     return (
       <div className={`rounded-lg bg-white p-6 shadow-sm ${className}`}>
-        <p className="text-center text-navy-500">게시글을 찾을 수 없습니다</p>
+        <p className="text-navy-500 text-center">게시글을 찾을 수 없습니다</p>
       </div>
     )
   }

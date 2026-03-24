@@ -54,7 +54,7 @@ export function GalleryTabs({ activeTab, onTabChange }: GalleryTabsProps) {
 
   return (
     <nav
-      className="sticky top-0 z-10 border-b border-navy-200 bg-white px-4 py-3"
+      className="border-navy-200 sticky top-0 z-10 border-b bg-white px-4 py-3"
       role="tablist"
       aria-label="갤러리 탭 네비게이션"
     >

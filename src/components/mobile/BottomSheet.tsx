@@ -73,7 +73,7 @@ export default function BottomSheet() {
         {/* 로딩 상태 */}
         {isLoading && (
           <div className="flex h-20 items-center justify-center">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-navy-200 border-t-navy-600" />
+            <div className="border-navy-200 border-t-navy-600 h-6 w-6 animate-spin rounded-full border-2" />
           </div>
         )}
 
@@ -81,7 +81,7 @@ export default function BottomSheet() {
         {error && (
           <div className="flex h-20 flex-col items-center justify-center">
             <span className="text-2xl">😢</span>
-            <p className="mt-1 text-sm text-navy-600">
+            <p className="text-navy-600 mt-1 text-sm">
               정보를 불러올 수 없습니다
             </p>
           </div>
@@ -103,7 +103,7 @@ export default function BottomSheet() {
                     sizes="56px"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-navy-100">
+                  <div className="bg-navy-100 flex h-full w-full items-center justify-center">
                     <span className="text-xl">🗾</span>
                   </div>
                 )}
@@ -111,10 +111,10 @@ export default function BottomSheet() {
 
               {/* 이름 + 주소 */}
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-base font-bold text-navy-800">
+                <h3 className="text-navy-800 truncate text-base font-bold">
                   {spot.name}
                 </h3>
-                <p className="truncate text-sm text-navy-500">{spot.address}</p>
+                <p className="text-navy-500 truncate text-sm">{spot.address}</p>
               </div>
             </div>
 
@@ -135,14 +135,14 @@ export default function BottomSheet() {
                 )}
 
                 {/* 설명 */}
-                <p className="mb-4 text-sm leading-relaxed text-navy-700">
+                <p className="text-navy-700 mb-4 text-sm leading-relaxed">
                   {spot.description}
                 </p>
 
                 {/* 상세보기 버튼 */}
                 <button
                   onClick={handleDetailClick}
-                  className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-navy-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+                  className="bg-navy-600 hover:bg-navy-700 flex w-full items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors"
                 >
                   <span>자세히 보기</span>
                   <svg
@@ -164,8 +164,8 @@ export default function BottomSheet() {
 
             {/* full: 주소 상세 */}
             {heightState === 'full' && (
-              <div className="mt-4 rounded-lg bg-navy-50 p-3">
-                <div className="flex items-start gap-2 text-sm text-navy-600">
+              <div className="bg-navy-50 mt-4 rounded-lg p-3">
+                <div className="text-navy-600 flex items-start gap-2 text-sm">
                   <svg
                     className="mt-0.5 h-4 w-4 flex-shrink-0"
                     fill="none"

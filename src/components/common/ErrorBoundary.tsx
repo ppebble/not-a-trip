@@ -86,7 +86,7 @@ class ErrorBoundary extends React.Component<
             </p>
             <button
               onClick={this.handleReset}
-              className="mt-3 rounded bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-500"
+              className="bg-navy-600 hover:bg-navy-500 mt-3 rounded px-4 py-2 text-sm text-white transition-colors"
             >
               다시 시도
             </button>

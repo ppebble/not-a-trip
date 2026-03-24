@@ -39,7 +39,7 @@ function NoPermission() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center rounded-md bg-navy-600 px-4 py-2 text-white transition-colors hover:bg-navy-700"
+            className="bg-navy-600 hover:bg-navy-700 inline-flex items-center rounded-md px-4 py-2 text-white transition-colors"
           >
             메인으로 돌아가기
           </Link>
@@ -118,12 +118,12 @@ export default function SpotEditPage() {
   // 로딩 중
   if (authLoading || spotLoading || isLoading) {
     return (
-      <main className="min-h-screen bg-navy-50">
-        <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <main className="bg-navy-50 min-h-screen">
+        <div className="border-navy-200 border-b bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
             <Link
               href={`/spots/${spotId}`}
-              className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
+              className="text-navy-500 hover:text-navy-700 flex items-center gap-2"
             >
               <svg
                 className="h-5 w-5"
@@ -140,7 +140,7 @@ export default function SpotEditPage() {
               </svg>
               <span>스팟으로 돌아가기</span>
             </Link>
-            <h1 className="mt-2 text-xl font-bold text-navy-800">스팟 수정</h1>
+            <h1 className="text-navy-800 mt-2 text-xl font-bold">스팟 수정</h1>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
@@ -159,10 +159,10 @@ export default function SpotEditPage() {
   // 비로그인 상태
   if (!isAuthenticated) {
     return (
-      <main className="min-h-screen bg-navy-50">
-        <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <main className="bg-navy-50 min-h-screen">
+        <div className="border-navy-200 border-b bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <h1 className="text-xl font-bold text-navy-800">스팟 수정</h1>
+            <h1 className="text-navy-800 text-xl font-bold">스팟 수정</h1>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
@@ -184,12 +184,12 @@ export default function SpotEditPage() {
   }
 
   return (
-    <main className="min-h-screen bg-navy-50">
-      <div className="border-b border-navy-200 bg-white px-4 py-4">
+    <main className="bg-navy-50 min-h-screen">
+      <div className="border-navy-200 border-b bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <Link
             href={`/spots/${spotId}`}
-            className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
+            className="text-navy-500 hover:text-navy-700 flex items-center gap-2"
           >
             <svg
               className="h-5 w-5"
@@ -206,8 +206,8 @@ export default function SpotEditPage() {
             </svg>
             <span>스팟으로 돌아가기</span>
           </Link>
-          <h1 className="mt-2 text-xl font-bold text-navy-800">스팟 수정</h1>
-          <p className="text-sm text-navy-500">스팟 정보를 수정하세요</p>
+          <h1 className="text-navy-800 mt-2 text-xl font-bold">스팟 수정</h1>
+          <p className="text-navy-500 text-sm">스팟 정보를 수정하세요</p>
         </div>
       </div>
       <div className="mx-auto max-w-4xl px-4 py-6">

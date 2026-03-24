@@ -21,8 +21,8 @@ import {
 const RouteMap = dynamic(() => import('@/components/route/RouteMap'), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[400px] items-center justify-center rounded-lg bg-navy-100">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy-300 border-t-navy-600" />
+    <div className="bg-navy-100 flex h-[400px] items-center justify-center rounded-lg">
+      <div className="border-navy-300 border-t-navy-600 h-8 w-8 animate-spin rounded-full border-4" />
     </div>
   ),
 })
@@ -134,17 +134,17 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                   ⭐ 공식 추천
                 </span>
               )}
-              <span className="text-sm text-navy-400">
+              <span className="text-navy-400 text-sm">
                 {DIFFICULTY_LABEL[route.difficulty]}
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-navy-900">{route.name}</h1>
-            <p className="mt-2 text-sm text-navy-500">{route.description}</p>
+            <h1 className="text-navy-900 text-2xl font-bold">{route.name}</h1>
+            <p className="text-navy-500 mt-2 text-sm">{route.description}</p>
           </div>
         </div>
 
         {/* 메타 정보 */}
-        <div className="mb-4 flex flex-wrap gap-4 text-sm text-navy-500">
+        <div className="text-navy-500 mb-4 flex flex-wrap gap-4 text-sm">
           <span>📍 {availableSpots.length}곳</span>
           <span>⏱️ {formatDuration(route.estimatedDuration)}</span>
           <span>🚶 {formatDistance(route.totalDistance)}</span>
@@ -158,7 +158,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             {route.relatedContentNames.map((name) => (
               <span
                 key={name}
-                className="rounded-full bg-navy-50 px-2.5 py-0.5 text-xs text-navy-600"
+                className="bg-navy-50 text-navy-600 rounded-full px-2.5 py-0.5 text-xs"
               >
                 {name}
               </span>
@@ -181,7 +181,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         )}
 
         {/* 작성자 정보 */}
-        <div className="mt-4 border-t border-navy-100 pt-4 text-sm text-navy-400">
+        <div className="border-navy-100 text-navy-400 mt-4 border-t pt-4 text-sm">
           코스 제작: {route.authorName}
         </div>
       </div>
@@ -191,7 +191,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <div className="flex gap-3">
           <button
             onClick={handleStartRoute}
-            className="flex-1 rounded-lg bg-navy-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-700"
+            className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-3 text-sm font-semibold text-white transition-colors"
           >
             🚶 코스 시작
           </button>
@@ -201,7 +201,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             className={`rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
               isBookmarked
                 ? 'border-amber-400 bg-amber-50 text-amber-700'
-                : 'border-navy-200 bg-white text-navy-600 hover:bg-navy-50'
+                : 'border-navy-200 text-navy-600 hover:bg-navy-50 bg-white'
             }`}
           >
             {isBookmarked ? '🔖 저장됨' : '🔖 저장'}
@@ -209,7 +209,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           {user && route.authorId === user.id && (
             <button
               onClick={() => router.push(`/routes/${route.id}/edit`)}
-              className="rounded-lg border-2 border-navy-200 bg-white px-4 py-3 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+              className="border-navy-200 text-navy-600 hover:bg-navy-50 rounded-lg border-2 bg-white px-4 py-3 text-sm transition-colors"
             >
               ✏️ 수정
             </button>
@@ -227,7 +227,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
       {/* 코스 지도 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-lg font-semibold text-navy-900">코스 지도</h2>
+        <h2 className="text-navy-900 mb-3 text-lg font-semibold">코스 지도</h2>
         <RouteMap
           spots={route.spots}
           startPoint={route.startPoint}
@@ -239,7 +239,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
       {/* 스팟 순서 목록 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-lg font-semibold text-navy-900">
+        <h2 className="text-navy-900 mb-3 text-lg font-semibold">
           코스 순서 ({availableSpots.length}곳)
         </h2>
         <ol className="space-y-0">
@@ -259,19 +259,19 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                       🏠
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-navy-900">
+                      <p className="text-navy-900 text-sm font-medium">
                         {route.startPoint.name}
                       </p>
-                      <p className="truncate text-xs text-navy-400">
+                      <p className="text-navy-400 truncate text-xs">
                         {route.startPoint.address}
                       </p>
                     </div>
                   </div>
                   {info && mode && (
                     <div className="flex items-center gap-2 py-2 pl-8">
-                      <div className="h-4 w-px bg-navy-200" />
+                      <div className="bg-navy-200 h-4 w-px" />
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-xs text-navy-400">
+                        <span className="text-navy-400 text-xs">
                           ↓ {formatDistance(info.distance)}
                           {' · '}
                           {getTravelModeIcon(mode)}{' '}
@@ -309,13 +309,13 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                 {/* 이동 거리/시간 표시 (첫 스팟 제외) */}
                 {idx > 0 && spot.distanceFromPrev && (
                   <div className="flex items-center gap-2 py-2 pl-8">
-                    <div className="h-4 w-px bg-navy-200" />
+                    <div className="bg-navy-200 h-4 w-px" />
                     {(() => {
                       const mode = getTravelMode(spot.distanceFromPrev)
                       const prev = route.spots[idx - 1]
                       return (
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-xs text-navy-400">
+                          <span className="text-navy-400 text-xs">
                             ↓ {formatDistance(spot.distanceFromPrev)}
                             {' · '}
                             {getTravelModeIcon(mode)}{' '}
@@ -361,7 +361,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                   </div>
 
                   {/* 썸네일 */}
-                  <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-navy-100">
+                  <div className="bg-navy-100 h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
                     {spot.thumbnailUrl ? (
                       <OptimizedImage
                         src={spot.thumbnailUrl}
@@ -371,7 +371,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-lg text-navy-300">
+                      <div className="text-navy-300 flex h-full items-center justify-center text-lg">
                         📍
                       </div>
                     )}
@@ -392,7 +392,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                       <p className="text-xs text-red-400">소실된 스팟</p>
                     )}
                     {spot.note && (
-                      <p className="truncate text-xs text-navy-400">
+                      <p className="text-navy-400 truncate text-xs">
                         {spot.note}
                       </p>
                     )}

@@ -107,7 +107,7 @@ export default function PilgrimageMap({
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}
-        className="h-full w-full rounded-lg border-2 border-navy-200"
+        className="border-navy-200 h-full w-full rounded-lg border-2"
         ref={mapRef}
         zoomControl={false} // 기본 줌 컨트롤 비활성화 (커스텀 컨트롤 사용)
         scrollWheelZoom={true}
@@ -153,7 +153,7 @@ export default function PilgrimageMap({
               map.zoomIn()
             }
           }}
-          className="flex h-10 w-10 items-center justify-center rounded-md bg-navy-600 text-white shadow-lg transition-colors hover:bg-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-500 focus:ring-offset-2"
+          className="bg-navy-600 hover:bg-navy-700 focus:ring-navy-500 flex h-10 w-10 items-center justify-center rounded-md text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
           aria-label="Zoom in"
         >
           <svg
@@ -178,7 +178,7 @@ export default function PilgrimageMap({
               map.zoomOut()
             }
           }}
-          className="flex h-10 w-10 items-center justify-center rounded-md bg-navy-600 text-white shadow-lg transition-colors hover:bg-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-500 focus:ring-offset-2"
+          className="bg-navy-600 hover:bg-navy-700 focus:ring-navy-500 flex h-10 w-10 items-center justify-center rounded-md text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
           aria-label="Zoom out"
         >
           <svg
@@ -210,7 +210,7 @@ export default function PilgrimageMap({
       )}
 
       {/* Map attribution with navy theme */}
-      <div className="absolute bottom-2 left-2 z-[1000] rounded bg-navy-800/80 px-2 py-1 text-xs text-white">
+      <div className="bg-navy-800/80 absolute bottom-2 left-2 z-[1000] rounded px-2 py-1 text-xs text-white">
         Anime Pilgrim
       </div>
 

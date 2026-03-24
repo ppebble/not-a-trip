@@ -53,7 +53,7 @@ const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
   loading: () => (
     <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100">
       <div className="text-center text-gray-500">
-        <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-navy-600 border-t-transparent"></div>
+        <div className="border-navy-600 mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"></div>
         <p>지도를 불러오는 중...</p>
       </div>
     </div>
@@ -143,12 +143,12 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
             <div>
               <Link
                 href="/"
-                className="flex items-center gap-2 text-navy-500 hover:text-navy-700"
+                className="text-navy-500 hover:text-navy-700 flex items-center gap-2"
               >
                 <ArrowLeftIcon size="md" />
                 <span>지도로 돌아가기</span>
               </Link>
-              <h1 className="mt-2 text-xl font-bold text-navy-800">
+              <h1 className="text-navy-800 mt-2 text-xl font-bold">
                 특별한 여행지
               </h1>
             </div>
@@ -159,7 +159,7 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
                 {hasEditPermission && (
                   <Link
                     href={`/spots/${spotId}/edit`}
-                    className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+                    className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
                   >
                     수정
                   </Link>
@@ -279,11 +279,11 @@ function SpotDetailContent({
 
           {/* 최초 제보자 표시 */}
           {spot.firstReporterId && spot.firstReporterName && (
-            <p className="mb-2 text-sm text-navy-500 md:mb-3">
+            <p className="text-navy-500 mb-2 text-sm md:mb-3">
               📍 최초 제보:{' '}
               <Link
                 href={`/profile/${spot.firstReporterId}`}
-                className="font-medium text-navy-600 hover:underline"
+                className="text-navy-600 font-medium hover:underline"
               >
                 @{spot.firstReporterName}
               </Link>
@@ -395,14 +395,14 @@ function SpotDetailContent({
             </h2>
             <button
               onClick={handleSupplementClick}
-              className="rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
             >
               {showSupplementForm ? '닫기' : '정보 수정 제안'}
             </button>
           </div>
 
           {showSupplementForm && (
-            <div className="mb-4 rounded-lg border border-navy-100 p-4">
+            <div className="border-navy-100 mb-4 rounded-lg border p-4">
               <SupplementForm
                 spotId={spot.id}
                 onSuccess={handleSupplementSuccess}
@@ -493,14 +493,14 @@ function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="inline-flex items-center rounded-md bg-navy-600 px-4 py-2 text-white transition-colors hover:bg-navy-700"
+                className="bg-navy-600 hover:bg-navy-700 inline-flex items-center rounded-md px-4 py-2 text-white transition-colors"
               >
                 다시 시도
               </button>
             )}
             <Link
               href="/"
-              className="inline-flex items-center rounded-md border border-navy-300 px-4 py-2 text-navy-600 transition-colors hover:bg-navy-50"
+              className="border-navy-300 text-navy-600 hover:bg-navy-50 inline-flex items-center rounded-md border px-4 py-2 transition-colors"
             >
               메인으로 돌아가기
             </Link>
@@ -527,7 +527,7 @@ function SpotNotFound() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center rounded-md bg-navy-600 px-4 py-2 text-white transition-colors hover:bg-navy-700"
+            className="bg-navy-600 hover:bg-navy-700 inline-flex items-center rounded-md px-4 py-2 text-white transition-colors"
           >
             메인으로 돌아가기
           </Link>

@@ -108,11 +108,11 @@ export function SpotOrderList({
 
   if (spots.length === 0) {
     return (
-      <div className="rounded-lg border-2 border-dashed border-navy-200 p-8 text-center">
-        <p className="text-sm text-navy-400">
+      <div className="border-navy-200 rounded-lg border-2 border-dashed p-8 text-center">
+        <p className="text-navy-400 text-sm">
           스팟을 검색하여 코스에 추가해주세요
         </p>
-        <p className="mt-1 text-xs text-navy-300">
+        <p className="text-navy-300 mt-1 text-xs">
           최소 2개의 스팟이 필요합니다
         </p>
       </div>
@@ -132,14 +132,14 @@ export function SpotOrderList({
             <div className="mb-1">
               <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2">
                 <span className="text-sm">🏠</span>
-                <span className="text-xs font-medium text-navy-700">
+                <span className="text-navy-700 text-xs font-medium">
                   {startPoint.name}
                 </span>
               </div>
               <div className="flex items-center gap-2 py-1.5 pl-8">
-                <div className="h-4 w-px bg-navy-200" />
+                <div className="bg-navy-200 h-4 w-px" />
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-navy-400">
+                  <span className="text-navy-400 text-xs">
                     ↓ {formatDistance(info.distance)}
                     {' · '}
                     {getTravelModeIcon(mode)}{' '}
@@ -174,13 +174,13 @@ export function SpotOrderList({
           {/* 이동 거리/시간 표시 (첫 스팟 제외) */}
           {idx > 0 && spot.distanceFromPrev !== null && (
             <div className="flex items-center gap-2 py-1.5 pl-8">
-              <div className="h-4 w-px bg-navy-200" />
+              <div className="bg-navy-200 h-4 w-px" />
               {(() => {
                 const mode = getTravelMode(spot.distanceFromPrev)
                 const prev = spots[idx - 1]
                 return (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-navy-400">
+                    <span className="text-navy-400 text-xs">
                       ↓ {formatDistance(spot.distanceFromPrev)}
                       {' · '}
                       {getTravelModeIcon(mode)}{' '}
@@ -222,19 +222,19 @@ export function SpotOrderList({
                 ? 'border-navy-400 bg-navy-50 opacity-50'
                 : dragOverIndex === idx
                   ? 'border-navy-500 bg-navy-50'
-                  : 'border-navy-200 bg-white hover:border-navy-300'
+                  : 'border-navy-200 hover:border-navy-300 bg-white'
             } cursor-grab active:cursor-grabbing`}
           >
             {/* 드래그 핸들 + 순서 번호 */}
             <div className="flex flex-shrink-0 flex-col items-center gap-1">
-              <span className="text-xs text-navy-300">⠿</span>
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-navy-600 text-xs font-bold text-white">
+              <span className="text-navy-300 text-xs">⠿</span>
+              <div className="bg-navy-600 flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-white">
                 {idx + 1}
               </div>
             </div>
 
             {/* 썸네일 */}
-            <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-navy-100">
+            <div className="bg-navy-100 h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
               {spot.thumbnailUrl ? (
                 <OptimizedImage
                   src={spot.thumbnailUrl}
@@ -244,7 +244,7 @@ export function SpotOrderList({
                   className="object-cover"
                 />
               ) : (
-                <div className="flex h-full items-center justify-center text-lg text-navy-300">
+                <div className="text-navy-300 flex h-full items-center justify-center text-lg">
                   📍
                 </div>
               )}
@@ -252,11 +252,11 @@ export function SpotOrderList({
 
             {/* 스팟 정보 */}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-navy-900">
+              <p className="text-navy-900 truncate text-sm font-medium">
                 {spot.spotName}
               </p>
               {spot.note && editingNoteIndex !== idx && (
-                <p className="truncate text-xs text-navy-400">{spot.note}</p>
+                <p className="text-navy-400 truncate text-xs">{spot.note}</p>
               )}
               {editingNoteIndex === idx && (
                 <textarea
@@ -264,7 +264,7 @@ export function SpotOrderList({
                   defaultValue={spot.note || ''}
                   placeholder="메모 입력..."
                   rows={2}
-                  className="mt-1 w-full resize-none rounded border border-navy-200 px-2 py-1 text-xs text-navy-700 focus:border-navy-400 focus:outline-none"
+                  className="border-navy-200 text-navy-700 focus:border-navy-400 mt-1 w-full resize-none rounded border px-2 py-1 text-xs focus:outline-none"
                   onBlur={(e) => {
                     handleNoteChange(idx, e.target.value)
                     setEditingNoteIndex(null)
@@ -288,7 +288,7 @@ export function SpotOrderList({
                 onClick={() =>
                   setEditingNoteIndex(editingNoteIndex === idx ? null : idx)
                 }
-                className="rounded p-1.5 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-600"
+                className="text-navy-400 hover:bg-navy-50 hover:text-navy-600 rounded p-1.5 transition-colors"
                 title="메모"
               >
                 📝
@@ -296,7 +296,7 @@ export function SpotOrderList({
               <button
                 type="button"
                 onClick={() => handleRemove(idx)}
-                className="rounded p-1.5 text-navy-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                className="text-navy-400 rounded p-1.5 transition-colors hover:bg-red-50 hover:text-red-500"
                 title="삭제"
               >
                 ✕

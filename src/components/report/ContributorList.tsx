@@ -16,8 +16,8 @@ export function ContributorList({ spotId }: ContributorListProps) {
   if (isLoading) {
     return (
       <div className="flex items-center gap-2 py-2">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-navy-400 border-t-transparent" />
-        <span className="text-xs text-navy-400">기여자 로딩 중...</span>
+        <div className="border-navy-400 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+        <span className="text-navy-400 text-xs">기여자 로딩 중...</span>
       </div>
     )
   }
@@ -26,12 +26,12 @@ export function ContributorList({ spotId }: ContributorListProps) {
 
   return (
     <div>
-      <h3 className="mb-2 text-sm font-medium text-navy-700">📋 정보 기여자</h3>
+      <h3 className="text-navy-700 mb-2 text-sm font-medium">📋 정보 기여자</h3>
       <div className="flex flex-wrap gap-2">
         {contributors.map((c) => (
           <span
             key={c.contributorId}
-            className="inline-flex items-center gap-1 rounded-full bg-navy-50 px-2.5 py-1 text-xs text-navy-600"
+            className="bg-navy-50 text-navy-600 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
           >
             <svg
               className="h-3 w-3"

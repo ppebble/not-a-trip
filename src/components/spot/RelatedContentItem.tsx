@@ -57,11 +57,11 @@ export function RelatedContentItem({
         onDragOver(index)
       }}
       onDragEnd={onDragEnd}
-      className={`flex items-center justify-between rounded-lg border bg-white p-3 transition-all ${isDragging ? 'border-navy-400 opacity-50 shadow-lg' : 'border-navy-200'} ${isDragOver ? 'border-2 border-navy-500 bg-navy-50' : ''} `}
+      className={`flex items-center justify-between rounded-lg border bg-white p-3 transition-all ${isDragging ? 'border-navy-400 opacity-50 shadow-lg' : 'border-navy-200'} ${isDragOver ? 'border-navy-500 bg-navy-50 border-2' : ''} `}
     >
       {/* 드래그 핸들 */}
       <div
-        className="mr-2 cursor-grab text-navy-400 hover:text-navy-600 active:cursor-grabbing"
+        className="text-navy-400 hover:text-navy-600 mr-2 cursor-grab active:cursor-grabbing"
         aria-label="드래그하여 순서 변경"
       >
         <svg
@@ -83,7 +83,7 @@ export function RelatedContentItem({
       <div className="flex flex-1 items-center gap-3">
         {/* 대표 이미지가 있으면 원형 뱃지로 표시, 없으면 기본 아이콘 */}
         {content.imageUrl ? (
-          <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border-2 border-navy-200">
+          <div className="border-navy-200 relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border-2">
             <Image
               src={content.imageUrl}
               alt={content.name}
@@ -96,8 +96,8 @@ export function RelatedContentItem({
           <ContentTypeIcon type={content.type} size="lg" />
         )}
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-navy-800">{content.name}</p>
-          <p className="truncate text-xs text-navy-500">
+          <p className="text-navy-800 truncate font-medium">{content.name}</p>
+          <p className="text-navy-500 truncate text-xs">
             {typeLabel}
             {content.year && ` · ${content.year}년`}
             {content.additionalInfo && ` · ${content.additionalInfo}`}
@@ -109,7 +109,7 @@ export function RelatedContentItem({
       <button
         type="button"
         onClick={onRemove}
-        className="ml-2 rounded p-1 text-navy-400 transition-colors hover:bg-red-50 hover:text-red-500"
+        className="text-navy-400 ml-2 rounded p-1 transition-colors hover:bg-red-50 hover:text-red-500"
         aria-label={`${content.name} 삭제`}
       >
         <svg

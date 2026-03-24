@@ -37,7 +37,7 @@ const HomeErrorFallback = ({
  */
 export default function Home() {
   return (
-    <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-navy-900">
+    <main className="bg-navy-900 flex h-[calc(100vh-3.5rem)] flex-col">
       <AsyncBoundary
         pendingFallback={<SpotLoadingSkeleton />}
         rejectedFallback={HomeErrorFallback}
@@ -122,14 +122,14 @@ function HomeContent() {
       {/* 데스크톱용 플로팅 정보 패널 */}
       <div className="absolute left-4 top-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
         <div className="flex items-center space-x-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-600 text-white">
+          <div className="bg-navy-600 flex h-8 w-8 items-center justify-center rounded-full text-white">
             📍
           </div>
           <div>
-            <p className="text-sm font-semibold text-navy-800">
+            <p className="text-navy-800 text-sm font-semibold">
               {spotCount}개의 특별한 여행지
             </p>
-            <p className="text-xs text-navy-600">
+            <p className="text-navy-600 text-xs">
               {spotCount > 0
                 ? '클릭하여 상세 정보를 확인하세요'
                 : '스팟 데이터를 불러오는 중...'}

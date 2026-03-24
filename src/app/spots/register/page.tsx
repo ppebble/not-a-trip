@@ -65,11 +65,11 @@ export default function SpotRegisterPage() {
   // 로딩 중 또는 비로그인 상태
   if (isLoading || !isAuthenticated) {
     return (
-      <main className="min-h-screen bg-navy-50">
-        <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <main className="bg-navy-50 min-h-screen">
+        <div className="border-navy-200 border-b bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <h1 className="text-xl font-bold text-navy-800">스팟 등록</h1>
-            <p className="text-sm text-navy-500">특별한 여행지를 공유하세요</p>
+            <h1 className="text-navy-800 text-xl font-bold">스팟 등록</h1>
+            <p className="text-navy-500 text-sm">특별한 여행지를 공유하세요</p>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
@@ -92,11 +92,11 @@ export default function SpotRegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-navy-50">
-      <div className="border-b border-navy-200 bg-white px-4 py-4">
+    <main className="bg-navy-50 min-h-screen">
+      <div className="border-navy-200 border-b bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-xl font-bold text-navy-800">스팟 등록</h1>
-          <p className="text-sm text-navy-500">특별한 여행지를 공유하세요</p>
+          <h1 className="text-navy-800 text-xl font-bold">스팟 등록</h1>
+          <p className="text-navy-500 text-sm">특별한 여행지를 공유하세요</p>
         </div>
       </div>
       <div className="mx-auto max-w-4xl px-4 py-6">

@@ -159,7 +159,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
                   </button>
                 </div>
               ) : (
-                <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-6 transition-colors hover:border-navy-400 hover:bg-gray-100">
+                <label className="hover:border-navy-400 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-6 transition-colors hover:bg-gray-100">
                   <svg
                     className="mb-2 h-10 w-10 text-gray-400"
                     fill="none"
@@ -199,7 +199,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
               value={episodeInfo}
               onChange={(e) => setEpisodeInfo(e.target.value)}
               placeholder="1화, OVA, 극장판 등"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+              className="focus:border-navy-500 focus:ring-navy-500 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1"
             />
           </div>
 
@@ -212,7 +212,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="장면에 대한 간단한 설명"
               rows={2}
-              className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+              className="focus:border-navy-500 focus:ring-navy-500 w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1"
             />
           </div>
 
@@ -227,7 +227,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-700 disabled:opacity-50"
+              className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
             >
               {isSubmitting ? '업로드 중...' : '추가하기'}
             </button>

@@ -73,7 +73,7 @@ export function RouteFilterBar({
       {/* 정렬 + 텍스트 필터 */}
       <div className="flex flex-wrap items-center gap-2">
         {/* 정렬 */}
-        <div className="flex rounded-lg border border-navy-200 bg-white">
+        <div className="border-navy-200 flex rounded-lg border bg-white">
           {SORT_OPTIONS.map((opt) => (
             <button
               key={opt.value}
@@ -95,7 +95,7 @@ export function RouteFilterBar({
           placeholder="작품명 검색"
           value={filters.contentName}
           onChange={(e) => updateFilter({ contentName: e.target.value })}
-          className="rounded-lg border border-navy-200 bg-white px-3 py-1.5 text-sm text-navy-800 placeholder-navy-300 outline-none focus:border-navy-400"
+          className="border-navy-200 text-navy-800 placeholder-navy-300 focus:border-navy-400 rounded-lg border bg-white px-3 py-1.5 text-sm outline-none"
         />
 
         {/* 지역 필터 */}
@@ -104,7 +104,7 @@ export function RouteFilterBar({
           placeholder="지역 검색"
           value={filters.regionTag}
           onChange={(e) => updateFilter({ regionTag: e.target.value })}
-          className="rounded-lg border border-navy-200 bg-white px-3 py-1.5 text-sm text-navy-800 placeholder-navy-300 outline-none focus:border-navy-400"
+          className="border-navy-200 text-navy-800 placeholder-navy-300 focus:border-navy-400 rounded-lg border bg-white px-3 py-1.5 text-sm outline-none"
         />
       </div>
 

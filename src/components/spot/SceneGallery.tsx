@@ -112,7 +112,7 @@ export default function SceneGallery({
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1 rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+            className="bg-navy-600 hover:bg-navy-700 flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-white transition-colors"
           >
             <svg
               className="h-4 w-4"

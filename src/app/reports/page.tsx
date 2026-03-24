@@ -19,7 +19,7 @@ export default function MyReportsPage() {
       <div className="min-h-screen bg-slate-50">
         <div className="border-b border-slate-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-lg">
-            <div className="h-6 w-32 animate-pulse rounded bg-navy-100" />
+            <div className="bg-navy-100 h-6 w-32 animate-pulse rounded" />
           </div>
         </div>
         <div className="mx-auto max-w-lg px-4 py-6">
@@ -27,7 +27,7 @@ export default function MyReportsPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-24 animate-pulse rounded-lg bg-navy-50"
+                className="bg-navy-50 h-24 animate-pulse rounded-lg"
               />
             ))}
           </div>
@@ -54,7 +54,7 @@ export default function MyReportsPage() {
         <div className="mx-auto max-w-lg">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-navy-500 hover:text-navy-700"
+            className="text-navy-500 hover:text-navy-700 flex items-center gap-2 text-sm"
           >
             <svg
               className="h-4 w-4"
@@ -72,10 +72,10 @@ export default function MyReportsPage() {
             홈으로
           </Link>
           <div className="mt-2 flex items-center justify-between">
-            <h1 className="text-xl font-bold text-navy-800">내 제보 목록</h1>
+            <h1 className="text-navy-800 text-xl font-bold">내 제보 목록</h1>
             <Link
               href="/reports/new"
-              className="rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-700"
+              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white"
             >
               새 제보
             </Link>

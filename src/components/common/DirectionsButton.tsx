@@ -88,7 +88,7 @@ export default function DirectionsButton({
     <div className="relative" ref={modalRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex items-center gap-1.5 rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-700 active:bg-navy-800 ${className}`}
+        className={`bg-navy-600 hover:bg-navy-700 active:bg-navy-800 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors ${className}`}
         aria-label="길찾기"
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -121,14 +121,14 @@ export default function DirectionsButton({
           role="menu"
           aria-label="지도 앱 선택"
         >
-          <div className="px-3 py-2 text-xs font-medium text-navy-400">
+          <div className="text-navy-400 px-3 py-2 text-xs font-medium">
             지도 앱 선택
           </div>
           {availableApps.map((app) => (
             <button
               key={app.key}
               onClick={() => handleSelect(app.key)}
-              className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm text-navy-700 transition-colors hover:bg-navy-50 active:bg-navy-100"
+              className="text-navy-700 hover:bg-navy-50 active:bg-navy-100 flex w-full items-center gap-2.5 px-3 py-2.5 text-sm transition-colors"
               role="menuitem"
             >
               <span className="text-base">{app.icon}</span>

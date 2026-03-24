@@ -113,7 +113,7 @@ export default function AutocompleteDropdown({
       {/* 로딩 상태 */}
       {isLoading && (
         <div className="flex items-center justify-center px-4 py-3">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-navy-500" />
+          <div className="border-t-navy-500 h-4 w-4 animate-spin rounded-full border-2 border-gray-300" />
           <span className="ml-2 text-sm text-gray-500">검색 중...</span>
         </div>
       )}

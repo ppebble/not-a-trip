@@ -47,7 +47,7 @@ export default function CategoryFilter() {
         className={`h-9 rounded-full px-4 text-sm font-medium transition-all ${
           isAllSelected
             ? 'bg-navy-600 text-white'
-            : 'bg-white/80 text-navy-700 hover:bg-white'
+            : 'text-navy-700 bg-white/80 hover:bg-white'
         }`}
       >
         전체
@@ -65,7 +65,7 @@ export default function CategoryFilter() {
             className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full px-4 text-sm font-medium transition-all ${
               isSelected
                 ? 'text-white shadow-md'
-                : 'bg-white/80 text-navy-700 hover:bg-white'
+                : 'text-navy-700 bg-white/80 hover:bg-white'
             }`}
             style={{
               backgroundColor: isSelected ? config.color : undefined,

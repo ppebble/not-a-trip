@@ -65,7 +65,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 9 }, (_, i) => (
         <div
           key={`skeleton-${i}`}
-          className="aspect-square animate-pulse bg-navy-200"
+          className="bg-navy-200 aspect-square animate-pulse"
         />
       ))}
     </>
@@ -77,8 +77,8 @@ function EmptyState() {
   return (
     <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">📸</div>
-      <p className="text-lg font-medium text-navy-700">아직 인증샷이 없어요</p>
-      <p className="mt-2 text-sm text-navy-500">
+      <p className="text-navy-700 text-lg font-medium">아직 인증샷이 없어요</p>
+      <p className="text-navy-500 mt-2 text-sm">
         첫 번째 순례 인증샷을 올려보세요!
       </p>
     </div>
@@ -90,13 +90,13 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">😢</div>
-      <p className="text-lg font-medium text-navy-700">
+      <p className="text-navy-700 text-lg font-medium">
         데이터를 불러올 수 없습니다
       </p>
-      <p className="mt-2 text-sm text-navy-500">네트워크 연결을 확인해주세요</p>
+      <p className="text-navy-500 mt-2 text-sm">네트워크 연결을 확인해주세요</p>
       <button
         onClick={onRetry}
-        className="bg-primary-500 hover:bg-primary-600 mt-4 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+        className="mt-4 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
       >
         다시 시도
       </button>
@@ -119,7 +119,7 @@ function FeedGridItem({
   return (
     <button
       type="button"
-      className="group relative aspect-square w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-navy-400"
+      className="focus:ring-navy-400 group relative aspect-square w-full overflow-hidden focus:outline-none focus:ring-2"
       onClick={onClick}
       aria-label={`${checkIn.userName}님의 ${spotName} 인증샷`}
     >
@@ -200,13 +200,13 @@ export function FeedTab({ onCheckInClick }: FeedTabProps) {
           aria-hidden="true"
         >
           {isLoadingMore && (
-            <div className="flex items-center gap-2 text-navy-500">
-              <div className="border-t-primary-500 h-5 w-5 animate-spin rounded-full border-2 border-navy-300" />
+            <div className="text-navy-500 flex items-center gap-2">
+              <div className="border-navy-300 h-5 w-5 animate-spin rounded-full border-2 border-t-primary-500" />
               <span className="text-sm">더 불러오는 중...</span>
             </div>
           )}
           {!hasMore && checkIns.length > 0 && (
-            <p className="text-sm text-navy-400">모든 인증샷을 불러왔습니다</p>
+            <p className="text-navy-400 text-sm">모든 인증샷을 불러왔습니다</p>
           )}
         </div>
       </div>
