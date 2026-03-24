@@ -315,7 +315,7 @@ export function ImageUpload({
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors ${isDragging ? 'border-navy-500 bg-navy-50' : 'border-navy-200 bg-navy-50 hover:border-navy-400'} ${disabled ? 'cursor-not-allowed opacity-50' : ''} `}
+          className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors ${isDragging ? 'border-primary bg-primary-50' : 'border-border bg-surface hover:border-primary-400'} ${disabled ? 'cursor-not-allowed opacity-50' : ''} `}
         >
           <input
             ref={fileInputRef}
@@ -327,7 +327,7 @@ export function ImageUpload({
             disabled={disabled}
           />
           <svg
-            className="text-navy-300 mx-auto mb-2 h-12 w-12"
+            className="mx-auto mb-2 h-12 w-12 text-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -339,10 +339,10 @@ export function ImageUpload({
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-navy-600 text-sm">
+          <p className="text-sm text-text-secondary">
             {isDragging ? '여기에 놓으세요' : '클릭하거나 드래그하여 사진 추가'}
           </p>
-          <p className="text-navy-400 mt-1 text-xs">
+          <p className="mt-1 text-xs text-muted">
             JPG, PNG, GIF, WEBP (최대 5MB) · 남은 슬롯: {remainingSlots}장
           </p>
         </div>
@@ -368,7 +368,7 @@ export function ImageUpload({
 
       {/* 최대 개수 도달 안내 */}
       {remainingSlots <= 0 && (
-        <p className="text-navy-500 text-center text-sm">
+        <p className="text-center text-sm text-muted">
           최대 {maxImages}장까지 업로드할 수 있습니다
         </p>
       )}
@@ -408,7 +408,7 @@ function ImagePreviewItem({
   const isCompleted = image.status === 'completed'
 
   return (
-    <div className="border-navy-200 bg-navy-50 group relative aspect-square overflow-hidden rounded-lg border">
+    <div className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-surface">
       {/* 이미지 */}
       <Image
         src={image.url}
@@ -514,7 +514,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveLeft()
             }}
-            className="text-navy-700 rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
+            className="rounded-full bg-white/90 p-1.5 text-text-secondary shadow hover:bg-white"
             title="왼쪽으로 이동"
           >
             <svg
@@ -564,7 +564,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveRight()
             }}
-            className="text-navy-700 rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
+            className="rounded-full bg-white/90 p-1.5 text-text-secondary shadow hover:bg-white"
             title="오른쪽으로 이동"
           >
             <svg

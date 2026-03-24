@@ -95,18 +95,22 @@ function AddLinkForm({
   }, [type, label, url, existingUrls, onAdd])
 
   return (
-    <div className="border-navy-200 bg-navy-50 rounded-lg border p-4">
-      <h4 className="text-navy-700 mb-3 text-sm font-medium">링크 추가</h4>
+    <div className="rounded-lg border border-border bg-surface p-4">
+      <h4 className="mb-3 text-sm font-medium text-text-secondary">
+        링크 추가
+      </h4>
 
       <div className="space-y-3">
         {/* 링크 타입 선택 */}
         <div>
-          <label className="text-navy-600 mb-1 block text-xs">링크 타입</label>
+          <label className="mb-1 block text-xs text-text-secondary">
+            링크 타입
+          </label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value as ExternalLinkType)}
             disabled={disabled}
-            className="border-navy-200 text-navy-800 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {(Object.keys(LINK_TYPE_CONFIG) as ExternalLinkType[]).map(
               (key) => (
@@ -120,32 +124,32 @@ function AddLinkForm({
 
         {/* 링크 이름 */}
         <div>
-          <label className="text-navy-600 mb-1 block text-xs">링크 이름</label>
+          <label className="mb-1 block text-xs text-text-secondary">
+            링크 이름
+          </label>
           <input
             type="text"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             placeholder="예: FC 바르셀로나 공식 사이트"
             disabled={disabled}
-            className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
             maxLength={100}
           />
         </div>
 
         {/* URL 입력 */}
         <div>
-          <label className="text-navy-600 mb-1 block text-xs">URL</label>
+          <label className="mb-1 block text-xs text-text-secondary">URL</label>
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://example.com"
             disabled={disabled}
-            className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           />
-          <p className="text-navy-400 mt-1 text-xs">
-            https:// 로 시작해야 합니다
-          </p>
+          <p className="mt-1 text-xs text-muted">https:// 로 시작해야 합니다</p>
         </div>
 
         {/* 에러 메시지 */}
@@ -180,7 +184,7 @@ function LinkItem({
   const config = LINK_TYPE_CONFIG[link.type]
 
   return (
-    <div className="border-navy-200 flex items-center gap-3 rounded-lg border bg-white p-3">
+    <div className="flex items-center gap-3 rounded-lg border border-border bg-white p-3">
       {/* 아이콘 */}
       <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-base">
         <span
@@ -192,10 +196,10 @@ function LinkItem({
 
       {/* 텍스트 */}
       <div className="min-w-0 flex-1">
-        <p className="text-navy-800 truncate text-sm font-medium">
+        <p className="truncate text-sm font-medium text-text-primary">
           {link.label}
         </p>
-        <p className="text-navy-500 truncate text-xs">{link.url}</p>
+        <p className="truncate text-xs text-muted">{link.url}</p>
       </div>
 
       {/* 삭제 버튼 */}
@@ -203,7 +207,7 @@ function LinkItem({
         type="button"
         onClick={onRemove}
         disabled={disabled}
-        className="text-navy-400 flex-shrink-0 rounded p-1 transition-colors hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex-shrink-0 rounded p-1 text-muted transition-colors hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="링크 삭제"
       >
         <svg
@@ -280,8 +284,10 @@ export function ExternalLinkForm({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-navy-800 text-lg font-semibold">{sectionTitle}</h3>
-        <span className="text-navy-500 text-sm">
+        <h3 className="text-lg font-semibold text-text-primary">
+          {sectionTitle}
+        </h3>
+        <span className="text-sm text-muted">
           {links.length}/{maxLinks}
         </span>
       </div>
@@ -308,7 +314,7 @@ export function ExternalLinkForm({
           disabled={disabled}
         />
       ) : (
-        <p className="text-navy-500 text-center text-sm">
+        <p className="text-center text-sm text-muted">
           최대 {maxLinks}개의 링크만 등록할 수 있습니다
         </p>
       )}

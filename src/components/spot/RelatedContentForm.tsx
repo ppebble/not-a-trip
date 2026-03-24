@@ -132,9 +132,8 @@ export function RelatedContentForm({
       {/* 콘텐츠 개수 표시 */}
       {value.length > 0 && (
         <div className="flex items-center justify-between">
-          <span className="text-navy-700 text-sm font-medium">
-            추가된 콘텐츠{' '}
-            <span className="text-navy-500">({value.length}개)</span>
+          <span className="text-sm font-medium text-text-secondary">
+            추가된 콘텐츠 <span className="text-muted">({value.length}개)</span>
           </span>
           {isMaxReached && (
             <span className="text-xs text-amber-600">
@@ -165,11 +164,11 @@ export function RelatedContentForm({
 
       {/* 콘텐츠 추가 폼 */}
       {isAdding ? (
-        <div className="border-navy-200 bg-navy-50 rounded-lg border p-4">
+        <div className="rounded-lg border border-border bg-surface p-4">
           <div className="space-y-3">
             {/* 콘텐츠 타입 */}
             <div>
-              <label className="text-navy-700 mb-1 block text-sm font-medium">
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
                 콘텐츠 타입
               </label>
               <select
@@ -180,7 +179,7 @@ export function RelatedContentForm({
                     type: e.target.value as ContentType,
                   })
                 }
-                className="border-navy-200 text-navy-800 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
                 {(Object.keys(CONTENT_TYPE_LABELS) as ContentType[]).map(
                   (type) => (
@@ -194,7 +193,7 @@ export function RelatedContentForm({
 
             {/* 콘텐츠 이름 */}
             <div>
-              <label className="text-navy-700 mb-1 block text-sm font-medium">
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
                 이름 <span className="text-red-500">*</span>
               </label>
               <input
@@ -205,14 +204,14 @@ export function RelatedContentForm({
                   setDuplicateWarning(null)
                 }}
                 placeholder="작품명, 팀명, 아티스트명 등"
-                className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
             {/* 연도 */}
             <div>
-              <label className="text-navy-700 mb-1 block text-sm font-medium">
-                연도 <span className="text-navy-400 text-xs">(선택)</span>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                연도 <span className="text-xs text-muted">(선택)</span>
               </label>
               <input
                 type="number"
@@ -226,14 +225,14 @@ export function RelatedContentForm({
                 placeholder="2024"
                 min={1900}
                 max={2100}
-                className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
             {/* 추가 정보 */}
             <div>
-              <label className="text-navy-700 mb-1 block text-sm font-medium">
-                추가 정보 <span className="text-navy-400 text-xs">(선택)</span>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                추가 정보 <span className="text-xs text-muted">(선택)</span>
               </label>
               <input
                 type="text"
@@ -245,7 +244,7 @@ export function RelatedContentForm({
                   })
                 }
                 placeholder="에피소드, 시즌, 앨범명 등"
-                className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
@@ -288,7 +287,7 @@ export function RelatedContentForm({
           <button
             type="button"
             onClick={() => setIsAdding(true)}
-            className="border-navy-200 bg-navy-50 text-navy-600 hover:border-navy-300 hover:bg-navy-100 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-3 text-sm font-medium transition-colors"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-surface px-4 py-3 text-sm font-medium text-primary transition-colors hover:border-primary-300 hover:bg-primary-100"
           >
             <svg
               className="h-4 w-4"
@@ -310,7 +309,7 @@ export function RelatedContentForm({
 
       {/* 빈 상태 안내 메시지 */}
       {value.length === 0 && !isAdding && (
-        <p className="text-navy-400 text-center text-xs">
+        <p className="text-center text-xs text-muted">
           이 스팟과 관련된 작품, 팀, 아티스트 등을 추가할 수 있습니다
         </p>
       )}
