@@ -105,7 +105,7 @@ function GalleryPageContent() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-navy-50">
+    <main className="bg-navy-50 min-h-screen">
       {/* GalleryHeader 컴포넌트 영역 (Task 2.1에서 구현) */}
       <Suspense fallback={<HeaderSkeleton />}>
         <GalleryHeaderPlaceholder />
@@ -161,10 +161,10 @@ function GalleryPageContent() {
  */
 function HeaderSkeleton() {
   return (
-    <div className="border-b border-navy-200 bg-white px-4 py-6">
+    <div className="border-navy-200 border-b bg-white px-4 py-6">
       <div className="mx-auto max-w-6xl">
         <SkeletonBlock className="h-8 w-32" />
-        <SkeletonBlock className="mt-2 h-4 w-48 bg-navy-100" />
+        <SkeletonBlock className="bg-navy-100 mt-2 h-4 w-48" />
       </div>
     </div>
   )
@@ -175,7 +175,7 @@ function HeaderSkeleton() {
  */
 function TabsSkeleton() {
   return (
-    <div className="border-b border-navy-200 bg-white px-4 py-3">
+    <div className="border-navy-200 border-b bg-white px-4 py-3">
       <div className="mx-auto flex max-w-6xl gap-2">
         <SkeletonBlock className="h-10 w-28" />
         <SkeletonBlock className="h-10 w-28" />
@@ -203,17 +203,17 @@ function ContentSkeleton() {
  */
 function GalleryHeaderPlaceholder() {
   return (
-    <div className="border-b border-navy-200 bg-white px-4 py-6">
+    <div className="border-navy-200 border-b bg-white px-4 py-6">
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-2xl font-bold text-navy-800">순례 갤러리</h1>
-        <p className="mt-1 text-sm text-navy-500">오타쿠들의 발자취</p>
+        <h1 className="text-navy-800 text-2xl font-bold">순례 갤러리</h1>
+        <p className="text-navy-500 mt-1 text-sm">오타쿠들의 발자취</p>
         {/* 통계 영역 - Task 2.1에서 실제 데이터로 교체 */}
         <div className="mt-4 flex gap-6">
-          <div className="text-sm text-navy-600">
+          <div className="text-navy-600 text-sm">
             <span className="font-semibold">총 인증</span>{' '}
             <span className="text-navy-400">--</span>
           </div>
-          <div className="text-sm text-navy-600">
+          <div className="text-navy-600 text-sm">
             <span className="font-semibold">오늘 인증</span>{' '}
             <span className="text-navy-400">--</span>
           </div>
@@ -240,7 +240,7 @@ function GalleryTabsPlaceholder({
   ] as const
 
   return (
-    <div className="sticky top-0 z-10 border-b border-navy-200 bg-white px-4 py-3">
+    <div className="border-navy-200 sticky top-0 z-10 border-b bg-white px-4 py-3">
       <div className="mx-auto flex max-w-6xl gap-2" role="tablist">
         {tabs.map((tab) => (
           <a

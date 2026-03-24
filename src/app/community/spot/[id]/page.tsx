@@ -23,7 +23,7 @@ export default function SpotCommunityPage({ params }: SpotCommunityPageProps) {
   }, [id, router])
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-navy-50">
+    <main className="bg-navy-50 flex min-h-screen items-center justify-center">
       <div className="text-center">
         <div className="mb-4 text-4xl">🔄</div>
         <p className="text-navy-600">스팟 상세 페이지로 이동 중...</p>

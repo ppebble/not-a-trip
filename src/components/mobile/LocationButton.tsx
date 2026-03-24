@@ -63,15 +63,15 @@ export default function LocationButton({
     <button
       onClick={handleClick}
       disabled={isLoading}
-      className={`flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-navy-500 focus:ring-offset-2 disabled:opacity-70 ${className}`}
+      className={`focus:ring-navy-500 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-70 ${className}`}
       aria-label="현재 위치로 이동"
       title="현재 위치로 이동"
     >
       {isLoading ? (
-        <div className="h-5 w-5 animate-spin rounded-full border-2 border-navy-200 border-t-navy-600" />
+        <div className="border-navy-200 border-t-navy-600 h-5 w-5 animate-spin rounded-full border-2" />
       ) : (
         <svg
-          className="h-5 w-5 text-navy-600"
+          className="text-navy-600 h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

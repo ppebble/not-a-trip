@@ -211,7 +211,7 @@ export function AdminStatusReportReview({
                   onChange={(e) =>
                     setSelectedStatus(e.target.value as SpotStatus)
                   }
-                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-400 focus:outline-none focus:ring-1 focus:ring-navy-400"
+                  className="focus:border-navy-400 focus:ring-navy-400 flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1"
                   aria-label="스팟 상태 선택"
                 >
                   {SPOT_STATUS_OPTIONS.map((opt) => (
@@ -223,7 +223,7 @@ export function AdminStatusReportReview({
                 <button
                   onClick={handleChangeSpotStatus}
                   disabled={loading}
-                  className="rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-700 disabled:opacity-50"
+                  className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-50"
                 >
                   {loading ? '처리중...' : '변경'}
                 </button>

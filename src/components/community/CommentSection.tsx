@@ -32,26 +32,26 @@ function CommentItem({
     comment.isGuest || (currentUserId && comment.userId === currentUserId)
 
   return (
-    <div className="border-b border-navy-100 py-4 last:border-b-0">
+    <div className="border-navy-100 border-b py-4 last:border-b-0">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* 작성자 아바타 */}
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-200 text-sm font-medium text-navy-600">
+          <div className="bg-navy-200 text-navy-600 flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium">
             {comment.author.charAt(0).toUpperCase()}
           </div>
           {/* 작성자 정보 */}
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-navy-700">
+              <span className="text-navy-700 text-sm font-medium">
                 {comment.author}
               </span>
               {comment.isGuest && (
-                <span className="rounded bg-navy-100 px-1.5 py-0.5 text-xs text-navy-500">
+                <span className="bg-navy-100 text-navy-500 rounded px-1.5 py-0.5 text-xs">
                   비회원
                 </span>
               )}
             </div>
-            <span className="text-xs text-navy-400">
+            <span className="text-navy-400 text-xs">
               {formatRelativeDate(comment.createdAt)}
             </span>
           </div>
@@ -60,7 +60,7 @@ function CommentItem({
         {canDelete && (
           <button
             onClick={() => onDeleteClick(comment)}
-            className="text-xs text-navy-400 transition-colors hover:text-red-500"
+            className="text-navy-400 text-xs transition-colors hover:text-red-500"
             title="댓글 삭제"
           >
             삭제
@@ -68,7 +68,7 @@ function CommentItem({
         )}
       </div>
       {/* 댓글 내용 */}
-      <p className="ml-11 whitespace-pre-wrap text-sm text-navy-600">
+      <p className="text-navy-600 ml-11 whitespace-pre-wrap text-sm">
         {comment.content}
       </p>
     </div>
@@ -82,15 +82,15 @@ function CommentListSkeleton() {
   return (
     <div className="space-y-4">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="animate-pulse border-b border-navy-100 py-4">
+        <div key={i} className="border-navy-100 animate-pulse border-b py-4">
           <div className="mb-2 flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-navy-200"></div>
+            <div className="bg-navy-200 h-8 w-8 rounded-full"></div>
             <div className="space-y-1">
-              <div className="h-4 w-20 rounded bg-navy-200"></div>
-              <div className="h-3 w-16 rounded bg-navy-100"></div>
+              <div className="bg-navy-200 h-4 w-20 rounded"></div>
+              <div className="bg-navy-100 h-3 w-16 rounded"></div>
             </div>
           </div>
-          <div className="ml-11 h-4 w-3/4 rounded bg-navy-100"></div>
+          <div className="bg-navy-100 ml-11 h-4 w-3/4 rounded"></div>
         </div>
       ))}
     </div>
@@ -104,8 +104,8 @@ function CommentListEmpty() {
   return (
     <div className="py-8 text-center">
       <div className="mb-2 text-3xl">💬</div>
-      <p className="text-sm text-navy-500">아직 댓글이 없습니다</p>
-      <p className="text-xs text-navy-400">첫 번째 댓글을 남겨보세요!</p>
+      <p className="text-navy-500 text-sm">아직 댓글이 없습니다</p>
+      <p className="text-navy-400 text-xs">첫 번째 댓글을 남겨보세요!</p>
     </div>
   )
 }
@@ -173,16 +173,16 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* 로그인 상태 표시 */}
       {isAuthLoading ? (
-        <div className="h-10 animate-pulse rounded-lg bg-navy-100"></div>
+        <div className="bg-navy-100 h-10 animate-pulse rounded-lg"></div>
       ) : isAuthenticated ? (
-        <div className="flex items-center gap-2 rounded-lg bg-navy-50 px-4 py-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-navy-200 text-xs font-medium text-navy-600">
+        <div className="bg-navy-50 flex items-center gap-2 rounded-lg px-4 py-2">
+          <div className="bg-navy-200 text-navy-600 flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium">
             {(user?.name || user?.email || '회')[0].toUpperCase()}
           </div>
-          <span className="text-sm text-navy-700">
+          <span className="text-navy-700 text-sm">
             {user?.name || user?.email?.split('@')[0] || '회원'}
           </span>
-          <span className="text-xs text-navy-400">(으)로 작성</span>
+          <span className="text-navy-400 text-xs">(으)로 작성</span>
         </div>
       ) : (
         /* 비회원: 닉네임 + 비밀번호 한 줄 입력 */
@@ -193,7 +193,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
             placeholder="닉네임"
-            className="w-1/3 rounded-lg border border-navy-200 px-3 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            className="border-navy-200 text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500 w-1/3 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1"
             maxLength={20}
           />
           <input
@@ -202,7 +202,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호 (4자 이상) *"
-            className="w-2/3 rounded-lg border border-navy-200 px-3 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+            className="border-navy-200 text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500 w-2/3 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1"
             maxLength={20}
           />
         </div>
@@ -212,7 +212,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
       <div>
         <label
           htmlFor="comment-content"
-          className="mb-1 block text-sm font-medium text-navy-700"
+          className="text-navy-700 mb-1 block text-sm font-medium"
         >
           댓글 내용
         </label>
@@ -222,7 +222,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
           onChange={(e) => setContent(e.target.value)}
           placeholder="댓글을 입력해주세요"
           rows={3}
-          className="w-full resize-none rounded-lg border border-navy-200 px-4 py-2 text-sm text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500"
+          className="border-navy-200 text-navy-700 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500 w-full resize-none rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-1"
           maxLength={500}
         />
       </div>
@@ -235,7 +235,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
         <button
           type="submit"
           disabled={createComment.isPending}
-          className="rounded-lg bg-navy-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           {createComment.isPending ? '작성 중...' : '댓글 작성'}
         </button>
@@ -315,7 +315,7 @@ export default function CommentSection({
   return (
     <div className={`rounded-lg bg-white p-6 shadow-sm ${className}`}>
       {/* 섹션 헤더 */}
-      <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-navy-800">
+      <h2 className="text-navy-800 mb-4 flex items-center gap-2 text-lg font-semibold">
         <svg
           className="h-5 w-5"
           fill="none"
@@ -333,7 +333,7 @@ export default function CommentSection({
       </h2>
 
       {/* 댓글 작성 폼 */}
-      <div className="mb-6 border-b border-navy-100 pb-6">
+      <div className="border-navy-100 mb-6 border-b pb-6">
         <CommentForm postId={postId} onSuccess={() => refetch()} />
       </div>
 
@@ -343,12 +343,12 @@ export default function CommentSection({
           <CommentListSkeleton />
         ) : error ? (
           <div className="py-4 text-center">
-            <p className="mb-2 text-sm text-navy-500">
+            <p className="text-navy-500 mb-2 text-sm">
               댓글을 불러오는데 실패했습니다
             </p>
             <button
               onClick={() => refetch()}
-              className="text-sm text-navy-600 hover:text-navy-800"
+              className="text-navy-600 hover:text-navy-800 text-sm"
             >
               다시 시도
             </button>
@@ -394,10 +394,10 @@ export default function CommentSection({
             onClick={() => setDeleteTarget(null)}
           />
           <div className="relative z-10 mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-            <h3 className="mb-2 text-lg font-semibold text-navy-800">
+            <h3 className="text-navy-800 mb-2 text-lg font-semibold">
               댓글 삭제
             </h3>
-            <p className="mb-4 text-sm text-navy-600">
+            <p className="text-navy-600 mb-4 text-sm">
               이 댓글을 삭제하시겠습니까?
             </p>
             {deleteError && (
@@ -407,7 +407,7 @@ export default function CommentSection({
               <button
                 onClick={() => setDeleteTarget(null)}
                 disabled={deleteComment.isPending}
-                className="rounded-lg border border-navy-300 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50 disabled:opacity-50"
+                className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
               >
                 취소
               </button>

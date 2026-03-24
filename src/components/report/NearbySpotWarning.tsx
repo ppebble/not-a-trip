@@ -22,9 +22,9 @@ export function NearbySpotWarning({
 }: NearbySpotWarningProps) {
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 rounded-lg bg-navy-50 p-4">
-        <div className="h-5 w-5 animate-spin rounded-full border-2 border-navy-600 border-t-transparent" />
-        <span className="text-sm text-navy-600">주변 스팟 검색 중...</span>
+      <div className="bg-navy-50 flex items-center gap-2 rounded-lg p-4">
+        <div className="border-navy-600 h-5 w-5 animate-spin rounded-full border-2 border-t-transparent" />
+        <span className="text-navy-600 text-sm">주변 스팟 검색 중...</span>
       </div>
     )
   }
@@ -77,21 +77,21 @@ export function NearbySpotWarning({
                 />
               </div>
             ) : (
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-navy-100 text-lg">
+              <div className="bg-navy-100 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded text-lg">
                 📍
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-navy-800">
+              <p className="text-navy-800 truncate text-sm font-medium">
                 {item.name}
               </p>
-              <p className="text-xs text-navy-400">
+              <p className="text-navy-400 text-xs">
                 {Math.round(item.distance)}m ·{' '}
                 {item.type === 'spot' ? '등록된 스팟' : '대기중 제보'}
               </p>
             </div>
             {item.type === 'spot' && (
-              <span className="text-xs text-navy-400">보완 →</span>
+              <span className="text-navy-400 text-xs">보완 →</span>
             )}
           </button>
         ))}

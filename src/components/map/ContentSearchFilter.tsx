@@ -132,7 +132,7 @@ export default function ContentSearchFilter({
         aria-label="검색 열기"
       >
         <svg
-          className="h-5 w-5 text-navy-600"
+          className="text-navy-600 h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -175,7 +175,7 @@ export default function ContentSearchFilter({
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-64 rounded-full border border-gray-200 bg-white/95 py-2 pl-10 pr-10 text-sm text-gray-900 placeholder-gray-500 shadow-lg backdrop-blur-sm transition-all focus:border-navy-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-navy-500"
+        className="focus:border-navy-500 focus:ring-navy-500 w-64 rounded-full border border-gray-200 bg-white/95 py-2 pl-10 pr-10 text-sm text-gray-900 placeholder-gray-500 shadow-lg backdrop-blur-sm transition-all focus:bg-white focus:outline-none focus:ring-1"
         role="combobox"
         aria-label="콘텐츠 검색"
         aria-expanded={isDropdownOpen}

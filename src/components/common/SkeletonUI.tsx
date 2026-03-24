@@ -18,7 +18,7 @@ interface SkeletonBaseProps {
 export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
   return (
     <div
-      className={`animate-pulse rounded bg-navy-200 ${className}`}
+      className={`bg-navy-200 animate-pulse rounded ${className}`}
       role="status"
       aria-label="로딩 중"
     />
@@ -83,13 +83,13 @@ export function GalleryGridSkeleton({ count = 8 }: { count?: number }) {
 export function MapSkeleton() {
   return (
     <div
-      className="flex h-full w-full items-center justify-center bg-navy-800"
+      className="bg-navy-800 flex h-full w-full items-center justify-center"
       role="status"
       aria-label="지도 로딩 중"
     >
       <div className="text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-navy-400 border-t-white" />
-        <p className="mt-4 text-navy-200">지도 로딩 중...</p>
+        <div className="border-navy-400 mx-auto h-12 w-12 animate-spin rounded-full border-4 border-t-white" />
+        <p className="text-navy-200 mt-4">지도 로딩 중...</p>
       </div>
     </div>
   )
@@ -143,21 +143,21 @@ export function SpotDetailSkeleton() {
  */
 export function GalleryPageSkeleton() {
   return (
-    <main className="min-h-screen bg-navy-50">
+    <main className="bg-navy-50 min-h-screen">
       {/* 헤더 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-6">
+      <div className="border-navy-200 border-b bg-white px-4 py-6">
         <div className="mx-auto max-w-6xl">
           <SkeletonBlock className="h-8 w-32" />
-          <SkeletonBlock className="mt-2 h-4 w-48 bg-navy-100" />
+          <SkeletonBlock className="bg-navy-100 mt-2 h-4 w-48" />
           <div className="mt-4 flex gap-4">
-            <SkeletonBlock className="h-6 w-24 bg-navy-100" />
-            <SkeletonBlock className="h-6 w-24 bg-navy-100" />
+            <SkeletonBlock className="bg-navy-100 h-6 w-24" />
+            <SkeletonBlock className="bg-navy-100 h-6 w-24" />
           </div>
         </div>
       </div>
 
       {/* 탭 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-3">
+      <div className="border-navy-200 border-b bg-white px-4 py-3">
         <div className="mx-auto flex max-w-6xl gap-2">
           <SkeletonBlock className="h-10 w-28" />
           <SkeletonBlock className="h-10 w-28" />

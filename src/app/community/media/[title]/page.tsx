@@ -103,9 +103,9 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
   const [bannerImageError, setBannerImageError] = useState(false)
 
   return (
-    <main className="min-h-screen bg-navy-50">
+    <main className="bg-navy-50 min-h-screen">
       {/* 페이지 타이틀 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <div className="border-navy-200 border-b bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-2">
             <Link
@@ -115,15 +115,15 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
               ← 작품별
             </Link>
           </div>
-          <h1 className="mt-2 text-xl font-bold text-navy-800">{mediaTitle}</h1>
-          <p className="text-sm text-navy-500">성지순례 현황</p>
+          <h1 className="text-navy-800 mt-2 text-xl font-bold">{mediaTitle}</h1>
+          <p className="text-navy-500 text-sm">성지순례 현황</p>
         </div>
       </div>
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
         {/* 작품 정보 배너 */}
-        <div className="relative mb-6 overflow-hidden rounded-lg bg-gradient-to-r from-navy-700 to-navy-600 shadow-md">
+        <div className="from-navy-700 to-navy-600 relative mb-6 overflow-hidden rounded-lg bg-gradient-to-r shadow-md">
           {/* 배경 이미지 (있는 경우) */}
           {imageUrl && !bannerImageError && (
             <div className="absolute inset-0">
@@ -135,7 +135,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
                 onError={() => setBannerImageError(true)}
                 sizes="(max-width: 896px) 100vw, 896px"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-navy-800/80 to-navy-700/60" />
+              <div className="from-navy-800/80 to-navy-700/60 absolute inset-0 bg-gradient-to-r" />
             </div>
           )}
 
@@ -159,7 +159,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
                 )}
                 <div>
                   <h2 className="text-lg font-bold">{mediaTitle}</h2>
-                  <p className="text-sm text-navy-200">
+                  <p className="text-navy-200 text-sm">
                     성지순례 스팟을 확인하고 인증해보세요
                   </p>
                 </div>
@@ -167,7 +167,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
               {data && (
                 <div className="text-right">
                   <div className="text-2xl font-bold">{data.totalCheckIns}</div>
-                  <div className="text-sm text-navy-200">총 인증</div>
+                  <div className="text-navy-200 text-sm">총 인증</div>
                 </div>
               )}
             </div>
@@ -179,9 +179,9 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
           <div className="mb-6 grid grid-cols-2 gap-4">
             <div className="rounded-lg bg-white p-4 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-100">
+                <div className="bg-navy-100 flex h-10 w-10 items-center justify-center rounded-full">
                   <svg
-                    className="h-5 w-5 text-navy-600"
+                    className="text-navy-600 h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -195,10 +195,10 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-navy-800">
+                  <div className="text-navy-800 text-2xl font-bold">
                     {data.total}
                   </div>
-                  <div className="text-sm text-navy-500">등록된 성지</div>
+                  <div className="text-navy-500 text-sm">등록된 성지</div>
                 </div>
               </div>
             </div>
@@ -226,10 +226,10 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-navy-800">
+                  <div className="text-navy-800 text-2xl font-bold">
                     {data.totalCheckIns}
                   </div>
-                  <div className="text-sm text-navy-500">총 인증 수</div>
+                  <div className="text-navy-500 text-sm">총 인증 수</div>
                 </div>
               </div>
             </div>
@@ -238,10 +238,10 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
 
         {/* 성지 목록 */}
         <div className="rounded-lg bg-white shadow-sm">
-          <div className="border-b border-navy-100 px-4 py-3">
+          <div className="border-navy-100 border-b px-4 py-3">
             <div className="flex items-center gap-2">
               <svg
-                className="h-5 w-5 text-navy-600"
+                className="text-navy-600 h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -253,7 +253,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
                   d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
                 />
               </svg>
-              <h3 className="font-semibold text-navy-800">성지 목록</h3>
+              <h3 className="text-navy-800 font-semibold">성지 목록</h3>
             </div>
           </div>
 
@@ -264,7 +264,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
           ) : !data || data.spots.length === 0 ? (
             <SpotListEmpty mediaTitle={mediaTitle} />
           ) : (
-            <div className="divide-y divide-navy-100">
+            <div className="divide-navy-100 divide-y">
               {data.spots.map((spot) => (
                 <SpotItem key={spot.id} spot={spot} />
               ))}
@@ -283,10 +283,10 @@ function SpotItem({ spot }: { spot: SpotWithCheckIn }) {
   return (
     <Link
       href={`/spots/${spot.id}`}
-      className="flex items-center gap-4 p-4 transition-colors hover:bg-navy-50"
+      className="hover:bg-navy-50 flex items-center gap-4 p-4 transition-colors"
     >
       {/* 스팟 이미지 */}
-      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-navy-100">
+      <div className="bg-navy-100 relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
         {spot.thumbnailUrl && !imageError ? (
           <Image
             src={spot.thumbnailUrl}
@@ -299,7 +299,7 @@ function SpotItem({ spot }: { spot: SpotWithCheckIn }) {
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <svg
-              className="h-6 w-6 text-navy-300"
+              className="text-navy-300 h-6 w-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -317,7 +317,7 @@ function SpotItem({ spot }: { spot: SpotWithCheckIn }) {
 
       {/* 스팟 정보 */}
       <div className="min-w-0 flex-1">
-        <h4 className="truncate font-medium text-navy-800">{spot.name}</h4>
+        <h4 className="text-navy-800 truncate font-medium">{spot.name}</h4>
         {categoryConfig && (
           <span
             className="mt-1 inline-block rounded-full px-2 py-0.5 text-xs"
@@ -354,7 +354,7 @@ function SpotItem({ spot }: { spot: SpotWithCheckIn }) {
           <span className="text-navy-400">미인증</span>
         )}
         <svg
-          className="h-4 w-4 text-navy-400"
+          className="text-navy-400 h-4 w-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -373,15 +373,15 @@ function SpotItem({ spot }: { spot: SpotWithCheckIn }) {
 
 function SpotListSkeleton() {
   return (
-    <div className="divide-y divide-navy-100">
+    <div className="divide-navy-100 divide-y">
       {[1, 2, 3, 4].map((i) => (
         <div key={i} className="flex animate-pulse items-center gap-4 p-4">
-          <div className="h-16 w-16 rounded-lg bg-navy-200" />
+          <div className="bg-navy-200 h-16 w-16 rounded-lg" />
           <div className="flex-1">
-            <div className="mb-2 h-4 w-3/4 rounded bg-navy-200" />
-            <div className="h-3 w-1/4 rounded bg-navy-100" />
+            <div className="bg-navy-200 mb-2 h-4 w-3/4 rounded" />
+            <div className="bg-navy-100 h-3 w-1/4 rounded" />
           </div>
-          <div className="h-6 w-12 rounded-full bg-navy-100" />
+          <div className="bg-navy-100 h-6 w-12 rounded-full" />
         </div>
       ))}
     </div>
@@ -392,8 +392,8 @@ function SpotListError() {
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">😢</div>
-      <p className="mb-2 text-navy-700">성지 목록을 불러오지 못했습니다</p>
-      <p className="text-sm text-navy-500">잠시 후 다시 시도해주세요.</p>
+      <p className="text-navy-700 mb-2">성지 목록을 불러오지 못했습니다</p>
+      <p className="text-navy-500 text-sm">잠시 후 다시 시도해주세요.</p>
     </div>
   )
 }
@@ -402,13 +402,13 @@ function SpotListEmpty({ mediaTitle }: { mediaTitle: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">🗺️</div>
-      <p className="mb-2 text-navy-700">
+      <p className="text-navy-700 mb-2">
         &apos;{mediaTitle}&apos; 관련 성지가 없습니다
       </p>
-      <p className="mb-4 text-sm text-navy-500">새로운 성지를 등록해주세요!</p>
+      <p className="text-navy-500 mb-4 text-sm">새로운 성지를 등록해주세요!</p>
       <Link
         href="/spots/register"
-        className="rounded-lg bg-navy-600 px-4 py-2 text-sm text-white transition-colors hover:bg-navy-700"
+        className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm text-white transition-colors"
       >
         성지 등록하기
       </Link>

@@ -260,7 +260,7 @@ export function AdminReportReview({
               }}
               placeholder="코멘트를 입력하세요 (반려/수정요청 시 필수)"
               rows={3}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-navy-400 focus:outline-none focus:ring-1 focus:ring-navy-400"
+              className="focus:border-navy-400 focus:ring-navy-400 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1"
             />
 
             {error && <p className="mt-2 text-sm text-red-500">{error}</p>}

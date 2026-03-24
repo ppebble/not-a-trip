@@ -12,10 +12,10 @@ export function PhotoUploadSection({
   disabled,
 }: PhotoUploadSectionProps) {
   return (
-    <div className="border-b border-navy-100 pb-6">
-      <h2 className="mb-4 text-lg font-semibold text-navy-800">
+    <div className="border-navy-100 border-b pb-6">
+      <h2 className="text-navy-800 mb-4 text-lg font-semibold">
         사진{' '}
-        <span className="text-xs font-normal text-navy-400">
+        <span className="text-navy-400 text-xs font-normal">
           (선택, 최대 5장)
         </span>
       </h2>

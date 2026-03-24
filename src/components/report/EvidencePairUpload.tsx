@@ -212,24 +212,24 @@ export function EvidencePairUpload({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-navy-800">
+        <p className="text-navy-800 text-sm font-medium">
           증거 사진 쌍 <span className="text-red-500">*</span>
         </p>
-        <span className="text-xs text-navy-400">
+        <span className="text-navy-400 text-xs">
           {pairStates.length}/{maxPairs}쌍
         </span>
       </div>
-      <p className="text-xs text-navy-400">
+      <p className="text-navy-400 text-xs">
         작품 속 캡처 이미지와 실제 현장 사진을 쌍으로 등록해주세요
       </p>
 
       {pairStates.map((pair, index) => (
         <div
           key={index}
-          className="rounded-lg border border-navy-100 bg-navy-50/30 p-3"
+          className="border-navy-100 bg-navy-50/30 rounded-lg border p-3"
         >
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-medium text-navy-600">
+            <span className="text-navy-600 text-xs font-medium">
               사진 쌍 {index + 1}
             </span>
             {pairStates.length > 1 && (
@@ -246,7 +246,7 @@ export function EvidencePairUpload({
           <div className="grid grid-cols-2 gap-3">
             {/* 캡처 이미지 */}
             <div>
-              <p className="mb-1 text-xs text-navy-500">🎬 작품 캡처</p>
+              <p className="text-navy-500 mb-1 text-xs">🎬 작품 캡처</p>
               <input
                 ref={(el) => {
                   captureRefs.current[index] = el
@@ -290,14 +290,14 @@ export function EvidencePairUpload({
                   type="button"
                   onClick={() => captureRefs.current[index]?.click()}
                   disabled={pair.isUploadingCapture}
-                  className="flex aspect-video w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-navy-200 hover:border-navy-400 hover:bg-navy-50"
+                  className="border-navy-200 hover:border-navy-400 hover:bg-navy-50 flex aspect-video w-full flex-col items-center justify-center rounded-lg border-2 border-dashed"
                 >
                   {pair.isUploadingCapture ? (
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-navy-600 border-t-transparent" />
+                    <div className="border-navy-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
                   ) : (
                     <>
                       <svg
-                        className="mb-1 h-6 w-6 text-navy-300"
+                        className="text-navy-300 mb-1 h-6 w-6"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -309,7 +309,7 @@ export function EvidencePairUpload({
                           d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                         />
                       </svg>
-                      <span className="text-[10px] text-navy-400">
+                      <span className="text-navy-400 text-[10px]">
                         캡처 업로드
                       </span>
                     </>
@@ -320,7 +320,7 @@ export function EvidencePairUpload({
 
             {/* 현장 사진 */}
             <div>
-              <p className="mb-1 text-xs text-navy-500">📸 현장 사진</p>
+              <p className="text-navy-500 mb-1 text-xs">📸 현장 사진</p>
               <input
                 ref={(el) => {
                   realRefs.current[index] = el
@@ -364,14 +364,14 @@ export function EvidencePairUpload({
                   type="button"
                   onClick={() => realRefs.current[index]?.click()}
                   disabled={pair.isUploadingReal}
-                  className="flex aspect-video w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-navy-200 hover:border-navy-400 hover:bg-navy-50"
+                  className="border-navy-200 hover:border-navy-400 hover:bg-navy-50 flex aspect-video w-full flex-col items-center justify-center rounded-lg border-2 border-dashed"
                 >
                   {pair.isUploadingReal ? (
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-navy-600 border-t-transparent" />
+                    <div className="border-navy-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
                   ) : (
                     <>
                       <svg
-                        className="mb-1 h-6 w-6 text-navy-300"
+                        className="text-navy-300 mb-1 h-6 w-6"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -383,7 +383,7 @@ export function EvidencePairUpload({
                           d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                         />
                       </svg>
-                      <span className="text-[10px] text-navy-400">
+                      <span className="text-navy-400 text-[10px]">
                         현장 업로드
                       </span>
                     </>
@@ -400,7 +400,7 @@ export function EvidencePairUpload({
             onChange={(e) => handleDescriptionChange(index, e.target.value)}
             placeholder="설명 (선택)"
             maxLength={100}
-            className="mt-2 w-full rounded-md border border-navy-100 px-2 py-1.5 text-xs focus:border-navy-400 focus:outline-none"
+            className="border-navy-100 focus:border-navy-400 mt-2 w-full rounded-md border px-2 py-1.5 text-xs focus:outline-none"
           />
 
           {/* 쌍 완성 상태 표시 */}
@@ -424,7 +424,7 @@ export function EvidencePairUpload({
           type="button"
           onClick={addPair}
           disabled={isAnyUploading}
-          className="w-full rounded-lg border border-dashed border-navy-200 py-2 text-sm text-navy-500 hover:border-navy-400 hover:bg-navy-50 disabled:opacity-50"
+          className="border-navy-200 text-navy-500 hover:border-navy-400 hover:bg-navy-50 w-full rounded-lg border border-dashed py-2 text-sm disabled:opacity-50"
         >
           + 사진 쌍 추가
         </button>

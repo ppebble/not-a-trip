@@ -126,7 +126,7 @@ export function SceneCarousel({
               onClick={() => goToSlide(index)}
               className={`h-2.5 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'w-8 bg-navy-600'
+                  ? 'bg-navy-600 w-8'
                   : 'w-2.5 bg-gray-300 hover:bg-gray-400'
               }`}
               aria-label={`${index + 1}번째 슬라이드로 이동`}

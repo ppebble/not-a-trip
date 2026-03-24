@@ -124,16 +124,16 @@ export default function EditPostPage() {
   // 로딩 상태
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-navy-50">
-        <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <main className="bg-navy-50 min-h-screen">
+        <div className="border-navy-200 border-b bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
-            <p className="text-sm text-navy-500">로딩 중...</p>
+            <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
+            <p className="text-navy-500 text-sm">로딩 중...</p>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
           <div className="flex items-center justify-center py-12">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy-300 border-t-navy-600" />
+            <div className="border-navy-300 border-t-navy-600 h-8 w-8 animate-spin rounded-full border-4" />
           </div>
         </div>
       </main>
@@ -143,11 +143,11 @@ export default function EditPostPage() {
   // 에러 상태
   if (error || !post) {
     return (
-      <main className="min-h-screen bg-navy-50">
-        <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <main className="bg-navy-50 min-h-screen">
+        <div className="border-navy-200 border-b bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
-            <p className="text-sm text-navy-500">오류 발생</p>
+            <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
+            <p className="text-navy-500 text-sm">오류 발생</p>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
@@ -155,7 +155,7 @@ export default function EditPostPage() {
             <p className="text-navy-600">게시글을 찾을 수 없습니다.</p>
             <Link
               href="/community"
-              className="mt-4 inline-block text-navy-500 hover:underline"
+              className="text-navy-500 mt-4 inline-block hover:underline"
             >
               목록으로 돌아가기
             </Link>
@@ -168,11 +168,11 @@ export default function EditPostPage() {
   // 권한 없음 (회원 게시글 + 타인)
   if (!canEdit()) {
     return (
-      <main className="min-h-screen bg-navy-50">
-        <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <main className="bg-navy-50 min-h-screen">
+        <div className="border-navy-200 border-b bg-white px-4 py-4">
           <div className="mx-auto max-w-4xl">
-            <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
-            <p className="text-sm text-navy-500">권한 없음</p>
+            <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
+            <p className="text-navy-500 text-sm">권한 없음</p>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
@@ -180,7 +180,7 @@ export default function EditPostPage() {
             <p className="text-navy-600">본인의 게시글만 수정할 수 있습니다.</p>
             <Link
               href={`/community/${postId}`}
-              className="mt-4 inline-block text-navy-500 hover:underline"
+              className="text-navy-500 mt-4 inline-block hover:underline"
             >
               게시글로 돌아가기
             </Link>
@@ -191,12 +191,12 @@ export default function EditPostPage() {
   }
 
   return (
-    <main className="min-h-screen bg-navy-50">
+    <main className="bg-navy-50 min-h-screen">
       {/* 페이지 타이틀 */}
-      <div className="border-b border-navy-200 bg-white px-4 py-4">
+      <div className="border-navy-200 border-b bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-xl font-bold text-navy-800">게시글 수정</h1>
-          <p className="text-sm text-navy-500">
+          <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
+          <p className="text-navy-500 text-sm">
             {post.isGuest
               ? '비회원 게시글 수정 (비밀번호 필요)'
               : '내용을 수정하세요'}
@@ -269,7 +269,7 @@ export default function EditPostPage() {
             <div>
               <label
                 htmlFor="title"
-                className="mb-2 block text-sm font-medium text-navy-700"
+                className="text-navy-700 mb-2 block text-sm font-medium"
               >
                 제목 <span className="text-red-500">*</span>
               </label>
@@ -279,21 +279,21 @@ export default function EditPostPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="제목을 입력하세요"
-                className="w-full rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
+                className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
                 maxLength={100}
               />
-              <p className="mt-1 text-right text-xs text-navy-400">
+              <p className="text-navy-400 mt-1 text-right text-xs">
                 {title.length}/100
               </p>
             </div>
 
             {/* 작성자 표시 (수정 불가) */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-navy-700">
+              <label className="text-navy-700 mb-2 block text-sm font-medium">
                 작성자
               </label>
               <div className="flex items-center gap-2">
-                <div className="flex-1 rounded-lg border border-navy-100 bg-navy-50 px-4 py-3 text-navy-600">
+                <div className="border-navy-100 bg-navy-50 text-navy-600 flex-1 rounded-lg border px-4 py-3">
                   {post.author}
                 </div>
                 {post.isGuest && (
@@ -302,7 +302,7 @@ export default function EditPostPage() {
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-xs text-navy-400">
+              <p className="text-navy-400 mt-1 text-xs">
                 작성자는 수정할 수 없습니다
               </p>
             </div>
@@ -311,7 +311,7 @@ export default function EditPostPage() {
             <div>
               <label
                 htmlFor="content"
-                className="mb-2 block text-sm font-medium text-navy-700"
+                className="text-navy-700 mb-2 block text-sm font-medium"
               >
                 내용 <span className="text-red-500">*</span>
               </label>
@@ -321,26 +321,26 @@ export default function EditPostPage() {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="내용을 입력하세요"
                 rows={10}
-                className="w-full resize-none rounded-lg border border-navy-200 px-4 py-3 text-navy-800 placeholder-navy-400 transition-colors focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20"
+                className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full resize-none rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
                 maxLength={5000}
               />
-              <p className="mt-1 text-right text-xs text-navy-400">
+              <p className="text-navy-400 mt-1 text-right text-xs">
                 {content.length}/5000
               </p>
             </div>
 
             {/* 버튼 영역 */}
-            <div className="flex items-center justify-end gap-3 border-t border-navy-100 pt-6">
+            <div className="border-navy-100 flex items-center justify-end gap-3 border-t pt-6">
               <Link
                 href={`/community/${postId}`}
-                className="rounded-lg border border-navy-300 px-6 py-2.5 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+                className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-6 py-2.5 text-sm font-medium transition-colors"
               >
                 취소
               </Link>
               <button
                 type="submit"
                 disabled={updatePost.isPending || pendingSubmit}
-                className="rounded-lg bg-navy-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="bg-navy-600 hover:bg-navy-700 rounded-lg px-6 py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {updatePost.isPending ? (
                   <span className="flex items-center gap-2">

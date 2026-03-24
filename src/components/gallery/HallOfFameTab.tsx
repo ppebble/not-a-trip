@@ -21,35 +21,35 @@ function LoadingSkeleton() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-6">
       <div className="mb-6 flex items-center justify-center">
-        <div className="h-6 w-48 animate-pulse rounded bg-navy-200" />
+        <div className="bg-navy-200 h-6 w-48 animate-pulse rounded" />
       </div>
       <div className="mb-8">
-        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-navy-200" />
+        <div className="bg-navy-200 mb-4 h-6 w-32 animate-pulse rounded" />
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
               className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-3"
             >
-              <div className="h-10 w-10 animate-pulse rounded-full bg-navy-200" />
-              <div className="h-14 w-14 animate-pulse rounded-lg bg-navy-200" />
+              <div className="bg-navy-200 h-10 w-10 animate-pulse rounded-full" />
+              <div className="bg-navy-200 h-14 w-14 animate-pulse rounded-lg" />
               <div className="flex-1">
-                <div className="mb-2 h-4 w-3/4 animate-pulse rounded bg-navy-200" />
-                <div className="h-3 w-1/2 animate-pulse rounded bg-navy-100" />
+                <div className="bg-navy-200 mb-2 h-4 w-3/4 animate-pulse rounded" />
+                <div className="bg-navy-100 h-3 w-1/2 animate-pulse rounded" />
               </div>
             </div>
           ))}
         </div>
       </div>
       <div>
-        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-navy-200" />
+        <div className="bg-navy-200 mb-4 h-6 w-32 animate-pulse rounded" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
               className="animate-pulse rounded-xl bg-white shadow-md"
             >
-              <div className="aspect-square w-full rounded-t-xl bg-navy-200" />
+              <div className="bg-navy-200 aspect-square w-full rounded-t-xl" />
             </div>
           ))}
         </div>
@@ -87,10 +87,10 @@ export function HallOfFameTab({
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="mb-4 text-5xl">😢</div>
-          <p className="text-lg font-medium text-navy-700">
+          <p className="text-navy-700 text-lg font-medium">
             데이터를 불러올 수 없습니다
           </p>
-          <p className="mt-2 text-sm text-navy-500">
+          <p className="text-navy-500 mt-2 text-sm">
             잠시 후 다시 시도해주세요
           </p>
           <button
@@ -118,10 +118,10 @@ export function HallOfFameTab({
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="mb-4 text-5xl">🏆</div>
-          <p className="text-lg font-medium text-navy-700">
+          <p className="text-navy-700 text-lg font-medium">
             아직 랭킹 데이터가 없습니다
           </p>
-          <p className="mt-2 text-sm text-navy-500">
+          <p className="text-navy-500 mt-2 text-sm">
             첫 번째 순례 인증을 남겨보세요!
           </p>
         </div>

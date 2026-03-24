@@ -368,7 +368,7 @@ export default memo(function FacilityCard({
                   d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
                 />
               </svg>
-              <span className="font-medium text-navy-600">
+              <span className="text-navy-600 font-medium">
                 {formatDistance(facility.distance)}
               </span>
             </div>
@@ -377,7 +377,7 @@ export default memo(function FacilityCard({
 
         <button
           onClick={handleMapClick}
-          className="ml-2 flex-shrink-0 rounded-md bg-navy-50 p-2 text-navy-600 transition-colors hover:bg-navy-100 hover:text-navy-700"
+          className="bg-navy-50 text-navy-600 hover:bg-navy-100 hover:text-navy-700 ml-2 flex-shrink-0 rounded-md p-2 transition-colors"
           title="지도에서 보기"
           aria-label={`${facility.name} 지도에서 보기`}
         >

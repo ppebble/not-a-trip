@@ -184,7 +184,7 @@ export default function NearbyFacilities({
           <h2 className="text-2xl font-bold text-gray-900">근처 편의시설</h2>
           <button
             onClick={() => setShowReportForm(true)}
-            className="rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+            className="bg-navy-600 hover:bg-navy-700 rounded-lg px-3 py-1.5 text-sm font-medium text-white transition-colors"
           >
             편의시설 제보
           </button>
@@ -211,7 +211,7 @@ export default function NearbyFacilities({
         </h2>
         <button
           onClick={() => setShowReportForm(true)}
-          className="rounded-lg bg-navy-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-navy-700"
+          className="bg-navy-600 hover:bg-navy-700 rounded-lg px-3 py-1.5 text-sm font-medium text-white transition-colors"
         >
           편의시설 제보
         </button>
@@ -251,7 +251,7 @@ export default function NearbyFacilities({
                   <h3 className="text-lg font-semibold text-gray-900">
                     {config.label}
                   </h3>
-                  <span className="rounded-full bg-navy-100 px-2 py-0.5 text-sm font-medium text-navy-700">
+                  <span className="bg-navy-100 text-navy-700 rounded-full px-2 py-0.5 text-sm font-medium">
                     {typeFacilities.length}
                   </span>
                 </div>

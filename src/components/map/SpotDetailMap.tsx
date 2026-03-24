@@ -200,7 +200,7 @@ export default function SpotDetailMap({
         center={mapCenter}
         zoom={mapZoom}
         style={{ height: '100%', width: '100%' }}
-        className="overflow-hidden rounded-lg border-2 border-navy-200"
+        className="border-navy-200 overflow-hidden rounded-lg border-2"
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
@@ -228,7 +228,7 @@ export default function SpotDetailMap({
         <Marker position={[lat, lng]} icon={spotIcon}>
           <Popup>
             <div className="p-2">
-              <h3 className="font-bold text-navy-900">{spot.name}</h3>
+              <h3 className="text-navy-900 font-bold">{spot.name}</h3>
               <p className="mt-1 text-sm text-gray-600">{spot.address}</p>
               {spot.description && (
                 <p className="mt-2 line-clamp-3 text-sm text-gray-700">
@@ -258,7 +258,7 @@ export default function SpotDetailMap({
                     <h4 className="font-semibold text-gray-900">
                       {facility.name}
                     </h4>
-                    <span className="rounded bg-navy-100 px-2 py-1 text-xs text-navy-800">
+                    <span className="bg-navy-100 text-navy-800 rounded px-2 py-1 text-xs">
                       {facilityTypeLabels[facility.type]}
                     </span>
                   </div>
@@ -297,7 +297,7 @@ export default function SpotDetailMap({
       )}
 
       {/* Map attribution with navy theme */}
-      <div className="absolute bottom-2 right-2 z-[1000] rounded bg-navy-800/80 px-2 py-1 text-xs text-white">
+      <div className="bg-navy-800/80 absolute bottom-2 right-2 z-[1000] rounded px-2 py-1 text-xs text-white">
         Not a Trip
       </div>
     </div>

@@ -142,7 +142,7 @@ export function LocationPicker({
   return (
     <div className="relative">
       {/* 안내 메시지 */}
-      <div className="mb-2 flex items-center gap-2 text-sm text-navy-500">
+      <div className="text-navy-500 mb-2 flex items-center gap-2 text-sm">
         <svg
           className="h-4 w-4"
           fill="none"
@@ -159,7 +159,7 @@ export function LocationPicker({
         <span>지도를 클릭하거나 마커를 드래그하여 위치를 선택하세요</span>
         {isLoading && (
           <svg
-            className="h-4 w-4 animate-spin text-navy-400"
+            className="text-navy-400 h-4 w-4 animate-spin"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -181,7 +181,7 @@ export function LocationPicker({
       </div>
 
       {/* 지도 컨테이너 */}
-      <div className="h-64 w-full overflow-hidden rounded-lg border-2 border-navy-200">
+      <div className="border-navy-200 h-64 w-full overflow-hidden rounded-lg border-2">
         <MapContainer
           center={center}
           zoom={markerPosition ? 15 : 6}
@@ -262,8 +262,8 @@ export function LocationPicker({
 
       {/* 선택된 좌표 표시 */}
       {markerPosition && (
-        <div className="mt-2 rounded-lg border border-navy-200 bg-navy-50 p-2">
-          <p className="text-xs text-navy-600">
+        <div className="border-navy-200 bg-navy-50 mt-2 rounded-lg border p-2">
+          <p className="text-navy-600 text-xs">
             📍 {markerPosition.lat.toFixed(6)}, {markerPosition.lng.toFixed(6)}
           </p>
         </div>

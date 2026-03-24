@@ -327,7 +327,7 @@ export function ImageUpload({
             disabled={disabled}
           />
           <svg
-            className="mx-auto mb-2 h-12 w-12 text-navy-300"
+            className="text-navy-300 mx-auto mb-2 h-12 w-12"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -339,10 +339,10 @@ export function ImageUpload({
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-sm text-navy-600">
+          <p className="text-navy-600 text-sm">
             {isDragging ? '여기에 놓으세요' : '클릭하거나 드래그하여 사진 추가'}
           </p>
-          <p className="mt-1 text-xs text-navy-400">
+          <p className="text-navy-400 mt-1 text-xs">
             JPG, PNG, GIF, WEBP (최대 5MB) · 남은 슬롯: {remainingSlots}장
           </p>
         </div>
@@ -368,7 +368,7 @@ export function ImageUpload({
 
       {/* 최대 개수 도달 안내 */}
       {remainingSlots <= 0 && (
-        <p className="text-center text-sm text-navy-500">
+        <p className="text-navy-500 text-center text-sm">
           최대 {maxImages}장까지 업로드할 수 있습니다
         </p>
       )}
@@ -408,7 +408,7 @@ function ImagePreviewItem({
   const isCompleted = image.status === 'completed'
 
   return (
-    <div className="group relative aspect-square overflow-hidden rounded-lg border border-navy-200 bg-navy-50">
+    <div className="border-navy-200 bg-navy-50 group relative aspect-square overflow-hidden rounded-lg border">
       {/* 이미지 */}
       <Image
         src={image.url}
@@ -514,7 +514,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveLeft()
             }}
-            className="rounded-full bg-white/90 p-1.5 text-navy-700 shadow hover:bg-white"
+            className="text-navy-700 rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
             title="왼쪽으로 이동"
           >
             <svg
@@ -564,7 +564,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveRight()
             }}
-            className="rounded-full bg-white/90 p-1.5 text-navy-700 shadow hover:bg-white"
+            className="text-navy-700 rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
             title="오른쪽으로 이동"
           >
             <svg

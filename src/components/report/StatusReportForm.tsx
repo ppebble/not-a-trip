@@ -144,7 +144,7 @@ export function StatusReportForm({
     <div className="space-y-4">
       {/* 상태 선택 */}
       <div>
-        <p className="mb-2 text-sm font-medium text-navy-800">
+        <p className="text-navy-800 mb-2 text-sm font-medium">
           현재 상태 <span className="text-red-500">*</span>
         </p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -160,10 +160,10 @@ export function StatusReportForm({
               }`}
             >
               <span className="text-lg">{s.icon}</span>
-              <p className="mt-1 text-xs font-medium text-navy-700">
+              <p className="text-navy-700 mt-1 text-xs font-medium">
                 {s.label}
               </p>
-              <p className="text-[10px] text-navy-400">{s.description}</p>
+              <p className="text-navy-400 text-[10px]">{s.description}</p>
             </button>
           ))}
         </div>
@@ -172,7 +172,7 @@ export function StatusReportForm({
       {/* 설명 입력 */}
       {selectedStatus && (
         <div>
-          <label className="mb-1 block text-sm font-medium text-navy-800">
+          <label className="text-navy-800 mb-1 block text-sm font-medium">
             상세 설명 <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -181,9 +181,9 @@ export function StatusReportForm({
             placeholder="현재 상태에 대해 자세히 설명해주세요"
             rows={3}
             maxLength={500}
-            className="w-full rounded-md border border-navy-200 px-3 py-2 text-sm focus:border-navy-400 focus:outline-none"
+            className="border-navy-200 focus:border-navy-400 w-full rounded-md border px-3 py-2 text-sm focus:outline-none"
           />
-          <p className="mt-1 text-right text-xs text-navy-400">
+          <p className="text-navy-400 mt-1 text-right text-xs">
             {description.length}/500
           </p>
         </div>
@@ -192,7 +192,7 @@ export function StatusReportForm({
       {/* 사진 첨부 */}
       {selectedStatus && (
         <div>
-          <label className="mb-1 block text-xs font-medium text-navy-700">
+          <label className="text-navy-700 mb-1 block text-xs font-medium">
             증거 사진 (선택)
           </label>
           <input
@@ -236,14 +236,14 @@ export function StatusReportForm({
               type="button"
               onClick={() => photoRef.current?.click()}
               disabled={isUploading}
-              className="flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed border-navy-200 hover:border-navy-400 hover:bg-navy-50"
+              className="border-navy-200 hover:border-navy-400 hover:bg-navy-50 flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed"
             >
               {isUploading ? (
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-navy-600 border-t-transparent" />
+                <div className="border-navy-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
               ) : (
                 <>
                   <svg
-                    className="mb-1 h-6 w-6 text-navy-300"
+                    className="text-navy-300 mb-1 h-6 w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -255,7 +255,7 @@ export function StatusReportForm({
                       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                     />
                   </svg>
-                  <span className="text-xs text-navy-400">사진 업로드</span>
+                  <span className="text-navy-400 text-xs">사진 업로드</span>
                 </>
               )}
             </button>
@@ -280,7 +280,7 @@ export function StatusReportForm({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-navy-200 py-2.5 text-sm font-medium text-navy-600 transition-colors hover:bg-navy-50"
+            className="border-navy-200 text-navy-600 hover:bg-navy-50 flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors"
           >
             취소
           </button>
@@ -289,7 +289,7 @@ export function StatusReportForm({
           type="button"
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="flex-1 rounded-lg bg-navy-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? '제출 중...' : '상태 신고'}
         </button>

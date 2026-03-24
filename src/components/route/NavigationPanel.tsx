@@ -107,9 +107,9 @@ export function NavigationPanel({
   }, [currentPosition, currentSpot.coordinates, distanceToNext])
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-navy-200 bg-white pb-safe-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+    <div className="border-navy-200 fixed inset-x-0 bottom-0 z-40 border-t bg-white pb-safe-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
       {/* 진행률 바 */}
-      <div className="h-1.5 w-full bg-navy-100">
+      <div className="bg-navy-100 h-1.5 w-full">
         <div
           className="h-full bg-green-500 transition-all duration-500"
           style={{ width: `${Math.min(progress, 100)}%` }}
@@ -118,7 +118,7 @@ export function NavigationPanel({
 
       <div className="mx-auto max-w-4xl px-4 py-3">
         {/* 진행 상태 요약 */}
-        <div className="mb-2 flex items-center justify-between text-xs text-navy-400">
+        <div className="text-navy-400 mb-2 flex items-center justify-between text-xs">
           <span>
             {checkedCount}/{availableSpots.length}곳 인증 완료
           </span>
@@ -153,7 +153,7 @@ export function NavigationPanel({
             </p>
             {/* 거리/시간 표시 */}
             {!isCurrentUnavailable && distanceToNext !== null && (
-              <p className="text-xs text-navy-400">
+              <p className="text-navy-400 text-xs">
                 {getTravelModeIcon(getTravelMode(distanceToNext))}{' '}
                 {formatDistance(distanceToNext)}
                 {estimatedTimeToNext !== null &&
@@ -210,14 +210,14 @@ export function NavigationPanel({
               {nextAvailableIndex !== null && (
                 <button
                   onClick={onMoveToNext}
-                  className="flex-1 rounded-lg bg-navy-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-700"
+                  className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-3 text-sm font-semibold text-white transition-colors"
                 >
                   ⏭️ 다음 스팟으로 건너뛰기
                 </button>
               )}
               <button
                 onClick={onEndRoute}
-                className="rounded-lg border-2 border-navy-200 bg-white px-4 py-3 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+                className="border-navy-200 text-navy-600 hover:bg-navy-50 rounded-lg border-2 bg-white px-4 py-3 text-sm transition-colors"
               >
                 종료
               </button>
@@ -227,14 +227,14 @@ export function NavigationPanel({
               {nextAvailableIndex !== null && (
                 <button
                   onClick={onMoveToNext}
-                  className="flex-1 rounded-lg bg-navy-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-700"
+                  className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-3 text-sm font-semibold text-white transition-colors"
                 >
                   ➡️ 다음 스팟으로
                 </button>
               )}
               <button
                 onClick={onEndRoute}
-                className="rounded-lg border-2 border-navy-200 bg-white px-4 py-3 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+                className="border-navy-200 text-navy-600 hover:bg-navy-50 rounded-lg border-2 bg-white px-4 py-3 text-sm transition-colors"
               >
                 종료
               </button>
@@ -249,7 +249,7 @@ export function NavigationPanel({
               </button>
               <button
                 onClick={onEndRoute}
-                className="rounded-lg border-2 border-navy-200 bg-white px-4 py-3 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+                className="border-navy-200 text-navy-600 hover:bg-navy-50 rounded-lg border-2 bg-white px-4 py-3 text-sm transition-colors"
               >
                 종료
               </button>

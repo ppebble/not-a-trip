@@ -214,7 +214,7 @@ export default function RouteMap({
         center={defaultCenter}
         zoom={13}
         style={{ height: '100%', width: '100%' }}
-        className="overflow-hidden rounded-lg border-2 border-navy-200"
+        className="border-navy-200 overflow-hidden rounded-lg border-2"
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
@@ -294,10 +294,10 @@ export default function RouteMap({
           >
             <Popup>
               <div className="min-w-[140px] p-1">
-                <p className="text-sm font-semibold text-navy-900">
+                <p className="text-navy-900 text-sm font-semibold">
                   🏠 {startPoint.name}
                 </p>
-                <p className="mt-0.5 text-xs text-navy-400">
+                <p className="text-navy-400 mt-0.5 text-xs">
                   {startPoint.address}
                 </p>
               </div>
@@ -320,7 +320,7 @@ export default function RouteMap({
             <Popup>
               <div className="min-w-[160px] p-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-navy-800">
+                  <span className="text-navy-800 text-sm font-bold">
                     {idx + 1}.
                   </span>
                   <span
@@ -337,14 +337,14 @@ export default function RouteMap({
                   <p className="mt-1 text-xs text-red-500">소실된 스팟</p>
                 )}
                 {spot.distanceFromPrev && (
-                  <p className="mt-1 text-xs text-navy-400">
+                  <p className="text-navy-400 mt-1 text-xs">
                     이전 스팟에서 {spot.distanceFromPrev}m
                     {spot.walkTimeFromPrev &&
                       ` · 도보 ${spot.walkTimeFromPrev}분`}
                   </p>
                 )}
                 {spot.note && (
-                  <p className="mt-1 text-xs text-navy-500">{spot.note}</p>
+                  <p className="text-navy-500 mt-1 text-xs">{spot.note}</p>
                 )}
               </div>
             </Popup>
