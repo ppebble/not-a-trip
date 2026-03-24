@@ -28,7 +28,7 @@ const LocationPicker = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="bg-navy-100 h-64 w-full animate-pulse rounded-lg" />
+      <div className="h-64 w-full animate-pulse rounded-lg bg-neutral-100" />
     ),
   }
 )
@@ -102,15 +102,15 @@ export function SpotForm({
 
       <form onSubmit={onSubmit} className="space-y-6">
         {/* 기본 정보 섹션 */}
-        <div className="border-navy-100 border-b pb-6">
-          <h2 className="text-navy-800 mb-4 text-lg font-semibold">
+        <div className="border-b border-border pb-6">
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">
             기본 정보
           </h2>
 
           <div className="mb-4">
             <label
               htmlFor="name"
-              className="text-navy-700 mb-2 block text-sm font-medium"
+              className="mb-2 block text-sm font-medium text-text-secondary"
             >
               스팟 이름 <span className="text-red-500">*</span>
             </label>
@@ -121,10 +121,10 @@ export function SpotForm({
               value={formData.name}
               onChange={handleChange}
               placeholder="스팟 이름을 입력하세요"
-              className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+              className="w-full rounded-lg border border-border px-4 py-3 text-text-primary placeholder-muted transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               maxLength={100}
             />
-            <p className="text-navy-400 mt-1 text-right text-xs">
+            <p className="mt-1 text-right text-xs text-muted">
               {formData.name.length}/100
             </p>
           </div>
@@ -132,7 +132,7 @@ export function SpotForm({
           <div className="mb-4">
             <label
               htmlFor="category"
-              className="text-navy-700 mb-2 block text-sm font-medium"
+              className="mb-2 block text-sm font-medium text-text-secondary"
             >
               카테고리 <span className="text-red-500">*</span>
             </label>
@@ -141,7 +141,7 @@ export function SpotForm({
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="border-navy-200 text-navy-800 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+              className="w-full rounded-lg border border-border px-4 py-3 text-text-primary transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="">카테고리를 선택하세요</option>
               {(Object.keys(CATEGORY_CONFIG) as SpotCategory[]).map((key) => (
@@ -155,7 +155,7 @@ export function SpotForm({
           <div>
             <label
               htmlFor="description"
-              className="text-navy-700 mb-2 block text-sm font-medium"
+              className="mb-2 block text-sm font-medium text-text-secondary"
             >
               설명 <span className="text-red-500">*</span>
             </label>
@@ -166,23 +166,23 @@ export function SpotForm({
               onChange={handleChange}
               placeholder="스팟에 대한 설명을 입력하세요"
               rows={4}
-              className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full resize-none rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+              className="w-full resize-none rounded-lg border border-border px-4 py-3 text-text-primary placeholder-muted transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               maxLength={2000}
             />
-            <p className="text-navy-400 mt-1 text-right text-xs">
+            <p className="mt-1 text-right text-xs text-muted">
               {formData.description.length}/2000
             </p>
           </div>
         </div>
 
         {/* 위치 정보 섹션 */}
-        <div className="border-navy-100 border-b pb-6">
-          <h2 className="text-navy-800 mb-4 text-lg font-semibold">
+        <div className="border-b border-border pb-6">
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">
             위치 정보
           </h2>
 
           <div className="mb-4">
-            <label className="text-navy-700 mb-2 block text-sm font-medium">
+            <label className="mb-2 block text-sm font-medium text-text-secondary">
               주소 <span className="text-red-500">*</span>
             </label>
             <AddressSearch
@@ -213,10 +213,10 @@ export function SpotForm({
         />
 
         {/* 관련 콘텐츠 섹션 */}
-        <div className="border-navy-100 border-b pb-6">
-          <h2 className="text-navy-800 mb-4 text-lg font-semibold">
+        <div className="border-b border-border pb-6">
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">
             관련 콘텐츠{' '}
-            <span className="text-navy-400 text-xs font-normal">(선택)</span>
+            <span className="text-xs font-normal text-muted">(선택)</span>
           </h2>
           <RelatedContentForm
             value={formData.relatedContent}
@@ -229,7 +229,7 @@ export function SpotForm({
         {/* 외부 링크 섹션 */}
         {formData.category &&
           ['sports', 'music', 'game'].includes(formData.category) && (
-            <div className="border-navy-100 border-b pb-6">
+            <div className="border-b border-border pb-6">
               <ExternalLinkForm
                 links={formData.externalLinks}
                 onChange={(links) => {
@@ -267,14 +267,14 @@ export function SpotForm({
             <button
               type="button"
               onClick={onCancel}
-              className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-6 py-2.5 text-sm font-medium transition-colors"
+              className="rounded-lg border border-border px-6 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={isSubmitting || isDeleting}
-              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-6 py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">

@@ -165,12 +165,12 @@ export function AddressSearch({
             onKeyDown={handleKeyDown}
             onFocus={() => results.length > 0 && setIsOpen(true)}
             placeholder="주소 또는 장소명 검색 (예: Tokyo Dome, 서울역)"
-            className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 pr-10 transition-colors focus:outline-none focus:ring-2"
+            className="w-full rounded-lg border border-border px-4 py-3 pr-10 text-text-primary placeholder-muted transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
           {isLoading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
               <svg
-                className="text-navy-400 h-5 w-5 animate-spin"
+                className="h-5 w-5 animate-spin text-muted"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -195,7 +195,7 @@ export function AddressSearch({
           type="button"
           onClick={handleSearchClick}
           disabled={isLoading}
-          className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-3 text-sm font-medium text-white transition-colors disabled:opacity-50"
+          className="rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:opacity-50"
         >
           검색
         </button>
@@ -206,17 +206,17 @@ export function AddressSearch({
 
       {/* 검색 결과 드롭다운 */}
       {isOpen && results.length > 0 && (
-        <div className="border-navy-200 absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-auto rounded-lg border bg-white shadow-lg">
+        <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-auto rounded-lg border border-border bg-white shadow-lg">
           {results.map((result, index) => (
             <button
               key={index}
               type="button"
               onClick={() => handleSelect(result)}
-              className="hover:bg-navy-50 w-full px-4 py-3 text-left transition-colors"
+              className="w-full px-4 py-3 text-left transition-colors hover:bg-primary-50"
             >
               <div className="flex items-start gap-2">
                 <svg
-                  className="text-navy-400 mt-0.5 h-4 w-4 flex-shrink-0"
+                  className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -235,11 +235,11 @@ export function AddressSearch({
                   />
                 </svg>
                 <div>
-                  <p className="text-navy-800 text-sm font-medium">
+                  <p className="text-sm font-medium text-text-primary">
                     {result.address}
                   </p>
                   {result.placeType && (
-                    <p className="text-navy-400 text-xs">{result.placeType}</p>
+                    <p className="text-xs text-muted">{result.placeType}</p>
                   )}
                 </div>
               </div>
@@ -250,12 +250,12 @@ export function AddressSearch({
 
       {/* 검색 결과 없음 */}
       {isOpen && results.length === 0 && !isLoading && query.length >= 2 && (
-        <div className="border-navy-200 absolute left-0 right-0 top-full z-10 mt-1 rounded-lg border bg-white p-4 text-center shadow-lg">
-          <p className="text-navy-500 text-sm">검색 결과가 없습니다</p>
+        <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-lg border border-border bg-white p-4 text-center shadow-lg">
+          <p className="text-sm text-muted">검색 결과가 없습니다</p>
         </div>
       )}
 
-      <p className="text-navy-400 mt-1 text-xs">
+      <p className="mt-1 text-xs text-muted">
         전세계 주소 및 장소명 검색 가능 (Powered by OpenStreetMap)
       </p>
     </div>

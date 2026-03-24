@@ -121,7 +121,7 @@ function CommunityEmpty({
       <p className="mb-4 text-sm text-gray-500">첫 번째 후기를 남겨보세요!</p>
       <Link
         href={`/community/write?spotId=${spotId}&spotName=${encodeURIComponent(spotName)}`}
-        className="bg-navy-600 hover:bg-navy-700 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+        className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
       >
         <svg
           className="h-4 w-4"
@@ -177,7 +177,7 @@ export default function SpotCommunitySection({
           {posts && posts.length > 0 && (
             <Link
               href={`/community/write?spotId=${spotId}&spotName=${encodeURIComponent(spotName)}`}
-              className="bg-navy-600 hover:bg-navy-700 flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-white transition-colors"
+              className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
             >
               <svg
                 className="h-4 w-4"
@@ -223,7 +223,7 @@ export default function SpotCommunitySection({
               <div className="mt-4 text-center">
                 <Link
                   href={`/community?spotId=${spotId}`}
-                  className="text-navy-600 hover:text-navy-700 text-sm hover:underline"
+                  className="text-sm text-primary hover:text-primary-600 hover:underline"
                 >
                   게시글 {posts.length}개 전체보기 →
                 </Link>

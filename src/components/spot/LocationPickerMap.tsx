@@ -124,7 +124,7 @@ export default function LocationPickerMap({
             type="button"
             onClick={handleConfirm}
             disabled={!selectedPos}
-            className="bg-navy-600 hover:bg-navy-700 w-full rounded-lg py-2.5 text-sm font-medium text-white transition-colors disabled:bg-gray-300 disabled:text-gray-500"
+            className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:bg-gray-300 disabled:text-gray-500"
           >
             이 위치로 결정
           </button>

@@ -53,7 +53,7 @@ const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
   loading: () => (
     <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100">
       <div className="text-center text-gray-500">
-        <div className="border-navy-600 mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"></div>
+        <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
         <p>지도를 불러오는 중...</p>
       </div>
     </div>
@@ -135,20 +135,20 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* 페이지 타이틀 */}
-      <div className="border-b border-slate-200 bg-white px-4 py-4">
+      <div className="border-b border-border bg-surface px-4 py-4">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between">
             <div>
               <Link
                 href="/"
-                className="text-navy-500 hover:text-navy-700 flex items-center gap-2"
+                className="flex items-center gap-2 text-primary hover:text-primary-600"
               >
                 <ArrowLeftIcon size="md" />
                 <span>지도로 돌아가기</span>
               </Link>
-              <h1 className="text-navy-800 mt-2 text-xl font-bold">
+              <h1 className="mt-2 text-xl font-bold text-text-primary">
                 특별한 여행지
               </h1>
             </div>
@@ -159,7 +159,7 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
                 {hasEditPermission && (
                   <Link
                     href={`/spots/${spotId}/edit`}
-                    className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+                    className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
                   >
                     수정
                   </Link>
@@ -279,11 +279,11 @@ function SpotDetailContent({
 
           {/* 최초 제보자 표시 */}
           {spot.firstReporterId && spot.firstReporterName && (
-            <p className="text-navy-500 mb-2 text-sm md:mb-3">
+            <p className="mb-2 text-sm text-muted md:mb-3">
               📍 최초 제보:{' '}
               <Link
                 href={`/profile/${spot.firstReporterId}`}
-                className="text-navy-600 font-medium hover:underline"
+                className="font-medium text-primary hover:underline"
               >
                 @{spot.firstReporterName}
               </Link>
@@ -395,14 +395,14 @@ function SpotDetailContent({
             </h2>
             <button
               onClick={handleSupplementClick}
-              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
             >
               {showSupplementForm ? '닫기' : '정보 수정 제안'}
             </button>
           </div>
 
           {showSupplementForm && (
-            <div className="border-navy-100 mb-4 rounded-lg border p-4">
+            <div className="mb-4 rounded-lg border border-primary-100 p-4">
               <SupplementForm
                 spotId={spot.id}
                 onSuccess={handleSupplementSuccess}
@@ -479,7 +479,7 @@ interface SpotDetailErrorProps {
 
 function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+    <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-red-500">
@@ -493,14 +493,14 @@ function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="bg-navy-600 hover:bg-navy-700 inline-flex items-center rounded-md px-4 py-2 text-white transition-colors"
+                className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-600"
               >
                 다시 시도
               </button>
             )}
             <Link
               href="/"
-              className="border-navy-300 text-navy-600 hover:bg-navy-50 inline-flex items-center rounded-md border px-4 py-2 transition-colors"
+              className="inline-flex items-center rounded-md border border-border px-4 py-2 text-primary transition-colors hover:bg-primary-50"
             >
               메인으로 돌아가기
             </Link>
@@ -513,7 +513,7 @@ function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
 
 function SpotNotFound() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+    <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-gray-400">
@@ -527,7 +527,7 @@ function SpotNotFound() {
           </p>
           <Link
             href="/"
-            className="bg-navy-600 hover:bg-navy-700 inline-flex items-center rounded-md px-4 py-2 text-white transition-colors"
+            className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-600"
           >
             메인으로 돌아가기
           </Link>

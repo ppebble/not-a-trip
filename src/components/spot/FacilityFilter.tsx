@@ -41,7 +41,7 @@ export default function FacilityFilter({
         onClick={onSelectAll}
         className={`inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
           isAllSelected
-            ? 'border-navy-300 bg-navy-100 text-navy-800'
+            ? 'border-primary-300 bg-primary-100 text-primary-800'
             : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
         }`}
         aria-pressed={isAllSelected}

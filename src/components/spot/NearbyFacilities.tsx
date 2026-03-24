@@ -33,7 +33,7 @@ const FACILITY_CONFIG: Record<
   convenience_store: {
     label: '편의점',
     icon: '🏪',
-    color: 'bg-blue-100 text-blue-800 border-blue-200',
+    color: 'bg-indigo-100 text-indigo-800 border-indigo-200',
   },
   cafe: {
     label: '카페',
@@ -184,7 +184,7 @@ export default function NearbyFacilities({
           <h2 className="text-2xl font-bold text-gray-900">근처 편의시설</h2>
           <button
             onClick={() => setShowReportForm(true)}
-            className="bg-navy-600 hover:bg-navy-700 rounded-lg px-3 py-1.5 text-sm font-medium text-white transition-colors"
+            className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
           >
             편의시설 제보
           </button>
@@ -211,7 +211,7 @@ export default function NearbyFacilities({
         </h2>
         <button
           onClick={() => setShowReportForm(true)}
-          className="bg-navy-600 hover:bg-navy-700 rounded-lg px-3 py-1.5 text-sm font-medium text-white transition-colors"
+          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
         >
           편의시설 제보
         </button>
@@ -251,7 +251,7 @@ export default function NearbyFacilities({
                   <h3 className="text-lg font-semibold text-gray-900">
                     {config.label}
                   </h3>
-                  <span className="bg-navy-100 text-navy-700 rounded-full px-2 py-0.5 text-sm font-medium">
+                  <span className="rounded-full bg-primary-100 px-2 py-0.5 text-sm font-medium text-primary-700">
                     {typeFacilities.length}
                   </span>
                 </div>

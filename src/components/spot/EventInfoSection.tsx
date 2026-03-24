@@ -91,12 +91,12 @@ export function EventInfoSection({
 
         {/* 팁 메시지 */}
         {externalLinks.length > 0 && (
-          <div className="bg-navy-50 mt-6 rounded-lg p-4">
+          <div className="mt-6 rounded-lg bg-primary-50 p-4">
             <div className="flex items-start gap-2">
               <span className="text-lg">💡</span>
               <div>
-                <p className="text-navy-800 text-sm font-medium">팁</p>
-                <p className="text-navy-600 text-sm">
+                <p className="text-sm font-medium text-text-primary">팁</p>
+                <p className="text-sm text-text-secondary">
                   {category === 'sports' &&
                     '경기 당일은 혼잡할 수 있으니 미리 예매하세요!'}
                   {category === 'music' &&

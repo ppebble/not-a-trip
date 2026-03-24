@@ -199,7 +199,7 @@ export default function GooglePlacesSearch({
           type="text"
           onFocus={loadScript}
           placeholder="장소 이름으로 검색 (포커스 시 구글맵 로드)"
-          className="focus:border-navy-400 focus:ring-navy-400 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400 transition-colors focus:outline-none focus:ring-1"
+          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
           readOnly
         />
       </div>
@@ -252,7 +252,7 @@ export default function GooglePlacesSearch({
         value={query}
         onChange={(e) => handleInputChange(e.target.value)}
         placeholder="장소 이름으로 검색 (예: 아키하바라 건담 카페)"
-        className="focus:border-navy-400 focus:ring-navy-400 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm transition-colors focus:outline-none focus:ring-1"
+        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
       />
 
       {/* 로딩 인디케이터 */}
@@ -290,7 +290,7 @@ export default function GooglePlacesSearch({
                 <button
                   type="button"
                   onClick={() => handleSelectSuggestion(suggestion)}
-                  className="hover:bg-navy-50 flex w-full items-start gap-2 px-3 py-2.5 text-left transition-colors"
+                  className="flex w-full items-start gap-2 px-3 py-2.5 text-left transition-colors hover:bg-primary-50"
                 >
                   <span className="mt-0.5 flex-shrink-0 text-gray-400">📍</span>
                   <div className="min-w-0 flex-1">

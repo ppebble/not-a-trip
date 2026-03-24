@@ -109,8 +109,8 @@
 - [x] 6. Checkpoint — 레이아웃 마이그레이션 검증
   - 모든 테스트 통과 확인, 사용자에게 질문 사항 확인
 
-- [ ] 7. 버튼/폼/카드 컴포넌트 마이그레이션
-  - [ ] 7.1 버튼 시스템 마이그레이션
+- [x] 7. 버튼/폼/카드 컴포넌트 마이그레이션
+  - [x] 7.1 버튼 시스템 마이그레이션
     - Primary 버튼: `navy-600` → `bg-primary`, 호버 시 어두운 shade
     - Secondary 버튼: Secondary 컬러 적용
     - Destructive 버튼: `danger` 시맨틱 컬러
@@ -118,14 +118,14 @@
     - 포커스 링: `navy-500` → Primary 컬러
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
 
-  - [ ] 7.2 폼/입력 필드 마이그레이션
+  - [x] 7.2 폼/입력 필드 마이그레이션
     - 보더: `navy-200` → `border-border`
     - 포커스: `navy-500` → Primary 컬러
     - 플레이스홀더: `text-muted`
     - 에러 상태: `danger` 시맨틱 컬러
     - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-  - [ ] 7.3 카드/배경 컴포넌트 마이그레이션
+  - [x] 7.3 카드/배경 컴포넌트 마이그레이션
     - 주 배경: `bg-background` (Pure White)
     - 카드 배경: `bg-surface` (Ghost Ivory)
     - 알림/강조 배경: `bg-accent-surface` (Soft Blush)

@@ -133,10 +133,21 @@ git checkout -b {type}/{이슈번호}--{간단한-요약}
 
 **브랜치 명명 규칙:**
 
-- `feat/{이슈번호}--{간단한-요약}`
-- `ui/{이슈번호}--{간단한-요약}`
-- `fix/{이슈번호}--{간단한-요약}`
-- `chore/{이슈번호}--{간단한-요약}`
+> ⚠️ GitHub Actions에서 허용하는 브랜치 prefix만 사용 가능. (가능한 브랜치 prefix === feat|fix|ui|enhancement|chore|refactor|hotfix|test) `style/`은 사용 불가.
+
+| prefix | 용도 | 예시 |
+|--------|------|------|
+| `feat/` | 새로운 기능 추가 | `feat/15--spot-pin-component--add` |
+| `ui/` | UI/UX 개선, 스타일 수정 | `ui/407--button-form-card-migration` |
+| `fix/` | 버그 수정 | `fix/20--map-marker-crash--fix` |
+| `chore/` | 빌드, 설정, 문서 등 | `chore/30--eslint-config--update` |
+| `test/` | 테스트 추가/수정 | `test/25--pbt-token-integrity--add` |
+| `refactor/` | 코드 리팩토링 | `refactor/40--store-structure--improve` |
+
+- 형식: `{type}/{이슈번호}--{간단한-요약}`
+- 요약 마지막에 동사 권장 (예: `--add`, `--fix`, `--update`, `--improve`)
+- 모두 소문자, 하이픈 사용
+- **`style/` prefix는 GitHub Actions에서 차단되므로 UI 작업은 반드시 `ui/` 사용**
 
 ### 3️⃣ 논리적 커밋 분할 (필수 준수)
 
