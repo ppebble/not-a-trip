@@ -29,8 +29,8 @@ export default function AdminStatusReportsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-gray-500">로딩 중...</div>
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <div className="text-neutral-500">로딩 중...</div>
       </div>
     )
   }
@@ -41,23 +41,23 @@ export default function AdminStatusReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="border-b border-gray-200 bg-white px-6 py-4">
-        <h1 className="text-xl font-bold text-gray-800">상태 신고 검토</h1>
-        <p className="mt-0.5 text-sm text-gray-500">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="border-b border-neutral-200 bg-white px-6 py-4">
+        <h1 className="text-xl font-bold text-neutral-800">상태 신고 검토</h1>
+        <p className="mt-0.5 text-sm text-neutral-500">
           사용자가 신고한 스팟 상태를 검토하고 확인 처리할 수 있습니다
         </p>
       </div>
 
       <div className="flex h-[calc(100vh-theme(spacing.14)-73px)]">
-        <div className="w-96 flex-shrink-0 border-r border-gray-200 bg-white">
+        <div className="w-96 flex-shrink-0 border-r border-neutral-200 bg-white">
           <AdminStatusReportList
             onSelectReport={handleSelectReport}
             selectedReportId={selectedReport?.id}
           />
         </div>
 
-        <div className="flex-1 bg-gray-50">
+        <div className="flex-1 bg-neutral-50">
           {selectedReport ? (
             <AdminStatusReportReview
               key={selectedReport.id}
@@ -66,7 +66,7 @@ export default function AdminStatusReportsPage() {
             />
           ) : (
             <div className="flex h-full items-center justify-center">
-              <div className="text-center text-gray-400">
+              <div className="text-center text-neutral-400">
                 <p className="text-4xl">🚨</p>
                 <p className="mt-2 text-sm">
                   좌측 목록에서 상태 신고를 선택하세요

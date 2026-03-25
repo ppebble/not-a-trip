@@ -153,8 +153,8 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             onClick={() => setActiveTab('reports')}
             className={`rounded-lg px-4 py-2 font-medium ${
               activeTab === 'reports'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+                ? 'bg-primary text-white'
+                : 'bg-white text-neutral-600 hover:bg-neutral-50'
             }`}
           >
             제보한 스팟

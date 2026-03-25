@@ -19,7 +19,7 @@ function RouteListSkeleton() {
         {Array.from({ length: 6 }, (_, i) => (
           <div
             key={i}
-            className="border-navy-200 overflow-hidden rounded-lg border bg-white"
+            className="overflow-hidden rounded-lg border border-neutral-200 bg-white"
           >
             <SkeletonBlock className="h-40 w-full rounded-none" />
             <div className="p-4">
@@ -39,19 +39,19 @@ function RouteListSkeleton() {
  */
 export default function RoutesPage() {
   return (
-    <main className="bg-navy-50 min-h-screen pt-14">
+    <main className="min-h-screen bg-primary-50 pt-14">
       <div className="mx-auto max-w-6xl px-4 py-6">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-navy-900 text-2xl font-bold">🗺️ 순례 코스</h1>
-            <p className="text-navy-500 mt-1 text-sm">
+            <h1 className="text-2xl font-bold text-primary">🗺️ 순례 코스</h1>
+            <p className="mt-1 text-sm text-secondary">
               다른 순례자들이 만든 코스를 탐색하고 따라가보세요
             </p>
           </div>
           <Link
             href="/routes/create"
-            className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
           >
             코스 만들기
           </Link>
@@ -61,10 +61,10 @@ export default function RoutesPage() {
         <RecommendedRoutes />
 
         {/* 구분선 */}
-        <div className="border-navy-200 my-6 border-t" />
+        <div className="my-6 border-t border-neutral-200" />
 
         {/* 전체 코스 목록 */}
-        <h2 className="text-navy-900 mb-4 text-lg font-bold">📋 전체 코스</h2>
+        <h2 className="mb-4 text-lg font-bold text-primary">📋 전체 코스</h2>
         <Suspense fallback={<RouteListSkeleton />}>
           <RouteListContent />
         </Suspense>

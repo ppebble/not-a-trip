@@ -17,10 +17,10 @@ export default function NewReportPage() {
   // 로딩 중
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50">
-        <div className="border-b border-slate-200 bg-white px-4 py-4">
+      <div className="min-h-screen bg-neutral-50">
+        <div className="border-b border-neutral-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-lg">
-            <div className="bg-navy-100 h-6 w-32 animate-pulse rounded" />
+            <div className="h-6 w-32 animate-pulse rounded bg-surface" />
           </div>
         </div>
         <div className="mx-auto max-w-lg px-4 py-8">
@@ -28,7 +28,7 @@ export default function NewReportPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="bg-navy-50 h-20 animate-pulse rounded-lg"
+                className="h-20 animate-pulse rounded-lg bg-primary-50"
               />
             ))}
           </div>
@@ -50,13 +50,13 @@ export default function NewReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-slate-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-lg">
           <Link
             href="/reports"
-            className="text-navy-500 hover:text-navy-700 flex items-center gap-2 text-sm"
+            className="flex items-center gap-2 text-sm text-secondary hover:text-text-primary"
           >
             <svg
               className="h-4 w-4"
@@ -73,8 +73,8 @@ export default function NewReportPage() {
             </svg>
             내 제보 목록
           </Link>
-          <h1 className="text-navy-800 mt-2 text-xl font-bold">새 성지 제보</h1>
-          <p className="text-navy-400 mt-1 text-sm">
+          <h1 className="mt-2 text-xl font-bold text-primary">새 성지 제보</h1>
+          <p className="mt-1 text-sm text-muted">
             발견한 성지를 제보하여 다른 유저들과 공유하세요
           </p>
         </div>

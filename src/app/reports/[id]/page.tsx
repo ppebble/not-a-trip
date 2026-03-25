@@ -39,13 +39,13 @@ export default function ReportDetailPage() {
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 text-center shadow-md">
           <p className="text-lg">😥</p>
-          <p className="text-navy-600 mt-2 text-sm">{error.message}</p>
+          <p className="mt-2 text-sm text-secondary">{error.message}</p>
           <Link
             href="/reports"
-            className="bg-navy-600 hover:bg-navy-700 mt-4 inline-block rounded-lg px-4 py-2 text-sm text-white"
+            className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm text-white hover:bg-primary-700"
           >
             목록으로 돌아가기
           </Link>
@@ -56,13 +56,13 @@ export default function ReportDetailPage() {
 
   if (!report) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 text-center shadow-md">
           <p className="text-lg">📭</p>
-          <p className="text-navy-600 mt-2 text-sm">제보를 찾을 수 없습니다</p>
+          <p className="mt-2 text-sm text-secondary">제보를 찾을 수 없습니다</p>
           <Link
             href="/reports"
-            className="bg-navy-600 hover:bg-navy-700 mt-4 inline-block rounded-lg px-4 py-2 text-sm text-white"
+            className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm text-white hover:bg-primary-700"
           >
             목록으로 돌아가기
           </Link>
@@ -72,13 +72,13 @@ export default function ReportDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-slate-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-lg">
           <Link
             href="/reports"
-            className="text-navy-500 hover:text-navy-700 flex items-center gap-2 text-sm"
+            className="flex items-center gap-2 text-sm text-secondary hover:text-text-primary"
           >
             <svg
               className="h-4 w-4"
@@ -96,7 +96,7 @@ export default function ReportDetailPage() {
             내 제보 목록
           </Link>
           <div className="mt-2 flex items-center gap-3">
-            <h1 className="text-navy-800 text-xl font-bold">제보 상세</h1>
+            <h1 className="text-xl font-bold text-primary">제보 상세</h1>
             <ReportStatusBadge status={report.status} size="md" />
           </div>
         </div>
@@ -155,8 +155,8 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
       <div className="rounded-lg bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-navy-800 text-lg font-bold">{report.name}</h2>
-            <p className="text-navy-400 mt-0.5 text-sm">{report.address}</p>
+            <h2 className="text-lg font-bold text-primary">{report.name}</h2>
+            <p className="mt-0.5 text-sm text-muted">{report.address}</p>
           </div>
           {categoryConfig && (
             <span
@@ -170,23 +170,23 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
             </span>
           )}
         </div>
-        <p className="text-navy-600 mt-3 text-sm leading-relaxed">
+        <p className="mt-3 text-sm leading-relaxed text-secondary">
           {report.description}
         </p>
         {report.episodeInfo && (
-          <p className="text-navy-400 mt-2 text-sm">📺 {report.episodeInfo}</p>
+          <p className="mt-2 text-sm text-muted">📺 {report.episodeInfo}</p>
         )}
       </div>
 
       {/* 작품 정보 */}
       {report.relatedContent && report.relatedContent.length > 0 && (
         <div className="rounded-lg bg-white p-4 shadow-sm">
-          <h3 className="text-navy-700 text-sm font-semibold">관련 작품</h3>
+          <h3 className="text-sm font-semibold text-secondary">관련 작품</h3>
           <div className="mt-2 flex flex-wrap gap-2">
             {report.relatedContent.map((content, i) => (
               <span
                 key={i}
-                className="bg-navy-50 text-navy-600 rounded-full px-3 py-1 text-xs"
+                className="rounded-full bg-primary-50 px-3 py-1 text-xs text-secondary"
               >
                 {content.name}
               </span>
@@ -198,12 +198,12 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
       {/* 증거 사진 쌍 */}
       {report.evidencePairs.length > 0 && (
         <div className="rounded-lg bg-white p-4 shadow-sm">
-          <h3 className="text-navy-700 text-sm font-semibold">증거 사진</h3>
+          <h3 className="text-sm font-semibold text-secondary">증거 사진</h3>
           <div className="mt-3 space-y-3">
             {report.evidencePairs.map((pair, i) => (
               <div key={i} className="grid grid-cols-2 gap-2">
                 <div>
-                  <p className="text-navy-400 mb-1 text-[10px]">작품 캡처</p>
+                  <p className="mb-1 text-[10px] text-muted">작품 캡처</p>
                   <div className="relative aspect-video overflow-hidden rounded-lg">
                     <Image
                       src={pair.captureImageUrl}
@@ -215,7 +215,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-navy-400 mb-1 text-[10px]">현장 사진</p>
+                  <p className="mb-1 text-[10px] text-muted">현장 사진</p>
                   <div className="relative aspect-video overflow-hidden rounded-lg">
                     <Image
                       src={pair.realPhotoUrl}
@@ -227,7 +227,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
                   </div>
                 </div>
                 {pair.description && (
-                  <p className="text-navy-400 col-span-2 text-xs">
+                  <p className="col-span-2 text-xs text-muted">
                     {pair.description}
                   </p>
                 )}
@@ -244,14 +244,14 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
 
       {/* 제출 정보 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
-        <div className="text-navy-400 flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between text-xs text-muted">
           <span>
             제보일: {new Date(report.createdAt).toLocaleDateString('ko-KR')}
           </span>
           {report.approvedSpotId && (
             <Link
               href={`/spots/${report.approvedSpotId}`}
-              className="text-navy-600 hover:text-navy-800 underline"
+              className="text-secondary underline hover:text-primary"
             >
               승인된 스팟 보기 →
             </Link>
@@ -271,7 +271,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
 function ReviewHistoryTimeline({ history }: { history: ReviewHistory[] }) {
   return (
     <div className="rounded-lg bg-white p-4 shadow-sm">
-      <h3 className="text-navy-700 text-sm font-semibold">검토 이력</h3>
+      <h3 className="text-sm font-semibold text-secondary">검토 이력</h3>
       <div className="mt-3 space-y-3">
         {history.map((entry, i) => (
           <div key={i} className="flex gap-3">
@@ -286,18 +286,18 @@ function ReviewHistoryTimeline({ history }: { history: ReviewHistory[] }) {
                 }`}
               />
               {i < history.length - 1 && (
-                <div className="bg-navy-100 w-px flex-1" />
+                <div className="w-px flex-1 bg-surface" />
               )}
             </div>
             <div className="pb-3">
               <div className="flex items-center gap-2">
                 <ReportStatusBadge status={entry.status} />
-                <span className="text-navy-300 text-[10px]">
+                <span className="text-[10px] text-neutral-300">
                   {new Date(entry.reviewedAt).toLocaleDateString('ko-KR')}
                 </span>
               </div>
               {entry.comment && (
-                <p className="text-navy-500 mt-1 text-xs">{entry.comment}</p>
+                <p className="mt-1 text-xs text-secondary">{entry.comment}</p>
               )}
             </div>
           </div>
@@ -339,33 +339,33 @@ function RevisionForm({ report }: { report: SpotReport }) {
   }
 
   return (
-    <div className="rounded-lg border-2 border-blue-200 bg-blue-50/50 p-4">
-      <h3 className="text-sm font-semibold text-blue-700">✏️ 제보 수정</h3>
-      <p className="mt-1 text-xs text-blue-500">
+    <div className="rounded-lg border-2 border-primary-200 bg-accent-surface p-4">
+      <h3 className="text-sm font-semibold text-primary">✏️ 제보 수정</h3>
+      <p className="mt-1 text-xs text-primary">
         관리자 요청에 따라 내용을 수정한 후 재제출하세요
       </p>
 
       <div className="mt-4 space-y-3">
         <div>
-          <label className="text-navy-600 block text-xs font-medium">
+          <label className="block text-xs font-medium text-secondary">
             설명
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="border-navy-200 focus:border-navy-400 mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
           />
         </div>
         <div>
-          <label className="text-navy-600 block text-xs font-medium">
+          <label className="block text-xs font-medium text-secondary">
             에피소드 정보
           </label>
           <input
             type="text"
             value={episodeInfo}
             onChange={(e) => setEpisodeInfo(e.target.value)}
-            className="border-navy-200 focus:border-navy-400 mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
           />
         </div>
 
@@ -374,7 +374,7 @@ function RevisionForm({ report }: { report: SpotReport }) {
         <button
           onClick={handleSubmit}
           disabled={updateReport.isPending}
-          className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
         >
           {updateReport.isPending ? '제출 중...' : '수정 후 재제출'}
         </button>
@@ -386,16 +386,19 @@ function RevisionForm({ report }: { report: SpotReport }) {
 /** 스켈레톤 */
 function ReportDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="border-b border-slate-200 bg-white px-4 py-4">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="border-b border-neutral-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-lg">
-          <div className="bg-navy-100 h-4 w-24 animate-pulse rounded" />
-          <div className="bg-navy-100 mt-3 h-6 w-40 animate-pulse rounded" />
+          <div className="h-4 w-24 animate-pulse rounded bg-surface" />
+          <div className="mt-3 h-6 w-40 animate-pulse rounded bg-surface" />
         </div>
       </div>
       <div className="mx-auto max-w-lg space-y-4 px-4 py-6">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-navy-50 h-32 animate-pulse rounded-lg" />
+          <div
+            key={i}
+            className="h-32 animate-pulse rounded-lg bg-primary-50"
+          />
         ))}
       </div>
     </div>

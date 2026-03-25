@@ -20,7 +20,7 @@ export default function ErrorBoundaryTestPage() {
   const [key, setKey] = useState(0)
 
   return (
-    <div className="min-h-screen bg-slate-900 px-4 pb-20 pt-20">
+    <div className="min-h-screen bg-neutral-900 px-4 pb-20 pt-20">
       <div className="mx-auto max-w-2xl space-y-6">
         <h1 className="text-xl font-bold text-white">
           🧪 ErrorBoundary + Sentry 테스트
@@ -47,8 +47,8 @@ export default function ErrorBoundaryTestPage() {
           </button>
         </div>
 
-        <div className="rounded-lg border border-slate-700 p-4">
-          <p className="mb-3 text-sm text-slate-400">
+        <div className="rounded-lg border border-neutral-700 p-4">
+          <p className="mb-3 text-sm text-neutral-400">
             ErrorBoundary 영역 (콘솔에서 Sentry 보고 확인)
           </p>
           <ErrorBoundary
@@ -62,12 +62,12 @@ export default function ErrorBoundaryTestPage() {
           </ErrorBoundary>
         </div>
 
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-neutral-500">
           에러 발생 시 브라우저 콘솔에서 [ErrorBoundary] 로그와 Sentry
           captureException 호출을 확인할 수 있습니다.
         </p>
 
-        <div className="rounded-lg bg-slate-800 p-3 text-xs text-slate-400">
+        <div className="rounded-lg bg-neutral-800 p-3 text-xs text-neutral-400">
           <p>
             Sentry 초기화: {Sentry.isInitialized() ? '✅ 활성' : '❌ 비활성'}
           </p>
