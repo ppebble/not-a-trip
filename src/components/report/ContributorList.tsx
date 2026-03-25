@@ -16,8 +16,8 @@ export function ContributorList({ spotId }: ContributorListProps) {
   if (isLoading) {
     return (
       <div className="flex items-center gap-2 py-2">
-        <div className="border-navy-400 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
-        <span className="text-navy-400 text-xs">기여자 로딩 중...</span>
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-muted border-t-transparent" />
+        <span className="text-xs text-muted">기여자 로딩 중...</span>
       </div>
     )
   }
@@ -26,12 +26,14 @@ export function ContributorList({ spotId }: ContributorListProps) {
 
   return (
     <div>
-      <h3 className="text-navy-700 mb-2 text-sm font-medium">📋 정보 기여자</h3>
+      <h3 className="mb-2 text-sm font-medium text-text-secondary">
+        📋 정보 기여자
+      </h3>
       <div className="flex flex-wrap gap-2">
         {contributors.map((c) => (
           <span
             key={c.contributorId}
-            className="bg-navy-50 text-navy-600 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
+            className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs text-primary-600"
           >
             <svg
               className="h-3 w-3"
@@ -47,9 +49,7 @@ export function ContributorList({ spotId }: ContributorListProps) {
               />
             </svg>
             {c.contributorName}
-            {c.count > 1 && (
-              <span className="text-navy-400">({c.count}건)</span>
-            )}
+            {c.count > 1 && <span className="text-muted">({c.count}건)</span>}
           </span>
         ))}
       </div>

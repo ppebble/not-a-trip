@@ -60,11 +60,11 @@ export function EventInfoSection({
         {/* 헤더 */}
         <div className="mb-4 flex items-center gap-2">
           <span className="text-2xl">{headerIcon}</span>
-          <h2 className="text-2xl font-bold text-gray-900">{headerText}</h2>
+          <h2 className="text-2xl font-bold text-primary">{headerText}</h2>
         </div>
 
         {/* 설명 텍스트 */}
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-secondary">
           {category === 'sports' &&
             '경기 일정 확인 및 티켓 예매를 위한 링크입니다.'}
           {category === 'music' &&
@@ -82,8 +82,8 @@ export function EventInfoSection({
         ) : (
           <div className="py-8 text-center">
             <div className="mb-3 text-3xl">📅</div>
-            <p className="text-gray-600">{emptyMessage.title}</p>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="text-secondary">{emptyMessage.title}</p>
+            <p className="mt-1 text-sm text-secondary">
               {emptyMessage.description}
             </p>
           </div>

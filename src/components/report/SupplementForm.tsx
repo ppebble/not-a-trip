@@ -191,7 +191,7 @@ export function SupplementForm({
     <div className="space-y-4">
       {/* 보완 유형 선택 */}
       <div>
-        <p className="text-navy-800 mb-2 text-sm font-medium">
+        <p className="mb-2 text-sm font-medium text-primary-800">
           보완 유형 <span className="text-red-500">*</span>
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -202,15 +202,15 @@ export function SupplementForm({
               onClick={() => setType(st.value)}
               className={`rounded-lg border p-3 text-left transition-colors ${
                 type === st.value
-                  ? 'border-navy-500 bg-navy-50'
-                  : 'border-navy-100 hover:border-navy-300'
+                  ? 'border-primary bg-primary-50'
+                  : 'border-border hover:border-neutral-300'
               }`}
             >
               <span className="text-lg">{st.icon}</span>
-              <p className="text-navy-700 mt-1 text-xs font-medium">
+              <p className="mt-1 text-xs font-medium text-secondary">
                 {st.label}
               </p>
-              <p className="text-navy-400 text-[10px]">{st.description}</p>
+              <p className="text-[10px] text-muted">{st.description}</p>
             </button>
           ))}
         </div>
@@ -218,9 +218,9 @@ export function SupplementForm({
 
       {/* scene_info 전용 필드 */}
       {type === 'scene_info' && (
-        <div className="border-navy-100 bg-navy-50/30 space-y-3 rounded-lg border p-3">
+        <div className="space-y-3 rounded-lg border border-border bg-primary-50/30 p-3">
           <div>
-            <label className="text-navy-700 mb-1 block text-xs font-medium">
+            <label className="mb-1 block text-xs font-medium text-secondary">
               작품명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -228,11 +228,11 @@ export function SupplementForm({
               value={animeTitle}
               onChange={(e) => setAnimeTitle(e.target.value)}
               placeholder="예: 너의 이름은"
-              className="border-navy-200 focus:border-navy-400 w-full rounded-md border px-3 py-2 text-sm focus:outline-none"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary-400 focus:outline-none"
             />
           </div>
           <div>
-            <label className="text-navy-700 mb-1 block text-xs font-medium">
+            <label className="mb-1 block text-xs font-medium text-secondary">
               에피소드/타임스탬프
             </label>
             <input
@@ -240,11 +240,11 @@ export function SupplementForm({
               value={episodeInfo}
               onChange={(e) => setEpisodeInfo(e.target.value)}
               placeholder="예: 1화 12:30"
-              className="border-navy-200 focus:border-navy-400 w-full rounded-md border px-3 py-2 text-sm focus:outline-none"
+              className="w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary-400 focus:outline-none"
             />
           </div>
           <div>
-            <label className="text-navy-700 mb-1 block text-xs font-medium">
+            <label className="mb-1 block text-xs font-medium text-secondary">
               캡처 이미지
             </label>
             <input
@@ -292,14 +292,14 @@ export function SupplementForm({
                 type="button"
                 onClick={() => captureRef.current?.click()}
                 disabled={isUploading}
-                className="border-navy-200 hover:border-navy-400 hover:bg-navy-50 flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed"
+                className="flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-primary-400 hover:bg-surface"
               >
                 {isUploading ? (
-                  <div className="border-navy-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                 ) : (
                   <>
                     <svg
-                      className="text-navy-300 mb-1 h-6 w-6"
+                      className="mb-1 h-6 w-6 text-neutral-300"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -311,7 +311,7 @@ export function SupplementForm({
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                       />
                     </svg>
-                    <span className="text-navy-400 text-xs">
+                    <span className="text-xs text-muted">
                       캡처 이미지 업로드
                     </span>
                   </>
@@ -325,7 +325,7 @@ export function SupplementForm({
       {/* photo 타입 전용 사진 업로드 */}
       {type === 'photo' && (
         <div>
-          <label className="text-navy-700 mb-1 block text-xs font-medium">
+          <label className="mb-1 block text-xs font-medium text-secondary">
             사진 첨부
           </label>
           <input
@@ -373,14 +373,14 @@ export function SupplementForm({
               type="button"
               onClick={() => photoRef.current?.click()}
               disabled={isUploading}
-              className="border-navy-200 hover:border-navy-400 hover:bg-navy-50 flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed"
+              className="flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-primary-400 hover:bg-surface"
             >
               {isUploading ? (
-                <div className="border-navy-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               ) : (
                 <>
                   <svg
-                    className="text-navy-300 mb-1 h-6 w-6"
+                    className="mb-1 h-6 w-6 text-neutral-300"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -392,7 +392,7 @@ export function SupplementForm({
                       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                     />
                   </svg>
-                  <span className="text-navy-400 text-xs">사진 업로드</span>
+                  <span className="text-xs text-muted">사진 업로드</span>
                 </>
               )}
             </button>
@@ -403,7 +403,7 @@ export function SupplementForm({
       {/* 보완 내용 */}
       {type && (
         <div>
-          <label className="text-navy-800 mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-primary-800">
             보완 내용 <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -420,9 +420,9 @@ export function SupplementForm({
             }
             rows={3}
             maxLength={500}
-            className="border-navy-200 focus:border-navy-400 w-full rounded-md border px-3 py-2 text-sm focus:outline-none"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary-400 focus:outline-none"
           />
-          <p className="text-navy-400 mt-1 text-right text-xs">
+          <p className="mt-1 text-right text-xs text-muted">
             {content.length}/500
           </p>
         </div>
@@ -437,7 +437,7 @@ export function SupplementForm({
           <button
             type="button"
             onClick={onCancel}
-            className="border-navy-200 text-navy-600 hover:bg-navy-50 flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors"
+            className="flex-1 rounded-lg border border-border py-2.5 text-sm font-medium text-primary transition-colors hover:bg-surface"
           >
             취소
           </button>
@@ -446,7 +446,7 @@ export function SupplementForm({
           type="button"
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? '제출 중...' : '정보 보완 제출'}
         </button>

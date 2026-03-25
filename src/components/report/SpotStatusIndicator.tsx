@@ -38,8 +38,8 @@ const STATUS_CONFIG: Record<
   inaccessible: {
     label: '접근 불가',
     icon: '🚫',
-    bgColor: 'bg-gray-100',
-    textColor: 'text-gray-700',
+    bgColor: 'bg-neutral-100',
+    textColor: 'text-neutral-700',
   },
 }
 

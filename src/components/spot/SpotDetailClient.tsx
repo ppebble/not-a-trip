@@ -51,8 +51,8 @@ import {
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
   ssr: false,
   loading: () => (
-    <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100">
-      <div className="text-center text-gray-500">
+    <div className="flex h-64 items-center justify-center rounded-lg bg-neutral-100">
+      <div className="text-center text-neutral-500">
         <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
         <p>지도를 불러오는 중...</p>
       </div>
@@ -266,7 +266,7 @@ function SpotDetailContent({
               </span>
             </div>
           )}
-          <h1 className="mb-2 text-2xl font-bold text-gray-900 md:mb-4 md:text-3xl">
+          <h1 className="mb-2 text-2xl font-bold text-neutral-900 md:mb-4 md:text-3xl">
             {spot.name}
           </h1>
 
@@ -292,7 +292,7 @@ function SpotDetailContent({
 
           {/* 주소 + 길찾기 버튼 */}
           <div className="mb-3 flex items-center justify-between gap-2 md:mb-4">
-            <div className="flex min-w-0 items-center text-gray-600">
+            <div className="flex min-w-0 items-center text-neutral-600">
               <span className="mr-1.5 flex-shrink-0 md:mr-2">
                 <MapPinIcon size="md" />
               </span>
@@ -310,15 +310,15 @@ function SpotDetailContent({
             )}
           </div>
 
-          <p className="text-sm leading-relaxed text-gray-700 md:text-base">
+          <p className="text-sm leading-relaxed text-neutral-700 md:text-base">
             {spot.description}
           </p>
         </div>
 
         {/* 데스크탑: 기존 그리드 사진 레이아웃 (카드 내부) */}
         {spot.photos && spot.photos.length > 0 && (
-          <div className="hidden border-t border-gray-100 p-6 md:block">
-            <h2 className="mb-4 text-2xl font-bold text-gray-900">사진</h2>
+          <div className="hidden border-t border-neutral-100 p-6 md:block">
+            <h2 className="mb-4 text-2xl font-bold text-neutral-900">사진</h2>
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
               {spot.photos.map((photo, index) => (
                 <div
@@ -351,7 +351,7 @@ function SpotDetailContent({
       {/* Location Map */}
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-6">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900">
+          <h2 className="mb-4 text-2xl font-bold text-primary">
             위치 및 근처 편의시설
           </h2>
           <div className="h-96 w-full overflow-hidden rounded-lg">
@@ -359,7 +359,7 @@ function SpotDetailContent({
           </div>
           {facilities.length > 0 && (
             <div className="mt-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-secondary">
                 근처 편의시설 {facilities.length}개가 표시됩니다. 마커를
                 클릭하면 상세 정보를 확인할 수 있습니다.
               </p>
@@ -390,7 +390,7 @@ function SpotDetailContent({
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900 md:text-xl">
+            <h2 className="text-lg font-bold text-primary md:text-xl">
               정보 보완
             </h2>
             <button
@@ -419,7 +419,7 @@ function SpotDetailContent({
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900 md:text-xl">
+            <h2 className="text-lg font-bold text-primary md:text-xl">
               현재 상태 신고
             </h2>
             <button
@@ -432,7 +432,7 @@ function SpotDetailContent({
 
           {spot.spotStatus && (
             <div className="mb-3 flex items-center gap-2">
-              <span className="text-sm text-gray-600">현재 상태:</span>
+              <span className="text-sm text-secondary">현재 상태:</span>
               <SpotStatusIndicator status={spot.spotStatus} />
             </div>
           )}
@@ -485,10 +485,10 @@ function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-red-500">
             <AlertTriangleIcon size={64} />
           </div>
-          <h2 className="mb-2 text-xl font-bold text-gray-900">
+          <h2 className="mb-2 text-xl font-bold text-primary">
             오류가 발생했습니다
           </h2>
-          <p className="mb-4 text-gray-600">{error.message}</p>
+          <p className="mb-4 text-secondary">{error.message}</p>
           <div className="flex justify-center gap-3">
             {onRetry && (
               <button
@@ -516,13 +516,13 @@ function SpotNotFound() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <div className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-gray-400">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-neutral-400">
             <MapPinIcon size={64} />
           </div>
-          <h2 className="mb-2 text-xl font-bold text-gray-900">
+          <h2 className="mb-2 text-xl font-bold text-primary">
             스팟을 찾을 수 없습니다
           </h2>
-          <p className="mb-4 text-gray-600">
+          <p className="mb-4 text-secondary">
             요청하신 스팟이 존재하지 않거나 삭제되었습니다.
           </p>
           <Link

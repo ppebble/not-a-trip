@@ -106,8 +106,10 @@ export function AdminStatusReportReview({
         {/* 헤더 */}
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">상태 신고 상세</h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <h2 className="text-xl font-bold text-neutral-800">
+              상태 신고 상세
+            </h2>
+            <p className="mt-1 text-sm text-neutral-500">
               스팟 ID: {report.spotId}
             </p>
           </div>
@@ -115,26 +117,26 @@ export function AdminStatusReportReview({
         </div>
 
         {/* 기본 정보 */}
-        <section className="rounded-lg border border-gray-200 bg-white p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-700">
+        <section className="rounded-lg border border-neutral-200 bg-white p-4">
+          <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             기본 정보
           </h3>
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <dt className="text-gray-400">신고 상태</dt>
-              <dd className="mt-0.5 font-medium text-gray-700">
+              <dt className="text-neutral-400">신고 상태</dt>
+              <dd className="mt-0.5 font-medium text-neutral-700">
                 {SPOT_STATUS_LABELS[report.status] || report.status}
               </dd>
             </div>
             <div>
-              <dt className="text-gray-400">신고자</dt>
-              <dd className="mt-0.5 font-medium text-gray-700">
+              <dt className="text-neutral-400">신고자</dt>
+              <dd className="mt-0.5 font-medium text-neutral-700">
                 {report.reporterName}
               </dd>
             </div>
             <div>
-              <dt className="text-gray-400">신고일</dt>
-              <dd className="mt-0.5 font-medium text-gray-700">
+              <dt className="text-neutral-400">신고일</dt>
+              <dd className="mt-0.5 font-medium text-neutral-700">
                 {new Date(report.createdAt).toLocaleDateString('ko-KR', {
                   year: 'numeric',
                   month: 'long',
@@ -146,19 +148,19 @@ export function AdminStatusReportReview({
         </section>
 
         {/* 설명 */}
-        <section className="rounded-lg border border-gray-200 bg-white p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-700">
+        <section className="rounded-lg border border-neutral-200 bg-white p-4">
+          <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             신고 내용
           </h3>
-          <p className="whitespace-pre-wrap text-sm text-gray-700">
+          <p className="whitespace-pre-wrap text-sm text-neutral-700">
             {report.description}
           </p>
         </section>
 
         {/* 증거 사진 */}
         {report.photoUrl && (
-          <section className="rounded-lg border border-gray-200 bg-white p-4">
-            <h3 className="mb-3 text-sm font-semibold text-gray-700">
+          <section className="rounded-lg border border-neutral-200 bg-white p-4">
+            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               증거 사진
             </h3>
             <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg">
@@ -183,8 +185,8 @@ export function AdminStatusReportReview({
         {isPending && (
           <section className="space-y-4">
             {/* 확인 처리 */}
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <h3 className="mb-3 text-sm font-semibold text-gray-700">
+            <div className="rounded-lg border border-neutral-200 bg-white p-4">
+              <h3 className="mb-3 text-sm font-semibold text-neutral-700">
                 확인 처리
               </h3>
               <button
@@ -197,11 +199,11 @@ export function AdminStatusReportReview({
             </div>
 
             {/* 스팟 상태 수동 변경 */}
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <h3 className="mb-3 text-sm font-semibold text-gray-700">
+            <div className="rounded-lg border border-neutral-200 bg-white p-4">
+              <h3 className="mb-3 text-sm font-semibold text-neutral-700">
                 스팟 상태 수동 변경
               </h3>
-              <p className="mb-3 text-xs text-gray-400">
+              <p className="mb-3 text-xs text-neutral-400">
                 스팟 상태를 변경하면 해당 스팟의 대기 중인 모든 신고가 자동으로
                 확인 완료 처리됩니다
               </p>
@@ -211,7 +213,7 @@ export function AdminStatusReportReview({
                   onChange={(e) =>
                     setSelectedStatus(e.target.value as SpotStatus)
                   }
-                  className="focus:border-navy-400 focus:ring-navy-400 flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1"
+                  className="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400"
                   aria-label="스팟 상태 선택"
                 >
                   {SPOT_STATUS_OPTIONS.map((opt) => (
@@ -223,7 +225,7 @@ export function AdminStatusReportReview({
                 <button
                   onClick={handleChangeSpotStatus}
                   disabled={loading}
-                  className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-50"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
                 >
                   {loading ? '처리중...' : '변경'}
                 </button>
@@ -234,7 +236,7 @@ export function AdminStatusReportReview({
 
         {/* 이미 처리된 신고 안내 */}
         {!isPending && (
-          <div className="rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
+          <div className="rounded-lg bg-neutral-50 p-4 text-center text-sm text-neutral-500">
             이미 확인 완료된 상태 신고입니다
           </div>
         )}

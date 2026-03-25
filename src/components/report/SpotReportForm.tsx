@@ -97,16 +97,16 @@ export function SpotReportForm() {
               <div
                 className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
                   isActive
-                    ? 'bg-navy-600 text-white'
+                    ? 'bg-primary text-white'
                     : isDone
                       ? 'bg-green-500 text-white'
-                      : 'bg-navy-100 text-navy-400'
+                      : 'bg-surface text-muted'
                 }`}
               >
                 {isDone ? '✓' : step}
               </div>
               <span
-                className={`mt-1 text-[10px] ${isActive ? 'text-navy-700 font-medium' : 'text-navy-400'}`}
+                className={`mt-1 text-[10px] ${isActive ? 'font-medium text-secondary' : 'text-muted'}`}
               >
                 {label}
               </span>
@@ -211,16 +211,16 @@ function StepLocation({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-navy-800 text-base font-semibold">
+      <h3 className="text-base font-semibold text-primary">
         성지 위치를 입력해주세요
       </h3>
-      <p className="text-navy-400 text-xs">
+      <p className="text-xs text-muted">
         Google Maps 등에서 좌표를 복사하여 입력하거나, 주소를 입력해주세요
       </p>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-navy-600 mb-1 block text-xs font-medium">
+          <label className="mb-1 block text-xs font-medium text-secondary">
             위도 (Latitude) <span className="text-red-500">*</span>
           </label>
           <input
@@ -229,11 +229,11 @@ function StepLocation({
             value={lat}
             onChange={(e) => setLat(e.target.value)}
             placeholder="35.6762"
-            className="border-navy-200 focus:border-navy-500 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
           />
         </div>
         <div>
-          <label className="text-navy-600 mb-1 block text-xs font-medium">
+          <label className="mb-1 block text-xs font-medium text-secondary">
             경도 (Longitude) <span className="text-red-500">*</span>
           </label>
           <input
@@ -242,13 +242,13 @@ function StepLocation({
             value={lng}
             onChange={(e) => setLng(e.target.value)}
             placeholder="139.6503"
-            className="border-navy-200 focus:border-navy-500 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-navy-600 mb-1 block text-xs font-medium">
+        <label className="mb-1 block text-xs font-medium text-secondary">
           주소
         </label>
         <input
@@ -256,7 +256,7 @@ function StepLocation({
           value={addr}
           onChange={(e) => setAddr(e.target.value)}
           placeholder="도쿄도 치요다구..."
-          className="border-navy-200 focus:border-navy-500 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
         />
       </div>
 
@@ -264,7 +264,7 @@ function StepLocation({
         type="button"
         onClick={handleNext}
         disabled={!isValid}
-        className="bg-navy-600 hover:bg-navy-700 disabled:bg-navy-200 w-full rounded-lg py-2.5 text-sm font-medium text-white transition-colors"
+        className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:bg-neutral-200"
       >
         다음
       </button>
@@ -300,7 +300,7 @@ function StepNearbyCheck({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-navy-800 text-base font-semibold">중복 검사</h3>
+      <h3 className="text-base font-semibold text-primary">중복 검사</h3>
 
       <NearbySpotWarning
         nearbyItems={nearbyItems}
@@ -320,7 +320,7 @@ function StepNearbyCheck({
       <button
         type="button"
         onClick={onBack}
-        className="border-navy-200 text-navy-600 hover:bg-navy-50 w-full rounded-lg border py-2 text-sm"
+        className="w-full rounded-lg border border-border py-2 text-sm text-secondary hover:bg-surface"
       >
         이전
       </button>
@@ -370,11 +370,11 @@ function StepInfo({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-navy-800 text-base font-semibold">장소 정보</h3>
+      <h3 className="text-base font-semibold text-primary">장소 정보</h3>
 
       {/* 장소명 */}
       <div>
-        <label className="text-navy-600 mb-1 block text-xs font-medium">
+        <label className="mb-1 block text-xs font-medium text-secondary">
           장소명 <span className="text-red-500">*</span>
         </label>
         <input
@@ -382,13 +382,13 @@ function StepInfo({
           value={formData.name}
           onChange={(e) => onUpdate({ name: e.target.value })}
           placeholder="예: 스와 신사 (諏訪神社)"
-          className="border-navy-200 focus:border-navy-500 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
         />
       </div>
 
       {/* 카테고리 */}
       <div>
-        <label className="text-navy-600 mb-1 block text-xs font-medium">
+        <label className="mb-1 block text-xs font-medium text-secondary">
           카테고리 <span className="text-red-500">*</span>
         </label>
         <div className="grid grid-cols-3 gap-2">
@@ -404,8 +404,8 @@ function StepInfo({
               onClick={() => onUpdate({ category: key })}
               className={`rounded-lg border px-2 py-2 text-xs transition-colors ${
                 formData.category === key
-                  ? 'border-navy-500 bg-navy-50 text-navy-700 font-medium'
-                  : 'border-navy-100 text-navy-500 hover:border-navy-300'
+                  ? 'border-primary bg-primary-50 font-medium text-secondary'
+                  : 'border-border text-secondary hover:border-neutral-300'
               }`}
             >
               {config.label}
@@ -416,7 +416,7 @@ function StepInfo({
 
       {/* 관련 작품 */}
       <div>
-        <label className="text-navy-600 mb-1 block text-xs font-medium">
+        <label className="mb-1 block text-xs font-medium text-secondary">
           관련 작품 <span className="text-red-500">*</span>
         </label>
         <div className="flex gap-2">
@@ -428,13 +428,13 @@ function StepInfo({
               e.key === 'Enter' && (e.preventDefault(), addContent())
             }
             placeholder="작품명 입력 후 추가"
-            className="border-navy-200 focus:border-navy-500 flex-1 rounded-lg border px-3 py-2 text-sm focus:outline-none"
+            className="flex-1 rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
           />
           <button
             type="button"
             onClick={addContent}
             disabled={!contentName.trim()}
-            className="bg-navy-100 text-navy-600 hover:bg-navy-200 rounded-lg px-3 text-sm disabled:opacity-40"
+            className="rounded-lg bg-surface px-3 text-sm text-secondary hover:bg-neutral-200 disabled:opacity-40"
           >
             추가
           </button>
@@ -444,13 +444,13 @@ function StepInfo({
             {formData.relatedContent.map((c, i) => (
               <span
                 key={i}
-                className="bg-navy-100 text-navy-600 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs"
+                className="inline-flex items-center gap-1 rounded-full bg-surface px-2 py-0.5 text-xs text-secondary"
               >
                 {c.name}
                 <button
                   type="button"
                   onClick={() => removeContent(i)}
-                  className="text-navy-400 hover:text-red-500"
+                  className="text-muted hover:text-red-500"
                 >
                   ×
                 </button>
@@ -462,7 +462,7 @@ function StepInfo({
 
       {/* 설명 */}
       <div>
-        <label className="text-navy-600 mb-1 block text-xs font-medium">
+        <label className="mb-1 block text-xs font-medium text-secondary">
           설명 <span className="text-red-500">*</span>
         </label>
         <textarea
@@ -470,13 +470,13 @@ function StepInfo({
           onChange={(e) => onUpdate({ description: e.target.value })}
           placeholder="이 장소에 대한 설명을 작성해주세요"
           rows={3}
-          className="border-navy-200 focus:border-navy-500 w-full resize-none rounded-lg border px-3 py-2 text-sm focus:outline-none"
+          className="w-full resize-none rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
         />
       </div>
 
       {/* 에피소드 정보 */}
       <div>
-        <label className="text-navy-600 mb-1 block text-xs font-medium">
+        <label className="mb-1 block text-xs font-medium text-secondary">
           에피소드/타임스탬프
         </label>
         <input
@@ -484,7 +484,7 @@ function StepInfo({
           value={formData.episodeInfo}
           onChange={(e) => onUpdate({ episodeInfo: e.target.value })}
           placeholder="예: 1화 12:30, 3화 오프닝"
-          className="border-navy-200 focus:border-navy-500 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
         />
       </div>
 
@@ -493,7 +493,7 @@ function StepInfo({
         <button
           type="button"
           onClick={onBack}
-          className="border-navy-200 text-navy-600 hover:bg-navy-50 flex-1 rounded-lg border py-2.5 text-sm"
+          className="flex-1 rounded-lg border border-border py-2.5 text-sm text-secondary hover:bg-surface"
         >
           이전
         </button>
@@ -501,7 +501,7 @@ function StepInfo({
           type="button"
           onClick={onNext}
           disabled={!isValid}
-          className="bg-navy-600 hover:bg-navy-700 disabled:bg-navy-200 flex-1 rounded-lg py-2.5 text-sm font-medium text-white"
+          className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:bg-neutral-200"
         >
           다음
         </button>
@@ -526,9 +526,7 @@ function StepEvidence({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-navy-800 text-base font-semibold">
-        증거 사진 업로드
-      </h3>
+      <h3 className="text-base font-semibold text-primary">증거 사진 업로드</h3>
 
       <EvidencePairUpload pairs={evidencePairs} onChange={onUpdate} />
 
@@ -543,7 +541,7 @@ function StepEvidence({
         <button
           type="button"
           onClick={onBack}
-          className="border-navy-200 text-navy-600 hover:bg-navy-50 flex-1 rounded-lg border py-2.5 text-sm"
+          className="flex-1 rounded-lg border border-border py-2.5 text-sm text-secondary hover:bg-surface"
         >
           이전
         </button>
@@ -551,7 +549,7 @@ function StepEvidence({
           type="button"
           onClick={onNext}
           disabled={!hasCompletePair}
-          className="bg-navy-600 hover:bg-navy-700 disabled:bg-navy-200 flex-1 rounded-lg py-2.5 text-sm font-medium text-white"
+          className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:bg-neutral-200"
         >
           다음
         </button>
@@ -582,10 +580,10 @@ function StepConfirm({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-navy-800 text-base font-semibold">제보 내용 확인</h3>
+      <h3 className="text-base font-semibold text-primary">제보 내용 확인</h3>
 
       {/* 요약 카드 */}
-      <div className="border-navy-100 bg-navy-50/30 space-y-3 rounded-lg border p-4">
+      <div className="space-y-3 rounded-lg border border-border bg-primary-50/30 p-4">
         <SummaryRow
           label="장소명"
           value={formData.name}
@@ -629,7 +627,7 @@ function StepConfirm({
         )}
       </div>
 
-      <p className="text-navy-400 text-xs">
+      <p className="text-xs text-muted">
         제출 후 관리자 검토를 거쳐 지도에 등록됩니다
       </p>
 
@@ -644,7 +642,7 @@ function StepConfirm({
           type="button"
           onClick={onBack}
           disabled={isSubmitting}
-          className="border-navy-200 text-navy-600 hover:bg-navy-50 flex-1 rounded-lg border py-2.5 text-sm disabled:opacity-50"
+          className="flex-1 rounded-lg border border-border py-2.5 text-sm text-secondary hover:bg-surface disabled:opacity-50"
         >
           이전
         </button>
@@ -652,7 +650,7 @@ function StepConfirm({
           type="button"
           onClick={onSubmit}
           disabled={isSubmitting}
-          className="bg-navy-600 hover:bg-navy-700 disabled:bg-navy-300 flex-1 rounded-lg py-2.5 text-sm font-medium text-white"
+          className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:bg-neutral-300"
         >
           {isSubmitting ? '제출 중...' : '제보하기'}
         </button>
@@ -673,13 +671,13 @@ function SummaryRow({
   return (
     <div className="flex items-start justify-between">
       <div className="min-w-0 flex-1">
-        <p className="text-navy-400 text-xs">{label}</p>
-        <p className="text-navy-700 text-sm">{value}</p>
+        <p className="text-xs text-muted">{label}</p>
+        <p className="text-sm text-secondary">{value}</p>
       </div>
       <button
         type="button"
         onClick={onEdit}
-        className="text-navy-400 hover:text-navy-600 ml-2 text-xs"
+        className="ml-2 text-xs text-muted hover:text-secondary"
       >
         수정
       </button>

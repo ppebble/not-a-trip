@@ -117,7 +117,7 @@ export function CheckInGallery({
             onClick={() => handleSortChange('latest')}
             className={`rounded-lg px-3 py-1 text-sm ${
               sortBy === 'latest'
-                ? 'bg-blue-100 text-blue-600'
+                ? 'bg-primary-100 text-primary'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -127,7 +127,7 @@ export function CheckInGallery({
             onClick={() => handleSortChange('popular')}
             className={`rounded-lg px-3 py-1 text-sm ${
               sortBy === 'popular'
-                ? 'bg-blue-100 text-blue-600'
+                ? 'bg-primary-100 text-primary'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >

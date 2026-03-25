@@ -35,7 +35,7 @@ export function BadgeCard({
       className={`relative rounded-xl p-4 text-center transition-all ${
         earned
           ? 'bg-gradient-to-br from-yellow-50 to-orange-50'
-          : 'bg-gray-100 opacity-60'
+          : 'bg-neutral-100 opacity-60'
       } ${className}`}
     >
       {/* 뱃지 아이콘 */}
@@ -43,7 +43,7 @@ export function BadgeCard({
         className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full shadow-lg ${
           earned
             ? 'bg-gradient-to-br from-yellow-400 to-orange-500'
-            : 'bg-gray-300'
+            : 'bg-neutral-300'
         }`}
       >
         {badge.iconUrl ? (
@@ -56,7 +56,7 @@ export function BadgeCard({
           />
         ) : (
           <svg
-            className={`h-8 w-8 ${earned ? 'text-white' : 'text-gray-500'}`}
+            className={`h-8 w-8 ${earned ? 'text-white' : 'text-neutral-500'}`}
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -66,10 +66,12 @@ export function BadgeCard({
       </div>
 
       {/* 뱃지 정보 */}
-      <h3 className={`font-bold ${earned ? 'text-gray-800' : 'text-gray-500'}`}>
+      <h3
+        className={`font-bold ${earned ? 'text-neutral-800' : 'text-neutral-500'}`}
+      >
         {badge.name}
       </h3>
-      <p className="mt-1 text-xs text-gray-500">{badge.description}</p>
+      <p className="mt-1 text-xs text-neutral-500">{badge.description}</p>
 
       {/* 획득 날짜 또는 진행률 */}
       {earned && earnedAt ? (
@@ -78,23 +80,23 @@ export function BadgeCard({
         </p>
       ) : progress !== undefined ? (
         <div className="mt-3">
-          <div className="h-2 overflow-hidden rounded-full bg-gray-200">
+          <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
             <div
-              className="h-full rounded-full bg-blue-500 transition-all"
+              className="h-full rounded-full bg-primary transition-all"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="mt-1 text-xs text-gray-500">{progress}% 달성</p>
+          <p className="mt-1 text-xs text-neutral-500">{progress}% 달성</p>
         </div>
       ) : (
-        <p className="mt-2 text-xs text-gray-400">미획득</p>
+        <p className="mt-2 text-xs text-neutral-400">미획득</p>
       )}
 
       {/* 잠금 아이콘 (미획득 시) */}
       {!earned && (
         <div className="absolute right-2 top-2">
           <svg
-            className="h-4 w-4 text-gray-400"
+            className="h-4 w-4 text-neutral-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

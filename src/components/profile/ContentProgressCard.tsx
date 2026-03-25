@@ -17,8 +17,8 @@ export function ContentProgressCard({
 }: ContentProgressCardProps) {
   const getProgressColor = (percent: number) => {
     if (percent >= 100) return 'bg-green-500'
-    if (percent >= 50) return 'bg-blue-500'
-    return 'bg-gray-400'
+    if (percent >= 50) return 'bg-primary'
+    return 'bg-neutral-400'
   }
 
   const getProgressLabel = (percent: number) => {
@@ -29,17 +29,17 @@ export function ContentProgressCard({
 
   return (
     <div
-      className={`rounded-xl border border-gray-100 bg-white p-4 shadow-sm ${className}`}
+      className={`rounded-xl border border-neutral-100 bg-white p-4 shadow-sm ${className}`}
     >
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-bold text-gray-800">{progress.contentName}</h3>
+        <h3 className="font-bold text-neutral-800">{progress.contentName}</h3>
         <span
           className={`rounded-full px-2 py-1 text-xs font-medium ${
             progress.progress >= 100
               ? 'bg-green-100 text-green-700'
               : progress.progress >= 50
-                ? 'bg-blue-100 text-blue-700'
-                : 'bg-gray-100 text-gray-600'
+                ? 'bg-primary-50 text-primary'
+                : 'bg-neutral-100 text-neutral-600'
           }`}
         >
           {getProgressLabel(progress.progress)}
@@ -47,7 +47,7 @@ export function ContentProgressCard({
       </div>
 
       {/* 프로그레스 바 */}
-      <div className="mb-2 h-3 overflow-hidden rounded-full bg-gray-100">
+      <div className="mb-2 h-3 overflow-hidden rounded-full bg-neutral-100">
         <div
           className={`h-full rounded-full transition-all ${getProgressColor(progress.progress)}`}
           style={{ width: `${Math.min(progress.progress, 100)}%` }}
@@ -56,15 +56,17 @@ export function ContentProgressCard({
 
       {/* 통계 */}
       <div className="flex items-center justify-between text-sm">
-        <span className="text-gray-500">
+        <span className="text-neutral-500">
           {progress.checkedSpots} / {progress.totalSpots} 스팟
         </span>
-        <span className="font-medium text-gray-700">{progress.progress}%</span>
+        <span className="font-medium text-neutral-700">
+          {progress.progress}%
+        </span>
       </div>
 
       {/* 마일스톤 표시 */}
       {progress.progress > 0 && progress.progress < 100 && (
-        <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+        <div className="mt-3 flex items-center gap-2 text-xs text-neutral-500">
           <svg
             className="h-4 w-4"
             fill="none"

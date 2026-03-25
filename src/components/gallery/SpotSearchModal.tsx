@@ -164,7 +164,7 @@ export function SpotSearchModal({
           </h2>
           <button
             onClick={onClose}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-neutral-100"
             aria-label="닫기"
           >
             <svg
@@ -188,7 +188,7 @@ export function SpotSearchModal({
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <svg
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 text-neutral-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -207,14 +207,14 @@ export function SpotSearchModal({
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="스팟 이름 또는 작품명으로 검색"
-              className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-10 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-lg border border-neutral-300 py-3 pl-10 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               aria-label="스팟 검색"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 hover:text-neutral-600"
                 aria-label="검색어 초기화"
               >
                 <svg
@@ -239,7 +239,7 @@ export function SpotSearchModal({
         <div className="max-h-[50vh] overflow-y-auto border-t">
           {isLoading && !selectedSpotId && (
             <div className="flex items-center justify-center py-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             </div>
           )}
 
@@ -251,14 +251,14 @@ export function SpotSearchModal({
             !error &&
             searchQuery &&
             searchResults.length === 0 && (
-              <div className="p-8 text-center text-gray-500">
+              <div className="p-8 text-center text-neutral-500">
                 <p className="mb-2">검색 결과가 없습니다</p>
                 <p className="text-sm">다른 검색어로 시도해보세요</p>
               </div>
             )}
 
           {!isLoading && !error && !searchQuery && (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-neutral-500">
               <p className="mb-2">스팟을 검색해주세요</p>
               <p className="text-sm">
                 스팟 이름이나 작품명으로 검색할 수 있어요
@@ -273,10 +273,10 @@ export function SpotSearchModal({
                   <button
                     onClick={() => handleSelectSpot(spot.id)}
                     disabled={isLoading && selectedSpotId === spot.id}
-                    className="flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-gray-50 disabled:opacity-50"
+                    className="flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-neutral-50 disabled:opacity-50"
                   >
                     {/* 썸네일 */}
-                    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-neutral-100">
                       {spot.thumbnailUrl ? (
                         <Image
                           src={spot.thumbnailUrl}
@@ -286,7 +286,7 @@ export function SpotSearchModal({
                           className="object-cover"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-gray-400">
+                        <div className="flex h-full w-full items-center justify-center text-neutral-400">
                           <svg
                             className="h-6 w-6"
                             fill="none"
@@ -312,14 +312,14 @@ export function SpotSearchModal({
 
                     {/* 스팟 정보 */}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium text-gray-900">
+                      <p className="truncate font-medium text-neutral-900">
                         {spot.name}
                       </p>
                       {spot.category &&
                         CATEGORY_CONFIG[
                           spot.category as keyof typeof CATEGORY_CONFIG
                         ] && (
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-neutral-500">
                             {
                               CATEGORY_CONFIG[
                                 spot.category as keyof typeof CATEGORY_CONFIG
@@ -331,10 +331,10 @@ export function SpotSearchModal({
 
                     {/* 로딩 또는 화살표 */}
                     {isLoading && selectedSpotId === spot.id ? (
-                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                     ) : (
                       <svg
-                        className="h-5 w-5 flex-shrink-0 text-gray-400"
+                        className="h-5 w-5 flex-shrink-0 text-neutral-400"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"

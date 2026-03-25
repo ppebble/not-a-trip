@@ -68,9 +68,9 @@ export function SpotContentSection({
           <div className="p-6">
             <div className="mb-4 flex items-center gap-2">
               <span className="text-2xl">📍</span>
-              <h2 className="text-2xl font-bold text-gray-900">정보</h2>
+              <h2 className="text-2xl font-bold text-primary">정보</h2>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-secondary">
               이 장소에 대한 추가 정보가 곧 제공될 예정입니다.
             </p>
           </div>

@@ -131,7 +131,7 @@ export function NavigationPanel({
           <div
             className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${
               isCurrentUnavailable
-                ? 'bg-gray-400'
+                ? 'bg-neutral-400'
                 : isCurrentChecked
                   ? 'bg-green-600'
                   : 'bg-red-600'
@@ -145,7 +145,7 @@ export function NavigationPanel({
             <p
               className={`truncate text-sm font-semibold ${
                 isCurrentUnavailable
-                  ? 'text-gray-400 line-through'
+                  ? 'text-neutral-400 line-through'
                   : 'text-text-primary'
               }`}
             >
@@ -175,7 +175,7 @@ export function NavigationPanel({
                   href={externalMapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600 transition-colors hover:bg-blue-100"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-50 text-primary transition-colors hover:bg-primary-100"
                   aria-label="외부 지도 앱으로 경로 탐색"
                 >
                   🗺️
@@ -183,11 +183,11 @@ export function NavigationPanel({
               ) : (
                 <button
                   disabled
-                  className="group relative flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-400"
+                  className="group relative flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 text-neutral-400"
                   aria-label="오프라인 상태에서는 외부 앱 연결이 불가합니다"
                 >
                   🗺️
-                  <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100">
+                  <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-neutral-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100">
                     오프라인 상태에서는 외부 앱 연결이 불가합니다
                   </span>
                 </button>

@@ -28,8 +28,8 @@ const STATUS_CONFIG: Record<
   },
   revision_requested: {
     label: '수정요청',
-    bgColor: 'bg-blue-100',
-    textColor: 'text-blue-700',
+    bgColor: 'bg-primary-50',
+    textColor: 'text-primary',
   },
 }
 

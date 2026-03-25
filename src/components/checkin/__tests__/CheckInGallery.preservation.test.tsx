@@ -222,8 +222,8 @@ describe('CheckInGallery Preservation - 갤러리 기존 레이아웃 보존', (
         expect(popularBtn).toBeTruthy()
 
         // 기본 정렬은 최신순 (활성 스타일)
-        expect(latestBtn.className).toContain('bg-blue-100')
-        expect(popularBtn.className).not.toContain('bg-blue-100')
+        expect(latestBtn.className).toContain('bg-primary-100')
+        expect(popularBtn.className).not.toContain('bg-primary-100')
 
         unmount()
       }),
@@ -253,10 +253,10 @@ describe('CheckInGallery Preservation - 갤러리 기존 레이아웃 보존', (
         fireEvent.click(popularBtn)
 
         // 인기순이 활성화되어야 함
-        expect(popularBtn.className).toContain('bg-blue-100')
+        expect(popularBtn.className).toContain('bg-primary-100')
 
         const latestBtn = getByText('최신순')
-        expect(latestBtn.className).not.toContain('bg-blue-100')
+        expect(latestBtn.className).not.toContain('bg-primary-100')
 
         unmount()
       }),

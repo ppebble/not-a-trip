@@ -17,7 +17,7 @@ function PostItem({ post, onClick }: PostItemProps) {
   return (
     <article
       onClick={onClick}
-      className="border-navy-100 hover:bg-navy-50 cursor-pointer border-b p-4 transition-colors"
+      className="cursor-pointer border-b border-neutral-100 p-4 transition-colors hover:bg-primary-50"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -31,12 +31,12 @@ function PostItem({ post, onClick }: PostItemProps) {
         {/* 게시글 정보 */}
         <div className="min-w-0 flex-1">
           {/* 제목 */}
-          <h3 className="text-navy-800 hover:text-navy-600 mb-2 truncate text-base font-semibold">
+          <h3 className="mb-2 truncate text-base font-semibold text-primary-800 hover:text-primary">
             {post.title}
           </h3>
 
           {/* 메타 정보: 작성자, 날짜 */}
-          <div className="text-navy-500 flex items-center gap-3 text-sm">
+          <div className="flex items-center gap-3 text-sm text-secondary">
             {/* 작성자 */}
             <span className="flex items-center gap-1">
               <svg
@@ -76,7 +76,7 @@ function PostItem({ post, onClick }: PostItemProps) {
         </div>
 
         {/* 통계 정보: 조회수, 댓글수 */}
-        <div className="text-navy-400 flex flex-shrink-0 items-center gap-4 text-sm">
+        <div className="flex flex-shrink-0 items-center gap-4 text-sm text-muted">
           {/* 조회수 */}
           <span className="flex items-center gap-1" title="조회수">
             <svg
@@ -129,13 +129,13 @@ function PostItem({ post, onClick }: PostItemProps) {
  */
 function PostListSkeleton() {
   return (
-    <div className="divide-navy-100 divide-y">
+    <div className="divide-y divide-neutral-100">
       {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="animate-pulse p-4">
-          <div className="bg-navy-200 mb-2 h-5 w-3/4 rounded"></div>
+          <div className="mb-2 h-5 w-3/4 rounded bg-border"></div>
           <div className="flex gap-4">
-            <div className="bg-navy-100 h-4 w-20 rounded"></div>
-            <div className="bg-navy-100 h-4 w-24 rounded"></div>
+            <div className="h-4 w-20 rounded bg-surface"></div>
+            <div className="h-4 w-24 rounded bg-surface"></div>
           </div>
         </div>
       ))}
@@ -156,11 +156,13 @@ function PostListError({
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">😢</div>
-      <p className="text-navy-700 mb-2">게시글을 불러오는데 실패했습니다</p>
-      <p className="text-navy-500 mb-4 text-sm">{error.message}</p>
+      <p className="mb-2 text-text-secondary">
+        게시글을 불러오는데 실패했습니다
+      </p>
+      <p className="mb-4 text-sm text-secondary">{error.message}</p>
       <button
         onClick={onRetry}
-        className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm text-white transition-colors"
+        className="rounded-lg bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary-700"
       >
         다시 시도
       </button>
@@ -175,8 +177,8 @@ function PostListEmpty() {
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">📝</div>
-      <p className="text-navy-700 mb-2">아직 게시글이 없습니다</p>
-      <p className="text-navy-500 text-sm">첫 번째 게시글을 작성해보세요!</p>
+      <p className="mb-2 text-text-secondary">아직 게시글이 없습니다</p>
+      <p className="text-sm text-secondary">첫 번째 게시글을 작성해보세요!</p>
     </div>
   )
 }
@@ -281,7 +283,7 @@ export default function PostList({
       className={`overflow-hidden rounded-lg bg-white shadow-sm ${className}`}
     >
       {/* 게시글 목록 */}
-      <div className="divide-navy-100 divide-y">
+      <div className="divide-y divide-neutral-100">
         {posts.map((post) => (
           <PostItem
             key={post.id}
@@ -292,8 +294,8 @@ export default function PostList({
       </div>
 
       {/* 목록 하단 정보 */}
-      <div className="border-navy-100 bg-navy-50 border-t px-4 py-3">
-        <p className="text-navy-500 text-center text-sm">
+      <div className="border-t border-neutral-100 bg-primary-50 px-4 py-3">
+        <p className="text-center text-sm text-secondary">
           총 {posts.length}개의 게시글
         </p>
       </div>

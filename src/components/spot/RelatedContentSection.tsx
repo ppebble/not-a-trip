@@ -51,7 +51,9 @@ export function RelatedContentSection({
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
       <div className="p-6">
-        <h2 className="mb-4 text-2xl font-bold text-gray-900">관련 콘텐츠</h2>
+        <h2 className="mb-4 text-2xl font-bold text-neutral-900">
+          관련 콘텐츠
+        </h2>
 
         {/* 콘텐츠 그리드 (Requirements 3.1) */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -124,12 +126,12 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
     CONTENT_TYPE_LABELS[content.type] || CONTENT_TYPE_LABELS.other
 
   return (
-    <div className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md">
+    <div className="rounded-lg border border-neutral-200 p-4 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* 대표 이미지가 있으면 원형 뱃지로 표시, 없으면 기본 아이콘 */}
           {content.imageUrl ? (
-            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-200">
+            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
               <Image
                 src={content.imageUrl}
                 alt={content.name}
@@ -141,14 +143,14 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
           ) : (
             <ContentTypeIcon type={content.type} size="3xl" />
           )}
-          <h3 className="font-semibold text-gray-900">{content.name}</h3>
+          <h3 className="font-semibold text-neutral-900">{content.name}</h3>
         </div>
-        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">
           {typeLabel}
         </span>
       </div>
       {(content.year || content.additionalInfo) && (
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm text-neutral-600">
           {content.year && `${content.year}년`}
           {content.year && content.additionalInfo && ' · '}
           {content.additionalInfo}

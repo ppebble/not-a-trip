@@ -108,7 +108,9 @@ export default function SceneGallery({
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{headerIcon}</span>
-            <h2 className="text-2xl font-bold text-gray-900">{headerText}</h2>
+            <h2 className="text-2xl font-bold text-neutral-900">
+              {headerText}
+            </h2>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
@@ -131,21 +133,21 @@ export default function SceneGallery({
           </button>
         </div>
 
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-neutral-500">
           {descriptionText} (다시 클릭하면 취소됩니다)
         </p>
 
         {isLoading || isLoadingLikes ? (
           <SceneGallerySkeleton />
         ) : error ? (
-          <div className="py-8 text-center text-gray-500">
+          <div className="py-8 text-center text-neutral-500">
             장면을 불러오는데 실패했습니다
           </div>
         ) : !scenes || scenes.length === 0 ? (
           <div className="py-8 text-center">
             <div className="mb-3 text-3xl">{headerIcon}</div>
-            <p className="text-gray-600">아직 등록된 장면이 없습니다</p>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="text-neutral-600">아직 등록된 장면이 없습니다</p>
+            <p className="mt-1 text-sm text-neutral-500">
               첫 번째 장면을 추가해보세요!
             </p>
           </div>

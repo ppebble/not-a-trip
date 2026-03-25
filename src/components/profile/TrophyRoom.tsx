@@ -24,9 +24,9 @@ export function TrophyRoom({ badges, className = '' }: TrophyRoomProps) {
   if (badges.length === 0) {
     return (
       <div className={`py-12 text-center ${className}`}>
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-neutral-100">
           <svg
-            className="h-8 w-8 text-gray-400"
+            className="h-8 w-8 text-neutral-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -39,8 +39,8 @@ export function TrophyRoom({ badges, className = '' }: TrophyRoomProps) {
             />
           </svg>
         </div>
-        <p className="text-gray-500">아직 획득한 뱃지가 없습니다</p>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="text-neutral-500">아직 획득한 뱃지가 없습니다</p>
+        <p className="mt-1 text-sm text-neutral-400">
           성지를 방문하고 인증하면 뱃지를 획득할 수 있어요!
         </p>
       </div>
@@ -76,10 +76,10 @@ export function TrophyRoom({ badges, className = '' }: TrophyRoomProps) {
             </div>
 
             {/* 뱃지 정보 */}
-            <h3 className="font-bold text-gray-800">
+            <h3 className="font-bold text-neutral-800">
               {userBadge.badge?.name || '뱃지'}
             </h3>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-neutral-500">
               {formatDate(userBadge.earnedAt)}
             </p>
 

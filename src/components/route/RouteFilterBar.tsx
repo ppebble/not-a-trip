@@ -73,15 +73,15 @@ export function RouteFilterBar({
       {/* 정렬 + 텍스트 필터 */}
       <div className="flex flex-wrap items-center gap-2">
         {/* 정렬 */}
-        <div className="border-navy-200 flex rounded-lg border bg-white">
+        <div className="flex rounded-lg border border-border bg-white">
           {SORT_OPTIONS.map((opt) => (
             <button
               key={opt.value}
               onClick={() => updateFilter({ sort: opt.value })}
               className={`px-3 py-1.5 text-sm transition-colors ${
                 filters.sort === opt.value
-                  ? 'bg-navy-600 text-white'
-                  : 'text-navy-600 hover:bg-navy-50'
+                  ? 'bg-primary text-white'
+                  : 'text-primary hover:bg-primary-50'
               } ${opt.value === 'popular' ? 'rounded-l-lg' : ''} ${opt.value === 'duration' ? 'rounded-r-lg' : ''}`}
             >
               {opt.label}
@@ -95,7 +95,7 @@ export function RouteFilterBar({
           placeholder="작품명 검색"
           value={filters.contentName}
           onChange={(e) => updateFilter({ contentName: e.target.value })}
-          className="border-navy-200 text-navy-800 placeholder-navy-300 focus:border-navy-400 rounded-lg border bg-white px-3 py-1.5 text-sm outline-none"
+          className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm text-text-primary placeholder-muted outline-none focus:border-primary-400"
         />
 
         {/* 지역 필터 */}
@@ -104,7 +104,7 @@ export function RouteFilterBar({
           placeholder="지역 검색"
           value={filters.regionTag}
           onChange={(e) => updateFilter({ regionTag: e.target.value })}
-          className="border-navy-200 text-navy-800 placeholder-navy-300 focus:border-navy-400 rounded-lg border bg-white px-3 py-1.5 text-sm outline-none"
+          className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm text-text-primary placeholder-muted outline-none focus:border-primary-400"
         />
       </div>
 
@@ -116,8 +116,8 @@ export function RouteFilterBar({
             onClick={() => handleDurationPreset(preset)}
             className={`rounded-full px-3 py-1 text-xs transition-colors ${
               activeDurationIdx === idx
-                ? 'bg-navy-600 text-white'
-                : 'bg-navy-50 text-navy-600 hover:bg-navy-100'
+                ? 'bg-primary text-white'
+                : 'bg-primary-50 text-primary hover:bg-primary-100'
             }`}
           >
             {preset.label}

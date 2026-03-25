@@ -40,7 +40,7 @@ function InfoOrFallback({
   children: React.ReactNode
 }) {
   if (value === null || value === undefined) {
-    return <span className="text-xs text-gray-400">정보 미등록</span>
+    return <span className="text-xs text-neutral-400">정보 미등록</span>
   }
   return <>{children}</>
 }
@@ -60,7 +60,7 @@ function BoolBadge({
   falseIcon?: string
 }) {
   if (value === null || value === undefined) {
-    return <span className="text-xs text-gray-400">정보 미등록</span>
+    return <span className="text-xs text-neutral-400">정보 미등록</span>
   }
   if (value) {
     return (
@@ -70,7 +70,7 @@ function BoolBadge({
     )
   }
   return falseLabel ? (
-    <span className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500">
+    <span className="inline-flex items-center gap-0.5 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
       {falseIcon ?? '✕'} {falseLabel}
     </span>
   ) : null
@@ -83,7 +83,7 @@ function CoinLockerDetail({ details }: { details: CoinLockerDetails }) {
     <div className="mt-3 space-y-2 rounded-md bg-purple-50/50 p-3 text-sm">
       {/* 크기별 가격 테이블 */}
       <div>
-        <span className="mb-1 block text-xs font-semibold text-gray-500">
+        <span className="mb-1 block text-xs font-semibold text-neutral-500">
           크기 / 가격
         </span>
         {details.sizes.length > 0 ? (
@@ -96,7 +96,7 @@ function CoinLockerDetail({ details }: { details: CoinLockerDetails }) {
                 <span className="font-medium text-purple-700">
                   {LOCKER_SIZE_LABEL[size]}
                 </span>
-                <span className="ml-1 text-gray-600">
+                <span className="ml-1 text-neutral-600">
                   {details.prices[size] != null
                     ? `¥${details.prices[size]}`
                     : '가격 미등록'}
@@ -105,7 +105,7 @@ function CoinLockerDetail({ details }: { details: CoinLockerDetails }) {
             ))}
           </div>
         ) : (
-          <span className="text-xs text-gray-400">정보 미등록</span>
+          <span className="text-xs text-neutral-400">정보 미등록</span>
         )}
       </div>
 
@@ -118,7 +118,7 @@ function CoinLockerDetail({ details }: { details: CoinLockerDetails }) {
           falseIcon="✕"
         />
         <InfoOrFallback value={details.operatingHours}>
-          <span className="inline-flex items-center gap-0.5 text-xs text-gray-600">
+          <span className="inline-flex items-center gap-0.5 text-xs text-neutral-600">
             ⏰ {details.operatingHours}
           </span>
         </InfoOrFallback>
@@ -219,7 +219,7 @@ function GoodsShopDetail({ details }: { details: GoodsShopDetails }) {
         🛍️ {subtypeLabel}
       </span>
       <InfoOrFallback value={details.operatingHours}>
-        <span className="inline-flex items-center gap-0.5 text-xs text-gray-600">
+        <span className="inline-flex items-center gap-0.5 text-xs text-neutral-600">
           ⏰ {details.operatingHours}
         </span>
       </InfoOrFallback>
@@ -267,7 +267,7 @@ function VerificationBadge({ facility }: { facility: NearbyFacility }) {
         : 'text-red-500'
 
   return (
-    <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+    <div className="mt-2 flex items-center gap-3 text-xs text-neutral-500">
       <span className={`font-semibold ${scoreColor}`}>✅ 신뢰도 {score}%</span>
       <span>👍{facility.upvotes}</span>
       <span>👎{facility.downvotes}</span>
@@ -314,11 +314,11 @@ export default memo(function FacilityCard({
   const displayFacility = isOtaku ? { ...facility, ...voteData } : facility
 
   return (
-    <div className="rounded-lg border border-gray-200 p-4 transition-all hover:border-gray-300 hover:shadow-md">
+    <div className="rounded-lg border border-neutral-200 p-4 transition-all hover:border-neutral-300 hover:shadow-md">
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex items-center space-x-2">
-            <h4 className="truncate font-semibold text-gray-900">
+            <h4 className="truncate font-semibold text-neutral-900">
               {facility.name}
             </h4>
             <span
@@ -328,7 +328,7 @@ export default memo(function FacilityCard({
             </span>
           </div>
 
-          <div className="space-y-1 text-sm text-gray-600">
+          <div className="space-y-1 text-sm text-neutral-600">
             {showAddress && (
               <div className="flex items-center space-x-1">
                 <svg

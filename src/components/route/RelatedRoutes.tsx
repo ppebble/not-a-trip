@@ -21,14 +21,14 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
     return (
       <div className="overflow-hidden rounded-lg bg-white shadow-md">
         <div className="p-4 md:p-6">
-          <h2 className="mb-4 text-lg font-bold text-gray-900 md:text-xl">
+          <h2 className="mb-4 text-lg font-bold text-neutral-900 md:text-xl">
             🗺️ 관련 순례 코스
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {Array.from({ length: 2 }, (_, i) => (
               <div
                 key={i}
-                className="border-navy-200 w-64 flex-shrink-0 overflow-hidden rounded-lg border bg-white"
+                className="w-64 flex-shrink-0 overflow-hidden rounded-lg border border-border bg-white"
               >
                 <SkeletonBlock className="h-28 w-full rounded-none" />
                 <div className="p-3">
@@ -48,10 +48,10 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
       <div className="p-4 md:p-6">
-        <h2 className="mb-4 text-lg font-bold text-gray-900 md:text-xl">
+        <h2 className="mb-4 text-lg font-bold text-neutral-900 md:text-xl">
           🗺️ 관련 순례 코스
         </h2>
-        <p className="text-navy-500 mb-3 text-sm">
+        <p className="mb-3 text-sm text-muted">
           「{contentNames[0]}」 관련 코스를 따라가보세요
         </p>
         <div className="flex gap-4 overflow-x-auto pb-2">

@@ -11,13 +11,13 @@ import { ArrowLeftIcon, AlertTriangleIcon } from '@/components/icons'
 /** 코스 상세 페이지 스켈레톤 */
 function RouteDetailSkeleton() {
   return (
-    <main className="bg-navy-50 min-h-screen pt-14">
+    <main className="min-h-screen bg-background pt-14">
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="mb-4">
           <SkeletonBlock className="h-5 w-28" />
         </div>
         <div className="space-y-6">
-          <div className="rounded-lg bg-white p-6 shadow-sm">
+          <div className="rounded-lg bg-surface p-6 shadow-sm">
             <SkeletonBlock className="mb-2 h-5 w-24" />
             <SkeletonBlock className="mb-3 h-8 w-2/3" />
             <SkeletonBlock className="mb-4 h-4 w-full" />
@@ -47,16 +47,16 @@ function RouteDetailError({
   reset: () => void
 }) {
   return (
-    <main className="bg-navy-50 min-h-screen pt-14">
+    <main className="min-h-screen bg-background pt-14">
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="py-16 text-center">
-          <div className="mx-auto h-12 w-12 rounded-full bg-red-100 p-3">
+          <div className="mx-auto h-12 w-12 rounded-full bg-danger-surface p-3">
             <AlertTriangleIcon size={24} color="#dc2626" />
           </div>
-          <p className="mt-4 text-lg text-red-500">{error.message}</p>
+          <p className="mt-4 text-lg text-danger">{error.message}</p>
           <button
             onClick={reset}
-            className="bg-navy-600 hover:bg-navy-700 mt-4 rounded-lg px-4 py-2 text-sm text-white"
+            className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm text-white hover:bg-primary-600"
           >
             다시 시도
           </button>
@@ -93,13 +93,13 @@ function RouteDetailInner({ routeId }: { routeId: string }) {
   const { data: route } = useRouteDetailSuspense(routeId)
 
   return (
-    <main className="bg-navy-50 min-h-screen pt-14">
+    <main className="min-h-screen bg-background pt-14">
       <div className="mx-auto max-w-4xl px-4 py-6">
         {/* 뒤로가기 */}
         <div className="mb-4">
           <Link
             href="/routes"
-            className="text-navy-500 hover:text-navy-700 inline-flex items-center gap-1 text-sm transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-primary-700"
           >
             <ArrowLeftIcon size="sm" />
             코스 목록으로
@@ -110,10 +110,10 @@ function RouteDetailInner({ routeId }: { routeId: string }) {
           <RouteDetailContent route={route} />
         ) : (
           <div className="py-16 text-center">
-            <p className="text-lg text-gray-500">코스를 찾을 수 없습니다</p>
+            <p className="text-lg text-neutral-500">코스를 찾을 수 없습니다</p>
             <Link
               href="/routes"
-              className="bg-navy-600 hover:bg-navy-700 mt-4 inline-block rounded-lg px-4 py-2 text-sm text-white"
+              className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm text-white hover:bg-primary-600"
             >
               코스 목록으로 돌아가기
             </Link>

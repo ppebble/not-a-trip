@@ -49,8 +49,8 @@ export function SpotCheckInSection({
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">순례 인증</h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <h2 className="text-2xl font-bold text-neutral-900">순례 인증</h2>
+            <p className="mt-1 text-sm text-neutral-500">
               {checkInCount > 0
                 ? `${checkInCount}명이 이 장소를 인증했습니다`
                 : '첫 번째 순례자가 되어보세요!'}

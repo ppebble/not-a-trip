@@ -33,7 +33,7 @@ const FACILITY_CONFIG: Record<
   convenience_store: {
     label: '편의점',
     icon: '🏪',
-    color: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+    color: 'bg-primary-100 text-primary-800 border-primary-200',
   },
   cafe: {
     label: '카페',
@@ -48,7 +48,7 @@ const FACILITY_CONFIG: Record<
   other: {
     label: '기타',
     icon: '📍',
-    color: 'bg-gray-100 text-gray-800 border-gray-200',
+    color: 'bg-neutral-100 text-neutral-800 border-neutral-200',
   },
   // Otaku_Category
   coin_locker: {
@@ -181,7 +181,7 @@ export default function NearbyFacilities({
     return (
       <div className="rounded-lg bg-white p-6 shadow-md">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">근처 편의시설</h2>
+          <h2 className="text-2xl font-bold text-neutral-900">근처 편의시설</h2>
           <button
             onClick={() => setShowReportForm(true)}
             className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
@@ -191,7 +191,7 @@ export default function NearbyFacilities({
         </div>
         <div className="py-8 text-center">
           <div className="mb-2 text-4xl">🏪</div>
-          <p className="text-gray-500">근처에 등록된 편의시설이 없습니다.</p>
+          <p className="text-neutral-500">근처에 등록된 편의시설이 없습니다.</p>
         </div>
         <FacilityReportForm
           isOpen={showReportForm}
@@ -206,7 +206,7 @@ export default function NearbyFacilities({
   return (
     <div className="rounded-lg bg-white p-6 shadow-md">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-neutral-900">
           근처 편의시설 ({facilities.length}개)
         </h2>
         <button
@@ -239,16 +239,16 @@ export default function NearbyFacilities({
           return (
             <div
               key={type}
-              className="overflow-hidden rounded-lg border border-gray-200"
+              className="overflow-hidden rounded-lg border border-neutral-200"
             >
               {/* 아코디언 헤더 */}
               <button
                 onClick={() => toggleAccordion(type)}
-                className="flex w-full items-center justify-between bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100"
+                className="flex w-full items-center justify-between bg-neutral-50 px-4 py-3 transition-colors hover:bg-neutral-100"
               >
                 <div className="flex items-center space-x-2">
                   <span className="text-xl">{config.icon}</span>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-neutral-900">
                     {config.label}
                   </h3>
                   <span className="rounded-full bg-primary-100 px-2 py-0.5 text-sm font-medium text-primary-700">
@@ -256,7 +256,7 @@ export default function NearbyFacilities({
                   </span>
                 </div>
                 <svg
-                  className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+                  className={`h-5 w-5 text-neutral-500 transition-transform duration-200 ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                   fill="none"
@@ -274,7 +274,7 @@ export default function NearbyFacilities({
 
               {/* 아코디언 콘텐츠 */}
               {isOpen && (
-                <div className="border-t border-gray-200 p-4">
+                <div className="border-t border-neutral-200 p-4">
                   <div className="space-y-3">
                     {visibleFacilities.map((facility) => (
                       <FacilityCard
@@ -289,7 +289,7 @@ export default function NearbyFacilities({
                   {hasMore && (
                     <button
                       onClick={() => toggleExpand(type)}
-                      className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-200 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+                      className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-200 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-50"
                     >
                       {isExpanded ? (
                         <>

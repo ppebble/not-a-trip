@@ -145,7 +145,7 @@ export function CheckInModal({
           <button
             onClick={handleClose}
             disabled={isSubmitting || isUploading}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-surface"
           >
             <svg
               className="h-6 w-6"
@@ -165,9 +165,9 @@ export function CheckInModal({
 
         <form onSubmit={handleSubmit} className="p-4">
           {/* 스팟 정보 */}
-          <div className="mb-4 rounded-lg bg-gray-50 p-3">
-            <p className="text-sm text-gray-500">인증 장소</p>
-            <p className="font-medium">{spotName}</p>
+          <div className="mb-4 rounded-lg bg-surface p-3">
+            <p className="text-sm text-secondary">인증 장소</p>
+            <p className="font-medium text-text-primary">{spotName}</p>
           </div>
 
           {/* 씬 이미지 비교 (있는 경우) */}

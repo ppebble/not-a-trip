@@ -68,8 +68,8 @@ export default function MicroVoteButton({
 
   return (
     <>
-      <div className="mt-3 flex items-center gap-2 border-t border-gray-100 pt-3">
-        <span className="text-xs text-gray-500">이 정보가 정확한가요?</span>
+      <div className="mt-3 flex items-center gap-2 border-t border-neutral-100 pt-3">
+        <span className="text-xs text-secondary">이 정보가 정확한가요?</span>
         <div className="flex gap-1">
           <button
             onClick={() => handleVote(true)}
@@ -77,7 +77,7 @@ export default function MicroVoteButton({
             className={`inline-flex items-center gap-0.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
               vote === true
                 ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
-                : 'bg-gray-50 text-gray-500 hover:bg-green-50 hover:text-green-600'
+                : 'bg-surface text-secondary hover:bg-green-50 hover:text-green-600'
             } disabled:opacity-50`}
             aria-label="정확해요"
             aria-pressed={vote === true}
@@ -90,7 +90,7 @@ export default function MicroVoteButton({
             className={`inline-flex items-center gap-0.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
               vote === false
                 ? 'bg-red-100 text-red-700 ring-1 ring-red-300'
-                : 'bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-600'
+                : 'bg-surface text-secondary hover:bg-red-50 hover:text-red-600'
             } disabled:opacity-50`}
             aria-label="아니에요"
             aria-pressed={vote === false}
