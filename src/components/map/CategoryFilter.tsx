@@ -46,8 +46,8 @@ export default function CategoryFilter() {
         onClick={handleSelectAll}
         className={`h-9 rounded-full px-4 text-sm font-medium transition-all ${
           isAllSelected
-            ? 'bg-navy-600 text-white'
-            : 'text-navy-700 bg-white/80 hover:bg-white'
+            ? 'bg-primary text-white'
+            : 'bg-white/80 text-text-secondary hover:bg-white'
         }`}
       >
         전체
@@ -65,7 +65,7 @@ export default function CategoryFilter() {
             className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full px-4 text-sm font-medium transition-all ${
               isSelected
                 ? 'text-white shadow-md'
-                : 'text-navy-700 bg-white/80 hover:bg-white'
+                : 'bg-white/80 text-text-secondary hover:bg-white'
             }`}
             style={{
               backgroundColor: isSelected ? config.bgColor : undefined,

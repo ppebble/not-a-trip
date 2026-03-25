@@ -40,17 +40,17 @@ export function LoginRequiredModal({
             </svg>
           </div>
         </div>
-        <h3 className="text-navy-800 mb-2 text-center text-lg font-semibold">
+        <h3 className="mb-2 text-center text-lg font-semibold text-primary-800">
           {title}
         </h3>
-        <p className="text-navy-500 mb-6 text-center text-sm">
+        <p className="mb-6 text-center text-sm text-secondary">
           {description}
           <br />
           로그인 페이지로 이동합니다.
         </p>
         <button
           onClick={onConfirm}
-          className="bg-navy-600 hover:bg-navy-700 w-full rounded-lg py-2.5 text-sm font-medium text-white transition-colors"
+          className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700"
         >
           로그인하러 가기
         </button>

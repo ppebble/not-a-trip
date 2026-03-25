@@ -64,7 +64,7 @@ function containsRequiredInfo(
     html.includes('background-image') ||
     container.querySelector('img') !== null ||
     // Also accept placeholder content (div with emoji or specific styling)
-    container.querySelector('div[class*="bg-navy-100"]') !== null ||
+    container.querySelector('div[class*="bg-surface"]') !== null ||
     content.includes('🗾')
 
   return hasName && hasAddress && hasDescription && hasPhoto
@@ -220,7 +220,7 @@ describe('SpotPreview Required Information Property Tests', () => {
           // Check for either <img> element or placeholder div with emoji
           const hasImageElement =
             container.querySelector('img') !== null ||
-            container.querySelector('div[class*="bg-navy-100"]') !== null ||
+            container.querySelector('div[class*="bg-surface"]') !== null ||
             container.textContent?.includes('🗾') === true
 
           return hasName && hasAddress && hasDescription && hasImageElement

@@ -106,21 +106,21 @@ export default function AutocompleteDropdown({
     <div
       id={id}
       ref={dropdownRef}
-      className="absolute bottom-full left-0 z-50 mb-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
+      className="absolute bottom-full left-0 z-50 mb-1 w-full overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg"
       role="listbox"
       aria-label="자동완성 제안 목록"
     >
       {/* 로딩 상태 */}
       {isLoading && (
         <div className="flex items-center justify-center px-4 py-3">
-          <div className="border-t-navy-500 h-4 w-4 animate-spin rounded-full border-2 border-gray-300" />
-          <span className="ml-2 text-sm text-gray-500">검색 중...</span>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-neutral-300 border-t-primary" />
+          <span className="ml-2 text-sm text-neutral-500">검색 중...</span>
         </div>
       )}
 
       {/* 검색 결과 없음 (Requirements 2.5) */}
       {!isLoading && items.length === 0 && (
-        <div className="px-4 py-3 text-center text-sm text-gray-500">
+        <div className="px-4 py-3 text-center text-sm text-neutral-500">
           검색 결과 없음
         </div>
       )}
@@ -135,7 +135,7 @@ export default function AutocompleteDropdown({
               tabIndex={0}
               onClick={() => handleItemClick(item)}
               onKeyDown={(e) => handleKeyDown(e, item)}
-              className="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
+              className="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none"
               aria-selected="false"
             >
               <div className="flex items-center gap-2">
@@ -146,12 +146,14 @@ export default function AutocompleteDropdown({
                   className="flex-shrink-0"
                 />
                 {/* 콘텐츠명 */}
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-neutral-900">
                   {item.name}
                 </span>
               </div>
               {/* 스팟 개수 */}
-              <span className="text-xs text-gray-400">{item.count}개 스팟</span>
+              <span className="text-xs text-neutral-400">
+                {item.count}개 스팟
+              </span>
             </li>
           ))}
         </ul>

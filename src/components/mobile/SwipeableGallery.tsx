@@ -133,7 +133,7 @@ export default function SwipeableGallery({
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-[4/3] w-full items-center justify-center bg-gray-100 text-gray-400">
+      <div className="flex aspect-[4/3] w-full items-center justify-center bg-neutral-100 text-neutral-400">
         이미지가 없습니다
       </div>
     )
