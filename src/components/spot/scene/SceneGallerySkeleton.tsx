@@ -4,11 +4,11 @@ export function SceneGallerySkeleton() {
       {[1, 2].map((i) => (
         <div
           key={i}
-          className="animate-pulse overflow-hidden rounded-xl border border-gray-200"
+          className="animate-pulse overflow-hidden rounded-xl border border-neutral-200"
         >
-          <div className="aspect-[4/3] bg-gray-200" />
+          <div className="aspect-[4/3] bg-neutral-200" />
           <div className="px-3 py-2">
-            <div className="h-4 w-3/4 rounded bg-gray-200" />
+            <div className="h-4 w-3/4 rounded bg-neutral-200" />
           </div>
         </div>
       ))}
