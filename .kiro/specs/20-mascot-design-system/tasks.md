@@ -133,8 +133,8 @@
     - 로딩 shimmer: Neutral 컬러
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 8. 레거시 컬러 참조 전면 제거
-  - [ ] 8.1 컴포넌트 소스에서 navy-/slate-/blue- 클래스 제거
+- [-] 8. 레거시 컬러 참조 전면 제거
+  - [-] 8.1 컴포넌트 소스에서 navy-/slate-/blue- 클래스 제거
     - 모든 `.tsx`, `.ts`, `.css` 파일에서 `navy-*`, `slate-*`, `blue-*` Tailwind 클래스를 시맨틱 클래스로 교체
     - 하드코딩된 hex 컬러값을 CSS 변수 참조로 교체
     - _Requirements: 3.1, 3.3_
