@@ -80,13 +80,13 @@ class ErrorBoundary extends React.Component<
             <div className="mx-auto h-12 w-12 rounded-full bg-red-100 p-3">
               <AlertTriangleIcon size={24} color="#dc2626" />
             </div>
-            <p className="mt-4 text-sm text-gray-700">문제가 발생했습니다</p>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-4 text-sm text-neutral-700">문제가 발생했습니다</p>
+            <p className="mt-1 text-xs text-neutral-500">
               {this.state.error.message}
             </p>
             <button
               onClick={this.handleReset}
-              className="bg-navy-600 hover:bg-navy-500 mt-3 rounded px-4 py-2 text-sm text-white transition-colors"
+              className="mt-3 rounded bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary-500"
             >
               다시 시도
             </button>

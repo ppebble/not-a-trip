@@ -26,8 +26,8 @@ const MapContent = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full items-center justify-center bg-gray-100">
-        <p className="text-sm text-gray-400">지도 로딩 중...</p>
+      <div className="flex h-full items-center justify-center bg-neutral-100">
+        <p className="text-sm text-neutral-400">지도 로딩 중...</p>
       </div>
     ),
   }
@@ -68,13 +68,13 @@ export default function LocationPickerMap({
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
       <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* 헤더 */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-          <h3 className="text-sm font-bold text-gray-900">
+        <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
+          <h3 className="text-sm font-bold text-neutral-900">
             📍 지도에서 위치 선택
           </h3>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-md p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
             aria-label="닫기"
           >
             <svg
@@ -94,8 +94,8 @@ export default function LocationPickerMap({
         </div>
 
         {/* 안내 */}
-        <div className="border-b border-gray-100 bg-gray-50 px-4 py-2">
-          <p className="text-xs text-gray-500">
+        <div className="border-b border-neutral-100 bg-neutral-50 px-4 py-2">
+          <p className="text-xs text-neutral-500">
             지도를 클릭하여 편의시설 위치를 지정해주세요
           </p>
         </div>
@@ -110,13 +110,13 @@ export default function LocationPickerMap({
         </div>
 
         {/* 하단 버튼 */}
-        <div className="border-t border-gray-200 px-4 py-3">
+        <div className="border-t border-neutral-200 px-4 py-3">
           {selectedPos ? (
-            <div className="mb-2 text-center text-xs text-gray-500">
+            <div className="mb-2 text-center text-xs text-neutral-500">
               📍 {selectedPos.lat.toFixed(6)}, {selectedPos.lng.toFixed(6)}
             </div>
           ) : (
-            <div className="mb-2 text-center text-xs text-gray-400">
+            <div className="mb-2 text-center text-xs text-neutral-400">
               위치를 선택해주세요
             </div>
           )}
@@ -124,7 +124,7 @@ export default function LocationPickerMap({
             type="button"
             onClick={handleConfirm}
             disabled={!selectedPos}
-            className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:bg-gray-300 disabled:text-gray-500"
+            className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600 disabled:bg-neutral-300 disabled:text-neutral-500"
           >
             이 위치로 결정
           </button>

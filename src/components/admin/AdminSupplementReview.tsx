@@ -103,8 +103,10 @@ export function AdminSupplementReview({
         {/* 헤더 */}
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">정보 보완 상세</h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <h2 className="text-xl font-bold text-neutral-800">
+              정보 보완 상세
+            </h2>
+            <p className="mt-1 text-sm text-neutral-500">
               스팟 ID: {supplement.spotId}
             </p>
           </div>
@@ -112,26 +114,26 @@ export function AdminSupplementReview({
         </div>
 
         {/* 기본 정보 */}
-        <section className="rounded-lg border border-gray-200 bg-white p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-700">
+        <section className="rounded-lg border border-neutral-200 bg-white p-4">
+          <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             기본 정보
           </h3>
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <dt className="text-gray-400">보완 유형</dt>
-              <dd className="mt-0.5 font-medium text-gray-700">
+              <dt className="text-neutral-400">보완 유형</dt>
+              <dd className="mt-0.5 font-medium text-neutral-700">
                 {SUPPLEMENT_TYPE_LABELS[supplement.type] || supplement.type}
               </dd>
             </div>
             <div>
-              <dt className="text-gray-400">기여자</dt>
-              <dd className="mt-0.5 font-medium text-gray-700">
+              <dt className="text-neutral-400">기여자</dt>
+              <dd className="mt-0.5 font-medium text-neutral-700">
                 {supplement.contributorName}
               </dd>
             </div>
             <div>
-              <dt className="text-gray-400">제출일</dt>
-              <dd className="mt-0.5 font-medium text-gray-700">
+              <dt className="text-neutral-400">제출일</dt>
+              <dd className="mt-0.5 font-medium text-neutral-700">
                 {new Date(supplement.createdAt).toLocaleDateString('ko-KR', {
                   year: 'numeric',
                   month: 'long',
@@ -143,39 +145,39 @@ export function AdminSupplementReview({
         </section>
 
         {/* 보완 내용 */}
-        <section className="rounded-lg border border-gray-200 bg-white p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-700">
+        <section className="rounded-lg border border-neutral-200 bg-white p-4">
+          <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             보완 내용
           </h3>
-          <p className="whitespace-pre-wrap text-sm text-gray-700">
+          <p className="whitespace-pre-wrap text-sm text-neutral-700">
             {supplement.content}
           </p>
         </section>
 
         {/* 씬 정보 (scene_info 타입) */}
         {supplement.type === 'scene_info' && supplement.sceneInfo && (
-          <section className="rounded-lg border border-gray-200 bg-white p-4">
-            <h3 className="mb-3 text-sm font-semibold text-gray-700">
+          <section className="rounded-lg border border-neutral-200 bg-white p-4">
+            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               씬 정보
             </h3>
             <dl className="space-y-2 text-sm">
               <div>
-                <dt className="text-gray-400">작품명</dt>
-                <dd className="mt-0.5 font-medium text-gray-700">
+                <dt className="text-neutral-400">작품명</dt>
+                <dd className="mt-0.5 font-medium text-neutral-700">
                   {supplement.sceneInfo.animeTitle}
                 </dd>
               </div>
               {supplement.sceneInfo.episodeInfo && (
                 <div>
-                  <dt className="text-gray-400">에피소드</dt>
-                  <dd className="mt-0.5 font-medium text-gray-700">
+                  <dt className="text-neutral-400">에피소드</dt>
+                  <dd className="mt-0.5 font-medium text-neutral-700">
                     {supplement.sceneInfo.episodeInfo}
                   </dd>
                 </div>
               )}
               {supplement.sceneInfo.captureImageUrl && (
                 <div>
-                  <dt className="mb-1 text-gray-400">캡처 이미지</dt>
+                  <dt className="mb-1 text-neutral-400">캡처 이미지</dt>
                   <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg">
                     <Image
                       src={supplement.sceneInfo.captureImageUrl}
@@ -193,8 +195,8 @@ export function AdminSupplementReview({
 
         {/* 사진 (photo 타입) */}
         {supplement.photos && supplement.photos.length > 0 && (
-          <section className="rounded-lg border border-gray-200 bg-white p-4">
-            <h3 className="mb-3 text-sm font-semibold text-gray-700">
+          <section className="rounded-lg border border-neutral-200 bg-white p-4">
+            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               첨부 사진 ({supplement.photos.length}장)
             </h3>
             <div className="grid grid-cols-2 gap-3">
@@ -228,8 +230,10 @@ export function AdminSupplementReview({
 
         {/* 검토 액션 (pending 상태일 때만) */}
         {isPending && (
-          <section className="rounded-lg border border-gray-200 bg-white p-4">
-            <h3 className="mb-3 text-sm font-semibold text-gray-700">검토</h3>
+          <section className="rounded-lg border border-neutral-200 bg-white p-4">
+            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
+              검토
+            </h3>
 
             {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
 
@@ -243,7 +247,7 @@ export function AdminSupplementReview({
                   }}
                   placeholder="반려 사유를 입력하세요 (필수)"
                   rows={3}
-                  className="focus:border-navy-400 focus:ring-navy-400 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1"
+                  className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400"
                 />
                 <div className="flex gap-2">
                   <button
@@ -260,7 +264,7 @@ export function AdminSupplementReview({
                       setError(null)
                     }}
                     disabled={loading}
-                    className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 disabled:opacity-50"
+                    className="rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200 disabled:opacity-50"
                   >
                     취소
                   </button>
@@ -289,7 +293,7 @@ export function AdminSupplementReview({
 
         {/* 이미 처리된 보완 안내 */}
         {!isPending && supplement.status !== 'rejected' && (
-          <div className="rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
+          <div className="rounded-lg bg-neutral-50 p-4 text-center text-sm text-neutral-500">
             이미 처리된 정보 보완입니다
           </div>
         )}

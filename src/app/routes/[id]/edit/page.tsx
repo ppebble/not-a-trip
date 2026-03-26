@@ -59,13 +59,13 @@ export default function RouteEditPage() {
   const isAuthor = route && user && route.authorId === user.id
 
   return (
-    <main className="bg-navy-50 min-h-screen pt-14">
+    <main className="min-h-screen bg-primary-50 pt-14">
       <div className="mx-auto max-w-3xl px-4 py-6">
         {/* 뒤로가기 */}
         <div className="mb-4">
           <Link
             href={`/routes/${routeId}`}
-            className="text-navy-500 hover:text-navy-700 text-sm transition-colors"
+            className="hover:text-text-primary text-sm text-secondary transition-colors"
           >
             ← 코스 상세로
           </Link>
@@ -82,14 +82,14 @@ export default function RouteEditPage() {
             <p className="text-lg text-red-500">{error}</p>
             <button
               onClick={() => router.push('/routes')}
-              className="bg-navy-600 hover:bg-navy-700 mt-4 rounded-lg px-4 py-2 text-sm text-white"
+              className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm text-white hover:bg-primary-700"
             >
               코스 목록으로 돌아가기
             </button>
           </div>
         ) : route && isAuthor ? (
           <>
-            <h1 className="text-navy-900 mb-6 text-2xl font-bold">
+            <h1 className="mb-6 text-2xl font-bold text-primary">
               ✏️ 코스 수정
             </h1>
             <RouteFormContent initialRoute={route} isEditMode />

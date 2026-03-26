@@ -30,13 +30,13 @@ function LoadingSkeleton() {
       {[1, 2, 3, 4].map((i) => (
         <MasonryItem key={`skeleton-${i}`}>
           <div className="animate-pulse rounded-xl bg-white shadow-md">
-            <div className="bg-navy-200 aspect-[4/5] rounded-t-xl" />
+            <div className="aspect-[4/5] rounded-t-xl bg-border" />
             <div className="p-3">
               <div className="mb-2 flex items-center gap-2">
-                <div className="bg-navy-200 h-6 w-6 rounded-full" />
-                <div className="bg-navy-200 h-4 w-20 rounded" />
+                <div className="h-6 w-6 rounded-full bg-border" />
+                <div className="h-4 w-20 rounded bg-border" />
               </div>
-              <div className="bg-navy-100 h-4 w-32 rounded" />
+              <div className="h-4 w-32 rounded bg-surface" />
             </div>
           </div>
         </MasonryItem>
@@ -49,10 +49,10 @@ function EmptyFilteredState({ contentName }: { contentName: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">📸</div>
-      <p className="text-navy-700 text-lg font-medium">
+      <p className="text-text-secondary text-lg font-medium">
         &apos;{contentName}&apos; 관련 인증샷이 없어요
       </p>
-      <p className="text-navy-500 mt-2 text-sm">
+      <p className="mt-2 text-sm text-secondary">
         첫 번째 순례 인증샷을 올려보세요!
       </p>
     </div>
@@ -63,10 +63,12 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">😢</div>
-      <p className="text-navy-700 text-lg font-medium">
+      <p className="text-text-secondary text-lg font-medium">
         데이터를 불러올 수 없습니다
       </p>
-      <p className="text-navy-500 mt-2 text-sm">네트워크 연결을 확인해주세요</p>
+      <p className="mt-2 text-sm text-secondary">
+        네트워크 연결을 확인해주세요
+      </p>
       <button
         onClick={onRetry}
         className="mt-4 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
@@ -82,10 +84,10 @@ function ContentGridSkeleton() {
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
         <div key={i} className="animate-pulse rounded-xl bg-white shadow-md">
-          <div className="bg-navy-200 aspect-[3/4] rounded-t-xl" />
+          <div className="aspect-[3/4] rounded-t-xl bg-border" />
           <div className="p-3">
-            <div className="bg-navy-200 mb-2 h-4 w-3/4 rounded" />
-            <div className="bg-navy-100 h-3 w-1/2 rounded" />
+            <div className="mb-2 h-4 w-3/4 rounded bg-border" />
+            <div className="h-3 w-1/2 rounded bg-surface" />
           </div>
         </div>
       ))}
@@ -104,7 +106,7 @@ function FilteredFeedHeader({
     <div className="mb-6 flex items-center gap-3">
       <button
         onClick={onBack}
-        className="bg-navy-100 text-navy-600 hover:bg-navy-200 flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+        className="flex items-center gap-1 rounded-lg bg-surface px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-border"
         aria-label="작품 목록으로 돌아가기"
       >
         <svg
@@ -122,7 +124,7 @@ function FilteredFeedHeader({
         </svg>
         <span>목록</span>
       </button>
-      <h2 className="text-navy-800 text-lg font-semibold">{contentName}</h2>
+      <h2 className="text-lg font-semibold text-primary-800">{contentName}</h2>
     </div>
   )
 }
@@ -236,13 +238,13 @@ export function ContentTab({
           aria-hidden="true"
         >
           {isLoadingMore && (
-            <div className="text-navy-500 flex items-center gap-2">
-              <div className="border-navy-300 h-5 w-5 animate-spin rounded-full border-2 border-t-primary-500" />
+            <div className="flex items-center gap-2 text-secondary">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-300 border-t-primary-500" />
               <span className="text-sm">더 불러오는 중...</span>
             </div>
           )}
           {!hasMore && checkIns.length > 0 && (
-            <p className="text-navy-400 text-sm">모든 인증샷을 불러왔습니다</p>
+            <p className="text-sm text-muted">모든 인증샷을 불러왔습니다</p>
           )}
         </div>
       </div>

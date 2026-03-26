@@ -103,12 +103,12 @@ export default function SceneGallery({
       : '이 장소가 등장한 작품 속 장면들입니다. 마음에 드는 장면에 좋아요를 눌러주세요!'
 
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-md">
+    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
       <div className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{headerIcon}</span>
-            <h2 className="text-2xl font-bold text-gray-900">{headerText}</h2>
+            <h2 className="text-2xl font-bold text-main-text">{headerText}</h2>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
@@ -131,21 +131,21 @@ export default function SceneGallery({
           </button>
         </div>
 
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-sub-text">
           {descriptionText} (다시 클릭하면 취소됩니다)
         </p>
 
         {isLoading || isLoadingLikes ? (
           <SceneGallerySkeleton />
         ) : error ? (
-          <div className="py-8 text-center text-gray-500">
+          <div className="py-8 text-center text-sub-text">
             장면을 불러오는데 실패했습니다
           </div>
         ) : !scenes || scenes.length === 0 ? (
           <div className="py-8 text-center">
             <div className="mb-3 text-3xl">{headerIcon}</div>
-            <p className="text-gray-600">아직 등록된 장면이 없습니다</p>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="text-main-text">아직 등록된 장면이 없습니다</p>
+            <p className="mt-1 text-sm text-sub-text">
               첫 번째 장면을 추가해보세요!
             </p>
           </div>

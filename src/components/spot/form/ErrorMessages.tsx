@@ -6,7 +6,7 @@ export function ErrorMessages({ errors }: ErrorMessagesProps) {
   if (errors.length === 0) return null
 
   return (
-    <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+    <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-4">
       <div className="flex items-start gap-3">
         <svg
           className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-500"
@@ -22,8 +22,8 @@ export function ErrorMessages({ errors }: ErrorMessagesProps) {
           />
         </svg>
         <div>
-          <h3 className="font-medium text-red-800">입력 내용을 확인해주세요</h3>
-          <ul className="mt-1 list-inside list-disc text-sm text-red-700">
+          <h3 className="font-medium text-red-500">입력 내용을 확인해주세요</h3>
+          <ul className="mt-1 list-inside list-disc text-sm text-red-500/80">
             {errors.map((error, index) => (
               <li key={index}>{error}</li>
             ))}

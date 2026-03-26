@@ -104,11 +104,13 @@ export function ViewfinderOverlay({
         </button>
         <button
           onClick={handleStartCamera}
-          className="rounded-xl bg-blue-600 px-6 py-3 text-lg font-medium text-white"
+          className="rounded-xl bg-primary px-6 py-3 text-lg font-medium text-white"
         >
           카메라 시작
         </button>
-        <p className="mt-3 text-sm text-gray-400">카메라 권한을 허용해주세요</p>
+        <p className="mt-3 text-sm text-neutral-400">
+          카메라 권한을 허용해주세요
+        </p>
       </div>
     )
   }
@@ -218,7 +220,7 @@ export function ViewfinderOverlay({
           {/* 오버레이 토글 */}
           <button
             onClick={() => setShowOverlay(!showOverlay)}
-            className={`rounded-full p-2 ${showOverlay ? 'bg-blue-600' : 'bg-black/50'} text-white`}
+            className={`rounded-full p-2 ${showOverlay ? 'bg-primary' : 'bg-black/50'} text-white`}
             aria-label={showOverlay ? '오버레이 숨기기' : '오버레이 보기'}
           >
             <svg
@@ -272,7 +274,7 @@ export function ViewfinderOverlay({
               step="0.01"
               value={opacity}
               onChange={handleOpacityChange}
-              className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/30 accent-blue-500"
+              className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/30 accent-primary"
               aria-label="오버레이 투명도 조절"
             />
             <span className="text-xs text-white/70">50%</span>

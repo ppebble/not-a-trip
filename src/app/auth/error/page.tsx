@@ -32,7 +32,7 @@ function ErrorContent() {
     : errorMessages.Default
 
   return (
-    <div className="rounded-lg bg-slate-800 p-8">
+    <div className="rounded-lg bg-neutral-800 p-8">
       <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/20">
         <svg
           className="h-8 w-8 text-red-500"
@@ -50,18 +50,18 @@ function ErrorContent() {
       </div>
 
       <h1 className="mb-2 text-2xl font-bold text-white">인증 오류</h1>
-      <p className="mb-6 text-slate-400">{errorMessage}</p>
+      <p className="mb-6 text-neutral-400">{errorMessage}</p>
 
       <div className="space-y-3">
         <Link
           href="/auth/signin"
-          className="block w-full rounded-lg bg-blue-600 py-3 text-white transition hover:bg-blue-700"
+          className="block w-full rounded-lg bg-primary py-3 text-white transition hover:bg-primary-700"
         >
           다시 로그인하기
         </Link>
         <Link
           href="/"
-          className="block w-full rounded-lg bg-slate-700 py-3 text-white transition hover:bg-slate-600"
+          className="block w-full rounded-lg bg-neutral-700 py-3 text-white transition hover:bg-neutral-600"
         >
           메인으로 돌아가기
         </Link>
@@ -72,12 +72,12 @@ function ErrorContent() {
 
 export default function AuthErrorPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
       <div className="w-full max-w-md space-y-6 text-center">
         <Suspense
           fallback={
-            <div className="rounded-lg bg-slate-800 p-8">
-              <p className="text-slate-400">로딩 중...</p>
+            <div className="rounded-lg bg-neutral-800 p-8">
+              <p className="text-neutral-400">로딩 중...</p>
             </div>
           }
         >

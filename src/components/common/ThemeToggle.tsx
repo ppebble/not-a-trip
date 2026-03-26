@@ -32,7 +32,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={cycleTheme}
-      className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 transition hover:bg-slate-700 hover:text-white"
+      className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-300 transition hover:bg-neutral-700 hover:text-white"
       aria-label={`현재: ${label}. 클릭하여 테마 변경`}
       title={label}
     >

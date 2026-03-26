@@ -107,7 +107,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   return (
     <div
       ref={previewRef}
-      className={`animate-fade-in-up absolute z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
+      className={`animate-fade-in-up absolute z-[900] w-96 rounded-xl border border-border bg-surface shadow-xl ${className}`}
       style={{
         left: position.left,
         top: position.top,
@@ -124,8 +124,8 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
       {isLoading && (
         <div className="flex h-40 items-center justify-center">
           <div className="text-center">
-            <div className="border-navy-200 border-t-navy-600 mx-auto h-8 w-8 animate-spin rounded-full border-2"></div>
-            <p className="text-navy-600 mt-2 text-sm">로딩 중...</p>
+            <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary"></div>
+            <p className="mt-2 text-sm text-primary">로딩 중...</p>
           </div>
         </div>
       )}
@@ -134,7 +134,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
       {error && (
         <div className="flex h-40 flex-col items-center justify-center p-4">
           <div className="mb-2 text-3xl">😢</div>
-          <p className="text-navy-600 text-center text-sm">
+          <p className="text-center text-sm text-primary">
             정보를 불러올 수 없습니다
           </p>
         </div>
@@ -176,7 +176,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
                 priority
               />
             ) : (
-              <div className="bg-navy-100 flex h-full w-full items-center justify-center">
+              <div className="flex h-full w-full items-center justify-center bg-accent-surface">
                 <span className="text-4xl">🗾</span>
               </div>
             )}
@@ -188,13 +188,13 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
             {/* 스팟 이름 */}
             <h2
               id="spot-preview-title"
-              className="text-navy-800 mb-2 truncate text-lg font-bold"
+              className="mb-2 truncate text-lg font-bold text-main-text"
             >
               {spot.name}
             </h2>
 
             {/* 스팟 주소 */}
-            <div className="text-navy-600 mb-2 flex items-start space-x-1.5 text-sm">
+            <div className="mb-2 flex items-start space-x-1.5 text-sm text-sub-text">
               <svg
                 className="mt-0.5 h-4 w-4 flex-shrink-0"
                 fill="none"
@@ -218,14 +218,14 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
             </div>
 
             {/* 스팟 설명 */}
-            <p className="text-navy-700 mb-4 line-clamp-2 text-sm leading-relaxed">
+            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-sub-text">
               {spot.description}
             </p>
 
             {/* 상세보기 버튼 (Requirements 2.4) */}
             <button
               onClick={handleDetailClick}
-              className="bg-navy-600 hover:bg-navy-700 flex w-full items-center justify-center space-x-1.5 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors"
+              className="flex w-full items-center justify-center space-x-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
             >
               <span>자세히 보기</span>
               <svg

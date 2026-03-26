@@ -36,21 +36,20 @@ export function IosPwaPrompt() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 pb-safe-bottom">
-      <div className="mx-4 mb-4 rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
+      <div className="mx-4 mb-4 rounded-xl border border-neutral-200 bg-white p-4 shadow-lg">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-neutral-900">
               홈 화면에 추가하기
             </p>
-            <p className="mt-1 text-xs text-gray-500">
-              Safari 하단의{' '}
-              <span className="inline-block text-blue-500">⎙</span> 공유 버튼을
-              탭한 후 &quot;홈 화면에 추가&quot;를 선택하세요.
+            <p className="mt-1 text-xs text-neutral-500">
+              Safari 하단의 <span className="inline-block text-primary">⎙</span>{' '}
+              공유 버튼을 탭한 후 &quot;홈 화면에 추가&quot;를 선택하세요.
             </p>
           </div>
           <button
             onClick={handleDismiss}
-            className="ml-3 text-gray-400 hover:text-gray-600"
+            className="ml-3 text-neutral-400 hover:text-neutral-600"
             aria-label="닫기"
           >
             ✕

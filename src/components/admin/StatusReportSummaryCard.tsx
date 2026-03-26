@@ -59,23 +59,23 @@ export const StatusReportSummaryCard = React.memo(
         onClick={onClick}
         className={`w-full rounded-lg border p-3 text-left transition-colors ${
           isSelected
-            ? 'border-navy-400 bg-navy-50'
-            : 'border-gray-200 bg-white hover:bg-gray-50'
+            ? 'border-neutral-400 bg-primary-50'
+            : 'border-neutral-200 bg-white hover:bg-neutral-50'
         }`}
       >
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
+              <span className="rounded bg-neutral-100 px-1.5 py-0.5 text-xs font-medium text-neutral-600">
                 {SPOT_STATUS_LABELS[report.status] || report.status}
               </span>
               <ReviewStatusBadge reviewStatus={report.reviewStatus} />
             </div>
-            <p className="mt-1.5 truncate text-sm font-medium text-gray-800">
+            <p className="mt-1.5 truncate text-sm font-medium text-neutral-800">
               {report.description.slice(0, 50)}
               {report.description.length > 50 ? '...' : ''}
             </p>
-            <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+            <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500">
               <span>{report.reporterName}</span>
               <span>·</span>
               <span>

@@ -21,8 +21,8 @@ import {
 const RouteMap = dynamic(() => import('@/components/route/RouteMap'), {
   ssr: false,
   loading: () => (
-    <div className="bg-navy-100 flex h-[400px] items-center justify-center rounded-lg">
-      <div className="border-navy-300 border-t-navy-600 h-8 w-8 animate-spin rounded-full border-4" />
+    <div className="flex h-[400px] items-center justify-center rounded-lg bg-neutral-100">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-300 border-t-primary" />
     </div>
   ),
 })
@@ -134,17 +134,21 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                   ⭐ 공식 추천
                 </span>
               )}
-              <span className="text-navy-400 text-sm">
+              <span className="text-sm text-muted">
                 {DIFFICULTY_LABEL[route.difficulty]}
               </span>
             </div>
-            <h1 className="text-navy-900 text-2xl font-bold">{route.name}</h1>
-            <p className="text-navy-500 mt-2 text-sm">{route.description}</p>
+            <h1 className="text-text-primary text-2xl font-bold">
+              {route.name}
+            </h1>
+            <p className="text-text-secondary mt-2 text-sm">
+              {route.description}
+            </p>
           </div>
         </div>
 
         {/* 메타 정보 */}
-        <div className="text-navy-500 mb-4 flex flex-wrap gap-4 text-sm">
+        <div className="text-text-secondary mb-4 flex flex-wrap gap-4 text-sm">
           <span>📍 {availableSpots.length}곳</span>
           <span>⏱️ {formatDuration(route.estimatedDuration)}</span>
           <span>🚶 {formatDistance(route.totalDistance)}</span>
@@ -158,7 +162,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             {route.relatedContentNames.map((name) => (
               <span
                 key={name}
-                className="bg-navy-50 text-navy-600 rounded-full px-2.5 py-0.5 text-xs"
+                className="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs text-primary-600"
               >
                 {name}
               </span>
@@ -172,7 +176,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             {route.regionTags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-blue-600"
+                className="rounded-full bg-secondary-50 px-2.5 py-0.5 text-xs text-secondary-600"
               >
                 📍 {tag}
               </span>
@@ -181,7 +185,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         )}
 
         {/* 작성자 정보 */}
-        <div className="border-navy-100 text-navy-400 mt-4 border-t pt-4 text-sm">
+        <div className="mt-4 border-t border-border pt-4 text-sm text-muted">
           코스 제작: {route.authorName}
         </div>
       </div>
@@ -191,7 +195,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <div className="flex gap-3">
           <button
             onClick={handleStartRoute}
-            className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-3 text-sm font-semibold text-white transition-colors"
+            className="flex-1 rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
           >
             🚶 코스 시작
           </button>
@@ -201,7 +205,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             className={`rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
               isBookmarked
                 ? 'border-amber-400 bg-amber-50 text-amber-700'
-                : 'border-navy-200 text-navy-600 hover:bg-navy-50 bg-white'
+                : 'border-border bg-white text-primary hover:bg-primary-50'
             }`}
           >
             {isBookmarked ? '🔖 저장됨' : '🔖 저장'}
@@ -209,7 +213,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           {user && route.authorId === user.id && (
             <button
               onClick={() => router.push(`/routes/${route.id}/edit`)}
-              className="border-navy-200 text-navy-600 hover:bg-navy-50 rounded-lg border-2 bg-white px-4 py-3 text-sm transition-colors"
+              className="rounded-lg border-2 border-border bg-white px-4 py-3 text-sm text-primary transition-colors hover:bg-primary-50"
             >
               ✏️ 수정
             </button>
@@ -227,7 +231,9 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
       {/* 코스 지도 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
-        <h2 className="text-navy-900 mb-3 text-lg font-semibold">코스 지도</h2>
+        <h2 className="text-text-primary mb-3 text-lg font-semibold">
+          코스 지도
+        </h2>
         <RouteMap
           spots={route.spots}
           startPoint={route.startPoint}
@@ -238,8 +244,8 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       </div>
 
       {/* 스팟 순서 목록 */}
-      <div className="rounded-lg bg-white p-4 shadow-sm">
-        <h2 className="text-navy-900 mb-3 text-lg font-semibold">
+      <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-900">
+        <h2 className="text-text-primary mb-3 text-lg font-semibold dark:text-neutral-100">
           코스 순서 ({availableSpots.length}곳)
         </h2>
         <ol className="space-y-0">
@@ -254,24 +260,24 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
               const mode = info ? getTravelMode(info.distance) : null
               return (
                 <li>
-                  <div className="flex items-center gap-3 rounded-lg bg-blue-50 p-3">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm text-white">
+                  <div className="flex items-center gap-3 rounded-lg bg-primary-50 p-3">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm text-white">
                       🏠
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-navy-900 text-sm font-medium">
+                      <p className="text-text-primary text-sm font-medium">
                         {route.startPoint.name}
                       </p>
-                      <p className="text-navy-400 truncate text-xs">
+                      <p className="truncate text-xs text-muted">
                         {route.startPoint.address}
                       </p>
                     </div>
                   </div>
                   {info && mode && (
                     <div className="flex items-center gap-2 py-2 pl-8">
-                      <div className="bg-navy-200 h-4 w-px" />
+                      <div className="h-4 w-px bg-neutral-200" />
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-navy-400 text-xs">
+                        <span className="text-xs text-muted">
                           ↓ {formatDistance(info.distance)}
                           {' · '}
                           {getTravelModeIcon(mode)}{' '}
@@ -290,7 +296,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                            className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary-100"
                           >
                             🗺️ 구글맵 길찾기
                           </a>
@@ -309,13 +315,13 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                 {/* 이동 거리/시간 표시 (첫 스팟 제외) */}
                 {idx > 0 && spot.distanceFromPrev && (
                   <div className="flex items-center gap-2 py-2 pl-8">
-                    <div className="bg-navy-200 h-4 w-px" />
+                    <div className="h-4 w-px bg-neutral-200" />
                     {(() => {
                       const mode = getTravelMode(spot.distanceFromPrev)
                       const prev = route.spots[idx - 1]
                       return (
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-navy-400 text-xs">
+                          <span className="text-xs text-muted">
                             ↓ {formatDistance(spot.distanceFromPrev)}
                             {' · '}
                             {getTravelModeIcon(mode)}{' '}
@@ -334,7 +340,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                               )}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                              className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary-100"
                             >
                               🗺️ 구글맵 길찾기
                             </a>
@@ -348,20 +354,22 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                 {/* 스팟 카드 */}
                 <div
                   className={`flex items-center gap-3 rounded-lg p-3 ${
-                    isUnavailable ? 'bg-gray-50 opacity-60' : 'hover:bg-navy-50'
+                    isUnavailable
+                      ? 'bg-neutral-50 opacity-60'
+                      : 'hover:bg-surface'
                   }`}
                 >
                   {/* 순서 번호 */}
                   <div
                     className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${
-                      isUnavailable ? 'bg-gray-400' : 'bg-navy-600'
+                      isUnavailable ? 'bg-neutral-400' : 'bg-primary'
                     }`}
                   >
                     {idx + 1}
                   </div>
 
                   {/* 썸네일 */}
-                  <div className="bg-navy-100 h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
+                  <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-surface">
                     {spot.thumbnailUrl ? (
                       <OptimizedImage
                         src={spot.thumbnailUrl}
@@ -371,7 +379,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="text-navy-300 flex h-full items-center justify-center text-lg">
+                      <div className="flex h-full items-center justify-center text-lg text-neutral-300">
                         📍
                       </div>
                     )}
@@ -382,8 +390,8 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                     <p
                       className={`truncate text-sm font-medium ${
                         isUnavailable
-                          ? 'text-gray-400 line-through'
-                          : 'text-navy-900'
+                          ? 'text-neutral-400 line-through'
+                          : 'text-text-primary'
                       }`}
                     >
                       {spot.spotName}
@@ -392,9 +400,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                       <p className="text-xs text-red-400">소실된 스팟</p>
                     )}
                     {spot.note && (
-                      <p className="text-navy-400 truncate text-xs">
-                        {spot.note}
-                      </p>
+                      <p className="truncate text-xs text-muted">{spot.note}</p>
                     )}
                   </div>
 

@@ -316,17 +316,17 @@ export default function AdminContentImagesPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="rounded-lg border border-gray-300 px-4 py-2 disabled:opacity-50"
+              className="rounded-lg border border-neutral-300 px-4 py-2 disabled:opacity-50"
             >
               이전
             </button>
-            <span className="px-4 py-2 text-gray-600">
+            <span className="px-4 py-2 text-neutral-600">
               {page} / {totalPages}
             </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="rounded-lg border border-gray-300 px-4 py-2 disabled:opacity-50"
+              className="rounded-lg border border-neutral-300 px-4 py-2 disabled:opacity-50"
             >
               다음
             </button>

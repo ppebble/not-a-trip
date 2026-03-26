@@ -16,10 +16,10 @@ export default function MyReportsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50">
-        <div className="border-b border-slate-200 bg-white px-4 py-4">
+      <div className="min-h-screen bg-neutral-50">
+        <div className="border-b border-neutral-200 bg-white px-4 py-4">
           <div className="mx-auto max-w-lg">
-            <div className="bg-navy-100 h-6 w-32 animate-pulse rounded" />
+            <div className="h-6 w-32 animate-pulse rounded bg-surface" />
           </div>
         </div>
         <div className="mx-auto max-w-lg px-4 py-6">
@@ -27,7 +27,7 @@ export default function MyReportsPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="bg-navy-50 h-24 animate-pulse rounded-lg"
+                className="h-24 animate-pulse rounded-lg bg-primary-50"
               />
             ))}
           </div>
@@ -42,19 +42,19 @@ export default function MyReportsPage() {
         isOpen={true}
         title="로그인이 필요한 서비스입니다"
         description="내 제보 목록을 확인하려면 로그인이 필요합니다."
-        onConfirm={() => router.push('/auth/login')}
+        onConfirm={() => router.push('/auth/signin')}
       />
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-slate-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-lg">
           <Link
             href="/"
-            className="text-navy-500 hover:text-navy-700 flex items-center gap-2 text-sm"
+            className="hover:text-text-primary flex items-center gap-2 text-sm text-secondary"
           >
             <svg
               className="h-4 w-4"
@@ -72,10 +72,10 @@ export default function MyReportsPage() {
             홈으로
           </Link>
           <div className="mt-2 flex items-center justify-between">
-            <h1 className="text-navy-800 text-xl font-bold">내 제보 목록</h1>
+            <h1 className="text-xl font-bold text-primary">내 제보 목록</h1>
             <Link
               href="/reports/new"
-              className="bg-navy-600 hover:bg-navy-700 rounded-lg px-4 py-2 text-sm font-medium text-white"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
             >
               새 제보
             </Link>

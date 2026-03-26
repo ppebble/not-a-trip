@@ -25,7 +25,7 @@ export function AdminDashboardCard({
   return (
     <Link
       href={href}
-      className="group block rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-blue-300 hover:shadow-md"
+      className="group block rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-md"
     >
       <div className="flex items-start justify-between">
         <span className="text-3xl" role="img" aria-label={title}>
@@ -37,10 +37,10 @@ export function AdminDashboardCard({
           </span>
         )}
       </div>
-      <h2 className="mt-4 text-lg font-bold text-gray-800 group-hover:text-blue-600">
+      <h2 className="mt-4 text-lg font-bold text-neutral-800 group-hover:text-primary">
         {title}
       </h2>
-      <p className="mt-1 text-sm text-gray-500">{description}</p>
+      <p className="mt-1 text-sm text-neutral-500">{description}</p>
     </Link>
   )
 }

@@ -221,7 +221,7 @@ export function LocationPicker({
         <button
           type="button"
           onClick={() => mapRef.current?.zoomIn()}
-          className="flex h-8 w-8 items-center justify-center rounded bg-white shadow-md transition-colors hover:bg-gray-100"
+          className="flex h-8 w-8 items-center justify-center rounded bg-white shadow-md transition-colors hover:bg-neutral-100"
           aria-label="확대"
         >
           <svg
@@ -241,7 +241,7 @@ export function LocationPicker({
         <button
           type="button"
           onClick={() => mapRef.current?.zoomOut()}
-          className="flex h-8 w-8 items-center justify-center rounded bg-white shadow-md transition-colors hover:bg-gray-100"
+          className="flex h-8 w-8 items-center justify-center rounded bg-white shadow-md transition-colors hover:bg-neutral-100"
           aria-label="축소"
         >
           <svg
@@ -263,7 +263,7 @@ export function LocationPicker({
       {/* 선택된 좌표 표시 */}
       {markerPosition && (
         <div className="mt-2 rounded-lg border border-border bg-surface p-2">
-          <p className="text-xs text-text-secondary">
+          <p className="text-text-secondary text-xs">
             📍 {markerPosition.lat.toFixed(6)}, {markerPosition.lng.toFixed(6)}
           </p>
         </div>

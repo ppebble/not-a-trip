@@ -235,10 +235,10 @@ function WriteForm() {
         )}
         {/* 자유게시판 모드 안내 */}
         {isGeneralMode && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <div className="rounded-lg border border-primary-200 bg-accent-surface p-4">
             <div className="flex items-center gap-2">
               <svg
-                className="h-5 w-5 text-blue-600"
+                className="h-5 w-5 text-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -251,8 +251,8 @@ function WriteForm() {
                 />
               </svg>
               <div>
-                <p className="font-medium text-blue-800">자유게시판</p>
-                <p className="text-sm text-blue-600">
+                <p className="font-medium text-primary-800">자유게시판</p>
+                <p className="text-sm text-primary">
                   스팟이나 작품과 관계없이 자유롭게 이야기를 나눠보세요.
                 </p>
               </div>
@@ -262,11 +262,11 @@ function WriteForm() {
 
         {/* 연결된 스팟 정보 표시 (자유게시판 모드가 아닐 때만) */}
         {!isGeneralMode && spotId && spotName && (
-          <div className="border-navy-200 bg-navy-50 rounded-lg border p-4">
+          <div className="rounded-lg border border-neutral-200 bg-primary-50 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <svg
-                  className="text-navy-600 h-5 w-5"
+                  className="h-5 w-5 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -285,14 +285,14 @@ function WriteForm() {
                   />
                 </svg>
                 <div>
-                  <p className="text-navy-500 text-xs">연결된 스팟</p>
-                  <p className="text-navy-800 font-medium">{spotName}</p>
+                  <p className="text-xs text-secondary">연결된 스팟</p>
+                  <p className="font-medium text-primary">{spotName}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={handleRemoveSpot}
-                className="text-navy-400 hover:bg-navy-100 hover:text-navy-600 rounded p-1 transition-colors"
+                className="rounded p-1 text-neutral-400 transition-colors hover:bg-surface hover:text-primary"
                 title="스팟 연결 해제"
               >
                 <svg
@@ -352,7 +352,7 @@ function WriteForm() {
         <div>
           <label
             htmlFor="title"
-            className="text-navy-700 mb-2 block text-sm font-medium"
+            className="text-text-primary mb-2 block text-sm font-medium"
           >
             제목 <span className="text-red-500">*</span>
           </label>
@@ -362,10 +362,10 @@ function WriteForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력하세요"
-            className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+            className="w-full rounded-lg border border-neutral-200 px-4 py-3 text-primary placeholder-neutral-400 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             maxLength={100}
           />
-          <p className="text-navy-400 mt-1 text-right text-xs">
+          <p className="mt-1 text-right text-xs text-neutral-400">
             {title.length}/100
           </p>
         </div>
@@ -374,7 +374,7 @@ function WriteForm() {
         <div>
           <label
             htmlFor="author"
-            className="text-navy-700 mb-2 block text-sm font-medium"
+            className="text-text-primary mb-2 block text-sm font-medium"
           >
             작성자 <span className="text-red-500">*</span>
           </label>
@@ -386,7 +386,7 @@ function WriteForm() {
                 id="author"
                 value={author}
                 readOnly
-                className="border-navy-200 bg-navy-50 text-navy-600 w-full cursor-not-allowed rounded-lg border px-4 py-3 focus:outline-none"
+                className="w-full cursor-not-allowed rounded-lg border border-neutral-200 bg-primary-50 px-4 py-3 text-secondary focus:outline-none"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                 <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
@@ -402,12 +402,12 @@ function WriteForm() {
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               placeholder="닉네임을 입력하세요"
-              className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+              className="w-full rounded-lg border border-neutral-200 px-4 py-3 text-primary placeholder-neutral-400 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               maxLength={30}
             />
           )}
           {!isAuthenticated && (
-            <p className="text-navy-400 mt-1 text-right text-xs">
+            <p className="mt-1 text-right text-xs text-neutral-400">
               {author.length}/30
             </p>
           )}
@@ -418,7 +418,7 @@ function WriteForm() {
           <div>
             <label
               htmlFor="password"
-              className="text-navy-700 mb-2 block text-sm font-medium"
+              className="text-text-primary mb-2 block text-sm font-medium"
             >
               비밀번호 <span className="text-red-500">*</span>
             </label>
@@ -428,10 +428,10 @@ function WriteForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="수정/삭제 시 필요한 비밀번호 (4자 이상)"
-              className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+              className="w-full rounded-lg border border-neutral-200 px-4 py-3 text-primary placeholder-neutral-400 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               maxLength={50}
             />
-            <p className="text-navy-400 mt-1 text-xs">
+            <p className="mt-1 text-xs text-neutral-400">
               게시글 수정/삭제 시 이 비밀번호가 필요합니다.
             </p>
           </div>
@@ -441,7 +441,7 @@ function WriteForm() {
         <div>
           <label
             htmlFor="content"
-            className="text-navy-700 mb-2 block text-sm font-medium"
+            className="text-text-primary mb-2 block text-sm font-medium"
           >
             내용 <span className="text-red-500">*</span>
           </label>
@@ -451,26 +451,26 @@ function WriteForm() {
             onChange={(e) => setContent(e.target.value)}
             placeholder="내용을 입력하세요"
             rows={10}
-            className="border-navy-200 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:ring-navy-500/20 w-full resize-none rounded-lg border px-4 py-3 transition-colors focus:outline-none focus:ring-2"
+            className="w-full resize-none rounded-lg border border-neutral-200 px-4 py-3 text-primary placeholder-neutral-400 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             maxLength={5000}
           />
-          <p className="text-navy-400 mt-1 text-right text-xs">
+          <p className="mt-1 text-right text-xs text-neutral-400">
             {content.length}/5000
           </p>
         </div>
 
         {/* 버튼 영역 */}
-        <div className="border-navy-100 flex items-center justify-end gap-3 border-t pt-6">
+        <div className="flex items-center justify-end gap-3 border-t border-neutral-100 pt-6">
           <Link
             href="/community"
-            className="border-navy-300 text-navy-600 hover:bg-navy-50 rounded-lg border px-6 py-2.5 text-sm font-medium transition-colors"
+            className="rounded-lg border border-neutral-300 px-6 py-2.5 text-sm font-medium text-secondary transition-colors hover:bg-primary-50"
           >
             취소
           </Link>
           <button
             type="submit"
             disabled={createPost.isPending}
-            className="bg-navy-600 hover:bg-navy-700 rounded-lg px-6 py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {createPost.isPending ? (
               <span className="flex items-center gap-2">
@@ -512,22 +512,22 @@ function WriteFormSkeleton() {
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
       <div className="animate-pulse space-y-6">
-        <div className="h-16 w-full rounded-lg bg-gray-200"></div>
+        <div className="h-16 w-full rounded-lg bg-neutral-200"></div>
         <div>
-          <div className="mb-2 h-4 w-16 rounded bg-gray-200"></div>
-          <div className="h-12 w-full rounded-lg bg-gray-200"></div>
+          <div className="mb-2 h-4 w-16 rounded bg-neutral-200"></div>
+          <div className="h-12 w-full rounded-lg bg-neutral-200"></div>
         </div>
         <div>
-          <div className="mb-2 h-4 w-16 rounded bg-gray-200"></div>
-          <div className="h-12 w-full rounded-lg bg-gray-200"></div>
+          <div className="mb-2 h-4 w-16 rounded bg-neutral-200"></div>
+          <div className="h-12 w-full rounded-lg bg-neutral-200"></div>
         </div>
         <div>
-          <div className="mb-2 h-4 w-16 rounded bg-gray-200"></div>
-          <div className="h-12 w-full rounded-lg bg-gray-200"></div>
+          <div className="mb-2 h-4 w-16 rounded bg-neutral-200"></div>
+          <div className="h-12 w-full rounded-lg bg-neutral-200"></div>
         </div>
         <div>
-          <div className="mb-2 h-4 w-16 rounded bg-gray-200"></div>
-          <div className="h-48 w-full rounded-lg bg-gray-200"></div>
+          <div className="mb-2 h-4 w-16 rounded bg-neutral-200"></div>
+          <div className="h-48 w-full rounded-lg bg-neutral-200"></div>
         </div>
       </div>
     </div>
@@ -548,12 +548,14 @@ function WriteFormSkeleton() {
  */
 export default function WritePage() {
   return (
-    <main className="bg-navy-50 min-h-screen">
+    <main className="min-h-screen bg-primary-50">
       {/* 페이지 타이틀 */}
-      <div className="border-navy-200 border-b bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-navy-800 text-xl font-bold">게시글 작성</h1>
-          <p className="text-navy-500 text-sm">특별한 여행 경험을 공유하세요</p>
+          <h1 className="text-xl font-bold text-primary">게시글 작성</h1>
+          <p className="text-sm text-secondary">
+            특별한 여행 경험을 공유하세요
+          </p>
         </div>
       </div>
 

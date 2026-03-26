@@ -132,7 +132,7 @@ export function RelatedContentForm({
       {/* 콘텐츠 개수 표시 */}
       {value.length > 0 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-text-secondary">
+          <span className="text-text-secondary text-sm font-medium">
             추가된 콘텐츠 <span className="text-muted">({value.length}개)</span>
           </span>
           {isMaxReached && (
@@ -168,7 +168,7 @@ export function RelatedContentForm({
           <div className="space-y-3">
             {/* 콘텐츠 타입 */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-text-secondary">
+              <label className="text-text-secondary mb-1 block text-sm font-medium">
                 콘텐츠 타입
               </label>
               <select
@@ -179,7 +179,7 @@ export function RelatedContentForm({
                     type: e.target.value as ContentType,
                   })
                 }
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="text-text-primary w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
                 {(Object.keys(CONTENT_TYPE_LABELS) as ContentType[]).map(
                   (type) => (
@@ -193,7 +193,7 @@ export function RelatedContentForm({
 
             {/* 콘텐츠 이름 */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-text-secondary">
+              <label className="text-text-secondary mb-1 block text-sm font-medium">
                 이름 <span className="text-red-500">*</span>
               </label>
               <input
@@ -204,13 +204,13 @@ export function RelatedContentForm({
                   setDuplicateWarning(null)
                 }}
                 placeholder="작품명, 팀명, 아티스트명 등"
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="text-text-primary w-full rounded-lg border border-border px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
             {/* 연도 */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-text-secondary">
+              <label className="text-text-secondary mb-1 block text-sm font-medium">
                 연도 <span className="text-xs text-muted">(선택)</span>
               </label>
               <input
@@ -225,13 +225,13 @@ export function RelatedContentForm({
                 placeholder="2024"
                 min={1900}
                 max={2100}
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="text-text-primary w-full rounded-lg border border-border px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
             {/* 추가 정보 */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-text-secondary">
+              <label className="text-text-secondary mb-1 block text-sm font-medium">
                 추가 정보 <span className="text-xs text-muted">(선택)</span>
               </label>
               <input
@@ -244,7 +244,7 @@ export function RelatedContentForm({
                   })
                 }
                 placeholder="에피소드, 시즌, 앨범명 등"
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="text-text-primary w-full rounded-lg border border-border px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>

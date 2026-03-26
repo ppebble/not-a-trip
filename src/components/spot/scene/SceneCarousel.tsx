@@ -79,11 +79,11 @@ export function SceneCarousel({
         <>
           <button
             onClick={goToPrev}
-            className="absolute -left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl"
+            className="absolute -left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-surface hover:shadow-xl"
             aria-label="이전 장면"
           >
             <svg
-              className="h-6 w-6 text-gray-700"
+              className="h-6 w-6 text-secondary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -98,11 +98,11 @@ export function SceneCarousel({
           </button>
           <button
             onClick={goToNext}
-            className="absolute -right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl"
+            className="absolute -right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-surface hover:shadow-xl"
             aria-label="다음 장면"
           >
             <svg
-              className="h-6 w-6 text-gray-700"
+              className="h-6 w-6 text-secondary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -127,7 +127,7 @@ export function SceneCarousel({
               className={`h-2.5 rounded-full transition-all ${
                 index === currentIndex
                   ? 'w-8 bg-primary'
-                  : 'w-2.5 bg-gray-300 hover:bg-gray-400'
+                  : 'w-2.5 bg-neutral-300 hover:bg-neutral-400'
               }`}
               aria-label={`${index + 1}번째 슬라이드로 이동`}
             />

@@ -68,7 +68,7 @@ export function AdminStatusReportList({
   return (
     <div className="flex h-full flex-col">
       {/* 필터 영역 */}
-      <div className="space-y-2 border-b border-gray-200 p-3">
+      <div className="space-y-2 border-b border-neutral-200 p-3">
         <div className="flex flex-wrap gap-1.5">
           {REVIEW_STATUS_FILTERS.map((filter) => (
             <button
@@ -76,8 +76,8 @@ export function AdminStatusReportList({
               onClick={() => handleReviewStatusChange(filter.value)}
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 reviewStatusFilter === filter.value
-                  ? 'bg-navy-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-primary text-white'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               }`}
             >
               {filter.label}
@@ -91,15 +91,15 @@ export function AdminStatusReportList({
               onClick={() => handleStatusChange(filter.value)}
               className={`rounded-full px-2.5 py-0.5 text-xs transition-colors ${
                 statusFilter === filter.value
-                  ? 'bg-gray-700 text-white'
-                  : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                  ? 'bg-neutral-700 text-white'
+                  : 'bg-neutral-50 text-neutral-500 hover:bg-neutral-100'
               }`}
             >
               {filter.label}
             </button>
           ))}
         </div>
-        <p className="text-xs text-gray-400">총 {total}건</p>
+        <p className="text-xs text-neutral-400">총 {total}건</p>
       </div>
 
       {/* 목록 */}
@@ -109,12 +109,12 @@ export function AdminStatusReportList({
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="h-20 animate-pulse rounded-lg bg-gray-100"
+                className="h-20 animate-pulse rounded-lg bg-neutral-100"
               />
             ))}
           </div>
         ) : reports.length === 0 ? (
-          <div className="py-12 text-center text-sm text-gray-400">
+          <div className="py-12 text-center text-sm text-neutral-400">
             {reviewStatusFilter === 'pending'
               ? '대기 중인 상태 신고가 없습니다'
               : '해당 조건의 상태 신고가 없습니다'}
@@ -135,21 +135,21 @@ export function AdminStatusReportList({
 
       {/* 페이지네이션 */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 border-t border-gray-200 p-2">
+        <div className="flex items-center justify-center gap-2 border-t border-neutral-200 p-2">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="rounded px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30"
+            className="rounded px-2 py-1 text-xs text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
           >
             이전
           </button>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-neutral-500">
             {page} / {totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="rounded px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30"
+            className="rounded px-2 py-1 text-xs text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
           >
             다음
           </button>

@@ -29,19 +29,19 @@ function createNumberIcon(
   isChecked: boolean,
   isCurrent: boolean
 ): DivIcon {
-  let bgColor = '#345084' // navy-600
-  let borderColor = '#4164a5' // navy-500
+  let bgColor = 'rgb(var(--color-primary-600))' // primary-600
+  let borderColor = 'rgb(var(--color-primary-500))' // primary-500
   let textDecoration = ''
 
   if (!isAvailable) {
-    bgColor = '#9ca3af' // gray-400
-    borderColor = '#6b7280' // gray-500
+    bgColor = '#bab4ac' // neutral-400
+    borderColor = '#948e86' // neutral-500
     textDecoration = 'line-through'
   } else if (isChecked) {
     bgColor = '#16a34a' // green-600
     borderColor = '#22c55e' // green-500
   } else if (isCurrent) {
-    bgColor = '#dc2626' // red-600
+    bgColor = 'rgb(var(--color-danger))' // danger
     borderColor = '#ef4444' // red-500
   }
 
@@ -66,7 +66,7 @@ const startPointIcon = new DivIcon({
   className: 'start-point-marker',
   html: `<div style="
     width:28px;height:28px;border-radius:50%;
-    background:#2563eb;border:2px solid #1d4ed8;
+    background:rgb(var(--color-primary-500));border:2px solid rgb(var(--color-primary-700));
     color:white;font-size:14px;
     display:flex;align-items:center;justify-content:center;
     box-shadow:0 2px 6px rgba(0,0,0,0.3);
@@ -81,8 +81,8 @@ const currentLocationIcon = new DivIcon({
   className: 'current-location-marker',
   html: `<div style="
     width:16px;height:16px;border-radius:50%;
-    background:#3b82f6;border:3px solid white;
-    box-shadow:0 0 0 2px #3b82f6,0 2px 8px rgba(59,130,246,0.5);
+    background:rgb(var(--color-primary-500));border:3px solid white;
+    box-shadow:0 0 0 2px rgb(var(--color-primary-500)),0 2px 8px rgba(95,82,200,0.5);
   "></div>`,
   iconSize: [16, 16],
   iconAnchor: [8, 8],
@@ -214,7 +214,7 @@ export default function RouteMap({
         center={defaultCenter}
         zoom={13}
         style={{ height: '100%', width: '100%' }}
-        className="border-navy-200 overflow-hidden rounded-lg border-2"
+        className="overflow-hidden rounded-lg border-2 border-border"
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
@@ -232,7 +232,9 @@ export default function RouteMap({
             key={`segment-${idx}`}
             positions={segment.positions}
             pathOptions={{
-              color: segment.isDashed ? '#6b7280' : '#345084',
+              color: segment.isDashed
+                ? '#948e86'
+                : 'rgb(var(--color-primary-600))',
               weight: segment.isDashed ? 2 : 3,
               opacity: segment.isDashed ? 0.6 : 0.8,
               dashArray: segment.isDashed ? '8, 8' : undefined,
@@ -246,7 +248,7 @@ export default function RouteMap({
             key={`unavail-${idx}`}
             positions={segment}
             pathOptions={{
-              color: '#9ca3af',
+              color: '#bab4ac',
               weight: 2,
               opacity: 0.5,
               dashArray: '8, 8',
@@ -277,7 +279,10 @@ export default function RouteMap({
                   ],
                 ]}
                 pathOptions={{
-                  color: mode === 'walking' ? '#2563eb' : '#6b7280',
+                  color:
+                    mode === 'walking'
+                      ? 'rgb(var(--color-primary-500))'
+                      : '#948e86',
                   weight: 2,
                   opacity: 0.6,
                   dashArray: '6, 6',
@@ -294,10 +299,10 @@ export default function RouteMap({
           >
             <Popup>
               <div className="min-w-[140px] p-1">
-                <p className="text-navy-900 text-sm font-semibold">
+                <p className="text-text-primary text-sm font-semibold">
                   🏠 {startPoint.name}
                 </p>
-                <p className="text-navy-400 mt-0.5 text-xs">
+                <p className="mt-0.5 text-xs text-muted">
                   {startPoint.address}
                 </p>
               </div>
@@ -320,14 +325,14 @@ export default function RouteMap({
             <Popup>
               <div className="min-w-[160px] p-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-navy-800 text-sm font-bold">
+                  <span className="text-text-primary text-sm font-bold">
                     {idx + 1}.
                   </span>
                   <span
                     className={`text-sm font-semibold ${
                       spot.isAvailable === false
-                        ? 'text-gray-400 line-through'
-                        : 'text-navy-900'
+                        ? 'text-neutral-400 line-through'
+                        : 'text-text-primary'
                     }`}
                   >
                     {spot.spotName}
@@ -337,14 +342,16 @@ export default function RouteMap({
                   <p className="mt-1 text-xs text-red-500">소실된 스팟</p>
                 )}
                 {spot.distanceFromPrev && (
-                  <p className="text-navy-400 mt-1 text-xs">
+                  <p className="mt-1 text-xs text-muted">
                     이전 스팟에서 {spot.distanceFromPrev}m
                     {spot.walkTimeFromPrev &&
                       ` · 도보 ${spot.walkTimeFromPrev}분`}
                   </p>
                 )}
                 {spot.note && (
-                  <p className="text-navy-500 mt-1 text-xs">{spot.note}</p>
+                  <p className="text-text-secondary mt-1 text-xs">
+                    {spot.note}
+                  </p>
                 )}
               </div>
             </Popup>
@@ -365,16 +372,16 @@ export default function RouteMap({
         <div className="flex flex-wrap items-center gap-3 text-xs">
           {startPoint && (
             <div className="flex items-center gap-1">
-              <div className="h-3 w-3 rounded-full bg-[#2563eb]" />
+              <div className="h-3 w-3 rounded-full bg-primary" />
               <span>시작</span>
             </div>
           )}
           <div className="flex items-center gap-1">
-            <div className="h-3 w-3 rounded-full bg-[#345084]" />
+            <div className="h-3 w-3 rounded-full bg-primary-600" />
             <span>스팟</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="h-3 w-3 rounded-full bg-gray-400" />
+            <div className="h-3 w-3 rounded-full bg-neutral-400" />
             <span>소실됨</span>
           </div>
           {checkedSpotIds.length > 0 && (

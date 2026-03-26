@@ -144,7 +144,7 @@ export function StatusReportForm({
     <div className="space-y-4">
       {/* 상태 선택 */}
       <div>
-        <p className="text-navy-800 mb-2 text-sm font-medium">
+        <p className="mb-2 text-sm font-medium text-primary">
           현재 상태 <span className="text-red-500">*</span>
         </p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -155,15 +155,15 @@ export function StatusReportForm({
               onClick={() => setSelectedStatus(s.value)}
               className={`rounded-lg border p-3 text-left transition-colors ${
                 selectedStatus === s.value
-                  ? 'border-navy-500 bg-navy-50'
-                  : 'border-navy-100 hover:border-navy-300'
+                  ? 'border-primary bg-primary-50'
+                  : 'border-border hover:border-neutral-300'
               }`}
             >
               <span className="text-lg">{s.icon}</span>
-              <p className="text-navy-700 mt-1 text-xs font-medium">
+              <p className="mt-1 text-xs font-medium text-secondary">
                 {s.label}
               </p>
-              <p className="text-navy-400 text-[10px]">{s.description}</p>
+              <p className="text-[10px] text-muted">{s.description}</p>
             </button>
           ))}
         </div>
@@ -172,7 +172,7 @@ export function StatusReportForm({
       {/* 설명 입력 */}
       {selectedStatus && (
         <div>
-          <label className="text-navy-800 mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-primary">
             상세 설명 <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -181,9 +181,9 @@ export function StatusReportForm({
             placeholder="현재 상태에 대해 자세히 설명해주세요"
             rows={3}
             maxLength={500}
-            className="border-navy-200 focus:border-navy-400 w-full rounded-md border px-3 py-2 text-sm focus:outline-none"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
           />
-          <p className="text-navy-400 mt-1 text-right text-xs">
+          <p className="mt-1 text-right text-xs text-muted">
             {description.length}/500
           </p>
         </div>
@@ -192,7 +192,7 @@ export function StatusReportForm({
       {/* 사진 첨부 */}
       {selectedStatus && (
         <div>
-          <label className="text-navy-700 mb-1 block text-xs font-medium">
+          <label className="mb-1 block text-xs font-medium text-secondary">
             증거 사진 (선택)
           </label>
           <input
@@ -236,14 +236,14 @@ export function StatusReportForm({
               type="button"
               onClick={() => photoRef.current?.click()}
               disabled={isUploading}
-              className="border-navy-200 hover:border-navy-400 hover:bg-navy-50 flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed"
+              className="flex aspect-video w-full max-w-xs flex-col items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-neutral-300 hover:bg-surface"
             >
               {isUploading ? (
-                <div className="border-navy-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               ) : (
                 <>
                   <svg
-                    className="text-navy-300 mb-1 h-6 w-6"
+                    className="mb-1 h-6 w-6 text-neutral-300"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -255,13 +255,13 @@ export function StatusReportForm({
                       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                     />
                   </svg>
-                  <span className="text-navy-400 text-xs">사진 업로드</span>
+                  <span className="text-xs text-muted">사진 업로드</span>
                 </>
               )}
             </button>
           )}
           {/* 사진 넛지 안내 */}
-          <p className="mt-1.5 text-xs text-blue-600">
+          <p className="mt-1.5 text-xs text-primary">
             💡 사진 증거를 첨부하면 더 빠르게 처리됩니다
           </p>
         </div>
@@ -280,7 +280,7 @@ export function StatusReportForm({
           <button
             type="button"
             onClick={onCancel}
-            className="border-navy-200 text-navy-600 hover:bg-navy-50 flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors"
+            className="flex-1 rounded-lg border border-border py-2.5 text-sm font-medium text-secondary transition-colors hover:bg-surface"
           >
             취소
           </button>
@@ -289,7 +289,7 @@ export function StatusReportForm({
           type="button"
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="bg-navy-600 hover:bg-navy-700 flex-1 rounded-lg py-2.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? '제출 중...' : '상태 신고'}
         </button>

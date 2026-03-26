@@ -199,7 +199,7 @@ export default function GooglePlacesSearch({
           type="text"
           onFocus={loadScript}
           placeholder="장소 이름으로 검색 (포커스 시 구글맵 로드)"
-          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+          className="w-full rounded-lg border border-neutral-200 bg-surface px-3 py-2 text-sm text-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
           readOnly
         />
       </div>
@@ -252,14 +252,14 @@ export default function GooglePlacesSearch({
         value={query}
         onChange={(e) => handleInputChange(e.target.value)}
         placeholder="장소 이름으로 검색 (예: 아키하바라 건담 카페)"
-        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
       />
 
       {/* 로딩 인디케이터 */}
       {isSearching && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
           <svg
-            className="h-4 w-4 animate-spin text-gray-400"
+            className="h-4 w-4 animate-spin text-neutral-400"
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -282,7 +282,7 @@ export default function GooglePlacesSearch({
 
       {/* 자동완성 드롭다운 */}
       {suggestions.length > 0 && (
-        <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-neutral-200 bg-white shadow-lg">
           {suggestions.map((suggestion, index) => {
             const prediction = suggestion.placePrediction
             return (
@@ -292,12 +292,14 @@ export default function GooglePlacesSearch({
                   onClick={() => handleSelectSuggestion(suggestion)}
                   className="flex w-full items-start gap-2 px-3 py-2.5 text-left transition-colors hover:bg-primary-50"
                 >
-                  <span className="mt-0.5 flex-shrink-0 text-gray-400">📍</span>
+                  <span className="mt-0.5 flex-shrink-0 text-neutral-400">
+                    📍
+                  </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-gray-900">
+                    <p className="truncate text-sm font-medium text-primary">
                       {prediction.mainText?.toString() ?? ''}
                     </p>
-                    <p className="truncate text-xs text-gray-500">
+                    <p className="truncate text-xs text-secondary">
                       {prediction.secondaryText?.toString() ?? ''}
                     </p>
                   </div>

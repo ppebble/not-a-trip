@@ -67,12 +67,16 @@ export function CompletionEffect({
       {/* 축하 카드 */}
       <div className="relative z-10 mx-4 w-full max-w-sm animate-[scaleIn_0.4s_ease-out] rounded-2xl bg-white p-8 text-center shadow-2xl">
         <div className="mb-4 text-6xl">🏆</div>
-        <h2 className="text-navy-900 mb-2 text-2xl font-bold">완주 축하!</h2>
-        <p className="text-navy-500 mb-1 text-sm">코스를 모두 완주했습니다</p>
-        <p className="text-navy-700 mb-6 text-lg font-semibold">{routeName}</p>
+        <h2 className="text-text-primary mb-2 text-2xl font-bold">
+          완주 축하!
+        </h2>
+        <p className="mb-1 text-sm text-muted">코스를 모두 완주했습니다</p>
+        <p className="text-text-secondary mb-6 text-lg font-semibold">
+          {routeName}
+        </p>
         <button
           onClick={onClose}
-          className="bg-navy-600 hover:bg-navy-700 w-full rounded-lg py-3 text-sm font-semibold text-white transition-colors"
+          className="w-full rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
         >
           확인
         </button>

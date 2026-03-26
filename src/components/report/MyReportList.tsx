@@ -20,7 +20,7 @@ export function MyReportList() {
     return (
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-navy-50 h-24 animate-pulse rounded-lg" />
+          <div key={i} className="h-24 animate-pulse rounded-lg bg-surface" />
         ))}
       </div>
     )
@@ -38,12 +38,10 @@ export function MyReportList() {
     return (
       <div className="py-12 text-center">
         <p className="text-lg">📝</p>
-        <p className="text-navy-400 mt-2 text-sm">
-          아직 제보한 성지가 없습니다
-        </p>
+        <p className="mt-2 text-sm text-muted">아직 제보한 성지가 없습니다</p>
         <Link
           href="/reports/new"
-          className="bg-navy-600 hover:bg-navy-700 mt-3 inline-block rounded-lg px-4 py-2 text-sm font-medium text-white"
+          className="mt-3 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
         >
           성지 제보하기
         </Link>
@@ -65,17 +63,17 @@ export function MyReportList() {
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="text-navy-600 hover:bg-navy-50 rounded-md px-3 py-1 text-sm disabled:opacity-30"
+            className="rounded-md px-3 py-1 text-sm text-primary hover:bg-surface disabled:opacity-30"
           >
             이전
           </button>
-          <span className="text-navy-500 text-sm">
+          <span className="text-sm text-secondary">
             {page} / {data.totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}
             disabled={page >= data.totalPages}
-            className="text-navy-600 hover:bg-navy-50 rounded-md px-3 py-1 text-sm disabled:opacity-30"
+            className="rounded-md px-3 py-1 text-sm text-primary hover:bg-surface disabled:opacity-30"
           >
             다음
           </button>
@@ -94,7 +92,7 @@ function ReportCard({ report }: { report: SpotReport }) {
   return (
     <Link
       href={`/reports/${report.id}`}
-      className="border-navy-100 hover:bg-navy-50/50 flex gap-3 rounded-lg border bg-white p-3 transition-colors"
+      className="flex gap-3 rounded-lg border border-border bg-white p-3 transition-colors hover:bg-surface/50"
     >
       {/* 썸네일 */}
       {thumbnail ? (
@@ -108,7 +106,7 @@ function ReportCard({ report }: { report: SpotReport }) {
           />
         </div>
       ) : (
-        <div className="bg-navy-50 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg text-2xl">
+        <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-surface text-2xl">
           📍
         </div>
       )}
@@ -116,27 +114,23 @@ function ReportCard({ report }: { report: SpotReport }) {
       {/* 정보 */}
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-navy-800 truncate text-sm font-medium">
+          <p className="truncate text-sm font-medium text-primary-800">
             {report.name}
           </p>
           <ReportStatusBadge status={report.status} />
         </div>
-        <p className="text-navy-400 mt-0.5 truncate text-xs">
-          {report.address}
-        </p>
+        <p className="mt-0.5 truncate text-xs text-muted">{report.address}</p>
         <div className="mt-1 flex items-center gap-2">
           {categoryConfig && (
-            <span className="text-navy-400 text-xs">
-              {categoryConfig.label}
-            </span>
+            <span className="text-xs text-muted">{categoryConfig.label}</span>
           )}
-          <span className="text-navy-300 text-xs">
+          <span className="text-xs text-neutral-300">
             {new Date(report.createdAt).toLocaleDateString('ko-KR')}
           </span>
         </div>
         {/* 수정요청 시 관리자 코멘트 표시 */}
         {report.status === 'revision_requested' && report.reviewComment && (
-          <p className="mt-1 truncate text-xs text-blue-600">
+          <p className="mt-1 truncate text-xs text-primary">
             💬 {report.reviewComment}
           </p>
         )}

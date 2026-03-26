@@ -54,11 +54,11 @@ function getRankStyle(rank: number): string {
     case 1:
       return 'bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200'
     case 2:
-      return 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'
+      return 'bg-gradient-to-r from-neutral-50 to-neutral-50 border-neutral-200'
     case 3:
       return 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'
     default:
-      return 'bg-white border-gray-100'
+      return 'bg-white border-neutral-100'
   }
 }
 
@@ -93,14 +93,16 @@ export function RankingList({
     <div className="space-y-8">
       {/* 이번 주 인기 스팟 섹션 */}
       <section>
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-neutral-900">
           <span>🔥</span>
           <span>이번 주 인기 스팟</span>
         </h2>
 
         {spotRanking.length === 0 ? (
-          <div className="rounded-lg bg-gray-50 p-8 text-center">
-            <p className="text-gray-500">아직 이번 주 인증 데이터가 없습니다</p>
+          <div className="rounded-lg bg-neutral-50 p-8 text-center">
+            <p className="text-neutral-500">
+              아직 이번 주 인증 데이터가 없습니다
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -129,7 +131,7 @@ export function RankingList({
                     {medal ? (
                       <span className="text-2xl">{medal}</span>
                     ) : (
-                      <span className="text-lg font-bold text-gray-400">
+                      <span className="text-lg font-bold text-neutral-400">
                         {rank}
                       </span>
                     )}
@@ -147,7 +149,7 @@ export function RankingList({
                         sizes="56px"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gray-200 text-xl">
+                      <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-xl">
                         📍
                       </div>
                     )}
@@ -156,14 +158,14 @@ export function RankingList({
                   {/* 스팟 정보 */}
                   <div className="min-w-0 flex-1">
                     <p
-                      className="truncate font-medium text-gray-900"
+                      className="truncate font-medium text-neutral-900"
                       data-testid="spot-name"
                     >
                       {item.spotName}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-neutral-500">
                       이번 주{' '}
-                      <span className="font-semibold text-blue-600">
+                      <span className="font-semibold text-primary">
                         {item.weeklyCheckIns}
                       </span>
                       회 인증
@@ -178,14 +180,14 @@ export function RankingList({
 
       {/* 인기 인증샷 섹션 */}
       <section>
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-neutral-900">
           <span>❤️</span>
           <span>인기 인증샷</span>
         </h2>
 
         {checkInRanking.length === 0 ? (
-          <div className="rounded-lg bg-gray-50 p-8 text-center">
-            <p className="text-gray-500">
+          <div className="rounded-lg bg-neutral-50 p-8 text-center">
+            <p className="text-neutral-500">
               아직 좋아요를 받은 인증샷이 없습니다
             </p>
           </div>
@@ -225,7 +227,7 @@ export function RankingList({
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gray-200 text-3xl">
+                      <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-3xl">
                         📷
                       </div>
                     )}

@@ -147,7 +147,7 @@ function CoinLockerFields({
       </legend>
 
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-600">
+        <label className="mb-1 block text-xs font-medium text-neutral-600">
           크기 선택
         </label>
         <div className="flex gap-2">
@@ -159,7 +159,7 @@ function CoinLockerFields({
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                 data.sizes.includes(size)
                   ? 'border-purple-400 bg-purple-100 text-purple-700'
-                  : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
+                  : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
               }`}
             >
               {{ small: '소형', medium: '중형', large: '대형' }[size]}
@@ -170,13 +170,13 @@ function CoinLockerFields({
 
       {data.sizes.length > 0 && (
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">
+          <label className="mb-1 block text-xs font-medium text-neutral-600">
             가격 (엔)
           </label>
           <div className="flex flex-wrap gap-2">
             {data.sizes.map((size) => (
               <div key={size} className="flex items-center gap-1">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-neutral-500">
                   {{ small: '소형', medium: '중형', large: '대형' }[size]}
                 </span>
                 <input
@@ -192,7 +192,7 @@ function CoinLockerFields({
                       prices: { ...data.prices, [size]: val },
                     })
                   }}
-                  className="w-20 rounded border border-gray-200 px-2 py-1 text-xs"
+                  className="w-20 rounded border border-neutral-200 px-2 py-1 text-xs"
                 />
               </div>
             ))}
@@ -201,7 +201,7 @@ function CoinLockerFields({
       )}
 
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-600">
+        <label className="mb-1 block text-xs font-medium text-neutral-600">
           이용 시간
         </label>
         <input
@@ -211,12 +211,12 @@ function CoinLockerFields({
           onChange={(e) =>
             onChange({ ...data, operatingHours: e.target.value || null })
           }
-          className="w-full rounded border border-gray-200 px-3 py-1.5 text-sm"
+          className="w-full rounded border border-neutral-200 px-3 py-1.5 text-sm"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-600">
+        <label className="mb-1 block text-xs font-medium text-neutral-600">
           대형 로커 (캐리어 보관)
         </label>
         <TriToggle
@@ -337,7 +337,7 @@ function GoodsShopFields({
         🛍️ 굿즈/잡화 상세
       </legend>
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-600">
+        <label className="mb-1 block text-xs font-medium text-neutral-600">
           매장 유형
         </label>
         <div className="flex gap-2">
@@ -358,7 +358,7 @@ function GoodsShopFields({
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                 data.subtype === opt.value
                   ? 'border-pink-400 bg-pink-100 text-pink-700'
-                  : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
+                  : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
               }`}
             >
               {opt.label}
@@ -367,7 +367,7 @@ function GoodsShopFields({
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-600">
+        <label className="mb-1 block text-xs font-medium text-neutral-600">
           영업시간
         </label>
         <input
@@ -377,7 +377,7 @@ function GoodsShopFields({
           onChange={(e) =>
             onChange({ ...data, operatingHours: e.target.value || null })
           }
-          className="w-full rounded border border-gray-200 px-3 py-1.5 text-sm"
+          className="w-full rounded border border-neutral-200 px-3 py-1.5 text-sm"
         />
       </div>
     </fieldset>
@@ -406,7 +406,7 @@ function TriToggle({
         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
           value === true
             ? 'border-green-400 bg-green-100 text-green-700'
-            : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
+            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
         }`}
       >
         {trueLabel}
@@ -417,7 +417,7 @@ function TriToggle({
         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
           value === false
             ? 'border-red-400 bg-red-100 text-red-700'
-            : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
+            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
         }`}
       >
         {falseLabel}
@@ -437,7 +437,7 @@ function TriToggleField({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-xs font-medium text-gray-600">
+      <label className="mb-1 block text-xs font-medium text-neutral-600">
         {label}
       </label>
       <TriToggle value={value} onChange={onChange} />
@@ -593,11 +593,13 @@ export default function FacilityReportForm({
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
         <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white shadow-2xl">
           {/* 헤더 */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
-            <h2 className="text-lg font-bold text-gray-900">편의시설 제보</h2>
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4">
+            <h2 className="text-lg font-bold text-neutral-900">
+              편의시설 제보
+            </h2>
             <button
               onClick={handleClose}
-              className="rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              className="rounded-md p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
               aria-label="닫기"
             >
               <svg
@@ -634,21 +636,21 @@ export default function FacilityReportForm({
             {/* Step 1: 장소 입력 방식 선택 */}
             {!inputMode && (
               <div className="space-y-3">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-neutral-700">
                   장소를 어떻게 등록하시겠어요?
                 </p>
                 <button
                   type="button"
                   onClick={() => setInputMode('search')}
-                  className="w-full rounded-lg border-2 border-gray-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
+                  className="w-full rounded-lg border-2 border-neutral-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🔍</span>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-neutral-900">
                         구글맵 장소 검색
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-neutral-500">
                         식당, 카페 등 이미 있는 장소에 덕후 정보만 추가
                       </p>
                     </div>
@@ -657,15 +659,15 @@ export default function FacilityReportForm({
                 <button
                   type="button"
                   onClick={handlePinMode}
-                  className="w-full rounded-lg border-2 border-gray-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
+                  className="w-full rounded-lg border-2 border-neutral-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">📍</span>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-neutral-900">
                         지도에 직접 핀 꽂기
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-neutral-500">
                         코인 로커, 화장실 등 지도에 없는 장소를 새로 등록
                       </p>
                     </div>
@@ -688,7 +690,7 @@ export default function FacilityReportForm({
                       googlePlaceId: undefined,
                     }))
                   }}
-                  className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                  className="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-700"
                 >
                   ← 입력 방식 다시 선택
                 </button>
@@ -718,7 +720,7 @@ export default function FacilityReportForm({
                         // geo 결과는 비동기이므로 effect로 처리
                       }}
                       disabled={geo.isLoading}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50"
                     >
                       {geo.isLoading ? (
                         <>
@@ -766,7 +768,7 @@ export default function FacilityReportForm({
                 {inputMode === 'pin' && (
                   <div className="space-y-3">
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">
+                      <label className="mb-1 block text-sm font-medium text-neutral-700">
                         이름 <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -779,7 +781,7 @@ export default function FacilityReportForm({
                             name: e.target.value,
                           }))
                         }
-                        className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.name ? 'border-red-400' : 'border-gray-200'}`}
+                        className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.name ? 'border-red-400' : 'border-neutral-200'}`}
                       />
                       {errors.name && (
                         <p className="mt-1 text-xs text-red-500">
@@ -789,7 +791,7 @@ export default function FacilityReportForm({
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">
+                      <label className="mb-1 block text-sm font-medium text-neutral-700">
                         주소
                       </label>
                       <input
@@ -802,12 +804,12 @@ export default function FacilityReportForm({
                             address: e.target.value,
                           }))
                         }
-                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">
+                      <label className="mb-1 block text-sm font-medium text-neutral-700">
                         위치 <span className="text-red-500">*</span>
                       </label>
 
@@ -827,7 +829,7 @@ export default function FacilityReportForm({
                           handleCurrentLocation()
                         }}
                         disabled={geo.isLoading}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50"
                       >
                         {geo.isLoading ? (
                           <>
@@ -899,7 +901,7 @@ export default function FacilityReportForm({
 
                 {/* 카테고리 선택 */}
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                  <label className="mb-1 block text-sm font-medium text-neutral-700">
                     카테고리 <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -910,7 +912,7 @@ export default function FacilityReportForm({
                         type: e.target.value as FacilityType,
                       }))
                     }
-                    className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.type ? 'border-red-400' : 'border-gray-200'}`}
+                    className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.type ? 'border-red-400' : 'border-neutral-200'}`}
                   >
                     <option value="">카테고리 선택...</option>
                     <optgroup label="일반 편의시설">

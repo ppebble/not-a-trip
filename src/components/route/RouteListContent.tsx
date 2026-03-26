@@ -12,7 +12,7 @@ import type { Route } from '@/types/route'
 
 function RouteCardSkeleton() {
   return (
-    <div className="border-navy-200 overflow-hidden rounded-lg border bg-white shadow-sm">
+    <div className="overflow-hidden rounded-lg border border-border bg-white shadow-sm">
       <SkeletonBlock className="h-40 w-full rounded-none" />
       <div className="p-4">
         <SkeletonBlock className="mb-2 h-5 w-3/4" />
@@ -95,8 +95,8 @@ export function RouteListContent() {
         </div>
       ) : routes.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="text-navy-400 text-lg">🗺️ 코스가 없습니다</p>
-          <p className="text-navy-300 mt-1 text-sm">
+          <p className="text-lg text-muted">🗺️ 코스가 없습니다</p>
+          <p className="mt-1 text-sm text-neutral-300">
             필터를 변경하거나 새 코스를 만들어보세요
           </p>
         </div>
@@ -111,7 +111,7 @@ export function RouteListContent() {
           {page < totalPages && (
             <div ref={observerRef} className="flex justify-center py-4">
               {isLoading && (
-                <div className="border-navy-200 border-t-navy-600 h-8 w-8 animate-spin rounded-full border-4" />
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-primary" />
               )}
             </div>
           )}

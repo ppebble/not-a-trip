@@ -183,9 +183,9 @@ export function QuickCheckIn({
               <div
                 className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
                   step === s
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary text-white'
                     : i < ['photo', 'comment', 'complete'].indexOf(step)
-                      ? 'bg-blue-100 text-blue-600'
+                      ? 'bg-primary-100 text-primary'
                       : 'bg-gray-100 text-gray-400'
                 }`}
               >
@@ -195,7 +195,7 @@ export function QuickCheckIn({
                 <div
                   className={`h-0.5 w-8 ${
                     i < ['photo', 'comment', 'complete'].indexOf(step)
-                      ? 'bg-blue-300'
+                      ? 'bg-primary-300'
                       : 'bg-gray-200'
                   }`}
                 />
@@ -225,7 +225,7 @@ export function QuickCheckIn({
                 {/* 카메라 촬영 */}
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 transition-colors hover:border-blue-500 hover:bg-blue-50"
+                  className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 transition-colors hover:border-primary hover:bg-primary-50"
                 >
                   <svg
                     className="h-10 w-10 text-gray-400"
@@ -255,7 +255,7 @@ export function QuickCheckIn({
                 {sceneImageUrl ? (
                   <button
                     onClick={() => setShowViewfinder(true)}
-                    className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 transition-colors hover:border-blue-500 hover:bg-blue-50"
+                    className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 transition-colors hover:border-primary hover:bg-primary-50"
                   >
                     <svg
                       className="h-10 w-10 text-gray-400"
@@ -282,7 +282,7 @@ export function QuickCheckIn({
                         fileInputRef.current.click()
                       }
                     }}
-                    className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 transition-colors hover:border-blue-500 hover:bg-blue-50"
+                    className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 transition-colors hover:border-primary hover:bg-primary-50"
                   >
                     <svg
                       className="h-10 w-10 text-gray-400"
@@ -337,7 +337,7 @@ export function QuickCheckIn({
                   placeholder="순례 소감을 남겨주세요 (선택)"
                   maxLength={200}
                   rows={3}
-                  className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 />
                 <p className="mt-1 text-right text-xs text-gray-400">
                   {comment.length}/200
@@ -362,7 +362,7 @@ export function QuickCheckIn({
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 rounded-lg bg-blue-600 py-3 text-sm font-medium text-white disabled:bg-gray-300"
+                  className="flex-1 rounded-lg bg-primary py-3 text-sm font-medium text-white disabled:bg-gray-300"
                 >
                   {isSubmitting ? '인증 중...' : '인증하기'}
                 </button>
@@ -396,7 +396,7 @@ export function QuickCheckIn({
               </p>
               <button
                 onClick={onClose}
-                className="w-full rounded-lg bg-blue-600 py-3 text-sm font-medium text-white"
+                className="w-full rounded-lg bg-primary py-3 text-sm font-medium text-white"
               >
                 확인
               </button>

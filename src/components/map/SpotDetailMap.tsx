@@ -200,7 +200,7 @@ export default function SpotDetailMap({
         center={mapCenter}
         zoom={mapZoom}
         style={{ height: '100%', width: '100%' }}
-        className="border-navy-200 overflow-hidden rounded-lg border-2"
+        className="overflow-hidden rounded-lg border-2 border-border"
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
@@ -228,10 +228,10 @@ export default function SpotDetailMap({
         <Marker position={[lat, lng]} icon={spotIcon}>
           <Popup>
             <div className="p-2">
-              <h3 className="text-navy-900 font-bold">{spot.name}</h3>
-              <p className="mt-1 text-sm text-gray-600">{spot.address}</p>
+              <h3 className="text-text-primary font-bold">{spot.name}</h3>
+              <p className="mt-1 text-sm text-neutral-600">{spot.address}</p>
               {spot.description && (
-                <p className="mt-2 line-clamp-3 text-sm text-gray-700">
+                <p className="mt-2 line-clamp-3 text-sm text-neutral-700">
                   {spot.description}
                 </p>
               )}
@@ -255,17 +255,17 @@ export default function SpotDetailMap({
               <Popup>
                 <div className="p-2">
                   <div className="mb-1 flex items-center justify-between">
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-neutral-900">
                       {facility.name}
                     </h4>
-                    <span className="bg-navy-100 text-navy-800 rounded px-2 py-1 text-xs">
+                    <span className="rounded bg-surface px-2 py-1 text-xs text-primary-800">
                       {facilityTypeLabels[facility.type]}
                     </span>
                   </div>
-                  <p className="mb-1 text-sm text-gray-600">
+                  <p className="mb-1 text-sm text-neutral-600">
                     {facility.address}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-neutral-500">
                     스팟에서 약 {Math.round(facility.distance)}m
                   </p>
                 </div>
@@ -278,7 +278,7 @@ export default function SpotDetailMap({
       {/* 범례 */}
       {facilities.length > 0 && (
         <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm">
-          <h4 className="mb-2 text-sm font-semibold text-gray-900">범례</h4>
+          <h4 className="mb-2 text-sm font-semibold text-neutral-900">범례</h4>
           <div className="space-y-1">
             <div className="flex items-center text-xs">
               <div className="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
@@ -297,7 +297,7 @@ export default function SpotDetailMap({
       )}
 
       {/* Map attribution with navy theme */}
-      <div className="bg-navy-800/80 absolute bottom-2 right-2 z-[1000] rounded px-2 py-1 text-xs text-white">
+      <div className="absolute bottom-2 right-2 z-[1000] rounded bg-primary-800/80 px-2 py-1 text-xs text-white">
         Not a Trip
       </div>
     </div>
@@ -308,10 +308,10 @@ export default function SpotDetailMap({
 function getFacilityColor(type: FacilityType): string {
   const colors: Record<FacilityType, string> = {
     restaurant: 'bg-orange-500',
-    convenience_store: 'bg-blue-500',
+    convenience_store: 'bg-primary',
     cafe: 'bg-green-500',
     station: 'bg-purple-500',
-    other: 'bg-gray-500',
+    other: 'bg-neutral-500',
     // Otaku_Category
     coin_locker: 'bg-violet-500',
     solo_dining: 'bg-rose-500',
@@ -319,5 +319,5 @@ function getFacilityColor(type: FacilityType): string {
     public_restroom: 'bg-teal-500',
     goods_shop: 'bg-pink-500',
   }
-  return colors[type] || 'bg-gray-500'
+  return colors[type] || 'bg-neutral-500'
 }

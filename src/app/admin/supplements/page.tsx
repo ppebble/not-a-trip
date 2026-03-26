@@ -28,8 +28,8 @@ export default function AdminSupplementsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-gray-500">로딩 중...</div>
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <div className="text-neutral-500">로딩 중...</div>
       </div>
     )
   }
@@ -40,23 +40,23 @@ export default function AdminSupplementsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="border-b border-gray-200 bg-white px-6 py-4">
-        <h1 className="text-xl font-bold text-gray-800">정보 보완 검토</h1>
-        <p className="mt-0.5 text-sm text-gray-500">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="border-b border-neutral-200 bg-white px-6 py-4">
+        <h1 className="text-xl font-bold text-neutral-800">정보 보완 검토</h1>
+        <p className="mt-0.5 text-sm text-neutral-500">
           사용자가 제출한 정보 보완을 검토하고 승인/반려할 수 있습니다
         </p>
       </div>
 
       <div className="flex h-[calc(100vh-theme(spacing.14)-73px)]">
-        <div className="w-96 flex-shrink-0 border-r border-gray-200 bg-white">
+        <div className="w-96 flex-shrink-0 border-r border-neutral-200 bg-white">
           <AdminSupplementList
             onSelectSupplement={handleSelectSupplement}
             selectedSupplementId={selectedSupplement?.id}
           />
         </div>
 
-        <div className="flex-1 bg-gray-50">
+        <div className="flex-1 bg-neutral-50">
           {selectedSupplement ? (
             <AdminSupplementReview
               key={selectedSupplement.id}
@@ -65,7 +65,7 @@ export default function AdminSupplementsPage() {
             />
           ) : (
             <div className="flex h-full items-center justify-center">
-              <div className="text-center text-gray-400">
+              <div className="text-center text-neutral-400">
                 <p className="text-4xl">📝</p>
                 <p className="mt-2 text-sm">
                   좌측 목록에서 정보 보완을 선택하세요

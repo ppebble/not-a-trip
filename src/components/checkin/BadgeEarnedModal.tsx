@@ -44,7 +44,9 @@ export function BadgeEarnedModal({ badges, onClose }: BadgeEarnedModalProps) {
           <div className="mb-4">
             <span className="text-4xl">🎉</span>
           </div>
-          <h2 className="mb-2 text-xl font-bold text-gray-800">뱃지 획득!</h2>
+          <h2 className="mb-2 text-xl font-bold text-neutral-800">
+            뱃지 획득!
+          </h2>
 
           {/* 뱃지 아이콘 (애니메이션) */}
           <div
@@ -71,10 +73,10 @@ export function BadgeEarnedModal({ badges, onClose }: BadgeEarnedModalProps) {
           </div>
 
           {/* 뱃지 정보 */}
-          <h3 className="mb-1 text-lg font-bold text-gray-800">
+          <h3 className="mb-1 text-lg font-bold text-neutral-800">
             {currentBadge?.badge?.name || '새로운 뱃지'}
           </h3>
-          <p className="mb-6 text-sm text-gray-500">
+          <p className="mb-6 text-sm text-neutral-500">
             {currentBadge?.badge?.description || '축하합니다!'}
           </p>
 
@@ -85,7 +87,7 @@ export function BadgeEarnedModal({ badges, onClose }: BadgeEarnedModalProps) {
                 <div
                   key={index}
                   className={`h-2 w-2 rounded-full ${
-                    index === currentIndex ? 'bg-orange-500' : 'bg-gray-200'
+                    index === currentIndex ? 'bg-orange-500' : 'bg-neutral-200'
                   }`}
                 />
               ))}

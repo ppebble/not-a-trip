@@ -29,7 +29,7 @@ export interface ContentGridProps {
 export function ContentGrid({ contents, onSelectContent }: ContentGridProps) {
   if (contents.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+      <div className="flex flex-col items-center justify-center py-16 text-neutral-500">
         <span className="mb-2 text-4xl">📚</span>
         <p>등록된 작품이 없습니다</p>
       </div>
@@ -65,11 +65,11 @@ function ContentCard({ content, onClick }: ContentCardProps) {
     <button
       type="button"
       onClick={onClick}
-      className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       aria-label={`${content.title} 작품 보기`}
     >
       {/* 포스터 이미지 영역 */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100">
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100">
         {content.imageUrl && !imageError ? (
           <Image
             src={content.imageUrl}
@@ -80,7 +80,7 @@ function ContentCard({ content, onClick }: ContentCardProps) {
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-200">
             <span className="text-5xl">🎬</span>
           </div>
         )}
@@ -92,12 +92,12 @@ function ContentCard({ content, onClick }: ContentCardProps) {
       {/* 작품 정보 영역 */}
       <div className="flex flex-1 flex-col p-3">
         {/* 작품 제목 */}
-        <h3 className="mb-2 line-clamp-2 text-left text-sm font-semibold text-gray-900">
+        <h3 className="mb-2 line-clamp-2 text-left text-sm font-semibold text-neutral-900">
           {content.title}
         </h3>
 
         {/* 통계 정보 */}
-        <div className="mt-auto flex items-center gap-3 text-xs text-gray-500">
+        <div className="mt-auto flex items-center gap-3 text-xs text-neutral-500">
           <span className="flex items-center gap-1">
             <span>📍</span>
             <span>{content.spotCount}개 스팟</span>

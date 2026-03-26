@@ -39,7 +39,7 @@ export const ComparisonCard = memo(function ComparisonCard({
 
   return (
     <div
-      className={`group relative cursor-pointer overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 ease-out ${isHovered ? 'scale-[1.02] shadow-xl' : 'scale-100'} `}
+      className={`group relative cursor-pointer overflow-hidden rounded-xl bg-surface shadow-md transition-all duration-300 ease-out ${isHovered ? 'scale-[1.02] shadow-xl' : 'scale-100'} `}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -146,12 +146,12 @@ export const ComparisonCard = memo(function ComparisonCard({
               className="rounded-full"
             />
           ) : (
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-xs">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-200 text-xs">
               {checkIn.userName.charAt(0)}
             </div>
           )}
           <span
-            className="text-sm font-medium text-gray-900"
+            className="text-sm font-medium text-neutral-900"
             data-testid="user-nickname"
           >
             {checkIn.userName}
@@ -160,7 +160,7 @@ export const ComparisonCard = memo(function ComparisonCard({
 
         {/* 스팟 이름 */}
         <p
-          className="mb-2 truncate text-sm text-gray-600"
+          className="mb-2 truncate text-sm text-neutral-600"
           data-testid="spot-name"
         >
           📍 {spot.name}
@@ -179,7 +179,7 @@ export const ComparisonCard = memo(function ComparisonCard({
               </span>
             ))}
             {badges.length > 3 && (
-              <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+              <span className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">
                 +{badges.length - 3}
               </span>
             )}

@@ -44,10 +44,10 @@ export default function CategoryFilter() {
       {/* 전체 선택 버튼 */}
       <button
         onClick={handleSelectAll}
-        className={`h-9 rounded-full px-4 text-sm font-medium transition-all ${
+        className={`h-9 rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
           isAllSelected
-            ? 'bg-navy-600 text-white'
-            : 'text-navy-700 bg-white/80 hover:bg-white'
+            ? 'scale-105 border-primary bg-primary text-white shadow-md'
+            : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
         }`}
       >
         전체
@@ -62,20 +62,24 @@ export default function CategoryFilter() {
           <button
             key={category}
             onClick={() => handleCategoryToggle(category)}
-            className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full px-4 text-sm font-medium transition-all ${
+            className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
               isSelected
-                ? 'text-white shadow-md'
-                : 'text-navy-700 bg-white/80 hover:bg-white'
+                ? 'scale-105 border-transparent text-white shadow-md'
+                : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
             }`}
             style={{
               backgroundColor: isSelected ? config.bgColor : undefined,
             }}
           >
-            <CategoryIcon
-              category={category}
-              size={category === 'animation' ? '2xl' : 'lg'}
-            />
-            <span>{config.label}</span>
+            <div className={isSelected ? '' : 'opacity-40 grayscale'}>
+              <CategoryIcon
+                category={category}
+                size={category === 'animation' ? '2xl' : 'lg'}
+              />
+            </div>
+            <span className={isSelected ? 'drop-shadow-sm' : ''}>
+              {config.label}
+            </span>
           </button>
         )
       })}

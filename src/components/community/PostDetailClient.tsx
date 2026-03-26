@@ -14,19 +14,19 @@ export default function PostDetailClient() {
   const postId = params.id as string
 
   return (
-    <main className="bg-navy-50 min-h-screen">
+    <main className="min-h-screen bg-primary-50">
       {/* 페이지 타이틀 */}
-      <div className="border-navy-200 border-b bg-white px-4 py-4">
+      <div className="border-b border-border bg-white px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-2">
             <Link
               href="/community"
-              className="text-navy-500 hover:text-navy-700"
+              className="hover:text-text-secondary text-secondary"
             >
               ← 커뮤니티
             </Link>
           </div>
-          <h1 className="text-navy-800 mt-2 text-xl font-bold">게시글</h1>
+          <h1 className="mt-2 text-xl font-bold text-primary-800">게시글</h1>
         </div>
       </div>
 

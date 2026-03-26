@@ -96,21 +96,21 @@ function AddLinkForm({
 
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
-      <h4 className="mb-3 text-sm font-medium text-text-secondary">
+      <h4 className="text-text-secondary mb-3 text-sm font-medium">
         링크 추가
       </h4>
 
       <div className="space-y-3">
         {/* 링크 타입 선택 */}
         <div>
-          <label className="mb-1 block text-xs text-text-secondary">
+          <label className="text-text-secondary mb-1 block text-xs">
             링크 타입
           </label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value as ExternalLinkType)}
             disabled={disabled}
-            className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-text-primary w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {(Object.keys(LINK_TYPE_CONFIG) as ExternalLinkType[]).map(
               (key) => (
@@ -124,7 +124,7 @@ function AddLinkForm({
 
         {/* 링크 이름 */}
         <div>
-          <label className="mb-1 block text-xs text-text-secondary">
+          <label className="text-text-secondary mb-1 block text-xs">
             링크 이름
           </label>
           <input
@@ -133,21 +133,21 @@ function AddLinkForm({
             onChange={(e) => setLabel(e.target.value)}
             placeholder="예: FC 바르셀로나 공식 사이트"
             disabled={disabled}
-            className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-text-primary w-full rounded-lg border border-border bg-white px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
             maxLength={100}
           />
         </div>
 
         {/* URL 입력 */}
         <div>
-          <label className="mb-1 block text-xs text-text-secondary">URL</label>
+          <label className="text-text-secondary mb-1 block text-xs">URL</label>
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://example.com"
             disabled={disabled}
-            className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-text-primary w-full rounded-lg border border-border bg-white px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           />
           <p className="mt-1 text-xs text-muted">https:// 로 시작해야 합니다</p>
         </div>
@@ -196,7 +196,7 @@ function LinkItem({
 
       {/* 텍스트 */}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-text-primary">
+        <p className="text-text-primary truncate text-sm font-medium">
           {link.label}
         </p>
         <p className="truncate text-xs text-muted">{link.url}</p>
@@ -284,7 +284,7 @@ export function ExternalLinkForm({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-text-primary">
+        <h3 className="text-text-primary text-lg font-semibold">
           {sectionTitle}
         </h3>
         <span className="text-sm text-muted">

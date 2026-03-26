@@ -44,9 +44,9 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
 
   return (
     <Link href={`/routes/${route.id}`} prefetch={false} className="block">
-      <article className="border-navy-200 overflow-hidden rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md">
+      <article className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-shadow hover:shadow-md">
         {/* 썸네일 영역 */}
-        <div className="bg-navy-100 relative h-40">
+        <div className="relative h-40 bg-surface">
           {route.spots[0]?.thumbnailUrl ? (
             <OptimizedImage
               src={route.spots[0].thumbnailUrl}
@@ -56,7 +56,7 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
               className="object-cover"
             />
           ) : (
-            <div className="text-navy-300 flex h-full items-center justify-center text-4xl">
+            <div className="flex h-full items-center justify-center text-4xl text-neutral-300">
               🗺️
             </div>
           )}
@@ -78,10 +78,10 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
 
         {/* 정보 영역 */}
         <div className="p-4">
-          <h3 className="text-navy-900 mb-1 truncate text-base font-semibold">
+          <h3 className="mb-1 truncate text-base font-semibold text-main-text">
             {route.name}
           </h3>
-          <p className="text-navy-500 mb-3 line-clamp-2 text-sm">
+          <p className="mb-3 line-clamp-2 text-sm text-sub-text">
             {route.description}
           </p>
 
@@ -91,13 +91,13 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
               {route.relatedContentNames.slice(0, 3).map((name) => (
                 <span
                   key={name}
-                  className="bg-navy-50 text-navy-600 rounded px-1.5 py-0.5 text-xs"
+                  className="rounded bg-primary-50 px-1.5 py-0.5 text-xs text-primary-600"
                 >
                   {name}
                 </span>
               ))}
               {route.relatedContentNames.length > 3 && (
-                <span className="text-navy-400 text-xs">
+                <span className="text-xs text-muted">
                   +{route.relatedContentNames.length - 3}
                 </span>
               )}
@@ -105,7 +105,7 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
           )}
 
           {/* 메타 정보 */}
-          <div className="text-navy-400 flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-3 text-xs text-muted">
             <span title="스팟 수">📍 {availableSpots.length}곳</span>
             <span title="예상 소요시간">
               ⏱️ {formatDuration(route.estimatedDuration)}
@@ -116,12 +116,12 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
           </div>
 
           {/* 하단: 북마크/완주 수 + 작성자 */}
-          <div className="border-navy-100 mt-3 flex items-center justify-between border-t pt-3">
-            <div className="text-navy-400 flex items-center gap-3 text-xs">
+          <div className="mt-3 flex items-center justify-between border-t border-neutral-100 pt-3">
+            <div className="flex items-center gap-3 text-xs text-muted">
               <span>🔖 {route.bookmarkCount}</span>
               <span>🏆 {route.completionCount}</span>
             </div>
-            <span className="text-navy-400 text-xs">{route.authorName}</span>
+            <span className="text-xs text-muted">{route.authorName}</span>
           </div>
         </div>
       </article>

@@ -61,7 +61,7 @@ export function RelatedContentItem({
     >
       {/* 드래그 핸들 */}
       <div
-        className="mr-2 cursor-grab text-muted hover:text-text-secondary active:cursor-grabbing"
+        className="hover:text-text-secondary mr-2 cursor-grab text-muted active:cursor-grabbing"
         aria-label="드래그하여 순서 변경"
       >
         <svg
@@ -96,7 +96,7 @@ export function RelatedContentItem({
           <ContentTypeIcon type={content.type} size="lg" />
         )}
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-text-primary">
+          <p className="text-text-primary truncate font-medium">
             {content.name}
           </p>
           <p className="truncate text-xs text-muted">

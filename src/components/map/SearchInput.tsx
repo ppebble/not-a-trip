@@ -72,7 +72,7 @@ export default function SearchInput({
       {/* 검색 아이콘 */}
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <svg
-          className="h-4 w-4 text-gray-400"
+          className="h-4 w-4 text-neutral-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -94,7 +94,7 @@ export default function SearchInput({
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="focus:border-navy-500 focus:ring-navy-500 w-full rounded-full border border-gray-200 bg-white/90 py-2 pl-10 pr-10 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all focus:bg-white focus:outline-none focus:ring-1"
+        className="w-full rounded-full border border-neutral-200 bg-white/90 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-sm transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
         aria-label="콘텐츠 검색"
       />
 
@@ -103,7 +103,7 @@ export default function SearchInput({
         <button
           type="button"
           onClick={handleClear}
-          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition-colors hover:text-gray-600"
+          className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 transition-colors hover:text-neutral-600"
           aria-label="검색어 초기화"
         >
           <svg

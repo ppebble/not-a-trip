@@ -17,7 +17,7 @@ function RecommendedSkeleton() {
       {Array.from({ length: 3 }, (_, i) => (
         <div
           key={i}
-          className="border-navy-200 w-72 flex-shrink-0 overflow-hidden rounded-lg border bg-white"
+          className="w-72 flex-shrink-0 overflow-hidden rounded-lg border border-border bg-white"
         >
           <SkeletonBlock className="h-32 w-full rounded-none" />
           <div className="p-3">
@@ -59,7 +59,7 @@ export function RecommendedRoutes() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-navy-900 mb-3 text-lg font-bold">
+          <h2 className="text-text-primary mb-3 text-lg font-bold">
             ⭐ 공식 추천 코스
           </h2>
           <RecommendedSkeleton />
@@ -78,7 +78,7 @@ export function RecommendedRoutes() {
       {/* 공식 추천 코스 섹션 */}
       {data.official.length > 0 && (
         <section>
-          <h2 className="text-navy-900 mb-3 text-lg font-bold">
+          <h2 className="text-text-primary mb-3 text-lg font-bold">
             ⭐ 공식 추천 코스
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
@@ -94,7 +94,9 @@ export function RecommendedRoutes() {
       {/* 인기 코스 섹션 */}
       {data.popular.length > 0 && (
         <section>
-          <h2 className="text-navy-900 mb-3 text-lg font-bold">🔥 인기 코스</h2>
+          <h2 className="text-text-primary mb-3 text-lg font-bold">
+            🔥 인기 코스
+          </h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {data.popular.map((route) => (
               <div key={route.id} className="w-72 flex-shrink-0">

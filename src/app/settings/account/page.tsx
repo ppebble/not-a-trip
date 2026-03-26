@@ -43,8 +43,8 @@ export default function AccountSettingsPage() {
 
   if (status === 'loading') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-900">
-        <p className="text-slate-400">로딩 중...</p>
+      <div className="flex min-h-screen items-center justify-center bg-neutral-900">
+        <p className="text-neutral-400">로딩 중...</p>
       </div>
     )
   }
@@ -148,7 +148,7 @@ function SetPasswordForm({
       <div>
         <label
           htmlFor="set-email"
-          className="mb-1 block text-sm font-medium text-slate-300"
+          className="mb-1 block text-sm font-medium text-neutral-300"
         >
           이메일 (로그인 ID)
         </label>
@@ -158,14 +158,14 @@ function SetPasswordForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full rounded-lg border border-slate-600 bg-slate-700 px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-3 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="example@email.com"
         />
       </div>
       <div>
         <label
           htmlFor="new-password"
-          className="mb-1 block text-sm font-medium text-slate-300"
+          className="mb-1 block text-sm font-medium text-neutral-300"
         >
           비밀번호
         </label>
@@ -176,14 +176,14 @@ function SetPasswordForm({
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
-          className="w-full rounded-lg border border-slate-600 bg-slate-700 px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-3 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="최소 6자 이상"
         />
       </div>
       <div>
         <label
           htmlFor="confirm-password"
-          className="mb-1 block text-sm font-medium text-slate-300"
+          className="mb-1 block text-sm font-medium text-neutral-300"
         >
           비밀번호 확인
         </label>
@@ -194,7 +194,7 @@ function SetPasswordForm({
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           minLength={6}
-          className="w-full rounded-lg border border-slate-600 bg-slate-700 px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-3 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="비밀번호 재입력"
         />
       </div>
@@ -253,17 +253,17 @@ function AccountSettingsContent() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-900">
-        <p className="text-slate-400">로딩 중...</p>
+      <div className="flex min-h-screen items-center justify-center bg-neutral-900">
+        <p className="text-neutral-400">로딩 중...</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 px-4 pb-20 pt-20">
+    <div className="min-h-screen bg-neutral-900 px-4 pb-20 pt-20">
       <div className="mx-auto max-w-lg space-y-6">
         {/* 프로필 카드 */}
-        <div className="flex items-center gap-4 rounded-lg bg-slate-800 p-6">
+        <div className="flex items-center gap-4 rounded-lg bg-neutral-800 p-6">
           {user?.image ? (
             <Image
               src={user.image}
@@ -275,7 +275,7 @@ function AccountSettingsContent() {
               unoptimized
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl font-bold text-white">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-bold text-white">
               {(user?.name || user?.email || '?').charAt(0).toUpperCase()}
             </div>
           )}
@@ -283,7 +283,7 @@ function AccountSettingsContent() {
             <h1 className="text-xl font-bold text-white">
               {user?.name || '사용자'}
             </h1>
-            <p className="text-sm text-slate-400">{user?.email || ''}</p>
+            <p className="text-sm text-neutral-400">{user?.email || ''}</p>
           </div>
         </div>
 
@@ -295,7 +295,7 @@ function AccountSettingsContent() {
         )}
 
         {/* 연결된 계정 목록 */}
-        <div className="rounded-lg bg-slate-800 p-6">
+        <div className="rounded-lg bg-neutral-800 p-6">
           <h2 className="mb-4 text-lg font-semibold text-white">연결된 계정</h2>
           <div className="space-y-3">
             {OAUTH_PROVIDERS.map((provider) => {
@@ -305,7 +305,7 @@ function AccountSettingsContent() {
               return (
                 <div
                   key={provider.id}
-                  className="flex items-center justify-between rounded-lg border border-slate-700 p-4"
+                  className="flex items-center justify-between rounded-lg border border-neutral-700 p-4"
                 >
                   <div className="flex items-center gap-3">
                     <ProviderIcon provider={provider.id} />
@@ -313,7 +313,7 @@ function AccountSettingsContent() {
                       <p className="text-sm font-medium text-white">
                         {provider.name}
                       </p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-neutral-400">
                         {isLinked ? '연결됨' : '미연결'}
                       </p>
                     </div>
@@ -342,14 +342,14 @@ function AccountSettingsContent() {
             })}
 
             {/* 이메일/비밀번호 상태 표시 */}
-            <div className="flex items-center justify-between rounded-lg border border-slate-700 p-4">
+            <div className="flex items-center justify-between rounded-lg border border-neutral-700 p-4">
               <div className="flex items-center gap-3">
                 <span className="text-lg">🔑</span>
                 <div>
                   <p className="text-sm font-medium text-white">
                     이메일/비밀번호
                   </p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-neutral-400">
                     {hasPassword ? '설정됨' : '미설정'}
                   </p>
                 </div>
@@ -365,11 +365,11 @@ function AccountSettingsContent() {
 
         {/* 비밀번호 설정 폼 (소셜 전용 계정만) */}
         {!hasPassword && (
-          <div className="rounded-lg bg-slate-800 p-6">
+          <div className="rounded-lg bg-neutral-800 p-6">
             <h2 className="mb-2 text-lg font-semibold text-white">
               이메일/비밀번호 설정
             </h2>
-            <p className="mb-4 text-sm text-slate-400">
+            <p className="mb-4 text-sm text-neutral-400">
               이메일(ID)과 비밀번호를 설정하면 이메일/비밀번호로도 로그인할 수
               있습니다.
             </p>
@@ -384,7 +384,7 @@ function AccountSettingsContent() {
 
         {/* 돌아가기 링크 */}
         <div className="text-center">
-          <Link href="/" className="text-sm text-slate-400 hover:text-white">
+          <Link href="/" className="text-sm text-neutral-400 hover:text-white">
             ← 메인으로 돌아가기
           </Link>
         </div>
