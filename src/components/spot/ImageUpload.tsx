@@ -339,7 +339,7 @@ export function ImageUpload({
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-sm text-text-secondary">
+          <p className="text-text-secondary text-sm">
             {isDragging ? '여기에 놓으세요' : '클릭하거나 드래그하여 사진 추가'}
           </p>
           <p className="mt-1 text-xs text-muted">
@@ -514,7 +514,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveLeft()
             }}
-            className="rounded-full bg-white/90 p-1.5 text-text-secondary shadow hover:bg-white"
+            className="text-text-secondary rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
             title="왼쪽으로 이동"
           >
             <svg
@@ -564,7 +564,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveRight()
             }}
-            className="rounded-full bg-white/90 p-1.5 text-text-secondary shadow hover:bg-white"
+            className="text-text-secondary rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
             title="오른쪽으로 이동"
           >
             <svg

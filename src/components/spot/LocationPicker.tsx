@@ -263,7 +263,7 @@ export function LocationPicker({
       {/* 선택된 좌표 표시 */}
       {markerPosition && (
         <div className="mt-2 rounded-lg border border-border bg-surface p-2">
-          <p className="text-xs text-text-secondary">
+          <p className="text-text-secondary text-xs">
             📍 {markerPosition.lat.toFixed(6)}, {markerPosition.lng.toFixed(6)}
           </p>
         </div>

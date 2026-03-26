@@ -42,7 +42,7 @@ function CommentItem({
           {/* 작성자 정보 */}
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-text-secondary">
+              <span className="text-text-secondary text-sm font-medium">
                 {comment.author}
               </span>
               {comment.isGuest && (
@@ -179,7 +179,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-border text-xs font-medium text-primary">
             {(user?.name || user?.email || '회')[0].toUpperCase()}
           </div>
-          <span className="text-sm text-text-secondary">
+          <span className="text-text-secondary text-sm">
             {user?.name || user?.email?.split('@')[0] || '회원'}
           </span>
           <span className="text-xs text-muted">(으)로 작성</span>
@@ -193,7 +193,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
             placeholder="닉네임"
-            className="w-1/3 rounded-lg border border-border px-3 py-2 text-sm text-text-secondary placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="text-text-secondary w-1/3 rounded-lg border border-border px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             maxLength={20}
           />
           <input
@@ -202,7 +202,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호 (4자 이상) *"
-            className="w-2/3 rounded-lg border border-border px-3 py-2 text-sm text-text-secondary placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="text-text-secondary w-2/3 rounded-lg border border-border px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             maxLength={20}
           />
         </div>
@@ -212,7 +212,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
       <div>
         <label
           htmlFor="comment-content"
-          className="mb-1 block text-sm font-medium text-text-secondary"
+          className="text-text-secondary mb-1 block text-sm font-medium"
         >
           댓글 내용
         </label>
@@ -222,7 +222,7 @@ function CommentForm({ postId, onSuccess }: CommentFormProps) {
           onChange={(e) => setContent(e.target.value)}
           placeholder="댓글을 입력해주세요"
           rows={3}
-          className="w-full resize-none rounded-lg border border-border px-4 py-2 text-sm text-text-secondary placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          className="text-text-secondary w-full resize-none rounded-lg border border-border px-4 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           maxLength={500}
         />
       </div>

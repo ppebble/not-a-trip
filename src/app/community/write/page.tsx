@@ -352,7 +352,7 @@ function WriteForm() {
         <div>
           <label
             htmlFor="title"
-            className="mb-2 block text-sm font-medium text-text-primary"
+            className="text-text-primary mb-2 block text-sm font-medium"
           >
             제목 <span className="text-red-500">*</span>
           </label>
@@ -374,7 +374,7 @@ function WriteForm() {
         <div>
           <label
             htmlFor="author"
-            className="mb-2 block text-sm font-medium text-text-primary"
+            className="text-text-primary mb-2 block text-sm font-medium"
           >
             작성자 <span className="text-red-500">*</span>
           </label>
@@ -418,7 +418,7 @@ function WriteForm() {
           <div>
             <label
               htmlFor="password"
-              className="mb-2 block text-sm font-medium text-text-primary"
+              className="text-text-primary mb-2 block text-sm font-medium"
             >
               비밀번호 <span className="text-red-500">*</span>
             </label>
@@ -441,7 +441,7 @@ function WriteForm() {
         <div>
           <label
             htmlFor="content"
-            className="mb-2 block text-sm font-medium text-text-primary"
+            className="text-text-primary mb-2 block text-sm font-medium"
           >
             내용 <span className="text-red-500">*</span>
           </label>

@@ -228,7 +228,7 @@ export default function SpotDetailMap({
         <Marker position={[lat, lng]} icon={spotIcon}>
           <Popup>
             <div className="p-2">
-              <h3 className="font-bold text-text-primary">{spot.name}</h3>
+              <h3 className="text-text-primary font-bold">{spot.name}</h3>
               <p className="mt-1 text-sm text-neutral-600">{spot.address}</p>
               {spot.description && (
                 <p className="mt-2 line-clamp-3 text-sm text-neutral-700">

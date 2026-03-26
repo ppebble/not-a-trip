@@ -299,7 +299,7 @@ export default function RouteMap({
           >
             <Popup>
               <div className="min-w-[140px] p-1">
-                <p className="text-sm font-semibold text-text-primary">
+                <p className="text-text-primary text-sm font-semibold">
                   🏠 {startPoint.name}
                 </p>
                 <p className="mt-0.5 text-xs text-muted">
@@ -325,7 +325,7 @@ export default function RouteMap({
             <Popup>
               <div className="min-w-[160px] p-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-text-primary">
+                  <span className="text-text-primary text-sm font-bold">
                     {idx + 1}.
                   </span>
                   <span
@@ -349,7 +349,7 @@ export default function RouteMap({
                   </p>
                 )}
                 {spot.note && (
-                  <p className="mt-1 text-xs text-text-secondary">
+                  <p className="text-text-secondary mt-1 text-xs">
                     {spot.note}
                   </p>
                 )}

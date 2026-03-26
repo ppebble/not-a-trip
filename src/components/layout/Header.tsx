@@ -24,7 +24,7 @@ export function Header() {
               e.currentTarget.style.display = 'none'
             }}
           />
-          <span className="text-xl font-bold text-text-primary">
+          <span className="text-text-primary text-xl font-bold">
             ✈️ Not a Trip
           </span>
         </Link>
@@ -33,25 +33,25 @@ export function Header() {
         <nav className="hidden items-center gap-6 md:flex">
           <Link
             href="/"
-            className="text-sm text-text-secondary transition hover:text-secondary-400"
+            className="text-text-secondary text-sm transition hover:text-secondary-400"
           >
             홈
           </Link>
           <Link
             href="/gallery"
-            className="text-sm text-text-secondary transition hover:text-secondary-400"
+            className="text-text-secondary text-sm transition hover:text-secondary-400"
           >
             순례 갤러리
           </Link>
           <Link
             href="/routes"
-            className="text-sm text-text-secondary transition hover:text-secondary-400"
+            className="text-text-secondary text-sm transition hover:text-secondary-400"
           >
             순례 코스
           </Link>
           <Link
             href="/spots/register"
-            className="text-sm text-text-secondary transition hover:text-secondary-400"
+            className="text-text-secondary text-sm transition hover:text-secondary-400"
           >
             스팟 등록
           </Link>
@@ -93,7 +93,7 @@ export function Header() {
                     {(user.name || user.email || '?').charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="hidden text-sm text-text-secondary sm:block">
+                <span className="text-text-secondary hidden text-sm sm:block">
                   {user.name || user.email}
                 </span>
               </Link>
@@ -119,7 +119,7 @@ export function Header() {
           {/* 모바일 햄버거 버튼 */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary md:hidden"
+            className="text-text-secondary hover:text-text-primary flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-secondary-100 md:hidden"
             aria-label="메뉴 열기"
           >
             {isMobileMenuOpen ? (
@@ -162,28 +162,28 @@ export function Header() {
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
+              className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
               홈
             </Link>
             <Link
               href="/gallery"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
+              className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
               순례 갤러리
             </Link>
             <Link
               href="/routes"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
+              className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
               순례 코스
             </Link>
             <Link
               href="/spots/register"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
+              className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
               스팟 등록
             </Link>
@@ -207,7 +207,7 @@ export function Header() {
               <Link
                 href="/settings/account"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
+                className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
                 👤 계정 설정
               </Link>

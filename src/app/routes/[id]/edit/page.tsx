@@ -65,7 +65,7 @@ export default function RouteEditPage() {
         <div className="mb-4">
           <Link
             href={`/routes/${routeId}`}
-            className="text-sm text-secondary transition-colors hover:text-text-primary"
+            className="hover:text-text-primary text-sm text-secondary transition-colors"
           >
             ← 코스 상세로
           </Link>

@@ -59,7 +59,7 @@ export function RecommendedRoutes() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="mb-3 text-lg font-bold text-text-primary">
+          <h2 className="text-text-primary mb-3 text-lg font-bold">
             ⭐ 공식 추천 코스
           </h2>
           <RecommendedSkeleton />
@@ -78,7 +78,7 @@ export function RecommendedRoutes() {
       {/* 공식 추천 코스 섹션 */}
       {data.official.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-bold text-text-primary">
+          <h2 className="text-text-primary mb-3 text-lg font-bold">
             ⭐ 공식 추천 코스
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
@@ -94,7 +94,7 @@ export function RecommendedRoutes() {
       {/* 인기 코스 섹션 */}
       {data.popular.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-bold text-text-primary">
+          <h2 className="text-text-primary mb-3 text-lg font-bold">
             🔥 인기 코스
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-2">

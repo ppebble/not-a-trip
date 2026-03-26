@@ -49,7 +49,7 @@ function EmptyFilteredState({ contentName }: { contentName: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">📸</div>
-      <p className="text-lg font-medium text-text-secondary">
+      <p className="text-text-secondary text-lg font-medium">
         &apos;{contentName}&apos; 관련 인증샷이 없어요
       </p>
       <p className="mt-2 text-sm text-secondary">
@@ -63,7 +63,7 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">😢</div>
-      <p className="text-lg font-medium text-text-secondary">
+      <p className="text-text-secondary text-lg font-medium">
         데이터를 불러올 수 없습니다
       </p>
       <p className="mt-2 text-sm text-secondary">

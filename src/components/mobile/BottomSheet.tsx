@@ -81,7 +81,7 @@ export default function BottomSheet() {
         {error && (
           <div className="flex h-20 flex-col items-center justify-center">
             <span className="text-2xl">😢</span>
-            <p className="mt-1 text-sm text-text-secondary">
+            <p className="text-text-secondary mt-1 text-sm">
               정보를 불러올 수 없습니다
             </p>
           </div>
@@ -111,7 +111,7 @@ export default function BottomSheet() {
 
               {/* 이름 + 주소 */}
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-base font-bold text-text-primary">
+                <h3 className="text-text-primary truncate text-base font-bold">
                   {spot.name}
                 </h3>
                 <p className="truncate text-sm text-muted">{spot.address}</p>
@@ -135,7 +135,7 @@ export default function BottomSheet() {
                 )}
 
                 {/* 설명 */}
-                <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+                <p className="text-text-secondary mb-4 text-sm leading-relaxed">
                   {spot.description}
                 </p>
 
@@ -165,7 +165,7 @@ export default function BottomSheet() {
             {/* full: 주소 상세 */}
             {heightState === 'full' && (
               <div className="mt-4 rounded-lg bg-accent-surface p-3">
-                <div className="flex items-start gap-2 text-sm text-text-secondary">
+                <div className="text-text-secondary flex items-start gap-2 text-sm">
                   <svg
                     className="mt-0.5 h-4 w-4 flex-shrink-0"
                     fill="none"

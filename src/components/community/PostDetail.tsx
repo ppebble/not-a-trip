@@ -42,7 +42,7 @@ function PostDetailError({
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">😢</div>
-      <p className="mb-2 text-text-secondary">
+      <p className="text-text-secondary mb-2">
         게시글을 불러오는데 실패했습니다
       </p>
       <p className="mb-4 text-sm text-secondary">{error.message}</p>
@@ -350,7 +350,7 @@ function PostContent({ post }: PostContentProps) {
 
         {/* 게시글 본문 */}
         <div className="prose prose-neutral max-w-none">
-          <p className="whitespace-pre-wrap text-text-secondary">
+          <p className="text-text-secondary whitespace-pre-wrap">
             {post.content}
           </p>
         </div>

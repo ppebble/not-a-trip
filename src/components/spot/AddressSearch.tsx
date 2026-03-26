@@ -165,7 +165,7 @@ export function AddressSearch({
             onKeyDown={handleKeyDown}
             onFocus={() => results.length > 0 && setIsOpen(true)}
             placeholder="주소 또는 장소명 검색 (예: Tokyo Dome, 서울역)"
-            className="w-full rounded-lg border border-border px-4 py-3 pr-10 text-text-primary placeholder-muted transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="text-text-primary w-full rounded-lg border border-border px-4 py-3 pr-10 placeholder-muted transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
           {isLoading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -235,7 +235,7 @@ export function AddressSearch({
                   />
                 </svg>
                 <div>
-                  <p className="text-sm font-medium text-text-primary">
+                  <p className="text-text-primary text-sm font-medium">
                     {result.address}
                   </p>
                   {result.placeType && (

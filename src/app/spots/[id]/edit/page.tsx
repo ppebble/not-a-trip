@@ -123,7 +123,7 @@ export default function SpotEditPage() {
           <div className="mx-auto max-w-4xl">
             <Link
               href={`/spots/${spotId}`}
-              className="flex items-center gap-2 text-secondary hover:text-text-primary"
+              className="hover:text-text-primary flex items-center gap-2 text-secondary"
             >
               <svg
                 className="h-5 w-5"
@@ -189,7 +189,7 @@ export default function SpotEditPage() {
         <div className="mx-auto max-w-4xl">
           <Link
             href={`/spots/${spotId}`}
-            className="flex items-center gap-2 text-secondary hover:text-text-primary"
+            className="hover:text-text-primary flex items-center gap-2 text-secondary"
           >
             <svg
               className="h-5 w-5"

@@ -95,8 +95,8 @@ export function EventInfoSection({
             <div className="flex items-start gap-2">
               <span className="text-lg">💡</span>
               <div>
-                <p className="text-sm font-medium text-text-primary">팁</p>
-                <p className="text-sm text-text-secondary">
+                <p className="text-text-primary text-sm font-medium">팁</p>
+                <p className="text-text-secondary text-sm">
                   {category === 'sports' &&
                     '경기 당일은 혼잡할 수 있으니 미리 예매하세요!'}
                   {category === 'music' &&

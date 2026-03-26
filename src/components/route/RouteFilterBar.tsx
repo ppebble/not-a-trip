@@ -95,7 +95,7 @@ export function RouteFilterBar({
           placeholder="작품명 검색"
           value={filters.contentName}
           onChange={(e) => updateFilter({ contentName: e.target.value })}
-          className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm text-text-primary placeholder-muted outline-none focus:border-primary-400"
+          className="text-text-primary rounded-lg border border-border bg-white px-3 py-1.5 text-sm placeholder-muted outline-none focus:border-primary-400"
         />
 
         {/* 지역 필터 */}
@@ -104,7 +104,7 @@ export function RouteFilterBar({
           placeholder="지역 검색"
           value={filters.regionTag}
           onChange={(e) => updateFilter({ regionTag: e.target.value })}
-          className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm text-text-primary placeholder-muted outline-none focus:border-primary-400"
+          className="text-text-primary rounded-lg border border-border bg-white px-3 py-1.5 text-sm placeholder-muted outline-none focus:border-primary-400"
         />
       </div>
 
