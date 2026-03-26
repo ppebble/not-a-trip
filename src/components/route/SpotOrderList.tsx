@@ -108,11 +108,11 @@ export function SpotOrderList({
 
   if (spots.length === 0) {
     return (
-      <div className="rounded-lg border-2 border-dashed border-border p-8 text-center">
+      <div className="rounded-lg border-2 border-dashed border-border p-8 text-center dark:border-neutral-800">
         <p className="text-sm text-muted">
           스팟을 검색하여 코스에 추가해주세요
         </p>
-        <p className="mt-1 text-xs text-neutral-300">
+        <p className="mt-1 text-xs text-neutral-300 dark:text-neutral-700">
           최소 2개의 스팟이 필요합니다
         </p>
       </div>
@@ -132,7 +132,7 @@ export function SpotOrderList({
             <div className="mb-1">
               <div className="flex items-center gap-2 rounded-lg bg-primary-50 px-3 py-2">
                 <span className="text-sm">🏠</span>
-                <span className="text-xs font-medium text-text-secondary">
+                <span className="text-text-secondary text-xs font-medium">
                   {startPoint.name}
                 </span>
               </div>
@@ -252,7 +252,7 @@ export function SpotOrderList({
 
             {/* 스팟 정보 */}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-text-primary">
+              <p className="text-text-primary truncate text-sm font-medium">
                 {spot.spotName}
               </p>
               {spot.note && editingNoteIndex !== idx && (
@@ -264,7 +264,7 @@ export function SpotOrderList({
                   defaultValue={spot.note || ''}
                   placeholder="메모 입력..."
                   rows={2}
-                  className="mt-1 w-full resize-none rounded border border-border px-2 py-1 text-xs text-text-secondary focus:border-primary-400 focus:outline-none"
+                  className="text-text-secondary mt-1 w-full resize-none rounded border border-border px-2 py-1 text-xs focus:border-primary-400 focus:outline-none"
                   onBlur={(e) => {
                     handleNoteChange(idx, e.target.value)
                     setEditingNoteIndex(null)

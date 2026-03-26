@@ -44,7 +44,7 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
 
   return (
     <Link href={`/routes/${route.id}`} prefetch={false} className="block">
-      <article className="overflow-hidden rounded-lg border border-border bg-white shadow-sm transition-shadow hover:shadow-md">
+      <article className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-shadow hover:shadow-md">
         {/* 썸네일 영역 */}
         <div className="relative h-40 bg-surface">
           {route.spots[0]?.thumbnailUrl ? (
@@ -78,10 +78,10 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
 
         {/* 정보 영역 */}
         <div className="p-4">
-          <h3 className="mb-1 truncate text-base font-semibold text-text-primary">
+          <h3 className="mb-1 truncate text-base font-semibold text-main-text">
             {route.name}
           </h3>
-          <p className="mb-3 line-clamp-2 text-sm text-secondary">
+          <p className="mb-3 line-clamp-2 text-sm text-sub-text">
             {route.description}
           </p>
 

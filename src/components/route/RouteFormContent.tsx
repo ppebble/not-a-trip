@@ -496,13 +496,13 @@ export function RouteFormContent({
 
       {/* Step 1: 기본 정보 (코스명 + 설명만) */}
       <section className="rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-text-primary">
+        <h2 className="text-text-primary mb-4 text-lg font-semibold">
           기본 정보
         </h2>
         <div className="space-y-4">
           {/* 코스명 */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               코스명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -517,7 +517,7 @@ export function RouteFormContent({
 
           {/* 설명 */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               설명 <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -533,7 +533,7 @@ export function RouteFormContent({
 
       {/* Step 2: 스팟 관리 (핵심) */}
       <section className="rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-text-primary">
+        <h2 className="text-text-primary mb-4 text-lg font-semibold">
           스팟 목록 <span className="text-red-500">*</span>
           <span className="ml-2 text-sm font-normal text-muted">
             ({spots.length}개)
@@ -584,7 +584,7 @@ export function RouteFormContent({
                           </div>
                         )}
                       </div>
-                      <span className="truncate text-sm text-text-primary">
+                      <span className="text-text-primary truncate text-sm">
                         {result.name}
                       </span>
                       {alreadyAdded && (
@@ -618,7 +618,7 @@ export function RouteFormContent({
 
       {/* Step 3: 시작 지점 (선택) */}
       <section className="rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="mb-1 text-lg font-semibold text-text-primary">
+        <h2 className="text-text-primary mb-1 text-lg font-semibold">
           시작 지점
           <span className="ml-2 text-sm font-normal text-muted">(선택)</span>
         </h2>
@@ -628,7 +628,7 @@ export function RouteFormContent({
         </p>
         <div className="space-y-3">
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               출발지 별명
             </label>
             <input
@@ -641,7 +641,7 @@ export function RouteFormContent({
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               주소
             </label>
             <div className="flex gap-2">
@@ -701,7 +701,7 @@ export function RouteFormContent({
                         className="flex-shrink-0"
                         disableBlur
                       />
-                      <span className="truncate text-sm text-text-primary">
+                      <span className="text-text-primary truncate text-sm">
                         {result.displayName}
                       </span>
                     </button>
@@ -745,14 +745,14 @@ export function RouteFormContent({
       </section>
 
       {/* Step 4: 코스 디테일 (태그 + 소요시간 + 난이도 + 공개설정) */}
-      <section className="rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-text-primary">
+      <section className="rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-900">
+        <h2 className="text-text-primary mb-4 text-lg font-semibold">
           코스 디테일
         </h2>
         <div className="space-y-4">
           {/* 관련 작품 (자동완성) */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               관련 작품
             </label>
             <p className="mb-2 text-xs text-muted">
@@ -765,12 +765,12 @@ export function RouteFormContent({
                 value={contentInput}
                 onChange={handleContentInputChange}
                 placeholder="작품명 검색"
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-primary focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
               />
               {contentInput &&
                 hasContentSearched &&
                 contentSuggestions.length > 0 && (
-                  <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-white shadow-lg">
+                  <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
                     {contentSuggestions.map((suggestion) => {
                       const alreadyAdded =
                         relatedContentNames.includes(suggestion)
@@ -780,7 +780,7 @@ export function RouteFormContent({
                           type="button"
                           onClick={() => handleSelectContent(suggestion)}
                           disabled={alreadyAdded}
-                          className="flex w-full items-center px-4 py-2 text-left text-sm text-text-primary transition-colors hover:bg-primary-50 disabled:opacity-40"
+                          className="text-text-primary flex w-full items-center px-4 py-2 text-left text-sm transition-colors hover:bg-primary-50 disabled:opacity-40 dark:hover:bg-neutral-700"
                         >
                           <span className="truncate">{suggestion}</span>
                           {alreadyAdded && (
@@ -817,7 +817,7 @@ export function RouteFormContent({
 
           {/* 지역 태그 (복수 선택 토글) */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               지역 태그
             </label>
             <p className="mb-2 text-xs text-muted">
@@ -849,7 +849,7 @@ export function RouteFormContent({
 
           {/* 예상 소요시간 + 이동시간 힌트 */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               예상 소요시간 (분) <span className="text-red-500">*</span>
             </label>
             {spots.length >= 2 &&
@@ -877,7 +877,7 @@ export function RouteFormContent({
 
           {/* 난이도 */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary mb-1 block text-sm font-medium">
               난이도 <span className="text-red-500">*</span>
             </label>
             <div className="flex gap-2">
@@ -888,7 +888,7 @@ export function RouteFormContent({
                   onClick={() => setDifficulty(opt.value)}
                   className={`flex-1 rounded-lg border px-2 py-2 text-sm transition-colors ${
                     difficulty === opt.value
-                      ? 'border-primary bg-primary-50 font-medium text-text-secondary'
+                      ? 'text-text-secondary border-primary bg-primary-50 font-medium'
                       : 'border-border text-muted hover:border-neutral-300'
                   }`}
                 >
@@ -900,7 +900,7 @@ export function RouteFormContent({
 
           {/* 공개/비공개 */}
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-text-secondary">
+            <label className="text-text-secondary text-sm font-medium">
               공개 설정
             </label>
             <button
@@ -927,8 +927,8 @@ export function RouteFormContent({
 
       {/* 미리보기 */}
       {showPreview && spots.length >= 2 && (
-        <section className="rounded-lg bg-white p-6 shadow-sm">
-          <h2 className="mb-3 text-lg font-semibold text-text-primary">
+        <section className="rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-900">
+          <h2 className="text-text-primary mb-3 text-lg font-semibold">
             코스 미리보기
           </h2>
           <RouteMap
@@ -951,7 +951,7 @@ export function RouteFormContent({
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-lg border border-border bg-white px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50"
+          className="rounded-lg border border-border bg-white px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-primary-400 dark:hover:bg-neutral-800"
         >
           취소
         </button>
@@ -959,7 +959,7 @@ export function RouteFormContent({
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
-            className="rounded-lg border border-border bg-white px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50"
+            className="rounded-lg border border-border bg-white px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-primary-400 dark:hover:bg-neutral-800"
           >
             {showPreview ? '미리보기 닫기' : '🗺️ 미리보기'}
           </button>

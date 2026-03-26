@@ -39,13 +39,13 @@ function RouteListSkeleton() {
  */
 export default function RoutesPage() {
   return (
-    <main className="min-h-screen bg-primary-50 pt-14">
+    <main className="min-h-screen bg-surface pt-14">
       <div className="mx-auto max-w-6xl px-4 py-6">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-primary">🗺️ 순례 코스</h1>
-            <p className="mt-1 text-sm text-secondary">
+            <h1 className="text-2xl font-bold text-main-text">🗺️ 순례 코스</h1>
+            <p className="mt-1 text-sm text-sub-text">
               다른 순례자들이 만든 코스를 탐색하고 따라가보세요
             </p>
           </div>
@@ -64,7 +64,7 @@ export default function RoutesPage() {
         <div className="my-6 border-t border-neutral-200" />
 
         {/* 전체 코스 목록 */}
-        <h2 className="mb-4 text-lg font-bold text-primary">📋 전체 코스</h2>
+        <h2 className="mb-4 text-lg font-bold text-main-text">📋 전체 코스</h2>
         <Suspense fallback={<RouteListSkeleton />}>
           <RouteListContent />
         </Suspense>

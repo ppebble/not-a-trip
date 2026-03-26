@@ -138,17 +138,17 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                 {DIFFICULTY_LABEL[route.difficulty]}
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-text-primary">
+            <h1 className="text-text-primary text-2xl font-bold">
               {route.name}
             </h1>
-            <p className="mt-2 text-sm text-text-secondary">
+            <p className="text-text-secondary mt-2 text-sm">
               {route.description}
             </p>
           </div>
         </div>
 
         {/* 메타 정보 */}
-        <div className="mb-4 flex flex-wrap gap-4 text-sm text-text-secondary">
+        <div className="text-text-secondary mb-4 flex flex-wrap gap-4 text-sm">
           <span>📍 {availableSpots.length}곳</span>
           <span>⏱️ {formatDuration(route.estimatedDuration)}</span>
           <span>🚶 {formatDistance(route.totalDistance)}</span>
@@ -231,7 +231,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
       {/* 코스 지도 */}
       <div className="rounded-lg bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-lg font-semibold text-text-primary">
+        <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 지도
         </h2>
         <RouteMap
@@ -244,8 +244,8 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       </div>
 
       {/* 스팟 순서 목록 */}
-      <div className="rounded-lg bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-lg font-semibold text-text-primary">
+      <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-900">
+        <h2 className="text-text-primary mb-3 text-lg font-semibold dark:text-neutral-100">
           코스 순서 ({availableSpots.length}곳)
         </h2>
         <ol className="space-y-0">
@@ -265,7 +265,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                       🏠
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-text-primary">
+                      <p className="text-text-primary text-sm font-medium">
                         {route.startPoint.name}
                       </p>
                       <p className="truncate text-xs text-muted">
