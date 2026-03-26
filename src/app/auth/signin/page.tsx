@@ -44,7 +44,7 @@ function SignInForm() {
   }
 
   return (
-    <div className="space-y-6 rounded-lg bg-neutral-800 p-8">
+    <div className="space-y-6 rounded-lg bg-surface p-8 shadow-xl">
       {/* 소셜 로그인 버튼 */}
       <div className="space-y-3">
         <button
@@ -107,17 +107,17 @@ function SignInForm() {
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-neutral-600"></div>
+          <div className="w-full border-t border-border"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-neutral-800 px-2 text-neutral-400">또는</span>
+          <span className="bg-surface px-2 text-sub-text">또는</span>
         </div>
       </div>
 
       {/* 이메일 로그인 폼 */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {(error || oauthError) && (
-          <div className="rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-400">
+          <div className="rounded-lg border border-red-500 bg-red-500/10 p-3 text-sm text-red-500">
             {oauthError || error}
             {error && !oauthError && (
               <button onClick={clearError} className="ml-2 underline">
@@ -130,7 +130,7 @@ function SignInForm() {
         <div>
           <label
             htmlFor="email"
-            className="mb-1 block text-sm font-medium text-neutral-300"
+            className="mb-1 block text-sm font-medium text-main-text"
           >
             이메일
           </label>
@@ -140,7 +140,7 @@ function SignInForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-3 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-main-text placeholder-sub-text focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="email@example.com"
           />
         </div>
@@ -148,7 +148,7 @@ function SignInForm() {
         <div>
           <label
             htmlFor="password"
-            className="mb-1 block text-sm font-medium text-neutral-300"
+            className="mb-1 block text-sm font-medium text-main-text"
           >
             비밀번호
           </label>
@@ -158,7 +158,7 @@ function SignInForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full rounded-lg border border-neutral-600 bg-neutral-700 px-4 py-3 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-main-text placeholder-sub-text focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="••••••••"
           />
         </div>
@@ -166,17 +166,17 @@ function SignInForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full rounded-lg bg-primary py-3 text-white transition hover:bg-primary-700 disabled:opacity-50"
+          className="w-full rounded-lg bg-primary py-3 text-white transition hover:bg-primary-600 disabled:opacity-50"
         >
           {isLoading ? '로그인 중...' : '로그인'}
         </button>
       </form>
 
-      <p className="text-center text-sm text-neutral-400">
+      <p className="text-center text-sm text-sub-text">
         계정이 없으신가요?{' '}
         <Link
           href="/auth/register"
-          className="text-primary-400 hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           회원가입
         </Link>
@@ -187,19 +187,19 @@ function SignInForm() {
 
 export default function SignInPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white">로그인</h1>
-          <p className="mt-2 text-neutral-400">
+          <h1 className="text-3xl font-bold text-main-text">로그인</h1>
+          <p className="mt-2 text-sub-text">
             Not a Trip에 오신 것을 환영합니다
           </p>
         </div>
 
         <Suspense
           fallback={
-            <div className="rounded-lg bg-neutral-800 p-8">
-              <p className="text-center text-neutral-400">로딩 중...</p>
+            <div className="rounded-lg bg-surface p-8 shadow-md">
+              <p className="text-center text-sub-text">로딩 중...</p>
             </div>
           }
         >
@@ -207,7 +207,10 @@ export default function SignInPage() {
         </Suspense>
 
         <div className="text-center">
-          <Link href="/" className="text-sm text-neutral-400 hover:text-white">
+          <Link
+            href="/"
+            className="text-sm text-sub-text transition-colors hover:text-main-text"
+          >
             ← 메인으로 돌아가기
           </Link>
         </div>

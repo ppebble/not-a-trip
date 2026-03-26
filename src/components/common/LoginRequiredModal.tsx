@@ -21,12 +21,12 @@ export function LoginRequiredModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-900">
         <div className="mb-4 flex justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
             <svg
-              className="h-6 w-6 text-amber-600"
+              className="h-6 w-6 text-amber-600 dark:text-amber-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -40,10 +40,10 @@ export function LoginRequiredModal({
             </svg>
           </div>
         </div>
-        <h3 className="mb-2 text-center text-lg font-semibold text-primary-800">
+        <h3 className="mb-2 text-center text-lg font-semibold text-primary-800 dark:text-primary-300">
           {title}
         </h3>
-        <p className="mb-6 text-center text-sm text-secondary">
+        <p className="mb-6 text-center text-sm text-secondary dark:text-secondary-400">
           {description}
           <br />
           로그인 페이지로 이동합니다.
