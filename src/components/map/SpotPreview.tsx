@@ -107,7 +107,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   return (
     <div
       ref={previewRef}
-      className={`animate-fade-in-up absolute z-[900] w-96 rounded-xl bg-white shadow-xl ${className}`}
+      className={`animate-fade-in-up absolute z-[900] w-96 rounded-xl border border-border bg-surface shadow-xl ${className}`}
       style={{
         left: position.left,
         top: position.top,
@@ -176,7 +176,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
                 priority
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-surface">
+              <div className="flex h-full w-full items-center justify-center bg-accent-surface">
                 <span className="text-4xl">🗾</span>
               </div>
             )}
@@ -188,13 +188,13 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
             {/* 스팟 이름 */}
             <h2
               id="spot-preview-title"
-              className="mb-2 truncate text-lg font-bold text-primary-800"
+              className="mb-2 truncate text-lg font-bold text-main-text"
             >
               {spot.name}
             </h2>
 
             {/* 스팟 주소 */}
-            <div className="mb-2 flex items-start space-x-1.5 text-sm text-primary">
+            <div className="mb-2 flex items-start space-x-1.5 text-sm text-sub-text">
               <svg
                 className="mt-0.5 h-4 w-4 flex-shrink-0"
                 fill="none"
@@ -218,14 +218,14 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
             </div>
 
             {/* 스팟 설명 */}
-            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-text-secondary">
+            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-sub-text">
               {spot.description}
             </p>
 
             {/* 상세보기 버튼 (Requirements 2.4) */}
             <button
               onClick={handleDetailClick}
-              className="flex w-full items-center justify-center space-x-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700"
+              className="flex w-full items-center justify-center space-x-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
             >
               <span>자세히 보기</span>
               <svg
