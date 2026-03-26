@@ -39,7 +39,7 @@ export const ComparisonCard = memo(function ComparisonCard({
 
   return (
     <div
-      className={`group relative cursor-pointer overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 ease-out ${isHovered ? 'scale-[1.02] shadow-xl' : 'scale-100'} `}
+      className={`group relative cursor-pointer overflow-hidden rounded-xl bg-surface shadow-md transition-all duration-300 ease-out ${isHovered ? 'scale-[1.02] shadow-xl' : 'scale-100'} `}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

@@ -20,13 +20,13 @@ export function GalleryHeader({
   todayCheckIns,
 }: GalleryHeaderProps) {
   return (
-    <header className="border-b border-border bg-white px-4 py-6">
+    <header className="border-b border-border bg-surface px-4 py-6">
       <div className="mx-auto max-w-6xl">
         {/* 페이지 제목 - Requirements 5.1 */}
-        <h1 className="text-2xl font-bold text-primary-800">순례 갤러리</h1>
+        <h1 className="text-2xl font-bold text-main-text">순례 갤러리</h1>
 
         {/* 부제목 - Requirements 5.2 */}
-        <p className="mt-1 text-sm text-secondary">오타쿠들의 발자취</p>
+        <p className="mt-1 text-sm text-sub-text">오타쿠들의 발자취</p>
 
         {/* 통계 영역 - Requirements 5.3 */}
         <div className="mt-4 flex gap-6">
@@ -35,7 +35,7 @@ export function GalleryHeader({
               📸
             </span>
             <div>
-              <span className="font-semibold text-text-secondary">총 인증</span>{' '}
+              <span className="font-semibold text-sub-text">총 인증</span>{' '}
               <span className="font-bold text-primary">
                 {totalCheckIns.toLocaleString()}
               </span>
@@ -46,9 +46,7 @@ export function GalleryHeader({
               🔥
             </span>
             <div>
-              <span className="font-semibold text-text-secondary">
-                오늘 인증
-              </span>{' '}
+              <span className="font-semibold text-sub-text">오늘 인증</span>{' '}
               <span className="font-bold text-green-600">
                 {todayCheckIns.toLocaleString()}
               </span>

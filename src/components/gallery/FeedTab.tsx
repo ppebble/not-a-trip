@@ -28,11 +28,11 @@ function SearchBar({
   onChange: (v: string) => void
 }) {
   return (
-    <div className="sticky top-14 z-10 border-b bg-white px-4 py-3">
+    <div className="sticky top-14 z-10 border-b border-border bg-surface px-4 py-3">
       <div className="mx-auto max-w-4xl">
         <div className="relative">
           <svg
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 dark:text-neutral-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -50,7 +50,7 @@ function SearchBar({
             placeholder="스팟 또는 유저 검색"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-lg bg-neutral-100 py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
+            className="w-full rounded-lg bg-neutral-100 py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300 dark:bg-accent-surface dark:text-neutral-200 dark:focus:ring-neutral-700"
           />
         </div>
       </div>
@@ -77,7 +77,7 @@ function EmptyState() {
   return (
     <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">📸</div>
-      <p className="text-lg font-medium text-text-secondary">
+      <p className="text-text-secondary text-lg font-medium">
         아직 인증샷이 없어요
       </p>
       <p className="mt-2 text-sm text-secondary">
@@ -92,7 +92,7 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">😢</div>
-      <p className="text-lg font-medium text-text-secondary">
+      <p className="text-text-secondary text-lg font-medium">
         데이터를 불러올 수 없습니다
       </p>
       <p className="mt-2 text-sm text-secondary">

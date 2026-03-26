@@ -54,7 +54,7 @@ export function GalleryTabs({ activeTab, onTabChange }: GalleryTabsProps) {
 
   return (
     <nav
-      className="sticky top-0 z-10 border-b border-border bg-white px-4 py-3"
+      className="sticky top-0 z-10 border-b border-border bg-surface px-4 py-3"
       role="tablist"
       aria-label="갤러리 탭 네비게이션"
     >
@@ -69,7 +69,7 @@ export function GalleryTabs({ activeTab, onTabChange }: GalleryTabsProps) {
               className={`flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
                 isActive
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-primary-50 text-primary hover:bg-primary-100'
+                  : 'bg-neutral-100 text-sub-text hover:bg-neutral-200'
               }`}
               role="tab"
               aria-selected={isActive}
