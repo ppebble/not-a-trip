@@ -42,7 +42,7 @@ export default function MyReportsPage() {
         isOpen={true}
         title="로그인이 필요한 서비스입니다"
         description="내 제보 목록을 확인하려면 로그인이 필요합니다."
-        onConfirm={() => router.push('/auth/login')}
+        onConfirm={() => router.push('/auth/signin')}
       />
     )
   }
@@ -54,7 +54,7 @@ export default function MyReportsPage() {
         <div className="mx-auto max-w-lg">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-secondary hover:text-text-primary"
+            className="hover:text-text-primary flex items-center gap-2 text-sm text-secondary"
           >
             <svg
               className="h-4 w-4"
