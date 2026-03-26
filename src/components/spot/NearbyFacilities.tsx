@@ -179,19 +179,19 @@ export default function NearbyFacilities({
   // 편의시설이 없는 경우
   if (facilities.length === 0) {
     return (
-      <div className="rounded-lg bg-white p-6 shadow-md">
+      <div className="rounded-lg border border-border bg-surface p-6 shadow-md">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-neutral-900">근처 편의시설</h2>
+          <h2 className="text-2xl font-bold text-main-text">근처 편의시설</h2>
           <button
             onClick={() => setShowReportForm(true)}
-            className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
+            className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
           >
             편의시설 제보
           </button>
         </div>
         <div className="py-8 text-center">
           <div className="mb-2 text-4xl">🏪</div>
-          <p className="text-neutral-500">근처에 등록된 편의시설이 없습니다.</p>
+          <p className="text-sub-text">근처에 등록된 편의시설이 없습니다.</p>
         </div>
         <FacilityReportForm
           isOpen={showReportForm}
@@ -204,14 +204,14 @@ export default function NearbyFacilities({
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-md">
+    <div className="rounded-lg border border-border bg-surface p-6 shadow-md">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-neutral-900">
+        <h2 className="text-2xl font-bold text-main-text">
           근처 편의시설 ({facilities.length}개)
         </h2>
         <button
           onClick={() => setShowReportForm(true)}
-          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
+          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
         >
           편의시설 제보
         </button>
@@ -239,24 +239,24 @@ export default function NearbyFacilities({
           return (
             <div
               key={type}
-              className="overflow-hidden rounded-lg border border-neutral-200"
+              className="overflow-hidden rounded-lg border border-border"
             >
               {/* 아코디언 헤더 */}
               <button
                 onClick={() => toggleAccordion(type)}
-                className="flex w-full items-center justify-between bg-neutral-50 px-4 py-3 transition-colors hover:bg-neutral-100"
+                className="flex w-full items-center justify-between bg-accent-surface px-4 py-3 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
               >
                 <div className="flex items-center space-x-2">
                   <span className="text-xl">{config.icon}</span>
-                  <h3 className="text-lg font-semibold text-neutral-900">
+                  <h3 className="text-lg font-semibold text-main-text">
                     {config.label}
                   </h3>
-                  <span className="rounded-full bg-primary-100 px-2 py-0.5 text-sm font-medium text-primary-700">
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-sm font-medium text-primary">
                     {typeFacilities.length}
                   </span>
                 </div>
                 <svg
-                  className={`h-5 w-5 text-neutral-500 transition-transform duration-200 ${
+                  className={`h-5 w-5 text-sub-text transition-transform duration-200 ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                   fill="none"
@@ -274,7 +274,7 @@ export default function NearbyFacilities({
 
               {/* 아코디언 콘텐츠 */}
               {isOpen && (
-                <div className="border-t border-neutral-200 p-4">
+                <div className="border-t border-border p-4">
                   <div className="space-y-3">
                     {visibleFacilities.map((facility) => (
                       <FacilityCard
@@ -289,7 +289,7 @@ export default function NearbyFacilities({
                   {hasMore && (
                     <button
                       onClick={() => toggleExpand(type)}
-                      className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-200 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-50"
+                      className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-border py-2 text-sm font-medium text-sub-text transition-colors hover:bg-accent-surface"
                     >
                       {isExpanded ? (
                         <>
