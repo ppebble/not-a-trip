@@ -1,6 +1,7 @@
 'use client'
 
 import { SpotCategory, CATEGORY_SECTIONS, ExternalLink } from '@/types'
+import { AppIcon } from '@/components/common/AppIcon'
 import SceneGallery from './SceneGallery'
 import { EventInfoSection } from './EventInfoSection'
 
@@ -67,7 +68,7 @@ export function SpotContentSection({
         <div className="overflow-hidden rounded-lg bg-white shadow-md dark:bg-neutral-900">
           <div className="p-6">
             <div className="mb-4 flex items-center gap-2">
-              <span className="text-2xl">📍</span>
+              <AppIcon name="spot" size={28} />
               <h2 className="text-2xl font-bold text-primary dark:text-primary-400">
                 정보
               </h2>

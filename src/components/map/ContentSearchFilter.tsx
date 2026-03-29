@@ -128,11 +128,11 @@ export default function ContentSearchFilter({
     return (
       <button
         onClick={handleToggleExpand}
-        className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/95 shadow-lg backdrop-blur-sm transition-all hover:bg-white ${className}`}
+        className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/95 shadow-lg backdrop-blur-sm transition-all hover:bg-white dark:bg-neutral-800/95 dark:hover:bg-neutral-800 ${className}`}
         aria-label="검색 열기"
       >
         <svg
-          className="h-5 w-5 text-primary"
+          className="h-5 w-5 text-primary dark:text-primary-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -153,7 +153,7 @@ export default function ContentSearchFilter({
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <svg
-          className="h-4 w-4 text-neutral-400"
+          className="h-4 w-4 text-neutral-400 dark:text-neutral-500"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -175,7 +175,7 @@ export default function ContentSearchFilter({
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-64 rounded-full border border-neutral-200 bg-white/95 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-lg backdrop-blur-sm transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
+        className="w-64 rounded-full border border-neutral-200 bg-white/95 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-lg backdrop-blur-sm transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary dark:border-neutral-700 dark:bg-neutral-800/95 dark:text-white dark:placeholder-neutral-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
         role="combobox"
         aria-label="콘텐츠 검색"
         aria-expanded={isDropdownOpen}
@@ -186,7 +186,7 @@ export default function ContentSearchFilter({
       <button
         type="button"
         onClick={handleClear}
-        className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 transition-colors hover:text-neutral-600"
+        className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 transition-colors hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
         aria-label="검색어 초기화"
       >
         <svg

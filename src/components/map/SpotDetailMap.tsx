@@ -277,15 +277,20 @@ export default function SpotDetailMap({
 
       {/* 범례 */}
       {facilities.length > 0 && (
-        <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm">
-          <h4 className="mb-2 text-sm font-semibold text-neutral-900">범례</h4>
+        <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm dark:bg-neutral-900/90">
+          <h4 className="mb-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+            범례
+          </h4>
           <div className="space-y-1">
-            <div className="flex items-center text-xs">
+            <div className="flex items-center text-xs text-neutral-700 dark:text-neutral-300">
               <div className="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
               <span>특별한 여행지</span>
             </div>
             {Array.from(new Set(facilities.map((f) => f.type))).map((type) => (
-              <div key={type} className="flex items-center text-xs">
+              <div
+                key={type}
+                className="flex items-center text-xs text-neutral-700 dark:text-neutral-300"
+              >
                 <div
                   className={`mr-2 h-3 w-3 rounded-full ${getFacilityColor(type)}`}
                 ></div>
