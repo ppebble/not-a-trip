@@ -3,6 +3,7 @@
 import { useAdminAuth } from '@/hooks/useAdminAuth'
 import { useAdminDashboardSummary } from '@/hooks/useAdminQueries'
 import { AdminDashboardCard } from '@/components/admin/AdminDashboardCard'
+import { AppIcon } from '@/components/common/AppIcon'
 
 /**
  * 관리자 대시보드 랜딩 페이지
@@ -87,7 +88,7 @@ export default function AdminDashboardPage() {
             <AdminDashboardCard
               title="콘텐츠 이미지 관리"
               description="콘텐츠 마스터 이미지를 관리합니다"
-              icon="🖼️"
+              icon={<AppIcon name="gallery" size={24} />}
               pendingCount={0}
               href="/admin/content-images"
             />
