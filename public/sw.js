@@ -208,7 +208,7 @@ async function handleDataRequest(request) {
 async function handleStaticRequest(request) {
   try {
     const response = await fetch(request)
-    if (response.status === 200) {
+    if (response.status === 200 && request.method === 'GET') {
       const cache = await caches.open(STATIC_CACHE)
       cache.put(request, response.clone())
     }
