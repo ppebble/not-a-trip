@@ -7,6 +7,7 @@ import {
   type RouteFilters,
 } from '@/components/route/RouteFilterBar'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
+import { AppIcon } from '@/components/common/AppIcon'
 import { useRouteList } from '@/hooks/useRouteQueries'
 import type { Route } from '@/types/route'
 
@@ -95,7 +96,10 @@ export function RouteListContent() {
         </div>
       ) : routes.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="text-lg text-muted">🗺️ 코스가 없습니다</p>
+          <div className="mb-4 flex justify-center">
+            <AppIcon name="map" size={48} className="opacity-20" />
+          </div>
+          <p className="text-lg text-muted">코스가 없습니다</p>
           <p className="mt-1 text-sm text-neutral-300">
             필터를 변경하거나 새 코스를 만들어보세요
           </p>

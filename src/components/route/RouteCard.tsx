@@ -2,6 +2,7 @@
 
 import { memo } from 'react'
 import Link from 'next/link'
+import { AppIcon } from '@/components/common/AppIcon'
 import { OptimizedImage } from '@/components/common'
 import type { Route, RouteDifficulty } from '@/types/route'
 
@@ -57,14 +58,15 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
             />
           ) : (
             <div className="flex h-full items-center justify-center text-4xl text-neutral-300">
-              🗺️
+              <AppIcon name="map" size={48} className="opacity-20" />
             </div>
           )}
 
           {/* 공식 추천 뱃지 */}
           {route.isOfficial && (
-            <span className="absolute left-2 top-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white shadow">
-              ⭐ 공식 추천
+            <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white shadow">
+              <AppIcon name="official" size={12} />
+              공식 추천
             </span>
           )}
 
@@ -106,20 +108,31 @@ export const RouteCard = memo(function RouteCard({ route }: RouteCardProps) {
 
           {/* 메타 정보 */}
           <div className="flex items-center gap-3 text-xs text-muted">
-            <span title="스팟 수">📍 {availableSpots.length}곳</span>
-            <span title="예상 소요시간">
-              ⏱️ {formatDuration(route.estimatedDuration)}
+            <span title="스팟 수" className="flex items-center gap-1">
+              <AppIcon name="spot" size={14} />
+              {availableSpots.length}곳
             </span>
-            <span title="총 거리">
-              🚶 {formatDistance(route.totalDistance)}
+            <span title="예상 소요시간" className="flex items-center gap-1">
+              <AppIcon name="duration" size={14} />
+              {formatDuration(route.estimatedDuration)}
+            </span>
+            <span title="총 거리" className="flex items-center gap-1">
+              <AppIcon name="distance" size={14} />
+              {formatDistance(route.totalDistance)}
             </span>
           </div>
 
           {/* 하단: 북마크/완주 수 + 작성자 */}
           <div className="mt-3 flex items-center justify-between border-t border-neutral-100 pt-3">
             <div className="flex items-center gap-3 text-xs text-muted">
-              <span>🔖 {route.bookmarkCount}</span>
-              <span>🏆 {route.completionCount}</span>
+              <span className="flex items-center gap-1">
+                <AppIcon name="bookmark" size={14} />
+                {route.bookmarkCount}
+              </span>
+              <span className="flex items-center gap-1">
+                <AppIcon name="completion" size={14} />
+                {route.completionCount}
+              </span>
             </div>
             <span className="text-xs text-muted">{route.authorName}</span>
           </div>

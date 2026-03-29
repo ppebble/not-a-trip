@@ -1,6 +1,7 @@
 'use client'
 
 import { useRelatedRoutes } from '@/hooks/useRouteQueries'
+import { AppIcon } from '@/components/common/AppIcon'
 import { RouteCard } from '@/components/route/RouteCard'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
 
@@ -21,8 +22,9 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
     return (
       <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
         <div className="p-4 md:p-6">
-          <h2 className="mb-4 text-lg font-bold text-main-text md:text-xl">
-            🗺️ 관련 순례 코스
+          <h2 className="flex items-center gap-2 text-lg font-bold text-main-text md:text-xl">
+            <AppIcon name="map" size={24} />
+            관련 순례 코스
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {Array.from({ length: 2 }, (_, i) => (
@@ -48,8 +50,9 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
       <div className="p-4 md:p-6">
-        <h2 className="mb-4 text-lg font-bold text-main-text md:text-xl">
-          🗺️ 관련 순례 코스
+        <h2 className="flex items-center gap-2 text-lg font-bold text-main-text md:text-xl">
+          <AppIcon name="map" size={24} />
+          관련 순례 코스
         </h2>
         <p className="mb-3 text-sm text-sub-text">
           「{contentNames[0]}」 관련 코스를 따라가보세요

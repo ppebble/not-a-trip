@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react'
 import Link from 'next/link'
+import { AppIcon } from '@/components/common/AppIcon'
 import { RouteListContent } from '@/components/route/RouteListContent'
 import { RecommendedRoutes } from '@/components/route/RecommendedRoutes'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
@@ -44,7 +45,10 @@ export default function RoutesPage() {
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-main-text">🗺️ 순례 코스</h1>
+            <h1 className="flex items-center gap-2 text-2xl font-bold text-main-text">
+              <AppIcon name="map" size={28} />
+              순례 코스
+            </h1>
             <p className="mt-1 text-sm text-sub-text">
               다른 순례자들이 만든 코스를 탐색하고 따라가보세요
             </p>
@@ -64,7 +68,10 @@ export default function RoutesPage() {
         <div className="my-6 border-t border-neutral-200" />
 
         {/* 전체 코스 목록 */}
-        <h2 className="mb-4 text-lg font-bold text-main-text">📋 전체 코스</h2>
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-main-text">
+          <AppIcon name="route" size={20} />
+          전체 코스
+        </h2>
         <Suspense fallback={<RouteListSkeleton />}>
           <RouteListContent />
         </Suspense>
