@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Bulk Replace via Gemini CLI",
+  "description": "대규모 문자열 치환 등 토큰이 많이 소모되는 단순 반복 작업을 Gemini CLI로 위임합니다.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "node .kiro/hooks/run-gemini-cli.js bulk-replace",
+    "timeout": 120
+  }
+}
