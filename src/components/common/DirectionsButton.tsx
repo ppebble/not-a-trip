@@ -7,6 +7,7 @@ import {
   openDirections,
   type DirectionsUrls,
 } from '@/lib/directions'
+import { AppIcon } from '@/components/common/AppIcon'
 
 interface DirectionsButtonProps {
   lat: number
@@ -18,13 +19,17 @@ interface DirectionsButtonProps {
 interface MapAppOption {
   key: keyof DirectionsUrls
   label: string
-  icon: string
+  icon: React.ReactNode
   /** 표시할 플랫폼 (없으면 모든 플랫폼) */
   platforms?: Array<'ios' | 'android' | 'web'>
 }
 
 const MAP_APPS: MapAppOption[] = [
-  { key: 'google', label: 'Google Maps', icon: '🗺️' },
+  {
+    key: 'google',
+    label: 'Google Maps',
+    icon: <AppIcon name="map" size={18} />,
+  },
   { key: 'apple', label: 'Apple Maps', icon: '🍎', platforms: ['ios'] },
   { key: 'kakao', label: '카카오맵', icon: '🟡' },
   { key: 'naver', label: '네이버 지도', icon: '🟢' },
@@ -131,7 +136,9 @@ export default function DirectionsButton({
               className="text-text-secondary flex w-full items-center gap-2.5 px-3 py-2.5 text-sm transition-colors hover:bg-primary-50 active:bg-surface"
               role="menuitem"
             >
-              <span className="text-base">{app.icon}</span>
+              <span className="flex h-5 w-5 items-center justify-center text-base">
+                {app.icon}
+              </span>
               {app.label}
             </button>
           ))}

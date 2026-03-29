@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
+import { AppIcon, AppIconType } from '@/components/common/AppIcon'
 
 /**
  * GalleryTabs 컴포넌트
@@ -23,10 +24,10 @@ export interface GalleryTabsProps {
   onTabChange?: (tab: GalleryTab) => void
 }
 
-const TABS: { id: GalleryTab; label: string; icon: string }[] = [
-  { id: 'feed', label: '실시간 피드', icon: '📸' },
-  { id: 'hall-of-fame', label: '명예의 전당', icon: '🏆' },
-  { id: 'content', label: '작품별', icon: '🎬' },
+const TABS: { id: GalleryTab; label: string; icon: AppIconType }[] = [
+  { id: 'feed', label: '실시간 피드', icon: 'gallery' },
+  { id: 'hall-of-fame', label: '명예의 전당', icon: 'hall-of-fame' },
+  { id: 'content', label: '작품별', icon: 'content-wise' },
 ]
 
 export function GalleryTabs({ activeTab, onTabChange }: GalleryTabsProps) {
@@ -76,7 +77,9 @@ export function GalleryTabs({ activeTab, onTabChange }: GalleryTabsProps) {
               aria-controls={`tabpanel-${tab.id}`}
               id={`tab-${tab.id}`}
             >
-              <span className="hidden sm:inline">{tab.icon}</span>
+              <span className="hidden sm:inline">
+                <AppIcon name={tab.icon} size={18} />
+              </span>
               <span>{tab.label}</span>
             </button>
           )

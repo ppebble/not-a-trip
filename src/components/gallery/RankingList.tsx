@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { AppIcon } from '@/components/common/AppIcon'
 
 /**
  * 스팟 랭킹 아이템
@@ -94,7 +95,7 @@ export function RankingList({
       {/* 이번 주 인기 스팟 섹션 */}
       <section>
         <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-neutral-900">
-          <span>🔥</span>
+          <AppIcon name="popular" size={24} />
           <span>이번 주 인기 스팟</span>
         </h2>
 
@@ -150,7 +151,7 @@ export function RankingList({
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-xl">
-                        📍
+                        <AppIcon name="spot" size={32} className="opacity-30" />
                       </div>
                     )}
                   </div>

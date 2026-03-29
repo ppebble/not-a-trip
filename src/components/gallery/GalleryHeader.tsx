@@ -1,5 +1,7 @@
 'use client'
 
+import { AppIcon } from '@/components/common/AppIcon'
+
 /**
  * GalleryHeader 컴포넌트
  * 순례 갤러리 페이지의 헤더 영역을 담당합니다.
@@ -31,8 +33,8 @@ export function GalleryHeader({
         {/* 통계 영역 - Requirements 5.3 */}
         <div className="mt-4 flex gap-6">
           <div className="flex items-center gap-2 text-sm">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-surface">
-              📸
+            <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-surface">
+              <AppIcon name="checkin" size={20} />
             </span>
             <div>
               <span className="font-semibold text-sub-text">총 인증</span>{' '}
@@ -42,8 +44,8 @@ export function GalleryHeader({
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-              🔥
+            <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-green-100">
+              <AppIcon name="today-checkin" size={20} />
             </span>
             <div>
               <span className="font-semibold text-sub-text">오늘 인증</span>{' '}

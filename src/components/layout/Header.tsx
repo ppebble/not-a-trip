@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
+import { AppIcon } from '@/components/common/AppIcon'
 
 export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
@@ -15,17 +16,9 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* 로고 */}
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/mascot/logo-face.webp"
-            alt="마스코트"
-            width={28}
-            height={28}
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-            }}
-          />
-          <span className="text-text-primary text-xl font-bold">
-            ✈️ Not a Trip
+          <span className="text-text-primary flex items-center gap-1.5 text-xl font-bold">
+            <AppIcon name="logo" size="2xl" />
+            Not a Trip
           </span>
         </Link>
 
@@ -82,15 +75,17 @@ export function Header() {
                 className="flex items-center gap-2 rounded-lg px-2 py-1 transition hover:bg-secondary-100"
               >
                 {user.image ? (
-                  <img
+                  <Image
                     src={user.image}
                     alt={user.name || '프로필'}
+                    width={28}
+                    height={28}
                     className="h-7 w-7 rounded-full object-cover"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                    {(user.name || user.email || '?').charAt(0).toUpperCase()}
+                  <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-secondary-100">
+                    <AppIcon name="profile-front" size="xl" />
                   </div>
                 )}
                 <span className="text-text-secondary hidden text-sm sm:block">
@@ -169,15 +164,17 @@ export function Header() {
             <Link
               href="/gallery"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
+              className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
+              <AppIcon name="gallery" size="sm" />
               순례 갤러리
             </Link>
             <Link
               href="/routes"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
+              className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
+              <AppIcon name="map" size="sm" />
               순례 코스
             </Link>
             <Link
@@ -207,9 +204,10 @@ export function Header() {
               <Link
                 href="/settings/account"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
+                className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
-                👤 계정 설정
+                <AppIcon name="profile" size="sm" />
+                계정 설정
               </Link>
             )}
           </div>

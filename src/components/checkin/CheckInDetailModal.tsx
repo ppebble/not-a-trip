@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { CheckIn } from '@/types'
+import { AppIcon } from '@/components/common/AppIcon'
 import { ComparisonViewer } from './ComparisonViewer'
 
 interface CheckInDetailModalProps {
@@ -45,10 +46,8 @@ export function CheckInDetailModal({
                 className="rounded-full"
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
-                <span className="text-lg font-medium text-gray-600">
-                  {checkIn.userName[0]}
-                </span>
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-secondary-50">
+                <AppIcon name="profile-front" size={36} />
               </div>
             )}
             <div>
