@@ -10,7 +10,7 @@ import Link from 'next/link'
 interface AdminDashboardCardProps {
   title: string
   description: string
-  icon: string
+  icon: string | React.ReactNode
   pendingCount: number
   href: string
 }
@@ -28,7 +28,11 @@ export function AdminDashboardCard({
       className="group block rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-md"
     >
       <div className="flex items-start justify-between">
-        <span className="text-3xl" role="img" aria-label={title}>
+        <span
+          className="flex h-10 w-10 items-center justify-center text-3xl"
+          role="img"
+          aria-label={title}
+        >
           {icon}
         </span>
         {pendingCount > 0 && (

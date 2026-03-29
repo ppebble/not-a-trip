@@ -1,6 +1,7 @@
 'use client'
 
 import { useContributors } from '@/hooks/useGalleryQueries'
+import { AppIcon } from '@/components/common/AppIcon'
 
 interface ContributorListProps {
   spotId: string
@@ -26,8 +27,9 @@ export function ContributorList({ spotId }: ContributorListProps) {
 
   return (
     <div>
-      <h3 className="text-text-secondary mb-2 text-sm font-medium">
-        📋 정보 기여자
+      <h3 className="text-text-secondary mb-2 flex items-center gap-1.5 text-sm font-medium">
+        <AppIcon name="checkin2" size={16} />
+        정보 기여자
       </h3>
       <div className="flex flex-wrap gap-2">
         {contributors.map((c) => (

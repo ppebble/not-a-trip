@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouteNavigation } from '@/hooks/useRouteNavigation'
@@ -130,8 +131,9 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-2">
               {route.isOfficial && (
-                <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
-                  ⭐ 공식 추천
+                <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                  <AppIcon name="official" size={12} />
+                  공식 추천
                 </span>
               )}
               <span className="text-sm text-muted">
@@ -149,11 +151,26 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
         {/* 메타 정보 */}
         <div className="text-text-secondary mb-4 flex flex-wrap gap-4 text-sm">
-          <span>📍 {availableSpots.length}곳</span>
-          <span>⏱️ {formatDuration(route.estimatedDuration)}</span>
-          <span>🚶 {formatDistance(route.totalDistance)}</span>
-          <span>🔖 {bookmarkCount}</span>
-          <span>🏆 {route.completionCount}</span>
+          <span className="flex items-center gap-1">
+            <AppIcon name="spot" size={16} />
+            {availableSpots.length}곳
+          </span>
+          <span className="flex items-center gap-1">
+            <AppIcon name="duration" size={16} />
+            {formatDuration(route.estimatedDuration)}
+          </span>
+          <span className="flex items-center gap-1">
+            <AppIcon name="distance" size={16} />
+            {formatDistance(route.totalDistance)}
+          </span>
+          <span className="flex items-center gap-1">
+            <AppIcon name="bookmark" size={16} />
+            {bookmarkCount}
+          </span>
+          <span className="flex items-center gap-1">
+            <AppIcon name="completion" size={16} />
+            {route.completionCount}
+          </span>
         </div>
 
         {/* 작품 태그 */}
@@ -176,9 +193,10 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             {route.regionTags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-secondary-50 px-2.5 py-0.5 text-xs text-secondary-600"
+                className="flex items-center gap-1 rounded-full bg-secondary-50 px-2.5 py-0.5 text-xs text-secondary-600"
               >
-                📍 {tag}
+                <AppIcon name="location" size={12} />
+                {tag}
               </span>
             ))}
           </div>
@@ -195,20 +213,26 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <div className="flex gap-3">
           <button
             onClick={handleStartRoute}
-            className="flex-1 rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
           >
-            🚶 코스 시작
+            <AppIcon name="route" size={18} />
+            코스 시작
           </button>
           <button
             onClick={handleBookmark}
             disabled={isBookmarking}
-            className={`rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
+            className={`flex items-center justify-center gap-2 rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
               isBookmarked
                 ? 'border-amber-400 bg-amber-50 text-amber-700'
                 : 'border-border bg-white text-primary hover:bg-primary-50'
             }`}
           >
-            {isBookmarked ? '🔖 저장됨' : '🔖 저장'}
+            <AppIcon
+              name="bookmark"
+              size={18}
+              className={isBookmarked ? '' : 'opacity-70'}
+            />
+            {isBookmarked ? '저장됨' : '저장'}
           </button>
           {user && route.authorId === user.id && (
             <button
@@ -261,8 +285,8 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
               return (
                 <li>
                   <div className="flex items-center gap-3 rounded-lg bg-primary-50 p-3">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm text-white">
-                      🏠
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary p-1.5 text-sm text-white">
+                      <AppIcon name="location" size={20} />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-text-primary text-sm font-medium">
@@ -296,9 +320,10 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary-100"
+                            className="flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary-100"
                           >
-                            🗺️ 구글맵 길찾기
+                            <AppIcon name="map" size={12} />
+                            구글맵 길찾기
                           </a>
                         )}
                       </div>
@@ -340,9 +365,10 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                               )}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary-100"
+                              className="flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary-100"
                             >
-                              🗺️ 구글맵 길찾기
+                              <AppIcon name="map" size={12} />
+                              구글맵 길찾기
                             </a>
                           )}
                         </div>
@@ -380,7 +406,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center text-lg text-neutral-300">
-                        📍
+                        <AppIcon name="spot" size={24} className="opacity-30" />
                       </div>
                     )}
                   </div>

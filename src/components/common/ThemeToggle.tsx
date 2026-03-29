@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { AppIcon } from './AppIcon'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -21,7 +22,12 @@ export function ThemeToggle() {
     else setTheme('system')
   }
 
-  const icon = theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻'
+  const getIcon = () => {
+    if (theme === 'dark') return <AppIcon name="dark-mode" size="xl" />
+    if (theme === 'light') return <AppIcon name="light-mode" size="xl" />
+    return <AppIcon name="settings" size="xl" />
+  }
+
   const label =
     theme === 'dark'
       ? '다크 모드'
@@ -36,7 +42,7 @@ export function ThemeToggle() {
       aria-label={`현재: ${label}. 클릭하여 테마 변경`}
       title={label}
     >
-      <span className="text-base">{icon}</span>
+      <span className="flex items-center justify-center">{getIcon()}</span>
     </button>
   )
 }

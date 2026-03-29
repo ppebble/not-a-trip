@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useSpotsSuspense } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
@@ -120,16 +121,16 @@ function HomeContent() {
       </div>
 
       {/* 데스크톱용 플로팅 정보 패널 */}
-      <div className="absolute left-4 top-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm md:block">
+      <div className="absolute left-4 top-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm dark:bg-neutral-900/90 md:block">
         <div className="flex items-center space-x-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
-            📍
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary text-white">
+            <AppIcon name="location" size="lg" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-primary">
+            <p className="text-sm font-semibold text-primary dark:text-primary-400">
               {spotCount}개의 특별한 여행지
             </p>
-            <p className="text-xs text-secondary">
+            <p className="text-xs text-secondary dark:text-neutral-400">
               {spotCount > 0
                 ? '클릭하여 상세 정보를 확인하세요'
                 : '스팟 데이터를 불러오는 중...'}

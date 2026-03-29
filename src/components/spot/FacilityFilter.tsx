@@ -41,8 +41,8 @@ export default function FacilityFilter({
         onClick={onSelectAll}
         className={`inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
           isAllSelected
-            ? 'border-primary-300 bg-primary-100 text-primary-800'
-            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
+            ? 'border-primary-300 bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
+            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
         }`}
         aria-pressed={isAllSelected}
       >
@@ -60,8 +60,8 @@ export default function FacilityFilter({
             onClick={() => onToggle(type)}
             className={`inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
               isSelected
-                ? color
-                : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
+                ? color + ' dark:bg-opacity-20'
+                : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
             }`}
             aria-pressed={isSelected}
           >

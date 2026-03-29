@@ -94,7 +94,7 @@ export default function SearchInput({
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-full rounded-full border border-neutral-200 bg-white/90 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-sm transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary"
+        className="w-full rounded-full border border-neutral-200 bg-white/90 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-sm transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-white dark:placeholder-neutral-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
         aria-label="콘텐츠 검색"
       />
 
@@ -103,7 +103,7 @@ export default function SearchInput({
         <button
           type="button"
           onClick={handleClear}
-          className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 transition-colors hover:text-neutral-600"
+          className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 transition-colors hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
           aria-label="검색어 초기화"
         >
           <svg

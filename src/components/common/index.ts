@@ -10,6 +10,8 @@ export {
   GalleryPageSkeleton,
 } from './SkeletonUI'
 export { OptimizedImage } from './OptimizedImage'
+export { AppIcon } from './AppIcon'
+export type { AppIconType } from './AppIcon'
 export { SpotLoadingSkeleton } from './SpotLoadingSkeleton'
 export { SpotErrorDisplay } from './SpotErrorDisplay'
 export { EmptySearchOverlay } from './EmptySearchOverlay'

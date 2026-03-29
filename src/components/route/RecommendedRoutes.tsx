@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { RouteCard } from '@/components/route/RouteCard'
+import { AppIcon } from '@/components/common/AppIcon'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
 import type { Route } from '@/types/route'
 
@@ -30,6 +31,15 @@ function RecommendedSkeleton() {
   )
 }
 
+/** 빈 상태 표시 컴포넌트 */
+function EmptyState({ message }: { message: string }) {
+  return (
+    <div className="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-neutral-100 bg-neutral-50/50">
+      <p className="text-sm text-neutral-400">{message}</p>
+    </div>
+  )
+}
+
 /**
  * RecommendedRoutes - 추천 코스 섹션
  * 코스 목록 페이지 상단에 공식 추천 + 인기 코스 표시
@@ -47,7 +57,7 @@ export function RecommendedRoutes() {
         const json: RecommendedData = await res.json()
         setData(json)
       } catch {
-        // 에러 시 섹션 숨김
+        // 에러 시 빈 상태로 유지
       } finally {
         setIsLoading(false)
       }
@@ -55,32 +65,17 @@ export function RecommendedRoutes() {
     fetchRecommended()
   }, [])
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-text-primary mb-3 text-lg font-bold">
-            ⭐ 공식 추천 코스
-          </h2>
-          <RecommendedSkeleton />
-        </div>
-      </div>
-    )
-  }
-
-  // 데이터 없으면 섹션 숨김
-  if (!data || (data.official.length === 0 && data.popular.length === 0)) {
-    return null
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* 공식 추천 코스 섹션 */}
-      {data.official.length > 0 && (
-        <section>
-          <h2 className="text-text-primary mb-3 text-lg font-bold">
-            ⭐ 공식 추천 코스
-          </h2>
+      <section>
+        <h2 className="text-text-primary mb-3 flex items-center gap-2 text-lg font-bold">
+          <AppIcon name="course-main" size="xl" />
+          공식 추천 코스
+        </h2>
+        {isLoading ? (
+          <RecommendedSkeleton />
+        ) : data && data.official.length > 0 ? (
           <div className="flex gap-4 overflow-x-auto pb-2">
             {data.official.map((route) => (
               <div key={route.id} className="w-72 flex-shrink-0">
@@ -88,15 +83,20 @@ export function RecommendedRoutes() {
               </div>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <EmptyState message="등록된 공식 추천 코스가 없습니다" />
+        )}
+      </section>
 
       {/* 인기 코스 섹션 */}
-      {data.popular.length > 0 && (
-        <section>
-          <h2 className="text-text-primary mb-3 text-lg font-bold">
-            🔥 인기 코스
-          </h2>
+      <section>
+        <h2 className="text-text-primary mb-3 flex items-center gap-2 text-lg font-bold">
+          <AppIcon name="course-popular" size="xl" />
+          인기 코스
+        </h2>
+        {isLoading ? (
+          <RecommendedSkeleton />
+        ) : data && data.popular.length > 0 ? (
           <div className="flex gap-4 overflow-x-auto pb-2">
             {data.popular.map((route) => (
               <div key={route.id} className="w-72 flex-shrink-0">
@@ -104,8 +104,10 @@ export function RecommendedRoutes() {
               </div>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <EmptyState message="현재 집계된 인기 코스가 없습니다" />
+        )}
+      </section>
     </div>
   )
 }

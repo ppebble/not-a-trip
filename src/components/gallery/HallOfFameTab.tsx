@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { AppIcon } from '@/components/common/AppIcon'
 import { useHallOfFameRanking } from '@/hooks/useGalleryQueries'
 import { RankingList } from './RankingList'
 
@@ -117,7 +118,9 @@ export function HallOfFameTab({
     return (
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="mb-4 text-5xl">🏆</div>
+          <div className="mb-4">
+            <AppIcon name="hall-of-fame" size={60} />
+          </div>
           <p className="text-text-secondary text-lg font-medium">
             아직 랭킹 데이터가 없습니다
           </p>

@@ -3,6 +3,7 @@
 import { useState, use } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { AppIcon } from '@/components/common/AppIcon'
 import { CheckInGallery } from '@/components/checkin'
 import { TrophyRoom } from '@/components/profile/TrophyRoom'
 import { ContentProgressCard } from '@/components/profile/ContentProgressCard'
@@ -82,10 +83,8 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
                 className="rounded-full"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500">
-                <span className="text-3xl font-bold text-white">
-                  {userInfo.name?.[0] || '?'}
-                </span>
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-secondary-100">
+                <AppIcon name="profile-front" size={72} />
               </div>
             )}
             <div>

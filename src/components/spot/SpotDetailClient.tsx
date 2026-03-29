@@ -39,6 +39,7 @@ import { SpotDetailSkeleton as SpotDetailSkeletonUI } from '@/components/common/
 import { AsyncBoundary } from '@/components/common/AsyncBoundary'
 import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 import DirectionsButton from '@/components/common/DirectionsButton'
+import { AppIcon } from '@/components/common/AppIcon'
 import { blurPlaceholderProps } from '@/lib/image-utils'
 import { RelatedRoutes } from '@/components/route/RelatedRoutes'
 import {
@@ -279,8 +280,9 @@ function SpotDetailContent({
 
           {/* 최초 제보자 표시 */}
           {spot.firstReporterId && spot.firstReporterName && (
-            <p className="mb-2 text-sm text-sub-text md:mb-3">
-              📍 최초 제보:{' '}
+            <p className="mb-2 flex items-center gap-1 text-sm text-sub-text md:mb-3">
+              <AppIcon name="location" size={16} />
+              최초 제보:{' '}
               <Link
                 href={`/profile/${spot.firstReporterId}`}
                 className="font-medium text-primary hover:underline"
@@ -349,17 +351,17 @@ function SpotDetailContent({
       />
 
       {/* Location Map */}
-      <div className="overflow-hidden rounded-lg bg-white shadow-md">
+      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
         <div className="p-6">
-          <h2 className="mb-4 text-2xl font-bold text-primary">
+          <h2 className="text-text-primary mb-4 text-2xl font-bold">
             위치 및 근처 편의시설
           </h2>
-          <div className="h-96 w-full overflow-hidden rounded-lg">
+          <div className="h-96 w-full overflow-hidden rounded-lg border border-border">
             <SpotDetailMap spot={spot} facilities={facilities} />
           </div>
           {facilities.length > 0 && (
             <div className="mt-4">
-              <p className="text-sm text-secondary">
+              <p className="text-text-secondary text-sm">
                 근처 편의시설 {facilities.length}개가 표시됩니다. 마커를
                 클릭하면 상세 정보를 확인할 수 있습니다.
               </p>
@@ -390,7 +392,7 @@ function SpotDetailContent({
       <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
         <div className="p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-main-text md:text-xl">
+            <h2 className="text-text-primary text-lg font-bold md:text-xl">
               정보 보완
             </h2>
             <button
@@ -416,10 +418,10 @@ function SpotDetailContent({
       </div>
 
       {/* 스팟 상태 신고 섹션 */}
-      <div className="overflow-hidden rounded-lg bg-surface shadow-md">
+      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
         <div className="p-4 md:p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-main-text md:text-xl">
+            <h2 className="text-text-primary text-lg font-bold md:text-xl">
               현재 상태 신고
             </h2>
             <button
@@ -432,7 +434,7 @@ function SpotDetailContent({
 
           {spot.spotStatus && (
             <div className="mb-3 flex items-center gap-2">
-              <span className="text-sm text-sub-text">현재 상태:</span>
+              <span className="text-text-secondary text-sm">현재 상태:</span>
               <SpotStatusIndicator status={spot.spotStatus} />
             </div>
           )}
