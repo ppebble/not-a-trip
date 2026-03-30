@@ -14,8 +14,12 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
+
+# Velog Posts (Local Only)
+docs/velog/
+
 
 # production
 /build
