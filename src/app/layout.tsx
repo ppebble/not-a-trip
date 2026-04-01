@@ -4,8 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import { Providers } from '@/lib/providers'
 import { Header } from '@/components/layout'
-import { ServiceWorkerRegistrar } from '@/components/mobile/ServiceWorkerRegistrar'
-import { IosPwaPrompt } from '@/components/mobile/IosPwaPrompt'
+import { SerwistRegistration } from '@/components/pwa'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
@@ -74,8 +73,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <main className="pt-14">{children}</main>
-          <ServiceWorkerRegistrar />
-          <IosPwaPrompt />
+          <SerwistRegistration />
         </Providers>
       </body>
     </html>
