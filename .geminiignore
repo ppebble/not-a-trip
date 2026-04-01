@@ -1,0 +1,16 @@
+.git
+.next
+node_modules
+.vscode
+public/uploads
+.kiro/hooks
+.kiro/specs
+.kiro/steering
+.kiro/templates
+scripts
+dist
+build
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

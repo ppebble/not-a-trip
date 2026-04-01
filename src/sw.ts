@@ -1,5 +1,12 @@
+/// <reference lib="webworker" />
 import { defaultCache } from '@serwist/next/worker'
-import { Serwist } from 'serwist'
+import {
+  CacheFirst,
+  ExpirationPlugin,
+  NetworkFirst,
+  Serwist,
+  StaleWhileRevalidate,
+} from 'serwist'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 
 declare global {
@@ -18,48 +25,63 @@ const serwist = new Serwist({
   runtimeCaching: [
     // 지도 타일 (OpenStreetMap): CacheFirst
     {
-      urlPattern: /^https:\/\/(.*\.)?tile\.openstreetmap\.org/,
-      handler: 'CacheFirst',
-      options: {
+      matcher: /^https:\/\/(.*\.)?tile\.openstreetmap\.org/,
+      handler: new CacheFirst({
         cacheName: 'map-tiles',
-        expiration: { maxEntries: 500, maxAgeSeconds: 30 * 24 * 60 * 60 },
-      },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 500,
+            maxAgeSeconds: 30 * 24 * 60 * 60,
+          }),
+        ],
+      }),
     },
     // 지도 타일 (Stadia Maps): CacheFirst
     {
-      urlPattern: /^https:\/\/tiles\.stadiamaps\.com/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'map-tiles',
-        expiration: { maxEntries: 500, maxAgeSeconds: 30 * 24 * 60 * 60 },
-      },
+      matcher: /^https:\/\/tiles\.stadiamaps\.com/,
+      handler: new CacheFirst({
+        cacheName: 'map-tiles-stadia',
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 500,
+            maxAgeSeconds: 30 * 24 * 60 * 60,
+          }),
+        ],
+      }),
     },
     // 외부 타일 서버 (Carto): CacheFirst (요구사항 3.7)
     {
-      urlPattern: /^https:\/\/.*basemaps\.cartocdn\.com/,
-      handler: 'CacheFirst',
-      options: {
+      matcher: /^https:\/\/.*basemaps\.cartocdn\.com/,
+      handler: new CacheFirst({
         cacheName: 'external-tiles',
-        expiration: { maxEntries: 500, maxAgeSeconds: 30 * 24 * 60 * 60 },
-      },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 500,
+            maxAgeSeconds: 30 * 24 * 60 * 60,
+          }),
+        ],
+      }),
     },
     // 스팟 데이터 API: StaleWhileRevalidate
     {
-      urlPattern: /\/api\/spots/,
-      handler: 'StaleWhileRevalidate',
-      options: {
+      matcher: /\/api\/spots/,
+      handler: new StaleWhileRevalidate({
         cacheName: 'spot-data',
-        expiration: { maxEntries: 100, maxAgeSeconds: 24 * 60 * 60 },
-      },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 100,
+            maxAgeSeconds: 24 * 60 * 60,
+          }),
+        ],
+      }),
     },
     // 코스 데이터 API: NetworkFirst
     {
-      urlPattern: /\/api\/routes/,
-      handler: 'NetworkFirst',
-      options: {
+      matcher: /\/api\/routes/,
+      handler: new NetworkFirst({
         cacheName: 'route-data',
         networkTimeoutSeconds: 5,
-      },
+      }),
     },
     ...defaultCache,
   ],
@@ -67,8 +89,7 @@ const serwist = new Serwist({
     entries: [
       {
         url: '/offline',
-        matcher: ({ request }: { request: Request }) =>
-          request.mode === 'navigate',
+        matcher: ({ request }) => request.mode === 'navigate',
       },
     ],
   },
@@ -80,7 +101,7 @@ serwist.addEventListeners()
 // 푸시 알림 이벤트 처리 (기존 sw.js에서 이전)
 // ============================================
 
-self.addEventListener('push', (event: PushEvent) => {
+self.addEventListener('push', (event) => {
   if (!event.data) return
 
   try {
@@ -91,7 +112,6 @@ self.addEventListener('push', (event: PushEvent) => {
       badge: data.badge || '/icons/icon-192x192.png',
       tag: data.tag || 'default',
       data: data.data || {},
-      vibrate: [200, 100, 200],
     }
 
     event.waitUntil(self.registration.showNotification(data.title, options))
@@ -103,27 +123,29 @@ self.addEventListener('push', (event: PushEvent) => {
   }
 })
 
-self.addEventListener('notificationclick', (event: NotificationEvent) => {
+self.addEventListener('notificationclick', (event) => {
   event.notification.close()
 
   const url = (event.notification.data as { url?: string })?.url || '/'
 
   event.waitUntil(
-    self.clients.matchAll({ type: 'window' }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url.includes(url) && 'focus' in client) {
-          return client.focus()
+    self.clients
+      .matchAll({ type: 'window' })
+      .then((clientList: readonly WindowClient[]) => {
+        for (const client of clientList) {
+          if (client.url.includes(url) && 'focus' in client) {
+            return client.focus()
+          }
         }
-      }
-      if (self.clients.openWindow) {
-        return self.clients.openWindow(url)
-      }
-    })
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(url)
+        }
+      })
   )
 })
 
 // 캐시 관리 메시지 처리
-self.addEventListener('message', (event: ExtendableMessageEvent) => {
+self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'CLEAR_CACHES') {
     event.waitUntil(
       caches.keys().then((cacheNames) => {
@@ -136,7 +158,7 @@ self.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data && event.data.type === 'PREFETCH_ROUTE') {
     event.waitUntil(
       prefetchRouteData(event.data.payload).then((result) => {
-        self.clients.matchAll().then((clients) => {
+        self.clients.matchAll().then((clients: readonly Client[]) => {
           clients.forEach((client) => {
             client.postMessage({
               type: 'ROUTE_PREFETCH_COMPLETE',
