@@ -72,7 +72,7 @@ switch (taskType) {
     const templatePath = templateMap[issueData.type] || templateMap['feat']
     const prompt = [
       `GitHub Issue를 생성해줘.`,
-      `리포지토리: ppebble/anime-pilgrim`,
+      `리포지토리: ppebble/not-a-trip`,
       `템플릿 파일: ${templatePath}`,
       `제목: ${issueData.title}`,
       `타입: ${issueData.type}`,
@@ -98,7 +98,7 @@ switch (taskType) {
     const prData = JSON.parse(taskArg)
     const prompt = [
       `GitHub Pull Request를 생성해줘.`,
-      `리포지토리: ppebble/anime-pilgrim`,
+      `리포지토리: ppebble/not-a-trip`,
       `PR 템플릿: .github/PULL_REQUEST_TEMPLATE.md`,
       `제목: ${prData.title}`,
       `base 브랜치: develop`,
