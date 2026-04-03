@@ -57,8 +57,8 @@
   - `npm run type-check` 및 `npm run build` 실행하여 Serwist 통합, 타입 선언, 레거시 파일 삭제 후 빌드가 정상 동작하는지 확인
   - Ensure all tests pass, ask the user if questions arise.
 
-- [x] 4. pwaStore 및 설치 이벤트 리스너 구현
-  - [ ] 4.1 pwaStore Zustand 스토어 생성
+- [-] 4. pwaStore 및 설치 이벤트 리스너 구현
+  - [x] 4.1 pwaStore Zustand 스토어 생성
     - `src/stores/pwaStore.ts` 파일 생성
     - `PwaState` 인터페이스 구현: deferredPrompt, isInstallable, isInstalled, isDismissed
     - `setDeferredPrompt`, `triggerInstall`, `dismiss`, `setInstalled`, `reset` 액션 구현
@@ -78,7 +78,7 @@
     - `'dismissed'` 결과 시 `isInstalled === false`, `deferredPrompt === null` 검증
     - **Validates: Requirements 5.6**
 
-  - [ ] 4.4 InstallPromptListener 컴포넌트 생성
+  - [x] 4.4 InstallPromptListener 컴포넌트 생성
     - `src/components/pwa/InstallPromptListener.tsx` 생성 ('use client')
     - `beforeinstallprompt` 이벤트 리스너 등록 → `preventDefault()` 호출 → `pwaStore.setDeferredPrompt()` 저장
     - `appinstalled` 이벤트 리스너 등록 → `pwaStore.setInstalled()` 호출
