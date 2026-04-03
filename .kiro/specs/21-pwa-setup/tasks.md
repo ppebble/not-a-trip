@@ -37,18 +37,18 @@
     - _Requirements: 1.2, 1.4_
 
 - [ ] 2. Web App Manifest 정비 및 타입 선언
-  - [ ] 2.1 manifest.json 메타데이터 검증 및 정비
+  - [x] 2.1 manifest.json 메타데이터 검증 및 정비
     - `public/manifest.json`의 필드 값 검증: name, short_name, theme_color, display, orientation, start_url, icons 배열
     - 현재 manifest가 이미 요구사항과 일치하는지 확인하고, 누락/불일치 항목 수정
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8_
 
-  - [ ] 2.2 BeforeInstallPromptEvent 타입 선언 파일 생성
+  - [x] 2.2 BeforeInstallPromptEvent 타입 선언 파일 생성
     - `src/types/pwa.d.ts` 파일 생성
     - `BeforeInstallPromptEvent` 인터페이스 정의 (platforms, userChoice with optional platform, prompt())
     - `WindowEventMap`에 `beforeinstallprompt` 이벤트 타입 추가
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 2.3 layout.tsx head 태그에 iOS 메타 태그 추가
+  - [x] 2.3 layout.tsx head 태그에 iOS 메타 태그 추가
     - `<meta name="apple-mobile-web-app-status-bar-style" content="default">` 메타 태그 추가
     - 기존 `apple-touch-icon` 링크 태그 유지 확인
     - _Requirements: 6.1, 6.9_
