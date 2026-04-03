@@ -10,9 +10,9 @@ inclusion: always
 
 **🚨 코드 작업 시작 전 반드시 수행:**
 
-1. **GitHub Issue 생성 (필수)**
-   - 해당 Task에 대한 GitHub Issue 먼저 생성
-   - `.github/ISSUE_TEMPLATE/` 중 적절한 템플릿 사용
+1. **GitHub Issue 생성 (MCP 도구로 직접 생성)**
+   - `mcp_github_create_issue` 도구를 사용하여 Kiro가 직접 생성
+   - `.github/ISSUE_TEMPLATE/` 중 적절한 템플릿 형식을 참고하여 body 작성
    - Issue 제목: `[Type] Task 번호 - 간단한 설명`
    - 예: `[Feat] Task 5.2 - SpotPin 컴포넌트 구현`
 
@@ -28,7 +28,7 @@ inclusion: always
 
 ### 각 Task 시작 시 체크리스트
 
-1. **Issue 생성 및 번호 확인**: GitHub Issue 생성 후 번호 메모
+1. **Issue 생성 및 번호 확인**: `mcp_github_create_issue` 도구로 직접 생성 후 번호 확인
 2. **브랜치 생성**: `{type}/{이슈번호}--{간단한-설명}` 형식
    2-1. {간단한-설명} 의 마지막은 동사가 올 수 있도록함(ex, feat/1--ex-component--add)
 3. **Task 상태 업데이트**: `taskStatus` 도구로 "in_progress" 설정
@@ -41,8 +41,8 @@ inclusion: always
 2. **논리적 커밋 분할**: 기능별로 의미있는 단위로 커밋
 3. **Task 상태 업데이트**: `taskStatus` 도구로 "completed" 설정
 4. **브랜치 푸시**: 작업 브랜치를 원격 저장소에 푸시
-5. **PR 생성**: develop 브랜치로 PR 생성 (템플릿 활용)
-6. **Issue 연결**: PR에서 `Closes #{이슈번호}` 작성하여 Issue 자동 연결
+5. **PR 생성**: `mcp_github_create_pull_request` 도구로 develop 브랜치에 PR 직접 생성 (`.github/PULL_REQUEST_TEMPLATE.md` 형식 참고)
+6. **Issue 연결**: PR body에 `Closes #{이슈번호}` 작성하여 Issue 자동 연결
 
 ### Property-Based Test (PBT) 작업 시
 
@@ -67,16 +67,15 @@ inclusion: always
 
 **Task 5.2 실행 예시:**
 
-1. **Issue 생성 먼저!**
+1. **Issue 생성 (MCP 도구로 직접 생성)**
 
    ```
    제목: [Feat] Task 5.2 - SpotPin 컴포넌트 구현
-   템플릿: Feature 템플릿 사용
+   템플릿: Feature 템플릿 형식 참고
    내용: SpotPin 컴포넌트 구현 및 마커 표시 기능
    ```
 
-   **2번을 시작하기전에 작업을 중단하고 다음 행동을 기다리도록함. 직접 이슈 생성 후 다음단계 진행**
-   **이슈나 pr을 생성할 때 .git에 있는 이슈/pr 탬플릿을 참고하여 바로 복사/붙혀넣기가 가능하도록 출력**
+   **`mcp_github_create_issue` 도구로 직접 생성 후 반환된 이슈 번호로 브랜치 생성 진행**
 
 2. **Issue 번호 확인 후 브랜치 생성**
 
@@ -116,9 +115,9 @@ inclusion: always
 
 **모든 Task 실행 시 반드시 다음 순서를 따라야 합니다:**
 
-### 1️⃣ GitHub Issue 생성 (필수)
+### 1️⃣ GitHub Issue 생성 (MCP 도구로 직접 생성)
 
-- 작업 시작 전 반드시 GitHub에서 Issue 생성
+- `mcp_github_create_issue` 도구를 사용하여 Kiro가 직접 생성
 - Issue 제목: `[Type] Task 번호 - 간단한 설명`
 - 예: `[Feat] Task 5.2 - SpotPin 컴포넌트 구현`
 
@@ -184,10 +183,10 @@ git commit -m "feat: spot detail 페이지 구현 및 에러 수정
 git push -u origin [브랜치명]
 ```
 
-- GitHub에서 develop 브랜치로 PR 생성
+- GitHub에서 `mcp_github_create_pull_request` 도구로 develop 브랜치에 PR 직접 생성
 - PR 설명에 `Closes #{이슈번호}` 작성
 
-- pr , issue 생성 시 .git 하단 해당 탬플릿 반드시 참조
+- pr, issue 생성 시 `.github/` 하단 해당 템플릿 형식 반드시 참조
 
 ## ⚠️ 주의사항
 
