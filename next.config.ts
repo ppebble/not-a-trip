@@ -1,5 +1,12 @@
+import withSerwistInit from '@serwist/next'
 import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
+
+const withSerwist = withSerwistInit({
+  swSrc: 'src/sw.ts',
+  swDest: 'public/sw.js',
+  disable: process.env.NODE_ENV === 'development',
+})
 
 const nextConfig: NextConfig = {
   images: {
@@ -82,7 +89,8 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withSentryConfig(nextConfig, {
+// withSerwist → withSentryConfig 순서로 체이닝
+export default withSentryConfig(withSerwist(nextConfig), {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
