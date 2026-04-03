@@ -1,0 +1,13 @@
+{
+  "name": "Lint Fix via Gemini CLI",
+  "version": "1.0.0",
+  "description": "ESLint 에러 일괄 수정을 Gemini CLI로 위임합니다.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "node .kiro/hooks/run-gemini-cli.js lint-fix ./src",
+    "timeout": 120
+  }
+}

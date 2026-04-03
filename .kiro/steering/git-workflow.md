@@ -2,195 +2,90 @@
 inclusion: always
 ---
 
-## 📋 작업 진행 가이드
+# Git 워크플로우
 
-### ⚠️ Task 실행 전 필수 체크리스트
+**모든 작업은 한글로 작성한다.**
 
-**모든 작업은 한글로 작성해**
+## Task 실행 전체 흐름
 
-**🚨 코드 작업 시작 전 반드시 수행:**
+```
+1. Issue 생성 (MCP) → 2. 브랜치 생성 → 3. 구현 & 커밋 → 4. 푸시 → 5. PR 생성 (MCP)
+```
 
-1. **GitHub Issue 생성 (필수)**
-   - 해당 Task에 대한 GitHub Issue 먼저 생성
-   - `.github/ISSUE_TEMPLATE/` 중 적절한 템플릿 사용
-   - Issue 제목: `[Type] Task 번호 - 간단한 설명`
-   - 예: `[Feat] Task 5.2 - SpotPin 컴포넌트 구현`
+### 1️⃣ Issue 생성
 
-2. **작업 내용 분석**
-   - 구현할 파일들과 기능 범위 파악
-   - 논리적 커밋 단위로 나눌 계획 수립
-   - 필요시 여러 이슈로 분할 검토
-
-3. **브랜치 전략 수립**
-   - 단일 기능: 하나의 브랜치
-   - 복합 작업: 기능별로 브랜치 분할
-   - Git stash 활용 계획 수립
-
-### 각 Task 시작 시 체크리스트
-
-1. **Issue 생성 및 번호 확인**: GitHub Issue 생성 후 번호 메모
-2. **브랜치 생성**: `{type}/{이슈번호}--{간단한-설명}` 형식
-   2-1. {간단한-설명} 의 마지막은 동사가 올 수 있도록함(ex, feat/1--ex-component--add)
-3. **Task 상태 업데이트**: `taskStatus` 도구로 "in_progress" 설정
-4. **요구사항 확인**: 해당 task의 Requirements 번호 확인
-5. **하위 작업 순서**: 하위 task가 있으면 순서대로 진행
-
-### 각 Task 완료 후 체크리스트
-
-1. **코드 품질 확인**: `npm run lint`, `npm run type-check`, `npm run build`
-2. **논리적 커밋 분할**: 기능별로 의미있는 단위로 커밋
-3. **Task 상태 업데이트**: `taskStatus` 도구로 "completed" 설정
-4. **브랜치 푸시**: 작업 브랜치를 원격 저장소에 푸시
-5. **PR 생성**: develop 브랜치로 PR 생성 (템플릿 활용)
-6. **Issue 연결**: PR에서 `Closes #{이슈번호}` 작성하여 Issue 자동 연결
-
-### Property-Based Test (PBT) 작업 시
-
-1. **테스트 실행**: 해당 속성 테스트 실행
-2. **상태 업데이트**: `updatePBTStatus` 도구로 결과 업데이트
-3. **실패 시**: 실패 예제와 함께 상태 업데이트, 즉시 수정하지 말고 사용자에게 문의
-
-### 브랜치 분할 전략 (500줄 이하 원칙)
-
-- Task 4 (상태 관리 설정): 924줄 - **리뷰하기에 너무 많음**
-
-**앞으로의 개선 방향:**
-각 Task를 500줄 이하의 하위 브랜치로 분할하여 리뷰 효율성 향상
-
-### 다음 작업자를 위한 정보
-
-- **현재 완료**: Task 1 (프로젝트 초기 설정), Task 2 (데이터베이스 및 API 기반 구축), Task 3 (Checkpoint), Task 4 (상태 관리 설정), Task 5.1 (PilgrimageMap 컴포넌트 구현)
-- **다음 예정**: Task 5.2 (SpotPin 컴포넌트 구현)
-- **현재 브랜치**: `feat/4--state-management-setup` (PR 대기 중), `fix/5--github-actions-errors` (GitHub Actions 수정)
-
-### 🚨 다음 Task 실행 시 필수 프로세스
-
-**Task 5.2 실행 예시:**
-
-1. **Issue 생성 먼저!**
-
-   ```
-   제목: [Feat] Task 5.2 - SpotPin 컴포넌트 구현
-   템플릿: Feature 템플릿 사용
-   내용: SpotPin 컴포넌트 구현 및 마커 표시 기능
-   ```
-
-   **2번을 시작하기전에 작업을 중단하고 다음 행동을 기다리도록함. 직접 이슈 생성 후 다음단계 진행**
-   **이슈나 pr을 생성할 때 .git에 있는 이슈/pr 탬플릿을 참고하여 바로 복사/붙혀넣기가 가능하도록 출력**
-
-2. **Issue 번호 확인 후 브랜치 생성**
-
-   ```bash
-   # 예: Issue #15가 생성되었다면
-   git checkout develop
-   git pull origin develop
-   git checkout -b feat/15--spot-pin-component
-   ```
-
-3. **논리적 커밋 분할 계획**
-   - `feat: SpotPin 컴포넌트 기본 구현`
-   - `style: SpotPin 마커 스타일링 추가`
-   - `feat: 클릭 이벤트 핸들링 구현`
-
-4. **작업 완료 후 PR 생성**
-   - PR 제목: `[Feat] SpotPin 컴포넌트 구현`
-   - PR 내용에 `Closes #15` 포함
-
----
-
-## Notes
-
-- **⚠️ 필수**: 모든 Task 실행 전 GitHub Issue 생성 필수
-- **커밋 전략**: 논리적 단위로 커밋 분할 (한 줄 메시지 + PR에 상세 내용)
-- **브랜치 분할**: 복합 작업 시 기능별로 브랜치 분할 권장
-- **리뷰 효율성**: 500줄 이하 원칙으로 PR 크기 관리
-- **추적성**: 모든 작업은 Issue와 연결하여 추적 가능하도록 관리
-- 각 태스크는 특정 요구사항을 참조하여 추적 가능합니다
-- 체크포인트에서 점진적 검증을 수행합니다
-- 속성 테스트는 보편적 정확성 속성을 검증합니다
-- 단위 테스트는 특정 예제와 에지 케이스를 검증합니다
-
-# Git 워크플로우 필수 프로세스
-
-## 🚨 코드 작업 시작 전 필수 체크리스트
-
-**모든 Task 실행 시 반드시 다음 순서를 따라야 합니다:**
-
-### 1️⃣ GitHub Issue 생성 (필수)
-
-- 작업 시작 전 반드시 GitHub에서 Issue 생성
-- Issue 제목: `[Type] Task 번호 - 간단한 설명`
-- 예: `[Feat] Task 5.2 - SpotPin 컴포넌트 구현`
+- `mcp_github_create_issue` 도구로 직접 생성 (owner: `ppebble`, repo: `not-a-trip`)
+- 제목: `[Type] Task 번호 - 간단한 설명`
+- body: `.github/ISSUE_TEMPLATE/` 형식 참고
+- labels: `feat`, `fix`, `chore`, `test`, `ui`, `enhancement` 중 선택
 
 ### 2️⃣ 브랜치 생성
 
 ```bash
-# develop 브랜치에서 새 브랜치 생성
 git checkout develop
 git pull origin develop
 git checkout -b {type}/{이슈번호}--{간단한-요약}
 ```
 
-**브랜치 명명 규칙:**
-
-> ⚠️ GitHub Actions에서 허용하는 브랜치 prefix만 사용 가능. (가능한 브랜치 prefix === feat|fix|ui|enhancement|chore|refactor|hotfix|test) `style/`은 사용 불가.
-
-| prefix | 용도 | 예시 |
-|--------|------|------|
-| `feat/` | 새로운 기능 추가 | `feat/15--spot-pin-component--add` |
-| `ui/` | UI/UX 개선, 스타일 수정 | `ui/407--button-form-card-migration` |
-| `fix/` | 버그 수정 | `fix/20--map-marker-crash--fix` |
-| `chore/` | 빌드, 설정, 문서 등 | `chore/30--eslint-config--update` |
-| `test/` | 테스트 추가/수정 | `test/25--pbt-token-integrity--add` |
-| `refactor/` | 코드 리팩토링 | `refactor/40--store-structure--improve` |
-
-- 형식: `{type}/{이슈번호}--{간단한-요약}`
-- 요약 마지막에 동사 권장 (예: `--add`, `--fix`, `--update`, `--improve`)
+- 형식: `{type}/{이슈번호}--{간단한-요약}` (마지막에 동사 권장: `--add`, `--fix`)
 - 모두 소문자, 하이픈 사용
-- **`style/` prefix는 GitHub Actions에서 차단되므로 UI 작업은 반드시 `ui/` 사용**
+- 허용 prefix: `feat|fix|ui|enhancement|chore|refactor|hotfix|test`
+- `style/`은 GitHub Actions에서 차단 → UI 작업은 `ui/` 사용
 
-### 3️⃣ 논리적 커밋 분할 (필수 준수)
+### 3️⃣ 논리적 커밋 분할
 
-**🚨 커밋 메시지 규칙 (commit-guidelines.md 참조)**
-
-- **한 줄 커밋**: Body 없이 한 줄로 완결
-- **한글 사용**: 모든 설명은 한글로 (기술용어/파일명 제외)
-- **형식**: `<type>: <description>` (50자 이내, 소문자 시작, 마침표 없음)
-- **기능별 분할**: 여러 기능 = 여러 커밋 (필수)
+- commit-guidelines.md 규칙 준수
+- 한 줄 커밋, 한글, 50자 이내, 소문자 시작, 마침표 없음
+- 여러 기능 = 여러 커밋 (필수)
 
 ```bash
-# ✅ 올바른 예시 (기능별 분할)
+# ✅ 기능별 분할
 git add src/app/spots/[id]/page.tsx
 git commit -m "feat: spot detail 페이지 구현"
 
 git add src/hooks/useSpotDetail.ts
 git commit -m "fix: useSpotDetail API 응답 처리 수정"
 
-git add src/app/spots/[id]/page.tsx
-git commit -m "fix: coordinates undefined 에러 방지 추가"
-
-# ❌ 잘못된 예시 (여러 기능을 하나의 커밋에)
+# ❌ 여러 기능을 하나의 커밋에 (금지)
 git add .
-git commit -m "feat: spot detail 페이지 구현 및 에러 수정
-
-- SpotDetailContent 컴포넌트 추가
-- API 응답 처리 수정
-- coordinates 안전장치 추가"
+git commit -m "feat: spot detail 페이지 구현 및 에러 수정"
 ```
 
-### 4️⃣ PR 생성 및 Issue 연결
+### 4️⃣ 푸시
 
 ```bash
 git push -u origin [브랜치명]
 ```
 
-- GitHub에서 develop 브랜치로 PR 생성
-- PR 설명에 `Closes #{이슈번호}` 작성
+### 5️⃣ PR 생성
 
-- pr , issue 생성 시 .git 하단 해당 탬플릿 반드시 참조
+- `mcp_github_create_pull_request` 도구로 직접 생성 (owner: `ppebble`, repo: `not-a-trip`)
+- base: `develop`
+- body: `.github/PULL_REQUEST_TEMPLATE.md` 형식 참고
+- body에 `Closes #{이슈번호}` 포함
 
-## ⚠️ 주의사항
+---
 
-- 브랜치명: 모두 소문자, 하이픈 사용
+## Task 시작 시 체크리스트
+
+1. Issue 생성 (MCP) → 이슈 번호 확인
+2. 브랜치 생성: `{type}/{이슈번호}--{간단한-설명}`
+3. `taskStatus` 도구로 `in_progress` 설정
+4. 해당 task의 Requirements 번호 확인
+5. 하위 task가 있으면 순서대로 진행
+
+## Task 완료 후 체크리스트
+
+1. 코드 품질 확인: `npm run type-check`, `npm run build`
+2. 논리적 커밋 분할 완료 확인
+3. `taskStatus` 도구로 `completed` 설정
+4. 브랜치 푸시
+5. PR 생성 (MCP) — `Closes #{이슈번호}` 포함
+
+---
+
+## 주의사항
+
 - 커밋 크기: 500줄 이하 권장
 - 반드시 Issue와 연결하여 추적성 확보
+- 복합 작업 시 기능별로 브랜치 분할 권장

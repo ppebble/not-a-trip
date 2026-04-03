@@ -1,0 +1,12 @@
+{
+  "name": "Create GitHub Issue via Gemini CLI",
+  "version": "1.0.0",
+  "description": "GitHub Issue 생성을 Gemini CLI로 위임합니다. 프로젝트 이슈 템플릿에 맞춰 자동 생성됩니다.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "사용자가 GitHub Issue 생성을 요청했습니다. 현재 작업 중인 Task 정보를 기반으로 다음 명령어를 실행하세요:\n\nnode .kiro/hooks/run-gemini-cli.js create-issue '{\"title\":\"[Type] Task X.X - 설명\",\"type\":\"feat|fix|chore|test|ui\",\"taskNumber\":\"X.X\",\"requirements\":\"X.X, X.X\",\"description\":\"작업 설명\",\"checklist\":\"체크리스트 항목들\"}'\n\nJSON의 각 필드를 현재 컨텍스트에 맞게 채워서 실행하세요."
+  }
+}

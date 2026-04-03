@@ -1,0 +1,13 @@
+{
+  "name": "Generate PR Description via Gemini CLI",
+  "version": "1.0.0",
+  "description": "git diff를 분석하여 PR 설명을 자동 생성합니다. PR 템플릿 형식에 맞춰 작성됩니다.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "node .kiro/hooks/run-gemini-cli.js generate-docs pr-description",
+    "timeout": 60
+  }
+}

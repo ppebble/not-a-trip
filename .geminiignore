@@ -14,3 +14,6 @@ build
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Allow docs/velog for blog post generation
+!docs/velog/

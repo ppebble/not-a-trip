@@ -6,7 +6,7 @@
 
 ## Tasks
 
-- [-] 1. @serwist/next 인프라 전환 및 빌드 설정
+- [x] 1. @serwist/next 인프라 전환 및 빌드 설정
   - [x] 1.1 @serwist/next 패키지 설치 및 next.config.ts 수정
     - `@serwist/next`, `serwist` 패키지 설치
     - `next.config.ts`에 `withSerwistInit` 래퍼를 `withSentryConfig`와 체이닝 적용
@@ -29,35 +29,35 @@
     - `src/app/layout.tsx`에서 기존 `IosPwaPrompt` import 제거
     - _Requirements: 1.4, 1.6_
 
-  - [-] 1.4 레거시 파일 삭제
+  - [x] 1.4 레거시 파일 삭제
     - `public/sw.js` 삭제 (빌드 시 자동 생성됨)
     - `public/offline.html` 삭제 (App Router 페이지로 대체)
     - `src/components/mobile/ServiceWorkerRegistrar.tsx` 삭제
     - `src/components/mobile/IosPwaPrompt.tsx` 삭제
     - _Requirements: 1.2, 1.4_
 
-- [ ] 2. Web App Manifest 정비 및 타입 선언
-  - [ ] 2.1 manifest.json 메타데이터 검증 및 정비
+- [x] 2. Web App Manifest 정비 및 타입 선언
+  - [x] 2.1 manifest.json 메타데이터 검증 및 정비
     - `public/manifest.json`의 필드 값 검증: name, short_name, theme_color, display, orientation, start_url, icons 배열
     - 현재 manifest가 이미 요구사항과 일치하는지 확인하고, 누락/불일치 항목 수정
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8_
 
-  - [ ] 2.2 BeforeInstallPromptEvent 타입 선언 파일 생성
+  - [x] 2.2 BeforeInstallPromptEvent 타입 선언 파일 생성
     - `src/types/pwa.d.ts` 파일 생성
     - `BeforeInstallPromptEvent` 인터페이스 정의 (platforms, userChoice with optional platform, prompt())
     - `WindowEventMap`에 `beforeinstallprompt` 이벤트 타입 추가
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 2.3 layout.tsx head 태그에 iOS 메타 태그 추가
+  - [x] 2.3 layout.tsx head 태그에 iOS 메타 태그 추가
     - `<meta name="apple-mobile-web-app-status-bar-style" content="default">` 메타 태그 추가
     - 기존 `apple-touch-icon` 링크 태그 유지 확인
     - _Requirements: 6.1, 6.9_
 
-- [ ] 3. 체크포인트 - 빌드 검증
+- [x] 3. 체크포인트 - 빌드 검증
   - `npm run type-check` 및 `npm run build` 실행하여 Serwist 통합, 타입 선언, 레거시 파일 삭제 후 빌드가 정상 동작하는지 확인
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. pwaStore 및 설치 이벤트 리스너 구현
+- [x] 4. pwaStore 및 설치 이벤트 리스너 구현
   - [ ] 4.1 pwaStore Zustand 스토어 생성
     - `src/stores/pwaStore.ts` 파일 생성
     - `PwaState` 인터페이스 구현: deferredPrompt, isInstallable, isInstalled, isDismissed

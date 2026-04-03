@@ -56,5 +56,9 @@ velog-post.md
 # code example files (steering reference only)
 .kiro/steering/code-example/
 
+# Serwist (빌드 시 자동 생성)
+public/sw.js
+public/sw.js.map
+
 # Sentry Config File
 .env.sentry-build-plugin
