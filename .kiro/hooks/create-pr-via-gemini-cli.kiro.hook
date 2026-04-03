@@ -1,0 +1,12 @@
+{
+  "name": "Create GitHub PR via Gemini CLI",
+  "version": "1.0.0",
+  "description": "GitHub PR 생성을 Gemini CLI로 위임합니다. PR 템플릿에 맞춰 자동 생성됩니다.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "사용자가 GitHub PR 생성을 요청했습니다. 현재 브랜치와 작업 내용을 기반으로 다음 명령어를 실행하세요:\n\nnode .kiro/hooks/run-gemini-cli.js create-pr '{\"title\":\"[Type] PR 제목\",\"branch\":\"현재브랜치\",\"issueNumber\":\"이슈번호\",\"type\":\"feat|fix|chore\",\"summary\":\"작업 개요\",\"changes\":\"변경 사항\"}'\n\nJSON의 각 필드를 현재 컨텍스트에 맞게 채워서 실행하세요."
+  }
+}
