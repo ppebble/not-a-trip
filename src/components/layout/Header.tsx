@@ -17,7 +17,7 @@ export function Header() {
         {/* 로고 */}
         <Link href="/" className="flex items-center gap-2">
           <span className="text-text-primary flex items-center gap-1.5 text-xl font-bold">
-            <AppIcon name="logo" size="2xl" />
+            <AppIcon name="logo" size="2xl" className="max-h-8" />
             Not a Trip
           </span>
         </Link>
