@@ -1,6 +1,7 @@
 {
   "steering": {
     "autoInclude": [
+      "project-context.md",
       "commit-guidelines.md",
       "task-execution-rules.md",
       "git-workflow.md"
@@ -15,6 +16,19 @@
   "git": {
     "enforceConventionalCommits": true,
     "requireKoreanDescription": true,
-    "maxDescriptionLength": 50
+    "maxDescriptionLength": 50,
+    "repository": {
+      "owner": "ppebble",
+      "repo": "not-a-trip",
+      "defaultBranch": "develop"
+    }
+  },
+  "mcp": {
+    "github": {
+      "owner": "ppebble",
+      "repo": "not-a-trip",
+      "issueTemplateDir": ".github/ISSUE_TEMPLATE/",
+      "prTemplate": ".github/PULL_REQUEST_TEMPLATE.md"
+    }
   }
 }
