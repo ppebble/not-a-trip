@@ -64,11 +64,12 @@ export default function CategoryFilter() {
             onClick={() => handleCategoryToggle(category)}
             className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
               isSelected
-                ? 'scale-105 border-transparent text-white shadow-md'
+                ? 'scale-105 border-transparent shadow-md'
                 : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
             }`}
             style={{
               backgroundColor: isSelected ? config.bgColor : undefined,
+              color: isSelected ? config.fgColor : undefined,
             }}
           >
             <div className={isSelected ? '' : 'opacity-40 grayscale'}>
