@@ -3,9 +3,14 @@
 
 /* 지도 컨테이너 기본 스타일 */
 .leaflet-container {
-  background: #eeedfc; /* primary-50 */
+  background: #f4f4f5; /* neutral-100 */
   font-family: inherit;
   z-index: 0 !important;
+}
+
+/* 다크 모드 지도 컨테이너 배경 */
+.dark .leaflet-container {
+  background: #27272a; /* neutral-800 */
 }
 
 /* 지도 내부 요소들의 z-index 제한 */
