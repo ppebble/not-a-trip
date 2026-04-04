@@ -211,7 +211,7 @@ export default function PilgrimageMap({
 
       {/* Map attribution with navy theme */}
       <div className="absolute bottom-2 left-2 z-[1000] rounded bg-primary-800/80 px-2 py-1 text-xs text-white">
-        Anime Pilgrim
+        Not a Trip
       </div>
 
       {/* 스팟 미리보기 - 데스크탑: 툴팁, 모바일: Bottom Sheet */}
