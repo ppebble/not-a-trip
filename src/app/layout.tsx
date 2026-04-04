@@ -4,7 +4,12 @@ import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import { Providers } from '@/lib/providers'
 import { Header } from '@/components/layout'
-import { SerwistRegistration, InstallPromptListener } from '@/components/pwa'
+import {
+  SerwistRegistration,
+  InstallPromptListener,
+  InstallBottomSheet,
+  InstallToast,
+} from '@/components/pwa'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
@@ -74,6 +79,8 @@ export default function RootLayout({
           <Header />
           <main className="pt-14">{children}</main>
           <InstallPromptListener />
+          <InstallBottomSheet />
+          <InstallToast />
           <SerwistRegistration />
         </Providers>
       </body>
