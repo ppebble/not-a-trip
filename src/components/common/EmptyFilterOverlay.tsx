@@ -18,7 +18,7 @@ export function EmptyFilterOverlay() {
           표시할 스팟 카테고리가 선택되지 않았습니다
         </p>
         <p className="mt-1 text-xs text-muted">
-          아래 필터에서 원하는 카테고리를 선택하세요
+          필터에서 원하는 카테고리를 선택하세요
         </p>
       </div>
     </div>
