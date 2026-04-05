@@ -197,11 +197,11 @@ export default function PilgrimageMap({
         </button>
       </div>
 
-      {/* 현재 위치 버튼 - 하단 우측 (엄지 접근 용이) */}
+      {/* 현재 위치 버튼 - 하단 우측 */}
       <LocationButton
         onLocationFound={handleLocationFound}
         onError={handleGpsError}
-        className="absolute bottom-20 right-4 z-[1000] md:bottom-4"
+        className="absolute bottom-4 right-4 z-[1000]"
       />
 
       {/* GPS 에러 폴백 UI */}
