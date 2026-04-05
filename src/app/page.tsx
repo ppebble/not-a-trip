@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useSpotsSuspense } from '@/hooks/useSpots'
@@ -58,8 +57,6 @@ function HomeContent() {
   // filterStore에서 필터 상태 가져오기
   const selectedCategories = useSelectedCategories()
   const searchQuery = useSearchQuery()
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false)
-
   // 카테고리가 전부 해제되었는지 확인
   const isNoCategorySelected = selectedCategories.length === 0
 
@@ -106,22 +103,19 @@ function HomeContent() {
       {/* 카테고리 필터 전체 해제 시 빈 상태 오버레이 */}
       {isEmptyFilterResult && !isEmptySearchResult && <EmptyFilterOverlay />}
 
-      {/* 필터 영역 (하단 중앙 플로팅 바) */}
-      <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
-        <div className="flex items-center gap-2">
-          {/* 콘텐츠 검색 필터 (토글 버튼) */}
-          <ContentSearchFilter onExpandChange={setIsSearchExpanded} />
-          {/* 카테고리 필터 - 검색창이 열리면 숨김 */}
-          {!isSearchExpanded && (
-            <div className="rounded-2xl bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
-              <CategoryFilter />
-            </div>
-          )}
+      {/* 필터 영역 (상단 통합 바) — Requirements 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4 */}
+      <div className="absolute left-0 right-0 top-0 z-[1000]">
+        <div className="flex items-center bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm dark:bg-neutral-900/95">
+          <ContentSearchFilter />
+          <div className="mx-2 h-8 w-px flex-shrink-0 bg-neutral-300 dark:bg-neutral-700" />
+          <div className="min-w-0 flex-1">
+            <CategoryFilter />
+          </div>
         </div>
       </div>
 
       {/* 데스크톱용 플로팅 정보 패널 */}
-      <div className="absolute left-4 top-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm dark:bg-neutral-900/90 md:block">
+      <div className="absolute bottom-4 left-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm dark:bg-neutral-900/90 md:block">
         <div className="flex items-center space-x-3">
           <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary text-white">
             <AppIcon name="location" size="lg" />
