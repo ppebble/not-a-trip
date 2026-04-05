@@ -6,7 +6,7 @@ import { SpinnerIcon } from '@/components/icons'
  */
 export function SpotLoadingSkeleton() {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-primary-800">
+    <div className="flex h-full w-full items-center justify-center bg-neutral-800">
       <div className="text-center">
         <SpinnerIcon size="lg" className="mx-auto animate-spin" />
         <p className="mt-2 text-sm text-neutral-200">스팟 데이터 로딩 중...</p>
