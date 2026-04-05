@@ -129,8 +129,8 @@ export default function PilgrimageMap({
         }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           className="map-tiles"
           maxZoom={19}
           tileSize={256}
@@ -145,7 +145,7 @@ export default function PilgrimageMap({
       </MapContainer>
 
       {/* Custom map controls with navy theme */}
-      <div className="absolute right-4 top-4 z-[1000] flex flex-col gap-2">
+      <div className="absolute bottom-20 right-4 z-[1000] flex flex-col gap-2">
         <button
           onClick={() => {
             const map = mapRef.current
@@ -197,11 +197,11 @@ export default function PilgrimageMap({
         </button>
       </div>
 
-      {/* 현재 위치 버튼 - 하단 우측 (엄지 접근 용이) */}
+      {/* 현재 위치 버튼 - 하단 우측 */}
       <LocationButton
         onLocationFound={handleLocationFound}
         onError={handleGpsError}
-        className="absolute bottom-20 right-4 z-[1000] md:bottom-4"
+        className="absolute bottom-4 right-4 z-[1000]"
       />
 
       {/* GPS 에러 폴백 UI */}
