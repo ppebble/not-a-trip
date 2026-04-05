@@ -347,6 +347,15 @@ button:focus-visible {
   }
 }
 
+/* Scrollbar hide utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .leaflet-container img {
   max-width: none !important;
   max-height: none !important;
