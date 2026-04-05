@@ -130,7 +130,7 @@ export default function PilgrimageMap({
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://tiles.288255.xyz/{z}/{x}/{y}.png"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           className="map-tiles"
           maxZoom={19}
           tileSize={256}
