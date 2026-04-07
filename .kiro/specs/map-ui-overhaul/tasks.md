@@ -40,16 +40,16 @@
     - 임의의 뷰포트 크기에서 LocationButton className에 반응형 분기(`md:`, `lg:` 등) 부재 확인
     - **Validates: Requirements 6.1, 6.2**
 
-- [ ] 3. Checkpoint — 단순 변경 검증
+- [x] 3. Checkpoint — 단순 변경 검증
   - 모든 테스트 통과 확인, 빌드 정상 확인. 문제가 있으면 사용자에게 문의.
 
-- [ ] 4. CategoryFilter 가로 스크롤 전환
-  - [ ] 4.1 CategoryFilter 레이아웃 변경
+- [x] 4. CategoryFilter 가로 스크롤 전환
+  - [x] 4.1 CategoryFilter 레이아웃 변경
     - `src/components/map/CategoryFilter.tsx`에서 `flex flex-wrap` → `flex overflow-x-auto scrollbar-hide`로 변경
     - 모든 카테고리 버튼에 `flex-shrink-0` 클래스 추가
     - 이벤트 전파 차단: `onPointerDown={(e) => e.stopPropagation()}`, `onWheel={(e) => e.stopPropagation()}` 추가
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
-  - [ ] 4.2 scrollbar-hide 유틸리티 CSS 추가
+  - [x] 4.2 scrollbar-hide 유틸리티 CSS 추가
     - `src/app/globals.css`에 `.scrollbar-hide` 클래스 추가 (webkit + Firefox 스크롤바 숨김)
     - _Requirements: 2.3_
   - [ ]* 4.3 Property 1 테스트: 카테고리 버튼 줄바꿈 방지
@@ -57,15 +57,15 @@
     - 임의의 카테고리 부분집합을 생성하여 렌더링 후, 모든 버튼에 `flex-shrink-0` 존재 및 부모 컨테이너에 `overflow-x-auto` 확인
     - **Validates: Requirements 2.2**
 
-- [ ] 5. ContentSearchFilter 토글 제거 및 상시 노출
-  - [ ] 5.1 ContentSearchFilter 토글 로직 제거
+- [x] 5. ContentSearchFilter 토글 제거 및 상시 노출
+  - [x] 5.1 ContentSearchFilter 토글 로직 제거
     - `src/components/map/ContentSearchFilter.tsx`에서 `isExpanded` 상태, `handleToggleExpand`, `onExpandChange` prop 제거
     - 접힌 상태의 돋보기 버튼 렌더링 분기 제거 (항상 입력 필드 렌더링)
     - 배경/테두리/그림자를 제거하여 부모 바에 위임 (통합 바 내 좌측 고정 영역)
     - 너비: `w-48 md:w-56`
     - 300ms 디바운스 유지, 컴포넌트 언마운트 시 타이머 클린업 보장
     - _Requirements: 3.2, 3.4, 3.5, 3.6_
-  - [ ] 5.2 AutocompleteDropdown 방향 변경
+  - [x] 5.2 AutocompleteDropdown 방향 변경
     - `src/components/map/AutocompleteDropdown.tsx`에서 `absolute bottom-full mb-1` → `absolute top-full mt-1`로 변경
     - _Requirements: 3.5_
   - [ ]* 5.3 Property 2 테스트: 검색 입력창 항상 노출
@@ -81,18 +81,18 @@
     - 임의의 입력 시퀀스와 타이밍을 생성하여, 300ms 디바운스 동작 및 언마운트 시 클린업 확인
     - **Validates: Requirements 3.6**
 
-- [ ] 6. Checkpoint — 개별 컴포넌트 변경 검증
+- [x] 6. Checkpoint — 개별 컴포넌트 변경 검증
   - 모든 테스트 통과 확인, 빌드 정상 확인. 문제가 있으면 사용자에게 문의.
 
-- [ ] 7. 필터 바 통합 및 레이아웃 재구성
-  - [ ] 7.1 page.tsx 필터 바를 상단 통합 바로 재구성
+- [x] 7. 필터 바 통합 및 레이아웃 재구성
+  - [x] 7.1 page.tsx 필터 바를 상단 통합 바로 재구성
     - `src/app/page.tsx`에서 하단 플로팅 영역(`absolute bottom-6 left-1/2 -translate-x-1/2`)을 상단 통합 바로 변경
     - 새 구조: `absolute top-0 left-0 right-0 z-[1000]` 컨테이너 내에 `[ContentSearchFilter | 구분선(h-8 w-px bg-neutral-300) | CategoryFilter]` 배치
     - 통합 바 스타일: `bg-white/95 backdrop-blur-sm shadow-lg dark:bg-neutral-900/95`
     - `isSearchExpanded` 상태 및 `onExpandChange` prop 전달 제거
     - 카테고리 필터 숨김 조건(`!isSearchExpanded &&`) 제거 — 항상 노출
     - _Requirements: 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4_
-  - [ ] 7.2 데스크톱 정보 패널 위치 변경
+  - [x] 7.2 데스크톱 정보 패널 위치 변경
     - `src/app/page.tsx`에서 `absolute left-4 top-4` → `absolute left-4 bottom-4`로 변경
     - _Requirements: 10.1, 10.2_
   - [ ]* 7.3 Property 5 테스트: 필터 바 z-index 보장
@@ -104,7 +104,7 @@
     - 임의의 렌더링에서 EmptyFilterOverlay 텍스트에 방향 지시어("아래", "위", "왼쪽", "오른쪽") 부재 확인
     - **Validates: Requirements 7.1**
 
-- [ ] 8. 최종 Checkpoint — 전체 통합 검증
+- [x] 8. 최종 Checkpoint — 전체 통합 검증
   - 모든 테스트 통과 확인, 빌드 정상 확인, 전체 Requirements 커버리지 확인. 문제가 있으면 사용자에게 문의.
 
 ## Notes

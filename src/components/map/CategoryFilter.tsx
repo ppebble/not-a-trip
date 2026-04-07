@@ -40,11 +40,15 @@ export default function CategoryFilter() {
   const isAllSelected = selectedCategories.length === ALL_CATEGORIES.length
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div
+      className="scrollbar-hide flex items-center gap-2 overflow-x-auto"
+      onPointerDown={(e) => e.stopPropagation()}
+      onWheel={(e) => e.stopPropagation()}
+    >
       {/* 전체 선택 버튼 */}
       <button
         onClick={handleSelectAll}
-        className={`h-9 rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
+        className={`h-9 flex-shrink-0 rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
           isAllSelected
             ? 'scale-105 border-primary bg-primary text-white shadow-md'
             : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
@@ -62,7 +66,7 @@ export default function CategoryFilter() {
           <button
             key={category}
             onClick={() => handleCategoryToggle(category)}
-            className={`flex h-9 items-center gap-1.5 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
+            className={`flex h-9 flex-shrink-0 items-center gap-1.5 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
               isSelected
                 ? 'scale-105 border-transparent shadow-md'
                 : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
