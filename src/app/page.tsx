@@ -2,7 +2,7 @@
 
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
-import { useSpotsSuspense } from '@/hooks/useSpots'
+import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
 import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
@@ -11,7 +11,6 @@ import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
 import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
 import { EmptySearchOverlay } from '@/components/common/EmptySearchOverlay'
 import { EmptyFilterOverlay } from '@/components/common/EmptyFilterOverlay'
-import { AsyncBoundary } from '@/components/common/AsyncBoundary'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -19,99 +18,92 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   loading: () => <MapSkeleton />,
 })
 
-/** Home 에러 fallback — 컴포넌트 외부 정의로 참조 안정성 확보 */
-const HomeErrorFallback = ({
-  error,
-  reset,
-}: {
-  error: Error
-  reset: () => void
-}) => <SpotErrorDisplay error={error} onRetry={reset} />
-
 /**
  * 메인 페이지 컴포넌트
  * Requirements 1.1, 1.4, 2.1, 2.2를 만족하는 지도 기반 메인 페이지
- * - AsyncBoundary로 선언적 로딩/에러 처리
+ * - useQuery로 필터 변경 시 지도 유지 (번쩍임 방지)
  * - 카테고리 필터링 지원
  * - filterStore 전역 상태 사용
  */
 export default function Home() {
   return (
-    <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-neutral-900">
-      <AsyncBoundary
-        pendingFallback={<SpotLoadingSkeleton />}
-        rejectedFallback={HomeErrorFallback}
-      >
-        <HomeContent />
-      </AsyncBoundary>
+    <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-neutral-100 dark:bg-neutral-900">
+      <HomeContent />
     </main>
   )
 }
 
 /**
  * 메인 페이지 내부 콘텐츠 컴포넌트
- * AsyncBoundary 내부에서만 사용 — 로딩/에러 상태는 경계로 위임
- * useSuspenseQuery를 통해 데이터가 있는 상태만 다룬다
+ * useQuery를 사용하여 필터 변경 시 지도가 유지되고 로딩 인디케이터만 표시
  */
 function HomeContent() {
-  // filterStore에서 필터 상태 가져오기
   const selectedCategories = useSelectedCategories()
   const searchQuery = useSearchQuery()
-  // 카테고리가 전부 해제되었는지 확인
   const isNoCategorySelected = selectedCategories.length === 0
 
-  // useSuspenseQuery로 스팟 데이터 가져오기 (카테고리 + 검색 필터 적용)
-  // 카테고리가 전부 해제되면 빈 배열 사용 (쿼리는 전체 조회)
-  const { data: spots } = useSpotsSuspense(
+  const {
+    data: spots,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+    isPlaceholderData,
+  } = useSpots(
     isNoCategorySelected ? undefined : selectedCategories,
     searchQuery || undefined
   )
 
-  /**
-   * 스팟 선택 핸들러
-   * 현재는 콘솔 로그만 출력하며, 향후 상세 페이지 네비게이션으로 확장 예정
-   */
+  // 초기 로딩 (데이터가 아직 없을 때)
+  if (isLoading) {
+    return <SpotLoadingSkeleton />
+  }
+
+  // 에러 상태
+  if (isError) {
+    return <SpotErrorDisplay error={error} onRetry={() => refetch()} />
+  }
+
+  const spotData = isNoCategorySelected ? [] : spots || []
+  const spotCount = spotData.length
+
+  const isEmptySearchResult = searchQuery && spotCount === 0
+  const isEmptyFilterResult = isNoCategorySelected
+
   const handleSpotSelect = (spotId: string) => {
     // eslint-disable-next-line no-console
     console.log('Selected spot:', spotId)
   }
 
-  // 스팟 데이터가 없을 때 빈 배열 사용
-  // 카테고리가 전부 해제되면 빈 배열 강제 적용
-  const spotData = isNoCategorySelected ? [] : spots || []
-  const spotCount = spotData.length
-
-  // 빈 상태 확인:
-  // 1. 검색어가 있고 결과가 없을 때
-  // 2. 카테고리가 전부 해제되었을 때
-  const isEmptySearchResult = searchQuery && spotCount === 0
-  const isEmptyFilterResult = isNoCategorySelected
-
   return (
     <div className="relative flex-1 overflow-hidden">
       <PilgrimageMap
-        initialCenter={[35.6762, 139.6503]} // 도쿄 중심 좌표
+        initialCenter={[35.6762, 139.6503]}
         initialZoom={6}
         className="h-full w-full"
         spots={spotData}
         onSpotSelect={handleSpotSelect}
       />
 
-      {/* 검색 결과 없음 오버레이 (Requirements 3.4) */}
       {isEmptySearchResult && <EmptySearchOverlay searchQuery={searchQuery} />}
-
-      {/* 카테고리 필터 전체 해제 시 빈 상태 오버레이 */}
       {isEmptyFilterResult && !isEmptySearchResult && <EmptyFilterOverlay />}
 
-      {/* 필터 영역 (상단 통합 바) — Requirements 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4 */}
+      {/* 필터 영역 (상단 통합 바) */}
       <div className="absolute left-0 right-0 top-0 z-[1000]">
-        <div className="flex items-center bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm dark:bg-neutral-900/95">
+        <div className="flex items-center border-b border-neutral-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-900/95">
           <ContentSearchFilter />
           <div className="mx-2 h-8 w-px flex-shrink-0 bg-neutral-300 dark:bg-neutral-700" />
           <div className="min-w-0 flex-1">
             <CategoryFilter />
           </div>
         </div>
+        {/* 필터 변경 시 얇은 로딩 프로그레스 바 */}
+        {(isFetching || isPlaceholderData) && (
+          <div className="h-0.5 w-full overflow-hidden bg-neutral-200 dark:bg-neutral-700">
+            <div className="animate-loading-bar h-full w-1/3 bg-primary" />
+          </div>
+        )}
       </div>
 
       {/* 데스크톱용 플로팅 정보 패널 */}

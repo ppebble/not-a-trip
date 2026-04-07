@@ -1,4 +1,8 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import {
+  useQuery,
+  useSuspenseQuery,
+  keepPreviousData,
+} from '@tanstack/react-query'
 import { SpotCategory, RelatedContent, ExternalLink } from '@/types'
 import type { SpotStatus } from '@/types/report'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
@@ -134,6 +138,7 @@ export function useSpots(
       return data.spots
     },
     enabled,
+    placeholderData: keepPreviousData,
   })
 }
 
