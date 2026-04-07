@@ -356,6 +356,19 @@ button:focus-visible {
   display: none;
 }
 
+/* 필터 로딩 프로그레스 바 */
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+.animate-loading-bar {
+  animation: loading-bar 1s ease-in-out infinite;
+}
+
 .leaflet-container img {
   max-width: none !important;
   max-height: none !important;
