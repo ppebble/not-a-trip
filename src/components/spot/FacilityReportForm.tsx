@@ -159,7 +159,7 @@ function CoinLockerFields({
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                 data.sizes.includes(size)
                   ? 'border-purple-400 bg-purple-100 text-purple-700'
-                  : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
+                  : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
               }`}
             >
               {{ small: '소형', medium: '중형', large: '대형' }[size]}
@@ -192,7 +192,7 @@ function CoinLockerFields({
                       prices: { ...data.prices, [size]: val },
                     })
                   }}
-                  className="w-20 rounded border border-neutral-200 px-2 py-1 text-xs"
+                  className="w-20 rounded border border-neutral-200 px-2 py-1 text-xs dark:border-neutral-700"
                 />
               </div>
             ))}
@@ -211,7 +211,7 @@ function CoinLockerFields({
           onChange={(e) =>
             onChange({ ...data, operatingHours: e.target.value || null })
           }
-          className="w-full rounded border border-neutral-200 px-3 py-1.5 text-sm"
+          className="w-full rounded border border-neutral-200 px-3 py-1.5 text-sm dark:border-neutral-700"
         />
       </div>
 
@@ -358,7 +358,7 @@ function GoodsShopFields({
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                 data.subtype === opt.value
                   ? 'border-pink-400 bg-pink-100 text-pink-700'
-                  : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
+                  : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
               }`}
             >
               {opt.label}
@@ -377,7 +377,7 @@ function GoodsShopFields({
           onChange={(e) =>
             onChange({ ...data, operatingHours: e.target.value || null })
           }
-          className="w-full rounded border border-neutral-200 px-3 py-1.5 text-sm"
+          className="w-full rounded border border-neutral-200 px-3 py-1.5 text-sm dark:border-neutral-700"
         />
       </div>
     </fieldset>
@@ -406,7 +406,7 @@ function TriToggle({
         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
           value === true
             ? 'border-green-400 bg-green-100 text-green-700'
-            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
+            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
         }`}
       >
         {trueLabel}
@@ -417,7 +417,7 @@ function TriToggle({
         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
           value === false
             ? 'border-red-400 bg-red-100 text-red-700'
-            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50'
+            : 'border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
         }`}
       >
         {falseLabel}
@@ -591,15 +591,15 @@ export default function FacilityReportForm({
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white shadow-2xl">
+        <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white shadow-2xl dark:bg-neutral-800">
           {/* 헤더 */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4">
-            <h2 className="text-lg font-bold text-neutral-900">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4 dark:border-neutral-700 dark:bg-neutral-800">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               편의시설 제보
             </h2>
             <button
               onClick={handleClose}
-              className="rounded-md p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
+              className="rounded-md p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-700"
               aria-label="닫기"
             >
               <svg
@@ -636,18 +636,18 @@ export default function FacilityReportForm({
             {/* Step 1: 장소 입력 방식 선택 */}
             {!inputMode && (
               <div className="space-y-3">
-                <p className="text-sm font-medium text-neutral-700">
+                <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                   장소를 어떻게 등록하시겠어요?
                 </p>
                 <button
                   type="button"
                   onClick={() => setInputMode('search')}
-                  className="w-full rounded-lg border-2 border-neutral-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
+                  className="w-full rounded-lg border-2 border-neutral-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50 dark:border-neutral-700"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🔍</span>
                     <div>
-                      <p className="text-sm font-semibold text-neutral-900">
+                      <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                         구글맵 장소 검색
                       </p>
                       <p className="text-xs text-neutral-500">
@@ -659,12 +659,12 @@ export default function FacilityReportForm({
                 <button
                   type="button"
                   onClick={handlePinMode}
-                  className="w-full rounded-lg border-2 border-neutral-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50"
+                  className="w-full rounded-lg border-2 border-neutral-200 p-4 text-left transition-colors hover:border-primary-300 hover:bg-primary-50/50 dark:border-neutral-700"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">📍</span>
                     <div>
-                      <p className="text-sm font-semibold text-neutral-900">
+                      <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                         지도에 직접 핀 꽂기
                       </p>
                       <p className="text-xs text-neutral-500">
@@ -720,7 +720,7 @@ export default function FacilityReportForm({
                         // geo 결과는 비동기이므로 effect로 처리
                       }}
                       disabled={geo.isLoading}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50"
+                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700"
                     >
                       {geo.isLoading ? (
                         <>
@@ -768,7 +768,7 @@ export default function FacilityReportForm({
                 {inputMode === 'pin' && (
                   <div className="space-y-3">
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-neutral-700">
+                      <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         이름 <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -781,7 +781,7 @@ export default function FacilityReportForm({
                             name: e.target.value,
                           }))
                         }
-                        className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.name ? 'border-red-400' : 'border-neutral-200'}`}
+                        className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.name ? 'border-red-400' : 'border-neutral-200 dark:border-neutral-700'}`}
                       />
                       {errors.name && (
                         <p className="mt-1 text-xs text-red-500">
@@ -791,7 +791,7 @@ export default function FacilityReportForm({
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-neutral-700">
+                      <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         주소
                       </label>
                       <input
@@ -804,12 +804,12 @@ export default function FacilityReportForm({
                             address: e.target.value,
                           }))
                         }
-                        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
+                        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm dark:border-neutral-700"
                       />
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-neutral-700">
+                      <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         위치 <span className="text-red-500">*</span>
                       </label>
 
@@ -829,7 +829,7 @@ export default function FacilityReportForm({
                           handleCurrentLocation()
                         }}
                         disabled={geo.isLoading}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50"
+                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700"
                       >
                         {geo.isLoading ? (
                           <>
@@ -901,7 +901,7 @@ export default function FacilityReportForm({
 
                 {/* 카테고리 선택 */}
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-neutral-700">
+                  <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                     카테고리 <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -912,7 +912,7 @@ export default function FacilityReportForm({
                         type: e.target.value as FacilityType,
                       }))
                     }
-                    className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.type ? 'border-red-400' : 'border-neutral-200'}`}
+                    className={`w-full rounded-lg border px-3 py-2 text-sm ${errors.type ? 'border-red-400' : 'border-neutral-200 dark:border-neutral-700'}`}
                   >
                     <option value="">카테고리 선택...</option>
                     <optgroup label="일반 편의시설">

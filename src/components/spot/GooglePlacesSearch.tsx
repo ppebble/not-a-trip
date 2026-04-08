@@ -199,7 +199,7 @@ export default function GooglePlacesSearch({
           type="text"
           onFocus={loadScript}
           placeholder="장소 이름으로 검색 (포커스 시 구글맵 로드)"
-          className="w-full rounded-lg border border-neutral-200 bg-surface px-3 py-2 text-sm text-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+          className="w-full rounded-lg border border-neutral-200 bg-surface px-3 py-2 text-sm text-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 dark:border-neutral-700"
           readOnly
         />
       </div>
@@ -252,7 +252,7 @@ export default function GooglePlacesSearch({
         value={query}
         onChange={(e) => handleInputChange(e.target.value)}
         placeholder="장소 이름으로 검색 (예: 아키하바라 건담 카페)"
-        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm transition-colors focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400 dark:border-neutral-700"
       />
 
       {/* 로딩 인디케이터 */}
@@ -282,7 +282,7 @@ export default function GooglePlacesSearch({
 
       {/* 자동완성 드롭다운 */}
       {suggestions.length > 0 && (
-        <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-neutral-200 bg-white shadow-lg">
+        <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
           {suggestions.map((suggestion, index) => {
             const prediction = suggestion.placePrediction
             return (

@@ -51,7 +51,7 @@ export function SceneCard({
 
   return (
     <div
-      className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-neutral-200 shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-neutral-200 shadow-sm transition-shadow duration-300 hover:shadow-lg dark:border-neutral-700"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -93,7 +93,7 @@ export function SceneCard({
         className={`absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium shadow-md transition-all ${
           liked
             ? 'bg-red-500 text-white'
-            : 'bg-white/90 text-neutral-700 hover:bg-red-500 hover:text-white'
+            : 'bg-white/90 text-neutral-700 hover:bg-red-500 hover:text-white dark:bg-neutral-700/90 dark:text-neutral-300'
         }`}
         aria-label={liked ? '좋아요 취소' : '좋아요'}
         title={liked ? '좋아요 취소' : '좋아요'}

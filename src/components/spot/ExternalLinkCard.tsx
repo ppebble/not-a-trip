@@ -38,7 +38,7 @@ export const ExternalLinkCard = memo(function ExternalLinkCard({
     <button
       type="button"
       onClick={handleClick}
-      className="group flex w-full items-center gap-3 rounded-lg border border-border bg-white p-4 text-left transition-all hover:border-primary-300 hover:shadow-md"
+      className="group flex w-full items-center gap-3 rounded-lg border border-border bg-white p-4 text-left transition-all hover:border-primary-300 hover:shadow-md dark:bg-neutral-800"
       style={{
         borderLeftWidth: '4px',
         borderLeftColor: config.color,
