@@ -254,9 +254,7 @@ export default function PostList({
   // 로딩 상태
   if (isLoading) {
     return (
-      <div
-        className={`rounded-lg bg-surface shadow-sm dark:bg-neutral-800 ${className}`}
-      >
+      <div className={`rounded-lg bg-surface shadow-sm ${className}`}>
         <PostListSkeleton />
       </div>
     )
@@ -265,9 +263,7 @@ export default function PostList({
   // 에러 상태
   if (error) {
     return (
-      <div
-        className={`rounded-lg bg-surface shadow-sm dark:bg-neutral-800 ${className}`}
-      >
+      <div className={`rounded-lg bg-surface shadow-sm ${className}`}>
         <PostListError error={error} onRetry={() => refetch()} />
       </div>
     )
@@ -276,9 +272,7 @@ export default function PostList({
   // 빈 목록
   if (!posts || posts.length === 0) {
     return (
-      <div
-        className={`rounded-lg bg-surface shadow-sm dark:bg-neutral-800 ${className}`}
-      >
+      <div className={`rounded-lg bg-surface shadow-sm ${className}`}>
         <PostListEmpty />
       </div>
     )
@@ -286,7 +280,7 @@ export default function PostList({
 
   return (
     <div
-      className={`overflow-hidden rounded-lg bg-surface shadow-sm dark:bg-neutral-800 ${className}`}
+      className={`overflow-hidden rounded-lg bg-surface shadow-sm ${className}`}
     >
       {/* 게시글 목록 */}
       <div className="divide-y divide-neutral-100">

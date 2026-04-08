@@ -55,7 +55,7 @@ export default function GpsErrorFallback({
 
   return (
     <div
-      className="absolute bottom-20 left-4 right-4 z-[1001] rounded-xl bg-surface p-4 shadow-xl dark:bg-neutral-800 md:bottom-4 md:left-auto md:right-16 md:w-80"
+      className="absolute bottom-20 left-4 right-4 z-[1001] rounded-xl bg-surface p-4 shadow-xl md:bottom-4 md:left-auto md:right-16 md:w-80"
       role="alert"
     >
       <div className="flex items-start gap-3">

@@ -159,7 +159,7 @@ function CoinLockerFields({
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                 data.sizes.includes(size)
                   ? 'border-purple-400 bg-purple-100 text-purple-700'
-                  : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50 dark:bg-neutral-800'
+                  : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50'
               }`}
             >
               {{ small: '소형', medium: '중형', large: '대형' }[size]}
@@ -358,7 +358,7 @@ function GoodsShopFields({
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                 data.subtype === opt.value
                   ? 'border-pink-400 bg-pink-100 text-pink-700'
-                  : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50 dark:bg-neutral-800'
+                  : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50'
               }`}
             >
               {opt.label}
@@ -406,7 +406,7 @@ function TriToggle({
         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
           value === true
             ? 'border-green-400 bg-green-100 text-green-700'
-            : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50 dark:bg-neutral-800'
+            : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50'
         }`}
       >
         {trueLabel}
@@ -417,7 +417,7 @@ function TriToggle({
         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
           value === false
             ? 'border-red-400 bg-red-100 text-red-700'
-            : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50 dark:bg-neutral-800'
+            : 'border-neutral-200 bg-surface text-neutral-500 hover:bg-neutral-50'
         }`}
       >
         {falseLabel}
@@ -591,9 +591,9 @@ export default function FacilityReportForm({
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-surface shadow-2xl dark:bg-neutral-800">
+        <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-surface shadow-2xl">
           {/* 헤더 */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 bg-surface px-6 py-4 dark:bg-neutral-800">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 bg-surface px-6 py-4">
             <h2 className="text-lg font-bold text-neutral-900">
               편의시설 제보
             </h2>

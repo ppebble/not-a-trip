@@ -94,7 +94,7 @@ export default function SearchInput({
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-full rounded-full border border-neutral-200 bg-surface/90 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-sm transition-all focus:border-primary focus:bg-surface focus:outline-none focus:ring-1 focus:ring-primary dark:bg-neutral-800/90 dark:text-white dark:placeholder-neutral-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+        className="w-full rounded-full border border-neutral-200 bg-surface/90 py-2 pl-10 pr-10 text-sm text-neutral-900 placeholder-neutral-500 shadow-sm transition-all focus:border-primary focus:bg-surface focus:outline-none focus:ring-1 focus:ring-primary/90 dark:text-white dark:placeholder-neutral-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
         aria-label="콘텐츠 검색"
       />
 

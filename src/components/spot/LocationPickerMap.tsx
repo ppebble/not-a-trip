@@ -66,7 +66,7 @@ export default function LocationPickerMap({
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-surface shadow-2xl dark:bg-neutral-800">
+      <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-surface shadow-2xl">
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
           <h3 className="text-sm font-bold text-neutral-900">
@@ -94,7 +94,7 @@ export default function LocationPickerMap({
         </div>
 
         {/* 안내 */}
-        <div className="border-b border-neutral-100 bg-neutral-50 px-4 py-2 dark:bg-neutral-700">
+        <div className="border-b border-neutral-100 bg-neutral-50 px-4 py-2">
           <p className="text-xs text-neutral-500">
             지도를 클릭하여 편의시설 위치를 지정해주세요
           </p>

@@ -221,7 +221,7 @@ export function LocationPicker({
         <button
           type="button"
           onClick={() => mapRef.current?.zoomIn()}
-          className="flex h-8 w-8 items-center justify-center rounded bg-surface shadow-md transition-colors hover:bg-neutral-100 dark:bg-neutral-800"
+          className="flex h-8 w-8 items-center justify-center rounded bg-surface shadow-md transition-colors hover:bg-neutral-100"
           aria-label="확대"
         >
           <svg
@@ -241,7 +241,7 @@ export function LocationPicker({
         <button
           type="button"
           onClick={() => mapRef.current?.zoomOut()}
-          className="flex h-8 w-8 items-center justify-center rounded bg-surface shadow-md transition-colors hover:bg-neutral-100 dark:bg-neutral-800"
+          className="flex h-8 w-8 items-center justify-center rounded bg-surface shadow-md transition-colors hover:bg-neutral-100"
           aria-label="축소"
         >
           <svg

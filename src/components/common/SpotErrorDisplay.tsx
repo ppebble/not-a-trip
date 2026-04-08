@@ -11,7 +11,7 @@ interface SpotErrorDisplayProps {
  */
 export function SpotErrorDisplay({ error, onRetry }: SpotErrorDisplayProps) {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800">
+    <div className="flex h-full w-full items-center justify-center bg-neutral-100">
       <div className="text-center">
         <div className="mx-auto h-12 w-12 rounded-full bg-danger-surface p-3 dark:bg-red-900/30">
           <AlertTriangleIcon size={24} color="#dc2626" />

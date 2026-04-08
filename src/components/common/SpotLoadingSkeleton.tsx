@@ -6,7 +6,7 @@ import { SpinnerIcon } from '@/components/icons'
  */
 export function SpotLoadingSkeleton() {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800">
+    <div className="flex h-full w-full items-center justify-center bg-neutral-100">
       <div className="text-center">
         <SpinnerIcon
           size="lg"

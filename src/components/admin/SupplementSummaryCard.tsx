@@ -63,7 +63,7 @@ export const SupplementSummaryCard = React.memo(function SupplementSummaryCard({
       className={`w-full rounded-lg border p-3 text-left transition-colors ${
         isSelected
           ? 'border-neutral-400 bg-primary-50'
-          : 'border-neutral-200 bg-surface hover:bg-neutral-50 dark:bg-neutral-800'
+          : 'border-neutral-200 bg-surface hover:bg-neutral-50'
       }`}
     >
       <div className="flex items-start justify-between gap-2">

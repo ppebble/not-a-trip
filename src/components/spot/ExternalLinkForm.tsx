@@ -110,7 +110,7 @@ function AddLinkForm({
             value={type}
             onChange={(e) => setType(e.target.value as ExternalLinkType)}
             disabled={disabled}
-            className="text-text-primary w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800"
+            className="text-text-primary w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {(Object.keys(LINK_TYPE_CONFIG) as ExternalLinkType[]).map(
               (key) => (
@@ -133,7 +133,7 @@ function AddLinkForm({
             onChange={(e) => setLabel(e.target.value)}
             placeholder="예: FC 바르셀로나 공식 사이트"
             disabled={disabled}
-            className="text-text-primary w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800"
+            className="text-text-primary w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
             maxLength={100}
           />
         </div>
@@ -147,7 +147,7 @@ function AddLinkForm({
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://example.com"
             disabled={disabled}
-            className="text-text-primary w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800"
+            className="text-text-primary w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm placeholder-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           />
           <p className="mt-1 text-xs text-muted">https:// 로 시작해야 합니다</p>
         </div>
@@ -184,7 +184,7 @@ function LinkItem({
   const config = LINK_TYPE_CONFIG[link.type]
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3 dark:bg-neutral-800">
+    <div className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3">
       {/* 아이콘 */}
       <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-base">
         <span

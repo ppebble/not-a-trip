@@ -75,7 +75,7 @@ export default function PasswordModal({
       />
 
       {/* 모달 콘텐츠 */}
-      <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-surface p-6 shadow-xl dark:bg-neutral-800">
+      <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-surface p-6 shadow-xl">
         {/* 헤더 */}
         <div className="mb-4 flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface">

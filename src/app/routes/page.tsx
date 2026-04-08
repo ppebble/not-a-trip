@@ -20,7 +20,7 @@ function RouteListSkeleton() {
         {Array.from({ length: 6 }, (_, i) => (
           <div
             key={i}
-            className="overflow-hidden rounded-lg border border-neutral-200 bg-surface dark:bg-neutral-800"
+            className="overflow-hidden rounded-lg border border-neutral-200 bg-surface"
           >
             <SkeletonBlock className="h-40 w-full rounded-none" />
             <div className="p-4">

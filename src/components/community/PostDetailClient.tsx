@@ -16,7 +16,7 @@ export default function PostDetailClient() {
   return (
     <main className="min-h-screen bg-primary-50">
       {/* 페이지 타이틀 */}
-      <div className="border-b border-border bg-surface px-4 py-4 dark:bg-neutral-800">
+      <div className="border-b border-border bg-surface px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-2">
             <Link

@@ -91,7 +91,7 @@ function CoinLockerDetail({ details }: { details: CoinLockerDetails }) {
             {details.sizes.map((size) => (
               <div
                 key={size}
-                className="rounded-md border border-purple-200 bg-surface px-2 py-1 text-xs dark:bg-neutral-800"
+                className="rounded-md border border-purple-200 bg-surface px-2 py-1 text-xs"
               >
                 <span className="font-medium text-purple-700">
                   {LOCKER_SIZE_LABEL[size]}

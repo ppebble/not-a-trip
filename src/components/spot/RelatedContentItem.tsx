@@ -57,7 +57,7 @@ export function RelatedContentItem({
         onDragOver(index)
       }}
       onDragEnd={onDragEnd}
-      className={`flex items-center justify-between rounded-lg border bg-surface p-3 transition-all dark:bg-neutral-800 ${isDragging ? 'border-primary-400 opacity-50 shadow-lg' : 'border-border'} ${isDragOver ? 'border-2 border-primary bg-primary-50' : ''} `}
+      className={`flex items-center justify-between rounded-lg border bg-surface p-3 transition-all ${isDragging ? 'border-primary-400 opacity-50 shadow-lg' : 'border-border'} ${isDragOver ? 'border-2 border-primary bg-primary-50' : ''} `}
     >
       {/* 드래그 핸들 */}
       <div

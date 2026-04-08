@@ -206,7 +206,7 @@ export function AddressSearch({
 
       {/* 검색 결과 드롭다운 */}
       {isOpen && results.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-auto rounded-lg border border-border bg-surface shadow-lg dark:bg-neutral-800">
+        <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-auto rounded-lg border border-border bg-surface shadow-lg">
           {results.map((result, index) => (
             <button
               key={index}
@@ -250,7 +250,7 @@ export function AddressSearch({
 
       {/* 검색 결과 없음 */}
       {isOpen && results.length === 0 && !isLoading && query.length >= 2 && (
-        <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-lg border border-border bg-surface p-4 text-center shadow-lg dark:bg-neutral-800">
+        <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-lg border border-border bg-surface p-4 text-center shadow-lg">
           <p className="text-sm text-muted">검색 결과가 없습니다</p>
         </div>
       )}

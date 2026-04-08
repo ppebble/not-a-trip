@@ -495,7 +495,7 @@ export function RouteFormContent({
       )}
 
       {/* Step 1: 기본 정보 (코스명 + 설명만) */}
-      <section className="rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-800">
+      <section className="rounded-lg bg-surface p-6 shadow-sm">
         <h2 className="text-text-primary mb-4 text-lg font-semibold">
           기본 정보
         </h2>
@@ -532,7 +532,7 @@ export function RouteFormContent({
       </section>
 
       {/* Step 2: 스팟 관리 (핵심) */}
-      <section className="rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-800">
+      <section className="rounded-lg bg-surface p-6 shadow-sm">
         <h2 className="text-text-primary mb-4 text-lg font-semibold">
           스팟 목록 <span className="text-red-500">*</span>
           <span className="ml-2 text-sm font-normal text-muted">
@@ -553,7 +553,7 @@ export function RouteFormContent({
 
           {/* 검색 결과 드롭다운 */}
           {searchQuery && hasSearched && (
-            <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg dark:bg-neutral-800">
+            <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg">
               {searchResults.length === 0 ? (
                 <div className="px-4 py-4 text-center text-sm text-muted">
                   &ldquo;{searchQuery}&rdquo;에 대한 검색 결과가 없습니다
@@ -617,7 +617,7 @@ export function RouteFormContent({
       </section>
 
       {/* Step 3: 시작 지점 (선택) */}
-      <section className="rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-800">
+      <section className="rounded-lg bg-surface p-6 shadow-sm">
         <h2 className="text-text-primary mb-1 text-lg font-semibold">
           시작 지점
           <span className="ml-2 text-sm font-normal text-muted">(선택)</span>
@@ -685,7 +685,7 @@ export function RouteFormContent({
             {hasGeoSearched &&
               geocodeResults.length > 0 &&
               !startPointCoords && (
-                <div className="mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg dark:bg-neutral-800">
+                <div className="mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg">
                   {geocodeResults.map((result, idx) => (
                     <button
                       key={idx}
@@ -745,7 +745,7 @@ export function RouteFormContent({
       </section>
 
       {/* Step 4: 코스 디테일 (태그 + 소요시간 + 난이도 + 공개설정) */}
-      <section className="rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-900">
+      <section className="rounded-lg bg-surface p-6 shadow-sm">
         <h2 className="text-text-primary mb-4 text-lg font-semibold">
           코스 디테일
         </h2>
@@ -765,12 +765,12 @@ export function RouteFormContent({
                 value={contentInput}
                 onChange={handleContentInputChange}
                 placeholder="작품명 검색"
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none dark:bg-neutral-800"
+                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none"
               />
               {contentInput &&
                 hasContentSearched &&
                 contentSuggestions.length > 0 && (
-                  <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg dark:bg-neutral-800">
+                  <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg">
                     {contentSuggestions.map((suggestion) => {
                       const alreadyAdded =
                         relatedContentNames.includes(suggestion)
@@ -838,7 +838,7 @@ export function RouteFormContent({
                   className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
                     regionTags.includes(tag)
                       ? 'border-primary bg-primary text-white'
-                      : 'border-border bg-surface text-primary hover:border-neutral-300 hover:bg-primary-50 dark:bg-neutral-800'
+                      : 'border-border bg-surface text-primary hover:border-neutral-300 hover:bg-primary-50'
                   }`}
                 >
                   {tag}
@@ -927,7 +927,7 @@ export function RouteFormContent({
 
       {/* 미리보기 */}
       {showPreview && spots.length >= 2 && (
-        <section className="rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-900">
+        <section className="rounded-lg bg-surface p-6 shadow-sm">
           <h2 className="text-text-primary mb-3 text-lg font-semibold">
             코스 미리보기
           </h2>
@@ -951,7 +951,7 @@ export function RouteFormContent({
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-lg border border-border bg-surface px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-primary-400 dark:hover:bg-neutral-800"
+          className="rounded-lg border border-border bg-surface px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50"
         >
           취소
         </button>
@@ -959,7 +959,7 @@ export function RouteFormContent({
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
-            className="rounded-lg border border-border bg-surface px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-primary-400 dark:hover:bg-neutral-800"
+            className="rounded-lg border border-border bg-surface px-6 py-3 text-sm text-primary transition-colors hover:bg-primary-50"
           >
             {showPreview ? '미리보기 닫기' : '🗺️ 미리보기'}
           </button>

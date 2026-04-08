@@ -277,7 +277,7 @@ export default function SpotDetailMap({
 
       {/* 범례 */}
       {facilities.length > 0 && (
-        <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-surface/90 p-3 shadow-lg backdrop-blur-sm dark:bg-neutral-900/90">
+        <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-surface/90 p-3 shadow-lg backdrop-blur-sm">
           <h4 className="mb-2 text-sm font-semibold text-neutral-900">범례</h4>
           <div className="space-y-1">
             <div className="flex items-center text-xs text-neutral-700">

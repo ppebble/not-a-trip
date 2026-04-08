@@ -82,7 +82,7 @@ export function AdminReportReview({
         </div>
 
         {/* 기본 정보 */}
-        <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
+        <section className="rounded-lg border border-neutral-200 bg-surface p-4">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             기본 정보
           </h3>
@@ -129,7 +129,7 @@ export function AdminReportReview({
 
         {/* 작품 정보 */}
         {report.relatedContent && report.relatedContent.length > 0 && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               작품 정보
             </h3>
@@ -158,7 +158,7 @@ export function AdminReportReview({
 
         {/* 증거 사진 쌍 */}
         {report.evidencePairs && report.evidencePairs.length > 0 && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               증거 사진 ({report.evidencePairs.length}쌍)
             </h3>
@@ -207,7 +207,7 @@ export function AdminReportReview({
 
         {/* 검토 히스토리 */}
         {report.reviewHistory && report.reviewHistory.length > 0 && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               검토 히스토리
             </h3>
@@ -250,7 +250,7 @@ export function AdminReportReview({
 
         {/* 검토 액션 (pending 상태일 때만) */}
         {isPending && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               검토
             </h3>

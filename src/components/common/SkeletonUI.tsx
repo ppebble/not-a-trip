@@ -18,7 +18,7 @@ interface SkeletonBaseProps {
 export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
   return (
     <div
-      className={`animate-pulse rounded bg-neutral-200 dark:bg-neutral-700 ${className}`}
+      className={`animate-pulse rounded bg-neutral-200 ${className}`}
       role="status"
       aria-label="로딩 중"
     />
@@ -31,7 +31,7 @@ export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
  */
 export function SpotCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-surface shadow-sm dark:bg-neutral-800">
+    <div className="overflow-hidden rounded-lg bg-surface shadow-sm">
       {/* 이미지 영역 */}
       <SkeletonBlock className="h-48 w-full rounded-none" />
       <div className="p-4">
@@ -52,7 +52,7 @@ export function SpotCardSkeleton() {
  */
 export function GalleryCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-surface shadow-sm dark:bg-neutral-800">
+    <div className="overflow-hidden rounded-lg bg-surface shadow-sm">
       <SkeletonBlock className="h-48 w-full rounded-none" />
       <div className="p-3">
         <SkeletonBlock className="mb-2 h-4 w-3/4" />
@@ -83,7 +83,7 @@ export function GalleryGridSkeleton({ count = 8 }: { count?: number }) {
 export function MapSkeleton() {
   return (
     <div
-      className="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800"
+      className="flex h-full w-full items-center justify-center bg-neutral-100"
       role="status"
       aria-label="지도 로딩 중"
     >
@@ -101,9 +101,9 @@ export function MapSkeleton() {
  */
 export function SpotDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-surface px-4 py-4 dark:bg-neutral-800">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-4">
         <div className="mx-auto max-w-7xl">
           <SkeletonBlock className="h-5 w-32" />
           <SkeletonBlock className="mt-2 h-6 w-40" />
@@ -113,7 +113,7 @@ export function SpotDetailSkeleton() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-8">
           {/* 스팟 정보 카드 */}
-          <div className="rounded-lg bg-surface p-6 shadow-md dark:bg-neutral-800">
+          <div className="rounded-lg bg-surface p-6 shadow-md">
             <SkeletonBlock className="mb-4 h-8 w-64" />
             <SkeletonBlock className="mb-4 h-4 w-48" />
             <div className="space-y-2">
@@ -123,7 +123,7 @@ export function SpotDetailSkeleton() {
           </div>
 
           {/* 사진 그리드 */}
-          <div className="rounded-lg bg-surface p-6 shadow-md dark:bg-neutral-800">
+          <div className="rounded-lg bg-surface p-6 shadow-md">
             <SkeletonBlock className="mb-4 h-6 w-16" />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
@@ -143,9 +143,9 @@ export function SpotDetailSkeleton() {
  */
 export function GalleryPageSkeleton() {
   return (
-    <main className="min-h-screen bg-primary-50 dark:bg-neutral-900">
+    <main className="min-h-screen bg-primary-50">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-surface px-4 py-6 dark:bg-neutral-800">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-6">
         <div className="mx-auto max-w-6xl">
           <SkeletonBlock className="h-8 w-32" />
           <SkeletonBlock className="mt-2 h-4 w-48" />
@@ -157,7 +157,7 @@ export function GalleryPageSkeleton() {
       </div>
 
       {/* 탭 */}
-      <div className="border-b border-neutral-200 bg-surface px-4 py-3 dark:bg-neutral-800">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-3">
         <div className="mx-auto flex max-w-6xl gap-2">
           <SkeletonBlock className="h-10 w-28" />
           <SkeletonBlock className="h-10 w-28" />

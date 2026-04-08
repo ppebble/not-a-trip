@@ -115,16 +115,14 @@ export default function ContentSearchFilter({
     >
       <div
         className={`flex items-center rounded-full transition-all duration-200 ${
-          isFocused
-            ? 'bg-surface ring-2 ring-primary/50 dark:bg-neutral-800'
-            : 'bg-transparent'
+          isFocused ? 'bg-surface ring-2 ring-primary/50' : 'bg-transparent'
         }`}
       >
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <svg
             className={`h-4 w-4 transition-colors ${
               isFocused
-                ? 'text-primary dark:text-primary-400'
+                ? 'text-primary'
                 : 'text-neutral-400 dark:text-neutral-500'
             }`}
             fill="none"
