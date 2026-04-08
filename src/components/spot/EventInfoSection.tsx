@@ -55,7 +55,7 @@ export function EventInfoSection({
   const emptyMessage = emptyMessages[category] || emptyMessages.sports
 
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-md">
+    <div className="overflow-hidden rounded-lg bg-surface shadow-md">
       <div className="p-6">
         {/* 헤더 */}
         <div className="mb-4 flex items-center gap-2">

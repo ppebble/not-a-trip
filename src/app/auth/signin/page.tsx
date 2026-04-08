@@ -50,7 +50,7 @@ function SignInForm() {
         <button
           onClick={() => loginWithProvider('google')}
           disabled={isLoading}
-          className="flex w-full items-center justify-center gap-3 rounded-lg bg-white px-4 py-3 text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-3 rounded-lg bg-surface px-4 py-3 text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24">
             <path

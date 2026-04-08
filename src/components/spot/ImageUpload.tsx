@@ -514,7 +514,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveLeft()
             }}
-            className="text-text-secondary rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
+            className="text-text-secondary rounded-full bg-surface/90 p-1.5 shadow hover:bg-surface"
             title="왼쪽으로 이동"
           >
             <svg
@@ -564,7 +564,7 @@ function ImagePreviewItem({
               e.stopPropagation()
               onMoveRight()
             }}
-            className="text-text-secondary rounded-full bg-white/90 p-1.5 shadow hover:bg-white"
+            className="text-text-secondary rounded-full bg-surface/90 p-1.5 shadow hover:bg-surface"
             title="오른쪽으로 이동"
           >
             <svg

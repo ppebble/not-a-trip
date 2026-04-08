@@ -66,7 +66,7 @@ export default function LocationPickerMap({
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+      <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-surface shadow-2xl">
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
           <h3 className="text-sm font-bold text-neutral-900">

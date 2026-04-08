@@ -142,7 +142,7 @@ function WriteForm() {
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm">
+    <div className="rounded-lg bg-surface p-6 shadow-sm">
       {/* 에러 메시지 표시 */}
       {errors.length > 0 && (
         <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
@@ -510,7 +510,7 @@ function WriteForm() {
  */
 function WriteFormSkeleton() {
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm">
+    <div className="rounded-lg bg-surface p-6 shadow-sm">
       <div className="animate-pulse space-y-6">
         <div className="h-16 w-full rounded-lg bg-neutral-200"></div>
         <div>
@@ -550,7 +550,7 @@ export default function WritePage() {
   return (
     <main className="min-h-screen bg-primary-50">
       {/* 페이지 타이틀 */}
-      <div className="border-b border-neutral-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <h1 className="text-xl font-bold text-primary">게시글 작성</h1>
           <p className="text-sm text-secondary">

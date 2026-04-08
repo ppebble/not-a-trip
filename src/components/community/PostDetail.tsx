@@ -89,7 +89,7 @@ function DeleteConfirmModal({
       />
 
       {/* 모달 콘텐츠 */}
-      <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+      <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-surface p-6 shadow-xl">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
             <svg
@@ -261,7 +261,7 @@ function PostContent({ post }: PostContentProps) {
 
   return (
     <>
-      <article className="rounded-lg bg-white p-6 shadow-sm">
+      <article className="rounded-lg bg-surface p-6 shadow-sm">
         {/* 게시글 헤더 */}
         <header className="mb-6 border-b border-neutral-100 pb-4">
           <h1 className="mb-4 text-2xl font-bold text-primary-800">
@@ -471,7 +471,7 @@ export default function PostDetail({
 
   if (isLoading) {
     return (
-      <div className={`rounded-lg bg-white p-6 shadow-sm ${className}`}>
+      <div className={`rounded-lg bg-surface p-6 shadow-sm ${className}`}>
         <PostDetailSkeleton />
       </div>
     )
@@ -479,7 +479,7 @@ export default function PostDetail({
 
   if (error) {
     return (
-      <div className={`rounded-lg bg-white shadow-sm ${className}`}>
+      <div className={`rounded-lg bg-surface shadow-sm ${className}`}>
         <PostDetailError error={error} onRetry={() => refetch()} />
       </div>
     )
@@ -487,7 +487,7 @@ export default function PostDetail({
 
   if (!post) {
     return (
-      <div className={`rounded-lg bg-white p-6 shadow-sm ${className}`}>
+      <div className={`rounded-lg bg-surface p-6 shadow-sm ${className}`}>
         <p className="text-center text-secondary">게시글을 찾을 수 없습니다</p>
       </div>
     )

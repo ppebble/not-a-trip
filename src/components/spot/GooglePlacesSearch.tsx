@@ -282,7 +282,7 @@ export default function GooglePlacesSearch({
 
       {/* 자동완성 드롭다운 */}
       {suggestions.length > 0 && (
-        <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-neutral-200 bg-white shadow-lg">
+        <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-neutral-200 bg-surface shadow-lg">
           {suggestions.map((suggestion, index) => {
             const prediction = suggestion.placePrediction
             return (

@@ -30,7 +30,7 @@ function LoadingSkeleton() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="flex items-center gap-4 rounded-xl border border-neutral-100 bg-white p-3"
+              className="flex items-center gap-4 rounded-xl border border-neutral-100 bg-surface p-3"
             >
               <div className="h-10 w-10 animate-pulse rounded-full bg-border" />
               <div className="h-14 w-14 animate-pulse rounded-lg bg-border" />
@@ -48,7 +48,7 @@ function LoadingSkeleton() {
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="animate-pulse rounded-xl bg-white shadow-md"
+              className="animate-pulse rounded-xl bg-surface shadow-md"
             >
               <div className="aspect-square w-full rounded-t-xl bg-border" />
             </div>

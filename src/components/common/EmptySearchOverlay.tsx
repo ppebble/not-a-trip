@@ -11,8 +11,8 @@ interface EmptySearchOverlayProps {
 export function EmptySearchOverlay({ searchQuery }: EmptySearchOverlayProps) {
   return (
     <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
-      <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm dark:bg-neutral-800/95">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface dark:bg-neutral-700">
+      <div className="backdrop-blur-sm/95 pointer-events-auto rounded-xl bg-surface/95 px-8 py-6 text-center shadow-xl">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface">
           <SearchIcon size="lg" className="text-muted" />
         </div>
         <p className="text-lg font-semibold text-primary-800 dark:text-primary-300">

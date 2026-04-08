@@ -147,7 +147,7 @@ export function QuickCheckIn({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center">
-      <div className="w-full max-w-lg rounded-t-2xl bg-white sm:rounded-2xl">
+      <div className="w-full max-w-lg rounded-t-2xl bg-surface sm:rounded-2xl">
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b p-4">
           <div>

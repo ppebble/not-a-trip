@@ -125,7 +125,7 @@ export default function EditPostPage() {
   if (isLoading) {
     return (
       <main className="bg-navy-50 min-h-screen">
-        <div className="border-navy-200 border-b bg-white px-4 py-4">
+        <div className="border-navy-200 border-b bg-surface px-4 py-4">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
             <p className="text-navy-500 text-sm">로딩 중...</p>
@@ -144,14 +144,14 @@ export default function EditPostPage() {
   if (error || !post) {
     return (
       <main className="bg-navy-50 min-h-screen">
-        <div className="border-navy-200 border-b bg-white px-4 py-4">
+        <div className="border-navy-200 border-b bg-surface px-4 py-4">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
             <p className="text-navy-500 text-sm">오류 발생</p>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
-          <div className="rounded-lg bg-white p-6 text-center shadow-sm">
+          <div className="rounded-lg bg-surface p-6 text-center shadow-sm">
             <p className="text-navy-600">게시글을 찾을 수 없습니다.</p>
             <Link
               href="/community"
@@ -169,14 +169,14 @@ export default function EditPostPage() {
   if (!canEdit()) {
     return (
       <main className="bg-navy-50 min-h-screen">
-        <div className="border-navy-200 border-b bg-white px-4 py-4">
+        <div className="border-navy-200 border-b bg-surface px-4 py-4">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
             <p className="text-navy-500 text-sm">권한 없음</p>
           </div>
         </div>
         <div className="mx-auto max-w-4xl px-4 py-6">
-          <div className="rounded-lg bg-white p-6 text-center shadow-sm">
+          <div className="rounded-lg bg-surface p-6 text-center shadow-sm">
             <p className="text-navy-600">본인의 게시글만 수정할 수 있습니다.</p>
             <Link
               href={`/community/${postId}`}
@@ -193,7 +193,7 @@ export default function EditPostPage() {
   return (
     <main className="bg-navy-50 min-h-screen">
       {/* 페이지 타이틀 */}
-      <div className="border-navy-200 border-b bg-white px-4 py-4">
+      <div className="border-navy-200 border-b bg-surface px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <h1 className="text-navy-800 text-xl font-bold">게시글 수정</h1>
           <p className="text-navy-500 text-sm">
@@ -206,7 +206,7 @@ export default function EditPostPage() {
 
       {/* 메인 콘텐츠 */}
       <div className="mx-auto max-w-4xl px-4 py-6">
-        <div className="rounded-lg bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-surface p-6 shadow-sm">
           {/* 비회원 게시글 안내 */}
           {post.isGuest && (
             <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">

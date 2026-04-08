@@ -154,7 +154,7 @@ export function SpotSearchModal({
       aria-labelledby="spot-search-title"
     >
       <div
-        className="max-h-[80vh] w-full max-w-md overflow-hidden rounded-xl bg-white"
+        className="max-h-[80vh] w-full max-w-md overflow-hidden rounded-xl bg-surface"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}

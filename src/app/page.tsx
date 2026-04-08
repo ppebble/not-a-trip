@@ -27,7 +27,7 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
  */
 export default function Home() {
   return (
-    <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-neutral-100 dark:bg-neutral-900">
+    <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">
       <HomeContent />
     </main>
   )
@@ -91,29 +91,29 @@ function HomeContent() {
 
       {/* 필터 영역 (상단 통합 바) */}
       <div className="absolute left-0 right-0 top-0 z-[1000]">
-        <div className="flex items-center border-b border-neutral-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-900/95">
+        <div className="flex items-center border-b border-neutral-200 bg-surface/95 px-4 py-3 shadow-sm backdrop-blur-sm">
           <ContentSearchFilter />
-          <div className="mx-2 h-8 w-px flex-shrink-0 bg-neutral-300 dark:bg-neutral-700" />
+          <div className="mx-2 h-8 w-px flex-shrink-0 bg-neutral-300" />
           <div className="min-w-0 flex-1">
             <CategoryFilter />
           </div>
         </div>
         {/* 필터 변경 시 얇은 로딩 프로그레스 바 */}
         {(isFetching || isPlaceholderData) && (
-          <div className="h-0.5 w-full overflow-hidden bg-neutral-200 dark:bg-neutral-700">
+          <div className="h-0.5 w-full overflow-hidden bg-neutral-200">
             <div className="animate-loading-bar h-full w-1/3 bg-primary" />
           </div>
         )}
       </div>
 
       {/* 데스크톱용 플로팅 정보 패널 */}
-      <div className="absolute bottom-4 left-4 hidden rounded-lg bg-white/90 p-4 shadow-lg backdrop-blur-sm dark:bg-neutral-900/90 md:block">
+      <div className="absolute bottom-4 left-4 hidden rounded-lg bg-surface/90 p-4 shadow-lg backdrop-blur-sm md:block">
         <div className="flex items-center space-x-3">
           <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary text-white">
             <AppIcon name="location" size="lg" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-primary dark:text-primary-400">
+            <p className="text-sm font-semibold text-primary">
               {spotCount}개의 특별한 여행지
             </p>
             <p className="text-xs text-secondary dark:text-neutral-400">

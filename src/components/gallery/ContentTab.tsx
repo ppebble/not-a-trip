@@ -29,7 +29,7 @@ function LoadingSkeleton() {
     <>
       {[1, 2, 3, 4].map((i) => (
         <MasonryItem key={`skeleton-${i}`}>
-          <div className="animate-pulse rounded-xl bg-white shadow-md">
+          <div className="animate-pulse rounded-xl bg-surface shadow-md">
             <div className="aspect-[4/5] rounded-t-xl bg-border" />
             <div className="p-3">
               <div className="mb-2 flex items-center gap-2">
@@ -83,7 +83,7 @@ function ContentGridSkeleton() {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <div key={i} className="animate-pulse rounded-xl bg-white shadow-md">
+        <div key={i} className="animate-pulse rounded-xl bg-surface shadow-md">
           <div className="aspect-[3/4] rounded-t-xl bg-border" />
           <div className="p-3">
             <div className="mb-2 h-4 w-3/4 rounded bg-border" />

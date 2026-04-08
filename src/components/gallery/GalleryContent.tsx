@@ -34,7 +34,10 @@ function ContentSkeleton() {
     <div className="mx-auto max-w-6xl px-4 py-6">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-          <div key={i} className="animate-pulse rounded-lg bg-white shadow-sm">
+          <div
+            key={i}
+            className="animate-pulse rounded-lg bg-surface shadow-sm"
+          >
             <div className="h-48 rounded-t-lg bg-border" />
             <div className="p-3">
               <div className="mb-2 h-4 w-3/4 rounded bg-border" />

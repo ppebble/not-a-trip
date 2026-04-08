@@ -92,7 +92,7 @@ function ReportCard({ report }: { report: SpotReport }) {
   return (
     <Link
       href={`/reports/${report.id}`}
-      className="flex gap-3 rounded-lg border border-border bg-white p-3 transition-colors hover:bg-surface/50"
+      className="flex gap-3 rounded-lg border border-border bg-surface p-3 transition-colors hover:bg-surface/50"
     >
       {/* 썸네일 */}
       {thumbnail ? (

@@ -274,7 +274,7 @@ export default function SceneImageModal({
                   }}
                   className={`h-2 rounded-full transition-all ${
                     index === currentIndex
-                      ? 'w-6 bg-white'
+                      ? 'w-6 bg-surface'
                       : 'w-2 bg-white/50 hover:bg-white/70'
                   }`}
                   aria-label={`${index + 1}번째 장면으로 이동`}

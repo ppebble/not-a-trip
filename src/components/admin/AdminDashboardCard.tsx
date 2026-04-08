@@ -25,7 +25,7 @@ export function AdminDashboardCard({
   return (
     <Link
       href={href}
-      className="group block rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-md"
+      className="group block rounded-xl border border-neutral-200 bg-surface p-6 shadow-sm transition-all hover:border-primary-300 hover:shadow-md"
     >
       <div className="flex items-start justify-between">
         <span

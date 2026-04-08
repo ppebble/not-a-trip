@@ -244,7 +244,7 @@ export default function NearbyFacilities({
               {/* 아코디언 헤더 */}
               <button
                 onClick={() => toggleAccordion(type)}
-                className="flex w-full items-center justify-between bg-accent-surface px-4 py-3 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                className="flex w-full items-center justify-between bg-accent-surface px-4 py-3 transition-colors hover:bg-neutral-100"
               >
                 <div className="flex items-center space-x-2">
                   <span className="text-xl">{config.icon}</span>

@@ -93,7 +93,7 @@ export function SceneCard({
         className={`absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium shadow-md transition-all ${
           liked
             ? 'bg-red-500 text-white'
-            : 'bg-white/90 text-neutral-700 hover:bg-red-500 hover:text-white'
+            : 'bg-surface/90 text-neutral-700 hover:bg-red-500 hover:text-white'
         }`}
         aria-label={liked ? '좋아요 취소' : '좋아요'}
         title={liked ? '좋아요 취소' : '좋아요'}

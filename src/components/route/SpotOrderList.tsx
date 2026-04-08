@@ -108,7 +108,7 @@ export function SpotOrderList({
 
   if (spots.length === 0) {
     return (
-      <div className="rounded-lg border-2 border-dashed border-border p-8 text-center dark:border-neutral-800">
+      <div className="rounded-lg border-2 border-dashed border-border p-8 text-center">
         <p className="text-sm text-muted">
           스팟을 검색하여 코스에 추가해주세요
         </p>
@@ -222,7 +222,7 @@ export function SpotOrderList({
                 ? 'border-primary-400 bg-primary-50 opacity-50'
                 : dragOverIndex === idx
                   ? 'border-primary bg-primary-50'
-                  : 'border-border bg-white hover:border-neutral-300'
+                  : 'border-border bg-surface hover:border-neutral-300'
             } cursor-grab active:cursor-grabbing`}
           >
             {/* 드래그 핸들 + 순서 번호 */}

@@ -90,7 +90,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
-      <div className="relative z-[10000] w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+      <div className="relative z-[10000] w-full max-w-md rounded-lg bg-surface p-6 shadow-xl">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-bold text-neutral-900">
             작품 속 장면 추가

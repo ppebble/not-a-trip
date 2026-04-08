@@ -59,7 +59,7 @@ function getRankStyle(rank: number): string {
     case 3:
       return 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'
     default:
-      return 'bg-white border-neutral-100'
+      return 'bg-surface border-neutral-100'
   }
 }
 
@@ -202,7 +202,7 @@ export function RankingList({
               return (
                 <div
                   key={item.checkInId}
-                  className={`group relative overflow-hidden rounded-xl bg-white shadow-md transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${onCheckInClick ? 'cursor-pointer' : ''} `}
+                  className={`group relative overflow-hidden rounded-xl bg-surface shadow-md transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${onCheckInClick ? 'cursor-pointer' : ''} `}
                   onClick={() => onCheckInClick?.(item.checkInId)}
                   role={onCheckInClick ? 'button' : undefined}
                   tabIndex={onCheckInClick ? 0 : undefined}
@@ -235,7 +235,7 @@ export function RankingList({
 
                     {/* 순위 뱃지 */}
                     <div
-                      className={`absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-full ${rank <= 3 ? 'bg-white/90 shadow-md' : 'bg-black/50'} `}
+                      className={`absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-full ${rank <= 3 ? 'shadow-md/90 bg-surface/90' : 'bg-black/50'} `}
                     >
                       {medal ? (
                         <span className="text-base">{medal}</span>

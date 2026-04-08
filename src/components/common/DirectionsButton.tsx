@@ -122,7 +122,7 @@ export default function DirectionsButton({
 
       {isOpen && (
         <div
-          className="absolute bottom-full left-0 z-50 mb-2 w-48 overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black/5"
+          className="absolute bottom-full left-0 z-50 mb-2 w-48 overflow-hidden rounded-lg bg-surface shadow-lg ring-1 ring-black/5"
           role="menu"
           aria-label="지도 앱 선택"
         >

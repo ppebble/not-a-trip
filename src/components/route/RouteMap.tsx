@@ -368,7 +368,7 @@ export default function RouteMap({
       </MapContainer>
 
       {/* 범례 */}
-      <div className="absolute bottom-3 left-3 z-[1000] rounded-lg bg-white/90 px-3 py-2 shadow-md backdrop-blur-sm">
+      <div className="backdrop-blur-sm/90 absolute bottom-3 left-3 z-[1000] rounded-lg bg-surface/90 px-3 py-2 shadow-md">
         <div className="flex flex-wrap items-center gap-3 text-xs">
           {startPoint && (
             <div className="flex items-center gap-1">
