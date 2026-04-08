@@ -64,7 +64,7 @@ export function NearbySpotWarning({
             key={item.id}
             type="button"
             onClick={() => item.type === 'spot' && onSelectSpot(item.id)}
-            className="flex w-full items-center gap-3 rounded-md bg-white p-2 text-left transition-colors hover:bg-amber-100"
+            className="flex w-full items-center gap-3 rounded-md bg-white p-2 text-left transition-colors hover:bg-amber-100 dark:bg-neutral-800 dark:hover:bg-neutral-700"
           >
             {item.thumbnailUrl ? (
               <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded">
@@ -102,7 +102,7 @@ export function NearbySpotWarning({
         <button
           type="button"
           onClick={onContinue}
-          className="flex-1 rounded-lg border border-amber-300 bg-white py-2 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100"
+          className="flex-1 rounded-lg border border-amber-300 bg-white py-2 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100 dark:bg-neutral-800 dark:hover:bg-neutral-700"
         >
           계속 진행
         </button>

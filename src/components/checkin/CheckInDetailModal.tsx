@@ -31,7 +31,7 @@ export function CheckInDetailModal({
       onClick={onClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white"
+        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white dark:bg-neutral-800"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}

@@ -65,7 +65,7 @@ function ContentCard({ content, onClick }: ContentCardProps) {
     <button
       type="button"
       onClick={onClick}
-      className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:bg-neutral-800"
       aria-label={`${content.title} 작품 보기`}
     >
       {/* 포스터 이미지 영역 */}
@@ -92,7 +92,7 @@ function ContentCard({ content, onClick }: ContentCardProps) {
       {/* 작품 정보 영역 */}
       <div className="flex flex-1 flex-col p-3">
         {/* 작품 제목 */}
-        <h3 className="mb-2 line-clamp-2 text-left text-sm font-semibold text-neutral-900">
+        <h3 className="mb-2 line-clamp-2 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100">
           {content.title}
         </h3>
 

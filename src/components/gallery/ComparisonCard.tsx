@@ -151,7 +151,7 @@ export const ComparisonCard = memo(function ComparisonCard({
             </div>
           )}
           <span
-            className="text-sm font-medium text-neutral-900"
+            className="text-sm font-medium text-neutral-900 dark:text-neutral-100"
             data-testid="user-nickname"
           >
             {checkIn.userName}

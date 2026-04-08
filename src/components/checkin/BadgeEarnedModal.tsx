@@ -39,7 +39,7 @@ export function BadgeEarnedModal({ badges, onClose }: BadgeEarnedModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-b from-yellow-400 to-orange-500 p-1">
-        <div className="rounded-xl bg-white p-6 text-center">
+        <div className="rounded-xl bg-white p-6 text-center dark:bg-neutral-800">
           {/* 축하 텍스트 */}
           <div className="mb-4">
             <span className="text-4xl">🎉</span>

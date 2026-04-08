@@ -255,7 +255,7 @@ export default function SpotDetailMap({
               <Popup>
                 <div className="p-2">
                   <div className="mb-1 flex items-center justify-between">
-                    <h4 className="font-semibold text-neutral-900">
+                    <h4 className="font-semibold text-neutral-900 dark:text-neutral-100">
                       {facility.name}
                     </h4>
                     <span className="rounded bg-surface px-2 py-1 text-xs text-primary-800">
