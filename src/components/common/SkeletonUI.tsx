@@ -18,7 +18,7 @@ interface SkeletonBaseProps {
 export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
   return (
     <div
-      className={`animate-pulse rounded bg-neutral-200 ${className}`}
+      className={`animate-pulse rounded bg-neutral-200 dark:bg-neutral-700 ${className}`}
       role="status"
       aria-label="로딩 중"
     />
@@ -31,7 +31,7 @@ export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
  */
 export function SpotCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-sm">
+    <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-neutral-800">
       {/* 이미지 영역 */}
       <SkeletonBlock className="h-48 w-full rounded-none" />
       <div className="p-4">
@@ -52,7 +52,7 @@ export function SpotCardSkeleton() {
  */
 export function GalleryCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-sm">
+    <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-neutral-800">
       <SkeletonBlock className="h-48 w-full rounded-none" />
       <div className="p-3">
         <SkeletonBlock className="mb-2 h-4 w-3/4" />
@@ -83,13 +83,15 @@ export function GalleryGridSkeleton({ count = 8 }: { count?: number }) {
 export function MapSkeleton() {
   return (
     <div
-      className="flex h-full w-full items-center justify-center bg-neutral-800"
+      className="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800"
       role="status"
       aria-label="지도 로딩 중"
     >
       <div className="text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-neutral-400 border-t-white" />
-        <p className="mt-4 text-neutral-200">지도 로딩 중...</p>
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-neutral-300 border-t-primary dark:border-neutral-600 dark:border-t-primary-400" />
+        <p className="mt-4 text-neutral-500 dark:text-neutral-300">
+          지도 로딩 중...
+        </p>
       </div>
     </div>
   )
