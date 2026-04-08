@@ -105,7 +105,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
   return (
     <main className="bg-navy-50 min-h-screen">
       {/* 페이지 타이틀 */}
-      <div className="border-navy-200 border-b bg-white px-4 py-4">
+      <div className="border-navy-200 border-b bg-surface px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-2">
             <Link
@@ -177,7 +177,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
         {/* 통계 카드 */}
         {data && (
           <div className="mb-6 grid grid-cols-2 gap-4">
-            <div className="rounded-lg bg-white p-4 shadow-sm">
+            <div className="rounded-lg bg-surface p-4 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="bg-navy-100 flex h-10 w-10 items-center justify-center rounded-full">
                   <svg
@@ -202,7 +202,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
                 </div>
               </div>
             </div>
-            <div className="rounded-lg bg-white p-4 shadow-sm">
+            <div className="rounded-lg bg-surface p-4 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
                   <svg
@@ -237,7 +237,7 @@ export default function MediaPilgrimagePage({ params }: PageProps) {
         )}
 
         {/* 성지 목록 */}
-        <div className="rounded-lg bg-white shadow-sm">
+        <div className="rounded-lg bg-surface shadow-sm">
           <div className="border-navy-100 border-b px-4 py-3">
             <div className="flex items-center gap-2">
               <svg

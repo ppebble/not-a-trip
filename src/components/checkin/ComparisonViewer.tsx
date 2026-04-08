@@ -163,10 +163,10 @@ export function ComparisonViewer({
 
         {/* 슬라이더 핸들 */}
         <div
-          className="absolute bottom-0 top-0 w-1 bg-white shadow-lg"
+          className="absolute bottom-0 top-0 w-1 bg-surface shadow-lg"
           style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
         >
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-2 shadow-lg">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface p-2 shadow-lg">
             <svg
               className="h-4 w-4 text-gray-600"
               fill="none"

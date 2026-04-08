@@ -16,7 +16,7 @@ import { UploadedImage } from '@/components/spot/ImageUpload'
 function NoPermission() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md">
+      <div className="mx-4 w-full max-w-md rounded-lg bg-surface p-8 shadow-md">
         <div className="text-center">
           <svg
             className="mx-auto mb-4 h-16 w-16 text-red-500"
@@ -119,7 +119,7 @@ export default function SpotEditPage() {
   if (authLoading || spotLoading || isLoading) {
     return (
       <main className="min-h-screen bg-primary-50">
-        <div className="border-b border-neutral-200 bg-white px-4 py-4">
+        <div className="border-b border-neutral-200 bg-surface px-4 py-4">
           <div className="mx-auto max-w-4xl">
             <Link
               href={`/spots/${spotId}`}
@@ -160,7 +160,7 @@ export default function SpotEditPage() {
   if (!isAuthenticated) {
     return (
       <main className="min-h-screen bg-primary-50">
-        <div className="border-b border-neutral-200 bg-white px-4 py-4">
+        <div className="border-b border-neutral-200 bg-surface px-4 py-4">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-xl font-bold text-primary">스팟 수정</h1>
           </div>
@@ -185,7 +185,7 @@ export default function SpotEditPage() {
 
   return (
     <main className="min-h-screen bg-primary-50">
-      <div className="border-b border-neutral-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-4">
         <div className="mx-auto max-w-4xl">
           <Link
             href={`/spots/${spotId}`}

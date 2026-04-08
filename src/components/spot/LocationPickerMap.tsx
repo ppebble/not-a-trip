@@ -66,15 +66,15 @@ export default function LocationPickerMap({
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-neutral-800">
+      <div className="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-surface shadow-2xl dark:bg-neutral-800">
         {/* 헤더 */}
-        <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 dark:border-neutral-700">
-          <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
+        <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
+          <h3 className="text-sm font-bold text-neutral-900">
             📍 지도에서 위치 선택
           </h3>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-700"
+            className="rounded-md p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
             aria-label="닫기"
           >
             <svg
@@ -110,7 +110,7 @@ export default function LocationPickerMap({
         </div>
 
         {/* 하단 버튼 */}
-        <div className="border-t border-neutral-200 px-4 py-3 dark:border-neutral-700">
+        <div className="border-t border-neutral-200 px-4 py-3">
           {selectedPos ? (
             <div className="mb-2 text-center text-xs text-neutral-500">
               📍 {selectedPos.lat.toFixed(6)}, {selectedPos.lng.toFixed(6)}

@@ -51,7 +51,7 @@ export default function CategoryFilter() {
         className={`h-9 flex-shrink-0 rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
           isAllSelected
             ? 'border-primary bg-primary text-white shadow-md'
-            : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
+            : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:bg-neutral-800/90 dark:text-neutral-500'
         }`}
       >
         전체
@@ -69,7 +69,7 @@ export default function CategoryFilter() {
             className={`flex h-9 flex-shrink-0 items-center gap-1.5 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
               isSelected
                 ? 'border-transparent shadow-md'
-                : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:border-neutral-700 dark:bg-neutral-800/90 dark:text-neutral-500'
+                : 'border-neutral-300 bg-neutral-200/90 text-neutral-500 line-through dark:bg-neutral-800/90 dark:text-neutral-500'
             }`}
             style={{
               backgroundColor: isSelected ? config.bgColor : undefined,

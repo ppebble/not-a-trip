@@ -73,7 +73,7 @@ export function RouteFilterBar({
       {/* 정렬 + 텍스트 필터 */}
       <div className="flex flex-wrap items-center gap-2">
         {/* 정렬 */}
-        <div className="flex rounded-lg border border-border bg-white dark:bg-neutral-800">
+        <div className="flex rounded-lg border border-border bg-surface">
           {SORT_OPTIONS.map((opt) => (
             <button
               key={opt.value}
@@ -81,7 +81,7 @@ export function RouteFilterBar({
               className={`px-3 py-1.5 text-sm transition-colors ${
                 filters.sort === opt.value
                   ? 'bg-primary text-white'
-                  : 'text-primary hover:bg-primary-50 dark:text-primary-400 dark:hover:bg-neutral-700'
+                  : 'text-primary hover:bg-primary-50 dark:text-primary-400'
               } ${opt.value === 'popular' ? 'rounded-l-lg' : ''} ${opt.value === 'duration' ? 'rounded-r-lg' : ''}`}
             >
               {opt.label}
@@ -95,7 +95,7 @@ export function RouteFilterBar({
           placeholder="작품명 검색"
           value={filters.contentName}
           onChange={(e) => updateFilter({ contentName: e.target.value })}
-          className="text-text-primary rounded-lg border border-border bg-white px-3 py-1.5 text-sm placeholder-muted outline-none focus:border-primary-400 dark:bg-neutral-800 dark:text-white dark:focus:border-primary-500"
+          className="text-text-primary rounded-lg border border-border bg-surface px-3 py-1.5 text-sm placeholder-muted outline-none focus:border-primary-400 dark:bg-neutral-800 dark:text-white dark:focus:border-primary-500"
         />
 
         {/* 지역 필터 */}
@@ -104,7 +104,7 @@ export function RouteFilterBar({
           placeholder="지역 검색"
           value={filters.regionTag}
           onChange={(e) => updateFilter({ regionTag: e.target.value })}
-          className="text-text-primary rounded-lg border border-border bg-white px-3 py-1.5 text-sm placeholder-muted outline-none focus:border-primary-400 dark:bg-neutral-800 dark:text-white dark:focus:border-primary-500"
+          className="text-text-primary rounded-lg border border-border bg-surface px-3 py-1.5 text-sm placeholder-muted outline-none focus:border-primary-400 dark:bg-neutral-800 dark:text-white dark:focus:border-primary-500"
         />
       </div>
 
@@ -117,7 +117,7 @@ export function RouteFilterBar({
             className={`rounded-full px-3 py-1 text-xs transition-colors ${
               activeDurationIdx === idx
                 ? 'bg-primary text-white'
-                : 'bg-primary-50 text-primary hover:bg-primary-100 dark:bg-neutral-800 dark:text-primary-400 dark:hover:bg-neutral-700'
+                : 'bg-primary-50 text-primary hover:bg-primary-100 dark:bg-neutral-800 dark:text-primary-400'
             }`}
           >
             {preset.label}

@@ -93,7 +93,7 @@ export const ComparisonCard = memo(function ComparisonCard({
             </div>
 
             {/* 중앙 구분선 */}
-            <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-white shadow-sm" />
+            <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-surface shadow-sm" />
           </div>
         ) : (
           /* 단일 이미지 모드 */
@@ -151,7 +151,7 @@ export const ComparisonCard = memo(function ComparisonCard({
             </div>
           )}
           <span
-            className="text-sm font-medium text-neutral-900 dark:text-neutral-100"
+            className="text-sm font-medium text-neutral-900"
             data-testid="user-nickname"
           >
             {checkIn.userName}

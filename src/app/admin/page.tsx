@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-white px-6 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-6 py-4">
         <h1 className="text-xl font-bold text-neutral-800">관리자 대시보드</h1>
         <p className="mt-0.5 text-sm text-neutral-500">
           모든 관리 기능의 현황을 확인하고 빠르게 이동할 수 있습니다
@@ -58,7 +58,7 @@ export default function AdminDashboardPage() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="h-40 animate-pulse rounded-xl border border-neutral-200 bg-white"
+                className="h-40 animate-pulse rounded-xl border border-neutral-200 bg-surface"
               />
             ))}
           </div>

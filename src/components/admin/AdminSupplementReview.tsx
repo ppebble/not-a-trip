@@ -114,7 +114,7 @@ export function AdminSupplementReview({
         </div>
 
         {/* 기본 정보 */}
-        <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             기본 정보
           </h3>
@@ -145,7 +145,7 @@ export function AdminSupplementReview({
         </section>
 
         {/* 보완 내용 */}
-        <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             보완 내용
           </h3>
@@ -156,7 +156,7 @@ export function AdminSupplementReview({
 
         {/* 씬 정보 (scene_info 타입) */}
         {supplement.type === 'scene_info' && supplement.sceneInfo && (
-          <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               씬 정보
             </h3>
@@ -195,7 +195,7 @@ export function AdminSupplementReview({
 
         {/* 사진 (photo 타입) */}
         {supplement.photos && supplement.photos.length > 0 && (
-          <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               첨부 사진 ({supplement.photos.length}장)
             </h3>
@@ -230,7 +230,7 @@ export function AdminSupplementReview({
 
         {/* 검토 액션 (pending 상태일 때만) */}
         {isPending && (
-          <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               검토
             </h3>

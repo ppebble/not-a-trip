@@ -126,7 +126,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
   return (
     <div className="space-y-6">
       {/* 코스 기본 정보 */}
-      <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-800">
+      <div className="rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-800">
         <div className="mb-4 flex items-start justify-between">
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -203,7 +203,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         )}
 
         {/* 작성자 정보 */}
-        <div className="mt-4 border-t border-border pt-4 text-sm text-muted dark:border-neutral-700">
+        <div className="mt-4 border-t border-border pt-4 text-sm text-muted">
           코스 제작: {route.authorName}
         </div>
       </div>
@@ -224,7 +224,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             className={`flex items-center justify-center gap-2 rounded-lg border-2 px-6 py-3 text-sm font-semibold transition-colors ${
               isBookmarked
                 ? 'border-amber-400 bg-amber-50 text-amber-700'
-                : 'border-border bg-white text-primary hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                : 'border-border bg-surface text-primary hover:bg-primary-50 dark:bg-neutral-800'
             }`}
           >
             <AppIcon
@@ -237,7 +237,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           {user && route.authorId === user.id && (
             <button
               onClick={() => router.push(`/routes/${route.id}/edit`)}
-              className="rounded-lg border-2 border-border bg-white px-4 py-3 text-sm text-primary transition-colors hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+              className="rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm text-primary transition-colors hover:bg-primary-50 dark:bg-neutral-800"
             >
               ✏️ 수정
             </button>
@@ -254,7 +254,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       )}
 
       {/* 코스 지도 */}
-      <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-800">
+      <div className="rounded-lg bg-surface p-4 shadow-sm dark:bg-neutral-800">
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 지도
         </h2>
@@ -268,8 +268,8 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       </div>
 
       {/* 스팟 순서 목록 */}
-      <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-900">
-        <h2 className="text-text-primary mb-3 text-lg font-semibold dark:text-neutral-100">
+      <div className="rounded-lg bg-surface p-4 shadow-sm dark:bg-neutral-900">
+        <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 순서 ({availableSpots.length}곳)
         </h2>
         <ol className="space-y-0">

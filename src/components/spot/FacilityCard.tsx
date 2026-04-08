@@ -91,7 +91,7 @@ function CoinLockerDetail({ details }: { details: CoinLockerDetails }) {
             {details.sizes.map((size) => (
               <div
                 key={size}
-                className="rounded-md border border-purple-200 bg-white px-2 py-1 text-xs dark:bg-neutral-800"
+                className="rounded-md border border-purple-200 bg-surface px-2 py-1 text-xs dark:bg-neutral-800"
               >
                 <span className="font-medium text-purple-700">
                   {LOCKER_SIZE_LABEL[size]}
@@ -314,11 +314,11 @@ export default memo(function FacilityCard({
   const displayFacility = isOtaku ? { ...facility, ...voteData } : facility
 
   return (
-    <div className="rounded-lg border border-neutral-200 p-4 transition-all hover:border-neutral-300 hover:shadow-md dark:border-neutral-700">
+    <div className="rounded-lg border border-neutral-200 p-4 transition-all hover:border-neutral-300 hover:shadow-md">
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex items-center space-x-2">
-            <h4 className="truncate font-semibold text-neutral-900 dark:text-neutral-100">
+            <h4 className="truncate font-semibold text-neutral-900">
               {facility.name}
             </h4>
             <span

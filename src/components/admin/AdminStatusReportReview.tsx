@@ -117,7 +117,7 @@ export function AdminStatusReportReview({
         </div>
 
         {/* 기본 정보 */}
-        <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             기본 정보
           </h3>
@@ -148,7 +148,7 @@ export function AdminStatusReportReview({
         </section>
 
         {/* 설명 */}
-        <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
             신고 내용
           </h3>
@@ -159,7 +159,7 @@ export function AdminStatusReportReview({
 
         {/* 증거 사진 */}
         {report.photoUrl && (
-          <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+          <section className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
             <h3 className="mb-3 text-sm font-semibold text-neutral-700">
               증거 사진
             </h3>
@@ -185,7 +185,7 @@ export function AdminStatusReportReview({
         {isPending && (
           <section className="space-y-4">
             {/* 확인 처리 */}
-            <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+            <div className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
               <h3 className="mb-3 text-sm font-semibold text-neutral-700">
                 확인 처리
               </h3>
@@ -199,7 +199,7 @@ export function AdminStatusReportReview({
             </div>
 
             {/* 스팟 상태 수동 변경 */}
-            <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+            <div className="rounded-lg border border-neutral-200 bg-surface p-4 dark:bg-neutral-800">
               <h3 className="mb-3 text-sm font-semibold text-neutral-700">
                 스팟 상태 수동 변경
               </h3>

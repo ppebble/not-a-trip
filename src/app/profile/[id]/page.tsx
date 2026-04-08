@@ -72,7 +72,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-4xl px-4 py-8">
         {/* 프로필 헤더 */}
-        <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+        <div className="mb-8 rounded-xl bg-surface p-6 shadow-sm">
           <div className="flex items-center gap-4">
             {userInfo.image ? (
               <Image
@@ -123,7 +123,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             className={`rounded-lg px-4 py-2 font-medium ${
               activeTab === 'checkins'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+                : 'bg-surface text-gray-600 hover:bg-gray-50'
             }`}
           >
             인증 갤러리
@@ -133,7 +133,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             className={`rounded-lg px-4 py-2 font-medium ${
               activeTab === 'badges'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+                : 'bg-surface text-gray-600 hover:bg-gray-50'
             }`}
           >
             트로피 룸
@@ -143,7 +143,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             className={`rounded-lg px-4 py-2 font-medium ${
               activeTab === 'progress'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+                : 'bg-surface text-gray-600 hover:bg-gray-50'
             }`}
           >
             진행 현황
@@ -153,7 +153,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             className={`rounded-lg px-4 py-2 font-medium ${
               activeTab === 'reports'
                 ? 'bg-primary text-white'
-                : 'bg-white text-neutral-600 hover:bg-neutral-50'
+                : 'bg-surface text-neutral-600 hover:bg-neutral-50'
             }`}
           >
             제보한 스팟
@@ -161,7 +161,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
         </div>
 
         {/* 탭 콘텐츠 */}
-        <div className="rounded-xl bg-white p-6 shadow-sm">
+        <div className="rounded-xl bg-surface p-6 shadow-sm">
           {activeTab === 'checkins' && (
             <CheckInGallery userId={userId} limit={12} />
           )}

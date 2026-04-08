@@ -17,7 +17,7 @@ function PostItem({ post, onClick }: PostItemProps) {
   return (
     <article
       onClick={onClick}
-      className="cursor-pointer border-b border-neutral-100 p-4 transition-colors last:border-b-0 hover:bg-neutral-50 dark:hover:bg-neutral-700"
+      className="cursor-pointer border-b border-neutral-100 p-4 transition-colors last:border-b-0 hover:bg-neutral-50"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -29,7 +29,7 @@ function PostItem({ post, onClick }: PostItemProps) {
     >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h4 className="mb-1 truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
+          <h4 className="mb-1 truncate text-sm font-medium text-neutral-900">
             {post.title}
           </h4>
           <div className="flex items-center gap-2 text-xs text-neutral-500">
@@ -170,13 +170,11 @@ export default function SpotCommunitySection({
   }
 
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-md dark:bg-neutral-800">
+    <div className="overflow-hidden rounded-lg bg-surface shadow-md dark:bg-neutral-800">
       <div className="p-6">
         {/* 헤더 */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            커뮤니티
-          </h2>
+          <h2 className="text-2xl font-bold text-neutral-900">커뮤니티</h2>
           {/* 게시글이 있을 때만 헤더에 글쓰기 버튼 표시 */}
           {posts && posts.length > 0 && (
             <Link
@@ -212,7 +210,7 @@ export default function SpotCommunitySection({
           <CommunityEmpty spotId={spotId} spotName={spotName} />
         ) : (
           <>
-            <div className="divide-y divide-neutral-100 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <div className="divide-y divide-neutral-100 rounded-lg border border-neutral-200">
               {posts.slice(0, maxPosts).map((post) => (
                 <PostItem
                   key={post.id}

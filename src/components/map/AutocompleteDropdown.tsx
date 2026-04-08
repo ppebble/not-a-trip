@@ -106,7 +106,7 @@ export default function AutocompleteDropdown({
     <div
       id={id}
       ref={dropdownRef}
-      className="absolute left-0 top-full z-50 mt-1 w-full overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+      className="absolute left-0 top-full z-50 mt-1 w-full overflow-hidden rounded-lg border border-neutral-200 bg-surface shadow-lg dark:bg-neutral-800"
       role="listbox"
       aria-label="자동완성 제안 목록"
     >
@@ -137,7 +137,7 @@ export default function AutocompleteDropdown({
               tabIndex={0}
               onClick={() => handleItemClick(item)}
               onKeyDown={(e) => handleKeyDown(e, item)}
-              className="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+              className="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none dark:focus:bg-neutral-700"
               aria-selected="false"
             >
               <div className="flex items-center gap-2">
@@ -148,7 +148,7 @@ export default function AutocompleteDropdown({
                   className="flex-shrink-0"
                 />
                 {/* 콘텐츠명 */}
-                <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                <span className="text-sm font-medium text-neutral-900">
                   {item.name}
                 </span>
               </div>

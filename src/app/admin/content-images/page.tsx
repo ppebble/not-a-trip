@@ -247,7 +247,7 @@ export default function AdminContentImagesPage() {
             {contents.map((content) => (
               <div
                 key={content.id}
-                className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                className="rounded-lg border border-gray-200 bg-surface p-4 shadow-sm"
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
@@ -336,7 +336,7 @@ export default function AdminContentImagesPage() {
 
       {showUploadModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+          <div className="mx-4 w-full max-w-md rounded-lg bg-surface p-6 shadow-xl">
             <h2 className="mb-4 text-xl font-bold text-gray-800">
               {selectedContent ? '이미지 업로드' : '새 콘텐츠 추가'}
             </h2>

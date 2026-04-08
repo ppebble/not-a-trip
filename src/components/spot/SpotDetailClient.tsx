@@ -482,7 +482,7 @@ interface SpotDetailErrorProps {
 function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-neutral-900">
+      <div className="mx-4 w-full max-w-md rounded-lg bg-surface p-8 shadow-md dark:bg-neutral-900">
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-red-500">
             <AlertTriangleIcon size={64} />
@@ -518,7 +518,7 @@ function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
 function SpotNotFound() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-neutral-900">
+      <div className="mx-4 w-full max-w-md rounded-lg bg-surface p-8 shadow-md dark:bg-neutral-900">
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center text-neutral-400">
             <MapPinIcon size={64} />

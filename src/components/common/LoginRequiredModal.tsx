@@ -22,7 +22,7 @@ export function LoginRequiredModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-900">
+      <div className="mx-4 w-full max-w-sm rounded-lg bg-surface p-6 shadow-xl dark:bg-neutral-900">
         <div className="mb-4 flex justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
             <svg

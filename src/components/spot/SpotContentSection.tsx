@@ -65,7 +65,7 @@ export function SpotContentSection({
 
       {/* 일반 정보 섹션 (info) - other 카테고리용 */}
       {sections.includes('info') && (
-        <div className="overflow-hidden rounded-lg bg-white shadow-md dark:bg-neutral-900">
+        <div className="overflow-hidden rounded-lg bg-surface shadow-md dark:bg-neutral-900">
           <div className="p-6">
             <div className="mb-4 flex items-center gap-2">
               <AppIcon name="spot" size={28} />

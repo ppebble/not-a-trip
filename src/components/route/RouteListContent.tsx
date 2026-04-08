@@ -13,7 +13,7 @@ import type { Route } from '@/types/route'
 
 function RouteCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm dark:bg-neutral-800">
       <SkeletonBlock className="h-40 w-full rounded-none" />
       <div className="p-4">
         <SkeletonBlock className="mb-2 h-5 w-3/4" />

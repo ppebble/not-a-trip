@@ -39,7 +39,7 @@ export function BadgeEarnedModal({ badges, onClose }: BadgeEarnedModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-b from-yellow-400 to-orange-500 p-1">
-        <div className="rounded-xl bg-white p-6 text-center dark:bg-neutral-800">
+        <div className="rounded-xl bg-surface p-6 text-center dark:bg-neutral-800">
           {/* 축하 텍스트 */}
           <div className="mb-4">
             <span className="text-4xl">🎉</span>
@@ -108,7 +108,7 @@ export function BadgeEarnedModal({ badges, onClose }: BadgeEarnedModalProps) {
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="absolute h-1 w-1 animate-ping rounded-full bg-white"
+              className="absolute h-1 w-1 animate-ping rounded-full bg-surface"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,

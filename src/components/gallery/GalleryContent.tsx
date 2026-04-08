@@ -36,7 +36,7 @@ function ContentSkeleton() {
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div
             key={i}
-            className="animate-pulse rounded-lg bg-white shadow-sm dark:bg-neutral-800"
+            className="animate-pulse rounded-lg bg-surface shadow-sm dark:bg-neutral-800"
           >
             <div className="h-48 rounded-t-lg bg-border" />
             <div className="p-3">

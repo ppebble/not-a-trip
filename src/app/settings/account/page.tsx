@@ -13,7 +13,7 @@ const OAUTH_PROVIDERS = [
   {
     id: 'google',
     name: 'Google',
-    color: 'bg-white text-gray-700 hover:bg-gray-100',
+    color: 'bg-surface text-gray-700 hover:bg-gray-100',
   },
   {
     id: 'kakao',

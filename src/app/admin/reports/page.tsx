@@ -40,7 +40,7 @@ export default function AdminReportsPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="border-b border-neutral-200 bg-white px-6 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-6 py-4">
         <h1 className="text-xl font-bold text-neutral-800">제보 관리</h1>
         <p className="mt-0.5 text-sm text-neutral-500">
           유저 제보를 검토하고 승인/반려할 수 있습니다
@@ -48,7 +48,7 @@ export default function AdminReportsPage() {
       </div>
 
       <div className="flex h-[calc(100vh-theme(spacing.14)-73px)]">
-        <div className="w-96 flex-shrink-0 border-r border-neutral-200 bg-white">
+        <div className="w-96 flex-shrink-0 border-r border-neutral-200 bg-surface">
           <AdminReportList
             onSelectReport={handleSelectReport}
             selectedReportId={selectedReport?.id}

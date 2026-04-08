@@ -289,7 +289,7 @@ export function ViewfinderOverlay({
             className="h-18 w-18 flex items-center justify-center rounded-full border-4 border-white bg-white/20 transition-transform active:scale-95 disabled:opacity-50"
             aria-label="사진 촬영"
           >
-            <div className="h-14 w-14 rounded-full bg-white" />
+            <div className="h-14 w-14 rounded-full bg-surface" />
           </button>
         </div>
       </div>

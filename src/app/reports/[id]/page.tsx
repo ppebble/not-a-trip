@@ -40,7 +40,7 @@ export default function ReportDetailPage() {
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 text-center shadow-md">
+        <div className="mx-4 w-full max-w-md rounded-lg bg-surface p-8 text-center shadow-md">
           <p className="text-lg">😥</p>
           <p className="mt-2 text-sm text-secondary">{error.message}</p>
           <Link
@@ -57,7 +57,7 @@ export default function ReportDetailPage() {
   if (!report) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 text-center shadow-md">
+        <div className="mx-4 w-full max-w-md rounded-lg bg-surface p-8 text-center shadow-md">
           <p className="text-lg">📭</p>
           <p className="mt-2 text-sm text-secondary">제보를 찾을 수 없습니다</p>
           <Link
@@ -74,7 +74,7 @@ export default function ReportDetailPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-4">
         <div className="mx-auto max-w-lg">
           <Link
             href="/reports"
@@ -152,7 +152,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
         )}
 
       {/* 장소 정보 */}
-      <div className="rounded-lg bg-white p-4 shadow-sm">
+      <div className="rounded-lg bg-surface p-4 shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-lg font-bold text-primary">{report.name}</h2>
@@ -180,7 +180,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
 
       {/* 작품 정보 */}
       {report.relatedContent && report.relatedContent.length > 0 && (
-        <div className="rounded-lg bg-white p-4 shadow-sm">
+        <div className="rounded-lg bg-surface p-4 shadow-sm">
           <h3 className="text-sm font-semibold text-secondary">관련 작품</h3>
           <div className="mt-2 flex flex-wrap gap-2">
             {report.relatedContent.map((content, i) => (
@@ -197,7 +197,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
 
       {/* 증거 사진 쌍 */}
       {report.evidencePairs.length > 0 && (
-        <div className="rounded-lg bg-white p-4 shadow-sm">
+        <div className="rounded-lg bg-surface p-4 shadow-sm">
           <h3 className="text-sm font-semibold text-secondary">증거 사진</h3>
           <div className="mt-3 space-y-3">
             {report.evidencePairs.map((pair, i) => (
@@ -243,7 +243,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
       )}
 
       {/* 제출 정보 */}
-      <div className="rounded-lg bg-white p-4 shadow-sm">
+      <div className="rounded-lg bg-surface p-4 shadow-sm">
         <div className="flex items-center justify-between text-xs text-muted">
           <span>
             제보일: {new Date(report.createdAt).toLocaleDateString('ko-KR')}
@@ -270,7 +270,7 @@ function ReportDetailContent({ report }: { report: SpotReport }) {
 /** 검토 히스토리 타임라인 */
 function ReviewHistoryTimeline({ history }: { history: ReviewHistory[] }) {
   return (
-    <div className="rounded-lg bg-white p-4 shadow-sm">
+    <div className="rounded-lg bg-surface p-4 shadow-sm">
       <h3 className="text-sm font-semibold text-secondary">검토 이력</h3>
       <div className="mt-3 space-y-3">
         {history.map((entry, i) => (
@@ -387,7 +387,7 @@ function RevisionForm({ report }: { report: SpotReport }) {
 function ReportDetailSkeleton() {
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="border-b border-neutral-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-4">
         <div className="mx-auto max-w-lg">
           <div className="h-4 w-24 animate-pulse rounded bg-surface" />
           <div className="mt-3 h-6 w-40 animate-pulse rounded bg-surface" />

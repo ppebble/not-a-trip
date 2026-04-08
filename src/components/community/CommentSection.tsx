@@ -314,7 +314,7 @@ export default function CommentSection({
 
   return (
     <div
-      className={`rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-800 ${className}`}
+      className={`rounded-lg bg-surface p-6 shadow-sm dark:bg-neutral-800 ${className}`}
     >
       {/* 섹션 헤더 */}
       <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-primary-800">
@@ -395,7 +395,7 @@ export default function CommentSection({
             className="absolute inset-0 bg-black/50"
             onClick={() => setDeleteTarget(null)}
           />
-          <div className="relative z-10 mx-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-800">
+          <div className="relative z-10 mx-4 w-full max-w-sm rounded-lg bg-surface p-6 shadow-xl dark:bg-neutral-800">
             <h3 className="mb-2 text-lg font-semibold text-primary-800">
               댓글 삭제
             </h3>

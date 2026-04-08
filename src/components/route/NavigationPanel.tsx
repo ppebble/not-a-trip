@@ -107,7 +107,7 @@ export function NavigationPanel({
   }, [currentPosition, currentSpot.coordinates, distanceToNext])
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-safe-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.1)] dark:border-neutral-700">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-safe-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
       {/* 진행률 바 */}
       <div className="h-1.5 w-full bg-neutral-200">
         <div
@@ -217,7 +217,7 @@ export function NavigationPanel({
               )}
               <button
                 onClick={onEndRoute}
-                className="text-text-secondary rounded-lg border-2 border-border bg-white px-4 py-3 text-sm transition-colors hover:bg-accent-surface dark:border-neutral-700 dark:bg-neutral-800"
+                className="text-text-secondary rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm transition-colors hover:bg-accent-surface dark:bg-neutral-800"
               >
                 종료
               </button>
@@ -234,7 +234,7 @@ export function NavigationPanel({
               )}
               <button
                 onClick={onEndRoute}
-                className="text-text-secondary rounded-lg border-2 border-border bg-white px-4 py-3 text-sm transition-colors hover:bg-accent-surface dark:border-neutral-700 dark:bg-neutral-800"
+                className="text-text-secondary rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm transition-colors hover:bg-accent-surface dark:bg-neutral-800"
               >
                 종료
               </button>
@@ -249,7 +249,7 @@ export function NavigationPanel({
               </button>
               <button
                 onClick={onEndRoute}
-                className="text-text-secondary rounded-lg border-2 border-border bg-white px-4 py-3 text-sm transition-colors hover:bg-accent-surface dark:border-neutral-700 dark:bg-neutral-800"
+                className="text-text-secondary rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm transition-colors hover:bg-accent-surface dark:bg-neutral-800"
               >
                 종료
               </button>

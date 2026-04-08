@@ -32,7 +32,7 @@ export const ReportSummaryCard = React.memo(function ReportSummaryCard({
       className={`w-full rounded-lg border p-3 text-left transition-colors ${
         isSelected
           ? 'border-neutral-400 bg-primary-50'
-          : 'border-neutral-200 bg-white hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+          : 'border-neutral-200 bg-surface hover:bg-neutral-50 dark:bg-neutral-800'
       }`}
     >
       <div className="flex gap-3">

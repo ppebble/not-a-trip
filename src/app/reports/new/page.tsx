@@ -18,7 +18,7 @@ export default function NewReportPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral-50">
-        <div className="border-b border-neutral-200 bg-white px-4 py-4">
+        <div className="border-b border-neutral-200 bg-surface px-4 py-4">
           <div className="mx-auto max-w-lg">
             <div className="h-6 w-32 animate-pulse rounded bg-surface" />
           </div>
@@ -52,7 +52,7 @@ export default function NewReportPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-surface px-4 py-4">
         <div className="mx-auto max-w-lg">
           <Link
             href="/reports"

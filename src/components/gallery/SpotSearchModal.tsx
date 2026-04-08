@@ -154,7 +154,7 @@ export function SpotSearchModal({
       aria-labelledby="spot-search-title"
     >
       <div
-        className="max-h-[80vh] w-full max-w-md overflow-hidden rounded-xl bg-white dark:bg-neutral-800"
+        className="max-h-[80vh] w-full max-w-md overflow-hidden rounded-xl bg-surface"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
@@ -164,7 +164,7 @@ export function SpotSearchModal({
           </h2>
           <button
             onClick={onClose}
-            className="rounded-full p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+            className="rounded-full p-1 hover:bg-neutral-100"
             aria-label="닫기"
           >
             <svg
@@ -273,7 +273,7 @@ export function SpotSearchModal({
                   <button
                     onClick={() => handleSelectSpot(spot.id)}
                     disabled={isLoading && selectedSpotId === spot.id}
-                    className="flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:hover:bg-neutral-700"
+                    className="flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-neutral-50 disabled:opacity-50"
                   >
                     {/* 썸네일 */}
                     <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-neutral-100">
@@ -312,7 +312,7 @@ export function SpotSearchModal({
 
                     {/* 스팟 정보 */}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium text-neutral-900 dark:text-neutral-100">
+                      <p className="truncate font-medium text-neutral-900">
                         {spot.name}
                       </p>
                       {spot.category &&

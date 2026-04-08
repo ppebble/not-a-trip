@@ -12,9 +12,7 @@ export function SpotLoadingSkeleton() {
           size="lg"
           className="mx-auto animate-spin text-neutral-400 dark:text-neutral-200"
         />
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">
-          스팟 데이터 로딩 중...
-        </p>
+        <p className="mt-2 text-sm text-neutral-500">스팟 데이터 로딩 중...</p>
       </div>
     </div>
   )

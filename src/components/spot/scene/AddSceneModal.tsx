@@ -90,9 +90,9 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
-      <div className="relative z-[10000] w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-800">
+      <div className="relative z-[10000] w-full max-w-md rounded-lg bg-surface p-6 shadow-xl dark:bg-neutral-800">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+          <h3 className="text-lg font-bold text-neutral-900">
             작품 속 장면 추가
           </h3>
           <button
@@ -123,13 +123,13 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label className="mb-1 block text-sm font-medium text-neutral-700">
               이미지 <span className="text-red-500">*</span>
             </label>
             <div className="mt-1">
               {imagePreview ? (
                 <div className="relative">
-                  <div className="relative aspect-video overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700">
+                  <div className="relative aspect-video overflow-hidden rounded-lg border border-neutral-200">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={imagePreview}
@@ -193,7 +193,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label className="mb-1 block text-sm font-medium text-neutral-700">
               에피소드 정보
             </label>
             <input
@@ -206,7 +206,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label className="mb-1 block text-sm font-medium text-neutral-700">
               설명
             </label>
             <textarea
@@ -222,7 +222,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-700"
+              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
             >
               취소
             </button>

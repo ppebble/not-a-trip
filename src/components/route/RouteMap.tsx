@@ -214,7 +214,7 @@ export default function RouteMap({
         center={defaultCenter}
         zoom={13}
         style={{ height: '100%', width: '100%' }}
-        className="overflow-hidden rounded-lg border-2 border-border dark:border-neutral-700"
+        className="overflow-hidden rounded-lg border-2 border-border"
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
@@ -368,7 +368,7 @@ export default function RouteMap({
       </MapContainer>
 
       {/* 범례 */}
-      <div className="absolute bottom-3 left-3 z-[1000] rounded-lg bg-white/90 px-3 py-2 shadow-md backdrop-blur-sm dark:bg-neutral-800/90">
+      <div className="absolute bottom-3 left-3 z-[1000] rounded-lg bg-surface/90 px-3 py-2 shadow-md backdrop-blur-sm dark:bg-neutral-800/90">
         <div className="flex flex-wrap items-center gap-3 text-xs">
           {startPoint && (
             <div className="flex items-center gap-1">
