@@ -7,17 +7,17 @@ import { FilterIcon } from '@/components/icons'
 export function EmptyFilterOverlay() {
   return (
     <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
-      <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface">
+      <div className="pointer-events-auto rounded-xl bg-white/95 px-8 py-6 text-center shadow-xl backdrop-blur-sm dark:bg-neutral-800/95">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface dark:bg-neutral-700">
           <FilterIcon size="lg" className="text-muted" />
         </div>
-        <p className="text-lg font-semibold text-primary-800">
+        <p className="text-lg font-semibold text-primary-800 dark:text-primary-300">
           카테고리를 선택해주세요
         </p>
-        <p className="mt-2 text-sm text-secondary">
+        <p className="mt-2 text-sm text-secondary dark:text-neutral-400">
           표시할 스팟 카테고리가 선택되지 않았습니다
         </p>
-        <p className="mt-1 text-xs text-muted">
+        <p className="mt-1 text-xs text-muted dark:text-neutral-500">
           필터에서 원하는 카테고리를 선택하세요
         </p>
       </div>

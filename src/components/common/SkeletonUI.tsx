@@ -18,7 +18,7 @@ interface SkeletonBaseProps {
 export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
   return (
     <div
-      className={`animate-pulse rounded bg-neutral-200 ${className}`}
+      className={`animate-pulse rounded bg-neutral-200 dark:bg-neutral-700 ${className}`}
       role="status"
       aria-label="로딩 중"
     />
@@ -31,7 +31,7 @@ export function SkeletonBlock({ className = '' }: SkeletonBaseProps) {
  */
 export function SpotCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-sm">
+    <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-neutral-800">
       {/* 이미지 영역 */}
       <SkeletonBlock className="h-48 w-full rounded-none" />
       <div className="p-4">
@@ -52,7 +52,7 @@ export function SpotCardSkeleton() {
  */
 export function GalleryCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-sm">
+    <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-neutral-800">
       <SkeletonBlock className="h-48 w-full rounded-none" />
       <div className="p-3">
         <SkeletonBlock className="mb-2 h-4 w-3/4" />
@@ -83,13 +83,15 @@ export function GalleryGridSkeleton({ count = 8 }: { count?: number }) {
 export function MapSkeleton() {
   return (
     <div
-      className="flex h-full w-full items-center justify-center bg-neutral-800"
+      className="flex h-full w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800"
       role="status"
       aria-label="지도 로딩 중"
     >
       <div className="text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-neutral-400 border-t-white" />
-        <p className="mt-4 text-neutral-200">지도 로딩 중...</p>
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-neutral-300 border-t-primary dark:border-neutral-600 dark:border-t-primary-400" />
+        <p className="mt-4 text-neutral-500 dark:text-neutral-300">
+          지도 로딩 중...
+        </p>
       </div>
     </div>
   )
@@ -101,36 +103,33 @@ export function MapSkeleton() {
  */
 export function SpotDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-white px-4 py-4">
+      <div className="border-b border-neutral-200 bg-white px-4 py-4 dark:border-neutral-700 dark:bg-neutral-800">
         <div className="mx-auto max-w-7xl">
-          <SkeletonBlock className="h-5 w-32 bg-neutral-200" />
-          <SkeletonBlock className="mt-2 h-6 w-40 bg-neutral-200" />
+          <SkeletonBlock className="h-5 w-32" />
+          <SkeletonBlock className="mt-2 h-6 w-40" />
         </div>
       </div>
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-8">
           {/* 스팟 정보 카드 */}
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <SkeletonBlock className="mb-4 h-8 w-64 bg-neutral-200" />
-            <SkeletonBlock className="mb-4 h-4 w-48 bg-neutral-200" />
+          <div className="rounded-lg bg-white p-6 shadow-md dark:bg-neutral-800">
+            <SkeletonBlock className="mb-4 h-8 w-64" />
+            <SkeletonBlock className="mb-4 h-4 w-48" />
             <div className="space-y-2">
-              <SkeletonBlock className="h-4 w-full bg-neutral-200" />
-              <SkeletonBlock className="h-4 w-3/4 bg-neutral-200" />
+              <SkeletonBlock className="h-4 w-full" />
+              <SkeletonBlock className="h-4 w-3/4" />
             </div>
           </div>
 
           {/* 사진 그리드 */}
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <SkeletonBlock className="mb-4 h-6 w-16 bg-neutral-200" />
+          <div className="rounded-lg bg-white p-6 shadow-md dark:bg-neutral-800">
+            <SkeletonBlock className="mb-4 h-6 w-16" />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
-                <SkeletonBlock
-                  key={i}
-                  className="aspect-video bg-neutral-200"
-                />
+                <SkeletonBlock key={i} className="aspect-video" />
               ))}
             </div>
           </div>
@@ -146,21 +145,21 @@ export function SpotDetailSkeleton() {
  */
 export function GalleryPageSkeleton() {
   return (
-    <main className="min-h-screen bg-primary-50">
+    <main className="min-h-screen bg-primary-50 dark:bg-neutral-900">
       {/* 헤더 */}
-      <div className="border-b border-neutral-200 bg-white px-4 py-6">
+      <div className="border-b border-neutral-200 bg-white px-4 py-6 dark:border-neutral-700 dark:bg-neutral-800">
         <div className="mx-auto max-w-6xl">
           <SkeletonBlock className="h-8 w-32" />
-          <SkeletonBlock className="mt-2 h-4 w-48 bg-surface" />
+          <SkeletonBlock className="mt-2 h-4 w-48" />
           <div className="mt-4 flex gap-4">
-            <SkeletonBlock className="h-6 w-24 bg-surface" />
-            <SkeletonBlock className="h-6 w-24 bg-surface" />
+            <SkeletonBlock className="h-6 w-24" />
+            <SkeletonBlock className="h-6 w-24" />
           </div>
         </div>
       </div>
 
       {/* 탭 */}
-      <div className="border-b border-neutral-200 bg-white px-4 py-3">
+      <div className="border-b border-neutral-200 bg-white px-4 py-3 dark:border-neutral-700 dark:bg-neutral-800">
         <div className="mx-auto flex max-w-6xl gap-2">
           <SkeletonBlock className="h-10 w-28" />
           <SkeletonBlock className="h-10 w-28" />
