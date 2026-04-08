@@ -222,7 +222,7 @@ export function SpotOrderList({
                 ? 'border-primary-400 bg-primary-50 opacity-50'
                 : dragOverIndex === idx
                   ? 'border-primary bg-primary-50'
-                  : 'border-border bg-white hover:border-neutral-300'
+                  : 'border-border bg-white hover:border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800'
             } cursor-grab active:cursor-grabbing`}
           >
             {/* 드래그 핸들 + 순서 번호 */}

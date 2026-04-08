@@ -18,7 +18,7 @@ function RecommendedSkeleton() {
       {Array.from({ length: 3 }, (_, i) => (
         <div
           key={i}
-          className="w-72 flex-shrink-0 overflow-hidden rounded-lg border border-border bg-white"
+          className="w-72 flex-shrink-0 overflow-hidden rounded-lg border border-border bg-white dark:border-neutral-700 dark:bg-neutral-800"
         >
           <SkeletonBlock className="h-32 w-full rounded-none" />
           <div className="p-3">

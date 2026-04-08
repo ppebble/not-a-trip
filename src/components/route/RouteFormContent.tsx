@@ -495,7 +495,7 @@ export function RouteFormContent({
       )}
 
       {/* Step 1: 기본 정보 (코스명 + 설명만) */}
-      <section className="rounded-lg bg-white p-6 shadow-sm">
+      <section className="rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-800">
         <h2 className="text-text-primary mb-4 text-lg font-semibold">
           기본 정보
         </h2>
@@ -532,7 +532,7 @@ export function RouteFormContent({
       </section>
 
       {/* Step 2: 스팟 관리 (핵심) */}
-      <section className="rounded-lg bg-white p-6 shadow-sm">
+      <section className="rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-800">
         <h2 className="text-text-primary mb-4 text-lg font-semibold">
           스팟 목록 <span className="text-red-500">*</span>
           <span className="ml-2 text-sm font-normal text-muted">
@@ -553,7 +553,7 @@ export function RouteFormContent({
 
           {/* 검색 결과 드롭다운 */}
           {searchQuery && hasSearched && (
-            <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-lg border border-border bg-white shadow-lg">
+            <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-60 overflow-y-auto rounded-lg border border-border bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
               {searchResults.length === 0 ? (
                 <div className="px-4 py-4 text-center text-sm text-muted">
                   &ldquo;{searchQuery}&rdquo;에 대한 검색 결과가 없습니다
@@ -567,7 +567,7 @@ export function RouteFormContent({
                       type="button"
                       onClick={() => handleAddSpot(result.id)}
                       disabled={alreadyAdded}
-                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-primary-50 disabled:opacity-40"
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-primary-50 disabled:opacity-40 dark:hover:bg-neutral-700"
                     >
                       <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-surface">
                         {result.thumbnailUrl ? (
@@ -617,7 +617,7 @@ export function RouteFormContent({
       </section>
 
       {/* Step 3: 시작 지점 (선택) */}
-      <section className="rounded-lg bg-white p-6 shadow-sm">
+      <section className="rounded-lg bg-white p-6 shadow-sm dark:bg-neutral-800">
         <h2 className="text-text-primary mb-1 text-lg font-semibold">
           시작 지점
           <span className="ml-2 text-sm font-normal text-muted">(선택)</span>
@@ -685,13 +685,13 @@ export function RouteFormContent({
             {hasGeoSearched &&
               geocodeResults.length > 0 &&
               !startPointCoords && (
-                <div className="mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-white shadow-lg">
+                <div className="mt-1 max-h-48 overflow-y-auto rounded-lg border border-border bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
                   {geocodeResults.map((result, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => handleSelectGeoResult(result)}
-                      className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-primary-50"
+                      className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-primary-50 dark:hover:bg-neutral-700"
                     >
                       <OptimizedImage
                         src={getPlaceIconPath(result.type, result.placeClass)}
@@ -838,7 +838,7 @@ export function RouteFormContent({
                   className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
                     regionTags.includes(tag)
                       ? 'border-primary bg-primary text-white'
-                      : 'border-border bg-white text-primary hover:border-neutral-300 hover:bg-primary-50'
+                      : 'border-border bg-white text-primary hover:border-neutral-300 hover:bg-primary-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                   }`}
                 >
                   {tag}
