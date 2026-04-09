@@ -19,25 +19,25 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
 })
 
 /**
- * 메인 페이지 컴포넌트
+ * 지도 메인 페이지 컴포넌트 (/map)
  * Requirements 1.1, 1.4, 2.1, 2.2를 만족하는 지도 기반 메인 페이지
  * - useQuery로 필터 변경 시 지도 유지 (번쩍임 방지)
  * - 카테고리 필터링 지원
  * - filterStore 전역 상태 사용
  */
-export default function Home() {
+export default function MapPage() {
   return (
     <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">
-      <HomeContent />
+      <MapContent />
     </main>
   )
 }
 
 /**
- * 메인 페이지 내부 콘텐츠 컴포넌트
+ * 지도 페이지 내부 콘텐츠 컴포넌트
  * useQuery를 사용하여 필터 변경 시 지도가 유지되고 로딩 인디케이터만 표시
  */
-function HomeContent() {
+function MapContent() {
   const selectedCategories = useSelectedCategories()
   const searchQuery = useSearchQuery()
   const isNoCategorySelected = selectedCategories.length === 0
