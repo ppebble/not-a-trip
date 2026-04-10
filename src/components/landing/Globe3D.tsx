@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { GlobeFallback2D } from './GlobeFallback2D'
+import { MascotWalker } from './MascotWalker'
 import type { GlobeDataPoint } from './HeroSection'
 
 /**
@@ -23,7 +24,7 @@ interface Globe3DProps {
 
 const GLOBE_RADIUS = 1.8
 const AUTO_ROTATE_SPEED = 0.003
-const RESUME_DELAY = 800
+const RESUME_DELAY = 100
 const DRAG_SENSITIVITY = 0.008
 /** 노드 간 최소 거리 (분산 알고리즘 임계값) */
 const MIN_NODE_DISTANCE = 0.35
@@ -205,6 +206,16 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
 
       {/* 글로우 */}
       <GlobeGlow />
+
+      {/* 마스코트 3D 모델 (별도 Suspense로 지구본 먼저 표시) */}
+      <Suspense fallback={null}>
+        <MascotWalker
+          globeRadius={GLOBE_RADIUS}
+          latitude={25}
+          longitude={30}
+          scale={0.15}
+        />
+      </Suspense>
     </group>
   )
 }
