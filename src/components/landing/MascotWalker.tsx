@@ -1,25 +1,23 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 
 /**
  * 지구본 위를 걷는 마스코트 3D 모델
- * globe.md 설계서: 구체의 특정 위도에 고정, 지구본 자전에 따라 걷는 연출
- * 제자리 걷기(inplace) 애니메이션 사용
+ * - scene을 clone하지 않고 직접 사용하여 애니메이션 바인딩 유지
+ * - 구 표면 바깥에 배치 (모델 높이 보정)
+ * - 법선 방향으로 수직 정렬
  */
 
 const MODEL_PATH = '/models/mascot-walk.glb'
 
 interface MascotWalkerProps {
   globeRadius: number
-  /** 마스코트 배치 위도 (도 단위, 기본값: 20° — 적도 약간 위) */
   latitude?: number
-  /** 마스코트 배치 경도 (도 단위, 기본값: 0°) */
   longitude?: number
-  /** 모델 스케일 (기본값: 0.15) */
   scale?: number
 }
 
@@ -27,56 +25,67 @@ export function MascotWalker({
   globeRadius,
   latitude = 20,
   longitude = 0,
-  scale = 0.15,
+  scale = 0.12,
 }: MascotWalkerProps) {
   const groupRef = useRef<THREE.Group>(null)
   const { scene, animations } = useGLTF(MODEL_PATH)
-  const { actions } = useAnimations(animations, groupRef)
+  const { actions, mixer } = useAnimations(animations, groupRef)
 
-  // 첫 번째 애니메이션 자동 재생
+  // 애니메이션 재생
   useEffect(() => {
-    const actionNames = Object.keys(actions)
-    if (actionNames.length > 0 && actions[actionNames[0]]) {
-      const action = actions[actionNames[0]]!
-      action.reset().fadeIn(0.3).play()
-      action.setLoop(THREE.LoopRepeat, Infinity)
+    const names = Object.keys(actions)
+    if (names.length > 0) {
+      const action = actions[names[0]]
+      if (action) {
+        action.reset().fadeIn(0.5).play()
+        action.setLoop(THREE.LoopRepeat, Infinity)
+        action.timeScale = 1.0
+      }
     }
     return () => {
-      Object.values(actions).forEach((a) => a?.fadeOut(0.3))
+      mixer.stopAllAction()
     }
-  }, [actions])
+  }, [actions, mixer])
 
-  // 구 표면 위치 계산 (위도/경도 → 3D 좌표)
-  const phi = (90 - latitude) * (Math.PI / 180)
-  const theta = (longitude + 180) * (Math.PI / 180)
-  const surfaceRadius = globeRadius + 0.01 // 구 표면 바로 위
+  // 구 표면 위치 + 법선 방향 계산
+  const { position, quaternion } = useMemo(() => {
+    const phi = (90 - latitude) * (Math.PI / 180)
+    const theta = (longitude + 180) * (Math.PI / 180)
+    // 모델 높이 보정: 구 표면에서 충분히 바깥으로 배치
+    const r = globeRadius + 0.02
 
-  const position: [number, number, number] = [
-    -surfaceRadius * Math.sin(phi) * Math.cos(theta),
-    surfaceRadius * Math.cos(phi),
-    surfaceRadius * Math.sin(phi) * Math.sin(theta),
-  ]
+    const pos = new THREE.Vector3(
+      -r * Math.sin(phi) * Math.cos(theta),
+      r * Math.cos(phi),
+      r * Math.sin(phi) * Math.sin(theta)
+    )
 
-  // 마스코트가 구 표면에 수직으로 서도록 회전
-  useFrame(() => {
-    if (groupRef.current) {
-      const pos = new THREE.Vector3(...position)
-      const normal = pos.clone().normalize()
-      // 법선 방향으로 up 벡터 정렬
-      const up = new THREE.Vector3(0, 1, 0)
-      const quaternion = new THREE.Quaternion().setFromUnitVectors(up, normal)
-      groupRef.current.quaternion.copy(quaternion)
-      // 걷는 방향으로 약간 회전 (경도 방향)
-      groupRef.current.rotateOnAxis(normal, Math.PI * 0.5)
-    }
-  })
+    // 법선 방향으로 up 정렬 (모델이 구 표면에 수직으로 서도록)
+    const normal = pos.clone().normalize()
+    const q = new THREE.Quaternion().setFromUnitVectors(
+      new THREE.Vector3(0, 1, 0),
+      normal
+    )
+    // 걷는 방향 회전 (경도 접선 방향)
+    const tangentRotation = new THREE.Quaternion().setFromAxisAngle(
+      normal,
+      Math.PI * 0.5
+    )
+    q.multiply(tangentRotation)
+
+    return { position: pos, quaternion: q }
+  }, [globeRadius, latitude, longitude])
 
   return (
-    <group ref={groupRef} position={position} scale={[scale, scale, scale]}>
-      <primitive object={scene.clone()} />
+    <group
+      ref={groupRef}
+      position={[position.x, position.y, position.z]}
+      quaternion={quaternion}
+      scale={[scale, scale, scale]}
+    >
+      <primitive object={scene} />
     </group>
   )
 }
 
-// GLTF 프리로드
 useGLTF.preload(MODEL_PATH)
