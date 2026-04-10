@@ -1,16 +1,18 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { HeroSection } from './HeroSection'
+import { useDeviceCapability } from '@/hooks/useDeviceCapability'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 
 /**
- * 랜딩 페이지 클라이언트 컴포넌트 (스켈레톤)
- * 추후 HeroSection, StorytellingSection, SocialProofSection,
- * ConversionSection, FloatingCTA 등을 통합할 예정
- * Requirements: 1.8, 1.9
+ * 랜딩 페이지 클라이언트 컴포넌트
+ * 디바이스 능력 감지 후 각 섹션에 3D/2D 분기 props 전달
+ * Requirements: 1.8, 1.9, 5.2, 5.3
  */
 export function WelcomePageClient() {
-  const router = useRouter()
+  const { isHighEnd, isReady } = useDeviceCapability()
+  const reducedMotion = usePrefersReducedMotion()
 
   /** 페이지 이탈 시에도 has_visited 쿠키 설정 */
   useEffect(() => {
@@ -19,38 +21,38 @@ export function WelcomePageClient() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [])
 
-  /** CTA 클릭 시 has_visited 쿠키 설정 후 /map으로 이동 */
-  const handleExplore = useCallback(() => {
-    setHasVisitedCookie()
-    router.push('/map')
-  }, [router])
-
   return (
     <div className="min-h-screen bg-background">
-      {/* TODO: HeroSection */}
+      {/* 디바이스 감지 완료 전 스켈레톤 */}
+      {!isReady ? (
+        <HeroSkeleton />
+      ) : (
+        <HeroSection isHighEnd={isHighEnd} reducedMotion={reducedMotion} />
+      )}
+
       {/* TODO: StorytellingSection */}
       {/* TODO: SocialProofSection */}
       {/* TODO: ConversionSection */}
       {/* TODO: FloatingCTA */}
-
-      {/* 임시 CTA — 추후 HeroSection으로 대체 */}
-      <section className="flex min-h-screen flex-col items-center justify-center px-4">
-        <h1 className="mb-4 text-3xl font-bold text-main-text">
-          관광지가 아닌 성지를 탐험하세요
-        </h1>
-        <p className="mb-8 text-center text-sub-text">
-          애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등
-          <br />
-          팬들만 아는 특별한 여행지를 발견하세요.
-        </p>
-        <button
-          onClick={handleExplore}
-          className="rounded-lg bg-primary px-6 py-3 text-white transition-colors hover:bg-primary-600"
-        >
-          지도 탐색하기
-        </button>
-      </section>
     </div>
+  )
+}
+
+/** 디바이스 감지 중 표시할 히어로 스켈레톤 */
+function HeroSkeleton() {
+  return (
+    <section className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8 lg:flex-row lg:gap-12">
+        <div className="flex flex-1 flex-col items-center gap-4 lg:items-start">
+          <div className="h-10 w-64 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
+          <div className="h-6 w-48 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
+          <div className="h-12 w-36 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="h-64 w-64 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-700 md:h-80 md:w-80" />
+        </div>
+      </div>
+    </section>
   )
 }
 
