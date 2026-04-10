@@ -27,7 +27,7 @@ interface HeroSectionProps {
 const Globe3D = dynamic(() => import('./Globe3D').then((mod) => mod.Globe3D), {
   ssr: false,
   loading: () => (
-    <GlobeFallback2D className="h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80" />
+    <GlobeFallback2D className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]" />
   ),
 })
 
@@ -85,10 +85,10 @@ export function HeroSection({ isHighEnd, reducedMotion }: HeroSectionProps) {
           {isHighEnd && !reducedMotion ? (
             <Globe3D
               dataPoints={GLOBE_DATA_POINTS}
-              className="h-64 w-64 md:h-80 md:w-80 lg:h-96 lg:w-96"
+              className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
             />
           ) : (
-            <GlobeFallback2D className="h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80" />
+            <GlobeFallback2D className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]" />
           )}
         </div>
       </div>

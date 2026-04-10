@@ -219,7 +219,7 @@ export function Globe3D({ dataPoints = [], className = '' }: Globe3DProps) {
     >
       <ErrorBoundaryFallback onError={() => setHasError(true)}>
         <Canvas
-          camera={{ position: [0, 0, 4.5], fov: 45 }}
+          camera={{ position: [0, 0, 5.5], fov: 40 }}
           gl={{ antialias: true, alpha: true }}
           style={{ background: 'transparent' }}
         >
