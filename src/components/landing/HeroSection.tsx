@@ -33,63 +33,100 @@ const Globe3D = dynamic(() => import('./Globe3D').then((mod) => mod.Globe3D), {
   ),
 })
 
-/** 더미 성지순례 포인트 데이터 (작품 썸네일 포함) */
+/**
+ * 더미 성지순례 포인트 데이터 (인기순 상위 12개)
+ * 추후 실제 Spot API에서 인기순으로 가져올 예정
+ * 전 세계에 골고루 분포되도록 구성
+ */
 const GLOBE_DATA_POINTS: GlobeDataPoint[] = [
+  // 동아시아 (애니메이션/게임 성지)
   {
     lat: 35.6762,
     lng: 139.6503,
-    label: '도쿄',
+    label: '아키하바라',
     category: 'animation',
     thumbnail: '/icons/categories/animation.webp',
   },
   {
     lat: 34.6937,
     lng: 135.5023,
-    label: '오사카',
+    label: '도톤보리',
     category: 'movie_drama',
     thumbnail: '/icons/categories/movie_drama.webp',
   },
   {
     lat: 37.5665,
     lng: 126.978,
-    label: '서울',
+    label: '홍대',
     category: 'music',
     thumbnail: '/icons/categories/music.webp',
   },
   {
-    lat: 35.0116,
-    lng: 135.7681,
-    label: '교토',
-    category: 'animation',
-    thumbnail: '/icons/categories/animation.webp',
+    lat: 25.033,
+    lng: 121.5654,
+    label: '시먼딩',
+    category: 'movie_drama',
+    thumbnail: '/icons/categories/movie_drama.webp',
   },
-  {
-    lat: 43.0618,
-    lng: 141.3545,
-    label: '삿포로',
-    category: 'sports',
-    thumbnail: '/icons/categories/sports.webp',
-  },
-  {
-    lat: 33.5904,
-    lng: 130.4017,
-    label: '후쿠오카',
-    category: 'game',
-    thumbnail: '/icons/categories/game.webp',
-  },
+  // 유럽 (영화/스포츠)
   {
     lat: 48.8566,
     lng: 2.3522,
-    label: '파리',
+    label: '몽마르뜨',
     category: 'movie_drama',
     thumbnail: '/icons/categories/movie_drama.webp',
   },
   {
-    lat: 51.5074,
-    lng: -0.1278,
-    label: '런던',
+    lat: 41.3874,
+    lng: 2.1686,
+    label: '캄프 누',
     category: 'sports',
     thumbnail: '/icons/categories/sports.webp',
+  },
+  {
+    lat: 51.5074,
+    lng: -0.1278,
+    label: '킹스크로스',
+    category: 'movie_drama',
+    thumbnail: '/icons/categories/movie_drama.webp',
+  },
+  // 북미 (게임/영화)
+  {
+    lat: 34.0522,
+    lng: -118.2437,
+    label: '할리우드',
+    category: 'movie_drama',
+    thumbnail: '/icons/categories/movie_drama.webp',
+  },
+  {
+    lat: 40.7128,
+    lng: -74.006,
+    label: '타임스퀘어',
+    category: 'music',
+    thumbnail: '/icons/categories/music.webp',
+  },
+  // 오세아니아/동남아
+  {
+    lat: -33.8688,
+    lng: 151.2093,
+    label: '오페라하우스',
+    category: 'music',
+    thumbnail: '/icons/categories/music.webp',
+  },
+  {
+    lat: 13.7563,
+    lng: 100.5018,
+    label: '카오산로드',
+    category: 'other',
+    thumbnail: '/icons/categories/other.webp',
+  },
+  // 중동
+  {
+    lat: 25.2048,
+    lng: 55.2708,
+    label: '두바이몰',
+    category: 'game',
+    thumbnail: '/icons/categories/game.webp',
   },
 ]
 
