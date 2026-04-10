@@ -7,19 +7,20 @@ import * as THREE from 'three'
 
 /**
  * 지구본 위를 걷는 마스코트 3D 모델
- * - 적도 부근을 따라 경도 방향으로 이동
- * - 구 표면 법선 방향으로 수직 정렬 + 진행 방향으로 회전
+ * - 구체 표면을 따라 경도 방향으로 이동
+ * - 랜덤 간격으로 방향 전환 (위도도 약간 변동)
+ * - 법선 방향 수직 정렬 + 진행 방향 회전
  */
 
 const MODEL_PATH = '/models/mascot-walk.glb'
+/** 방향 전환 간격 범위 (초) */
+const DIR_CHANGE_MIN = 4
+const DIR_CHANGE_MAX = 10
 
 interface MascotWalkerProps {
   globeRadius: number
-  /** 마스코트 배치 위도 (기본값: 15°) */
   latitude?: number
-  /** 이동 속도 (rad/frame, 기본값: 0.003) */
   walkSpeed?: number
-  /** 모델 스케일 (기본값: 0.35) */
   scale?: number
 }
 
@@ -31,10 +32,13 @@ export function MascotWalker({
 }: MascotWalkerProps) {
   const groupRef = useRef<THREE.Group>(null)
   const longitudeRef = useRef(0)
+  const latitudeRef = useRef(latitude)
+  const directionRef = useRef(1) // 1 또는 -1
+  const nextChangeRef = useRef(randomInterval())
+  const elapsedRef = useRef(0)
   const { scene, animations } = useGLTF(MODEL_PATH)
   const { actions, mixer } = useAnimations(animations, groupRef)
 
-  // 애니메이션 재생
   useEffect(() => {
     const names = Object.keys(actions)
     if (names.length > 0) {
@@ -49,36 +53,44 @@ export function MascotWalker({
     }
   }, [actions, mixer])
 
-  const phi = (90 - latitude) * (Math.PI / 180)
-  const surfaceR = globeRadius + 0.05
-
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (!groupRef.current) return
 
-    // 경도 증가 → 구체 표면을 따라 이동
-    longitudeRef.current += walkSpeed
-    const theta = longitudeRef.current
+    // 랜덤 방향 전환 타이머
+    elapsedRef.current += delta
+    if (elapsedRef.current >= nextChangeRef.current) {
+      directionRef.current *= -1
+      // 위도도 약간 랜덤 변동 (±10°)
+      latitudeRef.current = latitude + (Math.random() - 0.5) * 20
+      latitudeRef.current = THREE.MathUtils.clamp(latitudeRef.current, -30, 50)
+      nextChangeRef.current = randomInterval()
+      elapsedRef.current = 0
+    }
 
-    // 구면 좌표 → 3D 위치
+    // 경도 이동
+    longitudeRef.current += walkSpeed * directionRef.current
+    const theta = longitudeRef.current
+    const phi = (90 - latitudeRef.current) * (Math.PI / 180)
+    const surfaceR = globeRadius + 0.05
+
     const x = -surfaceR * Math.sin(phi) * Math.cos(theta)
     const y = surfaceR * Math.cos(phi)
     const z = surfaceR * Math.sin(phi) * Math.sin(theta)
 
     groupRef.current.position.set(x, y, z)
 
-    // 법선 방향 (구 중심 → 표면)
+    // 법선
     const normal = new THREE.Vector3(x, y, z).normalize()
 
-    // 진행 방향 (경도 접선) — negate로 앞면 방향 보정
+    // 진행 방향 (경도 접선) — direction으로 앞/뒤 전환
     const tangent = new THREE.Vector3(
       surfaceR * Math.sin(phi) * Math.sin(theta),
       0,
       surfaceR * Math.sin(phi) * Math.cos(theta)
     )
       .normalize()
-      .negate()
+      .multiplyScalar(-directionRef.current)
 
-    // lookAt 매트릭스: 진행 방향을 바라보고, 법선을 up으로
     const mat = new THREE.Matrix4()
     mat.lookAt(new THREE.Vector3(0, 0, 0), tangent, normal)
     groupRef.current.quaternion.setFromRotationMatrix(mat)
@@ -89,6 +101,10 @@ export function MascotWalker({
       <primitive object={scene} />
     </group>
   )
+}
+
+function randomInterval(): number {
+  return DIR_CHANGE_MIN + Math.random() * (DIR_CHANGE_MAX - DIR_CHANGE_MIN)
 }
 
 useGLTF.preload(MODEL_PATH)
