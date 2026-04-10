@@ -96,6 +96,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
   const previousPointer = useRef({ x: 0, y: 0 })
   const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const autoRotateActive = useRef(true)
+  const pinHoveredRef = useRef(false)
   const { gl } = useThree()
 
   const onPointerDown = useCallback(
@@ -146,7 +147,12 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
   }, [gl, onPointerDown, onPointerMove, onPointerUp])
 
   useFrame(() => {
-    if (groupRef.current && autoRotateActive.current && !isDragging.current) {
+    if (
+      groupRef.current &&
+      autoRotateActive.current &&
+      !isDragging.current &&
+      !pinHoveredRef.current
+    ) {
       groupRef.current.rotation.y += AUTO_ROTATE_SPEED
     }
     gl.domElement.style.cursor = isDragging.current ? 'grabbing' : 'grab'
@@ -201,6 +207,9 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
           label={node.label}
           category={node.category}
           thumbnail={node.thumbnail}
+          onHoverChange={(h) => {
+            pinHoveredRef.current = h
+          }}
         />
       ))}
 
@@ -223,14 +232,23 @@ function SpotPin({
   label,
   category,
   thumbnail,
+  onHoverChange,
 }: {
   position: THREE.Vector3
   color: string
   label: string
   category: string
   thumbnail?: string
+  onHoverChange?: (hovered: boolean) => void
 }) {
   const [hovered, setHovered] = useState(false)
+  const handleHover = useCallback(
+    (h: boolean) => {
+      setHovered(h)
+      onHoverChange?.(h)
+    },
+    [onHoverChange]
+  )
   const normal = useMemo(() => position.clone().normalize(), [position])
   // 핀 끝 위치 (구 표면에서 바깥으로)
   const pinTip = useMemo(
@@ -260,8 +278,8 @@ function SpotPin({
       >
         <div
           className="flex flex-col items-center"
-          onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
+          onPointerEnter={() => handleHover(true)}
+          onPointerLeave={() => handleHover(false)}
         >
           {/* 썸네일 핀 */}
           <div
