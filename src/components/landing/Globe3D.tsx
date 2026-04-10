@@ -209,12 +209,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
 
       {/* 마스코트 3D 모델 (별도 Suspense로 지구본 먼저 표시) */}
       <Suspense fallback={null}>
-        <MascotWalker
-          globeRadius={GLOBE_RADIUS}
-          latitude={25}
-          longitude={30}
-          scale={0.15}
-        />
+        <MascotWalker globeRadius={GLOBE_RADIUS} latitude={15} scale={0.35} />
       </Suspense>
     </group>
   )
@@ -345,7 +340,7 @@ export function Globe3D({ dataPoints = [], className = '' }: Globe3DProps) {
     >
       <ErrorBoundaryFallback onError={() => setHasError(true)}>
         <Canvas
-          camera={{ position: [0, 0, 5.5], fov: 40 }}
+          camera={{ position: [0, 0, 6.5], fov: 40 }}
           gl={{ antialias: true, alpha: true }}
           style={{ background: 'transparent' }}
         >
