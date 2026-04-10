@@ -123,14 +123,6 @@ export function HeroSection({ isHighEnd, reducedMotion }: HeroSectionProps) {
 
         {/* 지구본 비주얼 영역 */}
         <div className="relative flex flex-1 items-center justify-center">
-          {/* 마스코트 환영 인사 일러스트 */}
-          <div
-            className="absolute -bottom-4 -right-2 z-20 md:-bottom-6 md:-right-4 lg:-bottom-8 lg:-right-6"
-            aria-hidden="true"
-          >
-            <MascotWelcome />
-          </div>
-
           {/* 3D/2D 지구본 분기 렌더링 */}
           {isHighEnd && !reducedMotion ? (
             <Globe3D
@@ -143,69 +135,5 @@ export function HeroSection({ isHighEnd, reducedMotion }: HeroSectionProps) {
         </div>
       </div>
     </section>
-  )
-}
-
-/**
- * 마스코트 환영 인사 SVG 일러스트
- * 실제 마스코트 에셋이 준비되면 Image 컴포넌트로 교체
- */
-function MascotWelcome() {
-  return (
-    <svg
-      viewBox="0 0 80 80"
-      className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="환영하는 마스코트 캐릭터"
-    >
-      {/* 몸체 */}
-      <circle cx="40" cy="44" r="24" className="fill-secondary-200" />
-      {/* 얼굴 */}
-      <circle cx="40" cy="36" r="18" className="fill-secondary-100" />
-      {/* 눈 */}
-      <circle cx="34" cy="33" r="2.5" className="fill-neutral-700" />
-      <circle cx="46" cy="33" r="2.5" className="fill-neutral-700" />
-      {/* 볼 터치 */}
-      <circle cx="30" cy="38" r="3" className="fill-primary-200/60" />
-      <circle cx="50" cy="38" r="3" className="fill-primary-200/60" />
-      {/* 입 (미소) */}
-      <path
-        d="M36 40 Q40 44 44 40"
-        className="stroke-neutral-600"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* 손 흔들기 */}
-      <ellipse
-        cx="62"
-        cy="28"
-        rx="6"
-        ry="4"
-        className="fill-secondary-200"
-        transform="rotate(-20 62 28)"
-      />
-      {/* 말풍선 */}
-      <rect
-        x="52"
-        y="8"
-        width="26"
-        height="14"
-        rx="7"
-        className="fill-primary-100"
-      />
-      <text
-        x="65"
-        y="18"
-        textAnchor="middle"
-        className="fill-primary-600"
-        fontSize="7"
-        fontWeight="bold"
-      >
-        반가워!
-      </text>
-    </svg>
   )
 }
