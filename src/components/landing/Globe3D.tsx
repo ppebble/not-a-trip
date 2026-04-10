@@ -164,23 +164,6 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
     }))
   }, [dataPoints])
 
-  // 연결선 (인접 노드 간)
-  const connectionLines = useMemo(() => {
-    const lines: { start: THREE.Vector3; end: THREE.Vector3; color: string }[] =
-      []
-    for (let i = 0; i < nodes.length - 1; i++) {
-      const dist = nodes[i].position.distanceTo(nodes[i + 1].position)
-      if (dist < 2.5) {
-        lines.push({
-          start: nodes[i].position,
-          end: nodes[i + 1].position,
-          color: nodes[i].color,
-        })
-      }
-    }
-    return lines
-  }, [nodes])
-
   return (
     <group ref={groupRef}>
       {/* 지구본 본체 — meshPhysicalMaterial 솔리드 */}
@@ -217,16 +200,6 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
           label={node.label}
           category={node.category}
           thumbnail={node.thumbnail}
-        />
-      ))}
-
-      {/* 연결선 */}
-      {connectionLines.map((line, i) => (
-        <ConnectionLine
-          key={`line-${i}`}
-          start={line.start}
-          end={line.end}
-          color={line.color}
         />
       ))}
 
@@ -324,37 +297,6 @@ function SpotPin({
       </Html>
     </group>
   )
-}
-
-// ─── ConnectionLine: 곡선 연결선 ───
-
-function ConnectionLine({
-  start,
-  end,
-  color,
-}: {
-  start: THREE.Vector3
-  end: THREE.Vector3
-  color: string
-}) {
-  const lineRef = useRef<THREE.Line>(null)
-  const lineObj = useMemo(() => {
-    const mid = new THREE.Vector3()
-      .addVectors(start, end)
-      .multiplyScalar(0.5)
-      .normalize()
-      .multiplyScalar(GLOBE_RADIUS + 0.3)
-    const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
-    const pts = curve.getPoints(20)
-    const geometry = new THREE.BufferGeometry().setFromPoints(pts)
-    const material = new THREE.LineBasicMaterial({
-      color,
-      transparent: true,
-      opacity: 0.3,
-    })
-    return new THREE.Line(geometry, material)
-  }, [start, end, color])
-  return <primitive ref={lineRef} object={lineObj} />
 }
 
 // ─── GlobeGlow: 외부 글로우 ───
