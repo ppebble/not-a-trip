@@ -1,7 +1,8 @@
 'use client'
 
-import { useRef, useMemo, useState, useCallback } from 'react'
+import { useRef, useMemo, useState, useCallback, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Billboard, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { GlobeFallback2D } from './GlobeFallback2D'
 import type { GlobeDataPoint } from './HeroSection'
@@ -46,9 +47,9 @@ const CATEGORY_COLORS: Record<string, string> = {
 const GLOBE_RADIUS = 1.8
 
 /** 자동 회전 속도 (rad/frame) */
-const AUTO_ROTATE_SPEED = 0.003
+const AUTO_ROTATE_SPEED = 0.007
 /** 드래그 종료 후 자동 회전 복귀까지 대기 시간 (ms) */
-const RESUME_DELAY = 1500
+const RESUME_DELAY = 100
 /** 드래그 감도 */
 const DRAG_SENSITIVITY = 0.008
 
@@ -127,6 +128,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
         position: latLngToVector3(dp.lat, dp.lng, GLOBE_RADIUS + 0.02),
         color: CATEGORY_COLORS[dp.category] || CATEGORY_COLORS.other,
         label: dp.label,
+        thumbnail: dp.thumbnail,
       })),
     [dataPoints]
   )
@@ -173,24 +175,14 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
         />
       </mesh>
 
-      {/* 데이터 포인트 */}
+      {/* 핀 + 썸네일 카드 */}
       {points.map((point, i) => (
-        <mesh key={i} position={point.position}>
-          <sphereGeometry args={[0.04, 12, 12]} />
-          <meshStandardMaterial
-            color={point.color}
-            emissive={point.color}
-            emissiveIntensity={0.5}
-          />
-        </mesh>
-      ))}
-
-      {/* 포인트 글로우 */}
-      {points.map((point, i) => (
-        <mesh key={`glow-${i}`} position={point.position}>
-          <sphereGeometry args={[0.07, 8, 8]} />
-          <meshBasicMaterial color={point.color} transparent opacity={0.2} />
-        </mesh>
+        <GlobePin
+          key={i}
+          position={point.position}
+          color={point.color}
+          thumbnail={point.thumbnail}
+        />
       ))}
 
       {/* 연결선 */}
@@ -203,6 +195,115 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
         />
       ))}
     </group>
+  )
+}
+
+/**
+ * 지구본 위 핀 + 썸네일 카드
+ * 구 표면에서 바깥 방향으로 핀이 솟아오르고, 끝에 썸네일 카드가 Billboard로 표시
+ */
+function GlobePin({
+  position,
+  color,
+  thumbnail,
+}: {
+  position: THREE.Vector3
+  color: string
+  thumbnail?: string
+}) {
+  const groupRef = useRef<THREE.Group>(null)
+
+  // 핀 방향: 구 중심(0,0,0)에서 포인트 위치로의 법선 벡터
+  const normal = useMemo(() => position.clone().normalize(), [position])
+
+  // 핀 끝 위치 (구 표면에서 0.25만큼 바깥)
+  const pinTip = useMemo(
+    () => position.clone().add(normal.clone().multiplyScalar(0.25)),
+    [position, normal]
+  )
+
+  // 핀 기둥의 중간점
+  const pinMid = useMemo(
+    () => position.clone().add(normal.clone().multiplyScalar(0.125)),
+    [position, normal]
+  )
+
+  // 핀 기둥 회전 (법선 방향으로 정렬)
+  const quaternion = useMemo(() => {
+    const q = new THREE.Quaternion()
+    q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal)
+    return q
+  }, [normal])
+
+  return (
+    <group ref={groupRef}>
+      {/* 핀 바닥 점 (구 표면) */}
+      <mesh position={position}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshStandardMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={0.6}
+        />
+      </mesh>
+
+      {/* 핀 기둥 */}
+      <mesh position={pinMid} quaternion={quaternion}>
+        <cylinderGeometry args={[0.008, 0.008, 0.25, 6]} />
+        <meshStandardMaterial color={color} metalness={0.3} roughness={0.6} />
+      </mesh>
+
+      {/* 썸네일 카드 (항상 카메라를 향하는 Billboard) */}
+      <Billboard
+        position={pinTip}
+        follow
+        lockX={false}
+        lockY={false}
+        lockZ={false}
+      >
+        <PinCard color={color} thumbnail={thumbnail} />
+      </Billboard>
+    </group>
+  )
+}
+
+/** 핀 끝의 썸네일 카드 */
+function PinCard({ color, thumbnail }: { color: string; thumbnail?: string }) {
+  return (
+    <group>
+      {/* 카드 배경 */}
+      <mesh>
+        <planeGeometry args={[0.22, 0.22]} />
+        <meshBasicMaterial color="#1a1a2e" transparent opacity={0.9} />
+      </mesh>
+
+      {/* 카드 테두리 */}
+      <mesh position={[0, 0, -0.001]}>
+        <planeGeometry args={[0.24, 0.24]} />
+        <meshBasicMaterial color={color} transparent opacity={0.8} />
+      </mesh>
+
+      {/* 썸네일 이미지 */}
+      {thumbnail ? (
+        <PinThumbnail thumbnail={thumbnail} />
+      ) : (
+        <mesh position={[0, 0, 0.001]}>
+          <planeGeometry args={[0.18, 0.18]} />
+          <meshBasicMaterial color={color} transparent opacity={0.3} />
+        </mesh>
+      )}
+    </group>
+  )
+}
+
+/** 텍스처 로드 + 표시 (별도 컴포넌트로 분리하여 Suspense 호환) */
+function PinThumbnail({ thumbnail }: { thumbnail: string }) {
+  const texture = useTexture(thumbnail)
+  return (
+    <mesh position={[0, 0, 0.001]}>
+      <planeGeometry args={[0.18, 0.18]} />
+      <meshBasicMaterial map={texture} transparent />
+    </mesh>
   )
 }
 
@@ -280,7 +381,9 @@ export function Globe3D({ dataPoints = [], className = '' }: Globe3DProps) {
           <ambientLight intensity={0.6} />
           <directionalLight position={[5, 3, 5]} intensity={0.8} />
           <pointLight position={[-5, -3, -5]} intensity={0.3} color="#b0d4e8" />
-          <GlobeMesh dataPoints={dataPoints} />
+          <Suspense fallback={null}>
+            <GlobeMesh dataPoints={dataPoints} />
+          </Suspense>
           <GlobeGlow />
         </Canvas>
       </ErrorBoundaryFallback>

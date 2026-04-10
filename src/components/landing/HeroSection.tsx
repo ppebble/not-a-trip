@@ -16,6 +16,8 @@ export interface GlobeDataPoint {
   lng: number
   label: string
   category: SpotCategory
+  /** 핀 썸네일 이미지 URL (작품 이미지) */
+  thumbnail?: string
 }
 
 interface HeroSectionProps {
@@ -31,16 +33,64 @@ const Globe3D = dynamic(() => import('./Globe3D').then((mod) => mod.Globe3D), {
   ),
 })
 
-/** 더미 성지순례 포인트 데이터 */
+/** 더미 성지순례 포인트 데이터 (작품 썸네일 포함) */
 const GLOBE_DATA_POINTS: GlobeDataPoint[] = [
-  { lat: 35.6762, lng: 139.6503, label: '도쿄', category: 'animation' },
-  { lat: 34.6937, lng: 135.5023, label: '오사카', category: 'movie_drama' },
-  { lat: 37.5665, lng: 126.978, label: '서울', category: 'music' },
-  { lat: 35.0116, lng: 135.7681, label: '교토', category: 'animation' },
-  { lat: 43.0618, lng: 141.3545, label: '삿포로', category: 'sports' },
-  { lat: 33.5904, lng: 130.4017, label: '후쿠오카', category: 'game' },
-  { lat: 48.8566, lng: 2.3522, label: '파리', category: 'movie_drama' },
-  { lat: 51.5074, lng: -0.1278, label: '런던', category: 'sports' },
+  {
+    lat: 35.6762,
+    lng: 139.6503,
+    label: '도쿄',
+    category: 'animation',
+    thumbnail: '/icons/categories/animation.webp',
+  },
+  {
+    lat: 34.6937,
+    lng: 135.5023,
+    label: '오사카',
+    category: 'movie_drama',
+    thumbnail: '/icons/categories/movie_drama.webp',
+  },
+  {
+    lat: 37.5665,
+    lng: 126.978,
+    label: '서울',
+    category: 'music',
+    thumbnail: '/icons/categories/music.webp',
+  },
+  {
+    lat: 35.0116,
+    lng: 135.7681,
+    label: '교토',
+    category: 'animation',
+    thumbnail: '/icons/categories/animation.webp',
+  },
+  {
+    lat: 43.0618,
+    lng: 141.3545,
+    label: '삿포로',
+    category: 'sports',
+    thumbnail: '/icons/categories/sports.webp',
+  },
+  {
+    lat: 33.5904,
+    lng: 130.4017,
+    label: '후쿠오카',
+    category: 'game',
+    thumbnail: '/icons/categories/game.webp',
+  },
+  {
+    lat: 48.8566,
+    lng: 2.3522,
+    label: '파리',
+    category: 'movie_drama',
+    thumbnail: '/icons/categories/movie_drama.webp',
+  },
+  {
+    lat: 51.5074,
+    lng: -0.1278,
+    label: '런던',
+    category: 'sports',
+    thumbnail: '/icons/categories/sports.webp',
+  },
 ]
 
 export function HeroSection({ isHighEnd, reducedMotion }: HeroSectionProps) {
