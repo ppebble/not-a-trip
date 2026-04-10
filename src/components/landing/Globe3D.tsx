@@ -352,7 +352,7 @@ export function Globe3D({ dataPoints = [], className = '' }: Globe3DProps) {
 
   return (
     <div
-      className={`relative ${className}`}
+      className={`relative select-none ${className}`}
       role="img"
       aria-label="전 세계 성지순례 포인트를 표시하는 인터랙티브 3D 지구본"
     >
