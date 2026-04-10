@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useMemo, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useRef, useMemo, useState, useCallback } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { GlobeFallback2D } from './GlobeFallback2D'
 import type { GlobeDataPoint } from './HeroSection'
@@ -45,25 +45,79 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const GLOBE_RADIUS = 1.8
 
-/** 지구본 메시 — 자동 회전 + 마우스 반응 */
+/** 자동 회전 속도 (rad/frame) */
+const AUTO_ROTATE_SPEED = 0.003
+/** 드래그 종료 후 자동 회전 복귀까지 대기 시간 (ms) */
+const RESUME_DELAY = 1500
+/** 드래그 감도 */
+const DRAG_SENSITIVITY = 0.008
+
+/** 지구본 메시 — 자동 회전 + 드래그 회전 (드래그 중 자동 회전 일시정지) */
 function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
   const groupRef = useRef<THREE.Group>(null)
-  const mouseRef = useRef({ x: 0, y: 0 })
+  const isDragging = useRef(false)
+  const previousPointer = useRef({ x: 0, y: 0 })
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const autoRotateActive = useRef(true)
+  const { gl } = useThree()
 
-  // 마우스 위치 추적
-  useFrame(({ pointer }) => {
-    mouseRef.current = { x: pointer.x, y: pointer.y }
+  // 드래그 이벤트 핸들러를 Canvas DOM에 직접 바인딩
+  const onPointerDown = useCallback(
+    (e: PointerEvent) => {
+      isDragging.current = true
+      autoRotateActive.current = false
+      previousPointer.current = { x: e.clientX, y: e.clientY }
+      if (resumeTimer.current) clearTimeout(resumeTimer.current)
+      gl.domElement.setPointerCapture(e.pointerId)
+    },
+    [gl]
+  )
 
-    if (groupRef.current) {
-      // 자동 회전 + 마우스 반응 회전
-      groupRef.current.rotation.y += 0.002
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(
-        groupRef.current.rotation.x,
-        mouseRef.current.y * 0.15,
-        0.02
-      )
-      groupRef.current.rotation.y += mouseRef.current.x * 0.001
+  const onPointerMove = useCallback((e: PointerEvent) => {
+    if (!isDragging.current || !groupRef.current) return
+    const dx = e.clientX - previousPointer.current.x
+    const dy = e.clientY - previousPointer.current.y
+    groupRef.current.rotation.y += dx * DRAG_SENSITIVITY
+    groupRef.current.rotation.x += dy * DRAG_SENSITIVITY
+    // X축 기울기 제한 (-60° ~ 60°)
+    groupRef.current.rotation.x = THREE.MathUtils.clamp(
+      groupRef.current.rotation.x,
+      -Math.PI / 3,
+      Math.PI / 3
+    )
+    previousPointer.current = { x: e.clientX, y: e.clientY }
+  }, [])
+
+  const onPointerUp = useCallback(() => {
+    isDragging.current = false
+    resumeTimer.current = setTimeout(() => {
+      autoRotateActive.current = true
+    }, RESUME_DELAY)
+  }, [])
+
+  // DOM 이벤트 바인딩
+  useMemo(() => {
+    const el = gl.domElement
+    el.addEventListener('pointerdown', onPointerDown)
+    el.addEventListener('pointermove', onPointerMove)
+    el.addEventListener('pointerup', onPointerUp)
+    el.addEventListener('pointerleave', onPointerUp)
+    el.style.cursor = 'grab'
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown)
+      el.removeEventListener('pointermove', onPointerMove)
+      el.removeEventListener('pointerup', onPointerUp)
+      el.removeEventListener('pointerleave', onPointerUp)
     }
+  }, [gl, onPointerDown, onPointerMove, onPointerUp])
+
+  // 매 프레임: 자동 회전 (드래그 중이 아닐 때만)
+  useFrame(() => {
+    if (groupRef.current && autoRotateActive.current && !isDragging.current) {
+      groupRef.current.rotation.y += AUTO_ROTATE_SPEED
+    }
+    // 드래그 중 커서 변경
+    gl.domElement.style.cursor = isDragging.current ? 'grabbing' : 'grab'
   })
 
   // 데이터 포인트 위치 계산
