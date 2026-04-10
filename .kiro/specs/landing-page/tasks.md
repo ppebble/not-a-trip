@@ -149,13 +149,13 @@
     - 각 카테고리별 올바른 소품 이미지 매핑 확인
     - _Requirements: 2.1, 2.4, 2.5_
 
-- [ ] 8. 소셜 프루프 섹션 구현
-  - [ ] 8.1 소셜 프루프 더미 데이터 정의
+- [x] 8. 소셜 프루프 섹션 구현
+  - [x] 8.1 소셜 프루프 더미 데이터 정의
     - `src/components/landing/data/proofData.ts` 생성
     - 6~8개 더미 ProofData 카드 (마스코트 일러스트 기반)
     - _Requirements: 3.2_
 
-  - [ ] 8.2 SocialProofSection 컴포넌트 구현
+  - [x] 8.2 SocialProofSection 컴포넌트 구현
     - `src/components/landing/SocialProofSection.tsx` 생성
     - "함께 덕질하는 즐거움" 커뮤니티 가치 카피 포함
     - ProofCard를 가로 슬라이더 형태로 표시

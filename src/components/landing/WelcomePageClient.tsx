@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { HeroSection } from './HeroSection'
 import { StorytellingSection } from './StorytellingSection'
+import { SocialProofSection } from './SocialProofSection'
 import { useDeviceCapability } from '@/hooks/useDeviceCapability'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 
@@ -31,14 +32,15 @@ export function WelcomePageClient() {
         <HeroSection isHighEnd={isHighEnd} reducedMotion={reducedMotion} />
       )}
 
-      {/* TODO: StorytellingSection */}
+      {/* StorytellingSection — 카테고리 스토리텔링 */}
       {isReady && (
         <StorytellingSection
           isHighEnd={isHighEnd}
           reducedMotion={reducedMotion}
         />
       )}
-      {/* TODO: SocialProofSection */}
+      {/* SocialProofSection — 자동 스크롤 슬라이더 */}
+      <SocialProofSection />
       {/* TODO: ConversionSection */}
       {/* TODO: FloatingCTA */}
     </div>

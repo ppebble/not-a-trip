@@ -8,18 +8,27 @@ import type { NextRequest } from 'next/server'
  * Requirements: 1.9
  */
 export function middleware(request: NextRequest) {
-  try {
-    const hasVisited = request.cookies.get('has_visited')?.value
-    if (hasVisited === 'true') {
-      return NextResponse.redirect(new URL('/map', request.url))
+  const { pathname } = request.nextUrl
+
+  // 루트 경로에서만 분기 리다이렉트
+  if (pathname === '/') {
+    try {
+      const hasVisited = request.cookies.get('has_visited')?.value
+      if (hasVisited === 'true') {
+        return NextResponse.redirect(new URL('/map', request.url))
+      }
+    } catch {
+      // 쿠키 읽기 실패 시 신규 유저로 간주
     }
-  } catch {
-    // 쿠키 읽기 실패 시 신규 유저로 간주
+
+    return NextResponse.redirect(new URL('/welcome', request.url))
   }
 
-  return NextResponse.redirect(new URL('/welcome', request.url))
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon\\.ico|icons|fonts|sw\\.js|manifest\\.json|monitoring).*)',
+  ],
 }
