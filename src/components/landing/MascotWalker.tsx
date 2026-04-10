@@ -69,12 +69,14 @@ export function MascotWalker({
     // 법선 방향 (구 중심 → 표면)
     const normal = new THREE.Vector3(x, y, z).normalize()
 
-    // 진행 방향 (경도 접선)
+    // 진행 방향 (경도 접선) — negate로 앞면 방향 보정
     const tangent = new THREE.Vector3(
       surfaceR * Math.sin(phi) * Math.sin(theta),
       0,
       surfaceR * Math.sin(phi) * Math.cos(theta)
-    ).normalize()
+    )
+      .normalize()
+      .negate()
 
     // lookAt 매트릭스: 진행 방향을 바라보고, 법선을 up으로
     const mat = new THREE.Matrix4()
