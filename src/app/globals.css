@@ -369,6 +369,28 @@ button:focus-visible {
   animation: loading-bar 1s ease-in-out infinite;
 }
 
+/* 카테고리 스토리텔링 섹션 — CSS 폴백 애니메이션 */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-in {
+  animation: fadeSlideIn 0.6s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-slide-in {
+    animation: none;
+  }
+}
+
 .leaflet-container img {
   max-width: none !important;
   max-height: none !important;
