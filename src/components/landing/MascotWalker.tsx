@@ -7,15 +7,19 @@ import * as THREE from 'three'
 
 /**
  * 지구본 위를 걷는 마스코트 3D 모델
- * - 구체 표면을 따라 경도 방향으로 이동
- * - 랜덤 간격으로 방향 전환 (위도도 약간 변동)
- * - 법선 방향 수직 정렬 + 진행 방향 회전
+ * - 경도 방향으로 일정하게 전진
+ * - 랜덤 간격으로 위도를 부드럽게 변경 (좌우 약간 트는 느낌)
+ * - lerp로 위도 전환하여 순간이동 방지
  */
 
 const MODEL_PATH = '/models/mascot-walk.glb'
-/** 방향 전환 간격 범위 (초) */
-const DIR_CHANGE_MIN = 4
-const DIR_CHANGE_MAX = 10
+/** 위도 변경 간격 범위 (초) */
+const DRIFT_INTERVAL_MIN = 5
+const DRIFT_INTERVAL_MAX = 12
+/** 위도 변동 범위 (±도) */
+const LAT_DRIFT_RANGE = 5
+/** 위도 lerp 속도 (0~1, 작을수록 부드러움) */
+const LAT_LERP_SPEED = 0.02
 
 interface MascotWalkerProps {
   globeRadius: number
@@ -32,9 +36,9 @@ export function MascotWalker({
 }: MascotWalkerProps) {
   const groupRef = useRef<THREE.Group>(null)
   const longitudeRef = useRef(0)
-  const latitudeRef = useRef(latitude)
-  const directionRef = useRef(1) // 1 또는 -1
-  const nextChangeRef = useRef(randomInterval())
+  const currentLatRef = useRef(latitude)
+  const targetLatRef = useRef(latitude)
+  const nextDriftRef = useRef(randomDriftInterval())
   const elapsedRef = useRef(0)
   const { scene, animations } = useGLTF(MODEL_PATH)
   const { actions, mixer } = useAnimations(animations, groupRef)
@@ -56,21 +60,31 @@ export function MascotWalker({
   useFrame((_, delta) => {
     if (!groupRef.current) return
 
-    // 랜덤 방향 전환 타이머
+    // 랜덤 위도 드리프트 타이머
     elapsedRef.current += delta
-    if (elapsedRef.current >= nextChangeRef.current) {
-      directionRef.current *= -1
-      // 위도도 약간 랜덤 변동 (±10°)
-      latitudeRef.current = latitude + (Math.random() - 0.5) * 20
-      latitudeRef.current = THREE.MathUtils.clamp(latitudeRef.current, -30, 50)
-      nextChangeRef.current = randomInterval()
+    if (elapsedRef.current >= nextDriftRef.current) {
+      targetLatRef.current =
+        latitude + (Math.random() - 0.5) * LAT_DRIFT_RANGE * 2
+      targetLatRef.current = THREE.MathUtils.clamp(
+        targetLatRef.current,
+        latitude - 15,
+        latitude + 15
+      )
+      nextDriftRef.current = randomDriftInterval()
       elapsedRef.current = 0
     }
 
-    // 경도 이동
-    longitudeRef.current += walkSpeed * directionRef.current
+    // 위도를 부드럽게 보간
+    currentLatRef.current = THREE.MathUtils.lerp(
+      currentLatRef.current,
+      targetLatRef.current,
+      LAT_LERP_SPEED
+    )
+
+    // 경도 전진 (항상 같은 방향)
+    longitudeRef.current += walkSpeed
     const theta = longitudeRef.current
-    const phi = (90 - latitudeRef.current) * (Math.PI / 180)
+    const phi = (90 - currentLatRef.current) * (Math.PI / 180)
     const surfaceR = globeRadius + 0.05
 
     const x = -surfaceR * Math.sin(phi) * Math.cos(theta)
@@ -82,14 +96,14 @@ export function MascotWalker({
     // 법선
     const normal = new THREE.Vector3(x, y, z).normalize()
 
-    // 진행 방향 (경도 접선) — direction으로 앞/뒤 전환
+    // 진행 방향 (경도 접선)
     const tangent = new THREE.Vector3(
       surfaceR * Math.sin(phi) * Math.sin(theta),
       0,
       surfaceR * Math.sin(phi) * Math.cos(theta)
     )
       .normalize()
-      .multiplyScalar(-directionRef.current)
+      .negate()
 
     const mat = new THREE.Matrix4()
     mat.lookAt(new THREE.Vector3(0, 0, 0), tangent, normal)
@@ -103,8 +117,11 @@ export function MascotWalker({
   )
 }
 
-function randomInterval(): number {
-  return DIR_CHANGE_MIN + Math.random() * (DIR_CHANGE_MAX - DIR_CHANGE_MIN)
+function randomDriftInterval(): number {
+  return (
+    DRIFT_INTERVAL_MIN +
+    Math.random() * (DRIFT_INTERVAL_MAX - DRIFT_INTERVAL_MIN)
+  )
 }
 
 useGLTF.preload(MODEL_PATH)
