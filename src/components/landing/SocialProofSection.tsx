@@ -7,55 +7,134 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 
 /**
  * 소셜 프루프 섹션 컴포넌트
- * 커뮤니티 가치 카피 + ProofCard 가로 슬라이더
- * 자동 스크롤 + 수동 좌우 스와이프 지원
+ * 커뮤니티 가치 카피 + ProofCard 무한 순환 슬라이더
+ * 자동 스크롤 + 수동 좌우 스와이프 + 데스크톱 화살표 지원
  * Requirements: 3.1, 3.2, 3.3, 3.4, 6.6, 7.4
  */
 
 /** 자동 스크롤 간격 (ms) */
 const AUTO_SCROLL_INTERVAL = 3500
+/** 슬라이드 전환 시간 (ms) */
+const TRANSITION_DURATION = 500
+/** 카드 간 간격 (px) — gap-4 = 1rem = 16px */
+const CARD_GAP = 16
+
+/**
+ * 무한 순환 구현:
+ * 원본 카드 앞뒤에 클론을 배치하여 끊김 없는 루프를 만든다.
+ * [clone-last-N] [original-0 ... original-N] [clone-first-N]
+ * 클론 영역에 도달하면 transition 없이 원본 위치로 점프한다.
+ */
+const CLONE_COUNT = 4 // 앞뒤로 복제할 카드 수
+
+function getExtendedData() {
+  const data = PROOF_DUMMY_DATA
+  const len = data.length
+  // 뒤쪽 클론: 마지막 CLONE_COUNT개
+  const prefixClones = data.slice(-CLONE_COUNT).map((d, i) => ({
+    ...d,
+    id: `clone-pre-${i}`,
+  }))
+  // 앞쪽 클론: 처음 CLONE_COUNT개
+  const suffixClones = data.slice(0, CLONE_COUNT).map((d, i) => ({
+    ...d,
+    id: `clone-suf-${i}`,
+  }))
+  return { extended: [...prefixClones, ...data, ...suffixClones], len }
+}
 
 export function SocialProofSection() {
   const sliderRef = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(true)
   const reducedMotion = usePrefersReducedMotion()
 
-  /** 한 카드 너비만큼 스크롤 */
-  const scrollByOneCard = useCallback(() => {
+  const { extended, len } = getExtendedData()
+  // 실제 인덱스 0 = extended 배열의 CLONE_COUNT 위치
+  const [currentIndex, setCurrentIndex] = useState(CLONE_COUNT)
+
+  /** 카드 1개 너비 + gap 계산 */
+  const getCardStep = useCallback(() => {
     const slider = sliderRef.current
-    if (!slider) return
-
-    const cardWidth = slider.querySelector('article')?.offsetWidth ?? 0
-    const gap = 16 // gap-4 = 1rem = 16px
-    const scrollAmount = cardWidth + gap
-    const maxScroll = slider.scrollWidth - slider.clientWidth
-
-    if (slider.scrollLeft >= maxScroll - 2) {
-      // 끝에 도달하면 처음으로 돌아감
-      slider.scrollTo({ left: 0, behavior: 'smooth' })
-    } else {
-      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' })
-    }
+    if (!slider) return 0
+    const firstCard = slider.querySelector<HTMLElement>('[data-card]')
+    if (!firstCard) return 0
+    return firstCard.offsetWidth + CARD_GAP
   }, [])
 
-  /** 자동 스크롤: reduced-motion 비활성 & 일시정지 아닐 때만 */
+  /** 슬라이드 위치 계산 */
+  const getTranslateX = useCallback(
+    (index: number) => {
+      const step = getCardStep()
+      return -(index * step)
+    },
+    [getCardStep]
+  )
+
+  /** 클론 영역 도달 시 원본 위치로 점프 (transition 없이) */
+  useEffect(() => {
+    if (isTransitioning) return
+
+    let jumpIndex: number | null = null
+    if (currentIndex >= len + CLONE_COUNT) {
+      // 끝 클론 → 원본 시작으로
+      jumpIndex = currentIndex - len
+    } else if (currentIndex < CLONE_COUNT) {
+      // 앞 클론 → 원본 끝으로
+      jumpIndex = currentIndex + len
+    }
+
+    if (jumpIndex !== null) {
+      const target = jumpIndex
+      // 다음 프레임에서 transition 없이 점프
+      requestAnimationFrame(() => {
+        setIsTransitioning(false)
+        setCurrentIndex(target)
+        // 점프 후 다시 transition 활성화
+        requestAnimationFrame(() => {
+          setIsTransitioning(true)
+        })
+      })
+    }
+  }, [currentIndex, isTransitioning, len])
+
+  /** 다음 카드로 이동 */
+  const goNext = useCallback(() => {
+    setIsTransitioning(true)
+    setCurrentIndex((prev) => prev + 1)
+  }, [])
+
+  /** 이전 카드로 이동 */
+  const goPrev = useCallback(() => {
+    setIsTransitioning(true)
+    setCurrentIndex((prev) => prev - 1)
+  }, [])
+
+  /** transition 종료 감지 → 클론 점프 트리거 */
+  const handleTransitionEnd = useCallback(() => {
+    setIsTransitioning(false)
+  }, [])
+
+  /** 자동 스크롤 */
   useEffect(() => {
     if (reducedMotion || isPaused) return
-
-    const timer = setInterval(scrollByOneCard, AUTO_SCROLL_INTERVAL)
+    const timer = setInterval(goNext, AUTO_SCROLL_INTERVAL)
     return () => clearInterval(timer)
-  }, [reducedMotion, isPaused, scrollByOneCard])
+  }, [reducedMotion, isPaused, goNext])
 
-  /** 데스크톱 좌/우 화살표 버튼 핸들러 */
-  const scrollLeft = () => {
-    const slider = sliderRef.current
-    if (!slider) return
-    const cardWidth = slider.querySelector('article')?.offsetWidth ?? 0
-    slider.scrollBy({ left: -(cardWidth + 16), behavior: 'smooth' })
+  /** 터치 스와이프 지원 */
+  const touchStartX = useRef(0)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true)
+    touchStartX.current = e.touches[0].clientX
   }
-
-  const scrollRight = () => {
-    scrollByOneCard()
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goNext()
+      else goPrev()
+    }
+    setIsPaused(false)
   }
 
   return (
@@ -74,50 +153,62 @@ export function SocialProofSection() {
           </p>
         </header>
 
-        {/* 슬라이더 컨테이너 */}
-        <div className="relative">
+        {/* 슬라이더 + 화살표 컨테이너 */}
+        <div className="relative flex items-center gap-3 md:gap-5">
           {/* 좌측 화살표 (데스크톱 전용) */}
           <button
             type="button"
-            onClick={scrollLeft}
-            className="absolute -left-3 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-border bg-surface p-2 text-sub-text shadow-sm transition-colors hover:bg-background hover:text-main-text md:block"
+            onClick={goPrev}
+            className="hidden shrink-0 rounded-full border border-border bg-surface p-3 text-sub-text shadow-sm transition-colors hover:bg-background hover:text-main-text md:block"
             aria-label="이전 카드"
           >
             <ChevronLeftIcon />
           </button>
 
-          {/* 슬라이더 */}
+          {/* 슬라이더 뷰포트 */}
           <div
-            ref={sliderRef}
-            className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-1 py-2"
-            role="list"
-            aria-label="성지순례 인증 카드 목록"
+            className="min-w-0 flex-1 overflow-hidden"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={() => setIsPaused(true)}
-            onTouchEnd={() => setIsPaused(false)}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {PROOF_DUMMY_DATA.map((proof) => (
-              <div
-                key={proof.id}
-                className="w-[85vw] shrink-0 snap-start sm:w-64 md:w-72 [&>article]:w-full"
-                role="listitem"
-              >
-                <ProofCard
-                  categoryTag={proof.categoryTag}
-                  spotName={proof.spotName}
-                  comment={proof.comment}
-                  image={proof.image}
-                />
-              </div>
-            ))}
+            <div
+              ref={sliderRef}
+              className="flex gap-4"
+              role="list"
+              aria-label="성지순례 인증 카드 목록"
+              style={{
+                transform: `translateX(${getTranslateX(currentIndex)}px)`,
+                transition: isTransitioning
+                  ? `transform ${TRANSITION_DURATION}ms ease-in-out`
+                  : 'none',
+              }}
+              onTransitionEnd={handleTransitionEnd}
+            >
+              {extended.map((proof, i) => (
+                <div
+                  key={proof.id}
+                  data-card
+                  className="w-[85vw] shrink-0 sm:w-64 md:w-72 [&>article]:w-full"
+                  role="listitem"
+                >
+                  <ProofCard
+                    categoryTag={proof.categoryTag}
+                    spotName={proof.spotName}
+                    comment={proof.comment}
+                    image={proof.image}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* 우측 화살표 (데스크톱 전용) */}
           <button
             type="button"
-            onClick={scrollRight}
-            className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-border bg-surface p-2 text-sub-text shadow-sm transition-colors hover:bg-background hover:text-main-text md:block"
+            onClick={goNext}
+            className="hidden shrink-0 rounded-full border border-border bg-surface p-3 text-sub-text shadow-sm transition-colors hover:bg-background hover:text-main-text md:block"
             aria-label="다음 카드"
           >
             <ChevronRightIcon />
@@ -133,8 +224,8 @@ function ChevronLeftIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -153,8 +244,8 @@ function ChevronRightIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
