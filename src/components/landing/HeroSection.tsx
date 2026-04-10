@@ -1,0 +1,161 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import { CTAButton } from './CTAButton'
+import { GlobeFallback2D } from './GlobeFallback2D'
+import type { SpotCategory } from '@/types/spot'
+
+/**
+ * 히어로 섹션 컴포넌트
+ * 3D 지구본(또는 2D 폴백) + 가치 제안 카피 + CTA 버튼으로 구성
+ * Requirements: 1.1, 1.2, 1.5, 1.6, 6.4, 7.4
+ */
+
+export interface GlobeDataPoint {
+  lat: number
+  lng: number
+  label: string
+  category: SpotCategory
+}
+
+interface HeroSectionProps {
+  isHighEnd: boolean
+  reducedMotion: boolean
+}
+
+/** Globe3D를 dynamic import로 로드 (SSR 비활성화, 번들 분리) */
+const Globe3D = dynamic(() => import('./Globe3D').then((mod) => mod.Globe3D), {
+  ssr: false,
+  loading: () => (
+    <GlobeFallback2D className="h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80" />
+  ),
+})
+
+/** 더미 성지순례 포인트 데이터 */
+const GLOBE_DATA_POINTS: GlobeDataPoint[] = [
+  { lat: 35.6762, lng: 139.6503, label: '도쿄', category: 'animation' },
+  { lat: 34.6937, lng: 135.5023, label: '오사카', category: 'movie_drama' },
+  { lat: 37.5665, lng: 126.978, label: '서울', category: 'music' },
+  { lat: 35.0116, lng: 135.7681, label: '교토', category: 'animation' },
+  { lat: 43.0618, lng: 141.3545, label: '삿포로', category: 'sports' },
+  { lat: 33.5904, lng: 130.4017, label: '후쿠오카', category: 'game' },
+  { lat: 48.8566, lng: 2.3522, label: '파리', category: 'movie_drama' },
+  { lat: 51.5074, lng: -0.1278, label: '런던', category: 'sports' },
+]
+
+export function HeroSection({ isHighEnd, reducedMotion }: HeroSectionProps) {
+  return (
+    <section
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-16"
+      aria-label="히어로 섹션"
+    >
+      {/* 배경 그라데이션 */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary-50/30 via-transparent to-transparent dark:from-primary-900/20"
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-8 lg:flex-row lg:gap-12">
+        {/* 텍스트 + CTA 영역 */}
+        <header className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-left">
+          <h1 className="mb-4 text-3xl font-bold leading-tight text-main-text md:text-4xl lg:text-5xl">
+            관광지가 아닌
+            <br />
+            <span className="text-primary-500">성지</span>를 탐험하세요
+          </h1>
+          <p className="mb-8 max-w-md text-base text-sub-text md:text-lg">
+            애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등
+            <br className="hidden sm:block" />
+            팬들만 아는 특별한 여행지를 발견하세요.
+          </p>
+          <CTAButton label="지도 탐색하기" href="/map" size="lg" />
+        </header>
+
+        {/* 지구본 비주얼 영역 */}
+        <div className="relative flex flex-1 items-center justify-center">
+          {/* 마스코트 환영 인사 일러스트 */}
+          <div
+            className="absolute -bottom-4 -right-2 z-20 md:-bottom-6 md:-right-4 lg:-bottom-8 lg:-right-6"
+            aria-hidden="true"
+          >
+            <MascotWelcome />
+          </div>
+
+          {/* 3D/2D 지구본 분기 렌더링 */}
+          {isHighEnd && !reducedMotion ? (
+            <Globe3D
+              dataPoints={GLOBE_DATA_POINTS}
+              className="h-64 w-64 md:h-80 md:w-80 lg:h-96 lg:w-96"
+            />
+          ) : (
+            <GlobeFallback2D className="h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80" />
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * 마스코트 환영 인사 SVG 일러스트
+ * 실제 마스코트 에셋이 준비되면 Image 컴포넌트로 교체
+ */
+function MascotWelcome() {
+  return (
+    <svg
+      viewBox="0 0 80 80"
+      className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="환영하는 마스코트 캐릭터"
+    >
+      {/* 몸체 */}
+      <circle cx="40" cy="44" r="24" className="fill-secondary-200" />
+      {/* 얼굴 */}
+      <circle cx="40" cy="36" r="18" className="fill-secondary-100" />
+      {/* 눈 */}
+      <circle cx="34" cy="33" r="2.5" className="fill-neutral-700" />
+      <circle cx="46" cy="33" r="2.5" className="fill-neutral-700" />
+      {/* 볼 터치 */}
+      <circle cx="30" cy="38" r="3" className="fill-primary-200/60" />
+      <circle cx="50" cy="38" r="3" className="fill-primary-200/60" />
+      {/* 입 (미소) */}
+      <path
+        d="M36 40 Q40 44 44 40"
+        className="stroke-neutral-600"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* 손 흔들기 */}
+      <ellipse
+        cx="62"
+        cy="28"
+        rx="6"
+        ry="4"
+        className="fill-secondary-200"
+        transform="rotate(-20 62 28)"
+      />
+      {/* 말풍선 */}
+      <rect
+        x="52"
+        y="8"
+        width="26"
+        height="14"
+        rx="7"
+        className="fill-primary-100"
+      />
+      <text
+        x="65"
+        y="18"
+        textAnchor="middle"
+        className="fill-primary-600"
+        fontSize="7"
+        fontWeight="bold"
+      >
+        반가워!
+      </text>
+    </svg>
+  )
+}
