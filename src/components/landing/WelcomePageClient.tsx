@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { HeroSection } from './HeroSection'
+import { StorytellingSection } from './StorytellingSection'
 import { useDeviceCapability } from '@/hooks/useDeviceCapability'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 
@@ -31,6 +32,12 @@ export function WelcomePageClient() {
       )}
 
       {/* TODO: StorytellingSection */}
+      {isReady && (
+        <StorytellingSection
+          isHighEnd={isHighEnd}
+          reducedMotion={reducedMotion}
+        />
+      )}
       {/* TODO: SocialProofSection */}
       {/* TODO: ConversionSection */}
       {/* TODO: FloatingCTA */}
