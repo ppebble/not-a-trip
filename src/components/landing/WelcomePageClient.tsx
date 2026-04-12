@@ -1,20 +1,43 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { HeroSection } from './HeroSection'
 import { StorytellingSection } from './StorytellingSection'
 import { SocialProofSection } from './SocialProofSection'
+import { ConversionSection } from './ConversionSection'
+import { FloatingCTA } from './FloatingCTA'
 import { useDeviceCapability } from '@/hooks/useDeviceCapability'
+import { useScrollPosition } from '@/hooks/useScrollPosition'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
+import { usePwaStore } from '@/stores/pwaStore'
 
 /**
  * 랜딩 페이지 클라이언트 컴포넌트
- * 디바이스 능력 감지 후 각 섹션에 3D/2D 분기 props 전달
- * Requirements: 1.8, 1.9, 5.2, 5.3
+ * 모든 섹션을 통합하고 디바이스 능력/스크롤/모션 훅을 연결
+ * Requirements: 5.2, 5.3, 5.4, 6.1, 6.2, 6.3
  */
 export function WelcomePageClient() {
+  const router = useRouter()
   const { isHighEnd, isReady } = useDeviceCapability()
   const reducedMotion = usePrefersReducedMotion()
+
+  // 섹션 ref — useScrollPosition에 전달
+  const heroRef = useRef<HTMLElement>(null)
+  const conversionRef = useRef<HTMLElement>(null)
+
+  const { heroExited, conversionVisible } = useScrollPosition({
+    heroRef,
+    conversionRef,
+  })
+
+  // PWA standalone 모드 감지
+  const [isStandalone, setIsStandalone] = useState(false)
+  const triggerInstall = usePwaStore((s) => s.triggerInstall)
+
+  useEffect(() => {
+    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
+  }, [])
 
   /** 페이지 이탈 시에도 has_visited 쿠키 설정 */
   useEffect(() => {
@@ -23,13 +46,27 @@ export function WelcomePageClient() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [])
 
+  // FloatingCTA 핸들러
+  const handleInstallClick = async () => {
+    await triggerInstall()
+  }
+
+  const handleExploreClick = () => {
+    setHasVisitedCookie()
+    router.push('/map')
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* 디바이스 감지 완료 전 스켈레톤 */}
       {!isReady ? (
         <HeroSkeleton />
       ) : (
-        <HeroSection isHighEnd={isHighEnd} reducedMotion={reducedMotion} />
+        <HeroSection
+          ref={heroRef}
+          isHighEnd={isHighEnd}
+          reducedMotion={reducedMotion}
+        />
       )}
 
       {/* StorytellingSection — 카테고리 스토리텔링 */}
@@ -39,10 +76,20 @@ export function WelcomePageClient() {
           reducedMotion={reducedMotion}
         />
       )}
+
       {/* SocialProofSection — 자동 스크롤 슬라이더 */}
       <SocialProofSection />
-      {/* TODO: ConversionSection */}
-      {/* TODO: FloatingCTA */}
+
+      {/* ConversionSection — PWA 설치 유도 전환 영역 */}
+      <ConversionSection ref={conversionRef} isStandalone={isStandalone} />
+
+      {/* FloatingCTA — Hero 이탈 후 ~ Conversion 진입 전 표시 */}
+      <FloatingCTA
+        visible={heroExited && !conversionVisible}
+        isStandalone={isStandalone}
+        onInstallClick={handleInstallClick}
+        onExploreClick={handleExploreClick}
+      />
     </div>
   )
 }
