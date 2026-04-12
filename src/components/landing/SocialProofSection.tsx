@@ -100,15 +100,17 @@ export function SocialProofSection() {
 
   /** 다음 카드로 이동 */
   const goNext = useCallback(() => {
+    if (isTransitioning) return // transition 중 클릭 무시
     setIsTransitioning(true)
     setCurrentIndex((prev) => prev + 1)
-  }, [])
+  }, [isTransitioning])
 
   /** 이전 카드로 이동 */
   const goPrev = useCallback(() => {
+    if (isTransitioning) return // transition 중 클릭 무시
     setIsTransitioning(true)
     setCurrentIndex((prev) => prev - 1)
-  }, [])
+  }, [isTransitioning])
 
   /** transition 종료 감지 → 클론 점프 트리거 */
   const handleTransitionEnd = useCallback(() => {
