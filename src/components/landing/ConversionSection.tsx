@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 import { usePwaStore } from '@/stores/pwaStore'
 import { CTAButton } from './CTAButton'
 
@@ -21,8 +21,16 @@ export const ConversionSection = forwardRef<
   ConversionSectionProps
 >(function ConversionSection({ isStandalone }, ref) {
   const triggerInstall = usePwaStore((s) => s.triggerInstall)
+  const isInstallable = usePwaStore((s) => s.isInstallable)
+  const [showFallbackMsg, setShowFallbackMsg] = useState(false)
 
   const handleInstall = async () => {
+    if (!isInstallable) {
+      // 설치 프롬프트 미지원 시 안내 메시지 표시
+      setShowFallbackMsg(true)
+      setTimeout(() => setShowFallbackMsg(false), 4000)
+      return
+    }
     await triggerInstall()
   }
 
@@ -60,6 +68,11 @@ export const ConversionSection = forwardRef<
             >
               🛂 여권 발급받기 (앱 설치)
             </button>
+          )}
+          {showFallbackMsg && (
+            <p className="animate-fade-slide-in text-sm text-sub-text">
+              브라우저 메뉴에서 &quot;홈 화면에 추가&quot;로 설치할 수 있어요
+            </p>
           )}
           <CTAButton
             label="지도 탐색하기"

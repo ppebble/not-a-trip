@@ -34,6 +34,7 @@ export function WelcomePageClient() {
   // PWA standalone 모드 감지
   const [isStandalone, setIsStandalone] = useState(false)
   const triggerInstall = usePwaStore((s) => s.triggerInstall)
+  const isInstallable = usePwaStore((s) => s.isInstallable)
 
   useEffect(() => {
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
@@ -48,6 +49,11 @@ export function WelcomePageClient() {
 
   // FloatingCTA 핸들러
   const handleInstallClick = async () => {
+    if (!isInstallable) {
+      // 설치 프롬프트 미지원 시 ConversionSection으로 스크롤
+      conversionRef.current?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
     await triggerInstall()
   }
 
