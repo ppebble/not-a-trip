@@ -4,7 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { GlobeFallback2D } from '@/components/landing/GlobeFallback2D'
 import { GLOBE_CONFIG } from '@/components/landing/Globe3D'
-import type { GlobeDataPoint } from '@/components/landing/HeroSection'
+import type { GlobeDataPoint } from '@/components/landing/data/globeData'
 
 const Globe3D = dynamic(
   () =>
