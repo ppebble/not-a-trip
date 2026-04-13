@@ -3,7 +3,7 @@ import type { SpotCategory } from '@/types/spot'
 /**
  * 소셜 프루프 실제 데이터
  * 웹 검색으로 검증된 실제 성지순례/팬 방문 명소 기반
- * 6개 카테고리 각 최소 2개, 총 15개 카드
+ * 6개 카테고리 각 최소 2개, 총 23개 카드
  * Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 7.3
  */
 
@@ -151,5 +151,77 @@ export const PROOF_DUMMY_DATA: ProofData[] = [
       '오타쿠 문화의 중심지, 피규어샵과 메이드카페가 즐비한 거리를 걷는 것만으로도 행복해요',
     image: '/icons/categories/other.webp', // TODO: 실제 스팟 사진으로 교체
     sceneImage: '/icons/categories/other.webp', // TODO: 아키하바라 관련 장면으로 교체
+  },
+  {
+    id: '16',
+    categoryTag: 'animation',
+    spotName: '스가 신사 계단',
+    comment:
+      '너의 이름은 마지막 장면의 그 계단! 요츠야역에서 걸어가면 포스터 속 풍경이 그대로예요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 너의 이름은 계단 장면으로 교체
+  },
+  {
+    id: '17',
+    categoryTag: 'animation',
+    spotName: '하코네 유모토',
+    comment:
+      '에반게리온의 제3신도쿄시 모델, 온천 마을 곳곳에 에바 콜라보가 숨어있어요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 에반게리온 하코네 장면으로 교체
+  },
+  {
+    id: '18',
+    categoryTag: 'animation',
+    spotName: '시부야 스크램블 교차로',
+    comment:
+      '주술회전 시부야 사변의 무대, 하치코 앞에서 고죠 사토루를 떠올리며 사진 찍었어요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 주술회전 시부야 장면으로 교체
+  },
+  {
+    id: '19',
+    categoryTag: 'animation',
+    spotName: '구마모토현 루피 동상',
+    comment:
+      '원피스 작가 오다 에이이치로의 고향, 밀짚모자 해적단 동상 10개를 찾아다니는 재미가 있어요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 원피스 루피 장면으로 교체
+  },
+  {
+    id: '20',
+    categoryTag: 'animation',
+    spotName: '히타시 오야마댐',
+    comment:
+      '진격의 거인 작가 이사야마 하지메의 고향, 댐 앞 에렌·미카사·아르민 동상이 압도적이에요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 진격의 거인 장면으로 교체
+  },
+  {
+    id: '21',
+    categoryTag: 'animation',
+    spotName: '지우펀 올드 스트리트',
+    comment:
+      '센과 치히로의 행방불명 분위기 그대로, 홍등이 켜진 골목을 걸으면 유바바의 목욕탕이 떠올라요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 센과 치히로 장면으로 교체
+  },
+  {
+    id: '22',
+    categoryTag: 'animation',
+    spotName: '모토스코 캠프장',
+    comment:
+      '유루캠 1화의 그 캠프장! 후지산을 바라보며 컵라면 먹는 린의 기분을 직접 느낄 수 있어요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 유루캠 후지산 장면으로 교체
+  },
+  {
+    id: '23',
+    categoryTag: 'animation',
+    spotName: '메이지무라 박물관',
+    comment:
+      '귀멸의 칼날 나비저택의 모델, 다이쇼 시대 건축물이 그대로 보존되어 있어 팬이라면 감동이에요',
+    image: '/icons/categories/animation.webp', // TODO: 실제 스팟 사진으로 교체
+    sceneImage: '/icons/categories/animation.webp', // TODO: 귀멸의 칼날 나비저택 장면으로 교체
   },
 ]
