@@ -200,6 +200,7 @@ export function SocialProofSection() {
                     spotName={proof.spotName}
                     comment={proof.comment}
                     image={proof.image}
+                    sceneImage={proof.sceneImage}
                   />
                 </div>
               ))}
