@@ -229,9 +229,8 @@ function useGSAPAnimation(
         })
 
         isLoadedRef.current = true
-      } catch (error) {
-        console.warn('GSAP 로드 실패, CSS 폴백 적용:', error)
-        // GSAP 로드 실패 시 카드를 보이게 처리
+      } catch {
+        // GSAP 로드 실패 시 CSS 폴백만 적용 (에러 로깅 필요 시 Sentry 사용)
         if (containerRef.current) {
           containerRef.current
             .querySelectorAll<HTMLElement>('.gsap-card')

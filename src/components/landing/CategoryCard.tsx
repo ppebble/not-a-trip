@@ -5,10 +5,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { SpotCategory } from '@/types/spot'
 
+/** 카테고리별 이모지 매핑 — mascotProp 이미지 로드 실패 시 폴백 */
+const CATEGORY_EMOJI: Record<SpotCategory, string> = {
+  animation: '🎬',
+  sports: '⚽',
+  movie_drama: '🎥',
+  music: '🎵',
+  game: '🎮',
+  other: '📍',
+}
+
 /**
  * 카테고리 카드 컴포넌트
  * 스토리텔링 섹션에서 각 카테고리를 소개하는 카드
- * Requirements: 2.4, 2.5, 2.6, 2.7, 2.8
+ * Requirements: 2.4, 2.5, 2.6, 2.7, 2.8, 3.4
  */
 
 interface CategoryCardProps {
@@ -52,6 +62,7 @@ export function CategoryCard({
   reducedMotion,
 }: CategoryCardProps) {
   const [imageError, setImageError] = useState(false)
+  const [mascotError, setMascotError] = useState(false)
 
   const cardStyles = getCategoryStyles(colorToken)
   const accentStyles = getCategoryAccentStyle(colorToken)
@@ -96,14 +107,25 @@ export function CategoryCard({
       <div className="flex flex-1 flex-col gap-3 p-4 md:p-5">
         {/* 마스코트 소품 + 제목 */}
         <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg">
-            <Image
-              src={mascotProp}
-              alt={`${title} 카테고리 아이콘`}
-              fill
-              className="object-contain"
-              sizes="40px"
-            />
+          <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg">
+            {!mascotError ? (
+              <Image
+                src={mascotProp}
+                alt={`${title} 카테고리 아이콘`}
+                fill
+                className="object-contain"
+                sizes="40px"
+                onError={() => setMascotError(true)}
+              />
+            ) : (
+              <span
+                className="text-lg"
+                role="img"
+                aria-label={`${title} 아이콘`}
+              >
+                {CATEGORY_EMOJI[category]}
+              </span>
+            )}
           </div>
           <h3 className="text-lg font-bold md:text-xl" style={accentStyles}>
             {title}
