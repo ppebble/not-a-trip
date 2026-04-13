@@ -49,7 +49,7 @@ export function Header() {
             스팟 등록
           </Link>
           <Link
-            href="/test/error-boundary"
+            href="/test/globe-fallback"
             className="text-sm text-yellow-400 transition hover:text-yellow-300"
           >
             🧪 테스트
@@ -185,7 +185,7 @@ export function Header() {
               스팟 등록
             </Link>
             <Link
-              href="/test/error-boundary"
+              href="/test/globe-fallback"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block rounded-lg px-3 py-2 text-sm text-yellow-400 transition hover:bg-secondary-100 hover:text-yellow-300"
             >
