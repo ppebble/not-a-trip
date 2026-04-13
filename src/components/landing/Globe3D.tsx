@@ -22,12 +22,22 @@ interface Globe3DProps {
   className?: string
 }
 
-const GLOBE_RADIUS = 1.8
-const AUTO_ROTATE_SPEED = 0.003
-const RESUME_DELAY = 100
-const DRAG_SENSITIVITY = 0.008
-/** 노드 간 최소 거리 (분산 알고리즘 임계값) */
-const MIN_NODE_DISTANCE = 0.35
+/**
+ * Globe3D 설정 객체 — 기존 매직 넘버 5개를 통합
+ * Requirements: 1.2, 1.3
+ */
+export const GLOBE_CONFIG = Object.freeze({
+  /** 지구본 반지름 (Three.js 단위) */
+  radius: 1.8,
+  /** 자동 회전 속도 (라디안/프레임) */
+  autoRotateSpeed: 0.003,
+  /** 드래그 종료 후 자동 회전 재개까지 대기 시간 (ms) */
+  resumeDelay: 100,
+  /** 드래그 감도 (포인터 이동 px → 회전 라디안 변환 계수) */
+  dragSensitivity: 0.008,
+  /** 노드 분산 알고리즘의 최소 노드 간 거리 (Three.js 단위) */
+  minNodeDistance: 0.35,
+} as const)
 
 /** 카테고리별 색상 */
 const CATEGORY_COLORS: Record<string, string> = {
@@ -64,7 +74,7 @@ function disperseNodes(
   iterations: number = 10
 ): THREE.Vector3[] {
   const dispersed = positions.map((p) => p.clone())
-  const radius = GLOBE_RADIUS + 0.02
+  const radius = GLOBE_CONFIG.radius + 0.02
 
   for (let iter = 0; iter < iterations; iter++) {
     for (let i = 0; i < dispersed.length; i++) {
@@ -114,8 +124,8 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
     if (!isDragging.current || !groupRef.current) return
     const dx = e.clientX - previousPointer.current.x
     const dy = e.clientY - previousPointer.current.y
-    groupRef.current.rotation.y += dx * DRAG_SENSITIVITY
-    groupRef.current.rotation.x += dy * DRAG_SENSITIVITY
+    groupRef.current.rotation.y += dx * GLOBE_CONFIG.dragSensitivity
+    groupRef.current.rotation.x += dy * GLOBE_CONFIG.dragSensitivity
     groupRef.current.rotation.x = THREE.MathUtils.clamp(
       groupRef.current.rotation.x,
       -Math.PI / 3,
@@ -128,7 +138,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
     isDragging.current = false
     resumeTimer.current = setTimeout(() => {
       autoRotateActive.current = true
-    }, RESUME_DELAY)
+    }, GLOBE_CONFIG.resumeDelay)
   }, [])
 
   useMemo(() => {
@@ -153,7 +163,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
       !isDragging.current &&
       !pinHoveredRef.current
     ) {
-      groupRef.current.rotation.y += AUTO_ROTATE_SPEED
+      groupRef.current.rotation.y += GLOBE_CONFIG.autoRotateSpeed
     }
     gl.domElement.style.cursor = isDragging.current ? 'grabbing' : 'grab'
   })
@@ -161,9 +171,9 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
   // 노드 좌표 계산 + 분산 알고리즘 적용
   const nodes = useMemo(() => {
     const rawPositions = dataPoints.map((dp) =>
-      latLngToVector3(dp.lat, dp.lng, GLOBE_RADIUS + 0.02)
+      latLngToVector3(dp.lat, dp.lng, GLOBE_CONFIG.radius + 0.02)
     )
-    const dispersed = disperseNodes(rawPositions, MIN_NODE_DISTANCE)
+    const dispersed = disperseNodes(rawPositions, GLOBE_CONFIG.minNodeDistance)
     return dataPoints.map((dp, i) => ({
       ...dp,
       position: dispersed[i],
@@ -175,7 +185,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
     <group ref={groupRef}>
       {/* 지구본 본체 — meshPhysicalMaterial 솔리드 */}
       <mesh>
-        <sphereGeometry args={[GLOBE_RADIUS, 64, 64]} />
+        <sphereGeometry args={[GLOBE_CONFIG.radius, 64, 64]} />
         <meshPhysicalMaterial
           color="#e5e7eb"
           roughness={0.4}
@@ -189,7 +199,7 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
 
       {/* 와이어프레임 격자 (미세한 경위선) */}
       <mesh>
-        <sphereGeometry args={[GLOBE_RADIUS + 0.003, 24, 24]} />
+        <sphereGeometry args={[GLOBE_CONFIG.radius + 0.003, 24, 24]} />
         <meshBasicMaterial
           color="#94a3b8"
           wireframe
@@ -218,7 +228,11 @@ function GlobeMesh({ dataPoints }: { dataPoints: GlobeDataPoint[] }) {
 
       {/* 마스코트 3D 모델 (별도 Suspense로 지구본 먼저 표시) */}
       <Suspense fallback={null}>
-        <MascotWalker globeRadius={GLOBE_RADIUS} latitude={15} scale={0.35} />
+        <MascotWalker
+          globeRadius={GLOBE_CONFIG.radius}
+          latitude={15}
+          scale={0.35}
+        />
       </Suspense>
     </group>
   )
@@ -335,7 +349,7 @@ function GlobeGlow() {
   })
   return (
     <mesh ref={meshRef}>
-      <sphereGeometry args={[GLOBE_RADIUS + 0.06, 32, 32]} />
+      <sphereGeometry args={[GLOBE_CONFIG.radius + 0.06, 32, 32]} />
       <meshBasicMaterial color="#7CB9E8" transparent opacity={0.06} />
     </mesh>
   )
@@ -406,7 +420,7 @@ class ErrorBoundaryFallback extends Component<
     this.props.onError()
   }
   render() {
-    if (this.state.hasError) return null
+    if (this.state.hasError) return <GlobeFallback2D />
     return this.props.children
   }
 }
