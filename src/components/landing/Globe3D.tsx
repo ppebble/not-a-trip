@@ -6,7 +6,7 @@ import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { GlobeFallback2D } from './GlobeFallback2D'
 import { MascotWalker } from './MascotWalker'
-import type { GlobeDataPoint } from './HeroSection'
+import type { GlobeDataPoint } from './data/globeData'
 
 /**
  * 3D 지구본 컴포넌트 (globe.md 설계서 기반)
