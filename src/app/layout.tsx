@@ -9,6 +9,7 @@ import {
   InstallPromptListener,
   InstallBottomSheet,
   InstallToast,
+  IosPwaGuide,
 } from '@/components/pwa'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
@@ -81,6 +82,7 @@ export default function RootLayout({
           <InstallPromptListener />
           <InstallBottomSheet />
           <InstallToast />
+          <IosPwaGuide />
           <SerwistRegistration />
         </Providers>
       </body>
