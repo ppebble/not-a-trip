@@ -22,49 +22,55 @@ export const CATEGORY_STORIES: CategoryStoryConfig[] = [
   {
     category: 'animation',
     title: '애니메이션 성지순례',
-    description: '좋아하는 작품 속 그 장소를 직접 걸어보세요',
-    mascotProp: '/icons/categories/animation.webp',
-    spotImage: '/icons/categories/animation.webp',
+    description:
+      '슬램덩크의 가마쿠라 건널목, 스즈미야 하루히의 니시노미야를 직접 걸어보세요',
+    mascotProp: '/icons/categories/animation.webp', // TODO: 실제 마스코트 소품 이미지로 교체
+    spotImage: '/icons/categories/animation.webp', // TODO: 실제 대표 스팟 이미지로 교체
     colorToken: 'category-anime',
   },
   {
     category: 'sports',
     title: '스포츠 직관 여행',
-    description: '경기장의 열기를 현장에서 느껴보세요',
-    mascotProp: '/icons/categories/sports.webp',
-    spotImage: '/icons/categories/sports.webp',
+    description:
+      '캄프 노우의 함성, 웸블리 스타디움의 열기를 현장에서 느껴보세요',
+    mascotProp: '/icons/categories/sports.webp', // TODO: 실제 마스코트 소품 이미지로 교체
+    spotImage: '/icons/categories/sports.webp', // TODO: 실제 대표 스팟 이미지로 교체
     colorToken: 'category-sports',
   },
   {
     category: 'movie_drama',
     title: '영화/드라마 촬영지',
-    description: '스크린 속 그 장면, 직접 서보세요',
-    mascotProp: '/icons/categories/movie_drama.webp',
-    spotImage: '/icons/categories/movie_drama.webp',
+    description:
+      '해리 포터의 킹스크로스역, 도깨비의 주문진 방파제에 직접 서보세요',
+    mascotProp: '/icons/categories/movie_drama.webp', // TODO: 실제 마스코트 소품 이미지로 교체
+    spotImage: '/icons/categories/movie_drama.webp', // TODO: 실제 대표 스팟 이미지로 교체
     colorToken: 'category-movie-drama',
   },
   {
     category: 'music',
     title: '음악/콘서트 장소',
-    description: '아티스트의 무대를 직접 찾아가 보세요',
-    mascotProp: '/icons/categories/music.webp',
-    spotImage: '/icons/categories/music.webp',
+    description:
+      '비틀즈의 캐번 클럽, 런던 애비 로드 횡단보도를 직접 찾아가 보세요',
+    mascotProp: '/icons/categories/music.webp', // TODO: 실제 마스코트 소품 이미지로 교체
+    spotImage: '/icons/categories/music.webp', // TODO: 실제 대표 스팟 이미지로 교체
     colorToken: 'category-music',
   },
   {
     category: 'game',
     title: '게임 속 세계',
-    description: '게임 속 배경이 된 실제 장소를 탐험하세요',
-    mascotProp: '/icons/categories/game.webp',
-    spotImage: '/icons/categories/game.webp',
+    description:
+      '용과 같이의 가부키초, 어쌔신 크리드의 피렌체를 실제로 탐험하세요',
+    mascotProp: '/icons/categories/game.webp', // TODO: 실제 마스코트 소품 이미지로 교체
+    spotImage: '/icons/categories/game.webp', // TODO: 실제 대표 스팟 이미지로 교체
     colorToken: 'category-game',
   },
   {
     category: 'other',
     title: '특별한 장소',
-    description: '팬들만 아는 숨겨진 명소를 발견하세요',
-    mascotProp: '/icons/categories/other.webp',
-    spotImage: '/icons/categories/other.webp',
+    description:
+      '셜록 홈즈의 베이커가 221B, 엘비스의 그레이스랜드 같은 숨겨진 명소를 발견하세요',
+    mascotProp: '/icons/categories/other.webp', // TODO: 실제 마스코트 소품 이미지로 교체
+    spotImage: '/icons/categories/other.webp', // TODO: 실제 대표 스팟 이미지로 교체
     colorToken: 'category-other',
   },
 ]
