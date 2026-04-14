@@ -28,6 +28,7 @@
     "@tanstack/react-query": "^5.90.14",
     "bcryptjs": "^3.0.3",
     "browser-image-compression": "^2.0.2",
+    "duckduckgo-images-api": "^1.0.5",
     "gsap": "^3.14.2",
     "leaflet": "^1.9.4",
     "mongodb": "^7.0.0",
