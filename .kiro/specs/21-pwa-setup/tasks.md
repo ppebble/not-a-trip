@@ -57,7 +57,7 @@
   - `npm run type-check` 및 `npm run build` 실행하여 Serwist 통합, 타입 선언, 레거시 파일 삭제 후 빌드가 정상 동작하는지 확인
   - Ensure all tests pass, ask the user if questions arise.
 
-- [-] 4. pwaStore 및 설치 이벤트 리스너 구현
+- [x] 4. pwaStore 및 설치 이벤트 리스너 구현
   - [x] 4.1 pwaStore Zustand 스토어 생성
     - `src/stores/pwaStore.ts` 파일 생성
     - `PwaState` 인터페이스 구현: deferredPrompt, isInstallable, isInstalled, isDismissed
@@ -87,8 +87,8 @@
     - `src/app/layout.tsx`의 Providers 내부에 `<InstallPromptListener />` 주입
     - _Requirements: 5.1, 5.8_
 
-- [ ] 5. 오프라인 폴백 페이지 구현
-  - [ ] 5.1 /offline 페이지 구현
+- [x] 5. 오프라인 폴백 페이지 구현
+  - [x] 5.1 /offline 페이지 구현
     - `src/app/offline/page.tsx` 생성
     - "네트워크가 연결되지 않았습니다" 문구 표시
     - 마스코트 일러스트(캐릭터정면1.webp) 표시
@@ -97,8 +97,8 @@
     - Tailwind CSS 및 Semantic Color 토큰 적용
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.6, 4.7_
 
-- [ ] 6. 커스텀 앱 설치 UI 구현
-  - [ ] 6.1 InstallBottomSheet 컴포넌트 구현 (모바일)
+- [x] 6. 커스텀 앱 설치 UI 구현
+  - [x] 6.1 InstallBottomSheet 컴포넌트 구현 (모바일)
     - `src/components/pwa/InstallBottomSheet.tsx` 생성 ('use client')
     - mounted 상태 패턴으로 Hydration 에러 방지 (SSR 시 null 반환)
     - `window.matchMedia('(max-width: 767px)')` 체크로 모바일에서만 표시
@@ -110,7 +110,7 @@
     - `src/components/pwa/index.ts`에 export 추가
     - _Requirements: 5.3, 5.4, 5.5, 5.7, 5.8, 5.9_
 
-  - [ ] 6.2 InstallToast 컴포넌트 구현 (데스크탑)
+  - [x] 6.2 InstallToast 컴포넌트 구현 (데스크탑)
     - `src/components/pwa/InstallToast.tsx` 생성 ('use client')
     - mounted 상태 패턴으로 Hydration 에러 방지
     - `window.matchMedia('(min-width: 768px)')` 체크로 데스크탑에서만 표시
@@ -120,7 +120,7 @@
     - `src/components/pwa/index.ts`에 export 추가
     - _Requirements: 5.3, 5.8, 5.9_
 
-  - [ ] 6.3 설치 UI를 layout.tsx에 통합
+  - [x] 6.3 설치 UI를 layout.tsx에 통합
     - `src/app/layout.tsx`의 Providers 내부에 `<InstallBottomSheet />`, `<InstallToast />` 주입
     - _Requirements: 5.3_
 
@@ -129,13 +129,13 @@
     - standalone 모드 활성화 시 InstallBottomSheet, InstallToast가 null 반환 검증
     - **Validates: Requirements 5.8, 6.7**
 
-- [ ] 7. 체크포인트 - 설치 UI 검증
+- [-] 7. 체크포인트 - 설치 UI 검증
   - `npm run type-check` 및 `npm run build` 실행
   - pwaStore, InstallPromptListener, InstallBottomSheet, InstallToast 통합 확인
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 8. iOS Safari 대응 전략 구현
-  - [ ] 8.1 IosPwaGuide 컴포넌트 구현
+- [-] 8. iOS Safari 대응 전략 구현
+  - [-] 8.1 IosPwaGuide 컴포넌트 구현
     - `src/components/pwa/IosPwaGuide.tsx` 생성 ('use client')
     - User-Agent 분석으로 iOS Safari 감지 (`iphone`, `ipad`, `ipod` 키워드)
     - standalone 모드가 아닌 경우에만 표시
