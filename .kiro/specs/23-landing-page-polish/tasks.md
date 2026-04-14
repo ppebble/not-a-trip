@@ -46,7 +46,7 @@
     - 테스트 파일: `src/components/landing/__tests__/StorytellingSection.test.tsx`, `src/components/landing/__tests__/CategoryCard.test.tsx`
     - _Requirements: 2.1, 2.2, 3.4_
 
-- [ ] 3. 체크포인트 — 코드 품질 개선 검증
+- [x] 3. 체크포인트 — 코드 품질 개선 검증
   - `npm run type-check` 및 `npm run build` 통과 확인
   - 모든 테스트 통과 확인, 문제 발생 시 사용자에게 문의
 
@@ -92,8 +92,8 @@
     - 테스트 파일: `src/components/landing/__tests__/data/proofData.test.ts`
     - _Requirements: 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 6. 카테고리 스토리 description 실제 스팟 이름 포함으로 교체
-  - [ ] 6.1 categoryStories.ts description 교체 및 TODO 주석 추가
+- [x] 6. 카테고리 스토리 description 실제 스팟 이름 포함으로 교체
+  - [x] 6.1 categoryStories.ts description 교체 및 TODO 주석 추가
     - 웹 검색으로 각 카테고리의 대표 성지순례 명소 확인
     - 각 카테고리 description에 실제 유명 스팟 이름 1~2개 포함하는 구체적 문장으로 교체
     - title은 현재 값 유지
@@ -106,7 +106,7 @@
     - 테스트 파일: `src/components/landing/__tests__/data/categoryStories.test.ts`
     - _Requirements: 6.1, 6.3_
 
-- [ ] 7. 최종 체크포인트 — 전체 검증
+- [x] 7. 최종 체크포인트 — 전체 검증
   - `npm run type-check` 및 `npm run build` 통과 확인
   - 모든 테스트 통과 확인, 문제 발생 시 사용자에게 문의
 
