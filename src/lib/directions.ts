@@ -2,8 +2,29 @@
  * 길찾기 딥링크 유틸리티
  * 플랫폼별 지도 앱 딥링크 URL 생성
  *
- * @requirements 2.3
+ * @requirements 1.1, 1.2, 1.3, 1.4, 2.3
  */
+
+/** 대한민국 좌표 경계 */
+const KOREA_BOUNDARY = {
+  lat: { min: 33.0, max: 38.7 },
+  lng: { min: 124.5, max: 132.0 },
+} as const
+
+/**
+ * 좌표가 대한민국 영토 범위 내인지 판별
+ * @param lat 위도
+ * @param lng 경도
+ * @returns 국내 좌표 여부
+ */
+export function isKoreanCoordinates(lat: number, lng: number): boolean {
+  return (
+    lat >= KOREA_BOUNDARY.lat.min &&
+    lat <= KOREA_BOUNDARY.lat.max &&
+    lng >= KOREA_BOUNDARY.lng.min &&
+    lng <= KOREA_BOUNDARY.lng.max
+  )
+}
 
 export interface Coordinates {
   lat: number
