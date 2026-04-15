@@ -1,0 +1,15 @@
+{
+  "name": "agent-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Gemini API 기반 MCP 서버 — Kiro에서 AI 에이전트 도구로 사용",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "dotenv": "^17.4.2"
+  }
+}
