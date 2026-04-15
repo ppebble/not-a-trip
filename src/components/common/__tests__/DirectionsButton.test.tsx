@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+/// <reference types="@testing-library/jest-dom" />
 import { render, screen, fireEvent } from '@testing-library/react'
 import DirectionsButton from '../DirectionsButton'
 
