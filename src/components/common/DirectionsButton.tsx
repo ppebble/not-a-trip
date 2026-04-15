@@ -5,6 +5,7 @@ import {
   generateDirectionsUrls,
   detectPlatform,
   openDirections,
+  isKoreanCoordinates,
   type DirectionsUrls,
 } from '@/lib/directions'
 import { AppIcon } from '@/components/common/AppIcon'
@@ -72,6 +73,8 @@ export default function DirectionsButton({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
 
+  const isDomestic = isKoreanCoordinates(lat, lng)
+
   const availableApps = MAP_APPS.filter(
     (app) => !app.platforms || app.platforms.includes(platform)
   )
@@ -80,6 +83,14 @@ export default function DirectionsButton({
     destination: { lat, lng },
     destinationName,
   })
+
+  const handleClick = useCallback(() => {
+    if (isDomestic) {
+      setIsOpen((prev) => !prev)
+    } else {
+      openDirections(urls.google)
+    }
+  }, [isDomestic, urls.google])
 
   const handleSelect = useCallback(
     (key: keyof DirectionsUrls) => {
@@ -92,11 +103,13 @@ export default function DirectionsButton({
   return (
     <div className="relative" ref={modalRef}>
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleClick}
         className={`flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 active:bg-primary-800 ${className}`}
         aria-label="길찾기"
-        aria-expanded={isOpen}
-        aria-haspopup="true"
+        {...(isDomestic && {
+          'aria-expanded': isOpen,
+          'aria-haspopup': 'true' as const,
+        })}
       >
         <svg
           className="h-4 w-4"
@@ -120,7 +133,7 @@ export default function DirectionsButton({
         길찾기
       </button>
 
-      {isOpen && (
+      {isOpen && isDomestic && (
         <div
           className="absolute bottom-full left-0 z-50 mb-2 w-48 overflow-hidden rounded-lg bg-surface shadow-lg ring-1 ring-black/5"
           role="menu"
