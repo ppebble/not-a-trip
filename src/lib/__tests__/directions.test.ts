@@ -53,6 +53,33 @@ describe('Feature: navigation-google-maps-default', () => {
     })
   })
 
+  describe('Edge cases: 도서 지역 및 인접 해외 좌표', () => {
+    /**
+     * **Validates: Requirements 4.1, 4.2, 4.3**
+     *
+     * 바운딩 박스 방식의 한계로 인해 후쿠오카/쓰시마는
+     * 경계 범위 내에 포함되어 국내로 분류됨 (known limitation)
+     */
+
+    it('제주도 (33.4, 126.5) → 국내 분류', () => {
+      expect(isKoreanCoordinates(33.4, 126.5)).toBe(true)
+    })
+
+    it('울릉도 (37.5, 130.9) → 국내 분류', () => {
+      expect(isKoreanCoordinates(37.5, 130.9)).toBe(true)
+    })
+
+    it('후쿠오카 (33.6, 130.4) → 바운딩 박스 내 포함 (국내 분류)', () => {
+      // 지리적으로는 해외이나, 바운딩 박스 범위 내에 포함됨
+      expect(isKoreanCoordinates(33.6, 130.4)).toBe(true)
+    })
+
+    it('쓰시마 (34.4, 129.3) → 바운딩 박스 내 포함 (국내 분류)', () => {
+      // 지리적으로는 해외이나, 바운딩 박스 범위 내에 포함됨
+      expect(isKoreanCoordinates(34.4, 129.3)).toBe(true)
+    })
+  })
+
   describe('Property 2: Google Maps URL contains coordinates', () => {
     /**
      * **Validates: Requirements 2.2**
