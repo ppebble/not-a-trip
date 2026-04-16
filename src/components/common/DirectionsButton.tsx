@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import {
   generateDirectionsUrls,
   detectPlatform,
@@ -32,8 +33,25 @@ const MAP_APPS: MapAppOption[] = [
     icon: <AppIcon name="map" size={18} />,
   },
   { key: 'apple', label: 'Apple Maps', icon: '🍎', platforms: ['ios'] },
-  { key: 'kakao', label: '카카오맵', icon: '🟡' },
-  { key: 'naver', label: '네이버 지도', icon: '🟢' },
+  {
+    key: 'kakao',
+    label: '카카오맵',
+    icon: (
+      <Image src="/icons/kakao-map.png" alt="카카오맵" width={18} height={18} />
+    ),
+  },
+  {
+    key: 'naver',
+    label: '네이버 지도',
+    icon: (
+      <Image
+        src="/icons/naver-map.png"
+        alt="네이버 지도"
+        width={18}
+        height={18}
+      />
+    ),
+  },
 ]
 
 /**
