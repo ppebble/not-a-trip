@@ -1,8 +1,8 @@
 /**
- * 길찾기 딥링크 유틸리티
- * 플랫폼별 지도 앱 딥링크 URL 생성
+ * 길찾기 URL 유틸리티
+ * 플랫폼별 지도 앱 웹 URL 생성
  *
- * @requirements 1.1, 1.2, 1.3, 1.4, 2.3
+ * @requirements 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 6.1, 6.2
  */
 
 /** 대한민국 좌표 경계 */
@@ -48,13 +48,13 @@ export interface DirectionsUrls {
 }
 
 /**
- * 길찾기 딥링크 URL 생성 함수
+ * 길찾기 URL 생성 함수
  *
- * 각 플랫폼의 Universal Link / Deep Link 표준 포맷 사용:
+ * 각 플랫폼의 웹 URL / URL Scheme 사용:
  * - Google Maps: Universal Link (https://www.google.com/maps/dir/)
  * - Apple Maps: URL Scheme (maps://)
- * - Kakao Map: URL Scheme (kakaomap://)
- * - Naver Map: URL Scheme (nmap://)
+ * - Kakao Map: 웹 URL (https://map.kakao.com/link/to/)
+ * - Naver Map: 웹 URL (https://map.naver.com/v5/directions/)
  */
 export function generateDirectionsUrls(
   options: DirectionsOptions
@@ -65,8 +65,8 @@ export function generateDirectionsUrls(
   return {
     google: `https://www.google.com/maps/dir/?api=1&destination=${destination.lat},${destination.lng}`,
     apple: `maps://maps.apple.com/?daddr=${destination.lat},${destination.lng}&dirflg=w`,
-    kakao: `kakaomap://route?ep=${destination.lat},${destination.lng}&by=FOOT`,
-    naver: `nmap://route/walk?dlat=${destination.lat}&dlng=${destination.lng}&dname=${encodedName}&appname=com.notatrip`,
+    kakao: `https://map.kakao.com/link/to/${encodedName},${destination.lat},${destination.lng}`,
+    naver: `https://map.naver.com/v5/directions/-/-/-/walk?c=${destination.lng},${destination.lat},15,0,0,0,dh`,
   }
 }
 
