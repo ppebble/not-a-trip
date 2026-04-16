@@ -98,7 +98,7 @@ export function ThemeSelector() {
 
       {isOpen && (
         <div
-          className="absolute right-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-lg bg-surface shadow-lg ring-1 ring-black/5"
+          className="absolute right-0 top-full z-[9999] mt-1 w-44 overflow-hidden rounded-lg bg-surface shadow-lg ring-1 ring-black/5"
           role="menu"
           aria-label="테마 선택"
         >
