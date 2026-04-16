@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
-import { ThemeToggle } from '@/components/common/ThemeToggle'
+import { ThemeSelector } from '@/components/common/ThemeToggle'
 import { AppIcon } from '@/components/common/AppIcon'
 
 export function Header() {
@@ -109,7 +109,7 @@ export function Header() {
           )}
 
           {/* 테마 토글 */}
-          <ThemeToggle />
+          <ThemeSelector />
 
           {/* 모바일 햄버거 버튼 */}
           <button
