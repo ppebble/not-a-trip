@@ -143,6 +143,3 @@ export function ThemeSelector() {
     </div>
   )
 }
-
-// 하위 호환을 위한 alias (Task 2에서 제거 예정)
-export const ThemeToggle = ThemeSelector
