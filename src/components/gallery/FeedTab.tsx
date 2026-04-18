@@ -120,6 +120,8 @@ function FeedGridItem({
   isPriority: boolean
   onClick?: () => void
 }) {
+  const [imageError, setImageError] = useState(false)
+
   return (
     <button
       type="button"
@@ -128,12 +130,13 @@ function FeedGridItem({
       aria-label={`${checkIn.userName}님의 ${spotName} 인증샷`}
     >
       <Image
-        src={checkIn.photoUrl}
+        src={imageError ? '/images/placeholder-spot.jpg' : checkIn.photoUrl}
         alt={`${checkIn.userName}의 인증샷`}
         fill
         className="object-cover"
         sizes="(max-width: 896px) 33vw, 299px"
         priority={isPriority}
+        onError={() => setImageError(true)}
       />
       {/* 호버 오버레이 */}
       <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
