@@ -149,7 +149,7 @@ export function ContentSpotsClient({ contentName }: ContentSpotsClientProps) {
  * 스팟 카드 컴포넌트
  * Requirements: 4.3, 4.4
  */
-function SpotCard({ spot }: { spot: SpotPin }) {
+export function SpotCard({ spot }: { spot: SpotPin }) {
   const [imageError, setImageError] = useState(false)
   const categoryConfig = spot.category ? CATEGORY_CONFIG[spot.category] : null
 
