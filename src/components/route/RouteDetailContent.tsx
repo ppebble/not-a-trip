@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouteNavigation } from '@/hooks/useRouteNavigation'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
-import { NavigationPanel } from '@/components/route/NavigationPanel'
+import { GuidePanel } from '@/components/route/GuidePanel'
 import { CompletionEffect } from '@/components/route/CompletionEffect'
 import { OptimizedImage } from '@/components/common'
 import type { Route, RouteDifficulty } from '@/types/route'
@@ -245,14 +245,6 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         </div>
       )}
 
-      {/* GPS 정확도 경고 */}
-      {nav.isNavigating && nav.accuracy !== null && nav.accuracy > 100 && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-          ⚠️ GPS 정확도가 낮습니다 ({Math.round(nav.accuracy)}m). 실외로
-          이동하면 정확도가 개선됩니다.
-        </div>
-      )}
-
       {/* 코스 지도 */}
       <div className="rounded-lg bg-surface p-4 shadow-sm">
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
@@ -446,21 +438,18 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         onConfirm={() => router.push('/auth/signin')}
       />
 
-      {/* 따라가기 모드 하단 패널 */}
+      {/* 가이드 모드 하단 패널 */}
       {nav.isNavigating && nav.activeRoute && (
-        <NavigationPanel
-          currentSpot={nav.activeRoute.spots[nav.currentSpotIndex]}
-          currentSpotIndex={nav.currentSpotIndex}
+        <GuidePanel
           spots={nav.activeRoute.spots}
-          progress={nav.progress}
-          distanceToNext={nav.distanceToNext}
-          estimatedTimeToNext={nav.estimatedTimeToNext}
           checkedSpotIds={nav.checkedSpotIds}
+          currentSpotIndex={nav.currentSpotIndex}
+          progress={nav.progress}
           currentPosition={nav.currentPosition}
-          isCompleted={nav.isCompleted}
+          accuracy={nav.accuracy}
           onCheckIn={handleCheckIn}
-          onMoveToNext={nav.moveToNextSpot}
           onEndRoute={nav.endRoute}
+          isCompleted={nav.isCompleted}
         />
       )}
 
