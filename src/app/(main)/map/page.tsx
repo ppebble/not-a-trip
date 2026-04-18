@@ -2,6 +2,7 @@
 
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/navigation'
 import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
@@ -38,6 +39,7 @@ export default function MapPage() {
  * useQuery를 사용하여 필터 변경 시 지도가 유지되고 로딩 인디케이터만 표시
  */
 function MapContent() {
+  const router = useRouter()
   const selectedCategories = useSelectedCategories()
   const searchQuery = useSearchQuery()
   const isNoCategorySelected = selectedCategories.length === 0
@@ -72,8 +74,7 @@ function MapContent() {
   const isEmptyFilterResult = isNoCategorySelected
 
   const handleSpotSelect = (spotId: string) => {
-    // eslint-disable-next-line no-console
-    console.log('Selected spot:', spotId)
+    router.push(`/spots/${spotId}`)
   }
 
   return (
