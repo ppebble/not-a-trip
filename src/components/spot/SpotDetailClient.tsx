@@ -42,6 +42,7 @@ import DirectionsButton from '@/components/common/DirectionsButton'
 import { AppIcon } from '@/components/common/AppIcon'
 import { blurPlaceholderProps } from '@/lib/image-utils'
 import { RelatedRoutes } from '@/components/route/RelatedRoutes'
+import { SameContentSpots } from '@/components/spot/SameContentSpots'
 import {
   ArrowLeftIcon,
   MapPinIcon,
@@ -462,6 +463,14 @@ function SpotDetailContent({
         }
         onConfirm={() => router.push('/auth/signin')}
       />
+
+      {/* 같은 작품의 다른 스팟 (Requirements 4.6, 4.7) */}
+      {spot.relatedContent && spot.relatedContent.length > 0 && (
+        <SameContentSpots
+          currentSpotId={spot.id}
+          relatedContent={spot.relatedContent}
+        />
+      )}
 
       {/* 관련 순례 코스 */}
       {spot.relatedContent && spot.relatedContent.length > 0 && (
