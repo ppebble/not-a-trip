@@ -6,6 +6,8 @@ import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouteNavigation } from '@/hooks/useRouteNavigation'
+import ShareButton from '@/components/common/ShareButton'
+import { formatRouteShareText } from '@/lib/share-utils'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { GuidePanel } from '@/components/route/GuidePanel'
 import { CompletionEffect } from '@/components/route/CompletionEffect'
@@ -244,6 +246,11 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
               ✏️ 수정
             </button>
           )}
+          <ShareButton
+            title={route.name}
+            text={formatRouteShareText(route.name)}
+            variant="icon"
+          />
         </div>
       )}
 
