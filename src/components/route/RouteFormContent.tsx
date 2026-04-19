@@ -402,7 +402,7 @@ export function RouteFormContent({
     if (!description.trim()) errs.push('설명은 필수입니다')
     if (!estimatedDuration || parseInt(estimatedDuration, 10) <= 0)
       errs.push('예상 소요시간은 필수입니다')
-    if (spots.length < 2) errs.push('코스에는 최소 2개의 스팟이 필요합니다')
+    if (spots.length < 1) errs.push('코스에는 최소 1개의 스팟이 필요합니다')
     return errs
   }, [name, description, estimatedDuration, spots])
 
