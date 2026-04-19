@@ -114,7 +114,7 @@ function WriteForm() {
       if (spotId) {
         router.push(`/spots/${spotId}`)
       } else if (mediaTitle) {
-        router.push(`/community/media/${encodeURIComponent(mediaTitle)}`)
+        router.push(`/contents/${encodeURIComponent(mediaTitle)}`)
       } else if (isGeneralMode) {
         router.push('/community?tab=general')
       } else {
