@@ -113,7 +113,7 @@ export function SpotOrderList({
           스팟을 검색하여 코스에 추가해주세요
         </p>
         <p className="mt-1 text-xs text-neutral-300 dark:text-neutral-700">
-          최소 2개의 스팟이 필요합니다
+          최소 1개의 스팟이 필요합니다
         </p>
       </div>
     )
@@ -306,9 +306,9 @@ export function SpotOrderList({
         </div>
       ))}
 
-      {spots.length < 2 && (
-        <p className="mt-2 text-center text-xs text-amber-600">
-          ⚠️ 코스에는 최소 2개의 스팟이 필요합니다 (현재 {spots.length}개)
+      {spots.length === 1 && (
+        <p className="mt-2 text-center text-xs text-primary">
+          💡 더 많은 스팟을 추가하면 풍성한 순례 경험을 만들 수 있어요!
         </p>
       )}
     </div>
