@@ -13,6 +13,9 @@ import {
   SkeletonBlock,
   GalleryGridSkeleton,
 } from '@/components/common/SkeletonUI'
+import OnboardingTour from '@/components/common/OnboardingTour'
+import { useOnboarding } from '@/hooks/useOnboarding'
+import { GALLERY_PAGE_STEPS } from '@/lib/tour-config'
 
 /**
  * 갤러리 탭 타입
@@ -45,6 +48,8 @@ function GalleryPageSkeleton() {
 function GalleryPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { isActive, currentStep, next, skip } =
+    useOnboarding(GALLERY_PAGE_STEPS)
 
   // 현재 활성 탭 (기본값: feed)
   const tabParam = searchParams.get('tab')
@@ -125,7 +130,10 @@ function GalleryPageContent() {
       </Suspense>
 
       {/* FloatingActionButton - 순례 인증 시작 */}
-      <FloatingActionButton onClick={handleFloatingButtonClick} />
+      <FloatingActionButton
+        onClick={handleFloatingButtonClick}
+        data-tour="upload-checkin"
+      />
 
       {/* SpotSearchModal - 스팟 검색 */}
       <SpotSearchModal
@@ -152,6 +160,16 @@ function GalleryPageContent() {
           badges={earnedBadges}
         />
       )}
+
+      {/* OnboardingTour - 신규 사용자 가이드 */}
+      <OnboardingTour
+        steps={GALLERY_PAGE_STEPS}
+        isActive={isActive}
+        currentStep={currentStep}
+        onNext={next}
+        onSkip={skip}
+        onComplete={skip}
+      />
     </main>
   )
 }
