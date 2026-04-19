@@ -108,6 +108,68 @@ function FilteredFeedHeader({
 }
 
 /**
+ * 콘텐츠 검색바 (클라이언트 사이드 필터링)
+ */
+function ContentSearchBar({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (v: string) => void
+}) {
+  return (
+    <div className="mb-3">
+      <div className="relative">
+        <svg
+          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <input
+          type="text"
+          placeholder="콘텐츠 검색..."
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full rounded-lg bg-accent-surface py-2.5 pl-10 pr-10 text-sm text-main-text placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary/50 dark:placeholder-neutral-500"
+          aria-label="콘텐츠 검색"
+        />
+        {value && (
+          <button
+            onClick={() => onChange('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+            aria-label="검색어 초기화"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/**
  * ContentType 필터 칩 바
  */
 function ContentTypeFilterChips({
@@ -118,13 +180,13 @@ function ContentTypeFilterChips({
   onFilterChange: (value: string) => void
 }) {
   return (
-    <div className="mb-4 flex gap-2 overflow-x-auto pb-2">
+    <div className="scrollbar-hide mb-4 flex items-center gap-2 overflow-x-auto px-1 py-1">
       {CONTENT_TYPE_FILTERS.map((filter) => (
         <button
           key={filter.value}
-          className={`flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+          className={`h-9 flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
             activeFilter === filter.value
-              ? 'bg-primary text-white'
+              ? 'bg-primary text-white shadow-sm'
               : 'bg-accent-surface text-sub-text hover:bg-border'
           }`}
           onClick={() => onFilterChange(filter.value)}
@@ -143,6 +205,7 @@ export function ContentTab({
   const router = useRouter()
   const searchParams = useSearchParams()
   const [activeFilter, setActiveFilter] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('')
 
   // React Query로 콘텐츠 목록 조회 (필터 적용)
   const {
@@ -160,6 +223,13 @@ export function ContentTab({
     spotCount: 0,
     contentType: item.contentType,
   }))
+
+  // 검색어로 클라이언트 사이드 필터링
+  const filteredContents = searchQuery
+    ? contents.filter((c) =>
+        c.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : contents
 
   // 필터링된 체크인 피드 (콘텐츠 선택 시에만 활성화)
   const {
@@ -219,6 +289,7 @@ export function ContentTab({
   if (contentsError) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
+        <ContentSearchBar value={searchQuery} onChange={setSearchQuery} />
         <ContentTypeFilterChips
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
@@ -231,6 +302,7 @@ export function ContentTab({
   if (isLoadingContents) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
+        <ContentSearchBar value={searchQuery} onChange={setSearchQuery} />
         <ContentTypeFilterChips
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
@@ -242,11 +314,15 @@ export function ContentTab({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
+      <ContentSearchBar value={searchQuery} onChange={setSearchQuery} />
       <ContentTypeFilterChips
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
       />
-      <ContentGrid contents={contents} onSelectContent={handleSelectContent} />
+      <ContentGrid
+        contents={filteredContents}
+        onSelectContent={handleSelectContent}
+      />
     </div>
   )
 }
