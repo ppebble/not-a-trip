@@ -155,10 +155,10 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
         </p>
       )}
       <Link
-        href={`/community/media/${encodeURIComponent(content.name)}`}
+        href={`/contents/${encodeURIComponent(content.name)}`}
         className="mt-3 inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-primary-700"
       >
-        <span>커뮤니티 보기</span>
+        <span>작품별 스팟 보기</span>
         <svg
           className="h-4 w-4"
           fill="none"

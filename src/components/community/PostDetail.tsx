@@ -212,7 +212,7 @@ function PostContent({ post }: PostContentProps) {
       return `/community/spot/${post.spotId}`
     }
     if (post.mediaTitle) {
-      return `/community/media/${encodeURIComponent(post.mediaTitle)}`
+      return `/contents/${encodeURIComponent(post.mediaTitle)}`
     }
     // 자유게시판 게시글인 경우 general 탭으로 이동
     return '/community?tab=general'
