@@ -7,6 +7,7 @@ import { LoginRequiredModal } from '@/components/common'
 export interface FloatingActionButtonProps {
   onClick: () => void
   label?: string // default: "+ 순례 인증하기"
+  'data-tour'?: string
 }
 
 /**
@@ -20,6 +21,7 @@ export interface FloatingActionButtonProps {
 export function FloatingActionButton({
   onClick,
   label = '+ 순례 인증하기',
+  'data-tour': dataTour,
 }: FloatingActionButtonProps) {
   const { data: session } = useSession()
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -36,6 +38,7 @@ export function FloatingActionButton({
     <>
       <button
         onClick={handleClick}
+        data-tour={dataTour}
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-primary-700 hover:shadow-xl active:scale-95"
         aria-label={label}
       >

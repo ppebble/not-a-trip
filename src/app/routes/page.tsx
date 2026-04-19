@@ -6,6 +6,9 @@ import { AppIcon } from '@/components/common/AppIcon'
 import { RouteListContent } from '@/components/route/RouteListContent'
 import { RecommendedRoutes } from '@/components/route/RecommendedRoutes'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
+import OnboardingTour from '@/components/common/OnboardingTour'
+import { useOnboarding } from '@/hooks/useOnboarding'
+import { ROUTE_PAGE_STEPS } from '@/lib/tour-config'
 
 /** 코스 목록 페이지 스켈레톤 */
 function RouteListSkeleton() {
@@ -39,6 +42,8 @@ function RouteListSkeleton() {
  * Requirements: 2.1, 2.2
  */
 export default function RoutesPage() {
+  const { isActive, currentStep, next, skip } = useOnboarding(ROUTE_PAGE_STEPS)
+
   return (
     <main className="min-h-screen bg-surface pt-14">
       <div className="mx-auto max-w-6xl px-4 py-6">
@@ -55,6 +60,7 @@ export default function RoutesPage() {
           </div>
           <Link
             href="/routes/create"
+            data-tour="start-route"
             className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
           >
             코스 만들기
@@ -76,6 +82,14 @@ export default function RoutesPage() {
           <RouteListContent />
         </Suspense>
       </div>
+      <OnboardingTour
+        steps={ROUTE_PAGE_STEPS}
+        isActive={isActive}
+        currentStep={currentStep}
+        onNext={next}
+        onSkip={skip}
+        onComplete={skip}
+      />
     </main>
   )
 }
