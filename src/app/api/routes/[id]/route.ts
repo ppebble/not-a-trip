@@ -131,9 +131,9 @@ export async function PUT(
       errors.push('유효하지 않은 난이도입니다')
     if (
       body.spots !== undefined &&
-      (!Array.isArray(body.spots) || body.spots.length < 2)
+      (!Array.isArray(body.spots) || body.spots.length < 1)
     )
-      errors.push('코스에는 최소 2개의 스팟이 필요합니다')
+      errors.push('코스에는 최소 1개의 스팟이 필요합니다')
 
     if (errors.length > 0) {
       return NextResponse.json(

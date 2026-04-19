@@ -52,8 +52,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       errors.push('예상 소요시간은 필수입니다')
     if (!body.difficulty || !VALID_DIFFICULTIES.includes(body.difficulty))
       errors.push('난이도를 선택해주세요 (easy, moderate, hard)')
-    if (!Array.isArray(body.spots) || body.spots.length < 2)
-      errors.push('코스에는 최소 2개의 스팟이 필요합니다')
+    if (!Array.isArray(body.spots) || body.spots.length < 1)
+      errors.push('코스에는 최소 1개의 스팟이 필요합니다')
 
     if (errors.length > 0) {
       return NextResponse.json(
