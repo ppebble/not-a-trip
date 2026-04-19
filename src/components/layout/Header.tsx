@@ -34,7 +34,7 @@ export function Header() {
             href="/gallery"
             className="text-text-secondary text-sm transition hover:text-secondary-400"
           >
-            순례 갤러리
+            순례 인증
           </Link>
           <Link
             href="/routes"
@@ -167,7 +167,7 @@ export function Header() {
               className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
             >
               <AppIcon name="gallery" size="sm" />
-              순례 갤러리
+              순례 인증
             </Link>
             <Link
               href="/routes"

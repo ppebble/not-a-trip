@@ -205,7 +205,7 @@ function GalleryHeaderPlaceholder() {
   return (
     <div className="border-b border-neutral-200 bg-surface px-4 py-6">
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-2xl font-bold text-main-text">순례 갤러리</h1>
+        <h1 className="text-2xl font-bold text-main-text">순례 인증</h1>
         <p className="mt-1 text-sm text-sub-text">오타쿠들의 발자취</p>
         {/* 통계 영역 - Task 2.1에서 실제 데이터로 교체 */}
         <div className="mt-4 flex gap-6">
