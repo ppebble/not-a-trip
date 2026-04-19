@@ -48,6 +48,15 @@ export function Header() {
           >
             스팟 등록
           </Link>
+          <button
+            onClick={() => {
+              localStorage.removeItem('not-a-trip-onboarding-completed')
+              window.location.reload()
+            }}
+            className="text-text-secondary text-sm transition hover:text-secondary-400"
+          >
+            가이드 다시 보기
+          </button>
           <Link
             href="/test/globe-fallback"
             className="text-sm text-yellow-400 transition hover:text-yellow-300"
@@ -184,6 +193,16 @@ export function Header() {
             >
               스팟 등록
             </Link>
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false)
+                localStorage.removeItem('not-a-trip-onboarding-completed')
+                window.location.reload()
+              }}
+              className="text-text-secondary hover:text-text-primary block w-full rounded-lg px-3 py-2 text-left text-sm transition hover:bg-secondary-100"
+            >
+              📖 가이드 다시 보기
+            </button>
             <Link
               href="/test/globe-fallback"
               onClick={() => setIsMobileMenuOpen(false)}
