@@ -105,6 +105,20 @@ const spotsArrayArbitrary: fc.Arbitrary<RouteSpot[]> = fc
   )
   .map((tuple) => tuple as RouteSpot[])
 
+/**
+ * 2~8개의 유효한 RouteSpot 배열을 생성하는 arbitrary.
+ * 단일 스팟 코스에서는 거리/시간 정보가 표시되지 않으므로,
+ * 거리/시간 검증 테스트에서는 최소 2개 스팟이 필요하다.
+ */
+const multiSpotsArrayArbitrary: fc.Arbitrary<RouteSpot[]> = fc
+  .integer({ min: 2, max: 8 })
+  .chain((count) =>
+    fc.tuple(
+      ...Array.from({ length: count }, (_, i) => availableSpotArbitrary(i))
+    )
+  )
+  .map((tuple) => tuple as RouteSpot[])
+
 // ============================================
 // Default props factory
 // ============================================
@@ -168,7 +182,7 @@ describe('GuidePanel 스팟 목록 렌더링 완전성 속성 테스트', () => 
    */
   test('Property 2: 임의의 RouteSpot 배열에 대해 distanceFromPrev가 포맷팅되어 표시된다', () => {
     fc.assert(
-      fc.property(spotsArrayArbitrary, (spots) => {
+      fc.property(multiSpotsArrayArbitrary, (spots) => {
         const { container, unmount } = render(
           <GuidePanel {...makeDefaultProps(spots)} />
         )
@@ -199,7 +213,7 @@ describe('GuidePanel 스팟 목록 렌더링 완전성 속성 테스트', () => 
    */
   test('Property 2: 임의의 RouteSpot 배열에 대해 walkTimeFromPrev가 포맷팅되어 표시된다', () => {
     fc.assert(
-      fc.property(spotsArrayArbitrary, (spots) => {
+      fc.property(multiSpotsArrayArbitrary, (spots) => {
         const { container, unmount } = render(
           <GuidePanel {...makeDefaultProps(spots)} />
         )
