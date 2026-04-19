@@ -4,8 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { CheckIn } from '@/types'
 import { ContentGrid, ContentSummary } from './ContentGrid'
-import { MasonryGrid, MasonryItem } from './MasonryGrid'
-import { ComparisonCard } from './ComparisonCard'
+import { FeedGrid } from './FeedGrid'
 import { useCheckInFeed } from '@/hooks/useCheckInFeed'
 import { useContentList as useContentListQuery } from '@/hooks/useGalleryQueries'
 
@@ -24,37 +23,18 @@ export interface ContentTabProps {
   onCheckInClick?: (checkIn: CheckIn) => void
 }
 
-function LoadingSkeleton() {
+function ContentGridSkeleton() {
   return (
-    <>
-      {[1, 2, 3, 4].map((i) => (
-        <MasonryItem key={`skeleton-${i}`}>
-          <div className="animate-pulse rounded-xl bg-surface shadow-md">
-            <div className="aspect-[4/5] rounded-t-xl bg-border" />
-            <div className="p-3">
-              <div className="mb-2 flex items-center gap-2">
-                <div className="h-6 w-6 rounded-full bg-border" />
-                <div className="h-4 w-20 rounded bg-border" />
-              </div>
-              <div className="h-4 w-32 rounded bg-surface" />
-            </div>
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+        <div key={i} className="animate-pulse rounded-xl bg-surface shadow-md">
+          <div className="aspect-[3/4] rounded-t-xl bg-border" />
+          <div className="p-3">
+            <div className="mb-2 h-4 w-3/4 rounded bg-border" />
+            <div className="h-3 w-1/2 rounded bg-surface" />
           </div>
-        </MasonryItem>
+        </div>
       ))}
-    </>
-  )
-}
-
-function EmptyFilteredState({ contentName }: { contentName: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="mb-4 text-5xl">📸</div>
-      <p className="text-text-secondary text-lg font-medium">
-        &apos;{contentName}&apos; 관련 인증샷이 없어요
-      </p>
-      <p className="mt-2 text-sm text-secondary">
-        첫 번째 순례 인증샷을 올려보세요!
-      </p>
     </div>
   )
 }
@@ -75,22 +55,6 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
       >
         다시 시도
       </button>
-    </div>
-  )
-}
-
-function ContentGridSkeleton() {
-  return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <div key={i} className="animate-pulse rounded-xl bg-surface shadow-md">
-          <div className="aspect-[3/4] rounded-t-xl bg-border" />
-          <div className="p-3">
-            <div className="mb-2 h-4 w-3/4 rounded bg-border" />
-            <div className="h-3 w-1/2 rounded bg-surface" />
-          </div>
-        </div>
-      ))}
     </div>
   )
 }
@@ -163,7 +127,7 @@ export function ContentTab({
     loadMoreRef,
   } = useCheckInFeed({
     contentName: selectedContent,
-    itemsPerPage: 20,
+    itemsPerPage: 21,
     sortBy: 'latest',
     enabled: !!selectedContent,
   })
@@ -185,68 +149,23 @@ export function ContentTab({
     router.push(`/gallery?${params.toString()}`)
   }, [router, searchParams])
 
-  // 작품이 선택된 경우: 필터링된 체크인 피드 표시
+  // 작품이 선택된 경우: FeedGrid로 필터링된 체크인 피드 표시
   if (selectedContent) {
-    if (checkInsError && checkIns.length === 0) {
-      return (
-        <div className="mx-auto max-w-6xl px-4 py-6">
-          <FilteredFeedHeader
-            contentName={selectedContent}
-            onBack={handleBack}
-          />
-          <ErrorState onRetry={refreshCheckIns} />
-        </div>
-      )
-    }
-
-    if (!isLoadingCheckIns && checkIns.length === 0) {
-      return (
-        <div className="mx-auto max-w-6xl px-4 py-6">
-          <FilteredFeedHeader
-            contentName={selectedContent}
-            onBack={handleBack}
-          />
-          <EmptyFilteredState contentName={selectedContent} />
-        </div>
-      )
-    }
-
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
         <FilteredFeedHeader contentName={selectedContent} onBack={handleBack} />
-        <MasonryGrid>
-          {checkIns.map((checkIn) => (
-            <MasonryItem key={checkIn.id}>
-              <ComparisonCard
-                checkIn={checkIn}
-                spot={
-                  checkIn.spot || {
-                    id: checkIn.spotId,
-                    name: '알 수 없는 스팟',
-                  }
-                }
-                badges={checkIn.badges}
-                onClick={() => onCheckInClick?.(checkIn)}
-              />
-            </MasonryItem>
-          ))}
-          {isLoadingCheckIns && <LoadingSkeleton />}
-        </MasonryGrid>
-        <div
-          ref={loadMoreRef}
-          className="flex h-20 items-center justify-center"
-          aria-hidden="true"
-        >
-          {isLoadingMore && (
-            <div className="flex items-center gap-2 text-secondary">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-300 border-t-primary-500" />
-              <span className="text-sm">더 불러오는 중...</span>
-            </div>
-          )}
-          {!hasMore && checkIns.length > 0 && (
-            <p className="text-sm text-muted">모든 인증샷을 불러왔습니다</p>
-          )}
-        </div>
+        <FeedGrid
+          checkIns={checkIns}
+          isLoading={isLoadingCheckIns}
+          isLoadingMore={isLoadingMore}
+          error={checkInsError ? new Error(checkInsError) : null}
+          hasMore={hasMore}
+          onRetry={refreshCheckIns}
+          loadMoreRef={loadMoreRef as React.RefObject<HTMLDivElement>}
+          onCheckInClick={onCheckInClick}
+          emptyMessage={`'${selectedContent}' 관련 인증샷이 없어요`}
+          emptySubMessage="첫 번째 순례 인증샷을 올려보세요!"
+        />
       </div>
     )
   }
