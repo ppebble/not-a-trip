@@ -36,10 +36,12 @@ interface RankingResponse {
 interface ContentNameItem {
   name: string
   count: number
+  contentType?: string
 }
 
 interface ContentNamesResponse {
   items: ContentNameItem[]
+  total: number
 }
 
 // ── Query Key Factory ───────────────────────────────────────
@@ -50,7 +52,8 @@ export const galleryKeys = {
   checkinList: (params: Record<string, unknown>) =>
     [...galleryKeys.checkins(), params] as const,
   ranking: () => [...galleryKeys.all, 'ranking'] as const,
-  contentList: () => [...galleryKeys.all, 'contentList'] as const,
+  contentList: (contentType?: string) =>
+    [...galleryKeys.all, 'contentList', contentType ?? 'all'] as const,
   checkinCount: (spotId: string) =>
     [...galleryKeys.all, 'checkinCount', spotId] as const,
 }
@@ -102,17 +105,19 @@ export function useHallOfFameRanking() {
 }
 
 /**
- * 작품 목록 조회 훅 (ContentTab용)
+ * 콘텐츠 목록 조회 훅 (ContentTab용)
  * Requirements: 8.3
  */
-export function useContentList() {
+export function useContentList(contentType?: string) {
   return useQuery({
-    queryKey: galleryKeys.contentList(),
+    queryKey: galleryKeys.contentList(contentType),
     queryFn: async (): Promise<ContentNamesResponse> => {
-      const res = await fetch(
-        buildUrl(API_ROUTES.CONTENT_NAMES, { type: 'content' })
-      )
-      if (!res.ok) throw new Error('작품 목록 조회 실패')
+      const params: Record<string, string> = { type: 'content' }
+      if (contentType && contentType !== 'all') {
+        params.contentType = contentType
+      }
+      const res = await fetch(buildUrl(API_ROUTES.CONTENT_NAMES, params))
+      if (!res.ok) throw new Error('콘텐츠 목록 조회 실패')
       return res.json()
     },
     staleTime: 5 * 60 * 1000,

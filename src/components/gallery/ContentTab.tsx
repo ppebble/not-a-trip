@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { CheckIn } from '@/types'
 import { ContentGrid, ContentSummary } from './ContentGrid'
 import { FeedGrid } from './FeedGrid'
@@ -9,12 +9,26 @@ import { useCheckInFeed } from '@/hooks/useCheckInFeed'
 import { useContentList as useContentListQuery } from '@/hooks/useGalleryQueries'
 
 /**
+ * ContentType 필터 칩 목록
+ */
+const CONTENT_TYPE_FILTERS = [
+  { value: 'all', label: '전체' },
+  { value: 'anime', label: '애니메이션' },
+  { value: 'movie', label: '영화' },
+  { value: 'drama', label: '드라마' },
+  { value: 'sports_team', label: '스포츠팀' },
+  { value: 'artist', label: '아티스트' },
+  { value: 'game', label: '게임' },
+  { value: 'other', label: '기타' },
+] as const
+
+/**
  * ContentTab 컴포넌트
- * 작품별 탭 - 작품 포스터 그리드와 필터링된 체크인 피드를 표시
+ * 콘텐츠별 탭 - 콘텐츠 포스터 그리드와 필터링된 체크인 피드를 표시
  *
  * Requirements:
- * - 3.4: 작품별 탭에서 작품 포스터를 대형 카드로 그리드 레이아웃에 표시
- * - 3.5: 작품 선택 시 해당 작품 체크인만 필터링
+ * - 3.4: 콘텐츠별 탭에서 콘텐츠 포스터를 대형 카드로 그리드 레이아웃에 표시
+ * - 3.5: 콘텐츠 선택 시 해당 콘텐츠 체크인만 필터링
  * - 8.3: React Query 전환
  */
 
@@ -71,7 +85,7 @@ function FilteredFeedHeader({
       <button
         onClick={onBack}
         className="flex items-center gap-1 rounded-lg bg-surface px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-border"
-        aria-label="작품 목록으로 돌아가기"
+        aria-label="콘텐츠 목록으로 돌아가기"
       >
         <svg
           className="h-4 w-4"
@@ -93,20 +107,50 @@ function FilteredFeedHeader({
   )
 }
 
+/**
+ * ContentType 필터 칩 바
+ */
+function ContentTypeFilterChips({
+  activeFilter,
+  onFilterChange,
+}: {
+  activeFilter: string
+  onFilterChange: (value: string) => void
+}) {
+  return (
+    <div className="mb-4 flex gap-2 overflow-x-auto pb-2">
+      {CONTENT_TYPE_FILTERS.map((filter) => (
+        <button
+          key={filter.value}
+          className={`flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+            activeFilter === filter.value
+              ? 'bg-primary text-white'
+              : 'bg-accent-surface text-sub-text hover:bg-border'
+          }`}
+          onClick={() => onFilterChange(filter.value)}
+        >
+          {filter.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function ContentTab({
   selectedContent,
   onCheckInClick,
 }: ContentTabProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [activeFilter, setActiveFilter] = useState('all')
 
-  // React Query로 작품 목록 조회
+  // React Query로 콘텐츠 목록 조회 (필터 적용)
   const {
     data: contentData,
     isLoading: isLoadingContents,
     error: contentsError,
     refetch: refreshContents,
-  } = useContentListQuery()
+  } = useContentListQuery(activeFilter)
 
   // API 응답을 ContentSummary 형식으로 변환
   const contents: ContentSummary[] = (contentData?.items ?? []).map((item) => ({
@@ -114,9 +158,10 @@ export function ContentTab({
     imageUrl: undefined,
     checkInCount: item.count,
     spotCount: 0,
+    contentType: item.contentType,
   }))
 
-  // 필터링된 체크인 피드 (작품 선택 시에만 활성화)
+  // 필터링된 체크인 피드 (콘텐츠 선택 시에만 활성화)
   const {
     checkIns,
     isLoading: isLoadingCheckIns,
@@ -149,7 +194,7 @@ export function ContentTab({
     router.push(`/gallery?${params.toString()}`)
   }, [router, searchParams])
 
-  // 작품이 선택된 경우: FeedGrid로 필터링된 체크인 피드 표시
+  // 콘텐츠가 선택된 경우: FeedGrid로 필터링된 체크인 피드 표시
   if (selectedContent) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
@@ -170,10 +215,14 @@ export function ContentTab({
     )
   }
 
-  // 작품이 선택되지 않은 경우: 작품 목록 그리드 표시
+  // 콘텐츠가 선택되지 않은 경우: 콘텐츠 목록 그리드 표시
   if (contentsError) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
+        <ContentTypeFilterChips
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
         <ErrorState onRetry={() => refreshContents()} />
       </div>
     )
@@ -182,6 +231,10 @@ export function ContentTab({
   if (isLoadingContents) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-6">
+        <ContentTypeFilterChips
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
         <ContentGridSkeleton />
       </div>
     )
@@ -189,6 +242,10 @@ export function ContentTab({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
+      <ContentTypeFilterChips
+        activeFilter={activeFilter}
+        onFilterChange={setActiveFilter}
+      />
       <ContentGrid contents={contents} onSelectContent={handleSelectContent} />
     </div>
   )

@@ -236,7 +236,7 @@ function GalleryTabsPlaceholder({
   const tabs = [
     { id: 'feed', label: '실시간 피드' },
     { id: 'hall-of-fame', label: '명예의 전당' },
-    { id: 'content', label: '작품별' },
+    { id: 'content', label: '콘텐츠별' },
   ] as const
 
   return (
