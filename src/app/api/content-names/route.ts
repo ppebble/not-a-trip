@@ -9,6 +9,7 @@ interface AutocompleteItem {
   name: string
   category: SpotCategory
   count: number
+  contentType?: string
 }
 
 /**
@@ -43,9 +44,10 @@ type SearchType = 'all' | 'content' | 'spot'
  * Query params:
  *   - search: 검색어 (부분 일치, 대소문자 무시)
  *   - type: 검색 타입 (all | content | spot), 기본값 all
+ *   - contentType: ContentType 필터 (anime | movie | drama | sports_team | artist | game | other)
  *
  * Response:
- *   - items: AutocompleteItem[] (최대 10개)
+ *   - items: AutocompleteItem[] (type=content일 때 최대 50개, 그 외 최대 10개)
  *   - total: 전체 매칭 개수
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -53,6 +55,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')?.trim() || ''
     const type = (searchParams.get('type') as SearchType) || 'all'
+    const contentType = searchParams.get('contentType')?.trim() || ''
 
     const collection = await getCollection<SpotDocument>('spots')
 
@@ -108,12 +111,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         })
       }
 
+      // contentType 필터 적용
+      if (contentType) {
+        contentPipeline.push({
+          $match: {
+            'relatedContent.type': contentType,
+          },
+        })
+      }
+
       contentPipeline.push(
         {
           $group: {
             _id: {
               name: '$relatedContent.name',
               category: '$category',
+              contentType: '$relatedContent.type',
             },
             count: { $sum: 1 },
           },
@@ -122,11 +135,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           $group: {
             _id: '$_id.name',
             category: { $first: '$_id.category' },
+            contentType: { $first: '$_id.contentType' },
             count: { $sum: '$count' },
           },
         },
         { $sort: { count: -1 } },
-        { $limit: 10 }
+        { $limit: type === 'content' ? 50 : 10 }
       )
 
       const contentResults = await collection
@@ -141,14 +155,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             name,
             category: (doc.category as SpotCategory) || 'other',
             count: doc.count as number,
+            contentType: (doc.contentType as string) || undefined,
           })
         }
       })
     }
 
-    // 카운트 내림차순 정렬 후 최대 10개 제한
+    // 카운트 내림차순 정렬
     items.sort((a, b) => b.count - a.count)
-    const limitedItems = items.slice(0, 10)
+
+    // type=content일 때는 50개, 그 외 10개 제한
+    const maxItems = type === 'content' ? 50 : 10
+    const limitedItems = items.slice(0, maxItems)
 
     return NextResponse.json({
       items: limitedItems,
