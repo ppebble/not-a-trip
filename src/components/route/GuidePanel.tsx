@@ -124,6 +124,7 @@ export function GuidePanel({
             const isChecked = checkedSpotIds.includes(spot.spotId)
             const isUnavailable = spot.isAvailable === false
             const isCurrent = idx === currentSpotIndex
+            const isSingleSpot = availableSpots.length === 1
 
             return (
               <div
@@ -162,8 +163,9 @@ export function GuidePanel({
                   >
                     {spot.spotName}
                   </p>
-                  {/* 거리/시간 표시 */}
-                  {!isUnavailable &&
+                  {/* 거리/시간 표시: 단일 스팟이면 표시하지 않음 */}
+                  {!isSingleSpot &&
+                    !isUnavailable &&
                     spot.distanceFromPrev !== null &&
                     spot.distanceFromPrev > 0 && (
                       <p className="text-xs text-muted">
