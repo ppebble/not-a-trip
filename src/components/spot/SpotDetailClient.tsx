@@ -48,6 +48,8 @@ import {
   MapPinIcon,
   AlertTriangleIcon,
 } from '@/components/icons'
+import ShareButton from '@/components/common/ShareButton'
+import { formatSpotShareText } from '@/lib/share-utils'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -155,28 +157,40 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
               </h1>
             </div>
 
-            {/* 수정/삭제 버튼 - 관리자 또는 본인 스팟인 경우 표시 */}
-            {(hasEditPermission || hasDeletePermission) && (
-              <div className="flex gap-2">
-                {hasEditPermission && (
-                  <Link
-                    href={`/spots/${spotId}/edit`}
-                    className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
-                  >
-                    수정
-                  </Link>
+            <div className="flex items-center gap-2">
+              {/* 공유 버튼 */}
+              <ShareButton
+                title={spot.name}
+                text={formatSpotShareText(
+                  spot.name,
+                  spot.relatedContent?.[0]?.name
                 )}
-                {hasDeletePermission && (
-                  <button
-                    onClick={handleDelete}
-                    disabled={isDeleting}
-                    className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {isDeleting ? '삭제 중...' : '삭제'}
-                  </button>
-                )}
-              </div>
-            )}
+                variant="icon"
+              />
+
+              {/* 수정/삭제 버튼 - 관리자 또는 본인 스팟인 경우 표시 */}
+              {(hasEditPermission || hasDeletePermission) && (
+                <div className="flex gap-2">
+                  {hasEditPermission && (
+                    <Link
+                      href={`/spots/${spotId}/edit`}
+                      className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary-50"
+                    >
+                      수정
+                    </Link>
+                  )}
+                  {hasDeletePermission && (
+                    <button
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                      className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isDeleting ? '삭제 중...' : '삭제'}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
