@@ -159,10 +159,12 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
             <AppIcon name="duration" size={16} />
             {formatDuration(route.estimatedDuration)}
           </span>
-          <span className="flex items-center gap-1">
-            <AppIcon name="distance" size={16} />
-            {formatDistance(route.totalDistance)}
-          </span>
+          {route.totalDistance > 0 && (
+            <span className="flex items-center gap-1">
+              <AppIcon name="distance" size={16} />
+              {formatDistance(route.totalDistance)}
+            </span>
+          )}
           <span className="flex items-center gap-1">
             <AppIcon name="bookmark" size={16} />
             {bookmarkCount}
@@ -264,6 +266,11 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 순서 ({availableSpots.length}곳)
         </h2>
+        {availableSpots.length === 1 && (
+          <p className="mb-3 text-center text-xs text-primary">
+            📍 단일 스팟 코스입니다. 해당 장소를 방문하여 인증해보세요!
+          </p>
+        )}
         <ol className="space-y-0">
           {/* 시작 지점 표시 */}
           {route.startPoint &&
