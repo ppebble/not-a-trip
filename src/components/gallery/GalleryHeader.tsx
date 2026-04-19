@@ -7,7 +7,7 @@ import { AppIcon } from '@/components/common/AppIcon'
  * 순례 갤러리 페이지의 헤더 영역을 담당합니다.
  *
  * Requirements:
- * - 5.1: "순례 갤러리" 페이지 제목 표시
+ * - 5.1: "순례 인증" 페이지 제목 표시
  * - 5.2: "오타쿠들의 발자취" 부제목 표시
  * - 5.3: 총 인증 수, 오늘 인증 수 통계 표시
  */
@@ -25,7 +25,7 @@ export function GalleryHeader({
     <header className="border-b border-border bg-surface px-4 py-6">
       <div className="mx-auto max-w-6xl">
         {/* 페이지 제목 - Requirements 5.1 */}
-        <h1 className="text-2xl font-bold text-main-text">순례 갤러리</h1>
+        <h1 className="text-2xl font-bold text-main-text">순례 인증</h1>
 
         {/* 부제목 - Requirements 5.2 */}
         <p className="mt-1 text-sm text-sub-text">오타쿠들의 발자취</p>
