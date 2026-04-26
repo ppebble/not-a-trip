@@ -14,7 +14,6 @@ interface SpotDetailMapProps {
   className?: string
 }
 
-// 스팟 마커 아이콘 (빨간색)
 const spotIcon = new Icon({
   iconUrl:
     'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
@@ -26,7 +25,6 @@ const spotIcon = new Icon({
   shadowSize: [41, 41],
 })
 
-// 편의시설 타입별 마커 색상 및 아이콘
 const facilityIcons: Record<FacilityType, Icon> = {
   restaurant: new Icon({
     iconUrl:
@@ -78,7 +76,6 @@ const facilityIcons: Record<FacilityType, Icon> = {
     popupAnchor: [1, -28],
     shadowSize: [33, 33],
   }),
-  // Otaku_Category
   coin_locker: new Icon({
     iconUrl:
       'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
@@ -131,14 +128,12 @@ const facilityIcons: Record<FacilityType, Icon> = {
   }),
 }
 
-// 편의시설 타입별 한글 라벨
 const facilityTypeLabels: Record<FacilityType, string> = {
   restaurant: '음식점',
   convenience_store: '편의점',
   cafe: '카페',
   station: '역/정류장',
   other: '기타',
-  // Otaku_Category
   coin_locker: '코인 로커',
   solo_dining: '혼밥 식당',
   charging_cafe: '충전/와이파이',
@@ -154,24 +149,20 @@ export default function SpotDetailMap({
   const mapRef = useRef<LeafletMap | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  // 스팟 좌표가 유효한지 확인
   const hasValidCoordinates = spot.coordinates && spot.coordinates.length === 2
   const [lat, lng] = hasValidCoordinates
     ? spot.coordinates
-    : [35.6762, 139.6503] // 기본값 설정
+    : [35.6762, 139.6503]
 
-  // 지도 중심점과 줌 레벨 계산
   const mapCenter: [number, number] = [lat, lng]
-  const mapZoom = 15 // 상세 페이지에서는 더 가까운 줌 레벨 사용
+  const mapZoom = 15
 
-  // ResizeObserver 기반 invalidateSize + bounds 맞추기
   const fitMapBounds = useCallback(() => {
     const map = mapRef.current
     if (!map) return
 
     map.invalidateSize()
 
-    // 스팟과 편의시설을 모두 포함하는 영역으로 지도 조정
     if (hasValidCoordinates && facilities.length > 0) {
       const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
 
@@ -210,7 +201,6 @@ export default function SpotDetailMap({
         boxZoom={true}
         keyboard={true}
         whenReady={() => {
-          // 지도가 준비되면 즉시 크기 재계산 (ResizeObserver가 이후 변경 감지)
           mapRef.current?.invalidateSize()
         }}
       >
@@ -224,14 +214,13 @@ export default function SpotDetailMap({
           crossOrigin=""
         />
 
-        {/* 스팟 마커 */}
         <Marker position={[lat, lng]} icon={spotIcon}>
           <Popup>
-            <div className="p-2">
-              <h3 className="text-text-primary font-bold">{spot.name}</h3>
-              <p className="mt-1 text-sm text-neutral-600">{spot.address}</p>
+            <div className="spot-detail-popup-content p-2 text-main-text">
+              <h3 className="font-bold text-main-text">{spot.name}</h3>
+              <p className="mt-1 text-sm text-sub-text">{spot.address}</p>
               {spot.description && (
-                <p className="mt-2 line-clamp-3 text-sm text-neutral-700">
+                <p className="mt-2 line-clamp-3 text-sm text-sub-text">
                   {spot.description}
                 </p>
               )}
@@ -239,13 +228,12 @@ export default function SpotDetailMap({
           </Popup>
         </Marker>
 
-        {/* 편의시설 마커들 */}
         {facilities.map((facility) => {
-          // 좌표 유효성 검사
           const coords = facility.coordinates
           if (!coords || !Array.isArray(coords) || coords.length !== 2) {
             return null
           }
+
           return (
             <Marker
               key={facility.id}
@@ -253,19 +241,19 @@ export default function SpotDetailMap({
               icon={facilityIcons[facility.type]}
             >
               <Popup>
-                <div className="p-2">
+                <div className="spot-detail-popup-content p-2 text-main-text">
                   <div className="mb-1 flex items-center justify-between">
-                    <h4 className="font-semibold text-neutral-900">
+                    <h4 className="font-semibold text-main-text">
                       {facility.name}
                     </h4>
-                    <span className="rounded bg-surface px-2 py-1 text-xs text-primary-800">
+                    <span className="facility-popup-chip rounded px-2 py-1 text-xs">
                       {facilityTypeLabels[facility.type]}
                     </span>
                   </div>
-                  <p className="mb-1 text-sm text-neutral-600">
+                  <p className="mb-1 text-sm text-sub-text">
                     {facility.address}
                   </p>
-                  <p className="text-xs text-neutral-500">
+                  <p className="text-xs text-sub-text">
                     스팟에서 약 {Math.round(facility.distance)}m
                   </p>
                 </div>
@@ -275,19 +263,18 @@ export default function SpotDetailMap({
         })}
       </MapContainer>
 
-      {/* 범례 */}
       {facilities.length > 0 && (
-        <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-surface/90 p-3 shadow-lg backdrop-blur-sm">
-          <h4 className="mb-2 text-sm font-semibold text-neutral-900">범례</h4>
+        <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-surface/90 p-3 text-main-text shadow-lg backdrop-blur-sm">
+          <h4 className="mb-2 text-sm font-semibold text-main-text">범례</h4>
           <div className="space-y-1">
-            <div className="flex items-center text-xs text-neutral-700">
+            <div className="flex items-center text-xs text-sub-text">
               <div className="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
               <span>특별한 여행지</span>
             </div>
             {Array.from(new Set(facilities.map((f) => f.type))).map((type) => (
               <div
                 key={type}
-                className="flex items-center text-xs text-neutral-700"
+                className="flex items-center text-xs text-sub-text"
               >
                 <div
                   className={`mr-2 h-3 w-3 rounded-full ${getFacilityColor(type)}`}
@@ -299,7 +286,6 @@ export default function SpotDetailMap({
         </div>
       )}
 
-      {/* Map attribution with navy theme */}
       <div className="absolute bottom-2 right-2 z-[1000] rounded bg-primary-800/80 px-2 py-1 text-xs text-white">
         Not a Trip
       </div>
@@ -307,7 +293,6 @@ export default function SpotDetailMap({
   )
 }
 
-// 편의시설 타입별 색상 클래스 반환
 function getFacilityColor(type: FacilityType): string {
   const colors: Record<FacilityType, string> = {
     restaurant: 'bg-orange-500',
@@ -315,12 +300,12 @@ function getFacilityColor(type: FacilityType): string {
     cafe: 'bg-green-500',
     station: 'bg-purple-500',
     other: 'bg-neutral-500',
-    // Otaku_Category
     coin_locker: 'bg-violet-500',
     solo_dining: 'bg-rose-500',
     charging_cafe: 'bg-cyan-500',
     public_restroom: 'bg-teal-500',
     goods_shop: 'bg-pink-500',
   }
+
   return colors[type] || 'bg-neutral-500'
 }

@@ -616,6 +616,246 @@ const NARA_FACILITIES: SeedFacility[] = [
   },
 ]
 
+// REAL-ANI-026: Tokyo Racecourse (Uma Musume PRETTY DERBY)
+const TOKYO_RACECOURSE_UMAMUSUME_FACILITIES: SeedFacility[] = [
+  {
+    name: 'Ministop Fuchu Hachimancho',
+    type: 'convenience_store',
+    address: 'Hachimancho, Fuchu, Tokyo',
+    coordinates: { lat: 35.670181, lng: 139.4826863 },
+    spotId: 'REAL-ANI-026',
+  },
+  {
+    name: '7-Eleven Fuchu Keiba Area',
+    type: 'convenience_store',
+    address: 'Hachimancho, Fuchu, Tokyo',
+    coordinates: { lat: 35.6699289, lng: 139.4860831 },
+    spotId: 'REAL-ANI-026',
+  },
+  {
+    name: 'Lawson Fuchu Hiyoshicho',
+    type: 'convenience_store',
+    address: 'Hiyoshicho, Fuchu, Tokyo',
+    coordinates: { lat: 35.6653974, lng: 139.4791364 },
+    spotId: 'REAL-ANI-026',
+  },
+  {
+    name: 'Cafe&Bar ipini',
+    type: 'cafe',
+    address: 'Hachimancho, Fuchu, Tokyo',
+    coordinates: { lat: 35.669889, lng: 139.4826836 },
+    spotId: 'REAL-ANI-026',
+  },
+  {
+    name: 'Apollo Base',
+    type: 'restaurant',
+    address: 'Hachimancho, Fuchu, Tokyo',
+    coordinates: { lat: 35.6680876, lng: 139.4843678 },
+    spotId: 'REAL-ANI-026',
+  },
+  {
+    name: 'Wine Terrace Yu-me',
+    type: 'restaurant',
+    address: 'Hachimancho, Fuchu, Tokyo',
+    coordinates: { lat: 35.6693303, lng: 139.4804877 },
+    spotId: 'REAL-ANI-026',
+  },
+  {
+    name: 'Fuchukeibajo-Seimonmae Station',
+    type: 'station',
+    address: 'Hachimancho, Fuchu, Tokyo',
+    coordinates: { lat: 35.6684223, lng: 139.4847109 },
+    spotId: 'REAL-ANI-026',
+  },
+]
+
+// REAL-ANI-027: Nakayama Racecourse (Uma Musume PRETTY DERBY)
+const NAKAYAMA_RACECOURSE_UMAMUSUME_FACILITIES: SeedFacility[] = [
+  {
+    name: 'Sukiya Nakayama Area',
+    type: 'restaurant',
+    address: 'Kosaku, Funabashi, Chiba',
+    coordinates: { lat: 35.7217857, lng: 139.9585693 },
+    spotId: 'REAL-ANI-027',
+  },
+  {
+    name: 'Gusto Funabashi Kosaku',
+    type: 'restaurant',
+    address: 'Kosaku, Funabashi, Chiba',
+    coordinates: { lat: 35.7296212, lng: 139.959264 },
+    spotId: 'REAL-ANI-027',
+  },
+  {
+    name: 'Gonzaemon',
+    type: 'restaurant',
+    address: 'Kosaku, Funabashi, Chiba',
+    coordinates: { lat: 35.7283522, lng: 139.9592849 },
+    spotId: 'REAL-ANI-027',
+  },
+  {
+    name: 'FamilyMart Nakayama Racecourse Area',
+    type: 'convenience_store',
+    address: 'Kosaku, Funabashi, Chiba',
+    coordinates: { lat: 35.7215502, lng: 139.9583748 },
+    spotId: 'REAL-ANI-027',
+  },
+  {
+    name: '7-Eleven Funabashi Hokubo',
+    type: 'convenience_store',
+    address: 'Funabashi, Chiba',
+    coordinates: { lat: 35.7314966, lng: 139.9445385 },
+    spotId: 'REAL-ANI-027',
+  },
+  {
+    name: 'Ministop Ichikawa Wakamiya',
+    type: 'convenience_store',
+    address: 'Wakamiya, Ichikawa, Chiba',
+    coordinates: { lat: 35.7259363, lng: 139.9516587 },
+    spotId: 'REAL-ANI-027',
+  },
+]
+
+// REAL-ANI-028: Hitachi Seaside Park Miharashi Hill (Frieren-inspired)
+const HITACHI_SEASIDE_FRIEREN_FACILITIES: SeedFacility[] = [
+  {
+    name: 'Flying Garden Hitachinaka',
+    type: 'restaurant',
+    address: 'Mawatari, Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4007802, lng: 140.5801509 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'Yamada Udon Hitachinaka',
+    type: 'restaurant',
+    address: 'Mawatari, Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4007217, lng: 140.5809016 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'Mos Burger Hitachinaka',
+    type: 'restaurant',
+    address: 'Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4068469, lng: 140.5867086 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'Lawson Hitachinaka Mawatari',
+    type: 'convenience_store',
+    address: 'Mawatari, Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4004098, lng: 140.5808912 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'Sanyu Store Hitachinaka',
+    type: 'convenience_store',
+    address: 'Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4060581, lng: 140.5839916 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'Starbucks Hitachinaka',
+    type: 'cafe',
+    address: 'Mawatari, Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4012439, lng: 140.5814002 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'Tullys Coffee Hitachinaka',
+    type: 'cafe',
+    address: 'Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4056448, lng: 140.5859507 },
+    spotId: 'REAL-ANI-028',
+  },
+  {
+    name: 'ape',
+    type: 'cafe',
+    address: 'Hitachinaka, Ibaraki',
+    coordinates: { lat: 36.4053372, lng: 140.5856975 },
+    spotId: 'REAL-ANI-028',
+  },
+]
+
+// REAL-ANI-029: Dogo Onsen Honkan (Spirited Away-inspired)
+const DOGO_ONSEN_FACILITIES: SeedFacility[] = [
+  {
+    name: 'FamilyMart Dogo Yunomachi',
+    type: 'convenience_store',
+    address: '18-7 Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8523573, lng: 132.7837914 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: '7-Eleven Dogo Area',
+    type: 'convenience_store',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8520672, lng: 132.7826256 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Dogo Nikitatsu Sunday Market',
+    type: 'convenience_store',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8515456, lng: 132.7834548 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Dogo Onsen Station',
+    type: 'station',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8504258, lng: 132.7850817 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Sushimaru',
+    type: 'restaurant',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8523199, lng: 132.7862855 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Iyo Tanuki',
+    type: 'restaurant',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8521905, lng: 132.7843171 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Uotake',
+    type: 'restaurant',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8520052, lng: 132.7859387 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Petit Madonna',
+    type: 'cafe',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8519331, lng: 132.7852831 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Hado Honpo',
+    type: 'cafe',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8515492, lng: 132.7852744 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Dogo no Machiya',
+    type: 'cafe',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8517463, lng: 132.7851428 },
+    spotId: 'REAL-ANI-029',
+  },
+  {
+    name: 'Josai Pharmacy Dogo',
+    type: 'other',
+    address: 'Dogoyunomachi, Matsuyama, Ehime',
+    coordinates: { lat: 33.8500276, lng: 132.7845463 },
+    spotId: 'REAL-ANI-029',
+  },
+]
+
 // ============================================
 // 스포츠 스팟 주변 편의시설
 // ============================================
@@ -1386,6 +1626,10 @@ const SEED_FACILITIES: SeedFacility[] = [
   ...ENOSHIMA_FACILITIES,
   ...AKIHABARA_FACILITIES,
   ...NARA_FACILITIES,
+  ...TOKYO_RACECOURSE_UMAMUSUME_FACILITIES,
+  ...NAKAYAMA_RACECOURSE_UMAMUSUME_FACILITIES,
+  ...HITACHI_SEASIDE_FRIEREN_FACILITIES,
+  ...DOGO_ONSEN_FACILITIES,
   // 스포츠
   ...CAMP_NOU_FACILITIES,
   ...OLD_TRAFFORD_FACILITIES,
