@@ -9,24 +9,22 @@ import {
 } from '@/types'
 import { VALID_FACILITY_TYPES } from '@/lib/facility-utils'
 
-// MongoDB document interfaces
 interface SpotDocument {
-  id: string // 커스텀 ID 사용
+  id: string
   coordinates: {
     lat: number
     lng: number
   }
 }
 
+type FacilityCoordinates = { lat: number; lng: number } | [number, number]
+
 interface FacilityDocument {
   _id: ObjectId
   name: string
   type: string
   address: string
-  coordinates: {
-    lat: number
-    lng: number
-  }
+  coordinates: FacilityCoordinates
   status?: FacilityStatus
   verificationScore?: number
   upvotes?: number
@@ -38,17 +36,15 @@ interface FacilityDocument {
   updatedAt?: Date
 }
 
-/**
- * Calculate distance between two coordinates using Haversine formula
- * Returns distance in meters
- */
+type MappedFacility = NearbyFacility | null
+
 function calculateDistance(
   lat1: number,
   lng1: number,
   lat2: number,
   lng2: number
 ): number {
-  const R = 6371000 // Earth's radius in meters
+  const r = 6371000
   const dLat = (lat2 - lat1) * (Math.PI / 180)
   const dLng = (lng2 - lng1) * (Math.PI / 180)
 
@@ -60,13 +56,34 @@ function calculateDistance(
       Math.sin(dLng / 2)
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return R * c
+  return r * c
 }
 
-/**
- * GET /api/spots/[id]/facilities - 근처 편의시설 조회
- * Requirements: 4.1, 4.2, 7.1, 7.2, 7.5
- */
+function normalizeCoordinates(
+  coordinates: FacilityCoordinates
+): { lat: number; lng: number } | null {
+  if (Array.isArray(coordinates)) {
+    if (coordinates.length !== 2) return null
+
+    const [lat, lng] = coordinates
+    if (typeof lat !== 'number' || typeof lng !== 'number') {
+      return null
+    }
+
+    return { lat, lng }
+  }
+
+  if (
+    coordinates &&
+    typeof coordinates.lat === 'number' &&
+    typeof coordinates.lng === 'number'
+  ) {
+    return coordinates
+  }
+
+  return null
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -74,14 +91,13 @@ export async function GET(
   try {
     const { id } = await params
     const { searchParams } = new URL(request.url)
-    const radiusKm = parseFloat(searchParams.get('radius') || '2') // Default 2km radius
-    const maxResults = parseInt(searchParams.get('limit') || '50') // Default 50 results
+    const radiusKm = parseFloat(searchParams.get('radius') || '2')
+    const maxResults = parseInt(searchParams.get('limit') || '50')
     const typeFilter = searchParams.get('type')
 
-    // Get spot coordinates using custom id field
     const spotsCollection = await getCollection<SpotDocument>('spots')
     const spot = await spotsCollection.findOne(
-      { id }, // 커스텀 ID로 검색
+      { id },
       { projection: { coordinates: 1 } }
     )
 
@@ -89,13 +105,10 @@ export async function GET(
       return NextResponse.json({ error: 'Spot not found' }, { status: 404 })
     }
 
-    // Build MongoDB query filter
-    // Req 7.2: status가 'hidden'인 시설 자동 제외
     const query: Record<string, unknown> = {
       status: { $ne: 'hidden' },
     }
 
-    // Req 7.1: type 파라미터로 특정 카테고리 필터링
     if (
       typeFilter &&
       VALID_FACILITY_TYPES.includes(typeFilter as FacilityType)
@@ -107,26 +120,27 @@ export async function GET(
       await getCollection<FacilityDocument>('facilities')
     const allFacilities = await facilitiesCollection.find(query).toArray()
 
-    // Calculate distances and filter by radius
-    const nearbyFacilities: NearbyFacility[] = allFacilities
-      .map((facility) => {
+    const nearbyFacilities = allFacilities
+      .map((facility): MappedFacility => {
+        const coordinates = normalizeCoordinates(facility.coordinates)
+        if (!coordinates) {
+          return null
+        }
+
         const distance = calculateDistance(
           spot.coordinates.lat,
           spot.coordinates.lng,
-          facility.coordinates.lat,
-          facility.coordinates.lng
+          coordinates.lat,
+          coordinates.lng
         )
 
-        return {
+        const mapped: NearbyFacility = {
           id: facility._id.toString(),
           name: facility.name,
           type: facility.type as FacilityType,
-          distance: Math.round(distance), // Round to nearest meter
+          distance: Math.round(distance),
           address: facility.address,
-          coordinates: [facility.coordinates.lat, facility.coordinates.lng] as [
-            number,
-            number,
-          ],
+          coordinates: [coordinates.lat, coordinates.lng] as [number, number],
           status: facility.status,
           verificationScore: facility.verificationScore,
           upvotes: facility.upvotes,
@@ -137,10 +151,13 @@ export async function GET(
           createdAt: facility.createdAt?.toISOString(),
           updatedAt: facility.updatedAt?.toISOString(),
         }
+
+        return mapped
       })
-      .filter((facility) => facility.distance <= radiusKm * 1000) // Convert km to meters
-      .sort((a, b) => a.distance - b.distance) // Sort by distance
-      .slice(0, maxResults) // Limit results
+      .filter((facility): facility is NearbyFacility => facility !== null)
+      .filter((facility) => facility.distance <= radiusKm * 1000)
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, maxResults)
 
     return NextResponse.json(nearbyFacilities)
   } catch (error) {

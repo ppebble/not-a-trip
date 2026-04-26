@@ -489,6 +489,88 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    id: 'REAL-ANI-026',
+    name: '도쿄 경마장 (우마무스메 PRETTY DERBY)',
+    description:
+      '도쿄도 후추시에 위치한 JRA의 대표 경마장이다. 일본 더비, 재팬컵 등 굵직한 레이스가 열리는 곳으로, "우마무스메 PRETTY DERBY" 팬들이 실존 레이스의 분위기와 무대를 체감하기 좋은 장소다.',
+    photos: [
+      'https://upload.wikimedia.org/wikipedia/commons/e/e3/Tokyo_Racecourse_%2852638123669%29.jpg',
+    ],
+    address: '일본 도쿄도 후추시 히요시초 1-1',
+    coordinates: { lat: 35.6658, lng: 139.4839 },
+    category: 'animation',
+    relatedContent: [
+      { name: '우마무스메 PRETTY DERBY', type: 'anime', year: 2018 },
+      { name: '우마무스메 PRETTY DERBY', type: 'game', year: 2021 },
+    ],
+    authorName: 'System',
+    isGuestSpot: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'REAL-ANI-027',
+    name: '나카야마 경마장 (우마무스메 PRETTY DERBY)',
+    description:
+      '치바현 후나바시에 있는 JRA 경마장이다. 아리마 기념과 사츠키상 같은 상징적인 레이스로 유명하며, 우마무스메에서 익숙한 실존 경주 문화를 현장에서 느껴볼 수 있다.',
+    photos: [
+      'https://upload.wikimedia.org/wikipedia/commons/6/63/Nakayama_Racecourse01.jpg',
+    ],
+    address: '일본 지바현 후나바시시 코사쿠 1-1-1',
+    coordinates: { lat: 35.7264, lng: 139.9509 },
+    category: 'animation',
+    relatedContent: [
+      { name: '우마무스메 PRETTY DERBY', type: 'anime', year: 2018 },
+      { name: '우마무스메 PRETTY DERBY', type: 'game', year: 2021 },
+    ],
+    authorName: 'System',
+    isGuestSpot: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'REAL-ANI-028',
+    name: '국영 히타치 해변공원 미하라시 언덕 (프리렌 연상 스팟)',
+    description:
+      '이바라키현 히타치나카시에 있는 대형 공원 내 전망 언덕이다. 봄철 네모필라가 언덕 전체를 푸르게 덮는 풍경으로 유명하며, "장송의 프리렌"의 꽃밭 장면을 떠올리게 하는 장소로 큐레이션했다.',
+    photos: [
+      'https://upload.wikimedia.org/wikipedia/commons/b/b4/2025_Hitachi_Seaside_Park.jpg',
+    ],
+    address: '일본 이바라키현 히타치나카시 마와타리 오누마 605-4',
+    coordinates: { lat: 36.4055, lng: 140.5967 },
+    category: 'animation',
+    relatedContent: [
+      { name: '장송의 프리렌 (葬送のフリーレン)', type: 'anime', year: 2023 },
+    ],
+    authorName: 'System',
+    isGuestSpot: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'REAL-ANI-029',
+    name: '도고 온천 본관 (센과 치히로의 행방불명)',
+    description:
+      '에히메현 마쓰야마의 상징적인 온천 건물이다. 일본에서 가장 오래된 온천 중 하나로 알려져 있으며, "센과 치히로의 행방불명"의 배경 이미지와 함께 자주 언급되는 독특한 애니메이션 성지형 장소다.',
+    photos: [
+      'https://upload.wikimedia.org/wikipedia/commons/7/7c/D%C5%8Dgo_Onsen_Honkan.jpg',
+    ],
+    address: '일본 에히메현 마쓰야마시 도고유노마치 5-6',
+    coordinates: { lat: 33.8512, lng: 132.7862 },
+    category: 'animation',
+    relatedContent: [
+      {
+        name: '센과 치히로의 행방불명 (千と千尋の神隠し)',
+        type: 'anime',
+        year: 2001,
+      },
+    ],
+    authorName: 'System',
+    isGuestSpot: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ]
 
 // ============================================

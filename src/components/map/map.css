@@ -76,6 +76,41 @@
   background: white;
 }
 
+.dark .leaflet-popup-content-wrapper {
+  background: #111827;
+  border-color: #374151;
+  color: #f5f5f5;
+}
+
+.dark .leaflet-popup-tip {
+  background: #111827;
+}
+
+.dark .leaflet-popup-content {
+  color: #f5f5f5 !important;
+}
+
+.spot-detail-popup-content {
+  color: rgb(var(--color-text));
+}
+
+.spot-detail-popup-content p,
+.spot-detail-popup-content h3,
+.spot-detail-popup-content h4 {
+  color: inherit;
+}
+
+.facility-popup-chip {
+  background: rgb(var(--color-accent-surface)) !important;
+  color: rgb(var(--color-primary-800)) !important;
+  font-weight: 600;
+}
+
+.dark .facility-popup-chip {
+  background: rgb(var(--color-primary-100)) !important;
+  color: rgb(var(--color-primary-700)) !important;
+}
+
 /* Attribution 스타일 */
 .leaflet-control-attribution {
   background: rgba(30, 24, 72, 0.8) !important; /* primary-900/80 */
@@ -173,6 +208,15 @@
 
 .spot-popup .leaflet-popup-tip {
   background: white !important;
+}
+
+.dark .spot-popup .leaflet-popup-content-wrapper {
+  background: #111827 !important;
+  border-color: #5f52c8 !important;
+}
+
+.dark .spot-popup .leaflet-popup-tip {
+  background: #111827 !important;
 }
 
 /* 마커 애니메이션 */

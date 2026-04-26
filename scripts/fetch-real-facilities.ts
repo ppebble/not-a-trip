@@ -68,6 +68,15 @@ const SPOTS: SpotInfo[] = [
   { id: 'REAL-ANI-009', name: '에노시마', lat: 35.3008, lng: 139.4797 },
   { id: 'REAL-ANI-010', name: '아키하바라', lat: 35.7023, lng: 139.7745 },
   { id: 'REAL-ANI-011', name: '나라 공원', lat: 34.6851, lng: 135.843 },
+  { id: 'REAL-ANI-026', name: '도쿄 경마장', lat: 35.6658, lng: 139.4839 },
+  { id: 'REAL-ANI-027', name: '나카야마 경마장', lat: 35.7264, lng: 139.9509 },
+  {
+    id: 'REAL-ANI-028',
+    name: '히타치 해변공원 미하라시 언덕',
+    lat: 36.4055,
+    lng: 140.5967,
+  },
+  { id: 'REAL-ANI-029', name: '도고 온천 본관', lat: 33.8512, lng: 132.7862 },
   // 스포츠 스팟
   { id: 'REAL-SPO-001', name: '캄프 누', lat: 41.3809, lng: 2.1228 },
   { id: 'REAL-SPO-002', name: '올드 트래포드', lat: 53.4631, lng: -2.2913 },
@@ -176,10 +185,17 @@ async function fetchFacilities(spot: SpotInfo): Promise<Facility[]> {
   console.log(`   좌표: ${spot.lat}, ${spot.lng}`)
 
   try {
+    const params = new URLSearchParams()
+    params.set('data', query)
+
     const response = await fetch(OVERPASS_API, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `data=${encodeURIComponent(query)}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+        'User-Agent': 'codex-cli',
+      },
+      body: params.toString(),
     })
 
     if (!response.ok) {
