@@ -62,7 +62,11 @@ export function calculateProgress(
  * NavigationPanel의 "현재 1개 스팟" 추적 방식 대신
  * "전체 스팟 체크리스트"를 한눈에 보여주는 가이드 UI.
  *
- * Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10
+ * 단일 스팟 코스 처리 (Requirement 1.6):
+ * - isSingleSpot 조건으로 거리/시간 정보 미표시
+ * - 인증 UI는 스팟 수와 무관하게 항상 제공
+ *
+ * Requirements: 1.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10
  */
 export function GuidePanel({
   spots,
