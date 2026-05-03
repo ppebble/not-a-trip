@@ -21,16 +21,14 @@ export function formatRouteShareText(routeName: string): string {
 
 /** Web Share API 지원 여부 확인 (HTTPS 환경 + navigator.share 존재) */
 export function canShare(): boolean {
-  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+  if (typeof navigator === 'undefined' || !navigator.share) {
     return false
   }
-  if (!navigator.share) {
+  // HTTP 환경(localhost 개발 환경 포함)에서는 false 반환 (Requirement 2.11)
+  if (typeof window !== 'undefined' && window.location.protocol !== 'https:') {
     return false
   }
-  // HTTP 환경(localhost 제외)에서는 Web Share API 사용 불가
-  const isHttps = window.location.protocol === 'https:'
-  const isLocalhost = window.location.hostname === 'localhost'
-  return isHttps || isLocalhost
+  return true
 }
 
 /** 공유 실행 (Web Share API → Clipboard 폴백) */
