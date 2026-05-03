@@ -11,6 +11,15 @@ export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const handleResetTour = () => {
+    try {
+      localStorage.removeItem('not-a-trip-onboarding-completed')
+      window.location.reload()
+    } catch {
+      // localStorage 접근 실패 시 무시
+    }
+  }
+
   return (
     <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
@@ -49,13 +58,10 @@ export function Header() {
             스팟 등록
           </Link>
           <button
-            onClick={() => {
-              localStorage.removeItem('not-a-trip-onboarding-completed')
-              window.location.reload()
-            }}
+            onClick={handleResetTour}
             className="text-text-secondary text-sm transition hover:text-secondary-400"
           >
-            가이드 다시 보기
+            📖 가이드 다시 보기
           </button>
           <Link
             href="/test/globe-fallback"
@@ -196,8 +202,7 @@ export function Header() {
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false)
-                localStorage.removeItem('not-a-trip-onboarding-completed')
-                window.location.reload()
+                handleResetTour()
               }}
               className="text-text-secondary hover:text-text-primary block w-full rounded-lg px-3 py-2 text-left text-sm transition hover:bg-secondary-100"
             >
