@@ -42,7 +42,8 @@ function RouteListSkeleton() {
  * Requirements: 2.1, 2.2
  */
 export default function RoutesPage() {
-  const { isActive, currentStep, next, skip } = useOnboarding(ROUTE_PAGE_STEPS)
+  const { isActive, currentStep, next, skip, dismiss } =
+    useOnboarding(ROUTE_PAGE_STEPS)
 
   return (
     <main className="min-h-screen bg-surface pt-14">
@@ -89,6 +90,7 @@ export default function RoutesPage() {
         onNext={next}
         onSkip={skip}
         onComplete={skip}
+        onDismiss={dismiss}
       />
     </main>
   )

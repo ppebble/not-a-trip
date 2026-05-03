@@ -48,7 +48,7 @@ function GalleryPageSkeleton() {
 function GalleryPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { isActive, currentStep, next, skip } =
+  const { isActive, currentStep, next, skip, dismiss } =
     useOnboarding(GALLERY_PAGE_STEPS)
 
   // 현재 활성 탭 (기본값: feed)
@@ -169,6 +169,7 @@ function GalleryPageContent() {
         onNext={next}
         onSkip={skip}
         onComplete={skip}
+        onDismiss={dismiss}
       />
     </main>
   )
