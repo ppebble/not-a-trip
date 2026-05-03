@@ -13,7 +13,7 @@ export function Header() {
 
   const handleResetTour = () => {
     try {
-      localStorage.removeItem('not-a-trip-onboarding-completed')
+      localStorage.removeItem('not-a-trip-onboarding-dismissed')
       window.location.reload()
     } catch {
       // localStorage 접근 실패 시 무시
