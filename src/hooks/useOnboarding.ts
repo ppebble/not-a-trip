@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 
-const ONBOARDING_KEY = 'not-a-trip-onboarding-dismissed'
+const ONBOARDING_KEY_PREFIX = 'not-a-trip-onboarding'
 
 export interface TourStep {
   /** 대상 요소의 CSS selector 또는 data-tour 속성값 */
@@ -25,13 +25,23 @@ export interface UseOnboardingReturn {
 }
 
 /**
+ * 페이지별 localStorage 키를 생성한다.
+ * pageKey가 없으면 기본 키를 사용한다.
+ */
+function getStorageKey(pageKey?: string): string {
+  return pageKey
+    ? `${ONBOARDING_KEY_PREFIX}-${pageKey}-dismissed`
+    : `${ONBOARDING_KEY_PREFIX}-dismissed`
+}
+
+/**
  * localStorage에서 온보딩 dismissed 상태를 읽는다.
  * dismissed=true이면 가이드 숨김.
  * 접근 실패 시 null 반환 (graceful degradation — 매번 표시).
  */
-function getStoredDismissed(): boolean | null {
+function getStoredDismissed(key: string): boolean | null {
   try {
-    const value = localStorage.getItem(ONBOARDING_KEY)
+    const value = localStorage.getItem(key)
     return value === 'true'
   } catch {
     return null
@@ -42,12 +52,12 @@ function getStoredDismissed(): boolean | null {
  * localStorage에 온보딩 dismissed 상태를 저장한다.
  * 접근 실패 시 무시 (graceful degradation).
  */
-function setStoredDismissed(dismissed: boolean): void {
+function setStoredDismissed(key: string, dismissed: boolean): void {
   try {
     if (dismissed) {
-      localStorage.setItem(ONBOARDING_KEY, 'true')
+      localStorage.setItem(key, 'true')
     } else {
-      localStorage.removeItem(ONBOARDING_KEY)
+      localStorage.removeItem(key)
     }
   } catch {
     // localStorage 접근 실패 시 무시
@@ -86,20 +96,25 @@ export function findNextValidStep(
  * - "다시 보지 않기"(dismiss) 시 localStorage에 저장하여 이후 숨김
  * - DOM에 존재하지 않는 대상 요소는 자동 건너뛰기
  * - localStorage 접근 실패 시 매번 투어 표시 (graceful degradation)
+ * - pageKey로 페이지별 독립적인 dismissed 상태 관리
  *
  * @requirements 1.2, 1.3, 2.2, 2.3, 2.4, 3.3
  */
-export function useOnboarding(steps: TourStep[]): UseOnboardingReturn {
+export function useOnboarding(
+  steps: TourStep[],
+  pageKey?: string
+): UseOnboardingReturn {
   const [isActive, setIsActive] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const initializedRef = useRef(false)
+  const storageKey = getStorageKey(pageKey)
 
   // 마운트 시 localStorage 확인하여 투어 시작 여부 결정
   useEffect(() => {
     if (initializedRef.current) return
     initializedRef.current = true
 
-    const dismissed = getStoredDismissed()
+    const dismissed = getStoredDismissed(storageKey)
 
     // dismissed=true일 때만 투어 비활성화, 그 외(false/null)에는 매번 활성화
     if (dismissed === true) {
@@ -117,7 +132,7 @@ export function useOnboarding(steps: TourStep[]): UseOnboardingReturn {
 
     setIsActive(true)
     setCurrentStep(firstValid)
-  }, [steps])
+  }, [steps, storageKey])
 
   const next = useCallback(() => {
     const nextValid = findNextValidStep(steps, currentStep + 1)
@@ -136,12 +151,12 @@ export function useOnboarding(steps: TourStep[]): UseOnboardingReturn {
   }, [])
 
   const dismiss = useCallback(() => {
-    setStoredDismissed(true)
+    setStoredDismissed(storageKey, true)
     setIsActive(false)
-  }, [])
+  }, [storageKey])
 
   const reset = useCallback(() => {
-    setStoredDismissed(false)
+    setStoredDismissed(storageKey, false)
     initializedRef.current = false
 
     const firstValid = findNextValidStep(steps, 0)
@@ -152,7 +167,7 @@ export function useOnboarding(steps: TourStep[]): UseOnboardingReturn {
 
     setIsActive(true)
     setCurrentStep(firstValid)
-  }, [steps])
+  }, [steps, storageKey])
 
   return { isActive, currentStep, next, skip, dismiss, reset }
 }
