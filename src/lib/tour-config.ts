@@ -38,3 +38,24 @@ export const GALLERY_PAGE_STEPS: TourStep[] = [
     placement: 'bottom',
   },
 ]
+
+export const ROUTE_DETAIL_STEPS: TourStep[] = [
+  {
+    target: '[data-tour="route-map"]',
+    title: '코스 지도',
+    description: '코스에 포함된 스팟들의 위치를 지도에서 확인할 수 있어요',
+    placement: 'bottom',
+  },
+  {
+    target: '[data-tour="start-route-btn"]',
+    title: '코스 시작',
+    description: '코스 시작 버튼을 누르면 순서대로 스팟을 방문할 수 있어요',
+    placement: 'top',
+  },
+  {
+    target: '[data-tour="route-spots"]',
+    title: '코스 순서',
+    description: '코스에 포함된 스팟 목록을 순서대로 확인해보세요',
+    placement: 'top',
+  },
+]
