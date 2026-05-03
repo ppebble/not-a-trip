@@ -10,6 +10,7 @@ interface OnboardingTourProps {
   onNext: () => void
   onSkip: () => void
   onComplete: () => void
+  onDismiss?: () => void
 }
 
 interface TargetRect {
@@ -88,6 +89,7 @@ export default function OnboardingTour({
   onNext,
   onSkip,
   onComplete,
+  onDismiss,
 }: OnboardingTourProps) {
   const [targetRect, setTargetRect] = useState<TargetRect | null>(null)
   const [tooltipPos, setTooltipPos] = useState<TooltipPosition>({
@@ -225,13 +227,25 @@ export default function OnboardingTour({
         </p>
 
         <div className="flex items-center justify-between">
-          <button
-            onClick={onSkip}
-            className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-            type="button"
-          >
-            건너뛰기
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onSkip}
+              className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+              type="button"
+            >
+              건너뛰기
+            </button>
+
+            {onDismiss && (
+              <button
+                onClick={onDismiss}
+                className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+                type="button"
+              >
+                다시 보지 않기
+              </button>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {/* 스텝 인디케이터 */}
