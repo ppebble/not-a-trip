@@ -41,6 +41,7 @@ export default function CategoryFilter() {
 
   return (
     <div
+      data-tour="category-filter"
       className="scrollbar-hide flex items-center gap-2 overflow-x-auto px-1 py-1"
       onPointerDown={(e) => e.stopPropagation()}
       onWheel={(e) => e.stopPropagation()}
