@@ -42,8 +42,10 @@ function RouteListSkeleton() {
  * Requirements: 2.1, 2.2
  */
 export default function RoutesPage() {
-  const { isActive, currentStep, next, skip, dismiss } =
-    useOnboarding(ROUTE_PAGE_STEPS)
+  const { isActive, currentStep, next, skip, dismiss } = useOnboarding(
+    ROUTE_PAGE_STEPS,
+    'routes'
+  )
 
   return (
     <main className="min-h-screen bg-surface pt-14">
@@ -69,19 +71,21 @@ export default function RoutesPage() {
         </div>
 
         {/* 추천 코스 섹션 - Requirements: 4.1, 4.2 */}
-        <RecommendedRoutes />
+        <div data-tour="route-content">
+          <RecommendedRoutes />
 
-        {/* 구분선 */}
-        <div className="my-6 border-t border-neutral-200" />
+          {/* 구분선 */}
+          <div className="my-6 border-t border-neutral-200" />
 
-        {/* 전체 코스 목록 */}
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-main-text">
-          <AppIcon name="route" size={20} />
-          전체 코스
-        </h2>
-        <Suspense fallback={<RouteListSkeleton />}>
-          <RouteListContent />
-        </Suspense>
+          {/* 전체 코스 목록 */}
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-main-text">
+            <AppIcon name="route" size={20} />
+            전체 코스
+          </h2>
+          <Suspense fallback={<RouteListSkeleton />}>
+            <RouteListContent />
+          </Suspense>
+        </div>
       </div>
       <OnboardingTour
         steps={ROUTE_PAGE_STEPS}

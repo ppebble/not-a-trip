@@ -13,7 +13,11 @@ export function Header() {
 
   const handleResetTour = () => {
     try {
-      localStorage.removeItem('not-a-trip-onboarding-dismissed')
+      // 모든 페이지별 온보딩 키 초기화
+      const keys = Object.keys(localStorage).filter((k) =>
+        k.startsWith('not-a-trip-onboarding')
+      )
+      keys.forEach((k) => localStorage.removeItem(k))
       window.location.reload()
     } catch {
       // localStorage 접근 실패 시 무시

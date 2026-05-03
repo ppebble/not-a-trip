@@ -70,8 +70,10 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
   const [showLoginModal, setShowLoginModal] = useState(false)
 
   const nav = useRouteNavigation()
-  const { isActive, currentStep, next, skip, dismiss } =
-    useOnboarding(ROUTE_DETAIL_STEPS)
+  const { isActive, currentStep, next, skip, dismiss } = useOnboarding(
+    ROUTE_DETAIL_STEPS,
+    'route-detail'
+  )
 
   const [showCompletionEffect, setShowCompletionEffect] = useState(false)
 
@@ -223,7 +225,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <div className="flex gap-3">
           <button
             onClick={handleStartRoute}
-            data-tour="start-route-btn"
+            data-tour="route-start-btn"
             className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
           >
             <AppIcon name="route" size={18} />
@@ -262,7 +264,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       )}
 
       {/* 코스 지도 */}
-      <div className="rounded-lg bg-surface p-4 shadow-sm" data-tour="route-map">
+      <div className="rounded-lg bg-surface p-4 shadow-sm">
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 지도
         </h2>
@@ -276,7 +278,10 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       </div>
 
       {/* 스팟 순서 목록 */}
-      <div className="rounded-lg bg-surface p-4 shadow-sm" data-tour="route-spots">
+      <div
+        className="rounded-lg bg-surface p-4 shadow-sm"
+        data-tour="route-spot-list"
+      >
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 순서 ({availableSpots.length}곳)
         </h2>

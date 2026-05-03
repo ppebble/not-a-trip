@@ -30,8 +30,10 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
  * - filterStore 전역 상태 사용
  */
 export default function MapPage() {
-  const { isActive, currentStep, next, skip, dismiss } =
-    useOnboarding(MAP_PAGE_STEPS)
+  const { isActive, currentStep, next, skip, dismiss } = useOnboarding(
+    MAP_PAGE_STEPS,
+    'map'
+  )
 
   return (
     <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">

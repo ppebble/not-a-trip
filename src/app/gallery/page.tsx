@@ -48,8 +48,10 @@ function GalleryPageSkeleton() {
 function GalleryPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { isActive, currentStep, next, skip, dismiss } =
-    useOnboarding(GALLERY_PAGE_STEPS)
+  const { isActive, currentStep, next, skip, dismiss } = useOnboarding(
+    GALLERY_PAGE_STEPS,
+    'gallery'
+  )
 
   // 현재 활성 탭 (기본값: feed)
   const tabParam = searchParams.get('tab')
