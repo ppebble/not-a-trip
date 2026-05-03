@@ -24,3 +24,4 @@ export type { AsyncBoundaryProps } from './AsyncBoundary'
 
 export { ThemeSelector } from './ThemeToggle'
 export { default as ShareButton } from './ShareButton'
+export { default as Toast } from './Toast'
