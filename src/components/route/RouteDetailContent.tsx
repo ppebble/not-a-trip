@@ -55,7 +55,8 @@ function formatDistance(meters: number): string {
 /**
  * RouteDetailContent - 코스 상세 콘텐츠
  * RouteMap + 스팟 순서 목록 + 거리/시간 + 코스 시작/저장 버튼
- * Requirements: 1.4, 2.3, 2.4, 3.1
+ * 단일 스팟(1개) 코스도 정상 표시: 코스 순서 섹션에 단일 스팟 안내 메시지 포함
+ * Requirements: 1.4, 1.7, 2.3, 2.4, 3.1
  */
 export function RouteDetailContent({ route }: RouteDetailContentProps) {
   const router = useRouter()
