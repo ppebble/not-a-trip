@@ -216,13 +216,13 @@ export default function OnboardingTour({
         ref={tooltipRef}
         id={tooltipId}
         role="tooltip"
-        className="fixed z-[10000] w-72 max-w-[calc(100vw-32px)] rounded-xl bg-white p-4 shadow-xl dark:bg-gray-800"
+        className="fixed z-[10000] w-80 max-w-[calc(100vw-32px)] rounded-xl bg-white p-5 shadow-2xl dark:bg-gray-800"
         style={{ top: tooltipPos.top, left: tooltipPos.left }}
       >
-        <h3 className="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <h3 className="mb-2 text-base font-bold text-gray-900 dark:text-gray-100">
           {step.title}
         </h3>
-        <p className="mb-4 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+        <p className="mb-5 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
           {step.description}
         </p>
 
@@ -230,7 +230,7 @@ export default function OnboardingTour({
           <div className="flex items-center gap-2">
             <button
               onClick={onSkip}
-              className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+              className="text-sm text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
               type="button"
             >
               건너뛰기
@@ -239,7 +239,7 @@ export default function OnboardingTour({
             {onDismiss && (
               <button
                 onClick={onDismiss}
-                className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+                className="text-sm text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
                 type="button"
               >
                 다시 보지 않기
@@ -247,16 +247,16 @@ export default function OnboardingTour({
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {/* 스텝 인디케이터 */}
-            <span className="text-xs text-gray-400">
+            <span className="text-sm text-gray-400">
               {currentStep + 1}/{steps.length}
             </span>
 
             <button
               ref={nextButtonRef}
               onClick={handleNext}
-              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
               type="button"
             >
               {isLastStep ? '완료' : '다음'}
