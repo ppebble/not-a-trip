@@ -12,6 +12,9 @@ import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { GuidePanel } from '@/components/route/GuidePanel'
 import { CompletionEffect } from '@/components/route/CompletionEffect'
 import { OptimizedImage } from '@/components/common'
+import OnboardingTour from '@/components/common/OnboardingTour'
+import { useOnboarding } from '@/hooks/useOnboarding'
+import { ROUTE_DETAIL_STEPS } from '@/lib/tour-config'
 import type { Route, RouteDifficulty } from '@/types/route'
 import {
   getTravelMode,
@@ -67,6 +70,8 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
   const [showLoginModal, setShowLoginModal] = useState(false)
 
   const nav = useRouteNavigation()
+  const { isActive, currentStep, next, skip, dismiss } =
+    useOnboarding(ROUTE_DETAIL_STEPS)
 
   const [showCompletionEffect, setShowCompletionEffect] = useState(false)
 
@@ -218,6 +223,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <div className="flex gap-3">
           <button
             onClick={handleStartRoute}
+            data-tour="start-route-btn"
             className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
           >
             <AppIcon name="route" size={18} />
@@ -256,7 +262,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       )}
 
       {/* 코스 지도 */}
-      <div className="rounded-lg bg-surface p-4 shadow-sm">
+      <div className="rounded-lg bg-surface p-4 shadow-sm" data-tour="route-map">
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 지도
         </h2>
@@ -270,7 +276,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
       </div>
 
       {/* 스팟 순서 목록 */}
-      <div className="rounded-lg bg-surface p-4 shadow-sm">
+      <div className="rounded-lg bg-surface p-4 shadow-sm" data-tour="route-spots">
         <h2 className="text-text-primary mb-3 text-lg font-semibold">
           코스 순서 ({availableSpots.length}곳)
         </h2>
@@ -476,6 +482,17 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         isVisible={showCompletionEffect}
         routeName={route.name}
         onClose={() => setShowCompletionEffect(false)}
+      />
+
+      {/* 온보딩 가이드 투어 */}
+      <OnboardingTour
+        steps={ROUTE_DETAIL_STEPS}
+        isActive={isActive}
+        currentStep={currentStep}
+        onNext={next}
+        onSkip={skip}
+        onComplete={skip}
+        onDismiss={dismiss}
       />
     </div>
   )
