@@ -109,6 +109,7 @@ export default function ContentSearchFilter({
   return (
     <div
       ref={containerRef}
+      data-tour="search-input"
       className={`relative flex-shrink-0 transition-all duration-300 ease-in-out ${
         isFocused ? 'w-72' : 'w-48 md:w-56'
       } ${className}`}

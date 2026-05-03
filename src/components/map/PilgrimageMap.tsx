@@ -103,7 +103,7 @@ export default function PilgrimageMap({
   }, [setCenter, setZoom])
 
   return (
-    <div ref={containerRef} className={`relative h-full w-full ${className}`}>
+    <div ref={containerRef} data-tour="map-marker" className={`relative h-full w-full ${className}`}>
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}

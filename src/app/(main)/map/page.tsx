@@ -12,6 +12,9 @@ import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
 import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
 import { EmptySearchOverlay } from '@/components/common/EmptySearchOverlay'
 import { EmptyFilterOverlay } from '@/components/common/EmptyFilterOverlay'
+import { useOnboarding } from '@/hooks/useOnboarding'
+import OnboardingTour from '@/components/common/OnboardingTour'
+import { MAP_PAGE_STEPS } from '@/lib/tour-config'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -27,9 +30,19 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
  * - filterStore 전역 상태 사용
  */
 export default function MapPage() {
+  const { isActive, currentStep, next, skip } = useOnboarding(MAP_PAGE_STEPS)
+
   return (
     <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">
       <MapContent />
+      <OnboardingTour
+        steps={MAP_PAGE_STEPS}
+        isActive={isActive}
+        currentStep={currentStep}
+        onNext={next}
+        onSkip={skip}
+        onComplete={skip}
+      />
     </main>
   )
 }
