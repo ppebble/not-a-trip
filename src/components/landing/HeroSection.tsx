@@ -44,7 +44,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             <CTAButton label="지도 탐색하기" href="/map" size="lg" />
           </header>
 
-          {/* 플로팅 카드 콜라주 비주얼 영역 (Globe3D 대체) */}
+          {/* 플로팅 카드 콜라주 비주얼 영역 */}
           <div className="relative flex flex-1 items-center justify-center">
             <FloatingCardsCollage
               reducedMotion={reducedMotion}
