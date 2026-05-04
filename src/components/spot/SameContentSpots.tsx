@@ -4,27 +4,41 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSpots, SpotPin } from '@/hooks/useSpots'
-import { RelatedContent, CATEGORY_CONFIG, SpotCategory } from '@/types'
+import {
+  RelatedContent,
+  SpotContentRelation,
+  CATEGORY_CONFIG,
+  SpotCategory,
+} from '@/types'
+import { getPrimaryRelation } from '@/lib/relation-utils'
 import { CategoryIcon } from '@/components/common'
 import { MapPinIcon } from '@/components/icons'
 
 interface SameContentSpotsProps {
   /** 현재 스팟 ID (자기 자신 제외용) */
   currentSpotId: string
-  /** 관련 작품 목록 */
-  relatedContent: RelatedContent[]
+  /** 스팟-작품 관계 목록 (우선) */
+  relations: SpotContentRelation[]
+  /** 관련 작품 목록 (폴백용, 과도기) */
+  relatedContent?: RelatedContent[]
 }
 
 /**
  * 같은 작품의 다른 스팟 목록 컴포넌트
- * 첫 번째 relatedContent.name 기준으로 검색하여 현재 스팟을 제외한 목록 표시
- * Requirements: 4.6, 4.7
+ * 대표 관계(displayPriority 최소)의 contentName 기준으로 by-content API 호출
+ * relations 없으면 기존 relatedContent[0].name 폴백
+ * Requirements: 6.1, 6.2, 6.3
  */
 export function SameContentSpots({
   currentSpotId,
+  relations,
   relatedContent,
 }: SameContentSpotsProps) {
-  const contentName = relatedContent[0]?.name
+  // relations 우선, relatedContent 폴백
+  const primaryRelation =
+    relations?.length > 0 ? getPrimaryRelation(relations) : undefined
+  const contentName = primaryRelation?.contentName ?? relatedContent?.[0]?.name
+
   const { data: spots, isLoading } = useSpots(
     undefined,
     contentName,
