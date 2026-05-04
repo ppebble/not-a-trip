@@ -272,6 +272,12 @@ export async function DELETE(
     const postsCollection = await getCollection('posts')
     await postsCollection.updateMany({ spotId: id }, { $unset: { spotId: '' } })
 
+    // 연관 데이터 삭제 (spot_content_relations) - Requirements 10.3
+    const relationsCollection = await getCollection(
+      COLLECTIONS.SPOT_CONTENT_RELATIONS
+    )
+    await relationsCollection.deleteMany({ spotId: id })
+
     // 스팟 삭제
     await collection.deleteOne({ id })
 
