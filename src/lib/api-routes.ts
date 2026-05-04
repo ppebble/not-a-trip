@@ -15,6 +15,8 @@ export const API_ROUTES = {
     DETAIL: (id: string) => `/api/spots/${id}`,
     FACILITIES: (id: string) => `/api/spots/${id}/facilities`,
     SCENES: (id: string) => `/api/spots/${id}/scenes`,
+    RELATIONS: (id: string) => `/api/spots/${id}/relations`,
+    BY_CONTENT: '/api/spots/relations/by-content',
     COMMUNITY_SUMMARY: '/api/spots/community-summary',
   },
 
