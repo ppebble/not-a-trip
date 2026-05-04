@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCollection } from '@/lib/db'
+import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import {
   SpotPin,
@@ -9,6 +9,7 @@ import {
   ExternalLink,
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
+import { convertRelatedContentToRelation } from '@/lib/relation-utils'
 
 /**
  * 정규식 특수문자 이스케이프 처리
@@ -251,6 +252,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     await collection.insertOne(newSpot)
+
+    // spot_content_relations 동기화 (Requirements 10.1, 10.4)
+    if (newSpot.relatedContent && newSpot.relatedContent.length > 0) {
+      const relationsCollection = await getCollection(
+        COLLECTIONS.SPOT_CONTENT_RELATIONS
+      )
+      const relations = newSpot.relatedContent.map((content, index) =>
+        convertRelatedContentToRelation(newSpot.id, content, index)
+      )
+      await relationsCollection.insertMany(relations)
+    }
 
     return NextResponse.json(
       {
