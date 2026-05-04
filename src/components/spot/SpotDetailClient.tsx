@@ -50,6 +50,10 @@ import {
 } from '@/components/icons'
 import ShareButton from '@/components/common/ShareButton'
 import { formatSpotShareText } from '@/lib/share-utils'
+import {
+  getContentNamesFromRelations,
+  getPrimaryContentName,
+} from '@/lib/relation-utils'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -163,7 +167,7 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
                 title={spot.name}
                 text={formatSpotShareText(
                   spot.name,
-                  spot.relatedContent?.[0]?.name
+                  getPrimaryContentName(spot.relations, spot.relatedContent)
                 )}
                 variant="icon"
               />
@@ -489,8 +493,14 @@ function SpotDetailContent({
       )}
 
       {/* 관련 순례 코스 */}
-      {spot.relatedContent && spot.relatedContent.length > 0 && (
-        <RelatedRoutes contentNames={spot.relatedContent.map((c) => c.name)} />
+      {((spot.relations && spot.relations.length > 0) ||
+        (spot.relatedContent && spot.relatedContent.length > 0)) && (
+        <RelatedRoutes
+          contentNames={getContentNamesFromRelations(
+            spot.relations,
+            spot.relatedContent
+          )}
+        />
       )}
 
       {/* Related Content - 맨 아래 */}
