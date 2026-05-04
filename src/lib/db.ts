@@ -106,6 +106,8 @@ export const COLLECTIONS = {
   FACILITY_VOTES: 'facility_votes',
   // 인증 시스템 계정 연동 컬렉션 (15-oauth-integration)
   ACCOUNTS: 'accounts',
+  // 스팟-작품 관계 컬렉션 (30-spot-content-relation)
+  SPOT_CONTENT_RELATIONS: 'spot_content_relations',
 } as const
 
 /**
