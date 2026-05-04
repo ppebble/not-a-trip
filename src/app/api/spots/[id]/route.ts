@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCollection } from '@/lib/db'
+import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { canEditSpot, canDeleteSpot } from '@/lib/auth-utils'
 import {
@@ -9,6 +9,7 @@ import {
   RelatedContent,
   UpdateSpotInput,
   ExternalLink,
+  SpotContentRelation,
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
 
@@ -55,6 +56,14 @@ export async function GET(
       return NextResponse.json({ error: 'Spot not found' }, { status: 404 })
     }
 
+    // spot_content_relations에서 active 관계를 displayPriority 오름차순으로 조회
+    const relationsCollection =
+      await getCollection<SpotContentRelation>(COLLECTIONS.SPOT_CONTENT_RELATIONS)
+    const relations = await relationsCollection
+      .find({ spotId: spot.id, status: 'active' })
+      .sort({ displayPriority: 1 })
+      .toArray()
+
     const spotResponse: SpotResponse = {
       id: spot.id,
       name: spot.name,
@@ -75,7 +84,7 @@ export async function GET(
       isGuestSpot: spot.isGuestSpot,
     }
 
-    return NextResponse.json(spotResponse)
+    return NextResponse.json({ ...spotResponse, relations })
   } catch (error) {
     console.error('Error fetching spot detail:', error)
     return NextResponse.json(
