@@ -478,10 +478,12 @@ function SpotDetailContent({
         onConfirm={() => router.push('/auth/signin')}
       />
 
-      {/* 같은 작품의 다른 스팟 (Requirements 4.6, 4.7) */}
-      {spot.relatedContent && spot.relatedContent.length > 0 && (
+      {/* 같은 작품의 다른 스팟 (Requirements 6.1, 6.2, 6.3) */}
+      {((spot.relations && spot.relations.length > 0) ||
+        (spot.relatedContent && spot.relatedContent.length > 0)) && (
         <SameContentSpots
           currentSpotId={spot.id}
+          relations={spot.relations || []}
           relatedContent={spot.relatedContent}
         />
       )}
