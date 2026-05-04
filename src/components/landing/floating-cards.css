@@ -1,0 +1,144 @@
+/**
+ * 플로팅 카드 CSS 애니메이션
+ * - 12개 카드별 고유 float keyframes (float-card-0 ~ float-card-11)
+ * - GPU 가속: transform 속성만 사용하여 60fps 유지
+ * - will-change: transform으로 합성 레이어 생성
+ * - prefers-reduced-motion: reduce 미디어 쿼리 존중
+ *
+ * Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6
+ */
+
+/* ============================================
+   Base: GPU 가속 최적화
+   ============================================ */
+
+.floating-card {
+  will-change: transform;
+}
+
+/* ============================================
+   Keyframes: 12개 카드별 고유 float 애니메이션
+   - translateY: -8px ~ 8px (위아래 떠다님)
+   - translateX: -3px ~ 3px (좌우 미세 움직임)
+   - rotate: ±2deg (살짝 기울어짐 변화)
+   - 각 카드마다 다른 값으로 자연스러운 변화 연출
+   ============================================ */
+
+@keyframes float-card-0 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-10px) translateX(3px) rotate(2deg);
+  }
+}
+
+@keyframes float-card-1 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-8px) translateX(-2px) rotate(-1.5deg);
+  }
+}
+
+@keyframes float-card-2 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-12px) translateX(2px) rotate(1deg);
+  }
+}
+
+@keyframes float-card-3 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-7px) translateX(-3px) rotate(-2deg);
+  }
+}
+
+@keyframes float-card-4 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-9px) translateX(1px) rotate(1.5deg);
+  }
+}
+
+@keyframes float-card-5 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-11px) translateX(-1px) rotate(-1deg);
+  }
+}
+
+@keyframes float-card-6 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-8px) translateX(2px) rotate(2deg);
+  }
+}
+
+@keyframes float-card-7 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-10px) translateX(-2px) rotate(-1.8deg);
+  }
+}
+
+@keyframes float-card-8 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-6px) translateX(3px) rotate(1.2deg);
+  }
+}
+
+@keyframes float-card-9 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-12px) translateX(-1px) rotate(-2deg);
+  }
+}
+
+@keyframes float-card-10 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-9px) translateX(2px) rotate(1.8deg);
+  }
+}
+
+@keyframes float-card-11 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-7px) translateX(-3px) rotate(-1.5deg);
+  }
+}
+
+/* ============================================
+   접근성: prefers-reduced-motion 존중
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-card {
+    animation: none !important;
+    will-change: auto;
+  }
+}
