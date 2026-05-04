@@ -12,6 +12,7 @@ import {
   SpotContentRelation,
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
+import { convertRelatedContentToRelation } from '@/lib/relation-utils'
 
 // MongoDB document interface
 interface SpotDocument {
@@ -57,8 +58,9 @@ export async function GET(
     }
 
     // spot_content_relations에서 active 관계를 displayPriority 오름차순으로 조회
-    const relationsCollection =
-      await getCollection<SpotContentRelation>(COLLECTIONS.SPOT_CONTENT_RELATIONS)
+    const relationsCollection = await getCollection<SpotContentRelation>(
+      COLLECTIONS.SPOT_CONTENT_RELATIONS
+    )
     const relations = await relationsCollection
       .find({ spotId: spot.id, status: 'active' })
       .sort({ displayPriority: 1 })
@@ -192,6 +194,22 @@ export async function PUT(
       updateFields.externalLinks = body.externalLinks
 
     await collection.updateOne({ id }, { $set: updateFields })
+
+    // Relations 동기화: relatedContent 변경 시 기존 관계 삭제 후 재생성 (Requirements 10.2, 10.4)
+    if (updateFields.relatedContent !== undefined) {
+      const relationsCollection = await getCollection(
+        COLLECTIONS.SPOT_CONTENT_RELATIONS
+      )
+      // 기존 관계 삭제
+      await relationsCollection.deleteMany({ spotId: id })
+      // 새 관계 생성
+      if (updateFields.relatedContent.length > 0) {
+        const relations = updateFields.relatedContent.map((content, index) =>
+          convertRelatedContentToRelation(id, content, index)
+        )
+        await relationsCollection.insertMany(relations)
+      }
+    }
 
     return NextResponse.json({
       id,
