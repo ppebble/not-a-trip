@@ -23,10 +23,7 @@ export function normalizeContentName(name: string): string {
 /**
  * contentId 생성: {spotId}_{normalizedName} 형식
  */
-export function generateContentId(
-  spotId: string,
-  contentName: string
-): string {
+export function generateContentId(spotId: string, contentName: string): string {
   const normalized = normalizeContentName(contentName)
   return `${spotId}_${normalized}`
 }
