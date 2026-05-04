@@ -492,7 +492,10 @@ function SpotDetailContent({
       )}
 
       {/* Related Content - 맨 아래 */}
-      <RelatedContentSection contents={spot.relatedContent || []} />
+      <RelatedContentSection
+        relations={spot.relations || []}
+        contents={spot.relatedContent || []}
+      />
     </div>
   )
 }
