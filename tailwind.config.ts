@@ -87,6 +87,15 @@ const config: Config = {
         'screen-safe':
           'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
       },
+      keyframes: {
+        'mascot-float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-3px)' },
+        },
+      },
+      animation: {
+        'mascot-float': 'mascot-float 3s ease-in-out infinite',
+      },
     },
   },
   plugins: [
