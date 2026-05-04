@@ -77,12 +77,15 @@ const mixedStepsArb = fc
   .chain(({ inDomIds, notInDomIds }) => {
     const allIds = [...inDomIds, ...notInDomIds]
     // 셔플된 순서로 스텝 배열 생성
-    return fc.shuffledSubarray(allIds, { minLength: allIds.length, maxLength: allIds.length }).map(
-      (shuffled) => ({
+    return fc
+      .shuffledSubarray(allIds, {
+        minLength: allIds.length,
+        maxLength: allIds.length,
+      })
+      .map((shuffled) => ({
         inDomIds,
         steps: shuffled.map(tourStepFromId),
-      })
-    )
+      }))
   })
 
 // ============================================

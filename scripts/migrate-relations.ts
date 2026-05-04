@@ -19,7 +19,9 @@ interface SpotDocument {
 }
 
 async function migrateRelations() {
-  console.log('🚀 relatedContent → spot_content_relations 마이그레이션 시작...\n')
+  console.log(
+    '🚀 relatedContent → spot_content_relations 마이그레이션 시작...\n'
+  )
 
   const { db } = await connectToDatabase()
   const spotsCollection = db.collection<SpotDocument>(COLLECTIONS.SPOTS)

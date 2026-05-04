@@ -385,13 +385,13 @@ export interface UserLikeStatus {
 
 /** 관계 유형 */
 export type RelationType =
-  | 'scene_depicted'          // 장면 등장
-  | 'inspired_by'             // 모티프
-  | 'filming_location'        // 촬영지
-  | 'collaboration_event'     // 콜라보 이벤트
-  | 'merchandise_spot'        // 굿즈/전시
-  | 'fan_inferred'            // 팬 추정 성지
-  | 'promotional_reference'   // 홍보 등장
+  | 'scene_depicted' // 장면 등장
+  | 'inspired_by' // 모티프
+  | 'filming_location' // 촬영지
+  | 'collaboration_event' // 콜라보 이벤트
+  | 'merchandise_spot' // 굿즈/전시
+  | 'fan_inferred' // 팬 추정 성지
+  | 'promotional_reference' // 홍보 등장
 
 /** 신뢰도 */
 export type ConfidenceLevel = 'high' | 'medium' | 'low'
