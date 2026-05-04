@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { FloatingCard } from './FloatingCard'
+import './floating-cards.css'
 import { MascotOverlay } from './MascotOverlay'
 import { CARD_PLACEMENTS, SHOWCASE_CARDS } from './data/showcaseCards'
 
@@ -85,7 +86,7 @@ export function FloatingCardsCollage({
         }
 
         return (
-          <div key={card.id} style={cardStyle}>
+          <div key={card.id} className="floating-card" style={cardStyle}>
             <FloatingCard
               card={card}
               index={index}
