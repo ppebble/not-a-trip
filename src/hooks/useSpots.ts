@@ -3,7 +3,12 @@ import {
   useSuspenseQuery,
   keepPreviousData,
 } from '@tanstack/react-query'
-import { SpotCategory, RelatedContent, ExternalLink } from '@/types'
+import {
+  SpotCategory,
+  RelatedContent,
+  ExternalLink,
+  SpotContentRelation,
+} from '@/types'
 import type { SpotStatus } from '@/types/report'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 
@@ -53,6 +58,8 @@ export interface SpotDetailData {
   firstReporterId?: string
   /** 최초 제보자 이름 (09-spot-report-wiki) */
   firstReporterName?: string
+  /** 스팟-작품 관계 목록 (30-spot-content-relation) */
+  relations?: SpotContentRelation[]
 }
 
 // API response types
