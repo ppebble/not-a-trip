@@ -70,7 +70,6 @@ export function WelcomePageClient() {
       ) : (
         <HeroSection
           ref={heroRef}
-          isHighEnd={isHighEnd}
           reducedMotion={reducedMotion}
         />
       )}
@@ -110,8 +109,15 @@ function HeroSkeleton() {
           <div className="h-6 w-48 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
           <div className="h-12 w-36 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
         </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="h-64 w-64 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-700 md:h-80 md:w-80" />
+        {/* 카드 콜라주 스켈레톤 (기존 원형 지구본 → 사각형 카드들) */}
+        <div className="relative flex flex-1 items-center justify-center">
+          <div className="relative h-64 w-64 md:h-80 md:w-80">
+            <div className="absolute left-2 top-4 h-20 w-16 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(-5deg)' }} />
+            <div className="absolute right-4 top-2 h-24 w-20 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(3deg)' }} />
+            <div className="absolute bottom-8 left-8 h-20 w-16 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(4deg)' }} />
+            <div className="absolute bottom-4 right-6 h-24 w-20 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(-3deg)' }} />
+            <div className="absolute left-1/2 top-1/2 h-20 w-16 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'translate(-50%, -50%) rotate(2deg)' }} />
+          </div>
         </div>
       </div>
     </section>

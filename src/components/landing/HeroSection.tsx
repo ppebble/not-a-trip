@@ -1,32 +1,21 @@
 'use client'
 
 import { forwardRef } from 'react'
-import dynamic from 'next/dynamic'
 import { CTAButton } from './CTAButton'
-import { GlobeFallback2D } from './GlobeFallback2D'
-import { GLOBE_DATA_POINTS } from './data/globeData'
+import { FloatingCardsCollage } from './FloatingCardsCollage'
 
 /**
  * 히어로 섹션 컴포넌트
- * 3D 지구본(또는 2D 폴백) + 가치 제안 카피 + CTA 버튼으로 구성
- * Requirements: 1.1, 1.2, 1.5, 1.6, 6.4, 7.4
+ * 플로팅 카드 콜라주 + 가치 제안 카피 + CTA 버튼으로 구성
+ * Requirements: 4.1, 4.2, 4.3, 4.4
  */
 
 interface HeroSectionProps {
-  isHighEnd: boolean
   reducedMotion: boolean
 }
 
-/** Globe3D를 dynamic import로 로드 (SSR 비활성화, 번들 분리) */
-const Globe3D = dynamic(() => import('./Globe3D').then((mod) => mod.Globe3D), {
-  ssr: false,
-  loading: () => (
-    <GlobeFallback2D className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]" />
-  ),
-})
-
 export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
-  function HeroSection({ isHighEnd, reducedMotion }, ref) {
+  function HeroSection({ reducedMotion }, ref) {
     return (
       <section
         ref={ref}
@@ -55,17 +44,12 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             <CTAButton label="지도 탐색하기" href="/map" size="lg" />
           </header>
 
-          {/* 지구본 비주얼 영역 */}
+          {/* 플로팅 카드 콜라주 비주얼 영역 (Globe3D 대체) */}
           <div className="relative flex flex-1 items-center justify-center">
-            {/* 3D/2D 지구본 분기 렌더링 */}
-            {isHighEnd && !reducedMotion ? (
-              <Globe3D
-                dataPoints={GLOBE_DATA_POINTS}
-                className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
-              />
-            ) : (
-              <GlobeFallback2D className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]" />
-            )}
+            <FloatingCardsCollage
+              reducedMotion={reducedMotion}
+              className="h-72 w-72 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+            />
           </div>
         </div>
       </section>
