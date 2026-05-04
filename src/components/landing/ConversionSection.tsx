@@ -88,7 +88,6 @@ export const ConversionSection = forwardRef<
 
 /**
  * 마스코트 여권 인라인 SVG 일러스트
- * GlobeFallback2D 패턴과 동일하게 인라인 SVG로 구현
  */
 function PassportIllustration() {
   return (
