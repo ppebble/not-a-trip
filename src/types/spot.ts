@@ -378,3 +378,85 @@ export interface UserLikeStatus {
   liked: boolean
   likeCount: number
 }
+
+// ============================================
+// SpotContentRelation Types (스팟-작품 관계)
+// ============================================
+
+/** 관계 유형 */
+export type RelationType =
+  | 'scene_depicted'          // 장면 등장
+  | 'inspired_by'             // 모티프
+  | 'filming_location'        // 촬영지
+  | 'collaboration_event'     // 콜라보 이벤트
+  | 'merchandise_spot'        // 굿즈/전시
+  | 'fan_inferred'            // 팬 추정 성지
+  | 'promotional_reference'   // 홍보 등장
+
+/** 신뢰도 */
+export type ConfidenceLevel = 'high' | 'medium' | 'low'
+
+/** 공식성 */
+export type Officialness =
+  | 'official'
+  | 'community_verified'
+  | 'user_submitted'
+  | 'unverified'
+
+/** 관계 상태 */
+export type RelationStatus = 'active' | 'expired' | 'scheduled' | 'archived'
+
+/** 관계 유형 한글 라벨 */
+export const RELATION_TYPE_LABELS: Record<RelationType, string> = {
+  scene_depicted: '장면 등장',
+  inspired_by: '모티프',
+  filming_location: '촬영지',
+  collaboration_event: '콜라보 이벤트',
+  merchandise_spot: '굿즈/전시',
+  fan_inferred: '팬 추정 성지',
+  promotional_reference: '홍보 등장',
+}
+
+/** SpotContentRelation 엔티티 */
+export interface SpotContentRelation {
+  /** 고유 ID */
+  id: string
+  /** 연결된 스팟 ID */
+  spotId: string
+  /** 콘텐츠 식별자 ({spotId}_{normalizedContentName}) */
+  contentId: string
+  /** 작품명 */
+  contentName: string
+  /** 작품 타입 */
+  contentType: ContentType
+  /** 작품 대표 이미지 URL */
+  contentImageUrl?: string
+  /** 관계 유형 */
+  relationType: RelationType
+  /** 신뢰도 */
+  confidenceLevel: ConfidenceLevel
+  /** 공식성 */
+  officialness: Officialness
+  /** 표시 우선순위 (낮을수록 먼저) */
+  displayPriority: number
+  /** 관계 상태 */
+  status: RelationStatus
+  /** 요약 설명 */
+  summary?: string
+  /** 시작일 (기간성 관계) */
+  startDate?: Date
+  /** 종료일 (기간성 관계) */
+  endDate?: Date
+  /** 증거 수 */
+  sourceCount?: number
+  /** 검증 점수 */
+  verificationScore?: number
+  /** 생성자 ID */
+  createdBy?: string
+  /** 수정자 ID */
+  updatedBy?: string
+  /** 생성일 */
+  createdAt: Date
+  /** 수정일 */
+  updatedAt: Date
+}
