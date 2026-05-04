@@ -108,16 +108,38 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       }
     }
 
-    // 검색 필터 (Requirements 6.1, 6.2, 6.3, 6.4)
+    // 검색 필터 (Requirements 6.1, 6.2, 6.3, 6.4, 9.1, 9.2, 9.3)
     // - 빈 문자열이 아닌 경우에만 필터 적용 (6.4)
     // - name 또는 relatedContent.name 부분 일치 검색 (6.2)
+    // - spot_content_relations의 contentName 부분 일치 검색 (9.1)
     // - 대소문자 무시 (6.2)
     // - category와 AND 조건 결합 (6.3)
+    // - relations + relatedContent 결과 합산(union), 중복 제거 (9.2, 9.3)
     if (searchParam && searchParam.trim() !== '') {
       const escapedSearch = escapeRegex(searchParam.trim())
+
+      // spot_content_relations에서 contentName 부분 일치하는 spotId 조회
+      const relationsCollection = await getCollection(
+        COLLECTIONS.SPOT_CONTENT_RELATIONS
+      )
+      const matchingRelations = await relationsCollection
+        .find({
+          contentName: { $regex: escapedSearch, $options: 'i' },
+          status: 'active',
+        })
+        .project({ spotId: 1 })
+        .toArray()
+      const relationSpotIds = [
+        ...new Set(matchingRelations.map((r) => r.spotId as string)),
+      ]
+
+      // 기존 검색 조건 + relations 매칭 spotId 합산
       query.$or = [
         { name: { $regex: escapedSearch, $options: 'i' } },
         { 'relatedContent.name': { $regex: escapedSearch, $options: 'i' } },
+        ...(relationSpotIds.length > 0
+          ? [{ id: { $in: relationSpotIds } }]
+          : []),
       ]
     }
 
