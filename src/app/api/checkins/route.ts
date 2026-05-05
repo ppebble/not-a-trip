@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
-import { CheckIn, CheckInInput, CheckInFilter, UserStats } from '@/types'
+import {
+  CheckIn,
+  CheckInInput,
+  CheckInFilter,
+  UserStats,
+  SpotContentRelation,
+  RelationType,
+} from '@/types'
 import { checkAndAwardBadges } from '@/lib/badge-utils'
 
 /**
@@ -20,6 +27,12 @@ interface CheckInDocument {
   visitedAt: Date
   comment?: string
   likeCount: number
+  // relation 기반 필드
+  relationId?: string
+  contentId?: string
+  contentName?: string
+  relationType?: RelationType
+  migrationStatus?: 'resolved' | 'unresolved' | null
   createdAt: Date
   updatedAt?: Date
 }
@@ -197,7 +210,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
 /**
  * POST /api/checkins - 인증 생성
- * Requirements: 1.1, 1.3
+ * Requirements: 1.1, 1.3, 2.7, 2.8, 3.9, 11.1, 11.2, 11.3, 11.7
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -231,6 +244,57 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
+    // === relation 분기 로직 (Requirements 2.7, 3.9, 11.1~11.3) ===
+    let resolvedRelation: SpotContentRelation | null = null
+
+    try {
+      const relationsCollection = await getCollection<SpotContentRelation>(
+        COLLECTIONS.SPOT_CONTENT_RELATIONS
+      )
+      const activeRelations = await relationsCollection
+        .find({ spotId: body.spotId.trim(), status: 'active' })
+        .sort({ displayPriority: 1 })
+        .toArray()
+
+      if (activeRelations.length === 0) {
+        // 0개: relationId 없이 체크인 허용 (Requirements 11.1)
+        resolvedRelation = null
+      } else if (activeRelations.length === 1) {
+        // 1개: 자동 선택 (Requirements 11.2)
+        if (body.relationId && body.relationId !== activeRelations[0].id) {
+          return NextResponse.json(
+            { error: '유효하지 않은 관계 ID입니다' },
+            { status: 400 }
+          )
+        }
+        resolvedRelation = activeRelations[0]
+      } else {
+        // 2개 이상: relationId 필수 (Requirements 11.3)
+        if (!body.relationId) {
+          return NextResponse.json(
+            { error: '이 스팟에는 작품 선택이 필요합니다' },
+            { status: 400 }
+          )
+        }
+        // 유효한 relationId인지 확인 (Requirements 2.8, 11.7)
+        const matched = activeRelations.find((r) => r.id === body.relationId)
+        if (!matched) {
+          return NextResponse.json(
+            { error: '유효하지 않은 관계 ID입니다' },
+            { status: 400 }
+          )
+        }
+        resolvedRelation = matched
+      }
+    } catch (relError) {
+      // relations 조회 실패 시 400 에러 (M2 수정사항, Requirements 3.9)
+      console.error('Relations 조회 실패:', relError)
+      return NextResponse.json(
+        { error: '작품 정보를 조회할 수 없습니다' },
+        { status: 400 }
+      )
+    }
+
     const collection = await getCollection<CheckInDocument>(
       COLLECTIONS.CHECKINS
     )
@@ -250,6 +314,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       visitedAt: new Date(body.visitedAt),
       comment: body.comment?.trim(),
       likeCount: 0,
+      // relation 스냅샷 필드 (Requirements 2.7)
+      ...(resolvedRelation && {
+        relationId: resolvedRelation.id,
+        contentId: resolvedRelation.contentId,
+        contentName: resolvedRelation.contentName,
+        relationType: resolvedRelation.relationType,
+      }),
       createdAt: now,
       updatedAt: now,
     }
