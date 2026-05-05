@@ -111,6 +111,7 @@ function SameContentSpotCard({ spot }: { spot: SpotPin }) {
             sizes="160px"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             onError={() => setImageError(true)}
+            unoptimized={spot.thumbnailUrl.startsWith('http')}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">

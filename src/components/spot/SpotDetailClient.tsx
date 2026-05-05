@@ -353,6 +353,7 @@ function SpotDetailContent({
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-300 hover:scale-105"
                     priority={index === 0}
+                    unoptimized={photo.startsWith('http')}
                     {...(index === 0 ? {} : blurPlaceholderProps)}
                   />
                 </div>
