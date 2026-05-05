@@ -102,7 +102,9 @@ async function updateUserStats(userId: string): Promise<void> {
  * Query params:
  *   - spotId: 스팟별 필터
  *   - userId: 유저별 필터
- *   - contentName: 작품명 필터 (해당 작품과 연결된 스팟의 체크인만 조회)
+ *   - contentName: 작품명 필터 (relation 기반, unresolved 제외)
+ *   - relationId: 특정 relation 필터
+ *   - includeUnresolved: true일 때 unresolved 체크인 별도 포함
  *   - sortBy: 정렬 (latest | popular)
  *   - page: 페이지 번호
  *   - limit: 페이지당 개수
@@ -115,6 +117,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const { searchParams } = new URL(request.url)
     const contentName = searchParams.get('contentName') || undefined
+    const relationId = searchParams.get('relationId') || undefined
+    const includeUnresolved = searchParams.get('includeUnresolved') === 'true'
     const filter: CheckInFilter = {
       spotId: searchParams.get('spotId') || undefined,
       userId: searchParams.get('userId') || undefined,
@@ -129,36 +133,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (filter.spotId) query.spotId = filter.spotId
     if (filter.userId) query.userId = filter.userId
 
-    // contentName 필터: 해당 작품과 연결된 스팟의 체크인만 조회
-    // Requirements 3.5: 작품 선택 시 해당 작품 체크인만 필터링
+    // contentName 필터: relation 기반 (Requirements 4.1, 4.2, 8.1, 8.2)
+    // migrationStatus: { $ne: 'unresolved' } → null(신규)과 resolved 모두 포함
     if (contentName) {
-      const spotsCollection = await getCollection(COLLECTIONS.SPOTS)
+      query.contentName = contentName
+      query.migrationStatus = { $ne: 'unresolved' }
+    }
 
-      // 해당 작품명을 relatedContent에 포함하는 스팟 ID 목록 조회
-      const matchingSpots = await spotsCollection
-        .find({
-          'relatedContent.name': {
-            $regex: `^${contentName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
-            $options: 'i',
-          },
-        })
-        .project({ id: 1 })
-        .toArray()
-
-      const spotIds = matchingSpots.map((spot) => spot.id as string)
-
-      if (spotIds.length === 0) {
-        // 해당 작품과 연결된 스팟이 없으면 빈 결과 반환
-        return NextResponse.json({
-          checkins: [],
-          total: 0,
-          page: filter.page,
-          limit: filter.limit,
-          totalPages: 0,
-        })
-      }
-
-      query.spotId = { $in: spotIds }
+    // relationId 필터 (Requirements 4.5)
+    if (relationId) {
+      query.relationId = relationId
     }
 
     // 정렬 조건
@@ -176,7 +160,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       collection.countDocuments(query),
     ])
 
-    // Document를 CheckIn 타입으로 변환
+    // Document를 CheckIn 타입으로 변환 (Requirements 4.6, 8.5)
     const result: CheckIn[] = checkins.map((doc) => ({
       id: doc.id,
       spotId: doc.spotId,
@@ -188,17 +172,56 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       visitedAt: doc.visitedAt,
       comment: doc.comment,
       likeCount: doc.likeCount,
+      // relation 메타데이터 포함 (Requirements 4.6, 8.5)
+      ...(doc.relationId && { relationId: doc.relationId }),
+      ...(doc.contentId && { contentId: doc.contentId }),
+      ...(doc.contentName && { contentName: doc.contentName }),
+      ...(doc.relationType && { relationType: doc.relationType }),
+      ...(doc.migrationStatus !== undefined && {
+        migrationStatus: doc.migrationStatus,
+      }),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     }))
 
-    return NextResponse.json({
+    // includeUnresolved 처리 (Requirements 4.3, 8.3)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response: Record<string, any> = {
       checkins: result,
       total,
       page: filter.page,
       limit: filter.limit,
       totalPages: Math.ceil(total / limit),
-    })
+    }
+
+    if (includeUnresolved && filter.spotId) {
+      const unresolvedQuery = {
+        spotId: filter.spotId,
+        migrationStatus: 'unresolved' as const,
+      }
+      const [unresolvedCheckins, unresolvedTotal] = await Promise.all([
+        collection.find(unresolvedQuery).sort(sort).toArray(),
+        collection.countDocuments(unresolvedQuery),
+      ])
+      response.unresolvedCheckins = unresolvedCheckins.map((doc) => ({
+        id: doc.id,
+        spotId: doc.spotId,
+        userId: doc.userId,
+        userName: doc.userName,
+        userImage: doc.userImage,
+        photoUrl: doc.photoUrl,
+        sceneImageUrl: doc.sceneImageUrl,
+        visitedAt: doc.visitedAt,
+        comment: doc.comment,
+        likeCount: doc.likeCount,
+        migrationStatus: doc.migrationStatus,
+        createdAt: doc.createdAt,
+        updatedAt: doc.updatedAt,
+      }))
+      response.unresolvedTotal = unresolvedTotal
+    }
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error('Error fetching checkins:', error)
     return NextResponse.json(
