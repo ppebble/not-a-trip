@@ -349,6 +349,8 @@ export interface Scene {
   spotId: string
   imageUrl: string
   animeTitle: string
+  /** 작품명 (animeTitle에서 매핑, 새 필드) */
+  contentName?: string
   episodeInfo?: string
   description?: string
   likeCount: number
