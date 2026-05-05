@@ -2,11 +2,12 @@
 
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
-import { useSelectedCategories, useSearchQuery } from '@/stores/filterStore'
+import { useSelectedCategories, useSearchQuery, useFilterStore } from '@/stores/filterStore'
 import { MapSkeleton } from '@/components/common/SkeletonUI'
 import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
 import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
@@ -15,6 +16,7 @@ import { EmptyFilterOverlay } from '@/components/common/EmptyFilterOverlay'
 import { useOnboarding } from '@/hooks/useOnboarding'
 import OnboardingTour from '@/components/common/OnboardingTour'
 import { MAP_PAGE_STEPS } from '@/lib/tour-config'
+import type { SpotCategory } from '@/types'
 
 // Leaflet은 SSR을 지원하지 않으므로 dynamic import 사용
 const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
@@ -22,21 +24,54 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
   loading: () => <MapSkeleton />,
 })
 
+/** 유효한 카테고리 값 목록 */
+const VALID_CATEGORIES: SpotCategory[] = [
+  'animation', 'sports', 'movie_drama', 'music', 'game', 'other',
+]
+
 /**
  * 지도 메인 페이지 컴포넌트 (/map)
  * Requirements 1.1, 1.4, 2.1, 2.2를 만족하는 지도 기반 메인 페이지
+ * - URL 파라미터(search, category)를 필터 스토어에 동기화
  * - useQuery로 필터 변경 시 지도 유지 (번쩍임 방지)
  * - 카테고리 필터링 지원
  * - filterStore 전역 상태 사용
  */
 export default function MapPage() {
+  const searchParams = useSearchParams()
+  const setSearchQuery = useFilterStore((s) => s.setSearchQuery)
+  const setSelectedCategories = useFilterStore((s) => s.setSelectedCategories)
+
+  // URL 파라미터 → 필터 스토어 동기화 (URL이 source of truth)
+  useEffect(() => {
+    const searchParam = searchParams.get('search')
+    const categoryParam = searchParams.get('category')
+
+    // search: 있으면 적용, 없으면 초기화
+    setSearchQuery(searchParam || '')
+
+    // category: 있으면 해당 카테고리만, 없으면 전체 카테고리
+    if (categoryParam) {
+      const categories = categoryParam.split(',').filter(
+        (c): c is SpotCategory => VALID_CATEGORIES.includes(c as SpotCategory)
+      )
+      if (categories.length > 0) {
+        setSelectedCategories(categories)
+      } else {
+        setSelectedCategories([...VALID_CATEGORIES])
+      }
+    } else {
+      setSelectedCategories([...VALID_CATEGORIES])
+    }
+  }, [searchParams, setSearchQuery, setSelectedCategories])
+
   const { isActive, currentStep, next, skip, dismiss } = useOnboarding(
     MAP_PAGE_STEPS,
     'map'
   )
 
   return (
-    <main className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">
+    <div className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">
       <MapContent />
       <OnboardingTour
         steps={MAP_PAGE_STEPS}
@@ -47,7 +82,7 @@ export default function MapPage() {
         onComplete={skip}
         onDismiss={dismiss}
       />
-    </main>
+    </div>
   )
 }
 
