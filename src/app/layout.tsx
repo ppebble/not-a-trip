@@ -78,7 +78,7 @@ export default function RootLayout({
         <JsonLd data={generateWebSiteJsonLd()} />
         <Providers>
           <Header />
-          <main className="pt-14">{children}</main>
+          <main>{children}</main>
           <InstallPromptListener />
           <InstallBottomSheet />
           <InstallToast />

@@ -3,13 +3,23 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { ThemeSelector } from '@/components/common/ThemeToggle'
 import { AppIcon } from '@/components/common/AppIcon'
 
+/** 헤더를 숨길 경로 목록 (랜딩 페이지) */
+const HIDDEN_HEADER_PATHS = ['/welcome']
+
 export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  // 랜딩 페이지에서는 헤더 숨김
+  if (HIDDEN_HEADER_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    return null
+  }
 
   const handleResetTour = () => {
     try {
@@ -25,7 +35,10 @@ export function Header() {
   }
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
+    <>
+      {/* 헤더 높이만큼 스페이서 (fixed 헤더 아래 콘텐츠 밀어내기) */}
+      <div className="h-14" aria-hidden="true" />
+      <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* 로고 */}
         <Link href="/" className="flex items-center gap-2">
@@ -242,5 +255,6 @@ export function Header() {
         </nav>
       )}
     </header>
+    </>
   )
 }
