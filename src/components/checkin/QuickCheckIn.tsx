@@ -2,20 +2,22 @@
 
 /**
  * QuickCheckIn 컴포넌트
- * 3단계 빠른 인증 플로우 (사진 선택 → 코멘트 → 완료)
+ * 빠른 인증 플로우 (작품 선택 → 사진 선택 → 코멘트 → 완료)
+ * - 다중 relation 스팟에서 작품 선택 단계 추가 (M5 수정사항)
  * - 카메라/갤러리 선택 옵션
  * - 이미지 압축 적용
  * - 백그라운드 업로드 연동
  *
- * @requirements 3.1, 3.2, 3.3
+ * @requirements 3.1~3.8, M5 수정사항
  */
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import { ViewfinderOverlay } from '@/components/mobile/ViewfinderOverlay'
-import { CheckInInput, UserBadge } from '@/types'
+import { CheckInInput, UserBadge, SpotContentRelation } from '@/types'
+import RelationSelector from './RelationSelector'
 
-type Step = 'photo' | 'comment' | 'complete'
+type Step = 'relation' | 'photo' | 'comment' | 'complete'
 
 interface QuickCheckInProps {
   /** 스팟 ID */
@@ -45,6 +47,58 @@ export function QuickCheckIn({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // === Relation 선택 상태 (M5 수정사항, Requirements 3.1~3.8) ===
+  const [relations, setRelations] = useState<SpotContentRelation[]>([])
+  const [selectedRelationId, setSelectedRelationId] = useState<string | null>(
+    null
+  )
+  const [relationsLoading, setRelationsLoading] = useState(true)
+  const [relationsError, setRelationsError] = useState<string | null>(null)
+
+  // 모달 열릴 때 relations 조회 (M5 수정사항 — 8.1)
+  useEffect(() => {
+    const fetchRelations = async () => {
+      setRelationsLoading(true)
+      setRelationsError(null)
+      try {
+        const res = await fetch(`/api/spots/${spotId}/relations`)
+        if (!res.ok) throw new Error('작품 정보를 불러올 수 없습니다')
+        const data = await res.json()
+        const activeRelations: SpotContentRelation[] = data.relations || []
+        setRelations(activeRelations)
+
+        // 분기 로직 (8.2)
+        if (activeRelations.length === 1) {
+          // 1개: 자동 선택, photo 단계로 시작
+          setSelectedRelationId(activeRelations[0].id)
+          setStep('photo')
+        } else if (activeRelations.length >= 2) {
+          // 2개 이상: relation 선택 단계부터 시작 (8.3)
+          setSelectedRelationId(null)
+          setStep('relation')
+        } else {
+          // 0개: photo 단계로 시작
+          setStep('photo')
+        }
+      } catch {
+        setRelationsError('작품 정보를 불러올 수 없습니다')
+        setStep('photo')
+      } finally {
+        setRelationsLoading(false)
+      }
+    }
+
+    fetchRelations()
+  }, [spotId])
+
+  // 스텝 목록 계산 (relation 단계 포함 여부)
+  const hasRelationStep = relations.length >= 2
+  const steps: Step[] = hasRelationStep
+    ? ['relation', 'photo', 'comment', 'complete']
+    : ['photo', 'comment', 'complete']
+
+  const currentStepIndex = steps.indexOf(step)
 
   // 파일 선택 처리
   const handleFileSelect = useCallback(
@@ -76,7 +130,7 @@ export function QuickCheckIn({
     setError(null)
   }, [])
 
-  // 인증 제출
+  // 인증 제출 (8.4 — selectedRelationId 포함)
   const handleSubmit = useCallback(async () => {
     if (!photoFile) return
     setIsSubmitting(true)
@@ -95,13 +149,14 @@ export function QuickCheckIn({
       if (!uploadRes.ok) throw new Error('이미지 업로드 실패')
       const uploadData = await uploadRes.json()
 
-      // 2. 인증 생성
+      // 2. 인증 생성 — relationId 포함 (8.4)
       const input: CheckInInput = {
         spotId,
         photoUrl: uploadData.imageUrl,
         sceneImageUrl,
         visitedAt: new Date(),
         comment: comment.trim() || undefined,
+        ...(selectedRelationId && { relationId: selectedRelationId }),
       }
 
       const res = await fetch('/api/checkins', {
@@ -123,7 +178,7 @@ export function QuickCheckIn({
     } finally {
       setIsSubmitting(false)
     }
-  }, [photoFile, spotId, sceneImageUrl, comment, onSuccess])
+  }, [photoFile, spotId, sceneImageUrl, comment, selectedRelationId, onSuccess])
 
   // 사진 다시 선택
   const handleRetakePhoto = useCallback(() => {
@@ -133,6 +188,13 @@ export function QuickCheckIn({
     setError(null)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
+
+  // relation 선택 후 다음 단계로
+  const handleRelationNext = useCallback(() => {
+    if (selectedRelationId) {
+      setStep('photo')
+    }
+  }, [selectedRelationId])
 
   // 뷰파인더 모드
   if (showViewfinder && sceneImageUrl) {
@@ -177,36 +239,76 @@ export function QuickCheckIn({
         </div>
 
         {/* 스텝 인디케이터 */}
-        <div className="flex items-center justify-center gap-2 px-4 pt-3">
-          {(['photo', 'comment', 'complete'] as Step[]).map((s, i) => (
-            <div key={s} className="flex items-center gap-2">
-              <div
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
-                  step === s
-                    ? 'bg-primary text-white'
-                    : i < ['photo', 'comment', 'complete'].indexOf(step)
-                      ? 'bg-primary-100 text-primary'
-                      : 'bg-gray-100 text-gray-400'
-                }`}
-              >
-                {i + 1}
-              </div>
-              {i < 2 && (
-                <div
-                  className={`h-0.5 w-8 ${
-                    i < ['photo', 'comment', 'complete'].indexOf(step)
-                      ? 'bg-primary-300'
-                      : 'bg-gray-200'
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        {!relationsLoading && (
+          <div className="flex items-center justify-center gap-2 px-4 pt-3">
+            {steps
+              .filter((s) => s !== 'complete')
+              .map((s, i, arr) => (
+                <div key={s} className="flex items-center gap-2">
+                  <div
+                    className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
+                      step === s
+                        ? 'bg-primary text-white'
+                        : currentStepIndex > steps.indexOf(s)
+                          ? 'bg-primary-100 text-primary'
+                          : 'bg-gray-100 text-gray-400'
+                    }`}
+                  >
+                    {i + 1}
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div
+                      className={`h-0.5 w-8 ${
+                        currentStepIndex > steps.indexOf(s)
+                          ? 'bg-primary-300'
+                          : 'bg-gray-200'
+                      }`}
+                    />
+                  )}
+                </div>
+              ))}
+          </div>
+        )}
 
         <div className="p-4">
+          {/* 로딩 상태 */}
+          {relationsLoading && (
+            <div className="flex items-center justify-center gap-2 py-8">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <span className="text-sm text-gray-600">
+                작품 정보 불러오는 중...
+              </span>
+            </div>
+          )}
+
+          {/* Relations 에러 상태 */}
+          {relationsError && !relationsLoading && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+              {relationsError}
+            </div>
+          )}
+
+          {/* Step: 작품 선택 (다중 relation 스팟에서만 표시 — 8.3) */}
+          {step === 'relation' && !relationsLoading && (
+            <div className="space-y-4">
+              <RelationSelector
+                relations={relations}
+                selectedRelationId={selectedRelationId}
+                onSelect={setSelectedRelationId}
+              />
+
+              <button
+                onClick={handleRelationNext}
+                disabled={!selectedRelationId}
+                className="w-full rounded-lg bg-primary py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+              >
+                다음
+              </button>
+            </div>
+          )}
+
           {/* Step 1: 사진 선택 */}
-          {step === 'photo' && (
+          {step === 'photo' && !relationsLoading && (
             <div className="space-y-3">
               <p className="text-center text-sm text-gray-600">
                 인증샷을 선택해주세요
@@ -303,6 +405,16 @@ export function QuickCheckIn({
                   </button>
                 )}
               </div>
+
+              {/* 다중 relation 스팟에서 이전 버튼 */}
+              {hasRelationStep && (
+                <button
+                  onClick={() => setStep('relation')}
+                  className="w-full rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700"
+                >
+                  이전 (작품 선택)
+                </button>
+              )}
             </div>
           )}
 
@@ -361,7 +473,7 @@ export function QuickCheckIn({
                 </button>
                 <button
                   onClick={handleSubmit}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !!relationsError}
                   className="flex-1 rounded-lg bg-primary py-3 text-sm font-medium text-white disabled:bg-gray-300"
                 >
                   {isSubmitting ? '인증 중...' : '인증하기'}
