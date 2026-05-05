@@ -264,3 +264,90 @@ export async function fetchProofImages(): Promise<
     return fallback
   }
 }
+
+/**
+ * 소셜 프루프 섹션에 표시할 최근 체크인 데이터를 가져온다.
+ * contentName, migrationStatus를 포함하여 작품명 표시 및 미분류 라벨 처리에 사용
+ *
+ * @returns SocialProofCheckin[] — 최근 체크인 10개 (contentName 포함)
+ */
+export interface SocialProofCheckinData {
+  id: string
+  spotName: string
+  contentName?: string
+  migrationStatus?: 'resolved' | 'unresolved' | null
+  photoUrl: string
+  comment?: string
+  categoryTag: SpotCategory
+}
+
+interface CheckinDocument {
+  id: string
+  spotId: string
+  photoUrl: string
+  comment?: string
+  contentName?: string
+  migrationStatus?: 'resolved' | 'unresolved' | null
+  createdAt: Date
+}
+
+export async function fetchSocialProofCheckins(): Promise<
+  SocialProofCheckinData[]
+> {
+  try {
+    const checkinsCollection = await getCollection<CheckinDocument>(
+      COLLECTIONS.CHECKINS
+    )
+    const spotsCollection = await getCollection<SpotDocument>('spots')
+
+    // 최근 체크인 10개 조회 (photoUrl이 있는 것만)
+    const recentCheckins = await checkinsCollection
+      .find({ photoUrl: { $exists: true, $ne: '' } })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .project({
+        id: 1,
+        spotId: 1,
+        photoUrl: 1,
+        comment: 1,
+        contentName: 1,
+        migrationStatus: 1,
+      })
+      .toArray()
+
+    if (recentCheckins.length === 0) {
+      return []
+    }
+
+    // 체크인에 연결된 스팟 정보 조회
+    const spotIds = [...new Set(recentCheckins.map((c) => c.spotId))]
+    const spots = await spotsCollection
+      .find({ id: { $in: spotIds } })
+      .project({ id: 1, name: 1, category: 1 })
+      .toArray()
+
+    const spotMap = new Map(spots.map((s) => [s.id, s]))
+
+    // 체크인 데이터를 SocialProofCheckinData로 변환
+    const results: SocialProofCheckinData[] = []
+    for (const checkin of recentCheckins) {
+      const spot = spotMap.get(checkin.spotId)
+      if (!spot) continue
+
+      results.push({
+        id: checkin.id,
+        spotName: spot.name,
+        contentName: checkin.contentName || undefined,
+        migrationStatus: checkin.migrationStatus,
+        photoUrl: checkin.photoUrl,
+        comment: checkin.comment,
+        categoryTag: (spot.category as SpotCategory) || 'other',
+      })
+    }
+
+    return results
+  } catch (error) {
+    console.error('[fetchSocialProofCheckins] 체크인 데이터 조회 실패:', error)
+    return []
+  }
+}
