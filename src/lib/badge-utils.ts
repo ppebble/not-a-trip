@@ -6,6 +6,7 @@
 
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Badge, UserBadge, DEFAULT_BADGES } from '@/types'
+import { calculateContentProgress } from '@/lib/content-progress'
 
 interface CheckInDocument {
   id: string
@@ -146,8 +147,24 @@ export async function checkAndAwardBadges(
           break
 
         case 'content_progress':
-          // 콘텐츠별 진행률 (Requirements 4.1, 4.2)
-          // TODO: 콘텐츠별 스팟 수 계산 필요
+          // 콘텐츠별 진행률 — relation 기반 (Requirements 5.4)
+          if (condition.contentName && condition.requiredProgress) {
+            try {
+              const progressResult = await calculateContentProgress({
+                userId,
+                contentName: condition.contentName,
+              })
+              if (progressResult.progress >= condition.requiredProgress) {
+                shouldAward = true
+              }
+            } catch (progressError) {
+              // relation 기반 계산 실패 시 content_progress 뱃지 평가 건너뛰기 (H4, Requirements 11.6)
+              console.error(
+                `Content progress 뱃지 평가 건너뛰기 (${badge.code}):`,
+                progressError
+              )
+            }
+          }
           break
       }
 
