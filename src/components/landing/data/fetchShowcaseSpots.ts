@@ -1,4 +1,5 @@
 import { getCollection } from '@/lib/db'
+import { COLLECTIONS } from '@/lib/db'
 import type { SpotCategory } from '@/types/spot'
 import type { ShowcaseCard } from './showcaseCards'
 import { REAL_SPOT_PHOTO_FALLBACKS } from './realSpotPhotoFallbacks'
@@ -22,6 +23,13 @@ interface SpotDocument {
   photos: string[]
   category?: SpotCategory
   relatedContent?: { name: string }[]
+}
+
+interface RelationDocument {
+  spotId: string
+  contentName: string
+  status: string
+  displayPriority: number
 }
 
 function isPlaceholderPhoto(url?: string | null): boolean {
@@ -81,6 +89,35 @@ export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
     // 2차 순환: 각 카테고리 2번째 스팟
     const cards: ShowcaseCard[] = []
 
+    // 모든 스팟 ID 수집 후 일괄 relations 조회
+    const allSpots = spotsByCategory.flatMap(({ spots }) => spots)
+    const spotIds = allSpots.map((s) => s.id)
+
+    let relationsBySpotId: Record<string, string[]> = {}
+    try {
+      const relationsCollection = await getCollection<RelationDocument>(
+        COLLECTIONS.SPOT_CONTENT_RELATIONS
+      )
+      const relations = await relationsCollection
+        .find({ spotId: { $in: spotIds }, status: 'active' })
+        .sort({ displayPriority: 1 })
+        .project({ spotId: 1, contentName: 1 })
+        .toArray()
+
+      // spotId별 contentName 목록 그룹화
+      for (const rel of relations) {
+        if (!relationsBySpotId[rel.spotId]) {
+          relationsBySpotId[rel.spotId] = []
+        }
+        if (!relationsBySpotId[rel.spotId].includes(rel.contentName)) {
+          relationsBySpotId[rel.spotId].push(rel.contentName)
+        }
+      }
+    } catch {
+      // relations 조회 실패 시 빈 객체로 진행 (additionalContentNames 없이)
+      relationsBySpotId = {}
+    }
+
     for (let round = 0; round < 2; round++) {
       for (const { category, spots } of spotsByCategory) {
         if (cards.length >= maxCards) break
@@ -92,10 +129,20 @@ export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
 
         if (!imageUrl) continue
 
+        // additionalContentNames: 대표 작품명을 제외한 나머지 작품명
+        const allContentNames = relationsBySpotId[spot.id] || []
+        const additionalContentNames = allContentNames.filter(
+          (name) => name !== contentName
+        )
+
         cards.push({
           id: `showcase-${spot.id}-${round}`,
           spotName: spot.name,
           contentName,
+          additionalContentNames:
+            additionalContentNames.length > 0
+              ? additionalContentNames
+              : undefined,
           category: spot.category ?? category,
           imageUrl,
         })

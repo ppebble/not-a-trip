@@ -17,6 +17,8 @@ export interface ShowcaseCard {
   spotName: string
   /** 관련 작품명 (없으면 스팟 이름 사용) */
   contentName: string
+  /** 추가 작품명 목록 ("+N" 배지 계산용) */
+  additionalContentNames?: string[]
   /** 카테고리 */
   category: SpotCategory
   /** 이미지 URL */
