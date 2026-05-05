@@ -49,11 +49,15 @@ export function RelatedContentSection({
 
   // relations가 있으면 relation 기반 렌더링
   if (relations && relations.length > 0) {
-    const hasMore = relations.length > initialDisplayCount
+    // displayPriority 오름차순 정렬 강화 (Requirements 10.4)
+    const sortedRelations = [...relations].sort(
+      (a, b) => a.displayPriority - b.displayPriority
+    )
+    const hasMore = sortedRelations.length > initialDisplayCount
     const displayedRelations = isExpanded
-      ? relations
-      : relations.slice(0, initialDisplayCount)
-    const remainingCount = relations.length - initialDisplayCount
+      ? sortedRelations
+      : sortedRelations.slice(0, initialDisplayCount)
+    const remainingCount = sortedRelations.length - initialDisplayCount
 
     return (
       <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
