@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import { CheckInInput, UserBadge } from '@/types'
+import { CheckInInput, UserBadge, SpotContentRelation } from '@/types'
 import { useUploadQueueStore } from '@/stores/uploadQueueStore'
+import RelationSelector from './RelationSelector'
 
 interface CheckInModalProps {
   isOpen: boolean
@@ -40,6 +41,47 @@ export function CheckInModal({
   const activeUploads = uploadQueue.filter(
     (item) => item.status === 'uploading'
   )
+
+  // === Relation 선택 상태 (Requirements 3.1~3.7) ===
+  const [relations, setRelations] = useState<SpotContentRelation[]>([])
+  const [selectedRelationId, setSelectedRelationId] = useState<string | null>(
+    null
+  )
+  const [relationsLoading, setRelationsLoading] = useState(false)
+  const [relationsError, setRelationsError] = useState<string | null>(null)
+
+  // 모달 열릴 때 relations 조회 (Requirements 3.1)
+  useEffect(() => {
+    if (!isOpen) return
+
+    const fetchRelations = async () => {
+      setRelationsLoading(true)
+      setRelationsError(null)
+      try {
+        const res = await fetch(`/api/spots/${spotId}/relations`)
+        if (!res.ok) throw new Error('작품 정보를 불러올 수 없습니다')
+        const data = await res.json()
+        const activeRelations: SpotContentRelation[] = data.relations || []
+        setRelations(activeRelations)
+
+        // 1개일 때 자동 선택 (Requirements 3.5)
+        if (activeRelations.length === 1) {
+          setSelectedRelationId(activeRelations[0].id)
+        } else {
+          setSelectedRelationId(null)
+        }
+      } catch {
+        setRelationsError('작품 정보를 불러올 수 없습니다')
+      } finally {
+        setRelationsLoading(false)
+      }
+    }
+
+    fetchRelations()
+  }, [isOpen, spotId])
+
+  // 다중 relation 스팟에서 선택 필수 여부
+  const requiresRelationSelection = relations.length >= 2 && !selectedRelationId
 
   if (!isOpen) return null
 
@@ -97,6 +139,8 @@ export function CheckInModal({
         sceneImageUrl,
         visitedAt: new Date(visitedAt),
         comment: comment.trim() || undefined,
+        // relation 선택 포함 (Requirements 3.4)
+        ...(selectedRelationId && { relationId: selectedRelationId }),
       }
 
       const res = await fetch('/api/checkins', {
@@ -169,6 +213,33 @@ export function CheckInModal({
             <p className="text-sm text-secondary">인증 장소</p>
             <p className="text-text-primary font-medium">{spotName}</p>
           </div>
+
+          {/* Relations 로딩/에러 상태 */}
+          {relationsLoading && (
+            <div className="mb-4 flex items-center gap-2 rounded-lg bg-gray-50 p-3">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+              <span className="text-sm text-gray-600">
+                작품 정보 불러오는 중...
+              </span>
+            </div>
+          )}
+
+          {relationsError && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+              {relationsError}
+            </div>
+          )}
+
+          {/* RelationSelector — 2개 이상일 때 표시 (Requirements 3.7) */}
+          {!relationsLoading && !relationsError && relations.length >= 2 && (
+            <div className="mb-4">
+              <RelationSelector
+                relations={relations}
+                selectedRelationId={selectedRelationId}
+                onSelect={setSelectedRelationId}
+              />
+            </div>
+          )}
 
           {/* 씬 이미지 비교 (있는 경우) */}
           {sceneImageUrl && (
@@ -328,7 +399,13 @@ export function CheckInModal({
           {/* 제출 버튼 */}
           <button
             type="submit"
-            disabled={isSubmitting || isUploading || !photoUrl}
+            disabled={
+              isSubmitting ||
+              isUploading ||
+              !photoUrl ||
+              requiresRelationSelection ||
+              !!relationsError
+            }
             className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             {isSubmitting ? '인증 중...' : '인증하기'}
