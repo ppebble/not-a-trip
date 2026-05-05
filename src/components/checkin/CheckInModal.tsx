@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import Image from 'next/image'
-import { CheckInInput, UserBadge, SpotContentRelation } from '@/types'
+import { CheckInInput, UserBadge, SpotContentRelation, Scene } from '@/types'
 import { useUploadQueueStore } from '@/stores/uploadQueueStore'
 import RelationSelector from './RelationSelector'
+import { getSceneImageForContent } from '@/components/spot/SceneComparison'
 
 interface CheckInModalProps {
   isOpen: boolean
@@ -49,6 +50,8 @@ export function CheckInModal({
   )
   const [relationsLoading, setRelationsLoading] = useState(false)
   const [relationsError, setRelationsError] = useState<string | null>(null)
+  // === Scene 데이터 (Requirements 6.5) ===
+  const [scenes, setScenes] = useState<Scene[]>([])
 
   // 모달 열릴 때 relations 조회 (Requirements 3.1)
   useEffect(() => {
@@ -79,6 +82,45 @@ export function CheckInModal({
 
     fetchRelations()
   }, [isOpen, spotId])
+
+  // 모달 열릴 때 scenes 조회 (Requirements 6.5)
+  useEffect(() => {
+    if (!isOpen) return
+
+    const fetchScenes = async () => {
+      try {
+        const res = await fetch(`/api/spots/${spotId}/scenes`)
+        if (!res.ok) return
+        const data = await res.json()
+        setScenes(data.scenes || [])
+      } catch {
+        // 장면 조회 실패는 무시 (sceneImageUrl 폴백 사용)
+      }
+    }
+
+    fetchScenes()
+  }, [isOpen, spotId])
+
+  // 선택된 작품의 contentName 결정
+  const selectedContentName = useMemo(() => {
+    if (!selectedRelationId) return undefined
+    const relation = relations.find((r) => r.id === selectedRelationId)
+    return relation?.contentName
+  }, [selectedRelationId, relations])
+
+  // 선택된 작품의 대표 장면을 sceneImageUrl로 사용 (Requirements 6.5)
+  const effectiveSceneImageUrl = useMemo(() => {
+    if (scenes.length > 0 && relations.length > 0) {
+      const dynamicUrl = getSceneImageForContent(
+        scenes,
+        relations,
+        selectedContentName
+      )
+      if (dynamicUrl) return dynamicUrl
+    }
+    // 폴백: props로 전달된 sceneImageUrl
+    return sceneImageUrl
+  }, [scenes, relations, selectedContentName, sceneImageUrl])
 
   // 다중 relation 스팟에서 선택 필수 여부
   const requiresRelationSelection = relations.length >= 2 && !selectedRelationId
@@ -136,7 +178,7 @@ export function CheckInModal({
       const input: CheckInInput = {
         spotId,
         photoUrl,
-        sceneImageUrl,
+        sceneImageUrl: effectiveSceneImageUrl,
         visitedAt: new Date(visitedAt),
         comment: comment.trim() || undefined,
         // relation 선택 포함 (Requirements 3.4)
@@ -242,14 +284,14 @@ export function CheckInModal({
           )}
 
           {/* 씬 이미지 비교 (있는 경우) */}
-          {sceneImageUrl && (
+          {effectiveSceneImageUrl && (
             <div className="mb-4">
               <p className="mb-2 text-sm font-medium text-gray-700">
                 참고 장면
               </p>
               <div className="relative aspect-video overflow-hidden rounded-lg">
                 <Image
-                  src={sceneImageUrl}
+                  src={effectiveSceneImageUrl}
                   alt="참고 장면"
                   fill
                   sizes="(max-width: 768px) 50vw, 256px"
