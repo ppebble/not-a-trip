@@ -606,7 +606,7 @@ describe('QuickCheckIn — relation selector', () => {
 
   it('다중 relation 스팟에서 초기 selectedRelationId는 null', () => {
     // QuickCheckIn에서 relations.length >= 2일 때 selectedRelationId = null
-    const relationsCount = 3
+    const relationsCount: number = 3
     let selectedRelationId: string | null = null
 
     if (relationsCount >= 2) {

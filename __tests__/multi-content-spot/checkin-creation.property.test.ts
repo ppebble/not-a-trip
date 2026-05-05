@@ -89,9 +89,7 @@ function resolveRelationForCheckIn(
 /**
  * 체크인 문서에 스냅샷 필드를 적용하는 로직
  */
-function applyRelationSnapshot(
-  relation: SpotContentRelation | null
-): {
+function applyRelationSnapshot(relation: SpotContentRelation | null): {
   relationId?: string
   contentId?: string
   contentName?: string
@@ -164,7 +162,7 @@ describe('Property 2: Relation 개수별 분기 정확성', () => {
     fc.assert(
       fc.property(fc.constant([]), (emptyRelations) => {
         const result = resolveRelationForCheckIn(
-          emptyRelations as SpotContentRelation[]
+          emptyRelations as unknown as SpotContentRelation[]
         )
         expect(result.error).toBeUndefined()
         expect(result.relation).toBeNull()
