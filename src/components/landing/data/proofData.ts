@@ -11,6 +11,8 @@ export interface ProofData {
   id: string
   categoryTag: SpotCategory
   spotName: string
+  /** 작품명 (체크인 데이터에서 전달, 선택) */
+  contentName?: string
   comment: string
   /** 스팟 실제 사진 */
   image: string

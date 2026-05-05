@@ -14,6 +14,8 @@ import { CATEGORY_CONFIG, type SpotCategory } from '@/types/spot'
 interface ProofCardProps {
   categoryTag: SpotCategory
   spotName: string
+  /** 작품명 (체크인 데이터에서 전달) */
+  contentName?: string
   comment: string
   image?: string
   sceneImage?: string
@@ -22,6 +24,7 @@ interface ProofCardProps {
 export function ProofCard({
   categoryTag,
   spotName,
+  contentName,
   comment,
   image,
   sceneImage,
@@ -101,8 +104,19 @@ export function ProofCard({
           {categoryConfig.label}
         </span>
 
-        {/* 스팟 이름 */}
-        <h3 className="text-sm font-semibold text-main-text">{spotName}</h3>
+        {/* 스팟 이름 + 작품명 */}
+        <h3 className="text-sm font-semibold text-main-text">
+          {spotName}
+          {contentName && (
+            <span
+              className={`ml-1 text-xs font-normal ${
+                contentName === '(미분류)' ? 'text-gray-400' : 'text-sub-text'
+              }`}
+            >
+              · {contentName}
+            </span>
+          )}
+        </h3>
 
         {/* 코멘트 */}
         <p className="line-clamp-2 text-xs text-sub-text">{comment}</p>

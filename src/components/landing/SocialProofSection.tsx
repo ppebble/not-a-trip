@@ -11,12 +11,25 @@ import type { SpotCategory } from '@/types/spot'
  * 소셜 프루프 섹션 컴포넌트
  * 커뮤니티 가치 카피 + ProofCard 무한 순환 슬라이더
  * 자동 스크롤 + 수동 좌우 스와이프 + 데스크톱 화살표 지원
- * Requirements: 3.1, 3.2, 3.3, 3.4, 6.6, 7.4
+ * Requirements: 3.1, 3.2, 3.3, 3.4, 6.6, 7.4, 9.3, 9.4
  */
+
+/** 서버에서 전달받는 체크인 데이터 (M6 수정사항) */
+export interface SocialProofCheckin {
+  id: string
+  spotName: string
+  contentName?: string
+  migrationStatus?: 'resolved' | 'unresolved' | null
+  photoUrl: string
+  comment?: string
+  categoryTag: SpotCategory
+}
 
 interface SocialProofSectionProps {
   /** 카테고리별 실제 스팟 이미지 목록 */
   proofImages: Record<SpotCategory, string[]>
+  /** 서버에서 가져온 체크인 데이터 (contentName 포함) */
+  checkinData?: SocialProofCheckin[]
 }
 
 /** 자동 스크롤 간격 (ms) */
@@ -39,12 +52,52 @@ const CLONE_COUNT = 4
  * - 카테고리별로 순서대로 이미지를 배분
  * - 이미지가 없는 카테고리는 다른 카테고리의 이미지를 빌려옴
  * - sceneImage는 실제 장면 이미지가 없으므로 제거 (단일 실사 카드)
+ * - checkinData가 있으면 서버 체크인 데이터를 우선 사용
  */
-function getExtendedData(proofImages: Record<SpotCategory, string[]>) {
+function getExtendedData(
+  proofImages: Record<SpotCategory, string[]>,
+  checkinData?: SocialProofCheckin[]
+) {
   // 카테고리별 이미지 인덱스 카운터
   const counters: Record<string, number> = {}
 
-  const data: ProofData[] = PROOF_DUMMY_DATA.map((item) => {
+  // checkinData가 있으면 서버 데이터를 더미 데이터 앞에 배치
+  let baseData: ProofData[]
+
+  if (checkinData && checkinData.length > 0) {
+    // 서버 체크인 데이터를 ProofData 형태로 변환
+    const checkinProofData: ProofData[] = checkinData.map((checkin) => {
+      // contentName 표시 로직: Requirements 9.3, 9.4
+      let displayContentName: string | undefined
+      if (checkin.migrationStatus === 'unresolved') {
+        displayContentName = '(미분류)'
+      } else if (checkin.contentName) {
+        displayContentName = checkin.contentName
+      }
+
+      return {
+        id: `checkin-${checkin.id}`,
+        categoryTag: checkin.categoryTag,
+        spotName: checkin.spotName,
+        contentName: displayContentName,
+        comment: checkin.comment || '성지순례 인증!',
+        image: checkin.photoUrl,
+        sceneImage: undefined,
+      }
+    })
+
+    // 서버 데이터 + 더미 데이터 결합 (서버 데이터 우선)
+    baseData = [...checkinProofData, ...PROOF_DUMMY_DATA]
+  } else {
+    baseData = [...PROOF_DUMMY_DATA]
+  }
+
+  const data: ProofData[] = baseData.map((item) => {
+    // 이미 서버 체크인 데이터인 경우 이미지 교체 불필요
+    if (item.id.startsWith('checkin-')) {
+      return { ...item, sceneImage: undefined }
+    }
+
     const cat = item.categoryTag
     const images = proofImages[cat] || []
 
@@ -74,13 +127,16 @@ function getExtendedData(proofImages: Record<SpotCategory, string[]>) {
   return { extended: [...prefixClones, ...data, ...suffixClones], len }
 }
 
-export function SocialProofSection({ proofImages }: SocialProofSectionProps) {
+export function SocialProofSection({
+  proofImages,
+  checkinData,
+}: SocialProofSectionProps) {
   const sliderRef = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const reducedMotion = usePrefersReducedMotion()
 
-  const { extended, len } = getExtendedData(proofImages)
+  const { extended, len } = getExtendedData(proofImages, checkinData)
   // 실제 인덱스 0 = extended 배열의 CLONE_COUNT 위치
   const [currentIndex, setCurrentIndex] = useState(CLONE_COUNT)
 
@@ -229,6 +285,7 @@ export function SocialProofSection({ proofImages }: SocialProofSectionProps) {
                   <ProofCard
                     categoryTag={proof.categoryTag}
                     spotName={proof.spotName}
+                    contentName={proof.contentName}
                     comment={proof.comment}
                     image={proof.image}
                     sceneImage={proof.sceneImage}
