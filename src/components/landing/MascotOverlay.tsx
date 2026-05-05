@@ -22,7 +22,10 @@ interface MascotOverlayProps {
 /** 마스코트 이미지 경로 */
 const MASCOT_IMAGE_PATH = '/icons/raw/0329/캐릭터_메인_최종.webp'
 
-export function MascotOverlay({ reducedMotion, className = '' }: MascotOverlayProps) {
+export function MascotOverlay({
+  reducedMotion,
+  className = '',
+}: MascotOverlayProps) {
   return (
     <div
       className={`absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4 ${className}`}

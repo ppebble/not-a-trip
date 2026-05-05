@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
 import { WelcomePageClient } from '@/components/landing/WelcomePageClient'
+import {
+  fetchShowcaseSpots,
+  fetchCategoryImages,
+  fetchProofImages,
+} from '@/components/landing/data/fetchShowcaseSpots'
 
 export const metadata: Metadata = {
   title: '환영합니다',
@@ -12,6 +17,17 @@ export const metadata: Metadata = {
   },
 }
 
-export default function WelcomePage() {
-  return <WelcomePageClient />
+export default async function WelcomePage() {
+  const [showcaseSpots, categoryImages, proofImages] = await Promise.all([
+    fetchShowcaseSpots(),
+    fetchCategoryImages(),
+    fetchProofImages(),
+  ])
+  return (
+    <WelcomePageClient
+      showcaseSpots={showcaseSpots}
+      categoryImages={categoryImages}
+      proofImages={proofImages}
+    />
+  )
 }

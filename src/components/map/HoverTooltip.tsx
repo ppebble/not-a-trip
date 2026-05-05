@@ -10,10 +10,20 @@ interface HoverTooltipProps {
   isVisible: boolean
 }
 
+// 카테고리별 이모지 아이콘 (텍스트 렌더링용)
+const CATEGORY_EMOJI: Record<SpotCategory, string> = {
+  animation: '🎬',
+  sports: '⚽',
+  movie_drama: '🎥',
+  music: '🎵',
+  game: '🎮',
+  other: '📍',
+}
+
 // 카테고리별 아이콘 가져오기
 const getCategoryIcon = (category?: SpotCategory): string => {
   if (!category) return '📍'
-  return CATEGORY_CONFIG[category]?.icon || '📍'
+  return CATEGORY_EMOJI[category] || '📍'
 }
 
 // 카테고리별 라벨 가져오기

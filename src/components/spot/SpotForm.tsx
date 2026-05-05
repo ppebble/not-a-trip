@@ -13,6 +13,16 @@ import {
   ExternalLink,
 } from '@/types'
 import { ExternalLinkForm } from '@/components/spot/ExternalLinkForm'
+
+/** select option용 카테고리 이모지 매핑 */
+const CATEGORY_EMOJI: Record<SpotCategory, string> = {
+  animation: '🎬',
+  sports: '⚽',
+  movie_drama: '🎥',
+  music: '🎵',
+  game: '🎮',
+  other: '📍',
+}
 import {
   ErrorMessages,
   UserInfoBanner,
@@ -146,7 +156,7 @@ export function SpotForm({
               <option value="">카테고리를 선택하세요</option>
               {(Object.keys(CATEGORY_CONFIG) as SpotCategory[]).map((key) => (
                 <option key={key} value={key}>
-                  {CATEGORY_CONFIG[key].icon} {CATEGORY_CONFIG[key].label}
+                  {CATEGORY_EMOJI[key]} {CATEGORY_CONFIG[key].label}
                 </option>
               ))}
             </select>

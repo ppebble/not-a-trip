@@ -166,6 +166,7 @@ export default function SwipeableGallery({
               className="h-full w-full object-cover"
               priority={index === 0}
               draggable={false}
+              unoptimized={src.startsWith('http')}
               {...(index === 0 ? {} : blurPlaceholderProps)}
             />
           </div>

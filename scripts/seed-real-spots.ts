@@ -258,7 +258,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '하코네 유모토 (에반게리온)',
     description:
       '"신세기 에반게리온"의 제3신도쿄시 모델이 된 지역. 에반게리온 관련 상점과 전시물을 곳곳에서 찾아볼 수 있다.',
-    photos: ['https://picsum.photos/seed/hakone-yumoto/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Hakone-yumoto.jpg',
+    ],
     address: '일본 가나가와현 아시가라시모군 하코네마치 유모토',
     coordinates: { lat: 35.2285, lng: 139.1039 },
     category: 'animation',
@@ -279,7 +281,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '메이지무라 박물관 (귀멸의 칼날)',
     description:
       '"귀멸의 칼날"에 등장하는 나비저택의 모델이 된 건물들이 있는 야외 박물관. 다이쇼 시대의 건축물들을 통해 작품 속 분위기를 느낄 수 있다.',
-    photos: ['https://picsum.photos/seed/meijimura-museum/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Meiji%20Mura%2020220718%2004.jpg',
+    ],
     address: '일본 아이치현 이누야마시 우치야마 1',
     coordinates: { lat: 35.3347, lng: 136.9405 },
     category: 'animation',
@@ -296,7 +300,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '히타시 오야마댐 (진격의 거인)',
     description:
       '"진격의 거인" 작가 이사야마 하지메의 고향에 위치한 댐. 작품 속 거대한 벽을 연상시키며, 에렌, 미카사, 아르민의 동상이 세워져 있다.',
-    photos: ['https://picsum.photos/seed/hitashi-oyamadam/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Oyama%20Dam.jpg',
+    ],
     address: '일본 오이타현 히타시 오야마마치 니시 오야마',
     coordinates: { lat: 33.2505, lng: 130.9881 },
     category: 'animation',
@@ -313,7 +319,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '구마모토현 루피 동상 (원피스)',
     description:
       '"원피스" 작가 오다 에이치로의 고향인 구마모토현에 설치된 루피 동상. 현 내 여러 곳에 밀짚모자 해적단 멤버들의 동상이 흩어져 있어 찾아보는 재미가 있다.',
-    photos: ['https://picsum.photos/seed/kumamoto-luffy-statue/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Kumamoto%20Prefectural%20office%20new.jpg',
+    ],
     address: '일본 구마모토현 구마모토시 주오구 테토리혼초 4-1 (구마모토현청)',
     coordinates: { lat: 32.7937, lng: 130.7304 },
     category: 'animation',
@@ -328,7 +336,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '하루나산 (이니셜D)',
     description:
       '"이니셜D"의 주요 배경인 아키나산의 모델이 된 실제 산. 구불구불한 도로에서 작품 속 레이싱의 분위기를 느낄 수 있다.',
-    photos: ['https://picsum.photos/seed/haruna-mountain/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Haruna00.JPG',
+    ],
     address: '일본 군마현 다카사키시 하루나산',
     coordinates: { lat: 36.4719, lng: 138.8911 },
     category: 'animation',
@@ -343,7 +353,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '가부키초 (은혼)',
     description:
       '"은혼"의 가부키초의 모델이 된 도쿄 신주쿠의 번화가. 작품 속 코믹하고 활기찬 분위기를 실제로 체험할 수 있다.',
-    photos: ['https://picsum.photos/seed/kabukicho/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Kabukicho%20%2853084208633%29.jpg',
+    ],
     address: '일본 도쿄도 신주쿠구 가부키초',
     coordinates: { lat: 35.6938, lng: 139.7036 },
     category: 'animation',
@@ -358,7 +370,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '자연휴양림 나루토 소용돌이 (나루토)',
     description:
       '"나루토"의 주인공 이름과 같은 지명을 가진 도쿠시마현 나루토시의 거대한 소용돌이. 작품의 세계관과 연결되는 상징적인 장소이다.',
-    photos: ['https://picsum.photos/seed/naruto-whirlpool/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Naruto%20whirlpools%2020170609-3.jpg',
+    ],
     address: '일본 도쿠시마현 나루토시 나루토초 토사도마리',
     coordinates: { lat: 34.2307, lng: 134.6496 },
     category: 'animation',
@@ -375,7 +389,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '쿠알라룸푸르 타워 (드래곤볼)',
     description:
       '"드래곤볼"의 카린탑 모델 중 하나로 알려진 쿠알라룸푸르 타워. 거대한 외형이 작품 속 신비로운 분위기를 연상시킨다.',
-    photos: ['https://picsum.photos/seed/kuala-lumpur-tower/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Kuala%20Lumpur%20Tower.JPG',
+    ],
     address: '말레이시아 쿠알라룸푸르 잘란 판타이 바루',
     coordinates: { lat: 3.1528, lng: 101.7039 },
     category: 'animation',
@@ -392,7 +408,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '시부야 스크램블 교차로 (주술회전)',
     description:
       '"주술회전" 시부야 사변의 배경이 된 세계적으로 유명한 교차로. 작품 속 긴박감 넘치는 전투 장면을 떠올리게 한다.',
-    photos: ['https://picsum.photos/seed/shibuya-scramble/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya%20Scramble%20crossing.jpg',
+    ],
     address: '일본 도쿄도 시부야구 도겐자카 2-2-1',
     coordinates: { lat: 35.6591, lng: 139.703 },
     category: 'animation',
@@ -409,7 +427,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '시부야109 (최애의 아이)',
     description:
       '"최애의 아이"에서 아이돌 활동과 관련된 장소로 자주 언급되는 시부야의 랜드마크. 아이돌 문화의 중심지임을 느낄 수 있다.',
-    photos: ['https://picsum.photos/seed/shibuya109/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya%20109%20-01.jpg',
+    ],
     address: '일본 도쿄도 시부야구 도겐자카 2-29-1',
     coordinates: { lat: 35.6596, lng: 139.6998 },
     category: 'animation',
@@ -426,7 +446,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '모토스코 캠프장 (유루캠△)',
     description:
       '"유루캠△"의 주요 캠핑 장소 중 하나로, 후지산이 아름답게 보이는 경치를 자랑한다. 작품처럼 캠핑을 즐기기에 완벽한 곳.',
-    photos: ['https://picsum.photos/seed/motosuko-camp/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Lake%20Motosu%20%282015-12-17%29.jpg',
+    ],
     address: '일본 야마나시현 미나미코마군 후지카와구치코정 모토스 10450',
     coordinates: { lat: 35.4851, lng: 138.6186 },
     category: 'animation',
@@ -443,7 +465,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '시모키타자와 (봇치 더 록!)',
     description:
       '"봇치 더 록!"의 주요 배경이 되는 라이브하우스 거리. 인디 밴드의 성지로, 작품 속 꿈을 쫓는 소녀들의 열정을 느낄 수 있다.',
-    photos: ['https://picsum.photos/seed/shimokitazawa/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Shimokitazawa.jpg',
+    ],
     address: '일본 도쿄도 세타가야구 기타자와',
     coordinates: { lat: 35.6609, lng: 139.6666 },
     category: 'animation',
@@ -460,7 +484,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '뉘른베르크 (프리렌)',
     description:
       '"장송의 프리렌"의 중세 유럽풍 배경에 영감을 준 독일의 도시 중 하나. 아름다운 중세 건축물과 분위기에서 작품의 여운을 느낄 수 있다.',
-    photos: ['https://picsum.photos/seed/nuremberg/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Nuremberg%20old%20town%20nov%202020.jpg',
+    ],
     address: '독일 바이에른주 뉘른베르크',
     coordinates: { lat: 49.4521, lng: 11.0767 },
     category: 'animation',
@@ -477,7 +503,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '사이타마 스타디움 2002 (블루 록)',
     description:
       '"블루 록"과 같은 축구 애니메이션의 경기장 장면에서 영감을 받을 수 있는 대규모 축구 경기장. 실제 축구 경기의 열기를 느낄 수 있다.',
-    photos: ['https://picsum.photos/seed/saitama-stadium/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Saitama%20stadium2002-1.jpg',
+    ],
     address: '일본 사이타마현 사이타마시 미도리구 나카노 500',
     coordinates: { lat: 35.9044, lng: 139.7161 },
     category: 'animation',
@@ -701,7 +729,9 @@ const SPORTS_SPOTS: SeedSpot[] = [
     name: '산티아고 베르나베우 (레알 마드리드)',
     description:
       '레알 마드리드의 홈구장 산티아고 베르나베우입니다. 최근 대규모 리모델링을 거쳐 최첨단 시설을 갖춘 경기장으로 재탄생했습니다.',
-    photos: ['https://picsum.photos/seed/bernabeu/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Santiago%20Bernabeu%20Stadium.jpg',
+    ],
     address: '스페인 마드리드 Av. de Concha Espina, 1',
     coordinates: { lat: 40.4531, lng: -3.6883 },
     category: 'sports',
@@ -1097,7 +1127,9 @@ const MUSIC_SPOTS: SeedSpot[] = [
     name: '올림픽공원 체조경기장 (KSPO DOME)',
     description:
       '한국 최대 규모의 실내 공연장 중 하나로, 수많은 K-POP 콘서트가 열리는 곳입니다. 팬들에게 "체조경기장"으로 친숙한 공연 성지입니다.',
-    photos: ['https://picsum.photos/seed/kspo-dome/800/600'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/%EC%98%AC%EB%A6%BC%ED%94%BD%EC%B2%B4%EC%A1%B0.jpg',
+    ],
     address: '대한민국 서울특별시 송파구 올림픽로 424',
     coordinates: { lat: 37.5209, lng: 127.115 },
     category: 'music',

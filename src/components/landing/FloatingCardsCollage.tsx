@@ -5,12 +5,13 @@ import { useEffect, useState } from 'react'
 import { FloatingCard } from './FloatingCard'
 import './floating-cards.css'
 import { MascotOverlay } from './MascotOverlay'
-import { CARD_PLACEMENTS, SHOWCASE_CARDS } from './data/showcaseCards'
+import { CARD_PLACEMENTS } from './data/showcaseCards'
+import type { ShowcaseCard } from './data/showcaseCards'
 
 /**
  * FloatingCardsCollage 컴포넌트
  * 히어로 섹션의 비주얼 영역. 여러 장의 스팟 카드가 떠다니는 콜라주를 렌더링한다.
- * - SHOWCASE_CARDS 정적 데이터에서 카드 목록을 가져와 렌더링
+ * - 서버에서 fetch한 실제 스팟 데이터(showcaseSpots)를 기반으로 렌더링
  * - 반응형 카드 수 조절 (모바일 6장, 태블릿 9장, 데스크톱 12장)
  * - 각 카드에 고유한 float 애니메이션 딜레이/속도 부여
  * - MascotOverlay를 카드 콜라주 위에 배치
@@ -23,6 +24,8 @@ import { CARD_PLACEMENTS, SHOWCASE_CARDS } from './data/showcaseCards'
 interface FloatingCardsCollageProps {
   /** 모션 감소 설정 (prefers-reduced-motion) */
   reducedMotion: boolean
+  /** 서버에서 fetch한 쇼케이스 스팟 데이터 */
+  showcaseSpots: ShowcaseCard[]
   /** 추가 CSS 클래스 */
   className?: string
 }
@@ -32,10 +35,6 @@ interface FloatingCardsCollageProps {
  * - 모바일(< 768px): 6장
  * - 태블릿(768px ~ 1024px): 9장
  * - 데스크톱(> 1024px): 12장
- *
- * SHOWCASE_CARDS는 카테고리 순환 배치:
- * [anim, sports, movie, music, game, other, anim, sports, movie, music, game, other]
- * → 6장 슬라이스 시 각 카테고리 1장씩 보장
  */
 function getCardCount(width: number): number {
   if (width < 768) return 6
@@ -45,15 +44,14 @@ function getCardCount(width: number): number {
 
 export function FloatingCardsCollage({
   reducedMotion,
+  showcaseSpots,
   className = '',
 }: FloatingCardsCollageProps) {
   const [cardCount, setCardCount] = useState(12)
 
   useEffect(() => {
-    // 초기 카드 수 설정
     setCardCount(getCardCount(window.innerWidth))
 
-    // 리사이즈 이벤트로 반응형 카드 수 조절
     function handleResize() {
       setCardCount(getCardCount(window.innerWidth))
     }
@@ -62,18 +60,17 @@ export function FloatingCardsCollage({
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const visibleCards = SHOWCASE_CARDS.slice(0, cardCount)
+  const visibleCards = showcaseSpots.slice(0, cardCount)
 
   return (
     <div
-      className={`relative overflow-hidden ${className}`}
+      className={`relative ${className}`}
       role="img"
       aria-label="다양한 성지순례 스팟을 보여주는 플로팅 카드 콜라주"
     >
       {visibleCards.map((card, index) => {
         const placement = CARD_PLACEMENTS[index]
 
-        // 카드 위치 및 애니메이션 스타일
         const cardStyle: React.CSSProperties = {
           position: 'absolute',
           top: `${placement.top}%`,
@@ -97,7 +94,7 @@ export function FloatingCardsCollage({
         )
       })}
 
-      {/* 마스코트 오버레이 (카드 콜라주 위에 렌더링) */}
+      {/* 마스코트 오버레이 */}
       <MascotOverlay reducedMotion={reducedMotion} />
     </div>
   )

@@ -148,6 +148,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
                 className="object-cover"
                 sizes="384px"
                 priority
+                unoptimized={spot.photoUrl.startsWith('http')}
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-accent-surface">
