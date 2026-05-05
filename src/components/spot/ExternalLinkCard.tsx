@@ -1,6 +1,7 @@
 'use client'
 
 import { memo } from 'react'
+import Image from 'next/image'
 import { ExternalLink, LINK_TYPE_CONFIG } from '@/types'
 
 /**
@@ -45,12 +46,18 @@ export const ExternalLinkCard = memo(function ExternalLinkCard({
       }}
     >
       {/* 아이콘 */}
-      <span className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-xl">
+      <span className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
         <span
           className="absolute inset-0 rounded-full"
           style={{ backgroundColor: config.color, opacity: 0.08 }}
         />
-        {config.icon}
+        <Image
+          src={config.icon}
+          alt={config.label}
+          width={24}
+          height={24}
+          className="relative z-10"
+        />
       </span>
 
       {/* 텍스트 영역 */}

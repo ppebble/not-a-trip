@@ -1,12 +1,22 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import Image from 'next/image'
 import {
   ExternalLink,
   ExternalLinkType,
   LINK_TYPE_CONFIG,
   SpotCategory,
 } from '@/types'
+
+/** select option용 링크 타입 이모지 매핑 */
+const LINK_TYPE_EMOJI: Record<ExternalLinkType, string> = {
+  official: '🏠',
+  ticket: '🎫',
+  schedule: '📅',
+  sns: '📱',
+  other: '🔗',
+}
 
 /**
  * ExternalLinkForm 컴포넌트 Props
@@ -115,7 +125,7 @@ function AddLinkForm({
             {(Object.keys(LINK_TYPE_CONFIG) as ExternalLinkType[]).map(
               (key) => (
                 <option key={key} value={key}>
-                  {LINK_TYPE_CONFIG[key].icon} {LINK_TYPE_CONFIG[key].label}
+                  {LINK_TYPE_EMOJI[key]} {LINK_TYPE_CONFIG[key].label}
                 </option>
               )
             )}
@@ -186,12 +196,18 @@ function LinkItem({
   return (
     <div className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3">
       {/* 아이콘 */}
-      <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-base">
+      <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full">
         <span
           className="absolute inset-0 rounded-full"
           style={{ backgroundColor: config.color, opacity: 0.08 }}
         />
-        {config.icon}
+        <Image
+          src={config.icon}
+          alt={config.label}
+          width={20}
+          height={20}
+          className="relative z-10"
+        />
       </span>
 
       {/* 텍스트 */}
