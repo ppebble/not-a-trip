@@ -192,6 +192,12 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     relatedContent: [
       { name: '도쿄 구울 (東京喰種)', type: 'anime', year: 2014 },
       { name: '원피스 (ONE PIECE)', type: 'anime', year: 1999 },
+      {
+        name: '미소녀 전사 세일러문 (美少女戦士セーラームーン)',
+        type: 'anime',
+        year: 1992,
+      },
+      { name: '명탐정 코난 (名探偵コナン)', type: 'anime', year: 1996 },
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -213,6 +219,8 @@ const ANIMATION_SPOTS: SeedSpot[] = [
         type: 'anime',
         year: 2018,
       },
+      { name: '슬램덩크 (スラムダンク)', type: 'anime', year: 1993 },
+      { name: '츠리타마 (つり球)', type: 'anime', year: 2012 },
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -230,6 +238,12 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     category: 'animation',
     relatedContent: [
       { name: '슈타인즈 게이트 (STEINS;GATE)', type: 'anime', year: 2011 },
+      { name: '러브라이브! (ラブライブ!)', type: 'anime', year: 2013 },
+      {
+        name: '소드 아트 온라인 (Sword Art Online)',
+        type: 'anime',
+        year: 2012,
+      },
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -359,7 +373,15 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     address: '일본 도쿄도 신주쿠구 가부키초',
     coordinates: { lat: 35.6938, lng: 139.7036 },
     category: 'animation',
-    relatedContent: [{ name: '은혼 (銀魂)', type: 'anime', year: 2006 }],
+    relatedContent: [
+      { name: '은혼 (銀魂)', type: 'anime', year: 2006 },
+      { name: '용과 같이 (龍が如く)', type: 'game', year: 2005 },
+      {
+        name: '가부키초 셜록 (歌舞伎町シャーロック)',
+        type: 'anime',
+        year: 2019,
+      },
+    ],
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -416,6 +438,8 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     category: 'animation',
     relatedContent: [
       { name: '주술회전 (呪術廻戦)', type: 'anime', year: 2020 },
+      { name: '최애의 아이 (【推しの子】)', type: 'anime', year: 2023 },
+      { name: '듀라라라!! (デュラララ!!)', type: 'anime', year: 2010 },
     ],
     authorName: 'System',
     isGuestSpot: false,
@@ -1254,6 +1278,109 @@ const ALL_REAL_SPOTS: SeedSpot[] = [
   ...GAME_SPOTS,
 ]
 
+// ============================================
+// spot_content_relations 동기 생성 헬퍼
+// ============================================
+
+export interface SpotContentRelationDoc {
+  id: string
+  spotId: string
+  contentId: string
+  contentName: string
+  contentType: string
+  relationType: string
+  confidenceLevel: string
+  officialness: string
+  displayPriority: number
+  status: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+/**
+ * relatedContent 배열에서 contentType에 맞는 relationType을 결정한다.
+ */
+export function getRelationTypeForContent(contentType: string): string {
+  switch (contentType) {
+    case 'anime':
+    case 'movie':
+    case 'drama':
+      return 'scene_depicted'
+    case 'game':
+      return 'inspired_by'
+    case 'sports_team':
+    case 'artist':
+      return 'collaboration_event'
+    default:
+      return 'fan_inferred'
+  }
+}
+
+/**
+ * contentName을 정규화하여 contentId를 생성한다.
+ */
+export function normalizeContentName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣ぁ-んァ-ヶ一-龠]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '')
+}
+
+/**
+ * 스팟의 relatedContent 배열로부터 SpotContentRelation 문서 배열을 생성한다.
+ * 각 relatedContent 항목에 대해 정확히 1개의 relation 문서를 생성한다.
+ * @exported 테스트에서 사용
+ */
+export function createRelationsFromSpot(
+  spot: SeedSpot
+): SpotContentRelationDoc[] {
+  return spot.relatedContent.map((content, index) => {
+    const contentId = `${spot.id}_${normalizeContentName(content.name)}`
+    return {
+      id: `REL-${spot.id}-${String(index + 1).padStart(2, '0')}`,
+      spotId: spot.id,
+      contentId,
+      contentName: content.name,
+      contentType: content.type,
+      relationType: getRelationTypeForContent(content.type),
+      confidenceLevel: 'high',
+      officialness: 'community_verified',
+      displayPriority: index,
+      status: 'active',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  })
+}
+
+/**
+ * 스팟 배열의 relatedContent를 spot_content_relations 컬렉션에 멱등적으로 동기화한다.
+ * - 이미 존재하는 relation은 건너뛴다 (id 기준 중복 체크)
+ * - 새로운 relation만 삽입한다
+ * @returns 삽입된 relation 수
+ */
+export async function syncRelationsFromSpots(
+  spots: SeedSpot[],
+  relationsCollection: {
+    distinct: (field: string) => Promise<string[]>
+    insertMany: (
+      docs: SpotContentRelationDoc[]
+    ) => Promise<{ insertedCount: number }>
+  }
+): Promise<number> {
+  const allRelations = spots.flatMap(createRelationsFromSpot)
+  if (allRelations.length === 0) return 0
+
+  const existingIds = await relationsCollection.distinct('id')
+  const newRelations = allRelations.filter((r) => !existingIds.includes(r.id))
+
+  if (newRelations.length === 0) return 0
+
+  const result = await relationsCollection.insertMany(newRelations)
+  return result.insertedCount
+}
+
 async function seedRealSpots() {
   const client = new MongoClient(MONGODB_URI)
   const isAppendMode = process.argv.includes('--append')
@@ -1267,11 +1394,15 @@ async function seedRealSpots() {
 
     const db = client.db(MONGODB_DB)
     const collection = db.collection('spots')
+    const relationsCollection = db.collection('spot_content_relations')
 
     if (!isAppendMode) {
       // eslint-disable-next-line no-console
       console.log('기존 스팟 데이터 삭제 중...')
       await collection.deleteMany({})
+      // eslint-disable-next-line no-console
+      console.log('기존 spot_content_relations 데이터 삭제 중...')
+      await relationsCollection.deleteMany({})
     } else {
       // eslint-disable-next-line no-console
       console.log('--append 모드: 기존 데이터 유지')
@@ -1289,6 +1420,17 @@ async function seedRealSpots() {
       if (newSpots.length === 0) {
         // eslint-disable-next-line no-console
         console.log('추가할 새 스팟이 없습니다.')
+        // spot_content_relations 동기화 (멱등)
+        const syncCount = await syncRelationsFromSpots(
+          ALL_REAL_SPOTS,
+          relationsCollection as unknown as Parameters<
+            typeof syncRelationsFromSpots
+          >[1]
+        )
+        if (syncCount > 0) {
+          // eslint-disable-next-line no-console
+          console.log(`✅ ${syncCount}개의 spot_content_relations 동기화 완료`)
+        }
         return
       }
       // eslint-disable-next-line no-console
@@ -1298,6 +1440,18 @@ async function seedRealSpots() {
       console.log(
         `✅ ${result.insertedCount}개의 스팟 데이터가 추가되었습니다!`
       )
+
+      // spot_content_relations 동기 생성 (멱등)
+      const syncCount = await syncRelationsFromSpots(
+        ALL_REAL_SPOTS,
+        relationsCollection as unknown as Parameters<
+          typeof syncRelationsFromSpots
+        >[1]
+      )
+      if (syncCount > 0) {
+        // eslint-disable-next-line no-console
+        console.log(`✅ ${syncCount}개의 spot_content_relations 추가`)
+      }
       return
     }
 
@@ -1310,6 +1464,21 @@ async function seedRealSpots() {
 
     // eslint-disable-next-line no-console
     console.log(`✅ ${result.insertedCount}개의 스팟 데이터가 추가되었습니다!`)
+
+    // spot_content_relations 동기 생성
+    const allRelations = ALL_REAL_SPOTS.flatMap(createRelationsFromSpot)
+    await relationsCollection.createIndex({ id: 1 }, { unique: true })
+    await relationsCollection.createIndex({
+      spotId: 1,
+      status: 1,
+      displayPriority: 1,
+    })
+    const relResult = await relationsCollection.insertMany(allRelations)
+    // eslint-disable-next-line no-console
+    console.log(
+      `✅ ${relResult.insertedCount}개의 spot_content_relations 생성 완료!`
+    )
+
     // eslint-disable-next-line no-console
     console.log('')
     // eslint-disable-next-line no-console
@@ -1324,6 +1493,8 @@ async function seedRealSpots() {
     console.log(`  - 음악/콘서트: ${MUSIC_SPOTS.length}개`)
     // eslint-disable-next-line no-console
     console.log(`  - 게임: ${GAME_SPOTS.length}개`)
+    // eslint-disable-next-line no-console
+    console.log(`  - spot_content_relations: ${allRelations.length}개`)
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('❌ 실제 스팟 시드 데이터 삽입 실패:', error)
