@@ -7,7 +7,11 @@ import { useEffect } from 'react'
 import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
-import { useSelectedCategories, useSearchQuery, useFilterStore } from '@/stores/filterStore'
+import {
+  useSelectedCategories,
+  useSearchQuery,
+  useFilterStore,
+} from '@/stores/filterStore'
 import { MapSkeleton } from '@/components/common/SkeletonUI'
 import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
 import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
@@ -26,7 +30,12 @@ const PilgrimageMap = dynamic(() => import('@/components/map/PilgrimageMap'), {
 
 /** 유효한 카테고리 값 목록 */
 const VALID_CATEGORIES: SpotCategory[] = [
-  'animation', 'sports', 'movie_drama', 'music', 'game', 'other',
+  'animation',
+  'sports',
+  'movie_drama',
+  'music',
+  'game',
+  'other',
 ]
 
 /**
@@ -52,9 +61,11 @@ export default function MapPage() {
 
     // category: 있으면 해당 카테고리만, 없으면 전체 카테고리
     if (categoryParam) {
-      const categories = categoryParam.split(',').filter(
-        (c): c is SpotCategory => VALID_CATEGORIES.includes(c as SpotCategory)
-      )
+      const categories = categoryParam
+        .split(',')
+        .filter((c): c is SpotCategory =>
+          VALID_CATEGORIES.includes(c as SpotCategory)
+        )
       if (categories.length > 0) {
         setSelectedCategories(categories)
       } else {

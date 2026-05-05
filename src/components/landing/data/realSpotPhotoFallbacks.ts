@@ -32,7 +32,8 @@ export const REAL_SPOT_PHOTO_FALLBACKS: Record<string, RealSpotPhotoFallback> =
     },
     'REAL-ANI-012': {
       imageUrl: wikimediaFilePath('Hakone-yumoto.jpg'),
-      sourcePageUrl: 'https://commons.wikimedia.org/wiki/File:Hakone-yumoto.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Hakone-yumoto.jpg',
       license: 'CC BY-SA 4.0',
     },
     'REAL-ANI-013': {

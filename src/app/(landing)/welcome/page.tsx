@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { WelcomePageClient } from '@/components/landing/WelcomePageClient'
-import { fetchShowcaseSpots, fetchCategoryImages, fetchProofImages } from '@/components/landing/data/fetchShowcaseSpots'
+import {
+  fetchShowcaseSpots,
+  fetchCategoryImages,
+  fetchProofImages,
+} from '@/components/landing/data/fetchShowcaseSpots'
 
 export const metadata: Metadata = {
   title: '환영합니다',

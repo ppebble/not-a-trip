@@ -336,7 +336,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     name: '하루나산 (이니셜D)',
     description:
       '"이니셜D"의 주요 배경인 아키나산의 모델이 된 실제 산. 구불구불한 도로에서 작품 속 레이싱의 분위기를 느낄 수 있다.',
-    photos: ['https://commons.wikimedia.org/wiki/Special:FilePath/Haruna00.JPG'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Haruna00.JPG',
+    ],
     address: '일본 군마현 다카사키시 하루나산',
     coordinates: { lat: 36.4719, lng: 138.8911 },
     category: 'animation',
@@ -1125,7 +1127,9 @@ const MUSIC_SPOTS: SeedSpot[] = [
     name: '올림픽공원 체조경기장 (KSPO DOME)',
     description:
       '한국 최대 규모의 실내 공연장 중 하나로, 수많은 K-POP 콘서트가 열리는 곳입니다. 팬들에게 "체조경기장"으로 친숙한 공연 성지입니다.',
-    photos: ['https://commons.wikimedia.org/wiki/Special:FilePath/%EC%98%AC%EB%A6%BC%ED%94%BD%EC%B2%B4%EC%A1%B0.jpg'],
+    photos: [
+      'https://commons.wikimedia.org/wiki/Special:FilePath/%EC%98%AC%EB%A6%BC%ED%94%BD%EC%B2%B4%EC%A1%B0.jpg',
+    ],
     address: '대한민국 서울특별시 송파구 올림픽로 424',
     coordinates: { lat: 37.5209, lng: 127.115 },
     category: 'music',
