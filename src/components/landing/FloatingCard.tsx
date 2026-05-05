@@ -92,7 +92,7 @@ export function FloatingCard({
 
   return (
     <div
-      className="group relative overflow-hidden rounded-lg border border-white/10 shadow-lg backdrop-blur-sm transition-all duration-300 will-change-transform hover:scale-105 hover:shadow-2xl hover:shadow-white/10"
+      className="group relative rounded-lg border border-white/10 shadow-lg backdrop-blur-sm transition-all duration-300 will-change-transform hover:scale-105 hover:shadow-2xl hover:shadow-white/10"
       style={{
         width,
         height,
@@ -101,91 +101,113 @@ export function FloatingCard({
       data-index={index}
       data-reduced-motion={reducedMotion}
     >
-      {/* 배경 하이라이트 효과 */}
-      <div
-        className="absolute inset-0 opacity-15"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 0%, transparent 40%)',
-        }}
-      />
-
-      {/* 카테고리 아이콘 (이미지 없을 때 중앙 표시) */}
-      {!imageValid && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          {!iconError ? (
-            <Image
-              src={iconSrc}
-              alt={card.category}
-              width={iconSize}
-              height={iconSize}
-              className="opacity-50 drop-shadow-lg"
-              onError={() => setIconError(true)}
-            />
-          ) : (
-            <div
-              className="rounded-full opacity-40"
-              style={{
-                width: iconSize,
-                height: iconSize,
-                backgroundColor: accentColor,
-              }}
-            />
-          )}
-        </div>
-      )}
-
-      {/* accent 글로우 (하단) */}
-      <div
-        className="absolute inset-0 opacity-25"
-        style={{
-          background: `radial-gradient(ellipse at 50% 110%, ${accentColor} 0%, transparent 65%)`,
-        }}
-      />
-
-      {/* 실제 이미지 (유효한 경우에만 표시) */}
-      <Image
-        src={card.imageUrl}
-        alt={altText}
-        fill
-        sizes={`${width}px`}
-        className={`object-cover transition-opacity duration-300 ${imageValid ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={(e) => {
-          // 1px placeholder 이미지 감지: naturalWidth/naturalHeight가 1이면 무시
-          const img = e.currentTarget
-          if (img.naturalWidth > 1 && img.naturalHeight > 1) {
-            setImageValid(true)
-          }
-        }}
-        onError={() => setImageValid(false)}
-      />
-
-      {/* 작품명 오버레이 */}
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-6">
-        {/* 카테고리 태그 */}
-        <div
-          className="mb-1 inline-flex items-center rounded px-1.5 py-0.5"
-          style={{ backgroundColor: `${accentColor}33` }}
-        >
-          <span
-            className="text-[9px] font-semibold uppercase tracking-wide"
-            style={{ color: accentColor }}
+      {/* "+N" 배지 — 다중 작품 스팟에서만 표시 (Requirements 9.1, 9.2, 9.5) */}
+      {card.additionalContentNames &&
+        card.additionalContentNames.length > 0 && (
+          <div
+            className="absolute -right-1 -top-1 z-20 flex items-center justify-center rounded-full border border-white/20 bg-white/90 shadow-md backdrop-blur-sm"
+            style={{
+              width: size === 'sm' ? 22 : size === 'md' ? 26 : 30,
+              height: size === 'sm' ? 22 : size === 'md' ? 26 : 30,
+            }}
           >
-            {CATEGORY_LABEL[card.category]}
-          </span>
-        </div>
-        <p
-          className={`truncate font-medium text-white/90 ${TEXT_SIZE_CONFIG[size]}`}
-        >
-          {card.contentName}
-        </p>
-      </div>
+            <span
+              className={`font-bold text-gray-800 ${size === 'sm' ? 'text-[9px]' : size === 'md' ? 'text-[10px]' : 'text-xs'}`}
+            >
+              +{card.additionalContentNames.length}
+            </span>
+          </div>
+        )}
 
-      {/* 카테고리 accent 하단 바 */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-[2px]"
-        style={{ backgroundColor: accentColor }}
-      />
+      {/* 카드 내부 콘텐츠 (overflow-hidden 적용) */}
+      <div className="absolute inset-0 overflow-hidden rounded-lg">
+        {/* 배경 하이라이트 효과 */}
+        <div
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 0%, transparent 40%)',
+          }}
+        />
+
+        {/* 카테고리 아이콘 (이미지 없을 때 중앙 표시) */}
+        {!imageValid && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            {!iconError ? (
+              <Image
+                src={iconSrc}
+                alt={card.category}
+                width={iconSize}
+                height={iconSize}
+                className="opacity-50 drop-shadow-lg"
+                onError={() => setIconError(true)}
+              />
+            ) : (
+              <div
+                className="rounded-full opacity-40"
+                style={{
+                  width: iconSize,
+                  height: iconSize,
+                  backgroundColor: accentColor,
+                }}
+              />
+            )}
+          </div>
+        )}
+
+        {/* accent 글로우 (하단) */}
+        <div
+          className="absolute inset-0 opacity-25"
+          style={{
+            background: `radial-gradient(ellipse at 50% 110%, ${accentColor} 0%, transparent 65%)`,
+          }}
+        />
+
+        {/* 실제 이미지 (유효한 경우에만 표시) */}
+        <Image
+          src={card.imageUrl}
+          alt={altText}
+          fill
+          sizes={`${width}px`}
+          className={`object-cover transition-opacity duration-300 ${imageValid ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={(e) => {
+            // 1px placeholder 이미지 감지: naturalWidth/naturalHeight가 1이면 무시
+            const img = e.currentTarget
+            if (img.naturalWidth > 1 && img.naturalHeight > 1) {
+              setImageValid(true)
+            }
+          }}
+          onError={() => setImageValid(false)}
+        />
+
+        {/* 작품명 오버레이 */}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-6">
+          {/* 카테고리 태그 */}
+          <div
+            className="mb-1 inline-flex items-center rounded px-1.5 py-0.5"
+            style={{ backgroundColor: `${accentColor}33` }}
+          >
+            <span
+              className="text-[9px] font-semibold uppercase tracking-wide"
+              style={{ color: accentColor }}
+            >
+              {CATEGORY_LABEL[card.category]}
+            </span>
+          </div>
+          <p
+            className={`truncate font-medium text-white/90 ${TEXT_SIZE_CONFIG[size]}`}
+          >
+            {card.contentName}
+          </p>
+        </div>
+
+        {/* 카테고리 accent 하단 바 */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[2px]"
+          style={{ backgroundColor: accentColor }}
+        />
+      </div>
+      {/* 카드 내부 콘텐츠 wrapper 닫기 */}
     </div>
   )
 }
