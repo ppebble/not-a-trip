@@ -3,6 +3,8 @@
  * Spec: 07-pilgrimage-checkin
  */
 
+import { RelationType } from './spot'
+
 // ============================================
 // CheckIn (인증) 타입
 // ============================================
@@ -24,6 +26,18 @@ export interface CheckIn {
   comment?: string
   /** 좋아요 수 */
   likeCount: number
+  // === relation 기반 필드 ===
+  /** SpotContentRelation ID 참조 */
+  relationId?: string
+  /** 콘텐츠 식별자 스냅샷 */
+  contentId?: string
+  /** 작품명 스냅샷 */
+  contentName?: string
+  /** 관계 유형 스냅샷 */
+  relationType?: RelationType
+  /** 마이그레이션 상태: resolved | unresolved | null(신규) */
+  migrationStatus?: 'resolved' | 'unresolved' | null
+  // ================================
   createdAt: Date
   updatedAt?: Date
 }
@@ -35,6 +49,8 @@ export interface CheckInInput {
   sceneImageUrl?: string
   visitedAt: Date
   comment?: string
+  /** 선택된 relation ID (다중 작품 스팟에서 필수) */
+  relationId?: string
 }
 
 /** 인증 목록 조회 필터 */
