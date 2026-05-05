@@ -147,9 +147,10 @@ export const REAL_SPOT_PHOTO_FALLBACKS: Record<string, RealSpotPhotoFallback> =
     },
     'REAL-MUS-002': {
       imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/2/25/Tokyo_Dome.jpg',
-      sourcePageUrl: 'https://commons.wikimedia.org/wiki/File:Tokyo_Dome.jpg',
-      license: 'CC BY-SA 1.0',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tokyo_Dome_side_view.jpg/1280px-Tokyo_Dome_side_view.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Tokyo_Dome_side_view.jpg',
+      license: 'CC BY-SA 3.0',
     },
     'REAL-MUS-006': {
       imageUrl:
