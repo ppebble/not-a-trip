@@ -58,28 +58,32 @@ export const ConversionSection = forwardRef<
           </p>
         </header>
 
-        {/* CTA 영역 — isStandalone 분기 */}
+        {/* CTA 영역 — 지도 탐색 우선, 앱 설치 보조 */}
         <div className="flex flex-col items-center gap-4">
-          {!isStandalone && (
-            <button
-              type="button"
-              onClick={handleInstall}
-              className="inline-flex items-center justify-center rounded-lg bg-primary-500 px-8 py-4 text-lg font-semibold text-white transition-colors duration-200 hover:bg-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 active:scale-[0.98]"
-            >
-              🛂 여권 발급받기 (앱 설치)
-            </button>
-          )}
-          {showFallbackMsg && (
-            <p className="animate-fade-slide-in text-sm text-sub-text">
-              브라우저 메뉴에서 &quot;홈 화면에 추가&quot;로 설치할 수 있어요
-            </p>
-          )}
           <CTAButton
-            label="지도 탐색하기"
+            label="지도에서 탐색 시작"
             href="/map"
             size="lg"
-            variant={isStandalone ? 'primary' : 'secondary'}
+            variant="primary"
           />
+          {!isStandalone && (
+            <>
+              <button
+                type="button"
+                onClick={handleInstall}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-6 py-3 text-base font-medium text-white/70 backdrop-blur-sm transition hover:bg-white/10 hover:text-white"
+              >
+                <span>📲</span>
+                <span>앱으로 설치하기</span>
+              </button>
+              {showFallbackMsg && (
+                <p className="animate-fade-slide-in text-sm text-sub-text">
+                  브라우저 메뉴에서 &quot;홈 화면에 추가&quot;로 설치할 수
+                  있어요
+                </p>
+              )}
+            </>
+          )}
         </div>
       </div>
     </section>

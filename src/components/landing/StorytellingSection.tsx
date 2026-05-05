@@ -3,27 +3,33 @@
 import { useRef, useEffect } from 'react'
 import { CATEGORY_STORIES } from './data/categoryStories'
 import { CategoryCard } from './CategoryCard'
+import type { SpotCategory } from '@/types/spot'
 
 /**
  * 카테고리 스토리텔링 섹션
  * GSAP ScrollTrigger 기반 3D 팝업북 스타일 스크롤 애니메이션
  * Requirements: 2.1, 2.2, 2.3, 2.9, 5.3, 6.5, 7.6
- *
- * - isHighEnd === true && reducedMotion === false: GSAP 3D 팝업북 애니메이션
- * - isHighEnd === false: 단순 CSS 애니메이션 (페이드인/슬라이드인)
- * - reducedMotion === true: GSAP 비활성화, 정적 레이아웃
  */
 
 interface StorytellingSectionProps {
   isHighEnd: boolean
   reducedMotion: boolean
+  /** 카테고리별 대표 스팟 이미지 URL */
+  categoryImages: Record<SpotCategory, string>
 }
 
 export function StorytellingSection({
   isHighEnd,
   reducedMotion,
+  categoryImages,
 }: StorytellingSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // 카테고리 스토리에 실제 이미지 적용
+  const storiesWithImages = CATEGORY_STORIES.map((story) => ({
+    ...story,
+    spotImage: categoryImages[story.category] || story.spotImage,
+  }))
 
   // GSAP 애니메이션: 고성능 + 모션 허용 시에만 로드
   if (isHighEnd && !reducedMotion) {
@@ -32,15 +38,16 @@ export function StorytellingSection({
         containerRef={containerRef}
         isHighEnd={isHighEnd}
         reducedMotion={reducedMotion}
+        stories={storiesWithImages}
       />
     )
   }
 
-  // CSS 폴백: 저사양 또는 reduced-motion
   return (
     <StorytellingSectionFallback
       isHighEnd={isHighEnd}
       reducedMotion={reducedMotion}
+      stories={storiesWithImages}
     />
   )
 }
@@ -53,13 +60,13 @@ function StorytellingSectionWithGSAP({
   containerRef,
   isHighEnd,
   reducedMotion,
+  stories,
 }: {
   containerRef: React.RefObject<HTMLDivElement | null>
   isHighEnd: boolean
   reducedMotion: boolean
+  stories: typeof CATEGORY_STORIES
 }) {
-  // GSAP는 dynamic import로 로드하여 번들 분리
-  // useGSAP 훅은 scope 옵션으로 컨텍스트 자동 정리
   useGSAPAnimation(containerRef)
 
   return (
@@ -68,7 +75,6 @@ function StorytellingSectionWithGSAP({
       aria-label="카테고리 스토리텔링"
     >
       <div className="mx-auto max-w-6xl px-4">
-        {/* 섹션 헤더 */}
         <header className="mb-12 text-center md:mb-16">
           <h2 className="mb-3 text-2xl font-bold text-main-text md:text-3xl lg:text-4xl">
             어떤 <span className="text-primary-500">덕질</span>을 하시나요?
@@ -78,12 +84,11 @@ function StorytellingSectionWithGSAP({
           </p>
         </header>
 
-        {/* 카테고리 카드 그리드 */}
         <div
           ref={containerRef}
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {CATEGORY_STORIES.map((story, index) => (
+          {stories.map((story, index) => (
             <div
               key={story.category}
               className="gsap-card"
@@ -114,9 +119,11 @@ function StorytellingSectionWithGSAP({
 function StorytellingSectionFallback({
   isHighEnd,
   reducedMotion,
+  stories,
 }: {
   isHighEnd: boolean
   reducedMotion: boolean
+  stories: typeof CATEGORY_STORIES
 }) {
   return (
     <section
@@ -124,7 +131,6 @@ function StorytellingSectionFallback({
       aria-label="카테고리 스토리텔링"
     >
       <div className="mx-auto max-w-6xl px-4">
-        {/* 섹션 헤더 */}
         <header className="mb-12 text-center md:mb-16">
           <h2 className="mb-3 text-2xl font-bold text-main-text md:text-3xl lg:text-4xl">
             어떤 <span className="text-primary-500">덕질</span>을 하시나요?
@@ -134,9 +140,8 @@ function StorytellingSectionFallback({
           </p>
         </header>
 
-        {/* 카테고리 카드 그리드 — CSS 애니메이션 */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {CATEGORY_STORIES.map((story, index) => (
+          {stories.map((story, index) => (
             <div
               key={story.category}
               className={

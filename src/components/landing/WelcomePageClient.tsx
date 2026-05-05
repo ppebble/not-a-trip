@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { HeroSection } from './HeroSection'
+import { HowItWorksSection } from './HowItWorksSection'
 import { StorytellingSection } from './StorytellingSection'
 import { SocialProofSection } from './SocialProofSection'
 import { ConversionSection } from './ConversionSection'
@@ -11,13 +12,28 @@ import { useDeviceCapability } from '@/hooks/useDeviceCapability'
 import { useScrollPosition } from '@/hooks/useScrollPosition'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { usePwaStore } from '@/stores/pwaStore'
+import type { ShowcaseCard } from './data/showcaseCards'
+import type { SpotCategory } from '@/types/spot'
 
 /**
  * 랜딩 페이지 클라이언트 컴포넌트
  * 모든 섹션을 통합하고 디바이스 능력/스크롤/모션 훅을 연결
  * Requirements: 5.2, 5.3, 5.4, 6.1, 6.2, 6.3
  */
-export function WelcomePageClient() {
+interface WelcomePageClientProps {
+  /** 서버에서 fetch한 쇼케이스 스팟 데이터 */
+  showcaseSpots: ShowcaseCard[]
+  /** 카테고리별 대표 스팟 이미지 URL */
+  categoryImages: Record<SpotCategory, string>
+  /** 소셜 프루프용 카테고리별 스팟 이미지 목록 */
+  proofImages: Record<SpotCategory, string[]>
+}
+
+export function WelcomePageClient({
+  showcaseSpots,
+  categoryImages,
+  proofImages,
+}: WelcomePageClientProps) {
   const router = useRouter()
   const { isHighEnd, isReady } = useDeviceCapability()
   const reducedMotion = usePrefersReducedMotion()
@@ -64,26 +80,33 @@ export function WelcomePageClient() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* 디바이스 감지 완료 전 스켈레톤 */}
-      {!isReady ? (
-        <HeroSkeleton />
-      ) : (
-        <HeroSection
-          ref={heroRef}
-          reducedMotion={reducedMotion}
-        />
-      )}
+      {/* 히어로 — SSR 시점부터 바로 렌더 (스켈레톤 없음) */}
+      <HeroSection
+        ref={heroRef}
+        reducedMotion={reducedMotion}
+        showcaseSpots={showcaseSpots}
+      />
+
+      {/* HowItWorks — 4단계 플로우 */}
+      <HowItWorksSection />
 
       {/* StorytellingSection — 카테고리 스토리텔링 */}
-      {isReady && (
-        <StorytellingSection
-          isHighEnd={isHighEnd}
-          reducedMotion={reducedMotion}
-        />
-      )}
+      <div
+        className="h-px bg-gradient-to-r from-transparent via-primary-500/30 to-transparent"
+        aria-hidden="true"
+      />
+      <StorytellingSection
+        isHighEnd={isReady ? isHighEnd : false}
+        reducedMotion={reducedMotion}
+        categoryImages={categoryImages}
+      />
 
       {/* SocialProofSection — 자동 스크롤 슬라이더 */}
-      <SocialProofSection />
+      <div
+        className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        aria-hidden="true"
+      />
+      <SocialProofSection proofImages={proofImages} />
 
       {/* ConversionSection — PWA 설치 유도 전환 영역 */}
       <ConversionSection ref={conversionRef} isStandalone={isStandalone} />
@@ -96,31 +119,6 @@ export function WelcomePageClient() {
         onExploreClick={handleExploreClick}
       />
     </div>
-  )
-}
-
-/** 디바이스 감지 중 표시할 히어로 스켈레톤 */
-function HeroSkeleton() {
-  return (
-    <section className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8 lg:flex-row lg:gap-12">
-        <div className="flex flex-1 flex-col items-center gap-4 lg:items-start">
-          <div className="h-10 w-64 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
-          <div className="h-6 w-48 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700" />
-          <div className="h-12 w-36 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
-        </div>
-        {/* 카드 콜라주 스켈레톤 (기존 원형 지구본 → 사각형 카드들) */}
-        <div className="relative flex flex-1 items-center justify-center">
-          <div className="relative h-64 w-64 md:h-80 md:w-80">
-            <div className="absolute left-2 top-4 h-20 w-16 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(-5deg)' }} />
-            <div className="absolute right-4 top-2 h-24 w-20 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(3deg)' }} />
-            <div className="absolute bottom-8 left-8 h-20 w-16 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(4deg)' }} />
-            <div className="absolute bottom-4 right-6 h-24 w-20 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'rotate(-3deg)' }} />
-            <div className="absolute left-1/2 top-1/2 h-20 w-16 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" style={{ transform: 'translate(-50%, -50%) rotate(2deg)' }} />
-          </div>
-        </div>
-      </div>
-    </section>
   )
 }
 

@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProofCard } from './ProofCard'
 import { PROOF_DUMMY_DATA } from './data/proofData'
+import type { ProofData } from './data/proofData'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
+import type { SpotCategory } from '@/types/spot'
 
 /**
  * 소셜 프루프 섹션 컴포넌트
@@ -11,6 +13,11 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
  * 자동 스크롤 + 수동 좌우 스와이프 + 데스크톱 화살표 지원
  * Requirements: 3.1, 3.2, 3.3, 3.4, 6.6, 7.4
  */
+
+interface SocialProofSectionProps {
+  /** 카테고리별 실제 스팟 이미지 목록 */
+  proofImages: Record<SpotCategory, string[]>
+}
 
 /** 자동 스크롤 간격 (ms) */
 const AUTO_SCROLL_INTERVAL = 3500
@@ -25,17 +32,41 @@ const CARD_GAP = 16
  * [clone-last-N] [original-0 ... original-N] [clone-first-N]
  * 클론 영역에 도달하면 transition 없이 원본 위치로 점프한다.
  */
-const CLONE_COUNT = 4 // 앞뒤로 복제할 카드 수
+const CLONE_COUNT = 4
 
-function getExtendedData() {
-  const data = PROOF_DUMMY_DATA
+/**
+ * proofData에 실제 스팟 이미지를 주입하고 무한 순환용 클론을 생성한다.
+ * - 카테고리별로 순서대로 이미지를 배분
+ * - 이미지가 없는 카테고리는 다른 카테고리의 이미지를 빌려옴
+ * - sceneImage는 실제 장면 이미지가 없으므로 제거 (단일 실사 카드)
+ */
+function getExtendedData(proofImages: Record<SpotCategory, string[]>) {
+  // 카테고리별 이미지 인덱스 카운터
+  const counters: Record<string, number> = {}
+
+  const data: ProofData[] = PROOF_DUMMY_DATA.map((item) => {
+    const cat = item.categoryTag
+    const images = proofImages[cat] || []
+
+    let img: string | undefined
+    if (images.length > 0) {
+      const idx = counters[cat] ?? 0
+      counters[cat] = idx + 1
+      img = images[idx % images.length]
+    }
+
+    return {
+      ...item,
+      image: img || item.image, // DB 이미지가 있으면 사용, 없으면 원본 유지
+      sceneImage: undefined, // 실제 장면 이미지가 없으므로 제거 → 단일 카드
+    }
+  })
+
   const len = data.length
-  // 뒤쪽 클론: 마지막 CLONE_COUNT개
   const prefixClones = data.slice(-CLONE_COUNT).map((d, i) => ({
     ...d,
     id: `clone-pre-${i}`,
   }))
-  // 앞쪽 클론: 처음 CLONE_COUNT개
   const suffixClones = data.slice(0, CLONE_COUNT).map((d, i) => ({
     ...d,
     id: `clone-suf-${i}`,
@@ -43,13 +74,13 @@ function getExtendedData() {
   return { extended: [...prefixClones, ...data, ...suffixClones], len }
 }
 
-export function SocialProofSection() {
+export function SocialProofSection({ proofImages }: SocialProofSectionProps) {
   const sliderRef = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
-  const [isTransitioning, setIsTransitioning] = useState(true)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const reducedMotion = usePrefersReducedMotion()
 
-  const { extended, len } = getExtendedData()
+  const { extended, len } = getExtendedData(proofImages)
   // 실제 인덱스 0 = extended 배열의 CLONE_COUNT 위치
   const [currentIndex, setCurrentIndex] = useState(CLONE_COUNT)
 
