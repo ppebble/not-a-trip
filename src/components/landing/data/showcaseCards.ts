@@ -7,18 +7,19 @@ import { CATEGORY_CONFIG } from '@/types/spot'
 
 /**
  * 쇼케이스 카드 데이터 타입
- * 히어로 섹션 플로팅 카드 콜라주에 표시할 정적 카드 데이터
+ * 히어로 섹션 플로팅 카드 콜라주에 표시할 카드 데이터
+ * - 정적 데이터 또는 실제 스팟 데이터 기반으로 생성
  */
 export interface ShowcaseCard {
   /** 카드 고유 ID */
   id: string
   /** 스팟 이름 */
   spotName: string
-  /** 관련 작품명 */
+  /** 관련 작품명 (없으면 스팟 이름 사용) */
   contentName: string
   /** 카테고리 */
   category: SpotCategory
-  /** 이미지 URL (정적 에셋) */
+  /** 이미지 URL */
   imageUrl: string
 }
 
@@ -158,18 +159,113 @@ export const SHOWCASE_CARDS: ShowcaseCard[] = [
  * - zIndex: 겹침 순서
  */
 export const CARD_PLACEMENTS: CardPlacement[] = [
-  { top: 5, left: 10, rotate: -8, size: 'lg', delay: 0, duration: 6, zIndex: 3 },
-  { top: 15, left: 55, rotate: 5, size: 'md', delay: 0.5, duration: 7, zIndex: 2 },
-  { top: 40, left: 5, rotate: 3, size: 'md', delay: 1, duration: 8, zIndex: 2 },
-  { top: 35, left: 65, rotate: -5, size: 'lg', delay: 1.5, duration: 6.5, zIndex: 3 },
-  { top: 60, left: 25, rotate: 7, size: 'sm', delay: 2, duration: 7.5, zIndex: 1 },
-  { top: 65, left: 70, rotate: -3, size: 'md', delay: 0.8, duration: 8.5, zIndex: 2 },
-  { top: 10, left: 35, rotate: -12, size: 'sm', delay: 1.2, duration: 7, zIndex: 1 },
-  { top: 50, left: 45, rotate: 10, size: 'sm', delay: 1.8, duration: 6, zIndex: 1 },
-  { top: 75, left: 10, rotate: -6, size: 'sm', delay: 2.5, duration: 8, zIndex: 1 },
-  { top: 80, left: 50, rotate: 4, size: 'md', delay: 0.3, duration: 7, zIndex: 2 },
-  { top: 25, left: 80, rotate: -10, size: 'sm', delay: 1.6, duration: 6.5, zIndex: 1 },
-  { top: 55, left: 85, rotate: 8, size: 'sm', delay: 2.2, duration: 7.5, zIndex: 1 },
+  // 좌상단 영역
+  { top: 2, left: 2, rotate: -8, size: 'lg', delay: 0, duration: 6, zIndex: 3 },
+  {
+    top: 8,
+    left: 48,
+    rotate: 5,
+    size: 'md',
+    delay: 0.5,
+    duration: 7,
+    zIndex: 2,
+  },
+  // 중상단 영역
+  {
+    top: 30,
+    left: -2,
+    rotate: 3,
+    size: 'md',
+    delay: 1,
+    duration: 8,
+    zIndex: 2,
+  },
+  {
+    top: 28,
+    left: 58,
+    rotate: -5,
+    size: 'lg',
+    delay: 1.5,
+    duration: 6.5,
+    zIndex: 3,
+  },
+  // 중앙 영역
+  {
+    top: 52,
+    left: 18,
+    rotate: 7,
+    size: 'sm',
+    delay: 2,
+    duration: 7.5,
+    zIndex: 1,
+  },
+  {
+    top: 55,
+    left: 62,
+    rotate: -3,
+    size: 'md',
+    delay: 0.8,
+    duration: 8.5,
+    zIndex: 2,
+  },
+  // 좌측 중간
+  {
+    top: 5,
+    left: 28,
+    rotate: -12,
+    size: 'sm',
+    delay: 1.2,
+    duration: 7,
+    zIndex: 1,
+  },
+  // 중앙 하단
+  {
+    top: 44,
+    left: 38,
+    rotate: 10,
+    size: 'sm',
+    delay: 1.8,
+    duration: 6,
+    zIndex: 1,
+  },
+  // 하단 영역
+  {
+    top: 72,
+    left: 2,
+    rotate: -6,
+    size: 'sm',
+    delay: 2.5,
+    duration: 8,
+    zIndex: 1,
+  },
+  {
+    top: 76,
+    left: 44,
+    rotate: 4,
+    size: 'md',
+    delay: 0.3,
+    duration: 7,
+    zIndex: 2,
+  },
+  // 우측 영역
+  {
+    top: 18,
+    left: 78,
+    rotate: -10,
+    size: 'sm',
+    delay: 1.6,
+    duration: 6.5,
+    zIndex: 1,
+  },
+  {
+    top: 50,
+    left: 82,
+    rotate: 8,
+    size: 'sm',
+    delay: 2.2,
+    duration: 7.5,
+    zIndex: 1,
+  },
 ]
 
 // ============================================

@@ -1,0 +1,219 @@
+import { getCollection } from '@/lib/db'
+import type { SpotCategory } from '@/types/spot'
+import type { ShowcaseCard } from './showcaseCards'
+import { REAL_SPOT_PHOTO_FALLBACKS } from './realSpotPhotoFallbacks'
+import { CARD_PLACEMENTS } from './showcaseCards'
+
+/**
+ * 카테고리 순환 순서 (6장 슬라이스 시 각 카테고리 1장씩 보장)
+ */
+const CATEGORY_ORDER: SpotCategory[] = [
+  'animation',
+  'sports',
+  'movie_drama',
+  'music',
+  'game',
+  'other',
+]
+
+interface SpotDocument {
+  id: string
+  name: string
+  photos: string[]
+  category?: SpotCategory
+  relatedContent?: { name: string }[]
+}
+
+function isPlaceholderPhoto(url?: string | null): boolean {
+  if (!url) return true
+  return url.includes('picsum.photos/seed/') || url.startsWith('/icons/')
+}
+
+function resolveLandingPhoto(
+  spotId: string,
+  photoUrl?: string | null
+): string | null {
+  if (photoUrl && !isPlaceholderPhoto(photoUrl)) {
+    return photoUrl
+  }
+
+  return REAL_SPOT_PHOTO_FALLBACKS[spotId]?.imageUrl ?? photoUrl ?? null
+}
+
+/**
+ * DB에서 카테고리별 대표 스팟을 가져와 ShowcaseCard 배열로 반환한다.
+ * - 카테고리당 최대 2장, 총 12장 (CARD_PLACEMENTS 수에 맞춤)
+ * - 카테고리 순환 배치: [anim, sports, movie, music, game, other] × 2
+ * - 썸네일(photos[0])이 있는 스팟 우선 선택
+ * - 스팟이 부족하면 SHOWCASE_CARDS 정적 데이터로 보완
+ *
+ * Server Component 전용 (DB 직접 접근)
+ */
+export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
+  const maxCards = CARD_PLACEMENTS.length // 12
+
+  try {
+    const collection = await getCollection<SpotDocument>('spots')
+
+    // 카테고리별로 썸네일 있는 스팟 2개씩 조회
+    const spotsByCategory = await Promise.all(
+      CATEGORY_ORDER.map(async (category) => {
+        const spots = await collection
+          .find({
+            category,
+            'photos.0': { $exists: true, $ne: '' },
+          })
+          .project({
+            id: 1,
+            name: 1,
+            photos: 1,
+            category: 1,
+            relatedContent: 1,
+          })
+          .limit(2)
+          .toArray()
+        return { category, spots }
+      })
+    )
+
+    // 카테고리 순환 배치로 카드 생성
+    // 1차 순환: 각 카테고리 1번째 스팟
+    // 2차 순환: 각 카테고리 2번째 스팟
+    const cards: ShowcaseCard[] = []
+
+    for (let round = 0; round < 2; round++) {
+      for (const { category, spots } of spotsByCategory) {
+        if (cards.length >= maxCards) break
+        const spot = spots[round]
+        if (!spot) continue
+
+        const contentName = spot.relatedContent?.[0]?.name || spot.name
+        const imageUrl = resolveLandingPhoto(spot.id, spot.photos[0])
+
+        if (!imageUrl) continue
+
+        cards.push({
+          id: `showcase-${spot.id}-${round}`,
+          spotName: spot.name,
+          contentName,
+          category: spot.category ?? category,
+          imageUrl,
+        })
+      }
+    }
+
+    // 카드가 충분하면 반환
+    if (cards.length >= 6) {
+      return cards
+    }
+
+    // 스팟이 너무 적으면 정적 데이터로 보완
+    const { SHOWCASE_CARDS } = await import('./showcaseCards')
+    const staticCards = SHOWCASE_CARDS.slice(cards.length)
+    return [...cards, ...staticCards].slice(0, maxCards)
+  } catch (error) {
+    // DB 연결 실패 시 정적 데이터 폴백
+    console.error('[fetchShowcaseSpots] DB 조회 실패, 정적 데이터 사용:', error)
+    const { SHOWCASE_CARDS } = await import('./showcaseCards')
+    return SHOWCASE_CARDS
+  }
+}
+
+/**
+ * 카테고리별 대표 스팟 이미지 URL을 반환한다.
+ * categoryStories, proofData 등에서 플레이스홀더 아이콘 대신 사용
+ *
+ * @returns Record<SpotCategory, string> — 카테고리별 첫 번째 스팟 사진 URL
+ */
+export async function fetchCategoryImages(): Promise<
+  Record<SpotCategory, string>
+> {
+  const iconFallback: Record<SpotCategory, string> = {
+    animation: '/icons/categories/animation.webp',
+    sports: '/icons/categories/sports.webp',
+    movie_drama: '/icons/categories/movie_drama.webp',
+    music: '/icons/categories/music.webp',
+    game: '/icons/categories/game.webp',
+    other: '/icons/categories/other.webp',
+  }
+
+  try {
+    const collection = await getCollection<SpotDocument>('spots')
+
+    const results = await Promise.all(
+      CATEGORY_ORDER.map(async (category) => {
+        const spot = await collection.findOne(
+          { category, 'photos.0': { $exists: true, $ne: '' } },
+          { projection: { id: 1, photos: 1 } }
+        )
+        return {
+          category,
+          imageUrl: spot ? resolveLandingPhoto(spot.id, spot.photos[0]) : null,
+        }
+      })
+    )
+
+    const images = { ...iconFallback }
+    for (const { category, imageUrl } of results) {
+      if (imageUrl) {
+        images[category] = imageUrl
+      }
+    }
+
+    // 아이콘 폴백만 남은 카테고리는 그대로 둠 (다른 카테고리 이미지를 빌려오면 혼동)
+    return images
+  } catch {
+    return iconFallback
+  }
+}
+
+/**
+ * 소셜 프루프 카드에 사용할 카테고리별 스팟 이미지 목록을 반환한다.
+ * 카테고리별 최대 4장, 총 최대 24장의 실제 스팟 사진 URL
+ *
+ * @returns Record<SpotCategory, string[]> — 카테고리별 스팟 사진 URL 배열
+ */
+export async function fetchProofImages(): Promise<
+  Record<SpotCategory, string[]>
+> {
+  const fallback: Record<SpotCategory, string[]> = {
+    animation: [],
+    sports: [],
+    movie_drama: [],
+    music: [],
+    game: [],
+    other: [],
+  }
+
+  try {
+    const collection = await getCollection<SpotDocument>('spots')
+
+    const results = await Promise.all(
+      CATEGORY_ORDER.map(async (category) => {
+        const spots = await collection
+          .find({
+            category,
+            'photos.0': { $exists: true, $ne: '' },
+          })
+          .project({ id: 1, photos: 1 })
+          .limit(4)
+          .toArray()
+        return {
+          category,
+          images: spots
+            .map((s) => resolveLandingPhoto(s.id, s.photos[0]))
+            .filter((url): url is string => Boolean(url)),
+        }
+      })
+    )
+
+    const images = { ...fallback }
+    for (const { category, images: imgs } of results) {
+      images[category] = imgs
+    }
+
+    return images
+  } catch {
+    return fallback
+  }
+}
