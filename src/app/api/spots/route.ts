@@ -171,6 +171,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       thumbnailUrl: spot.photos[0] || '',
       category: spot.category,
       checkInCount: checkInCountMap.get(spot.id) || 0,
+      contentName: spot.relatedContent?.[0]?.name,
     }))
 
     return NextResponse.json({ spots: spotPins, total: spotPins.length })
