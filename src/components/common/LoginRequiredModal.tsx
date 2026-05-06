@@ -1,24 +1,40 @@
 'use client'
 
+import { useRouter, usePathname } from 'next/navigation'
+
 interface LoginRequiredModalProps {
   isOpen: boolean
   title?: string
   description?: string
-  onConfirm: () => void
+  callbackUrl?: string
+  onClose?: () => void
 }
 
 /**
  * 로그인 필요 모달 컴포넌트
  *
  * 로그인이 필요한 기능에 접근할 때 표시되는 공통 모달입니다.
+ * 확인 버튼 클릭 시 자체적으로 `/auth/signin?callbackUrl=...`로 이동합니다.
+ *
+ * Requirements: 1.1, 1.2, 1.3, 1.4
  */
 export function LoginRequiredModal({
   isOpen,
   title = '로그인이 필요한 서비스입니다',
   description = '이 기능을 사용하려면 로그인이 필요합니다.',
-  onConfirm,
+  callbackUrl,
+  onClose,
 }: LoginRequiredModalProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+
   if (!isOpen) return null
+
+  const handleConfirm = () => {
+    const targetUrl = callbackUrl || pathname || '/'
+    const encodedCallback = encodeURIComponent(targetUrl)
+    router.push(`/auth/signin?callbackUrl=${encodedCallback}`)
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -49,7 +65,7 @@ export function LoginRequiredModal({
           로그인 페이지로 이동합니다.
         </p>
         <button
-          onClick={onConfirm}
+          onClick={handleConfirm}
           className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700"
         >
           로그인하러 가기

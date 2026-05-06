@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { FacilityType, OtakuFacilityType } from '@/types'
 import {
   LockerSize,
@@ -454,7 +453,6 @@ export default function FacilityReportForm({
   spotCoordinates,
 }: FacilityReportFormProps) {
   const { data: session } = useSession()
-  const router = useRouter()
   const [inputMode, setInputMode] = useState<InputMode>(null)
   const [formData, setFormData] = useState<FormData>(getInitialFormData)
   const [errors, setErrors] = useState<FormErrors>({})
@@ -998,10 +996,7 @@ export default function FacilityReportForm({
 
       <LoginRequiredModal
         isOpen={showLoginModal}
-        onConfirm={() => {
-          setShowLoginModal(false)
-          router.push('/auth/signin')
-        }}
+        onClose={() => setShowLoginModal(false)}
         description="편의시설을 제보하려면 로그인이 필요합니다."
       />
     </>

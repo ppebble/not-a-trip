@@ -105,7 +105,7 @@ export function CheckInButton({
 
       <LoginRequiredModal
         isOpen={showLoginModal}
-        onConfirm={() => setShowLoginModal(false)}
+        onClose={() => setShowLoginModal(false)}
         description="순례 인증을 하려면 로그인이 필요합니다."
       />
     </>

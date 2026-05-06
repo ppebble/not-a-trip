@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { MyReportList } from '@/components/report/MyReportList'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
@@ -11,7 +10,6 @@ import Link from 'next/link'
  * Requirements: 1.6, 2.2
  */
 export default function MyReportsPage() {
-  const router = useRouter()
   const { user, isLoading, isAuthenticated } = useAuth()
 
   if (isLoading) {
@@ -42,7 +40,6 @@ export default function MyReportsPage() {
         isOpen={true}
         title="로그인이 필요한 서비스입니다"
         description="내 제보 목록을 확인하려면 로그인이 필요합니다."
-        onConfirm={() => router.push('/auth/signin')}
       />
     )
   }
