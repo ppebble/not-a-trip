@@ -61,6 +61,16 @@ export function Header() {
               홈
             </Link>
             <Link
+              href="/contents"
+              className={`text-sm transition hover:text-secondary-400 ${
+                pathname.startsWith('/contents')
+                  ? 'font-semibold text-secondary-400'
+                  : 'text-text-secondary'
+              }`}
+            >
+              작품 탐색
+            </Link>
+            <Link
               href="/gallery"
               className="text-text-secondary text-sm transition hover:text-secondary-400"
             >
@@ -196,6 +206,17 @@ export function Header() {
                 className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
                 홈
+              </Link>
+              <Link
+                href="/contents"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100 ${
+                  pathname.startsWith('/contents')
+                    ? 'font-semibold text-secondary-400'
+                    : 'text-text-secondary hover:text-text-primary'
+                }`}
+              >
+                작품 탐색
               </Link>
               <Link
                 href="/gallery"
