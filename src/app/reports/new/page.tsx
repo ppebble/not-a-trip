@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { SpotReportForm } from '@/components/report/SpotReportForm'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
@@ -11,7 +10,6 @@ import Link from 'next/link'
  * Requirements: 1.1
  */
 export default function NewReportPage() {
-  const router = useRouter()
   const { user, isLoading, isAuthenticated } = useAuth()
 
   // 로딩 중
@@ -44,7 +42,6 @@ export default function NewReportPage() {
         isOpen={true}
         title="로그인이 필요한 서비스입니다"
         description="성지 제보를 하려면 로그인이 필요합니다."
-        onConfirm={() => router.push('/auth/signin')}
       />
     )
   }

@@ -461,7 +461,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         isOpen={showLoginModal}
         title="로그인이 필요합니다"
         description="코스 시작 및 저장 기능을 사용하려면 로그인이 필요합니다."
-        onConfirm={() => router.push('/auth/signin')}
+        onClose={() => setShowLoginModal(false)}
       />
 
       {/* 가이드 모드 하단 패널 */}

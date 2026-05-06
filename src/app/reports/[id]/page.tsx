@@ -17,7 +17,6 @@ import Link from 'next/link'
  */
 export default function ReportDetailPage() {
   const params = useParams()
-  const router = useRouter()
   const reportId = params.id as string
   const { user, isLoading: authLoading, isAuthenticated } = useAuth()
   const { data: report, isLoading, error } = useReportDetail(reportId)
@@ -32,7 +31,6 @@ export default function ReportDetailPage() {
         isOpen={true}
         title="로그인이 필요한 서비스입니다"
         description="제보 상세를 확인하려면 로그인이 필요합니다."
-        onConfirm={() => router.push('/auth/signin')}
       />
     )
   }

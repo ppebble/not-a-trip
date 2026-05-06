@@ -480,7 +480,6 @@ function SpotDetailContent({
             ? '상태 신고를 하려면 로그인이 필요합니다.'
             : '정보 보완 제보를 하려면 로그인이 필요합니다.'
         }
-        onConfirm={() => router.push('/auth/signin')}
       />
 
       {/* 같은 작품의 다른 스팟 (Requirements 6.1, 6.2, 6.3) */}

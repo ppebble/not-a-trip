@@ -41,11 +41,6 @@ export default function SpotRegisterPage() {
     }
   }, [isAuthenticated, isLoading])
 
-  // 로그인 페이지로 이동
-  const handleLoginConfirm = () => {
-    router.push('/auth/signin?callbackUrl=/spots/register')
-  }
-
   // 취소 핸들러
   const handleCancel = () => {
     if (
@@ -79,7 +74,6 @@ export default function SpotRegisterPage() {
           isOpen={showLoginModal}
           title="로그인이 필요한 서비스입니다"
           description="스팟을 등록하려면 로그인이 필요합니다."
-          onConfirm={handleLoginConfirm}
         />
       </main>
     )

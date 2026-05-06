@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { LoginRequiredModal } from '@/components/common'
 import { API_ROUTES } from '@/lib/api-routes'
 
@@ -33,7 +32,6 @@ export default function MicroVoteButton({
   onVoteComplete,
 }: MicroVoteButtonProps) {
   const { data: session } = useSession()
-  const router = useRouter()
   const [vote, setVote] = useState<boolean | null>(currentVote)
   const [isLoading, setIsLoading] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -102,10 +100,7 @@ export default function MicroVoteButton({
 
       <LoginRequiredModal
         isOpen={showLoginModal}
-        onConfirm={() => {
-          setShowLoginModal(false)
-          router.push('/auth/signin')
-        }}
+        onClose={() => setShowLoginModal(false)}
         description="투표하려면 로그인이 필요합니다."
       />
     </>

@@ -103,11 +103,6 @@ export default function SpotEditPage() {
     }
   }, [isAuthenticated, authLoading])
 
-  // 로그인 페이지로 이동
-  const handleLoginConfirm = () => {
-    router.push(`/auth/signin?callbackUrl=/spots/${spotId}/edit`)
-  }
-
   // 취소 핸들러
   const handleCancel = () => {
     if (confirm('수정 중인 내용이 있습니다. 정말 취소하시겠습니까?')) {
@@ -150,7 +145,6 @@ export default function SpotEditPage() {
           isOpen={showLoginModal}
           title="로그인이 필요한 서비스입니다"
           description="스팟을 수정하려면 로그인이 필요합니다."
-          onConfirm={handleLoginConfirm}
         />
       </main>
     )
@@ -172,7 +166,6 @@ export default function SpotEditPage() {
           isOpen={true}
           title="로그인이 필요한 서비스입니다"
           description="스팟을 수정하려면 로그인이 필요합니다."
-          onConfirm={handleLoginConfirm}
         />
       </main>
     )
