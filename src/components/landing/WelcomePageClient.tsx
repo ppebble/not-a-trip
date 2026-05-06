@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { HeroSection } from './HeroSection'
+import { EntryPointSection } from './EntryPointSection'
 import { HowItWorksSection } from './HowItWorksSection'
 import { StorytellingSection } from './StorytellingSection'
 import { SocialProofSection } from './SocialProofSection'
@@ -86,6 +87,9 @@ export function WelcomePageClient({
         reducedMotion={reducedMotion}
         showcaseSpots={showcaseSpots}
       />
+
+      {/* EntryPointSection — 목적별 3개 카드 진입점 (Requirements 4.1) */}
+      <EntryPointSection />
 
       {/* HowItWorks — 4단계 플로우 */}
       <HowItWorksSection />
