@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
 import { SpotCategory } from '@/types'
 import { CategoryIcon } from '@/components/common'
 import type { AutocompleteItem } from '@/hooks/useAutocomplete'
@@ -152,10 +153,21 @@ export default function AutocompleteDropdown({
                   {item.name}
                 </span>
               </div>
-              {/* 스팟 개수 */}
-              <span className="text-xs text-neutral-400 dark:text-neutral-500">
-                {item.count}개 스팟
-              </span>
+              <div className="flex items-center gap-2">
+                {/* 작품 페이지로 이동 링크 (Requirements 5.1, 5.2, 5.3) */}
+                <Link
+                  href={`/contents/${encodeURIComponent(item.name)}`}
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
+                  className="whitespace-nowrap rounded px-1.5 py-0.5 text-xs text-primary hover:bg-primary/10 hover:underline"
+                >
+                  작품 페이지로 이동
+                </Link>
+                {/* 스팟 개수 */}
+                <span className="text-xs text-neutral-400 dark:text-neutral-500">
+                  {item.count}개 스팟
+                </span>
+              </div>
             </li>
           ))}
         </ul>
