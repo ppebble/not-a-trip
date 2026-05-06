@@ -271,6 +271,8 @@ export interface SpotPin {
   category?: SpotCategory
   /** 인증 수 (인기 스팟 표시용) */
   checkInCount?: number
+  /** 연결된 작품명 (relatedContent[0].name) */
+  contentName?: string
 }
 
 export interface SpotPreviewData {
