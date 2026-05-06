@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { CheckInInput, UserBadge, SpotContentRelation, Scene } from '@/types'
 import { useUploadQueueStore } from '@/stores/uploadQueueStore'
 import RelationSelector from './RelationSelector'
@@ -28,6 +29,7 @@ export function CheckInModal({
   sceneImageUrl,
   onSuccess,
 }: CheckInModalProps) {
+  const router = useRouter()
   const [photoUrl, setPhotoUrl] = useState('')
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [visitedAt, setVisitedAt] = useState(
@@ -36,6 +38,7 @@ export function CheckInModal({
   const [comment, setComment] = useState('')
   const [isUploading, setIsUploading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const uploadQueue = useUploadQueueStore((state) => state.queue)
@@ -204,6 +207,7 @@ export function CheckInModal({
       setComment('')
       setVisitedAt(new Date().toISOString().split('T')[0])
 
+      setIsSuccess(true)
       onSuccess?.(data.earnedBadges)
     } catch (err) {
       setError(err instanceof Error ? err.message : '인증에 실패했습니다')
@@ -218,6 +222,7 @@ export function CheckInModal({
       setPhotoPreview(null)
       setComment('')
       setError(null)
+      setIsSuccess(false)
       onClose()
     }
   }
@@ -249,6 +254,62 @@ export function CheckInModal({
           </button>
         </div>
 
+        {/* 인증 성공 CTA UI */}
+        {isSuccess ? (
+          <div className="p-4">
+            <div className="py-6 text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                <svg
+                  className="h-8 w-8 text-green-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-lg font-bold text-gray-900">
+                인증 완료!
+              </h3>
+              <p className="mb-6 text-sm text-gray-500">
+                순례 인증이 성공적으로 등록되었습니다
+              </p>
+
+              {/* CTA 버튼 영역 */}
+              <div className="space-y-3">
+                <button
+                  onClick={() => router.push('/gallery?tab=my')}
+                  className="w-full rounded-lg bg-blue-600 py-3 text-sm font-medium text-white hover:bg-blue-700"
+                >
+                  내 인증 보기
+                </button>
+
+                {selectedContentName && (
+                  <button
+                    onClick={() =>
+                      router.push(`/contents/${selectedContentName}`)
+                    }
+                    className="w-full rounded-lg border border-blue-600 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50"
+                  >
+                    같은 작품 더 보기
+                  </button>
+                )}
+
+                <button
+                  onClick={handleClose}
+                  className="w-full rounded-lg border border-gray-300 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  확인
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit} className="p-4">
           {/* 스팟 정보 */}
           <div className="mb-4 rounded-lg bg-surface p-3">
@@ -453,6 +514,7 @@ export function CheckInModal({
             {isSubmitting ? '인증 중...' : '인증하기'}
           </button>
         </form>
+        )}
       </div>
     </div>
   )
