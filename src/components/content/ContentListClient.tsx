@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { ContentType, CONTENT_TYPE_CONFIG } from '@/types'
+import { ContentType } from '@/types'
+import { ContentCard } from './ContentCard'
 
 /**
  * 작품 목록 아이템 인터페이스
@@ -137,7 +136,7 @@ export function ContentListClient({ initialContents }: ContentListClientProps) {
         {filteredContents.length > 0 && (
           <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {filteredContents.map((content) => (
-              <ContentCardPlaceholder
+              <ContentCard
                 key={`${content.contentName}-${content.contentType}`}
                 content={content}
               />
@@ -146,63 +145,5 @@ export function ContentListClient({ initialContents }: ContentListClientProps) {
         )}
       </div>
     </main>
-  )
-}
-
-/**
- * 작품 카드 플레이스홀더 (Task 4.1에서 ContentCard로 교체 예정)
- */
-function ContentCardPlaceholder({ content }: { content: ContentListItem }) {
-  const typeConfig = CONTENT_TYPE_CONFIG[content.contentType]
-
-  return (
-    <Link
-      href={`/contents/${encodeURIComponent(content.contentName)}`}
-      className="group block overflow-hidden rounded-lg border border-border bg-background transition-shadow hover:shadow-md"
-    >
-      {/* 이미지 영역 */}
-      <div className="relative aspect-[4/3] w-full bg-border/30">
-        {content.imageUrl ? (
-          <Image
-            src={content.imageUrl}
-            alt={`${content.contentName} 대표 이미지`}
-            fill
-            className="object-cover transition-transform group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center">
-            <Image
-              src={typeConfig.icon}
-              alt={typeConfig.label}
-              width={48}
-              height={48}
-              className="opacity-40"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* 정보 영역 */}
-      <div className="p-3">
-        <p className="truncate text-sm font-medium text-main-text group-hover:text-primary">
-          {content.contentName}
-        </p>
-        <div className="mt-1 flex items-center gap-1.5">
-          <span
-            className="rounded px-1.5 py-0.5 text-[10px] font-medium"
-            style={{
-              backgroundColor: typeConfig.bgColor,
-              color: typeConfig.fgColor,
-            }}
-          >
-            {typeConfig.label}
-          </span>
-          <span className="text-xs text-sub-text">
-            스팟 {content.spotCount}개
-          </span>
-        </div>
-      </div>
-    </Link>
   )
 }
