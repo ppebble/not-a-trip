@@ -11,8 +11,9 @@
  * @requirements 3.1~3.8, M5 수정사항
  */
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { ViewfinderOverlay } from '@/components/mobile/ViewfinderOverlay'
 import { CheckInInput, UserBadge, SpotContentRelation } from '@/types'
 import RelationSelector from './RelationSelector'
@@ -39,6 +40,7 @@ export function QuickCheckIn({
   onClose,
   onSuccess,
 }: QuickCheckInProps) {
+  const router = useRouter()
   const [step, setStep] = useState<Step>('photo')
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [photoFile, setPhotoFile] = useState<File | null>(null)
@@ -55,6 +57,13 @@ export function QuickCheckIn({
   )
   const [relationsLoading, setRelationsLoading] = useState(true)
   const [relationsError, setRelationsError] = useState<string | null>(null)
+
+  // 선택된 relation에서 contentName 추출 (CTA용)
+  const selectedContentName = useMemo(() => {
+    if (!selectedRelationId) return undefined
+    const relation = relations.find((r) => r.id === selectedRelationId)
+    return relation?.contentName
+  }, [selectedRelationId, relations])
 
   // 모달 열릴 때 relations 조회 (M5 수정사항 — 8.1)
   useEffect(() => {
@@ -506,12 +515,34 @@ export function QuickCheckIn({
               <p className="mb-6 text-sm text-gray-500">
                 순례 인증이 성공적으로 등록되었습니다
               </p>
-              <button
-                onClick={onClose}
-                className="w-full rounded-lg bg-primary py-3 text-sm font-medium text-white"
-              >
-                확인
-              </button>
+
+              {/* CTA 버튼 영역 */}
+              <div className="space-y-3">
+                <button
+                  onClick={() => router.push('/gallery?tab=my')}
+                  className="w-full rounded-lg bg-primary py-3 text-sm font-medium text-white"
+                >
+                  내 인증 보기
+                </button>
+
+                {selectedContentName && (
+                  <button
+                    onClick={() =>
+                      router.push(`/contents/${selectedContentName}`)
+                    }
+                    className="w-full rounded-lg border border-primary py-3 text-sm font-medium text-primary"
+                  >
+                    같은 작품 더 보기
+                  </button>
+                )}
+
+                <button
+                  onClick={onClose}
+                  className="w-full rounded-lg border border-gray-300 py-3 text-sm font-medium text-gray-700"
+                >
+                  확인
+                </button>
+              </div>
             </div>
           )}
         </div>
