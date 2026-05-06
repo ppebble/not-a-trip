@@ -74,6 +74,7 @@ export function SpotSearchModal({
         name: spot.name,
         thumbnailUrl: spot.thumbnailUrl,
         category: spot.category,
+        contentName: spot.contentName,
       }))
 
       setSearchResults(results)
@@ -315,11 +316,16 @@ export function SpotSearchModal({
                       <p className="truncate font-medium text-neutral-900">
                         {spot.name}
                       </p>
+                      {spot.contentName && (
+                        <p className="truncate text-sm text-primary">
+                          {spot.contentName}
+                        </p>
+                      )}
                       {spot.category &&
                         CATEGORY_CONFIG[
                           spot.category as keyof typeof CATEGORY_CONFIG
                         ] && (
-                          <p className="text-sm text-neutral-500">
+                          <p className="text-xs text-neutral-500">
                             {
                               CATEGORY_CONFIG[
                                 spot.category as keyof typeof CATEGORY_CONFIG
