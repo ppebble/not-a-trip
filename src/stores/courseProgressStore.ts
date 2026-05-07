@@ -5,7 +5,7 @@
  * startRoute 시 기존 Check-in 기록을 조회하여 자동 반영
  * persist 미들웨어로 브라우저 새로고침 후에도 상태 유지
  *
- * @requirements 2.1, 2.3, 3.5
+ * @requirements 2.1, 2.3, 3.1, 3.4, 3.5
  */
 
 import { create } from 'zustand'
@@ -25,6 +25,8 @@ interface CourseProgressState {
   startedAt: Date | null
   /** 네비게이션 활성 여부 */
   isNavigating: boolean
+  /** 배너 일시 숨김 여부 (dismiss 시 true) */
+  isBannerDismissed: boolean
 }
 
 interface CourseProgressActions {
@@ -52,6 +54,10 @@ interface CourseProgressActions {
   endRoute: () => void
   /** 전체 상태 리셋 */
   resetProgress: () => void
+  /** 배너 일시 숨김 */
+  dismissBanner: () => void
+  /** 배너 다시 표시 */
+  showBanner: () => void
 }
 
 type CourseProgressStore = CourseProgressState & CourseProgressActions
@@ -64,6 +70,7 @@ interface PersistedCourseProgress {
   checkedSpotIds: string[] // Set → Array로 직렬화
   startedAt: string | null // Date → ISO string
   isNavigating: boolean
+  isBannerDismissed: boolean
 }
 
 export const useCourseProgressStore = create<CourseProgressStore>()(
@@ -77,6 +84,7 @@ export const useCourseProgressStore = create<CourseProgressStore>()(
         checkedSpotIds: new Set<string>(),
         startedAt: null,
         isNavigating: false,
+        isBannerDismissed: false,
 
         startRoute: async (route: Route, userId: string) => {
           // 기존 Check-in 기록 조회하여 이미 인증된 스팟 자동 포함
@@ -111,6 +119,7 @@ export const useCourseProgressStore = create<CourseProgressStore>()(
               checkedSpotIds,
               startedAt: new Date(),
               isNavigating: true,
+              isBannerDismissed: false,
             },
             false,
             'courseProgress/startRoute'
@@ -206,10 +215,23 @@ export const useCourseProgressStore = create<CourseProgressStore>()(
               checkedSpotIds: new Set<string>(),
               startedAt: null,
               isNavigating: false,
+              isBannerDismissed: false,
             },
             false,
             'courseProgress/resetProgress'
           )
+        },
+
+        dismissBanner: () => {
+          set(
+            { isBannerDismissed: true },
+            false,
+            'courseProgress/dismissBanner'
+          )
+        },
+
+        showBanner: () => {
+          set({ isBannerDismissed: false }, false, 'courseProgress/showBanner')
         },
       }),
       {
@@ -231,6 +253,7 @@ export const useCourseProgressStore = create<CourseProgressStore>()(
           checkedSpotIds: Array.from(state.checkedSpotIds),
           startedAt: state.startedAt?.toISOString() ?? null,
           isNavigating: state.isNavigating,
+          isBannerDismissed: state.isBannerDismissed,
         }),
         // rehydrate 시 Array → Set, string → Date 변환
         merge: (persistedState, currentState) => {
@@ -259,3 +282,5 @@ export const useCurrentSpotIndex = () =>
   useCourseProgressStore((state) => state.currentSpotIndex)
 export const useCheckedSpotIds = () =>
   useCourseProgressStore((state) => state.checkedSpotIds)
+export const useIsBannerDismissed = () =>
+  useCourseProgressStore((state) => state.isBannerDismissed)
