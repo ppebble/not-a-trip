@@ -11,6 +11,7 @@ import {
   InstallToast,
   IosPwaGuide,
 } from '@/components/pwa'
+import { CourseProgressBanner } from '@/components/course/CourseProgressBanner'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
@@ -79,6 +80,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <main>{children}</main>
+          <CourseProgressBanner />
           <InstallPromptListener />
           <InstallBottomSheet />
           <InstallToast />
