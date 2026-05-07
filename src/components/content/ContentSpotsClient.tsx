@@ -265,7 +265,7 @@ export function ContentSpotsClient({ contentName }: ContentSpotsClientProps) {
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {spots.map((spot) => (
-              <SpotCard key={spot.id} spot={spot} />
+              <SpotCard key={spot.id} spot={spot} contentName={contentName} />
             ))}
           </div>
         )}
@@ -278,13 +278,22 @@ export function ContentSpotsClient({ contentName }: ContentSpotsClientProps) {
  * 스팟 카드 컴포넌트
  * Requirements: 4.3, 4.4
  */
-export function SpotCard({ spot }: { spot: SpotPin }) {
+export function SpotCard({
+  spot,
+  contentName,
+}: {
+  spot: SpotPin
+  contentName?: string
+}) {
   const [imageError, setImageError] = useState(false)
   const categoryConfig = spot.category ? CATEGORY_CONFIG[spot.category] : null
+  const href = contentName
+    ? `/spots/${spot.id}?content=${encodeURIComponent(contentName)}`
+    : `/spots/${spot.id}`
 
   return (
     <Link
-      href={`/spots/${spot.id}`}
+      href={href}
       className="group overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-shadow hover:shadow-md"
     >
       {/* 대표 사진 */}
