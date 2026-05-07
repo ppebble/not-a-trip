@@ -3,7 +3,7 @@
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
@@ -39,14 +39,10 @@ const VALID_CATEGORIES: SpotCategory[] = [
 ]
 
 /**
- * 지도 메인 페이지 컴포넌트 (/map)
- * Requirements 1.1, 1.4, 2.1, 2.2를 만족하는 지도 기반 메인 페이지
- * - URL 파라미터(search, category)를 필터 스토어에 동기화
- * - useQuery로 필터 변경 시 지도 유지 (번쩍임 방지)
- * - 카테고리 필터링 지원
- * - filterStore 전역 상태 사용
+ * URL 파라미터를 필터 스토어에 동기화하는 내부 컴포넌트
+ * useSearchParams()는 반드시 Suspense boundary 안에서 사용해야 함
  */
-export default function MapPage() {
+function SearchParamsSyncer() {
   const searchParams = useSearchParams()
   const setSearchQuery = useFilterStore((s) => s.setSearchQuery)
   const setSelectedCategories = useFilterStore((s) => s.setSelectedCategories)
@@ -76,6 +72,18 @@ export default function MapPage() {
     }
   }, [searchParams, setSearchQuery, setSelectedCategories])
 
+  return null
+}
+
+/**
+ * 지도 메인 페이지 컴포넌트 (/map)
+ * Requirements 1.1, 1.4, 2.1, 2.2를 만족하는 지도 기반 메인 페이지
+ * - URL 파라미터(search, category)를 필터 스토어에 동기화
+ * - useQuery로 필터 변경 시 지도 유지 (번쩍임 방지)
+ * - 카테고리 필터링 지원
+ * - filterStore 전역 상태 사용
+ */
+export default function MapPage() {
   const { isActive, currentStep, next, skip, dismiss } = useOnboarding(
     MAP_PAGE_STEPS,
     'map'
@@ -83,6 +91,10 @@ export default function MapPage() {
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col bg-background">
+      {/* useSearchParams는 Suspense boundary 안에서만 사용 가능 */}
+      <Suspense fallback={null}>
+        <SearchParamsSyncer />
+      </Suspense>
       <MapContent />
       <OnboardingTour
         steps={MAP_PAGE_STEPS}
