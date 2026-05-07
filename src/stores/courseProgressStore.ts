@@ -5,7 +5,7 @@
  * startRoute 시 기존 Check-in 기록을 조회하여 자동 반영
  * persist 미들웨어로 브라우저 새로고침 후에도 상태 유지
  *
- * @requirements 3.5
+ * @requirements 2.1, 2.3, 3.5
  */
 
 import { create } from 'zustand'
@@ -37,8 +37,15 @@ interface CourseProgressActions {
   /**
    * 스팟 인증 완료 처리
    * ⚠️ 반드시 Check-in API(POST /api/checkins) 성공 후에만 호출
+   * 내부적으로 advanceToNextUnchecked()를 자동 호출
    */
   checkInSpot: (spotId: string) => void
+  /**
+   * 다음 미인증 스팟으로 자동 이동
+   * 현재 인덱스 이후부터 순환 탐색하여 다음 미인증 유효 스팟 찾기
+   * 모든 스팟 인증 완료 시 인덱스 유지 (완주 상태)
+   */
+  advanceToNextUnchecked: () => void
   /** 다음 스팟으로 이동 */
   moveToNextSpot: () => void
   /** 코스 종료 */
@@ -115,6 +122,56 @@ export const useCourseProgressStore = create<CourseProgressStore>()(
           const next = new Set(checkedSpotIds)
           next.add(spotId)
           set({ checkedSpotIds: next }, false, 'courseProgress/checkInSpot')
+          // 체크인 후 자동으로 다음 미인증 스팟으로 이동
+          get().advanceToNextUnchecked()
+        },
+
+        advanceToNextUnchecked: () => {
+          const { activeRoute, currentSpotIndex, checkedSpotIds } = get()
+          if (!activeRoute) return
+
+          // isAvailable이 false가 아닌 유효 스팟만 필터링
+          const availableSpots = activeRoute.spots.filter(
+            (s) => s.isAvailable !== false
+          )
+          const currentIdx = currentSpotIndex
+
+          // 현재 인덱스 이후부터 순환 탐색
+          for (let i = currentIdx + 1; i < availableSpots.length; i++) {
+            if (!checkedSpotIds.has(availableSpots[i].spotId)) {
+              // 원본 spots 배열 기준 인덱스 찾기
+              const originalIdx = activeRoute.spots.findIndex(
+                (s) => s.spotId === availableSpots[i].spotId
+              )
+              if (originalIdx !== -1) {
+                set(
+                  { currentSpotIndex: originalIdx },
+                  false,
+                  'courseProgress/advanceToNextUnchecked'
+                )
+              }
+              return
+            }
+          }
+
+          // 현재 인덱스 이전도 탐색 (순환)
+          for (let i = 0; i < currentIdx; i++) {
+            if (!checkedSpotIds.has(availableSpots[i].spotId)) {
+              const originalIdx = activeRoute.spots.findIndex(
+                (s) => s.spotId === availableSpots[i].spotId
+              )
+              if (originalIdx !== -1) {
+                set(
+                  { currentSpotIndex: originalIdx },
+                  false,
+                  'courseProgress/advanceToNextUnchecked'
+                )
+              }
+              return
+            }
+          }
+
+          // 모든 스팟 인증 완료 → 인덱스 유지 (완주 상태)
         },
 
         moveToNextSpot: () => {
