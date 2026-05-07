@@ -11,6 +11,7 @@ import { formatRouteShareText } from '@/lib/share-utils'
 import { LoginRequiredModal } from '@/components/common/LoginRequiredModal'
 import { GuidePanel } from '@/components/route/GuidePanel'
 import { CompletionEffect } from '@/components/route/CompletionEffect'
+import { InlineCheckInSheet } from '@/components/route/InlineCheckInSheet'
 import { OptimizedImage } from '@/components/common'
 import OnboardingTour from '@/components/common/OnboardingTour'
 import { useOnboarding } from '@/hooks/useOnboarding'
@@ -77,6 +78,13 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
   const [showCompletionEffect, setShowCompletionEffect] = useState(false)
 
+  // 인라인 체크인 시트 상태
+  const [inlineCheckIn, setInlineCheckIn] = useState<{
+    spotId: string
+    spotName: string
+    spotIndex: number
+  } | null>(null)
+
   const availableSpots = route.spots.filter((s) => s.isAvailable !== false)
 
   // 완주 감지 시 이펙트 표시
@@ -125,13 +133,34 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
     await nav.startRoute(route, user.id)
   }, [isAuthenticated, user, nav, route])
 
-  /** 스팟 인증 (Check-in 페이지로 이동) */
+  /** 스팟 인증 - InlineCheckInSheet 열기 */
   const handleCheckIn = useCallback(
     (spotId: string) => {
-      router.push(`/spots/${spotId}`)
+      const spotIdx = route.spots.findIndex((s) => s.spotId === spotId)
+      const spot = route.spots[spotIdx]
+      if (!spot) return
+      setInlineCheckIn({
+        spotId,
+        spotName: spot.spotName,
+        spotIndex: spotIdx + 1,
+      })
     },
-    [router]
+    [route.spots]
   )
+
+  /** 인증 완료 콜백 - Store 업데이트 */
+  const handleCheckInComplete = useCallback(
+    (spotId: string) => {
+      nav.checkInSpot(spotId)
+      // advanceToNextUnchecked는 store 내부에서 자동 호출
+    },
+    [nav]
+  )
+
+  /** InlineCheckInSheet 닫기 */
+  const handleInlineCheckInClose = useCallback(() => {
+    setInlineCheckIn(null)
+  }, [])
 
   return (
     <div className="space-y-6">
@@ -488,6 +517,18 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         routeName={route.name}
         onClose={() => setShowCompletionEffect(false)}
       />
+
+      {/* 인라인 체크인 시트 */}
+      {inlineCheckIn && (
+        <InlineCheckInSheet
+          spotId={inlineCheckIn.spotId}
+          spotName={inlineCheckIn.spotName}
+          spotIndex={inlineCheckIn.spotIndex}
+          isOpen={true}
+          onClose={handleInlineCheckInClose}
+          onComplete={handleCheckInComplete}
+        />
+      )}
 
       {/* 온보딩 가이드 투어 */}
       <OnboardingTour
