@@ -21,6 +21,8 @@ interface SameContentSpotsProps {
   relations: SpotContentRelation[]
   /** 관련 작품 목록 (폴백용, 과도기) */
   relatedContent?: RelatedContent[]
+  /** 진입 컨텍스트 작품명 — 이 작품 기준으로 스팟 조회 */
+  contextContentName?: string
 }
 
 /**
@@ -33,10 +35,18 @@ export function SameContentSpots({
   currentSpotId,
   relations,
   relatedContent,
+  contextContentName,
 }: SameContentSpotsProps) {
-  // relations 우선, relatedContent 폴백
+  // contextContentName 우선 → relations 대표 → relatedContent 폴백
   const primaryRelation =
-    relations?.length > 0 ? getPrimaryRelation(relations) : undefined
+    contextContentName && relations?.length > 0
+      ? (relations.find(
+          (r) =>
+            r.contentName.toLowerCase() === contextContentName.toLowerCase()
+        ) ?? getPrimaryRelation(relations))
+      : relations?.length > 0
+        ? getPrimaryRelation(relations)
+        : undefined
   const contentName = primaryRelation?.contentName ?? relatedContent?.[0]?.name
 
   const { data: spots, isLoading } = useSpots(
@@ -85,7 +95,11 @@ export function SameContentSpots({
         </h2>
         <div className="flex gap-3 overflow-x-auto pb-2">
           {otherSpots.map((spot) => (
-            <SameContentSpotCard key={spot.id} spot={spot} />
+            <SameContentSpotCard
+              key={spot.id}
+              spot={spot}
+              contentName={contentName}
+            />
           ))}
         </div>
       </div>
@@ -93,13 +107,22 @@ export function SameContentSpots({
   )
 }
 
-function SameContentSpotCard({ spot }: { spot: SpotPin }) {
+function SameContentSpotCard({
+  spot,
+  contentName,
+}: {
+  spot: SpotPin
+  contentName?: string
+}) {
   const [imageError, setImageError] = useState(false)
   const categoryConfig = spot.category ? CATEGORY_CONFIG[spot.category] : null
+  const href = contentName
+    ? `/spots/${spot.id}?content=${encodeURIComponent(contentName)}`
+    : `/spots/${spot.id}`
 
   return (
     <Link
-      href={`/spots/${spot.id}`}
+      href={href}
       className="group w-40 flex-shrink-0 overflow-hidden rounded-lg border border-border bg-surface transition-shadow hover:shadow-md"
     >
       <div className="relative aspect-video overflow-hidden bg-neutral-100">
