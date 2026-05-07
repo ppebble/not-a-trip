@@ -54,6 +54,7 @@ import {
   getContentNamesFromRelations,
   getPrimaryContentName,
 } from '@/lib/relation-utils'
+import { useSearchParams } from 'next/navigation'
 
 // 지도 컴포넌트를 동적으로 로드 (SSR 방지)
 const SpotDetailMap = dynamic(() => import('@/components/map/SpotDetailMap'), {
@@ -141,6 +142,9 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
   } = useSpotDetailViewModel({ spotId, authorId: spot.authorId })
 
   const router = useRouter()
+  const searchParams = useSearchParams()
+  // ?content=작품명 으로 진입 컨텍스트 전달 (작품 허브 → 스팟 상세 이동 시)
+  const contentContext = searchParams.get('content') || undefined
 
   return (
     <div className="min-h-screen bg-background">
@@ -204,6 +208,7 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
         <SpotDetailContent
           spot={spot}
           facilities={facilities}
+          contentContext={contentContext}
           showSupplementForm={showSupplementForm}
           handleSupplementClick={handleSupplementClick}
           handleSupplementSuccess={handleSupplementSuccess}
@@ -224,6 +229,8 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
 interface SpotDetailContentProps {
   spot: SpotDetailData
   facilities: NearbyFacility[]
+  /** 진입 컨텍스트 작품명 (?content= 쿼리 파라미터) */
+  contentContext?: string
   showSupplementForm: boolean
   handleSupplementClick: () => void
   handleSupplementSuccess: () => void
@@ -240,6 +247,7 @@ interface SpotDetailContentProps {
 function SpotDetailContent({
   spot,
   facilities,
+  contentContext,
   showSupplementForm,
   handleSupplementClick,
   handleSupplementSuccess,
@@ -255,6 +263,15 @@ function SpotDetailContent({
   const categoryConfig = spot.category
     ? CATEGORY_CONFIG[spot.category as SpotCategory]
     : null
+
+  // 진입 컨텍스트에 맞는 relation summary 조회
+  const contextRelation = contentContext
+    ? spot.relations?.find(
+        (r) =>
+          r.contentName.toLowerCase() === contentContext.toLowerCase() &&
+          r.summary
+      )
+    : undefined
 
   return (
     <div className="space-y-8">
@@ -334,6 +351,18 @@ function SpotDetailContent({
           <p className="text-sm leading-relaxed text-sub-text md:text-base">
             {spot.description}
           </p>
+
+          {/* 진입 컨텍스트 작품별 설명 (relation summary) */}
+          {contextRelation && (
+            <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
+              <p className="mb-1 text-xs font-medium text-primary">
+                「{contextRelation.contentName}」 관련 설명
+              </p>
+              <p className="text-sm leading-relaxed text-main-text">
+                {contextRelation.summary}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* 데스크탑: 기존 그리드 사진 레이아웃 (카드 내부) */}
@@ -489,6 +518,7 @@ function SpotDetailContent({
           currentSpotId={spot.id}
           relations={spot.relations || []}
           relatedContent={spot.relatedContent}
+          contextContentName={contentContext}
         />
       )}
 

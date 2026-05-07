@@ -162,12 +162,18 @@ const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
  */
 export function ContentHubClient({ contentName }: ContentHubClientProps) {
   const router = useRouter()
-  const { data: spots, isLoading: spotsLoading, isError: spotsError } = useSpots(undefined, contentName)
+  const {
+    data: spots,
+    isLoading: spotsLoading,
+    isError: spotsError,
+  } = useSpots(undefined, contentName)
   const firstSpotId = spots?.[0]?.id
   const { data: contentInfo } = useContentInfo(contentName, firstSpotId)
   const { data: imageUrl } = useContentImage(contentName)
-  const { data: courses, isError: coursesError } = useContentCourses(contentName)
-  const { data: recentCheckIns, isError: checkInsError } = useRecentCheckIns(contentName)
+  const { data: courses, isError: coursesError } =
+    useContentCourses(contentName)
+  const { data: recentCheckIns, isError: checkInsError } =
+    useRecentCheckIns(contentName)
   const [bannerImageError, setBannerImageError] = useState(false)
 
   const typeLabel = contentInfo?.type
@@ -223,6 +229,7 @@ export function ContentHubClient({ contentName }: ContentHubClientProps) {
           isLoading={spotsLoading}
           isError={spotsError}
           totalSpotCount={spots?.length ?? 0}
+          contentName={contentName}
         />
 
         {/* ===== 섹션 3: 관련 코스 (Requirements: 3.4, 3.5) ===== */}
@@ -413,11 +420,13 @@ function RepresentativeSpotsSection({
   isLoading,
   isError,
   totalSpotCount,
+  contentName,
 }: {
   spots: SpotPin[]
   isLoading: boolean
   isError: boolean
   totalSpotCount: number
+  contentName: string
 }) {
   if (isLoading) {
     return (
@@ -468,7 +477,7 @@ function RepresentativeSpotsSection({
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {spots.map((spot) => (
-          <SpotCard key={spot.id} spot={spot} />
+          <SpotCard key={spot.id} spot={spot} contentName={contentName} />
         ))}
       </div>
     </section>
@@ -498,7 +507,9 @@ function RelatedCoursesSection({ courses }: { courses: Route[] }) {
                 </p>
                 <div className="mt-2 flex items-center gap-3 text-xs text-sub-text">
                   <span>📍 스팟 {course.spots.length}개</span>
-                  <span>⏱️ 약 {Math.round(course.estimatedDuration / 60)}시간</span>
+                  <span>
+                    ⏱️ 약 {Math.round(course.estimatedDuration / 60)}시간
+                  </span>
                   <span>
                     {course.difficulty === 'easy'
                       ? '🟢 쉬움'
