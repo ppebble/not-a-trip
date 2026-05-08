@@ -4,6 +4,13 @@ import type { UserStats, UserBadge, ContentProgress } from '@/types'
 
 // ── Response Types ──────────────────────────────────────────
 
+export interface UserInfo {
+  id: string
+  name: string
+  image: string | null
+  createdAt: string
+}
+
 interface BadgesResponse {
   badges: UserBadge[]
 }
@@ -22,6 +29,7 @@ interface ReportedSpot {
 
 export const userKeys = {
   all: ['users'] as const,
+  info: (userId: string) => [...userKeys.all, 'info', userId] as const,
   stats: (userId: string) => [...userKeys.all, 'stats', userId] as const,
   badges: (userId: string) => [...userKeys.all, 'badges', userId] as const,
   progress: (userId: string) => [...userKeys.all, 'progress', userId] as const,
