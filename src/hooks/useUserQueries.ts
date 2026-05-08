@@ -40,6 +40,22 @@ export const userKeys = {
 // ── Hooks ───────────────────────────────────────────────────
 
 /**
+ * 유저 기본 정보 조회 훅
+ * Requirements: 2.1, 2.2, 2.3, 2.4, 5.2
+ */
+export function useUserInfo(userId: string | undefined) {
+  return useQuery({
+    queryKey: userKeys.info(userId!),
+    queryFn: async (): Promise<UserInfo> => {
+      const res = await fetch(API_ROUTES.USERS.INFO(userId!))
+      if (!res.ok) throw new Error('유저 정보 조회 실패')
+      return res.json()
+    },
+    enabled: !!userId,
+  })
+}
+
+/**
  * 유저 통계 조회 훅
  * Requirements: 8.3
  */
