@@ -1,7 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { OptimizedImage } from '@/components/common/OptimizedImage'
 import {
   useBottomSheetStore,
   useIsBottomSheetOpen,
@@ -76,7 +76,7 @@ export default function BottomSheet() {
             <div className="flex items-center gap-3">
               <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg">
                 {spot.photoUrl ? (
-                  <Image
+                  <OptimizedImage
                     src={spot.photoUrl}
                     alt={spot.name}
                     fill
@@ -104,7 +104,7 @@ export default function BottomSheet() {
               <div className="mt-4">
                 {spot.photoUrl && (
                   <div className="relative mb-3 h-48 w-full overflow-hidden rounded-xl">
-                    <Image
+                    <OptimizedImage
                       src={spot.photoUrl}
                       alt={spot.name}
                       fill
