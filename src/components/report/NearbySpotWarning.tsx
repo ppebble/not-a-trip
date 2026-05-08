@@ -74,6 +74,7 @@ export function NearbySpotWarning({
                   fill
                   sizes="48px"
                   className="object-cover"
+                  unoptimized={item.thumbnailUrl.startsWith('http')}
                 />
               </div>
             ) : (

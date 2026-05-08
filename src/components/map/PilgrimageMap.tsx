@@ -4,10 +4,8 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Map as LeafletMap } from 'leaflet'
 import L from 'leaflet'
-import { useShallow } from 'zustand/react/shallow'
-import { useMapStore } from '@/stores/mapStore'
 import { SpotPin as SpotPinType } from '@/types'
-import SpotPin from './SpotPin'
+import SpotMarkerLayer from './SpotMarkerLayer'
 import SpotPreview from './SpotPreview'
 import BottomSheet from '@/components/mobile/BottomSheet'
 import LocationButton from '@/components/mobile/LocationButton'
@@ -32,22 +30,14 @@ export default function PilgrimageMap({
 }: PilgrimageMapProps) {
   const mapRef = useRef<LeafletMap | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const { center, zoom, setCenter, setZoom } = useMapStore(
-    useShallow((state) => ({
-      center: state.center,
-      zoom: state.zoom,
-      setCenter: state.setCenter,
-      setZoom: state.setZoom,
-    }))
-  )
   const [gpsError, setGpsError] = useState<{
     code: string
     message: string
   } | null>(null)
 
-  // Use props if provided, otherwise use store values
-  const mapCenter = initialCenter || center
-  const mapZoom = initialZoom || zoom
+  // Props를 직접 사용 (store 구독 불필요 — 줌/이동 시 리렌더 방지)
+  const mapCenter = initialCenter ?? ([37.5665, 126.978] as [number, number])
+  const mapZoom = initialZoom ?? 10
 
   // Leaflet 마커 아이콘 경로 설정 (로컬 경로로 변경)
   useEffect(() => {
@@ -79,28 +69,27 @@ export default function PilgrimageMap({
   }, [])
   useResizeObserver(containerRef, handleResize)
 
-  // Update store when map view changes
+  // 줌 중 마커 pane에 is-zooming 클래스 추가 → CSS로 transition/shadow 비활성화
+  // whenReady 이후 mapRef가 설정되므로 별도 state로 트리거
+  const [mapReady, setMapReady] = useState(false)
+
   useEffect(() => {
+    if (!mapReady) return
     const map = mapRef.current
     if (!map) return
 
-    const handleMoveEnd = () => {
-      const newCenter = map.getCenter()
-      setCenter([newCenter.lat, newCenter.lng])
-    }
+    const markerPane = map.getPane('markerPane')
+    const onZoomStart = () => markerPane?.classList.add('is-zooming')
+    const onZoomEnd = () => markerPane?.classList.remove('is-zooming')
 
-    const handleZoomEnd = () => {
-      setZoom(map.getZoom())
-    }
-
-    map.on('moveend', handleMoveEnd)
-    map.on('zoomend', handleZoomEnd)
+    map.on('zoomstart', onZoomStart)
+    map.on('zoomend', onZoomEnd)
 
     return () => {
-      map.off('moveend', handleMoveEnd)
-      map.off('zoomend', handleZoomEnd)
+      map.off('zoomstart', onZoomStart)
+      map.off('zoomend', onZoomEnd)
     }
-  }, [setCenter, setZoom])
+  }, [mapReady])
 
   return (
     <div
@@ -130,6 +119,7 @@ export default function PilgrimageMap({
         whenReady={() => {
           // 지도가 준비되면 즉시 크기 재계산 (ResizeObserver가 이후 변경 감지)
           mapRef.current?.invalidateSize()
+          setMapReady(true)
         }}
       >
         <TileLayer
@@ -142,10 +132,8 @@ export default function PilgrimageMap({
           noWrap={true} // 타일 반복 방지
         />
 
-        {/* 스팟 핀 렌더링 */}
-        {spots.map((spot) => (
-          <SpotPin key={spot.id} spot={spot} onSelect={onSpotSelect} />
-        ))}
+        {/* 스팟 핀 렌더링 — MarkerClusterGroup으로 관리 */}
+        <SpotMarkerLayer spots={spots} onSpotSelect={onSpotSelect} />
       </MapContainer>
 
       {/* Custom map controls with navy theme */}

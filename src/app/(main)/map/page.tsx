@@ -3,7 +3,7 @@
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
@@ -132,6 +132,14 @@ function MapContent() {
     searchQuery || undefined
   )
 
+  // spots 참조가 바뀌지 않으면 동일 배열 반환 → SpotPin memo 유지
+  // early return 위에 위치해야 Rules of Hooks 준수
+  const spotData = useMemo(
+    () => (isNoCategorySelected ? [] : spots || []),
+    [isNoCategorySelected, spots]
+  )
+  const spotCount = spotData.length
+
   // 초기 로딩 (데이터가 아직 없을 때)
   if (isLoading) {
     return <SpotLoadingSkeleton />
@@ -141,9 +149,6 @@ function MapContent() {
   if (isError) {
     return <SpotErrorDisplay error={error} onRetry={() => refetch()} />
   }
-
-  const spotData = isNoCategorySelected ? [] : spots || []
-  const spotCount = spotData.length
 
   const isEmptySearchResult = searchQuery && spotCount === 0
   const isEmptyFilterResult = isNoCategorySelected
