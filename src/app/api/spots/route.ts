@@ -88,7 +88,6 @@ interface SpotDocument {
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const collection = await getCollection<SpotDocument>('spots')
-    const checkinsCollection = await getCollection('checkins')
 
     // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url)
@@ -151,26 +150,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // Get spots from database with filter
     const spots = await collection.find(query).toArray()
 
-    // 각 스팟별 인증 수 집계 (인기 스팟 표시용)
-    const checkInCounts = await checkinsCollection
-      .aggregate<{
-        _id: string
-        count: number
-      }>([{ $group: { _id: '$spotId', count: { $sum: 1 } } }])
-      .toArray()
-
-    const checkInCountMap = new Map(
-      checkInCounts.map((item) => [item._id, item.count])
-    )
-
     // Transform to SpotPin format for map display
+    // checkInCount는 별도 집계 없이 spot 문서에 캐시된 값 사용 (없으면 0)
     const spotPins: SpotPin[] = spots.map((spot) => ({
       id: spot.id,
       name: spot.name,
       coordinates: [spot.coordinates.lat, spot.coordinates.lng],
       thumbnailUrl: spot.photos[0] || '',
       category: spot.category,
-      checkInCount: checkInCountMap.get(spot.id) || 0,
+      checkInCount: 0, // 지도 핀 표시용 — 인기 뱃지는 별도 API에서 처리
       contentName: spot.relatedContent?.[0]?.name,
     }))
 
