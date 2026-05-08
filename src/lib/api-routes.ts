@@ -81,6 +81,7 @@ export const API_ROUTES = {
 
   // Users (유저)
   USERS: {
+    INFO: (id: string) => `/api/users/${id}`,
     STATS: (id: string) => `/api/users/${id}/stats`,
     BADGES: (id: string) => `/api/users/${id}/badges`,
     PROGRESS: (id: string) => `/api/users/${id}/progress`,

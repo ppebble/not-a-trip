@@ -18,6 +18,24 @@ GitHub Issue, PR, 머지는 MCP 도구로 직접 수행한다.
 
 Issue body는 `.github/ISSUE_TEMPLATE/` 형식, PR body는 `.github/PULL_REQUEST_TEMPLATE.md` 형식 참고.
 
+## 🚨 PR body 작성 규칙 (필수)
+
+`mcp_github_create_pull_request`의 `body` 파라미터에서 **`\\n` 이스케이프 시퀀스를 사용하지 않는다.**
+실제 줄바꿈(multi-line string)을 사용해야 GitHub에서 마크다운이 정상 렌더링된다.
+
+```
+# ❌ 잘못된 예시 (\\n이 텍스트로 출력됨)
+body: "## 변경 사항\\n\\n- 항목 1\\n- 항목 2"
+
+# ✅ 올바른 예시 (실제 줄바꿈 사용)
+body: "## 변경 사항
+
+- 항목 1
+- 항목 2"
+```
+
+PR body는 반드시 `.github/PULL_REQUEST_TEMPLATE.md` 섹션 구조를 따르되, 실제 줄바꿈으로 작성한다.
+
 ## MCP Agent Worker (AI 에이전트 도구)
 
 단순 반복 작업은 MCP agent-worker 서버로 위임한다 (Gemini API 직접 호출):
