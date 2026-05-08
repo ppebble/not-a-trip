@@ -285,6 +285,7 @@ export function SpotSearchModal({
                           fill
                           sizes="48px"
                           className="object-cover"
+                          unoptimized={spot.thumbnailUrl.startsWith('http')}
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-neutral-400">

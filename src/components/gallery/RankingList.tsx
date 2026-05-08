@@ -148,6 +148,7 @@ export function RankingList({
                         className="object-cover"
                         onError={() => handleSpotImageError(item.spotId)}
                         sizes="56px"
+                        unoptimized={item.spotThumbnail.startsWith('http')}
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-xl">
@@ -226,6 +227,7 @@ export function RankingList({
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={() => handleCheckInImageError(item.checkInId)}
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        unoptimized={item.photoUrl.startsWith('http')}
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-3xl">
