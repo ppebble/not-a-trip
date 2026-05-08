@@ -3,11 +3,13 @@
 import { useState, use } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { AppIcon } from '@/components/common/AppIcon'
 import { CheckInGallery } from '@/components/checkin'
 import { TrophyRoom } from '@/components/profile/TrophyRoom'
 import { ContentProgressCard } from '@/components/profile/ContentProgressCard'
 import {
+  useUserInfo,
   useUserStats,
   useUserBadges,
   useUserProgress,
@@ -19,8 +21,21 @@ interface UserProfilePageProps {
 }
 
 /**
+ * 가입일 포맷팅 유틸 함수
+ * Requirements: 3.5
+ * @param createdAt ISO 8601 형식의 날짜 문자열
+ * @returns "YYYY년 MM월 가입" 형식의 문자열
+ */
+export function formatJoinDate(createdAt: string): string {
+  const date = new Date(createdAt)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${year}년 ${month}월 가입`
+}
+
+/**
  * 유저 프로필 페이지
- * Requirements: 3.1, 3.3
+ * Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.1, 4.2, 4.3, 4.4, 4.5
  */
 export default function UserProfilePage({ params }: UserProfilePageProps) {
   const { id: userId } = use(params)
@@ -28,6 +43,8 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
     'checkins' | 'badges' | 'progress' | 'reports'
   >('checkins')
 
+  const { data: session } = useSession()
+  const { data: userInfo, isLoading: userInfoLoading } = useUserInfo(userId)
   const { data: stats, isLoading: statsLoading } = useUserStats(userId)
   const { data: badges = [], isLoading: badgesLoading } = useUserBadges(userId)
   const { data: progress = [], isLoading: progressLoading } =
@@ -35,15 +52,10 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
   const { data: reportedSpots = [], isLoading: spotsLoading } =
     useUserReportedSpots(userId)
 
-  const isLoading =
-    statsLoading || badgesLoading || progressLoading || spotsLoading
+  const isOwner = session?.user?.id === userId
 
-  // TODO: 유저 정보 조회 API 필요
-  const userInfo = {
-    id: userId,
-    name: '순례자',
-    image: undefined as string | undefined,
-  }
+  const isLoading =
+    userInfoLoading || statsLoading || badgesLoading || progressLoading || spotsLoading
 
   if (isLoading) {
     return (
@@ -74,7 +86,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
         {/* 프로필 헤더 */}
         <div className="mb-8 rounded-xl bg-surface p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            {userInfo.image ? (
+            {userInfo?.image ? (
               <Image
                 src={userInfo.image}
                 alt={userInfo.name}
@@ -87,9 +99,23 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
                 <AppIcon name="profile-front" size={72} />
               </div>
             )}
-            <div>
-              <h1 className="text-2xl font-bold">{userInfo.name}</h1>
-              <p className="text-gray-500">성지순례 탐험가</p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-bold">{userInfo?.name}</h1>
+                {isOwner && (
+                  <Link
+                    href="/profile/edit"
+                    className="rounded-lg border border-gray-300 px-3 py-1 text-sm text-gray-600 hover:bg-gray-50"
+                  >
+                    편집
+                  </Link>
+                )}
+              </div>
+              {userInfo?.createdAt && (
+                <p className="text-sm text-gray-500">
+                  {formatJoinDate(userInfo.createdAt)}
+                </p>
+              )}
             </div>
           </div>
 
