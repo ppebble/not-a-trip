@@ -8,6 +8,7 @@ import { SectionNavigation } from '@/components/profile/SectionNavigation'
 import { ActivitySection } from '@/components/profile/sections/ActivitySection'
 import { ContributionSection } from '@/components/profile/sections/ContributionSection'
 import { CommunitySection } from '@/components/profile/sections/CommunitySection'
+import { CollectionSection } from '@/components/profile/sections/CollectionSection'
 import { useUserInfo, useUserStats } from '@/hooks/useUserQueries'
 import type { ProfileSection, ExtendedUserStats } from '@/types/profile'
 import type { UserStats } from '@/types/checkin'
@@ -156,9 +157,9 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             <CommunitySection userId={userId} isOwner={isOwner} />
           )}
 
-          {/* 보관함 섹션 — placeholder */}
+          {/* 보관함 섹션 */}
           {activeSection === 'collection' && (
-            <div className="py-12 text-center text-neutral-500">준비 중...</div>
+            <CollectionSection userId={userId} isOwner={isOwner} />
           )}
 
           {/* 관리 섹션 — Owner 전용, placeholder */}
