@@ -1,19 +1,12 @@
 'use client'
 
-import { useState, use } from 'react'
+import { use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { SectionNavigation } from '@/components/profile/SectionNavigation'
-import { CheckInGallery } from '@/components/checkin'
-import { TrophyRoom } from '@/components/profile/TrophyRoom'
-import { ContentProgressCard } from '@/components/profile/ContentProgressCard'
-import {
-  useUserInfo,
-  useUserStats,
-  useUserBadges,
-  useUserProgress,
-} from '@/hooks/useUserQueries'
+import { ActivitySection } from '@/components/profile/sections/ActivitySection'
+import { useUserInfo, useUserStats } from '@/hooks/useUserQueries'
 import type { ProfileSection, ExtendedUserStats } from '@/types/profile'
 import type { UserStats } from '@/types/checkin'
 
@@ -64,22 +57,13 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
       ? sectionParam
       : 'activity'
 
-  // 활동 섹션 내 하위 탭 상태 (placeholder용)
-  const [activityTab, setActivityTab] = useState<
-    'checkins' | 'completions' | 'badges' | 'progress'
-  >('checkins')
-
   const { data: session } = useSession()
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo(userId)
   const { data: stats, isLoading: statsLoading } = useUserStats(userId)
-  const { data: badges = [], isLoading: badgesLoading } = useUserBadges(userId)
-  const { data: progress = [], isLoading: progressLoading } =
-    useUserProgress(userId)
 
   const isOwner = session?.user?.id === userId
 
-  const isLoading =
-    userInfoLoading || statsLoading || badgesLoading || progressLoading
+  const isLoading = userInfoLoading || statsLoading
 
   // 섹션 변경 시 URL 업데이트
   const handleSectionChange = (section: ProfileSection) => {
@@ -155,57 +139,9 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
 
         {/* 섹션 콘텐츠 */}
         <div className="rounded-xl bg-surface p-6 shadow-sm">
-          {/* 활동 섹션 — 기존 기능 임시 포함 */}
+          {/* 활동 섹션 */}
           {activeSection === 'activity' && (
-            <div>
-              {/* 하위 탭 */}
-              <div className="mb-5 flex gap-2 overflow-x-auto whitespace-nowrap">
-                {(
-                  [
-                    { key: 'checkins', label: '인증 갤러리' },
-                    { key: 'completions', label: '코스 완주' },
-                    { key: 'badges', label: '트로피 룸' },
-                    { key: 'progress', label: '진행 현황' },
-                  ] as const
-                ).map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActivityTab(tab.key)}
-                    className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                      activityTab === tab.key
-                        ? 'bg-primary text-white'
-                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* 탭 콘텐츠 */}
-              {activityTab === 'checkins' && (
-                <CheckInGallery userId={userId} limit={12} />
-              )}
-              {activityTab === 'completions' && (
-                <div className="py-12 text-center text-neutral-500">
-                  준비 중...
-                </div>
-              )}
-              {activityTab === 'badges' && <TrophyRoom badges={badges} />}
-              {activityTab === 'progress' && (
-                <div className="space-y-4">
-                  {progress.length > 0 ? (
-                    progress.map((p) => (
-                      <ContentProgressCard key={p.contentName} progress={p} />
-                    ))
-                  ) : (
-                    <div className="py-12 text-center text-neutral-500">
-                      아직 진행 중인 작품이 없습니다
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            <ActivitySection userId={userId} isOwner={isOwner} />
           )}
 
           {/* 기여 섹션 — placeholder */}
