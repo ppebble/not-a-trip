@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { SectionNavigation } from '@/components/profile/SectionNavigation'
 import { ActivitySection } from '@/components/profile/sections/ActivitySection'
+import { ContributionSection } from '@/components/profile/sections/ContributionSection'
 import { useUserInfo, useUserStats } from '@/hooks/useUserQueries'
 import type { ProfileSection, ExtendedUserStats } from '@/types/profile'
 import type { UserStats } from '@/types/checkin'
@@ -144,9 +145,9 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
             <ActivitySection userId={userId} isOwner={isOwner} />
           )}
 
-          {/* 기여 섹션 — placeholder */}
+          {/* 기여 섹션 */}
           {activeSection === 'contribution' && (
-            <div className="py-12 text-center text-neutral-500">준비 중...</div>
+            <ContributionSection userId={userId} isOwner={isOwner} />
           )}
 
           {/* 커뮤니티 섹션 — placeholder */}
