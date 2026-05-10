@@ -85,6 +85,15 @@ export const API_ROUTES = {
     STATS: (id: string) => `/api/users/${id}/stats`,
     BADGES: (id: string) => `/api/users/${id}/badges`,
     PROGRESS: (id: string) => `/api/users/${id}/progress`,
+    ROUTES: (id: string) => `/api/users/${id}/routes`,
+    BOOKMARKS: (id: string) => `/api/users/${id}/bookmarks`,
+    COMPLETIONS: (id: string) => `/api/users/${id}/completions`,
+    REPORTS: (id: string) => `/api/users/${id}/reports`,
+    SUPPLEMENTS: (id: string) => `/api/users/${id}/supplements`,
+    STATUS_REPORTS: (id: string) => `/api/users/${id}/status-reports`,
+    POSTS: (id: string) => `/api/users/${id}/posts`,
+    COMMENTS: (id: string) => `/api/users/${id}/comments`,
+    UPDATE: (id: string) => `/api/users/${id}`,
   },
 
   // Account
