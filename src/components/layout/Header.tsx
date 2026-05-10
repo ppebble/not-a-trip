@@ -117,7 +117,7 @@ export function Header() {
             ) : isAuthenticated && user ? (
               <div className="flex items-center gap-3">
                 <Link
-                  href="/settings/account"
+                  href={`/profile/${user.id}`}
                   className="flex items-center gap-2 rounded-lg px-2 py-1 transition hover:bg-secondary-100"
                 >
                   {user.image ? (
@@ -266,14 +266,14 @@ export function Header() {
                   ⚙️ 관리자
                 </Link>
               )}
-              {isAuthenticated && (
+              {isAuthenticated && user && (
                 <Link
-                  href="/settings/account"
+                  href={`/profile/${user.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
                 >
                   <AppIcon name="profile" size="sm" />
-                  계정 설정
+                  마이페이지
                 </Link>
               )}
             </div>
