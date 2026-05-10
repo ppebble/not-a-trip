@@ -26,7 +26,7 @@ interface UserProfilePageProps {
  * @param createdAt ISO 8601 형식의 날짜 문자열
  * @returns "YYYY년 MM월 가입" 형식의 문자열
  */
-export function formatJoinDate(createdAt: string): string {
+function formatJoinDate(createdAt: string): string {
   const date = new Date(createdAt)
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -55,7 +55,11 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
   const isOwner = session?.user?.id === userId
 
   const isLoading =
-    userInfoLoading || statsLoading || badgesLoading || progressLoading || spotsLoading
+    userInfoLoading ||
+    statsLoading ||
+    badgesLoading ||
+    progressLoading ||
+    spotsLoading
 
   if (isLoading) {
     return (
