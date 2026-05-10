@@ -290,3 +290,30 @@ export function useUserComments(userId: string, enabled = true) {
     enabled: !!userId && enabled,
   })
 }
+
+/**
+ * 프로필 업데이트 mutation 훅
+ * Requirements: 9.9
+ */
+export function useUpdateProfile(userId: string) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: { name?: string; image?: string }) => {
+      const res = await fetch(API_ROUTES.USERS.UPDATE(userId), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error || '프로필 업데이트 실패')
+      }
+      return res.json()
+    },
+    onSuccess: () => {
+      // 유저 정보 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: userKeys.info(userId) })
+    },
+  })
+}
