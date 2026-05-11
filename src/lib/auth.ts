@@ -178,16 +178,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.provider = account?.provider || 'credentials'
       }
 
-      // 매번 DB에서 role 조회 (role 변경 즉시 반영)
+      // 매번 DB에서 role, name, image 조회 (프로필 변경 즉시 반영)
       if (token.email || token.id) {
         try {
           const db = await getDb()
           const query = token.email
             ? { email: token.email }
             : { _id: new ObjectId(token.id as string) }
-          const dbUser = await db.collection('users').findOne(query)
+          const dbUser = await db.collection('users').findOne(query, {
+            projection: { role: 1, name: 1, image: 1 },
+          })
           if (dbUser) {
             token.role = dbUser.role || 'user'
+            token.name = dbUser.name ?? token.name
+            token.picture = dbUser.image ?? token.picture
             // eslint-disable-next-line no-console
             console.log(
               `[Auth] User ${token.email || token.id} role: ${token.role}`
@@ -213,6 +217,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string
         session.user.provider = token.provider as string
         session.user.role = token.role as 'user' | 'admin'
+        // DB에서 갱신된 name/image를 세션에 반영
+        if (token.name) session.user.name = token.name as string
+        if (token.picture) session.user.image = token.picture as string
       }
       return session
     },
