@@ -26,7 +26,7 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
             <AppIcon name="map" size={24} />
             관련 순례 코스
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
+          <div className="flex gap-4 overflow-x-auto pb-2 pt-1">
             {Array.from({ length: 2 }, (_, i) => (
               <div
                 key={i}
@@ -57,7 +57,7 @@ export function RelatedRoutes({ contentNames }: RelatedRoutesProps) {
         <p className="mb-3 text-sm text-sub-text">
           「{contentNames[0]}」 관련 코스를 따라가보세요
         </p>
-        <div className="flex gap-4 overflow-x-auto pb-2">
+        <div className="flex gap-4 overflow-x-auto pb-2 pt-1">
           {routes.map((route) => (
             <div key={route.id} className="w-64 flex-shrink-0">
               <RouteCard route={route} />

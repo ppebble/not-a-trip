@@ -47,7 +47,7 @@ export const ROUTE_DETAIL_STEPS: TourStep[] = [
     title: '🚀 코스 시작하기',
     description:
       '이 버튼을 누르면 가이드 모드가 시작됩니다! 각 스팟을 순서대로 방문하며 GPS 기반 인증을 할 수 있어요.',
-    placement: 'bottom',
+    placement: 'top',
   },
   {
     target: '[data-tour="route-spot-list"]',

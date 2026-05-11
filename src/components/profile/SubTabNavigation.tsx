@@ -22,7 +22,7 @@ export function SubTabNavigation({
 }: SubTabNavigationProps) {
   return (
     <div
-      className="flex gap-2 overflow-x-auto whitespace-nowrap pb-1"
+      className="flex gap-2 overflow-x-auto whitespace-nowrap py-1"
       role="tablist"
       aria-label="하위 탭 네비게이션"
     >

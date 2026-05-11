@@ -14,7 +14,7 @@ interface RecommendedData {
 /** 추천 코스 카드 스켈레톤 */
 function RecommendedSkeleton() {
   return (
-    <div className="flex gap-4 overflow-x-auto pb-2">
+    <div className="flex gap-4 overflow-x-auto pb-2 pt-1">
       {Array.from({ length: 3 }, (_, i) => (
         <div
           key={i}
@@ -76,7 +76,7 @@ export function RecommendedRoutes() {
         {isLoading ? (
           <RecommendedSkeleton />
         ) : data && data.official.length > 0 ? (
-          <div className="flex gap-4 overflow-x-auto pb-2">
+          <div className="flex gap-4 overflow-x-auto px-1 pb-2 pt-1">
             {data.official.map((route) => (
               <div key={route.id} className="w-72 flex-shrink-0">
                 <RouteCard route={route} />
@@ -97,7 +97,7 @@ export function RecommendedRoutes() {
         {isLoading ? (
           <RecommendedSkeleton />
         ) : data && data.popular.length > 0 ? (
-          <div className="flex gap-4 overflow-x-auto pb-2">
+          <div className="flex gap-4 overflow-x-auto px-1 pb-2 pt-1">
             {data.popular.map((route) => (
               <div key={route.id} className="w-72 flex-shrink-0">
                 <RouteCard route={route} />

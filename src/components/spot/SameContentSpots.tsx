@@ -66,7 +66,7 @@ export function SameContentSpots({
           <h2 className="mb-4 text-lg font-bold text-main-text md:text-xl">
             같은 작품의 다른 스팟
           </h2>
-          <div className="flex gap-3 overflow-x-auto pb-2">
+          <div className="flex gap-3 overflow-x-auto pb-2 pt-1">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -93,7 +93,7 @@ export function SameContentSpots({
         <h2 className="mb-4 text-lg font-bold text-main-text md:text-xl">
           같은 작품의 다른 스팟
         </h2>
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="flex gap-3 overflow-x-auto pb-2 pt-1">
           {otherSpots.map((spot) => (
             <SameContentSpotCard
               key={spot.id}
