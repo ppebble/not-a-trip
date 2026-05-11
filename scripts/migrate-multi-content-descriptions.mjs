@@ -279,7 +279,9 @@ async function main() {
     }
 
     if (!isApply) {
-      console.log('Dry run complete. Re-run with --apply to update the database.')
+      console.log(
+        'Dry run complete. Re-run with --apply to update the database.'
+      )
       return
     }
 

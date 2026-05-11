@@ -31,17 +31,31 @@ interface SpotMarkerLayerProps {
 // ─── 터치 디바이스 감지 ──────────────────────────────────────────────────────
 function detectTouchDevice(): boolean {
   if (typeof window === 'undefined') return false
-  return 'ontouchstart' in window || window.matchMedia('(hover: none)').matches || navigator.maxTouchPoints > 0
+  return (
+    'ontouchstart' in window ||
+    window.matchMedia('(hover: none)').matches ||
+    navigator.maxTouchPoints > 0
+  )
 }
 let _isTouchDevice = detectTouchDevice()
 if (typeof window !== 'undefined') {
-  window.addEventListener('resize', () => { _isTouchDevice = detectTouchDevice() }, { passive: true })
+  window.addEventListener(
+    'resize',
+    () => {
+      _isTouchDevice = detectTouchDevice()
+    },
+    { passive: true }
+  )
 }
 
 // ─── 카테고리 유틸 ───────────────────────────────────────────────────────────
 const CATEGORY_EMOJI: Record<SpotCategory, string> = {
-  animation: '🎬', sports: '⚽', movie_drama: '🎥',
-  music: '🎵', game: '🎮', other: '📍',
+  animation: '🎬',
+  sports: '⚽',
+  movie_drama: '🎥',
+  music: '🎵',
+  game: '🎮',
+  other: '📍',
 }
 
 const getCategoryColor = (category?: SpotCategory): string => {
@@ -99,7 +113,10 @@ function createLabelIcon(name: string, category?: SpotCategory): L.DivIcon {
 }
 
 /** 근접 (≥16): 이미지 원형 핀 — 48px */
-function createImageIcon(thumbnailUrl: string, category?: SpotCategory): L.DivIcon {
+function createImageIcon(
+  thumbnailUrl: string,
+  category?: SpotCategory
+): L.DivIcon {
   const color = getCategoryColor(category)
   const catIconPath = getCategoryIconPath(category)
   const emoji = getCategoryEmoji(category)
@@ -121,7 +138,10 @@ function createImageIcon(thumbnailUrl: string, category?: SpotCategory): L.DivIc
 }
 
 /** 호버 아이콘 (줌 레벨 무관, 항상 이미지 핀 확대) */
-function createHoveredIcon(thumbnailUrl: string, category?: SpotCategory): L.DivIcon {
+function createHoveredIcon(
+  thumbnailUrl: string,
+  category?: SpotCategory
+): L.DivIcon {
   const color = getCategoryColor(category)
   const catIconPath = getCategoryIconPath(category)
   const emoji = getCategoryEmoji(category)
@@ -145,19 +165,34 @@ function createHoveredIcon(thumbnailUrl: string, category?: SpotCategory): L.Div
 /** 줌 레벨에 맞는 아이콘 반환 */
 function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
   switch (tier) {
-    case 'dot': return createDotIcon(spot.category)
-    case 'label': return createLabelIcon(spot.name, spot.category)
-    case 'image': return createImageIcon(spot.thumbnailUrl, spot.category)
+    case 'dot':
+      return createDotIcon(spot.category)
+    case 'label':
+      return createLabelIcon(spot.name, spot.category)
+    case 'image':
+      return createImageIcon(spot.thumbnailUrl, spot.category)
   }
 }
 
 // ─── 클러스터 아이콘 ─────────────────────────────────────────────────────────
 function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const count = cluster.getChildCount()
-  let size = 36, bgColor = '#4164a5', fontSize = '12px'
-  if (count >= 50) { size = 48; bgColor = '#dc2626'; fontSize = '14px' }
-  else if (count >= 20) { size = 44; bgColor = '#ea580c'; fontSize = '13px' }
-  else if (count >= 10) { size = 40; bgColor = '#ca8a04'; fontSize = '13px' }
+  let size = 36,
+    bgColor = '#4164a5',
+    fontSize = '12px'
+  if (count >= 50) {
+    size = 48
+    bgColor = '#dc2626'
+    fontSize = '14px'
+  } else if (count >= 20) {
+    size = 44
+    bgColor = '#ea580c'
+    fontSize = '13px'
+  } else if (count >= 10) {
+    size = 40
+    bgColor = '#ca8a04'
+    fontSize = '13px'
+  }
 
   return L.divIcon({
     html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${bgColor};color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${fontSize};border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.25);">${count}</div>`,
@@ -167,7 +202,10 @@ function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
 }
 
 // ─── 메인 컴포넌트 ───────────────────────────────────────────────────────────
-export default function SpotMarkerLayer({ spots, onSpotSelect }: SpotMarkerLayerProps) {
+export default function SpotMarkerLayer({
+  spots,
+  onSpotSelect,
+}: SpotMarkerLayerProps) {
   const map = useMap()
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null)
   const markersRef = useRef<Map<string, L.Marker>>(new Map())
@@ -175,7 +213,11 @@ export default function SpotMarkerLayer({ spots, onSpotSelect }: SpotMarkerLayer
   const currentTierRef = useRef<ZoomTier>(getZoomTier(map.getZoom()))
   const hoveredRef = useRef<{ id: string } | null>(null)
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const touchStateRef = useRef<{ id: string; count: number; timer: ReturnType<typeof setTimeout> | null }>({ id: '', count: 0, timer: null })
+  const touchStateRef = useRef<{
+    id: string
+    count: number
+    timer: ReturnType<typeof setTimeout> | null
+  }>({ id: '', count: 0, timer: null })
   const onSpotSelectRef = useRef(onSpotSelect)
   onSpotSelectRef.current = onSpotSelect
   spotsRef.current = spots
@@ -257,7 +299,9 @@ export default function SpotMarkerLayer({ spots, onSpotSelect }: SpotMarkerLayer
             ts.count = 1
             useMapStore.getState().setSelectedSpot(spot.id)
             useBottomSheetStore.getState().open(spot.id)
-            ts.timer = setTimeout(() => { ts.count = 0 }, 3000)
+            ts.timer = setTimeout(() => {
+              ts.count = 0
+            }, 3000)
             return
           }
           ts.count = 0
@@ -275,7 +319,9 @@ export default function SpotMarkerLayer({ spots, onSpotSelect }: SpotMarkerLayer
           // 이전 호버 해제
           if (hoveredRef.current && hoveredRef.current.id !== spot.id) {
             const prev = currentMarkers.get(hoveredRef.current.id)
-            const prevSpot = spotsRef.current.find((s) => s.id === hoveredRef.current!.id)
+            const prevSpot = spotsRef.current.find(
+              (s) => s.id === hoveredRef.current!.id
+            )
             if (prev && prevSpot) {
               prev.setIcon(getIconForZoom(prevSpot, currentTierRef.current))
               prev.setZIndexOffset(0)

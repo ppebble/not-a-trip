@@ -40,7 +40,13 @@ function detectTouchDevice(): boolean {
 let _isTouchDevice = detectTouchDevice()
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('resize', () => { _isTouchDevice = detectTouchDevice() }, { passive: true })
+  window.addEventListener(
+    'resize',
+    () => {
+      _isTouchDevice = detectTouchDevice()
+    },
+    { passive: true }
+  )
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -49,12 +55,16 @@ type OutsideTouchCallback = (isMarkerTouch: boolean) => void
 const _outsideTouchCallbacks = new Set<OutsideTouchCallback>()
 
 if (typeof window !== 'undefined') {
-  document.addEventListener('touchstart', (e: TouchEvent) => {
-    if (_outsideTouchCallbacks.size === 0) return
-    const target = e.target as HTMLElement
-    const isMarkerTouch = !!target.closest('.custom-image-spot-pin')
-    _outsideTouchCallbacks.forEach((cb) => cb(isMarkerTouch))
-  }, { passive: true })
+  document.addEventListener(
+    'touchstart',
+    (e: TouchEvent) => {
+      if (_outsideTouchCallbacks.size === 0) return
+      const target = e.target as HTMLElement
+      const isMarkerTouch = !!target.closest('.custom-image-spot-pin')
+      _outsideTouchCallbacks.forEach((cb) => cb(isMarkerTouch))
+    },
+    { passive: true }
+  )
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -71,10 +81,16 @@ const getCategoryColor = (category?: SpotCategory): string => {
 }
 
 // 카테고리별 아이콘
-const getCategoryIcon = (category?: SpotCategory): { path: string; fallback: string } => {
+const getCategoryIcon = (
+  category?: SpotCategory
+): { path: string; fallback: string } => {
   const fallbackIcons: Record<SpotCategory, string> = {
-    animation: '🎬', sports: '⚽', movie_drama: '🎥',
-    music: '🎵', game: '🎮', other: '📍',
+    animation: '🎬',
+    sports: '⚽',
+    movie_drama: '🎥',
+    music: '🎵',
+    game: '🎮',
+    other: '📍',
   }
   if (!category) return { path: '/icons/categories/other.webp', fallback: '📍' }
   return {
@@ -96,7 +112,9 @@ const createImagePinIcon = (
   const borderColor = isHovered ? '#fbbf24' : categoryColor
   const borderWidth = isHovered ? 4 : 3
   const shadowIntensity = isHovered ? 0.5 : 0.3
-  const glowEffect = isHovered ? 'box-shadow: 0 0 12px 2px rgba(251, 191, 36, 0.4);' : ''
+  const glowEffect = isHovered
+    ? 'box-shadow: 0 0 12px 2px rgba(251, 191, 36, 0.4);'
+    : ''
 
   const isPopular = checkInCount && checkInCount >= 10
   const popularBadge = isPopular
@@ -136,13 +154,22 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
   const map = useMap()
 
   // Store 액션들 — ref로 관리하여 이벤트 핸들러 재등록 없이 최신 값 참조
-  const { setSelectedSpot } = useMapStore(useShallow((s) => ({ setSelectedSpot: s.setSelectedSpot })))
-  const { openPreview, closePreview } = useUIStore(useShallow((s) => ({ openPreview: s.openPreview, closePreview: s.closePreview })))
+  const { setSelectedSpot } = useMapStore(
+    useShallow((s) => ({ setSelectedSpot: s.setSelectedSpot }))
+  )
+  const { openPreview, closePreview } = useUIStore(
+    useShallow((s) => ({
+      openPreview: s.openPreview,
+      closePreview: s.closePreview,
+    }))
+  )
   // previewSpotId, isPreviewHovered는 구독하지 않고 ref로만 읽음
   // → store 변경 시 SpotPin 리렌더 없음
   const isPreviewHovered = useUIStore.getState().isPreviewHovered
   const previewSpotId = useUIStore.getState().previewSpotId
-  const { open: openBottomSheet } = useBottomSheetStore(useShallow((s) => ({ open: s.open })))
+  const { open: openBottomSheet } = useBottomSheetStore(
+    useShallow((s) => ({ open: s.open }))
+  )
 
   // 최신 액션을 ref로 유지 — 이벤트 핸들러 재등록 없이 클로저 문제 해결
   // previewSpotId, isPreviewHovered는 구독하지 않고 이벤트 핸들러에서 getState()로 직접 읽음
@@ -173,7 +200,12 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
 
   useEffect(() => {
     // ── 아이콘 생성 ──
-    const baseIcon = createImagePinIcon(spot.thumbnailUrl, false, spot.category, spot.checkInCount)
+    const baseIcon = createImagePinIcon(
+      spot.thumbnailUrl,
+      false,
+      spot.category,
+      spot.checkInCount
+    )
 
     // ── 마커 생성 ──
     const marker = L.marker(spot.coordinates, {
@@ -186,7 +218,14 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     const setHovered = (hovered: boolean) => {
       if (stateRef.current.isHovered === hovered) return
       stateRef.current.isHovered = hovered
-      marker.setIcon(createImagePinIcon(spot.thumbnailUrl, hovered, spot.category, spot.checkInCount))
+      marker.setIcon(
+        createImagePinIcon(
+          spot.thumbnailUrl,
+          hovered,
+          spot.category,
+          spot.checkInCount
+        )
+      )
       marker.setZIndexOffset(hovered ? Z_INDEX.hovered : Z_INDEX.base)
     }
 
@@ -199,7 +238,9 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
           setHovered(true)
           s.setSelectedSpot(spot.id)
           s.openBottomSheet(spot.id)
-          touchTimerRef.current = setTimeout(() => { s.touchCount = 0 }, 3000)
+          touchTimerRef.current = setTimeout(() => {
+            s.touchCount = 0
+          }, 3000)
           return
         }
         s.touchCount = 0
@@ -251,13 +292,20 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
       // 정리
       if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current)
       if (touchTimerRef.current) clearTimeout(touchTimerRef.current)
-      if (outsideTouchCbRef.current) _outsideTouchCallbacks.delete(outsideTouchCbRef.current)
+      if (outsideTouchCbRef.current)
+        _outsideTouchCallbacks.delete(outsideTouchCbRef.current)
       marker.remove()
       markerRef.current = null
     }
     // spot.id가 바뀌면 마커를 재생성, 나머지는 ref로 처리
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, spot.id, spot.coordinates, spot.thumbnailUrl, spot.category, spot.checkInCount])
+  }, [
+    map,
+    spot.id,
+    spot.coordinates,
+    spot.thumbnailUrl,
+    spot.category,
+    spot.checkInCount,
+  ])
 
   // React 렌더에서는 아무것도 렌더링하지 않음 — 마커는 Leaflet이 직접 관리
   return null

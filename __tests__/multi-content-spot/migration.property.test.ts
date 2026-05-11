@@ -118,32 +118,26 @@ function migrateCheckIn(
 describe('Property 10: 마이그레이션 분기 정확성', () => {
   it('active relation 1개: relation 정보 추가 + resolved', () => {
     fc.assert(
-      fc.property(
-        legacyCheckInArb,
-        relationDocArb,
-        (checkinBase, relation) => {
-          const checkin: CheckInDoc = {
-            id: checkinBase.id,
-            spotId: checkinBase.spotId,
-          }
-          const sameSpotRelation = { ...relation, spotId: checkin.spotId }
-
-          const result = migrateCheckIn(checkin, [sameSpotRelation])
-
-          expect(result.action).toBe('resolved')
-          expect(result.updatedCheckin.relationId).toBe(sameSpotRelation.id)
-          expect(result.updatedCheckin.contentId).toBe(
-            sameSpotRelation.contentId
-          )
-          expect(result.updatedCheckin.contentName).toBe(
-            sameSpotRelation.contentName
-          )
-          expect(result.updatedCheckin.relationType).toBe(
-            sameSpotRelation.relationType
-          )
-          expect(result.updatedCheckin.migrationStatus).toBe('resolved')
+      fc.property(legacyCheckInArb, relationDocArb, (checkinBase, relation) => {
+        const checkin: CheckInDoc = {
+          id: checkinBase.id,
+          spotId: checkinBase.spotId,
         }
-      ),
+        const sameSpotRelation = { ...relation, spotId: checkin.spotId }
+
+        const result = migrateCheckIn(checkin, [sameSpotRelation])
+
+        expect(result.action).toBe('resolved')
+        expect(result.updatedCheckin.relationId).toBe(sameSpotRelation.id)
+        expect(result.updatedCheckin.contentId).toBe(sameSpotRelation.contentId)
+        expect(result.updatedCheckin.contentName).toBe(
+          sameSpotRelation.contentName
+        )
+        expect(result.updatedCheckin.relationType).toBe(
+          sameSpotRelation.relationType
+        )
+        expect(result.updatedCheckin.migrationStatus).toBe('resolved')
+      }),
       { numRuns: 100 }
     )
   })
@@ -228,29 +222,23 @@ describe('Property 11: 마이그레이션 멱등성', () => {
 
   it('마이그레이션을 두 번 실행해도 결과가 동일해야 한다', () => {
     fc.assert(
-      fc.property(
-        legacyCheckInArb,
-        relationDocArb,
-        (checkinBase, relation) => {
-          const checkin: CheckInDoc = {
-            id: checkinBase.id,
-            spotId: checkinBase.spotId,
-          }
-          const sameSpotRelation = { ...relation, spotId: checkin.spotId }
-
-          // 첫 번째 마이그레이션
-          const firstResult = migrateCheckIn(checkin, [sameSpotRelation])
-          // 두 번째 마이그레이션 (이미 relationId가 있음)
-          const secondResult = migrateCheckIn(firstResult.updatedCheckin, [
-            sameSpotRelation,
-          ])
-
-          expect(secondResult.action).toBe('skipped')
-          expect(secondResult.updatedCheckin).toEqual(
-            firstResult.updatedCheckin
-          )
+      fc.property(legacyCheckInArb, relationDocArb, (checkinBase, relation) => {
+        const checkin: CheckInDoc = {
+          id: checkinBase.id,
+          spotId: checkinBase.spotId,
         }
-      ),
+        const sameSpotRelation = { ...relation, spotId: checkin.spotId }
+
+        // 첫 번째 마이그레이션
+        const firstResult = migrateCheckIn(checkin, [sameSpotRelation])
+        // 두 번째 마이그레이션 (이미 relationId가 있음)
+        const secondResult = migrateCheckIn(firstResult.updatedCheckin, [
+          sameSpotRelation,
+        ])
+
+        expect(secondResult.action).toBe('skipped')
+        expect(secondResult.updatedCheckin).toEqual(firstResult.updatedCheckin)
+      }),
       { numRuns: 100 }
     )
   })

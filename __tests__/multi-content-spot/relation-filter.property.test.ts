@@ -139,9 +139,7 @@ describe('Property 3: Active 관계 필터링 및 displayPriority 정렬', () =>
         fc.array(relationArb, { minLength: 0, maxLength: 20 }),
         (relations) => {
           const result = filterAndSortActiveRelations(relations)
-          const activeRelations = relations.filter(
-            (r) => r.status === 'active'
-          )
+          const activeRelations = relations.filter((r) => r.status === 'active')
 
           // 모든 active relation의 id가 결과에 존재
           for (const active of activeRelations) {

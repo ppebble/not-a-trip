@@ -12,7 +12,9 @@ export async function GET(
   try {
     const { id: userId } = await params
 
-    const supplementsCollection = await getCollection(COLLECTIONS.SPOT_SUPPLEMENTS)
+    const supplementsCollection = await getCollection(
+      COLLECTIONS.SPOT_SUPPLEMENTS
+    )
 
     const supplements = await supplementsCollection
       .find({ contributorId: userId })

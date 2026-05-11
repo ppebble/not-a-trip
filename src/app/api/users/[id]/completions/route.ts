@@ -13,7 +13,9 @@ export async function GET(
   try {
     const { id: userId } = await params
 
-    const completionsCollection = await getCollection(COLLECTIONS.ROUTE_COMPLETIONS)
+    const completionsCollection = await getCollection(
+      COLLECTIONS.ROUTE_COMPLETIONS
+    )
     const routesCollection = await getCollection(COLLECTIONS.ROUTES)
 
     const completions = await completionsCollection

@@ -7,13 +7,13 @@
 
 ## Tasks
 
-- [ ] 1. API 상수 등록 및 API Route 구현
-  - [ ] 1.1 `API_ROUTES.USERS.INFO` 상수 추가
+- [x] 1. API 상수 등록 및 API Route 구현
+  - [x] 1.1 `API_ROUTES.USERS.INFO` 상수 추가
     - `src/lib/api-routes.ts`의 `USERS` 객체에 `INFO: (id: string) => \`/api/users/\${id}\`` 항목 추가
     - 기존 `STATS`, `BADGES`, `PROGRESS` 항목 위에 위치
     - _Requirements: 5.1_
 
-  - [ ] 1.2 `GET /api/users/[id]` API Route 구현
+  - [x] 1.2 `GET /api/users/[id]` API Route 구현
     - `src/app/api/users/[id]/route.ts` 신규 생성
     - `getCollection`과 `COLLECTIONS` 임포트, 기존 `stats/route.ts` 패턴 준수
     - MongoDB projection으로 `_id`, `name`, `image`, `createdAt`만 조회 (`password`, `email` 등 민감 필드 제외)
@@ -36,13 +36,13 @@
     - fast-check 100회 이상, 태그: `Feature: 37-profile-user-info, Property 2: 민감 필드 비노출`
     - **Validates: Requirements 1.5**
 
-- [ ] 2. `useUserInfo` React Query 훅 구현
-  - [ ] 2.1 `UserInfo` 타입 및 `userKeys.info` 쿼리 키 추가
+- [x] 2. `useUserInfo` React Query 훅 구현
+  - [x] 2.1 `UserInfo` 타입 및 `userKeys.info` 쿼리 키 추가
     - `src/hooks/useUserQueries.ts`에 `UserInfo` 인터페이스 추가 (`id`, `name`, `image`, `createdAt` 필드)
     - `userKeys` 팩토리에 `info: (userId: string) => [...userKeys.all, 'info', userId] as const` 추가
     - _Requirements: 2.3, 2.5_
 
-  - [ ] 2.2 `useUserInfo` 훅 구현
+  - [x] 2.2 `useUserInfo` 훅 구현
     - `src/hooks/useUserQueries.ts`에 `useUserInfo(userId: string | undefined)` 훅 추가
     - `API_ROUTES.USERS.INFO(userId)` 상수 사용
     - `enabled: !!userId` 조건으로 빈 문자열 및 `undefined` 시 요청 차단
@@ -56,11 +56,11 @@
     - fast-check 100회 이상, 태그: `Feature: 37-profile-user-info, Property 3: 빈 userId 요청 차단`
     - **Validates: Requirements 2.2**
 
-- [ ] 3. 체크포인트 — API 및 훅 검증
+- [x] 3. 체크포인트 — API 및 훅 검증
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. 프로필 페이지 수정
-  - [ ] 4.1 `formatJoinDate` 유틸 함수 구현 및 유저 정보 연동
+- [x] 4. 프로필 페이지 수정
+  - [x] 4.1 `formatJoinDate` 유틸 함수 구현 및 유저 정보 연동
     - `src/app/profile/[id]/page.tsx` 수정
     - `useUserInfo`, `useSession` 임포트 추가
     - `formatJoinDate(createdAt: string): string` 함수 구현 — `YYYY년 MM월 가입` 형식 반환 (월 두 자리 패딩)
@@ -77,7 +77,7 @@
     - fast-check 100회 이상, 태그: `Feature: 37-profile-user-info, Property 5: 가입일 포맷 일관성`
     - **Validates: Requirements 3.5**
 
-  - [ ] 4.3 본인/타인 프로필 구분 및 편집 버튼 조건부 노출
+  - [x] 4.3 본인/타인 프로필 구분 및 편집 버튼 조건부 노출
     - `src/app/profile/[id]/page.tsx` 수정
     - `useSession()` 훅으로 현재 세션 조회
     - `isOwner = session?.user?.id === userId` 계산
@@ -100,7 +100,7 @@
     - fast-check 100회 이상, 태그: `Feature: 37-profile-user-info, Property 4: 유저 이름 렌더링`
     - **Validates: Requirements 3.2**
 
-- [ ] 5. 최종 체크포인트 — 전체 기능 검증
+- [x] 5. 최종 체크포인트 — 전체 기능 검증
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
