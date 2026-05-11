@@ -212,15 +212,76 @@ function SetPasswordForm({
   )
 }
 
+// ── 프로필 이미지 업로드 상수 ────────────────────────────────
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+const ALLOWED_TYPES_LABEL = 'JPG, PNG, GIF, WEBP'
+
 // ── 프로필 편집 탭 ───────────────────────────────────────────
 
 function ProfileEditTab({ userId }: { userId: string }) {
   const { data: userInfo } = useUserInfo(userId)
   const updateProfile = useUpdateProfile(userId)
   const [name, setName] = useState(userInfo?.name ?? '')
-  const [image, setImage] = useState(userInfo?.image ?? '')
+  const [imageUrl, setImageUrl] = useState(userInfo?.image ?? '')
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+
+  // 파일 선택 시 클라이언트 검증 + 업로드
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setError(null)
+    setSuccess(false)
+
+    // 파일 형식 검증
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setError(`지원하지 않는 파일 형식입니다. (${ALLOWED_TYPES_LABEL}만 가능)`)
+      e.target.value = ''
+      return
+    }
+
+    // 파일 크기 검증 (5MB)
+    if (file.size > MAX_FILE_SIZE) {
+      setError('파일 크기는 5MB 이하여야 합니다')
+      e.target.value = ''
+      return
+    }
+
+    // 미리보기 생성
+    const objectUrl = URL.createObjectURL(file)
+    setPreviewUrl(objectUrl)
+
+    // 서버에 업로드
+    setIsUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || '업로드에 실패했습니다')
+      }
+
+      const data = await res.json()
+      setImageUrl(data.imageUrl)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '업로드에 실패했습니다')
+      setPreviewUrl(null)
+      e.target.value = ''
+    } finally {
+      setIsUploading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -240,13 +301,16 @@ function ProfileEditTab({ userId }: { userId: string }) {
     try {
       await updateProfile.mutateAsync({
         name: trimmedName,
-        image: image || undefined,
+        image: imageUrl || undefined,
       })
       setSuccess(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : '저장에 실패했습니다')
     }
   }
+
+  // 현재 표시할 이미지: 미리보기 > 기존 이미지
+  const displayImage = previewUrl || imageUrl
 
   return (
     <div className="space-y-6">
@@ -275,26 +339,63 @@ function ProfileEditTab({ userId }: { userId: string }) {
           />
         </div>
 
-        {/* 이미지 URL 변경 (선택사항) */}
+        {/* 프로필 이미지 파일 업로드 */}
         <div>
-          <label
-            htmlFor="profile-image"
-            className="text-text-secondary mb-1 block text-sm font-medium"
-          >
-            프로필 이미지 URL{' '}
+          <label className="text-text-secondary mb-1 block text-sm font-medium">
+            프로필 이미지{' '}
             <span className="text-xs text-neutral-400">(선택사항)</span>
           </label>
-          <input
-            id="profile-image"
-            type="url"
-            value={image}
-            onChange={(e) => {
-              setImage(e.target.value)
-              setSuccess(false)
-            }}
-            className="text-text-primary w-full rounded-lg border border-border bg-surface px-4 py-3 placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="https://example.com/image.jpg"
-          />
+
+          {/* 현재 이미지 미리보기 */}
+          <div className="mb-3 flex items-center gap-4">
+            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary-100">
+              {displayImage ? (
+                <Image
+                  src={displayImage}
+                  alt="프로필 미리보기"
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-full object-cover"
+                  unoptimized
+                />
+              ) : (
+                <AppIcon name="profile-front" size={56} />
+              )}
+            </div>
+            <div className="text-xs text-neutral-400">
+              <p>{ALLOWED_TYPES_LABEL}</p>
+              <p>최대 5MB</p>
+            </div>
+          </div>
+
+          <label
+            htmlFor="profile-image-file"
+            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm transition hover:bg-neutral-50 ${
+              isUploading ? 'cursor-not-allowed opacity-50' : ''
+            }`}
+          >
+            {isUploading ? (
+              <>
+                <span className="animate-spin">⏳</span>
+                <span className="text-neutral-500">업로드 중...</span>
+              </>
+            ) : (
+              <>
+                <span>📷</span>
+                <span className="text-neutral-500">
+                  {displayImage ? '이미지 변경' : '이미지 선택'}
+                </span>
+              </>
+            )}
+            <input
+              id="profile-image-file"
+              type="file"
+              accept={ALLOWED_TYPES.join(',')}
+              onChange={handleFileChange}
+              disabled={isUploading}
+              className="sr-only"
+            />
+          </label>
         </div>
 
         {/* 에러 / 성공 메시지 */}
@@ -311,7 +412,7 @@ function ProfileEditTab({ userId }: { userId: string }) {
 
         <button
           type="submit"
-          disabled={updateProfile.isPending}
+          disabled={updateProfile.isPending || isUploading}
           className="w-full rounded-lg bg-primary py-3 text-white transition hover:opacity-90 disabled:opacity-50"
         >
           {updateProfile.isPending ? '저장 중...' : '저장'}
