@@ -127,7 +127,12 @@ export function Header() {
                       width={28}
                       height={28}
                       className="h-7 w-7 rounded-full object-cover"
-                      referrerPolicy="no-referrer"
+                      referrerPolicy={
+                        user.image.startsWith('http')
+                          ? 'no-referrer'
+                          : undefined
+                      }
+                      unoptimized={!user.image.startsWith('http')}
                     />
                   ) : (
                     <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-secondary-100">
