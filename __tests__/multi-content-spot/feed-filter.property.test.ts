@@ -31,7 +31,9 @@ const checkInArb = fc.record({
   id: fc.uuid(),
   spotId: fc.stringMatching(/^REAL-[A-Z]{3}-\d{3}$/),
   userId: fc.uuid(),
-  contentName: fc.option(fc.constantFrom('슬램덩크', '주술회전', '최애의 아이', '듀라라라')),
+  contentName: fc.option(
+    fc.constantFrom('슬램덩크', '주술회전', '최애의 아이', '듀라라라')
+  ),
   migrationStatus: fc.option(fc.constantFrom('resolved', 'unresolved')),
   createdAt: fc.date(),
 }) as fc.Arbitrary<CheckInDoc>
@@ -158,7 +160,12 @@ describe('Property 5: Unresolved 체크인 제외 일관성', () => {
       fc.property(
         fc.array(checkInArb, { minLength: 0, maxLength: 50 }),
         (checkins) => {
-          const contentNames = ['슬램덩크', '주술회전', '최애의 아이', '듀라라라']
+          const contentNames = [
+            '슬램덩크',
+            '주술회전',
+            '최애의 아이',
+            '듀라라라',
+          ]
 
           for (const contentName of contentNames) {
             const result = filterByContentName(checkins, contentName)

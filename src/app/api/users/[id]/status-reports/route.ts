@@ -12,7 +12,9 @@ export async function GET(
   try {
     const { id: userId } = await params
 
-    const statusReportsCollection = await getCollection(COLLECTIONS.SPOT_STATUS_REPORTS)
+    const statusReportsCollection = await getCollection(
+      COLLECTIONS.SPOT_STATUS_REPORTS
+    )
 
     const statusReports = await statusReportsCollection
       .find({ reporterId: userId })

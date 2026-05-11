@@ -151,10 +151,8 @@ async function main() {
       const originalRelated = Array.isArray(spot.relatedContent)
         ? spot.relatedContent
         : []
-      const {
-        deduped: dedupedRelated,
-        duplicateNames: duplicateRelatedNames,
-      } = dedupeRelatedContent(originalRelated)
+      const { deduped: dedupedRelated, duplicateNames: duplicateRelatedNames } =
+        dedupeRelatedContent(originalRelated)
 
       const activeRelations = await relationsCollection
         .find({ spotId: spot.id, status: 'active' })
@@ -267,7 +265,9 @@ async function main() {
     }
 
     if (!isApply) {
-      console.log('\nDry run complete. Re-run with --apply to update the database.')
+      console.log(
+        '\nDry run complete. Re-run with --apply to update the database.'
+      )
       return
     }
 

@@ -100,8 +100,7 @@ describe('Property 13: FloatingCard "+N" 배지 표시', () => {
     fc.assert(
       fc.property(showcaseCardArb, (card) => {
         const hasMultipleContents =
-          card.additionalContentNames &&
-          card.additionalContentNames.length > 0
+          card.additionalContentNames && card.additionalContentNames.length > 0
 
         if (hasMultipleContents) {
           expect(shouldShowBadge(card)).toBe(true)

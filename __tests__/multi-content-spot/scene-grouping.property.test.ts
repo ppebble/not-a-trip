@@ -122,7 +122,10 @@ describe('Property 9: 장면 그룹화 — contentName 매칭', () => {
 
           for (const scene of scenes) {
             const sceneContentName = scene.contentName || scene.animeTitle
-            if (sceneContentName && relationContentNames.has(sceneContentName)) {
+            if (
+              sceneContentName &&
+              relationContentNames.has(sceneContentName)
+            ) {
               // 해당 contentName 그룹에 있어야 함
               const matchingGroup = groups.find(
                 (g) => g.contentName === sceneContentName

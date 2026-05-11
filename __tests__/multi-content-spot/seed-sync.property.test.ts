@@ -63,7 +63,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('생성된 relation 수는 relatedContent 배열 길이와 동일해야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         expect(relations.length).toBe(spot.relatedContent.length)
       }),
@@ -74,7 +76,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('각 relation의 contentName은 원본 relatedContent[i].name과 일치해야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         for (let i = 0; i < relations.length; i++) {
           expect(relations[i].contentName).toBe(spot.relatedContent[i].name)
@@ -87,7 +91,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('각 relation의 spotId는 원본 스팟의 id와 일치해야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         for (const relation of relations) {
           expect(relation.spotId).toBe(spot.id)
@@ -100,7 +106,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('각 relation의 contentType은 원본 relatedContent[i].type과 일치해야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         for (let i = 0; i < relations.length; i++) {
           expect(relations[i].contentType).toBe(spot.relatedContent[i].type)
@@ -113,7 +121,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('각 relation의 relationType은 contentType에 따라 올바르게 결정되어야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         for (let i = 0; i < relations.length; i++) {
           const expectedRelationType = getRelationTypeForContent(
@@ -129,7 +139,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('각 relation의 displayPriority는 배열 인덱스와 동일해야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         for (let i = 0; i < relations.length; i++) {
           expect(relations[i].displayPriority).toBe(i)
@@ -142,7 +154,9 @@ describe('Property 12: Seed 동기화 일관성', () => {
   it('모든 생성된 relation의 status는 active여야 한다', () => {
     fc.assert(
       fc.property(seedSpotArb, (spot) => {
-        const relations = createRelationsFromSpot(spot as unknown as Parameters<typeof createRelationsFromSpot>[0])
+        const relations = createRelationsFromSpot(
+          spot as unknown as Parameters<typeof createRelationsFromSpot>[0]
+        )
 
         for (const relation of relations) {
           expect(relation.status).toBe('active')
@@ -154,14 +168,11 @@ describe('Property 12: Seed 동기화 일관성', () => {
 
   it('normalizeContentName은 일관된 contentId를 생성해야 한다', () => {
     fc.assert(
-      fc.property(
-        fc.string({ minLength: 1, maxLength: 50 }),
-        (name) => {
-          const result1 = normalizeContentName(name)
-          const result2 = normalizeContentName(name)
-          expect(result1).toBe(result2)
-        }
-      ),
+      fc.property(fc.string({ minLength: 1, maxLength: 50 }), (name) => {
+        const result1 = normalizeContentName(name)
+        const result2 = normalizeContentName(name)
+        expect(result1).toBe(result2)
+      }),
       { numRuns: 100 }
     )
   })
