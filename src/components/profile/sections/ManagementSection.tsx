@@ -223,6 +223,7 @@ const ALLOWED_TYPES_LABEL = 'JPG, PNG, GIF, WEBP'
 function ProfileEditTab({ userId }: { userId: string }) {
   const { data: userInfo } = useUserInfo(userId)
   const updateProfile = useUpdateProfile(userId)
+  const { update: updateSession } = useSession()
   const [name, setName] = useState(userInfo?.name ?? '')
   const [imageUrl, setImageUrl] = useState(userInfo?.image ?? '')
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -303,6 +304,8 @@ function ProfileEditTab({ userId }: { userId: string }) {
         name: trimmedName,
         image: imageUrl || undefined,
       })
+      // 세션 강제 갱신 — 헤더의 이름/이미지 즉시 반영
+      await updateSession()
       setSuccess(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : '저장에 실패했습니다')
