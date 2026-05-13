@@ -159,14 +159,17 @@ describe('Property 4: fetchProofImages 변환 결과는 항상 올바른 Record 
 
   it('빈 배열 입력에도 6개 카테고리 키를 포함한 빈 Record를 반환한다', () => {
     fc.assert(
-      fc.property(fc.constant([]), (items: ShowcaseSpotItem[]) => {
-        const result = transformToProofImages(items)
+      fc.property(
+        fc.constant([] as ShowcaseSpotItem[]),
+        (items: ShowcaseSpotItem[]) => {
+          const result = transformToProofImages(items)
 
-        return (
-          SPOT_CATEGORIES.every((cat) => cat in result) &&
-          Object.values(result).every((arr) => arr.length === 0)
-        )
-      }),
+          return (
+            SPOT_CATEGORIES.every((cat) => cat in result) &&
+            Object.values(result).every((arr) => arr.length === 0)
+          )
+        }
+      ),
       { numRuns: 10 }
     )
   })
