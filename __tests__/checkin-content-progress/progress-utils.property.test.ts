@@ -426,3 +426,71 @@ describe('Property 4: 0% 작품 제외 필터링', () => {
     )
   })
 })
+
+// ============================================
+// Property 5: 진행률 내림차순 정렬
+// **Validates: Requirements 3.3**
+// ============================================
+
+describe('Property 5: 진행률 내림차순 정렬', () => {
+  it('임의의 ContentProgress[] 배열에 정렬 함수 적용 후 인접 항목은 a[i].progress >= a[i+1].progress를 만족해야 한다', () => {
+    const contentProgressArb = fc.record({
+      contentName: contentNameArb,
+      totalSpots: fc.integer({ min: 1, max: 1000 }),
+      checkedSpots: fc.integer({ min: 1, max: 1000 }),
+      progress: fc.integer({ min: 0, max: 100 }),
+    })
+
+    fc.assert(
+      fc.property(
+        fc.array(contentProgressArb, { minLength: 0, maxLength: 50 }),
+        (items) => {
+          const sorted = [...items].sort((a, b) => b.progress - a.progress)
+
+          for (let i = 0; i < sorted.length - 1; i++) {
+            expect(sorted[i].progress).toBeGreaterThanOrEqual(
+              sorted[i + 1].progress
+            )
+          }
+        }
+      ),
+      { numRuns: 100 }
+    )
+  })
+
+  it('mergeProgressMaps 결과에 정렬 함수를 적용하면 내림차순이 보장되어야 한다', () => {
+    fc.assert(
+      fc.property(
+        fc.array(
+          fc.record({
+            contentName: contentNameArb,
+            totalSpots: fc.integer({ min: 1, max: 1000 }),
+            checkedSpots: fc.integer({ min: 1, max: 1000 }),
+          }),
+          { minLength: 0, maxLength: 20 }
+        ),
+        (entries) => {
+          const totalSpotsMap = new Map<string, number>()
+          const checkedSpotsMap = new Map<string, number>()
+
+          for (const entry of entries) {
+            const checkedSpots = Math.min(entry.checkedSpots, entry.totalSpots)
+            totalSpotsMap.set(entry.contentName, entry.totalSpots)
+            checkedSpotsMap.set(entry.contentName, checkedSpots)
+          }
+
+          const sorted = mergeProgressMaps(totalSpotsMap, checkedSpotsMap).sort(
+            (a, b) => b.progress - a.progress
+          )
+
+          for (let i = 0; i < sorted.length - 1; i++) {
+            expect(sorted[i].progress).toBeGreaterThanOrEqual(
+              sorted[i + 1].progress
+            )
+          }
+        }
+      ),
+      { numRuns: 100 }
+    )
+  })
+})
