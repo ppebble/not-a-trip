@@ -108,6 +108,10 @@ export const COLLECTIONS = {
   ACCOUNTS: 'accounts',
   // 스팟-작품 관계 컬렉션 (30-spot-content-relation)
   SPOT_CONTENT_RELATIONS: 'spot_content_relations',
+  // 스팟 품질 워크플로 컬렉션 (40-spot-quality-workflow)
+  SPOT_QUALITY_REPORTS: 'spot_quality_reports',
+  SPOT_LIFECYCLE_HISTORY: 'spot_lifecycle_history',
+  SUPPLEMENT_REQUESTS: 'supplement_requests',
 } as const
 
 /**
