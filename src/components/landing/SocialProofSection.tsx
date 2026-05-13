@@ -53,8 +53,9 @@ const CLONE_COUNT = 4
  * - 이미지가 없는 카테고리는 다른 카테고리의 이미지를 빌려옴
  * - sceneImage는 실제 장면 이미지가 없으므로 제거 (단일 실사 카드)
  * - checkinData가 있으면 서버 체크인 데이터를 우선 사용
+ * @public 테스트 가능하도록 export (Property 7 검증용)
  */
-function getExtendedData(
+export function getExtendedData(
   proofImages: Record<SpotCategory, string[]>,
   checkinData?: SocialProofCheckin[]
 ) {
