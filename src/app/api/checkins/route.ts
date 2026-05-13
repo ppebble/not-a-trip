@@ -11,6 +11,11 @@ import {
   RelationType,
 } from '@/types'
 import { checkAndAwardBadges } from '@/lib/badge-utils'
+import {
+  fetchTotalSpotsMap,
+  fetchCheckedSpotsMap,
+  mergeProgressMaps,
+} from '@/lib/progress-utils'
 
 /**
  * CheckIn MongoDB Document
@@ -80,6 +85,13 @@ async function updateUserStats(userId: string): Promise<void> {
   const badgesCollection = await getCollection(COLLECTIONS.USER_BADGES)
   const badgeCount = await badgesCollection.countDocuments({ userId })
 
+  // 콘텐츠별 진행률 계산 (Requirements 1.1, 1.2, 1.3, 1.4, 1.5, 1.6)
+  const [totalSpotsMap, checkedSpotsMap] = await Promise.all([
+    fetchTotalSpotsMap(),
+    fetchCheckedSpotsMap(userId),
+  ])
+  const contentProgress = mergeProgressMaps(totalSpotsMap, checkedSpotsMap)
+
   // 통계 업데이트 (upsert)
   await statsCollection.updateOne(
     { userId },
@@ -89,7 +101,7 @@ async function updateUserStats(userId: string): Promise<void> {
         totalCheckIns,
         uniqueSpots,
         badgeCount,
-        contentProgress: [], // TODO: 콘텐츠별 진행률 계산
+        contentProgress,
         updatedAt: new Date(),
       },
     },
