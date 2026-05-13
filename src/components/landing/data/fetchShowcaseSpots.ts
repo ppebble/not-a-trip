@@ -4,6 +4,8 @@ import type { SpotCategory } from '@/types/spot'
 import type { ShowcaseCard } from './showcaseCards'
 import { REAL_SPOT_PHOTO_FALLBACKS } from './realSpotPhotoFallbacks'
 import { CARD_PLACEMENTS } from './showcaseCards'
+import type { ShowcaseSpotItem } from '@/app/api/spots/showcase/route'
+import { isPlaceholderPhoto as isPlaceholderPhotoFromRoute } from '@/app/api/spots/showcase/route'
 
 /**
  * 카테고리 순환 순서 (6장 슬라이스 시 각 카테고리 1장씩 보장)
@@ -216,52 +218,64 @@ export async function fetchCategoryImages(): Promise<
 
 /**
  * 소셜 프루프 카드에 사용할 카테고리별 스팟 이미지 목록을 반환한다.
- * 카테고리별 최대 4장, 총 최대 24장의 실제 스팟 사진 URL
+ * GET /api/spots/showcase API를 호출하여 실제 스팟 사진 URL을 가져온다.
+ * API 실패 시 카테고리 아이콘 폴백으로 graceful degradation한다.
  *
  * @returns Record<SpotCategory, string[]> — 카테고리별 스팟 사진 URL 배열
+ * Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 4.1, 4.5
  */
 export async function fetchProofImages(): Promise<
   Record<SpotCategory, string[]>
 > {
-  const fallback: Record<SpotCategory, string[]> = {
-    animation: [],
-    sports: [],
-    movie_drama: [],
-    music: [],
-    game: [],
-    other: [],
+  const iconFallback: Record<SpotCategory, string[]> = {
+    animation: ['/icons/categories/animation.webp'],
+    sports: ['/icons/categories/sports.webp'],
+    movie_drama: ['/icons/categories/movie_drama.webp'],
+    music: ['/icons/categories/music.webp'],
+    game: ['/icons/categories/game.webp'],
+    other: ['/icons/categories/other.webp'],
   }
 
   try {
-    const collection = await getCollection<SpotDocument>('spots')
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/spots/showcase`, {
+      next: { revalidate: 3600 }, // 1시간 캐시
+    })
 
-    const results = await Promise.all(
-      CATEGORY_ORDER.map(async (category) => {
-        const spots = await collection
-          .find({
-            category,
-            'photos.0': { $exists: true, $ne: '' },
-          })
-          .project({ id: 1, photos: 1 })
-          .limit(4)
-          .toArray()
-        return {
-          category,
-          images: spots
-            .map((s) => resolveLandingPhoto(s.id, s.photos[0]))
-            .filter((url): url is string => Boolean(url)),
-        }
-      })
-    )
-
-    const images = { ...fallback }
-    for (const { category, images: imgs } of results) {
-      images[category] = imgs
+    if (!res.ok) {
+      throw new Error(`Showcase API returned ${res.status}`)
     }
 
-    return images
-  } catch {
-    return fallback
+    const spots: ShowcaseSpotItem[] = await res.json()
+
+    // Record<SpotCategory, string[]> 변환
+    const result: Record<SpotCategory, string[]> = {
+      animation: [],
+      sports: [],
+      movie_drama: [],
+      music: [],
+      game: [],
+      other: [],
+    }
+
+    for (const spot of spots) {
+      if (
+        spot.category &&
+        spot.thumbnailUrl &&
+        !isPlaceholderPhotoFromRoute(spot.thumbnailUrl)
+      ) {
+        result[spot.category].push(spot.thumbnailUrl)
+      }
+    }
+
+    return result
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[fetchProofImages] Showcase API 호출 실패, 카테고리 아이콘 폴백 사용:',
+      error
+    )
+    return iconFallback
   }
 }
 
