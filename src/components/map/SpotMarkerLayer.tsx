@@ -1,15 +1,15 @@
-'use client'
+﻿'use client'
 
 /**
- * SpotMarkerLayer - 줌 레벨 기반 2단계 핀 + MarkerClusterGroup
+ * SpotMarkerLayer - 以??덈꺼 湲곕컲 2?④퀎 ? + MarkerClusterGroup
  *
- * 줌 레벨에 따라 핀 형태를 자동 전환:
- * - ≤ 12 (광역): 카테고리 이모지 도트 (22px) — DOM 비용 최소
- * - 13~15 (중간): 카테고리 컬러 핀 + 스팟 이름 라벨 (32px)
- * - ≥ 16 (근접): 이미지 원형 핀 (48px) — 클러스터 해제
+ * 以??덈꺼???곕씪 ? ?뺥깭瑜??먮룞 ?꾪솚:
+ * - ??12 (愿묒뿭): 移댄뀒怨좊━ ?대え吏 ?꾪듃 (22px) ??DOM 鍮꾩슜 理쒖냼
+ * - 13~15 (以묎컙): 移댄뀒怨좊━ 而щ윭 ? + ?ㅽ뙚 ?대쫫 ?쇰꺼 (32px)
+ * - ??16 (洹쇱젒): ?대?吏 ?먰삎 ? (48px) ???대윭?ㅽ꽣 ?댁젣
  *
- * 줌 변경 시 모든 마커의 아이콘을 일괄 교체한다.
- * 클러스터링은 줌 ≤ 15에서만 활성화된다.
+ * 以?蹂寃???紐⑤뱺 留덉빱???꾩씠肄섏쓣 ?쇨큵 援먯껜?쒕떎.
+ * ?대윭?ㅽ꽣留곸? 以???15?먯꽌留??쒖꽦?붾맂??
  */
 
 import { useEffect, useRef } from 'react'
@@ -19,6 +19,7 @@ import 'leaflet.markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
+import { MAP_MARKER_ASSETS } from '@/components/common/mascotAssets'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore } from '@/stores/uiStore'
 import { useBottomSheetStore } from '@/stores/bottomSheetStore'
@@ -28,7 +29,7 @@ interface SpotMarkerLayerProps {
   onSpotSelect?: (spotId: string) => void
 }
 
-// ─── 터치 디바이스 감지 ──────────────────────────────────────────────────────
+// ??? ?곗튂 ?붾컮?댁뒪 媛먯? ??????????????????????????????????????????????????????
 function detectTouchDevice(): boolean {
   if (typeof window === 'undefined') return false
   return (
@@ -48,14 +49,14 @@ if (typeof window !== 'undefined') {
   )
 }
 
-// ─── 카테고리 유틸 ───────────────────────────────────────────────────────────
+// ??? 移댄뀒怨좊━ ?좏떥 ???????????????????????????????????????????????????????????
 const CATEGORY_EMOJI: Record<SpotCategory, string> = {
-  animation: '🎬',
-  sports: '⚽',
-  movie_drama: '🎥',
-  music: '🎵',
-  game: '🎮',
-  other: '📍',
+  animation: 'A',
+  sports: 'S',
+  movie_drama: 'M',
+  music: 'U',
+  game: 'G',
+  other: 'O',
 }
 
 const MAP_THEME_COLORS = {
@@ -78,8 +79,8 @@ const getCategoryColor = (category?: SpotCategory): string => {
 }
 
 const getCategoryEmoji = (category?: SpotCategory): string => {
-  if (!category) return '📍'
-  return CATEGORY_EMOJI[category] || '📍'
+  if (!category) return 'O'
+  return CATEGORY_EMOJI[category] || 'O'
 }
 
 const getCategoryIconPath = (category?: SpotCategory): string => {
@@ -87,7 +88,7 @@ const getCategoryIconPath = (category?: SpotCategory): string => {
   return CATEGORY_CONFIG[category]?.icon || '/icons/categories/other.webp'
 }
 
-// ─── 줌 레벨별 아이콘 생성 ───────────────────────────────────────────────────
+// ??? 以??덈꺼蹂??꾩씠肄??앹꽦 ???????????????????????????????????????????????????
 
 type ZoomTier = 'dot' | 'label' | 'image'
 
@@ -97,7 +98,7 @@ function getZoomTier(zoom: number): ZoomTier {
   return 'image'
 }
 
-/** 광역 (≤12): 카테고리 이모지 도트 — 22px, 이미지 없음, shadow 없음 */
+/** 愿묒뿭 (??2): 移댄뀒怨좊━ ?대え吏 ?꾪듃 ??22px, ?대?吏 ?놁쓬, shadow ?놁쓬 */
 function createDotIcon(category?: SpotCategory): L.DivIcon {
   const color = getCategoryColor(category)
   const emoji = getCategoryEmoji(category)
@@ -109,12 +110,12 @@ function createDotIcon(category?: SpotCategory): L.DivIcon {
   })
 }
 
-/** 중간 (13~15): 카테고리 컬러 핀 + 스팟 이름 — 이미지 없음 */
+/** 以묎컙 (13~15): 移댄뀒怨좊━ 而щ윭 ? + ?ㅽ뙚 ?대쫫 ???대?吏 ?놁쓬 */
 function createLabelIcon(name: string, category?: SpotCategory): L.DivIcon {
   const color = getCategoryColor(category)
   const emoji = getCategoryEmoji(category)
-  // 이름은 최대 8자로 truncate
-  const displayName = name.length > 8 ? name.slice(0, 8) + '…' : name
+  // ?대쫫? 理쒕? 8?먮줈 truncate
+  const displayName = name.length > 8 ? `${name.slice(0, 8)}...` : name
   return L.divIcon({
     className: 'spot-label-pin',
     html: `<div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
@@ -126,19 +127,19 @@ function createLabelIcon(name: string, category?: SpotCategory): L.DivIcon {
   })
 }
 
-/** 근접 (≥16): 이미지 원형 핀 — 48px */
+/** 洹쇱젒 (??6): ?대?吏 ?먰삎 ? ??48px */
 function createImageIcon(
   thumbnailUrl: string,
   category?: SpotCategory
 ): L.DivIcon {
   const color = getCategoryColor(category)
-  const catIconPath = getCategoryIconPath(category)
+  const _catIconPath = getCategoryIconPath(category)
   const emoji = getCategoryEmoji(category)
   const hasImage = thumbnailUrl && thumbnailUrl.length > 0
 
   const imageHtml = hasImage
-    ? `<img src="${thumbnailUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/><div style="display:none;width:100%;height:100%;background:${color};border-radius:50%;align-items:center;justify-content:center;"><img src="${catIconPath}" style="width:20px;height:20px;" onerror="this.outerHTML='<span style=font-size:20px>${emoji}</span>';"/></div>`
-    : `<div style="width:100%;height:100%;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;"><img src="${catIconPath}" style="width:20px;height:20px;" onerror="this.outerHTML='<span style=font-size:20px>${emoji}</span>';"/></div>`
+    ? `<img src="${thumbnailUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/><div style="display:none;width:100%;height:100%;background:${color};border-radius:50%;align-items:center;justify-content:center;padding:7px;"><img src="${MAP_MARKER_ASSETS.spot}" style="width:100%;height:100%;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:20px>${emoji}</span>';"/></div>`
+    : `<div style="width:100%;height:100%;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;padding:7px;"><img src="${MAP_MARKER_ASSETS.spot}" style="width:100%;height:100%;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:20px>${emoji}</span>';"/></div>`
 
   return L.divIcon({
     className: 'spot-image-pin',
@@ -151,19 +152,19 @@ function createImageIcon(
   })
 }
 
-/** 호버 아이콘 (줌 레벨 무관, 항상 이미지 핀 확대) */
+/** ?몃쾭 ?꾩씠肄?(以??덈꺼 臾닿?, ??긽 ?대?吏 ? ?뺣?) */
 function createHoveredIcon(
   thumbnailUrl: string,
   category?: SpotCategory
 ): L.DivIcon {
   const color = getCategoryColor(category)
-  const catIconPath = getCategoryIconPath(category)
+  const _catIconPath = getCategoryIconPath(category)
   const emoji = getCategoryEmoji(category)
   const hasImage = thumbnailUrl && thumbnailUrl.length > 0
 
   const imageHtml = hasImage
-    ? `<img src="${thumbnailUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/><div style="display:none;width:100%;height:100%;background:${color};border-radius:50%;align-items:center;justify-content:center;"><img src="${catIconPath}" style="width:22px;height:22px;" onerror="this.outerHTML='<span style=font-size:22px>${emoji}</span>';"/></div>`
-    : `<div style="width:100%;height:100%;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;"><img src="${catIconPath}" style="width:22px;height:22px;" onerror="this.outerHTML='<span style=font-size:22px>${emoji}</span>';"/></div>`
+    ? `<img src="${thumbnailUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/><div style="display:none;width:100%;height:100%;background:${color};border-radius:50%;align-items:center;justify-content:center;padding:7px;"><img src="${MAP_MARKER_ASSETS.spot}" style="width:100%;height:100%;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:22px>${emoji}</span>';"/></div>`
+    : `<div style="width:100%;height:100%;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;padding:7px;"><img src="${MAP_MARKER_ASSETS.spot}" style="width:100%;height:100%;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:22px>${emoji}</span>';"/></div>`
 
   return L.divIcon({
     className: 'spot-image-pin is-hovered',
@@ -176,7 +177,7 @@ function createHoveredIcon(
   })
 }
 
-/** 줌 레벨에 맞는 아이콘 반환 */
+/** 以??덈꺼??留욌뒗 ?꾩씠肄?諛섑솚 */
 function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
   switch (tier) {
     case 'dot':
@@ -188,7 +189,7 @@ function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
   }
 }
 
-// ─── 클러스터 아이콘 ─────────────────────────────────────────────────────────
+// ??? ?대윭?ㅽ꽣 ?꾩씠肄??????????????????????????????????????????????????????????
 function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const count = cluster.getChildCount()
   let size = 36
@@ -215,7 +216,7 @@ function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   })
 }
 
-// ─── 메인 컴포넌트 ───────────────────────────────────────────────────────────
+// ??? 硫붿씤 而댄룷?뚰듃 ???????????????????????????????????????????????????????????
 export default function SpotMarkerLayer({
   spots,
   onSpotSelect,
@@ -236,7 +237,7 @@ export default function SpotMarkerLayer({
   onSpotSelectRef.current = onSpotSelect
   spotsRef.current = spots
 
-  // 클러스터 그룹 생성 (한 번만)
+  // ?대윭?ㅽ꽣 洹몃９ ?앹꽦 (??踰덈쭔)
   useEffect(() => {
     const clusterGroup = L.markerClusterGroup({
       maxClusterRadius: 50,
@@ -252,16 +253,16 @@ export default function SpotMarkerLayer({
     const currentMarkers = markersRef.current
     map.addLayer(clusterGroup)
 
-    // 줌 변경 시 아이콘 일괄 교체
+    // 以?蹂寃????꾩씠肄??쇨큵 援먯껜
     const onZoomEnd = () => {
       const newTier = getZoomTier(map.getZoom())
       if (newTier === currentTierRef.current) return
       currentTierRef.current = newTier
 
-      // 호버 해제
+      // ?몃쾭 ?댁젣
       hoveredRef.current = null
 
-      // 모든 마커 아이콘 교체
+      // 紐⑤뱺 留덉빱 ?꾩씠肄?援먯껜
       markersRef.current.forEach((marker, id) => {
         const spot = spotsRef.current.find((s) => s.id === id)
         if (spot) marker.setIcon(getIconForZoom(spot, newTier))
@@ -286,7 +287,7 @@ export default function SpotMarkerLayer({
     const newSpotIds = new Set(spots.map((s) => s.id))
     const tier = currentTierRef.current
 
-    // 제거
+    // ?쒓굅
     const toRemove: L.Marker[] = []
     currentMarkers.forEach((marker, id) => {
       if (!newSpotIds.has(id)) {
@@ -296,7 +297,7 @@ export default function SpotMarkerLayer({
     })
     if (toRemove.length > 0) clusterGroup.removeLayers(toRemove)
 
-    // 추가
+    // 異붽?
     const toAdd: L.Marker[] = []
     for (const spot of spots) {
       if (currentMarkers.has(spot.id)) continue
@@ -304,7 +305,7 @@ export default function SpotMarkerLayer({
       const icon = getIconForZoom(spot, tier)
       const marker = L.marker(spot.coordinates, { icon })
 
-      // 클릭
+      // ?대┃
       marker.on('click', () => {
         if (_isTouchDevice) {
           const ts = touchStateRef.current
@@ -326,12 +327,12 @@ export default function SpotMarkerLayer({
         onSpotSelectRef.current?.(spot.id)
       })
 
-      // 호버
+      // ?몃쾭
       marker.on('mouseover', () => {
         if (_isTouchDevice) return
         if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current)
         hoverTimerRef.current = setTimeout(() => {
-          // 이전 호버 해제
+          // ?댁쟾 ?몃쾭 ?댁젣
           if (hoveredRef.current && hoveredRef.current.id !== spot.id) {
             const prev = currentMarkers.get(hoveredRef.current.id)
             const prevSpot = spotsRef.current.find(

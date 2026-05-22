@@ -17,6 +17,7 @@ import { useEffect, useRef, memo } from 'react'
 import { useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { SpotPin as SpotPinType, CATEGORY_CONFIG, SpotCategory } from '@/types'
+import { MAP_MARKER_ASSETS } from '@/components/common/mascotAssets'
 import { useShallow } from 'zustand/react/shallow'
 import { useMapStore } from '@/stores/mapStore'
 import { useUIStore } from '@/stores/uiStore'
@@ -93,12 +94,12 @@ const getCategoryIcon = (
   category?: SpotCategory
 ): { path: string; fallback: string } => {
   const fallbackIcons: Record<SpotCategory, string> = {
-    animation: '🎬',
-    sports: '⚽',
-    movie_drama: '🎥',
-    music: '🎵',
-    game: '🎮',
-    other: '📍',
+    animation: 'A',
+    sports: 'S',
+    movie_drama: 'M',
+    music: 'U',
+    game: 'G',
+    other: 'O',
   }
   if (!category) return { path: '/icons/categories/other.webp', fallback: '📍' }
   return {
@@ -132,11 +133,11 @@ const createImagePinIcon = (
   const hasImage = thumbnailUrl && thumbnailUrl.length > 0
   const imageContent = hasImage
     ? `<img src="${thumbnailUrl}" alt="spot" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
-       <div class="fallback-icon" style="display:none;width:100%;height:100%;background:${categoryColor};border-radius:50%;align-items:center;justify-content:center;">
-         <img src="${categoryIconData.path}" alt="category" style="width:24px;height:24px;" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:24px>${categoryIconData.fallback}</span>';"/>
+       <div class="fallback-icon" style="display:none;width:100%;height:100%;background:${categoryColor};border-radius:50%;align-items:center;justify-content:center;padding:6px;">
+         <img src="${MAP_MARKER_ASSETS.spot}" alt="" style="width:100%;height:100%;object-fit:contain;" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span style=font-size:24px>${categoryIconData.fallback}</span>');"/>
        </div>`
-    : `<div style="width:100%;height:100%;background:${categoryColor};border-radius:50%;display:flex;align-items:center;justify-content:center;">
-         <img src="${categoryIconData.path}" alt="category" style="width:24px;height:24px;" onerror="this.style.display='none';this.parentElement.innerHTML+='<span style=font-size:24px>${categoryIconData.fallback}</span>';"/>
+    : `<div style="width:100%;height:100%;background:${categoryColor};border-radius:50%;display:flex;align-items:center;justify-content:center;padding:6px;">
+         <img src="${MAP_MARKER_ASSETS.spot}" alt="" style="width:100%;height:100%;object-fit:contain;" onerror="this.style.display='none';this.parentElement.innerHTML+='<span style=font-size:24px>${categoryIconData.fallback}</span>';"/>
        </div>`
 
   const hoverClass = isHovered ? 'is-hovered' : ''

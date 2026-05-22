@@ -1,4 +1,4 @@
-export { LoginRequiredModal } from './LoginRequiredModal'
+﻿export { LoginRequiredModal } from './LoginRequiredModal'
 export { ContentTypeIcon, CategoryIcon, LinkTypeIcon } from './ContentTypeIcon'
 export {
   SkeletonBlock,
@@ -22,6 +22,7 @@ export type { ErrorBoundaryProps } from './ErrorBoundary'
 export { AsyncBoundary } from './AsyncBoundary'
 export type { AsyncBoundaryProps } from './AsyncBoundary'
 export { MascotIllustration } from './MascotIllustration'
+export { MascotLoader } from './MascotLoader'
 
 export { ThemeSelector } from './ThemeToggle'
 export { default as ShareButton } from './ShareButton'
