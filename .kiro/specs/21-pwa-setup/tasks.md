@@ -135,7 +135,7 @@
   - Ensure all tests pass, ask the user if questions arise.
 
 - [-] 8. iOS Safari 대응 전략 구현
-  - [-] 8.1 IosPwaGuide 컴포넌트 구현
+  - [x] 8.1 IosPwaGuide 컴포넌트 구현
     - `src/components/pwa/IosPwaGuide.tsx` 생성 ('use client')
     - User-Agent 분석으로 iOS Safari 감지 (`iphone`, `ipad`, `ipod` 키워드)
     - standalone 모드가 아닌 경우에만 표시
@@ -144,6 +144,7 @@
     - Tailwind CSS 및 Semantic Color 토큰 적용
     - `src/components/pwa/index.ts`에 export 추가
     - `src/app/layout.tsx`의 Providers 내부에 `<IosPwaGuide />` 주입
+    - 2026-05-22: 공용 `isIosSafari` 유틸 재사용, `isInstalled`/standalone 상태 연동, 마스코트 기반 안내 UI로 보강 완료
     - _Requirements: 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8_
 
   - [ ]* 8.2 iOS Safari UA 감지 속성 테스트 작성
