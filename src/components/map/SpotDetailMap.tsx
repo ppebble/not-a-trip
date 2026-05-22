@@ -7,6 +7,7 @@ import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, FacilityType } from '@/types'
 import { useResizeObserver } from '@/hooks/useResizeObserver'
 import './map.css'
+import { MAP_MARKER_ASSETS } from '@/components/common/mascotAssets'
 
 interface SpotDetailMapProps {
   spot: SpotDetailData
@@ -28,19 +29,23 @@ const FACILITY_THEME_COLORS: Record<FacilityType, string> = {
 }
 
 const facilityTypeLabels: Record<FacilityType, string> = {
-  restaurant: '음식점',
-  convenience_store: '편의점',
-  cafe: '카페',
-  station: '역/정류장',
-  other: '기타',
-  coin_locker: '코인 로커',
-  solo_dining: '혼밥 식당',
-  charging_cafe: '충전/와이파이',
-  public_restroom: '화장실',
-  goods_shop: '굿즈/상점',
+  restaurant: '???',
+  convenience_store: '???',
+  cafe: '??',
+  station: '?/???',
+  other: '??',
+  coin_locker: '?? ??',
+  solo_dining: '?? ??',
+  charging_cafe: '??/????',
+  public_restroom: '???',
+  goods_shop: '???',
 }
 
-function createMapPin(color: string, size: 'spot' | 'facility'): DivIcon {
+function createMapPin(
+  color: string,
+  size: 'spot' | 'facility',
+  imagePath: string
+): DivIcon {
   const pinSize = size === 'spot' ? 26 : 20
   const tailWidth = size === 'spot' ? 9 : 7
   const tailHeight = size === 'spot' ? 14 : 11
@@ -48,7 +53,7 @@ function createMapPin(color: string, size: 'spot' | 'facility'): DivIcon {
   return divIcon({
     className: `detail-map-pin detail-map-pin--${size}`,
     html: `<div style="width:${pinSize}px;height:${pinSize + tailHeight}px;display:flex;flex-direction:column;align-items:center;">
-      <div style="width:${pinSize}px;height:${pinSize}px;border-radius:9999px;background:${color};border:2px solid rgb(var(--color-surface));box-shadow:0 4px 12px rgb(var(--color-text) / 0.22);"></div>
+      <div style="width:${pinSize}px;height:${pinSize}px;border-radius:9999px;background:${color};border:2px solid rgb(var(--color-surface));box-shadow:0 4px 12px rgb(var(--color-text) / 0.22);display:flex;align-items:center;justify-content:center;padding:${size === 'spot' ? 5 : 4}px;overflow:hidden;"><img src="${imagePath}" alt="" style="width:100%;height:100%;object-fit:contain;"/></div>
       <div style="width:0;height:0;border-left:${tailWidth}px solid transparent;border-right:${tailWidth}px solid transparent;border-top:${tailHeight}px solid ${color};margin-top:-2px;"></div>
     </div>`,
     iconSize: [pinSize, pinSize + tailHeight],
@@ -57,25 +62,63 @@ function createMapPin(color: string, size: 'spot' | 'facility'): DivIcon {
   })
 }
 
-const spotIcon = createMapPin('rgb(var(--color-danger))', 'spot')
+const spotIcon = createMapPin(
+  'rgb(var(--color-danger))',
+  'spot',
+  MAP_MARKER_ASSETS.spot
+)
 
 const facilityIcons: Record<FacilityType, DivIcon> = {
-  restaurant: createMapPin(FACILITY_THEME_COLORS.restaurant, 'facility'),
+  restaurant: createMapPin(
+    FACILITY_THEME_COLORS.restaurant,
+    'facility',
+    MAP_MARKER_ASSETS.map
+  ),
   convenience_store: createMapPin(
     FACILITY_THEME_COLORS.convenience_store,
-    'facility'
+    'facility',
+    MAP_MARKER_ASSETS.map
   ),
-  cafe: createMapPin(FACILITY_THEME_COLORS.cafe, 'facility'),
-  station: createMapPin(FACILITY_THEME_COLORS.station, 'facility'),
-  other: createMapPin(FACILITY_THEME_COLORS.other, 'facility'),
-  coin_locker: createMapPin(FACILITY_THEME_COLORS.coin_locker, 'facility'),
-  solo_dining: createMapPin(FACILITY_THEME_COLORS.solo_dining, 'facility'),
-  charging_cafe: createMapPin(FACILITY_THEME_COLORS.charging_cafe, 'facility'),
+  cafe: createMapPin(
+    FACILITY_THEME_COLORS.cafe,
+    'facility',
+    MAP_MARKER_ASSETS.map
+  ),
+  station: createMapPin(
+    FACILITY_THEME_COLORS.station,
+    'facility',
+    MAP_MARKER_ASSETS.current
+  ),
+  other: createMapPin(
+    FACILITY_THEME_COLORS.other,
+    'facility',
+    MAP_MARKER_ASSETS.map
+  ),
+  coin_locker: createMapPin(
+    FACILITY_THEME_COLORS.coin_locker,
+    'facility',
+    MAP_MARKER_ASSETS.map
+  ),
+  solo_dining: createMapPin(
+    FACILITY_THEME_COLORS.solo_dining,
+    'facility',
+    MAP_MARKER_ASSETS.map
+  ),
+  charging_cafe: createMapPin(
+    FACILITY_THEME_COLORS.charging_cafe,
+    'facility',
+    MAP_MARKER_ASSETS.current
+  ),
   public_restroom: createMapPin(
     FACILITY_THEME_COLORS.public_restroom,
-    'facility'
+    'facility',
+    MAP_MARKER_ASSETS.map
   ),
-  goods_shop: createMapPin(FACILITY_THEME_COLORS.goods_shop, 'facility'),
+  goods_shop: createMapPin(
+    FACILITY_THEME_COLORS.goods_shop,
+    'facility',
+    MAP_MARKER_ASSETS.popular
+  ),
 }
 
 function getFacilityColor(type: FacilityType): string {

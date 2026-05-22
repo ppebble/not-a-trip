@@ -1,19 +1,11 @@
-import Image from 'next/image'
-
-type MascotVariant = 'main' | 'greeting' | 'confirm' | 'cheer'
+﻿import Image from 'next/image'
+import { MASCOT_ASSETS, type MascotVariant } from './mascotAssets'
 
 interface MascotIllustrationProps {
   variant?: MascotVariant
   size?: 'sm' | 'md' | 'lg'
   className?: string
   priority?: boolean
-}
-
-const MASCOT_ASSETS: Record<MascotVariant, string> = {
-  main: '/icons/raw/0329/캐릭터_메인_최종.webp',
-  greeting: '/icons/raw/0329/캐릭터-인사.webp',
-  confirm: '/icons/raw/0329/캐릭터-확인.webp',
-  cheer: '/icons/raw/0329/캐릭터-환호.webp',
 }
 
 const SIZE_CLASSES: Record<
