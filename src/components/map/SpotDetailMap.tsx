@@ -2,7 +2,7 @@
 
 import { useRef, useCallback } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Map as LeafletMap, Icon } from 'leaflet'
+import { Map as LeafletMap, divIcon, DivIcon } from 'leaflet'
 import { SpotDetailData } from '@/hooks/useSpots'
 import { NearbyFacility, FacilityType } from '@/types'
 import { useResizeObserver } from '@/hooks/useResizeObserver'
@@ -14,118 +14,17 @@ interface SpotDetailMapProps {
   className?: string
 }
 
-const spotIcon = new Icon({
-  iconUrl:
-    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
-
-const facilityIcons: Record<FacilityType, Icon> = {
-  restaurant: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  convenience_store: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  cafe: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  station: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  other: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  coin_locker: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  solo_dining: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  charging_cafe: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  public_restroom: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
-  goods_shop: new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png',
-    shadowUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
-    popupAnchor: [1, -28],
-    shadowSize: [33, 33],
-  }),
+const FACILITY_THEME_COLORS: Record<FacilityType, string> = {
+  restaurant: 'rgb(var(--link-schedule))',
+  convenience_store: 'rgb(var(--color-primary-500))',
+  cafe: 'rgb(var(--link-ticket))',
+  station: 'rgb(var(--color-secondary-500))',
+  other: 'rgb(var(--color-muted))',
+  coin_locker: 'rgb(var(--color-secondary-600))',
+  solo_dining: 'rgb(var(--color-danger))',
+  charging_cafe: 'rgb(var(--link-official))',
+  public_restroom: 'rgb(var(--link-ticket))',
+  goods_shop: 'rgb(var(--content-game-fg))',
 }
 
 const facilityTypeLabels: Record<FacilityType, string> = {
@@ -138,7 +37,49 @@ const facilityTypeLabels: Record<FacilityType, string> = {
   solo_dining: '혼밥 식당',
   charging_cafe: '충전/와이파이',
   public_restroom: '화장실',
-  goods_shop: '굿즈/잡화',
+  goods_shop: '굿즈/상점',
+}
+
+function createMapPin(color: string, size: 'spot' | 'facility'): DivIcon {
+  const pinSize = size === 'spot' ? 26 : 20
+  const tailWidth = size === 'spot' ? 9 : 7
+  const tailHeight = size === 'spot' ? 14 : 11
+
+  return divIcon({
+    className: `detail-map-pin detail-map-pin--${size}`,
+    html: `<div style="width:${pinSize}px;height:${pinSize + tailHeight}px;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:${pinSize}px;height:${pinSize}px;border-radius:9999px;background:${color};border:2px solid rgb(var(--color-surface));box-shadow:0 4px 12px rgb(var(--color-text) / 0.22);"></div>
+      <div style="width:0;height:0;border-left:${tailWidth}px solid transparent;border-right:${tailWidth}px solid transparent;border-top:${tailHeight}px solid ${color};margin-top:-2px;"></div>
+    </div>`,
+    iconSize: [pinSize, pinSize + tailHeight],
+    iconAnchor: [pinSize / 2, pinSize + tailHeight],
+    popupAnchor: [0, -(pinSize + tailHeight - 8)],
+  })
+}
+
+const spotIcon = createMapPin('rgb(var(--color-danger))', 'spot')
+
+const facilityIcons: Record<FacilityType, DivIcon> = {
+  restaurant: createMapPin(FACILITY_THEME_COLORS.restaurant, 'facility'),
+  convenience_store: createMapPin(
+    FACILITY_THEME_COLORS.convenience_store,
+    'facility'
+  ),
+  cafe: createMapPin(FACILITY_THEME_COLORS.cafe, 'facility'),
+  station: createMapPin(FACILITY_THEME_COLORS.station, 'facility'),
+  other: createMapPin(FACILITY_THEME_COLORS.other, 'facility'),
+  coin_locker: createMapPin(FACILITY_THEME_COLORS.coin_locker, 'facility'),
+  solo_dining: createMapPin(FACILITY_THEME_COLORS.solo_dining, 'facility'),
+  charging_cafe: createMapPin(FACILITY_THEME_COLORS.charging_cafe, 'facility'),
+  public_restroom: createMapPin(
+    FACILITY_THEME_COLORS.public_restroom,
+    'facility'
+  ),
+  goods_shop: createMapPin(FACILITY_THEME_COLORS.goods_shop, 'facility'),
+}
+
+function getFacilityColor(type: FacilityType): string {
+  return FACILITY_THEME_COLORS[type] || 'rgb(var(--color-muted))'
 }
 
 export default function SpotDetailMap({
@@ -268,8 +209,11 @@ export default function SpotDetailMap({
           <h4 className="mb-2 text-sm font-semibold text-main-text">범례</h4>
           <div className="space-y-1">
             <div className="flex items-center text-xs text-sub-text">
-              <div className="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
-              <span>특별한 여행지</span>
+              <div
+                className="mr-2 h-3 w-3 rounded-full"
+                style={{ backgroundColor: 'rgb(var(--color-danger))' }}
+              ></div>
+              <span>성지 본체</span>
             </div>
             {Array.from(new Set(facilities.map((f) => f.type))).map((type) => (
               <div
@@ -277,7 +221,8 @@ export default function SpotDetailMap({
                 className="flex items-center text-xs text-sub-text"
               >
                 <div
-                  className={`mr-2 h-3 w-3 rounded-full ${getFacilityColor(type)}`}
+                  className="mr-2 h-3 w-3 rounded-full"
+                  style={{ backgroundColor: getFacilityColor(type) }}
                 ></div>
                 <span>{facilityTypeLabels[type]}</span>
               </div>
@@ -286,26 +231,9 @@ export default function SpotDetailMap({
         </div>
       )}
 
-      <div className="absolute bottom-2 right-2 z-[1000] rounded bg-primary-800/80 px-2 py-1 text-xs text-white">
+      <div className="text-text absolute bottom-2 right-2 z-[1000] rounded bg-surface/90 px-2 py-1 text-xs shadow-sm backdrop-blur-sm">
         Not a Trip
       </div>
     </div>
   )
-}
-
-function getFacilityColor(type: FacilityType): string {
-  const colors: Record<FacilityType, string> = {
-    restaurant: 'bg-orange-500',
-    convenience_store: 'bg-primary',
-    cafe: 'bg-green-500',
-    station: 'bg-purple-500',
-    other: 'bg-neutral-500',
-    coin_locker: 'bg-violet-500',
-    solo_dining: 'bg-rose-500',
-    charging_cafe: 'bg-cyan-500',
-    public_restroom: 'bg-teal-500',
-    goods_shop: 'bg-pink-500',
-  }
-
-  return colors[type] || 'bg-neutral-500'
 }

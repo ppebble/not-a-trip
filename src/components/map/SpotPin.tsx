@@ -74,10 +74,18 @@ const Z_INDEX = { base: 0, hovered: 10000 }
 // 핀 크기 상수
 const PIN_SIZES = { base: 48, hovered: 54 }
 
+const MAP_THEME_COLORS = {
+  defaultCategory: 'rgb(var(--category-other-bg))',
+  hoveredAccent: 'rgb(var(--color-secondary-500))',
+  popularStart: 'rgb(var(--color-secondary-500))',
+  popularEnd: 'rgb(var(--color-danger))',
+  markerPlaceholder: 'rgb(var(--color-accent-surface))',
+} as const
+
 // 카테고리별 색상
 const getCategoryColor = (category?: SpotCategory): string => {
-  if (!category) return '#2d4a6f'
-  return CATEGORY_CONFIG[category]?.bgColor || '#2d4a6f'
+  if (!category) return MAP_THEME_COLORS.defaultCategory
+  return CATEGORY_CONFIG[category]?.bgColor || MAP_THEME_COLORS.defaultCategory
 }
 
 // 카테고리별 아이콘
@@ -109,16 +117,16 @@ const createImagePinIcon = (
   const size = isHovered ? PIN_SIZES.hovered : PIN_SIZES.base
   const categoryColor = getCategoryColor(category)
   const categoryIconData = getCategoryIcon(category)
-  const borderColor = isHovered ? '#fbbf24' : categoryColor
+  const borderColor = isHovered ? MAP_THEME_COLORS.hoveredAccent : categoryColor
   const borderWidth = isHovered ? 4 : 3
   const shadowIntensity = isHovered ? 0.5 : 0.3
   const glowEffect = isHovered
-    ? 'box-shadow: 0 0 12px 2px rgba(251, 191, 36, 0.4);'
+    ? 'box-shadow: 0 0 12px 2px rgb(var(--color-secondary-500) / 0.4);'
     : ''
 
   const isPopular = checkInCount && checkInCount >= 10
   const popularBadge = isPopular
-    ? `<div style="position:absolute;top:-4px;right:-4px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;font-size:10px;font-weight:bold;padding:2px 4px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.2);z-index:10;">🔥${checkInCount}</div>`
+    ? `<div style="position:absolute;top:-4px;right:-4px;background:linear-gradient(135deg,${MAP_THEME_COLORS.popularStart},${MAP_THEME_COLORS.popularEnd});color:white;font-size:10px;font-weight:bold;padding:2px 4px;border-radius:8px;box-shadow:0 2px 4px rgb(var(--color-text) / 0.2);z-index:10;">🔥${checkInCount}</div>`
     : ''
 
   const hasImage = thumbnailUrl && thumbnailUrl.length > 0
@@ -137,7 +145,7 @@ const createImagePinIcon = (
     className: `custom-image-spot-pin ${hoverClass}`,
     html: `
       <div class="image-pin-container ${hoverClass}" style="width:${size}px;height:${size + 12}px;position:relative;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,${shadowIntensity}));transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);">
-        <div class="image-circle" style="width:${size}px;height:${size}px;border-radius:50%;border:${borderWidth}px solid ${borderColor};overflow:hidden;background:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);${glowEffect}">
+        <div class="image-circle" style="width:${size}px;height:${size}px;border-radius:50%;border:${borderWidth}px solid ${borderColor};overflow:hidden;background:${MAP_THEME_COLORS.markerPlaceholder};box-shadow:0 2px 8px rgb(var(--color-text) / 0.2);transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);${glowEffect}">
           ${imageContent}
         </div>
         <div class="pin-tail" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid ${borderColor};transition:border-color 0.25s ease;"></div>
@@ -165,8 +173,6 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
   )
   // previewSpotId, isPreviewHovered는 구독하지 않고 ref로만 읽음
   // → store 변경 시 SpotPin 리렌더 없음
-  const isPreviewHovered = useUIStore.getState().isPreviewHovered
-  const previewSpotId = useUIStore.getState().previewSpotId
   const { open: openBottomSheet } = useBottomSheetStore(
     useShallow((s) => ({ open: s.open }))
   )
