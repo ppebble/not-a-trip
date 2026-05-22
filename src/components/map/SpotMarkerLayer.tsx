@@ -58,9 +58,23 @@ const CATEGORY_EMOJI: Record<SpotCategory, string> = {
   other: '📍',
 }
 
+const MAP_THEME_COLORS = {
+  defaultCategory: 'rgb(var(--category-other-bg))',
+  markerSurface: 'rgb(var(--color-surface))',
+  markerText: 'rgb(var(--color-text))',
+  markerPlaceholder: 'rgb(var(--color-accent-surface))',
+  hoveredAccent: 'rgb(var(--color-secondary-500))',
+  markerBorder: 'rgb(var(--color-surface))',
+  clusterText: 'rgb(var(--color-background))',
+  clusterBase: 'rgb(var(--color-primary-600))',
+  clusterWarn: 'rgb(var(--color-primary-700))',
+  clusterHot: 'rgb(var(--color-secondary-500))',
+  clusterCritical: 'rgb(var(--color-danger))',
+}
+
 const getCategoryColor = (category?: SpotCategory): string => {
-  if (!category) return '#4164a5'
-  return CATEGORY_CONFIG[category]?.bgColor || '#4164a5'
+  if (!category) return MAP_THEME_COLORS.defaultCategory
+  return CATEGORY_CONFIG[category]?.bgColor || MAP_THEME_COLORS.defaultCategory
 }
 
 const getCategoryEmoji = (category?: SpotCategory): string => {
@@ -89,7 +103,7 @@ function createDotIcon(category?: SpotCategory): L.DivIcon {
   const emoji = getCategoryEmoji(category)
   return L.divIcon({
     className: 'spot-dot-pin',
-    html: `<div style="width:22px;height:22px;border-radius:50%;background:${color};border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;">${emoji}</div>`,
+    html: `<div style="width:22px;height:22px;border-radius:50%;background:${color};border:2px solid ${MAP_THEME_COLORS.markerBorder};display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;">${emoji}</div>`,
     iconSize: [22, 22],
     iconAnchor: [11, 11],
   })
@@ -104,8 +118,8 @@ function createLabelIcon(name: string, category?: SpotCategory): L.DivIcon {
   return L.divIcon({
     className: 'spot-label-pin',
     html: `<div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
-      <div style="width:32px;height:32px;border-radius:50%;background:${color};border:2.5px solid white;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">${emoji}</div>
-      <div style="margin-top:2px;padding:1px 4px;border-radius:4px;background:rgba(255,255,255,0.92);font-size:10px;font-weight:600;color:#1f2937;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 2px rgba(0,0,0,0.1);">${displayName}</div>
+      <div style="width:32px;height:32px;border-radius:50%;background:${color};border:2.5px solid ${MAP_THEME_COLORS.markerBorder};display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 3px rgb(var(--color-text) / 0.2);">${emoji}</div>
+      <div style="margin-top:2px;padding:1px 4px;border-radius:4px;background:rgb(var(--color-surface) / 0.92);font-size:10px;font-weight:600;color:${MAP_THEME_COLORS.markerText};white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 2px rgb(var(--color-text) / 0.1);">${displayName}</div>
     </div>`,
     iconSize: [80, 50],
     iconAnchor: [40, 20],
@@ -129,7 +143,7 @@ function createImageIcon(
   return L.divIcon({
     className: 'spot-image-pin',
     html: `<div style="width:48px;height:58px;position:relative;cursor:pointer;">
-      <div style="width:48px;height:48px;border-radius:50%;border:3px solid ${color};overflow:hidden;background:#e5e7eb;">${imageHtml}</div>
+      <div style="width:48px;height:48px;border-radius:50%;border:3px solid ${color};overflow:hidden;background:${MAP_THEME_COLORS.markerPlaceholder};">${imageHtml}</div>
       <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid ${color};"></div>
     </div>`,
     iconSize: [48, 58],
@@ -154,8 +168,8 @@ function createHoveredIcon(
   return L.divIcon({
     className: 'spot-image-pin is-hovered',
     html: `<div style="width:56px;height:66px;position:relative;cursor:pointer;">
-      <div style="width:56px;height:56px;border-radius:50%;border:4px solid #fbbf24;overflow:hidden;background:#e5e7eb;box-shadow:0 0 10px 2px rgba(251,191,36,0.4);">${imageHtml}</div>
-      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #fbbf24;"></div>
+      <div style="width:56px;height:56px;border-radius:50%;border:4px solid ${MAP_THEME_COLORS.hoveredAccent};overflow:hidden;background:${MAP_THEME_COLORS.markerPlaceholder};box-shadow:0 0 10px 2px rgb(var(--color-secondary-500) / 0.4);">${imageHtml}</div>
+      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid ${MAP_THEME_COLORS.hoveredAccent};"></div>
     </div>`,
     iconSize: [56, 66],
     iconAnchor: [28, 66],
@@ -177,25 +191,25 @@ function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
 // ─── 클러스터 아이콘 ─────────────────────────────────────────────────────────
 function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const count = cluster.getChildCount()
-  let size = 36,
-    bgColor = '#4164a5',
-    fontSize = '12px'
+  let size = 36
+  let bgColor = MAP_THEME_COLORS.clusterBase
+  let fontSize = '12px'
   if (count >= 50) {
     size = 48
-    bgColor = '#dc2626'
+    bgColor = MAP_THEME_COLORS.clusterCritical
     fontSize = '14px'
   } else if (count >= 20) {
     size = 44
-    bgColor = '#ea580c'
+    bgColor = MAP_THEME_COLORS.clusterHot
     fontSize = '13px'
   } else if (count >= 10) {
     size = 40
-    bgColor = '#ca8a04'
+    bgColor = MAP_THEME_COLORS.clusterWarn
     fontSize = '13px'
   }
 
   return L.divIcon({
-    html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${bgColor};color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${fontSize};border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.25);">${count}</div>`,
+    html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${bgColor};color:${MAP_THEME_COLORS.clusterText};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${fontSize};border:3px solid ${MAP_THEME_COLORS.markerBorder};box-shadow:0 2px 4px rgb(var(--color-text) / 0.25);">${count}</div>`,
     className: 'marker-cluster-custom',
     iconSize: L.point(size, size),
   })
@@ -235,6 +249,7 @@ export default function SpotMarkerLayer({
       iconCreateFunction: createClusterIcon,
     })
     clusterGroupRef.current = clusterGroup
+    const currentMarkers = markersRef.current
     map.addLayer(clusterGroup)
 
     // 줌 변경 시 아이콘 일괄 교체
@@ -258,7 +273,7 @@ export default function SpotMarkerLayer({
       map.off('zoomend', onZoomEnd)
       map.removeLayer(clusterGroup)
       clusterGroupRef.current = null
-      markersRef.current.clear()
+      currentMarkers.clear()
     }
   }, [map])
 

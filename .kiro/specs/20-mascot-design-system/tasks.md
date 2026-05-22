@@ -169,7 +169,7 @@
     - WCAG AA 대비 기준 충족 확인
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-  - [ ] 9.4 map.css 하드코딩 hex 값 새 팔레트에 맞게 교체
+  - [x] 9.4 map.css 하드코딩 hex 값 새 팔레트에 맞게 교체
     - Leaflet 줌 컨트롤, 팝업, 툴팁 등의 hex 값을 새 Primary 계열로 교체
     - _Requirements: 2.1_
 
@@ -199,9 +199,10 @@
     - `public/mascot/` 디렉토리 생성 및 플레이스홀더 에셋 경로 설정 (실제 에셋은 추후 추가)
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
 
-  - [ ] 12.2 SpotPin 지도 마커 마스코트 테마 적용
+  - [-] 12.2 SpotPin 지도 마커 마스코트 테마 적용
     - 마스코트 테마 커스텀 마커 에셋 적용 (에셋 미존재 시 기존 SVG divIcon 폴백)
     - 카테고리별 마커 색상을 토큰(`--category-*-bg/fg`) 참조로 변경
+    - 2026-05-22: 에셋 미존재 상태에서 SpotPin/SpotMarkerLayer/SpotDetailMap 마커를 시맨틱 토큰 기반으로 우선 마이그레이션 완료
     - _Requirements: 12.1, 12.2, 12.4_
 
   - [ ] 12.3 CurrentLocationMarker 마스코트 에셋 적용
