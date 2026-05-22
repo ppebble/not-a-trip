@@ -21,6 +21,7 @@ export { SentryUserManager } from './SentryUserManager'
 export type { ErrorBoundaryProps } from './ErrorBoundary'
 export { AsyncBoundary } from './AsyncBoundary'
 export type { AsyncBoundaryProps } from './AsyncBoundary'
+export { MascotIllustration } from './MascotIllustration'
 
 export { ThemeSelector } from './ThemeToggle'
 export { default as ShareButton } from './ShareButton'

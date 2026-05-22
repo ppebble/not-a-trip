@@ -4,6 +4,7 @@
 - Map marker theming migrated to semantic design tokens
 - Leaflet `map.css` hardcoded palette values migrated to token-based colors
 - Spot detail map markers no longer depend on external colored marker assets
+- Mascot-themed empty/error/loading fallback UI applied using existing local mascot assets
 
 ## Scrum / decision needed
 1. **Mascot marker assets**
@@ -18,5 +19,6 @@
    - `8.1` is still partial across the repo.
    - This branch only closed the map-related legacy color path that was still functionally visible.
 
-4. **Lottie / mascot empty states**
-   - `11.x`, `12.1` remain blocked on asset choice and package adoption scope.
+4. **Lottie / mascot loading upgrade**
+   - `11.x` still needs a package decision because new dependencies are currently out of scope.
+   - `12.1` is partially closed with static mascot assets, but the Lottie-specific loading path is still open.

@@ -1,4 +1,5 @@
 import { FilterIcon } from '@/components/icons'
+import { MascotIllustration } from './MascotIllustration'
 
 /**
  * 카테고리 필터 전체 해제 시 빈 상태 오버레이 컴포넌트
@@ -7,18 +8,29 @@ import { FilterIcon } from '@/components/icons'
 export function EmptyFilterOverlay() {
   return (
     <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
-      <div className="backdrop-blur-sm/95 pointer-events-auto rounded-xl bg-surface/95 px-8 py-6 text-center shadow-xl">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface">
-          <FilterIcon size="lg" className="text-muted" />
+      <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-border bg-surface/95 px-8 py-7 text-center shadow-xl backdrop-blur-md">
+        <div className="text-text-secondary mb-3 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium">
+          <FilterIcon size="sm" className="text-primary" />
+          필터 선택 필요
         </div>
+
+        <MascotIllustration
+          variant="greeting"
+          size="md"
+          className="mx-auto mb-3"
+        />
+
         <p className="text-lg font-semibold text-primary-800 dark:text-primary-300">
-          카테고리를 선택해주세요
+          카테고리를 선택해 주세요
         </p>
+
         <p className="mt-2 text-sm text-secondary dark:text-neutral-400">
-          표시할 스팟 카테고리가 선택되지 않았습니다
+          표시할 스팟 카테고리가 아직 선택되지 않았습니다.
         </p>
-        <p className="mt-1 text-xs text-muted dark:text-neutral-500">
-          필터에서 원하는 카테고리를 선택하세요
+
+        <p className="mt-2 rounded-xl bg-accent-surface px-4 py-3 text-xs leading-5 text-muted dark:text-neutral-400">
+          관심 있는 장르를 고르면 마스코트가 그 분위기에 맞는 장소를 바로
+          보여드릴게요.
         </p>
       </div>
     </div>
