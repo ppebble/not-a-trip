@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection } from '@/lib/db'
 import {
@@ -37,6 +37,8 @@ interface FacilityDocument {
 }
 
 type MappedFacility = NearbyFacility | null
+
+const FILTERABLE_STATUSES: FacilityStatus[] = ['active', 'needs_verification']
 
 function calculateDistance(
   lat1: number,
@@ -94,6 +96,7 @@ export async function GET(
     const radiusKm = parseFloat(searchParams.get('radius') || '2')
     const maxResults = parseInt(searchParams.get('limit') || '50')
     const typeFilter = searchParams.get('type')
+    const statusFilter = searchParams.get('status')
 
     const spotsCollection = await getCollection<SpotDocument>('spots')
     const spot = await spotsCollection.findOne(
@@ -114,6 +117,13 @@ export async function GET(
       VALID_FACILITY_TYPES.includes(typeFilter as FacilityType)
     ) {
       query.type = typeFilter
+    }
+
+    if (
+      statusFilter &&
+      FILTERABLE_STATUSES.includes(statusFilter as FacilityStatus)
+    ) {
+      query.status = statusFilter
     }
 
     const facilitiesCollection =
