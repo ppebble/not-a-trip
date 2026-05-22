@@ -190,13 +190,14 @@
     - _Requirements: 13.3_
 
 - [ ] 12. 마스코트 에셋 기반 상태 화면 및 지도 마커 개편
-  - [ ] 12.1 상태 화면 컴포넌트 마스코트 일러스트 적용
+  - [-] 12.1 상태 화면 컴포넌트 마스코트 일러스트 적용
     - `EmptySearchOverlay`: 마스코트 일러스트 + 폴백 (기존 SearchIcon)
     - `EmptyFilterOverlay`: 마스코트 일러스트 + 폴백 (기존 FilterIcon)
     - `SpotErrorDisplay`: 마스코트 일러스트 + `accent-surface` 배경 + 폴백 (기존 AlertTriangleIcon)
     - `ErrorBoundary`: 마스코트 일러스트 + `primary` 버튼 + 폴백
     - 로딩 스피너: LottieLoader 컴포넌트 적용 + 폴백 체인
     - `public/mascot/` 디렉토리 생성 및 플레이스홀더 에셋 경로 설정 (실제 에셋은 추후 추가)
+    - 2026-05-22: 공용 `MascotIllustration` 추가 및 Empty/Error/Loading 상태 UI를 기존 로컬 마스코트 에셋 기반으로 우선 개편 완료
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
 
   - [-] 12.2 SpotPin 지도 마커 마스코트 테마 적용
