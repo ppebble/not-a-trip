@@ -1,21 +1,45 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { Suspense, useState, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { GalleryContent } from '@/components/gallery/GalleryContent'
 import { FloatingActionButton } from '@/components/gallery/FloatingActionButton'
-import { SpotSearchModal } from '@/components/gallery/SpotSearchModal'
-import { CheckInModal } from '@/components/checkin/CheckInModal'
-import { BadgeEarnedModal } from '@/components/checkin/BadgeEarnedModal'
 import { Spot, UserBadge } from '@/types'
 import {
   GalleryPageSkeleton as GalleryPageSkeletonUI,
   SkeletonBlock,
   GalleryGridSkeleton,
 } from '@/components/common/SkeletonUI'
-import OnboardingTour from '@/components/common/OnboardingTour'
 import { useOnboarding } from '@/hooks/useOnboarding'
 import { GALLERY_PAGE_STEPS } from '@/lib/tour-config'
+
+const SpotSearchModal = dynamic(
+  () =>
+    import('@/components/gallery/SpotSearchModal').then(
+      (mod) => mod.SpotSearchModal
+    ),
+  { loading: () => null }
+)
+
+const CheckInModal = dynamic(
+  () =>
+    import('@/components/checkin/CheckInModal').then((mod) => mod.CheckInModal),
+  { loading: () => null }
+)
+
+const BadgeEarnedModal = dynamic(
+  () =>
+    import('@/components/checkin/BadgeEarnedModal').then(
+      (mod) => mod.BadgeEarnedModal
+    ),
+  { loading: () => null }
+)
+
+const OnboardingTour = dynamic(
+  () => import('@/components/common/OnboardingTour'),
+  { loading: () => null }
+)
 
 /**
  * 갤러리 탭 타입

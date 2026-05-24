@@ -4,14 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import { Providers } from '@/lib/providers'
 import { Header } from '@/components/layout'
-import {
-  SerwistRegistration,
-  InstallPromptListener,
-  InstallBottomSheet,
-  InstallToast,
-  IosPwaGuide,
-} from '@/components/pwa'
-import { CourseProgressBanner } from '@/components/course/CourseProgressBanner'
+import AppChromeDeferredHost from '@/components/app/AppChromeDeferredHost'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
@@ -84,12 +77,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <main>{children}</main>
-          <CourseProgressBanner />
-          <InstallPromptListener />
-          <InstallBottomSheet />
-          <InstallToast />
-          <IosPwaGuide />
-          <SerwistRegistration />
+          <AppChromeDeferredHost />
         </Providers>
       </body>
     </html>

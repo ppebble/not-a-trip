@@ -1,18 +1,54 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { SectionNavigation } from '@/components/profile/SectionNavigation'
-import { ActivitySection } from '@/components/profile/sections/ActivitySection'
-import { ContributionSection } from '@/components/profile/sections/ContributionSection'
-import { CommunitySection } from '@/components/profile/sections/CommunitySection'
-import { CollectionSection } from '@/components/profile/sections/CollectionSection'
-import { ManagementSection } from '@/components/profile/sections/ManagementSection'
 import { useUserInfo, useUserStats } from '@/hooks/useUserQueries'
 import type { ProfileSection, ExtendedUserStats } from '@/types/profile'
 import type { UserStats } from '@/types/checkin'
+
+const ActivitySection = dynamic(
+  () =>
+    import('@/components/profile/sections/ActivitySection').then(
+      (mod) => mod.ActivitySection
+    ),
+  { loading: () => <SectionLoadingPlaceholder /> }
+)
+
+const ContributionSection = dynamic(
+  () =>
+    import('@/components/profile/sections/ContributionSection').then(
+      (mod) => mod.ContributionSection
+    ),
+  { loading: () => <SectionLoadingPlaceholder /> }
+)
+
+const CommunitySection = dynamic(
+  () =>
+    import('@/components/profile/sections/CommunitySection').then(
+      (mod) => mod.CommunitySection
+    ),
+  { loading: () => <SectionLoadingPlaceholder /> }
+)
+
+const CollectionSection = dynamic(
+  () =>
+    import('@/components/profile/sections/CollectionSection').then(
+      (mod) => mod.CollectionSection
+    ),
+  { loading: () => <SectionLoadingPlaceholder /> }
+)
+
+const ManagementSection = dynamic(
+  () =>
+    import('@/components/profile/sections/ManagementSection').then(
+      (mod) => mod.ManagementSection
+    ),
+  { loading: () => <SectionLoadingPlaceholder /> }
+)
 
 interface UserProfilePageProps {
   params: Promise<{ id: string }>
@@ -176,6 +212,16 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+function SectionLoadingPlaceholder() {
+  return (
+    <div className="space-y-4">
+      <div className="h-5 w-40 animate-pulse rounded bg-neutral-200" />
+      <div className="h-24 animate-pulse rounded-xl bg-neutral-100" />
+      <div className="h-24 animate-pulse rounded-xl bg-neutral-100" />
     </div>
   )
 }
