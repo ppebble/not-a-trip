@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { extractClientIp, logAdminAction } from '@/lib/audit-log'
 import { validateReviewAction } from '@/lib/report-validation'
 import type { ReportStatus, ReviewHistory } from '@/types/report'
 import type { RelatedContent, SpotCategory } from '@/types/spot'
@@ -162,6 +163,30 @@ export async function PUT(
         $push: { reviewHistory: historyEntry } as any,
       }
     )
+
+    void logAdminAction({
+      adminId,
+      adminName: session.user.name ?? session.user.email ?? undefined,
+      actionType: 'review_spot_report',
+      resourceType: 'spot_report',
+      resourceId: id,
+      changes: [
+        {
+          field: 'status',
+          before: report.status,
+          after: newStatus,
+        },
+        {
+          field: 'reviewComment',
+          before: report.reviewComment ?? '',
+          after: comment || '',
+        },
+      ],
+      ipAddress: extractClientIp(request.headers),
+    }).catch((auditError) => {
+      // eslint-disable-next-line no-console
+      console.error('Failed to write audit log:', auditError)
+    })
 
     const actionLabels: Record<string, string> = {
       approve: '승인',

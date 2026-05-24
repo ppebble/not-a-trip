@@ -112,6 +112,7 @@ export const COLLECTIONS = {
   SPOT_QUALITY_REPORTS: 'spot_quality_reports',
   SPOT_LIFECYCLE_HISTORY: 'spot_lifecycle_history',
   SUPPLEMENT_REQUESTS: 'supplement_requests',
+  AUDIT_LOGS: 'audit_logs',
 } as const
 
 /**
