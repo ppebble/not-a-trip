@@ -10,6 +10,18 @@ jest.mock('@/lib/upload', () => ({
   recordUploadQuotaUsage: jest.fn(),
 }))
 
+jest.mock('@/lib/security', () => ({
+  getClientIp: jest.fn(() => '127.0.0.1'),
+  createUploadFingerprint: jest.fn(() => 'fingerprint'),
+  assertHourlyUploadLimit: jest.fn(),
+  findRecentDuplicateUpload: jest.fn().mockResolvedValue(null),
+  analyzeNsfwImage: jest
+    .fn()
+    .mockResolvedValue({ allowed: true, pendingReview: false }),
+  recordUploadFingerprint: jest.fn(),
+  UploadAbuseError: class UploadAbuseError extends Error {},
+}))
+
 import { POST } from '../route'
 import { auth } from '@/lib/auth'
 import {
@@ -19,6 +31,13 @@ import {
   uploadImageVariantsToStorage,
   validateUploadFile,
 } from '@/lib/upload'
+import {
+  analyzeNsfwImage,
+  assertHourlyUploadLimit,
+  createUploadFingerprint,
+  findRecentDuplicateUpload,
+  recordUploadFingerprint,
+} from '@/lib/security'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockValidateUploadFile = validateUploadFile as jest.MockedFunction<
@@ -35,10 +54,33 @@ const mockUploadImageVariantsToStorage =
   >
 const mockRecordUploadQuotaUsage =
   recordUploadQuotaUsage as jest.MockedFunction<typeof recordUploadQuotaUsage>
+const mockCreateUploadFingerprint =
+  createUploadFingerprint as jest.MockedFunction<typeof createUploadFingerprint>
+const mockAssertHourlyUploadLimit =
+  assertHourlyUploadLimit as jest.MockedFunction<typeof assertHourlyUploadLimit>
+const mockFindRecentDuplicateUpload =
+  findRecentDuplicateUpload as jest.MockedFunction<
+    typeof findRecentDuplicateUpload
+  >
+const mockAnalyzeNsfwImage = analyzeNsfwImage as jest.MockedFunction<
+  typeof analyzeNsfwImage
+>
+const mockRecordUploadFingerprint =
+  recordUploadFingerprint as jest.MockedFunction<typeof recordUploadFingerprint>
 
 describe('POST /api/upload', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockCreateUploadFingerprint.mockReturnValue('fingerprint')
+    mockFindRecentDuplicateUpload.mockResolvedValue(null)
+    mockAnalyzeNsfwImage.mockResolvedValue({
+      score: null,
+      category: 'safe',
+      allowed: true,
+      pendingReview: false,
+    })
+    mockAssertHourlyUploadLimit.mockResolvedValue()
+    mockRecordUploadFingerprint.mockResolvedValue()
   })
 
   test('returns 401 when unauthenticated', async () => {

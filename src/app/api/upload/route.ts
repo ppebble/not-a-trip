@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { auth } from '@/lib/auth'
 import {
+  analyzeNsfwImage,
+  assertHourlyUploadLimit,
+  createUploadFingerprint,
+  findRecentDuplicateUpload,
+  getClientIp,
+  recordUploadFingerprint,
+  UploadAbuseError,
+} from '@/lib/security'
+import {
   assertUploadQuota,
   prepareUploadArtifacts,
   recordUploadQuotaUsage,
@@ -19,6 +28,7 @@ import type { UploadApiSuccess } from '@/types/upload'
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const ip = getClientIp(request)
     const session = await auth()
 
     if (!session?.user?.id) {
@@ -41,8 +51,39 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     const format = validateUploadFile(file, buffer)
+    const fingerprint = createUploadFingerprint(buffer)
+
+    await assertHourlyUploadLimit(session.user.id)
+    const duplicate = await findRecentDuplicateUpload(
+      session.user.id,
+      fingerprint
+    )
+
+    if (duplicate) {
+      const responseBody: UploadApiSuccess = {
+        success: true,
+        imageUrl: duplicate.original,
+        original: duplicate.original,
+        pin: duplicate.pin ?? duplicate.original,
+        card: duplicate.card ?? duplicate.original,
+        fileName: file.name,
+        storage: 'r2',
+      }
+
+      return NextResponse.json(responseBody)
+    }
 
     await assertUploadQuota(session.user.id, file.size)
+    const moderation = await analyzeNsfwImage(buffer, {
+      userId: session.user.id,
+      ip,
+    })
+    if (!moderation.allowed) {
+      return NextResponse.json(
+        { error: moderation.reason ?? '업로드할 수 없는 이미지입니다.' },
+        { status: 400 }
+      )
+    }
 
     const artifacts = await prepareUploadArtifacts(buffer, format)
     const timestamp = Date.now()
@@ -54,6 +95,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     )
 
     await recordUploadQuotaUsage(session.user.id, file.size)
+    await recordUploadFingerprint({
+      userId: session.user.id,
+      fingerprint,
+      originalUrl: uploaded.original,
+      pinUrl: uploaded.pin,
+      cardUrl: uploaded.card,
+    })
 
     const responseBody: UploadApiSuccess = {
       success: true,
@@ -69,11 +117,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   } catch (error) {
     if (
       error instanceof UploadValidationError ||
-      error instanceof UploadQuotaError
+      error instanceof UploadQuotaError ||
+      error instanceof UploadAbuseError
     ) {
       return NextResponse.json(
         { error: error.message },
-        { status: error instanceof UploadQuotaError ? 429 : 400 }
+        {
+          status:
+            error instanceof UploadQuotaError ||
+            error instanceof UploadAbuseError
+              ? 429
+              : 400,
+        }
       )
     }
 

@@ -5,8 +5,16 @@ import { validatePostInput } from '@/lib/post-validation'
 import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
+import {
+  createRateLimitHeaders,
+  evaluateSlidingWindowLimit,
+  getClientIp,
+  guardPostSpam,
+  logIfSanitized,
+  sanitizePlainText,
+  SpamGuardError,
+} from '@/lib/security'
 
-// MongoDB document interface
 interface PostDocument {
   _id?: ObjectId
   title: string
@@ -18,10 +26,9 @@ interface PostDocument {
   updatedAt: Date
   spotId?: string
   mediaTitle?: string
-  // 비회원/회원 구분 필드
-  password?: string // 비회원용 비밀번호 (해시 저장)
-  userId?: string // 회원용 사용자 ID (optional)
-  isGuest: boolean // 회원/비회원 구분 (true: 비회원, false: 회원)
+  password?: string
+  userId?: string
+  isGuest: boolean
 }
 
 interface SpotDocument {
@@ -33,9 +40,6 @@ interface SpotDocument {
   }[]
 }
 
-/**
- * MongoDB 문서를 Post 타입으로 변환
- */
 function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
   return {
     id: doc._id.toHexString(),
@@ -48,22 +52,11 @@ function documentToPost(doc: PostDocument & { _id: ObjectId }): Post {
     updatedAt: doc.updatedAt,
     spotId: doc.spotId,
     mediaTitle: doc.mediaTitle,
-    // 비회원/회원 구분 필드 (password는 보안상 제외)
     userId: doc.userId,
     isGuest: doc.isGuest,
   }
 }
 
-/**
- * GET /api/posts - 게시글 목록 조회
- * Requirements: 5.1
- *
- * Query Parameters:
- * - spotId: 특정 스팟 관련 게시글만 조회
- * - mediaTitle: 특정 작품 관련 게시글만 조회 (해당 작품과 연결된 스팟의 게시글도 포함)
- * - type: 게시글 타입 필터 ('general' - 스팟/작품과 연결되지 않은 일반 게시글)
- * - search: 제목/내용 검색어
- */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url)
@@ -80,7 +73,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let filter: any = {}
 
     if (type === 'general') {
-      // 자유게시판: 스팟/작품과 연결되지 않은 게시글만 조회
       filter = {
         $and: [
           { $or: [{ spotId: { $exists: false } }, { spotId: null }] },
@@ -88,56 +80,45 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         ],
       }
     } else if (spotId) {
-      // 특정 스팟의 게시글만 조회
       filter.spotId = spotId
     } else if (mediaTitle) {
-      // 작품별 조회: 해당 작품과 연결된 스팟들의 게시글도 포함
       const spotsCollection = await getCollection<SpotDocument>(
         COLLECTIONS.SPOTS
       )
-
-      // 해당 작품과 연결된 스팟 ID 목록 조회
       const spots = await spotsCollection
         .find({ 'relatedMedia.title': mediaTitle })
         .toArray()
       const spotIds = spots.map((spot) => spot.id)
 
-      // 작품과 직접 연결된 게시글 OR 해당 작품의 스팟과 연결된 게시글
       filter = {
         $or: [
-          { mediaTitle: mediaTitle },
+          { mediaTitle },
           ...(spotIds.length > 0 ? [{ spotId: { $in: spotIds } }] : []),
         ],
       }
     }
 
-    // 검색어가 있는 경우 제목/내용에서 검색 (대소문자 무시)
     if (search && search.trim()) {
       const searchRegex = { $regex: search.trim(), $options: 'i' }
       const searchCondition = {
         $or: [{ title: searchRegex }, { content: searchRegex }],
       }
 
-      // 기존 필터와 검색 조건 결합
-      if (Object.keys(filter).length > 0) {
-        filter = { $and: [filter, searchCondition] }
-      } else {
-        filter = searchCondition
-      }
+      filter =
+        Object.keys(filter).length > 0
+          ? { $and: [filter, searchCondition] }
+          : searchCondition
     }
 
-    // 최신순으로 정렬하여 조회
     const posts = await postsCollection
       .find(filter)
       .sort({ createdAt: -1 })
       .toArray()
 
-    // Post 타입으로 변환
     const postList: Post[] = posts.map(documentToPost)
 
     return NextResponse.json({ posts: postList, total: postList.length })
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error fetching posts:', error)
     return NextResponse.json(
       { error: 'Failed to fetch posts' },
@@ -146,24 +127,56 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-/**
- * POST /api/posts - 게시글 작성
- * Requirements: 5.2, 16.8.4
- *
- * 회원: 세션에서 userId 자동 추출, 비밀번호 불필요
- * 비회원: 닉네임 + 비밀번호 필수, 비밀번호 해시 저장
- */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json()
+    const ip = getClientIp(request)
+    const session = await auth()
+    const isAuthenticated = !!session?.user
+    const identityKey = session?.user?.id || ip
+
+    const rateLimit = evaluateSlidingWindowLimit({
+      key: `post-write:${identityKey}`,
+      limit: 30,
+      windowMs: 60 * 1000,
+    })
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: '게시글 작성 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
+        },
+        { status: 429, headers: createRateLimitHeaders(rateLimit) }
+      )
+    }
+
+    guardPostSpam(identityKey)
+
+    const sanitizedTitle = sanitizePlainText(body.title)
+    const sanitizedContent = sanitizePlainText(body.content)
+    await Promise.all([
+      logIfSanitized({
+        label: 'post.title',
+        before: body.title,
+        after: sanitizedTitle,
+        userId: session?.user?.id,
+        ip,
+      }),
+      logIfSanitized({
+        label: 'post.content',
+        before: body.content,
+        after: sanitizedContent,
+        userId: session?.user?.id,
+        ip,
+      }),
+    ])
+
     const input: CreatePostInput = {
-      title: body.title,
-      content: body.content,
+      title: sanitizedTitle,
+      content: sanitizedContent,
       spotId: body.spotId,
       mediaTitle: body.mediaTitle,
     }
 
-    // 유효성 검사
     const validation = validatePostInput(input)
     if (!validation.valid) {
       return NextResponse.json(
@@ -172,17 +185,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    // 세션 확인 (회원/비회원 구분)
-    const session = await auth()
-    const isAuthenticated = !!session?.user
-
-    // 비회원인 경우 비밀번호 필수 검증
     if (!isAuthenticated) {
       if (!body.password || body.password.trim().length === 0) {
         return NextResponse.json(
           {
             error: 'Validation failed',
-            details: ['비회원은 비밀번호가 필수입니다'],
+            details: ['비회원은 비밀번호가 필요합니다.'],
           },
           { status: 400 }
         )
@@ -191,7 +199,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json(
           {
             error: 'Validation failed',
-            details: ['비밀번호는 4자 이상이어야 합니다'],
+            details: ['비밀번호는 4자 이상이어야 합니다.'],
           },
           { status: 400 }
         )
@@ -201,14 +209,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const collection = await getCollection<PostDocument & { _id: ObjectId }>(
       COLLECTIONS.POSTS
     )
-
     const now = new Date()
 
-    // 회원/비회원에 따른 게시글 데이터 구성
     let newPost: PostDocument
 
     if (isAuthenticated && session.user) {
-      // 회원 게시글
       newPost = {
         title: input.title.trim(),
         content: input.content.trim(),
@@ -224,7 +229,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         ...(input.mediaTitle && { mediaTitle: input.mediaTitle.trim() }),
       }
     } else {
-      // 비회원 게시글 - 비밀번호 해시 저장
       const hashedPassword = await bcrypt.hash(body.password, 10)
 
       newPost = {
@@ -246,7 +250,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       newPost as PostDocument & { _id: ObjectId }
     )
 
-    // 응답에서 password 제외
     const createdPost: Post = {
       id: result.insertedId.toHexString(),
       title: newPost.title,
@@ -264,7 +267,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ post: createdPost }, { status: 201 })
   } catch (error) {
-    // eslint-disable-next-line no-console
+    if (error instanceof SpamGuardError) {
+      return NextResponse.json(
+        { error: error.message },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(error.retryAfterSeconds) },
+        }
+      )
+    }
+
     console.error('Error creating post:', error)
     return NextResponse.json(
       { error: 'Failed to create post' },

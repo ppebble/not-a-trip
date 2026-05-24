@@ -71,3 +71,10 @@
       - legacy-compatible response alias `imageUrl` plus `{ original, pin, card }`
       - migration script `scripts/migrate-local-uploads-to-r2.mjs`
       - helper `replaceLegacyUploadPathWithCdnUrl()`
+    - spec 42 security baseline:
+      - `src/lib/security/*` shared helpers for rate limiting, sanitization, spam guard, upload abuse, NSFW moderation hook, and login lockouts
+      - API/IP throttling in `src/middleware.ts`
+      - write-throttling + spam guard coverage in checkins/posts/comments/reports
+      - sanitized input handling for register/checkin/post/comment/report payloads
+      - upload abuse protections layered onto `POST /api/upload`
+      - credentials login normalization, failed-attempt lockout, successful-login security logs, and 24h token/session max age

@@ -16,6 +16,15 @@ import {
   fetchCheckedSpotsMap,
   mergeProgressMaps,
 } from '@/lib/progress-utils'
+import {
+  createRateLimitHeaders,
+  evaluateSlidingWindowLimit,
+  getClientIp,
+  guardCheckinSpam,
+  logIfSanitized,
+  sanitizeOptionalPlainText,
+  SpamGuardError,
+} from '@/lib/security'
 
 /**
  * CheckIn MongoDB Document
@@ -249,6 +258,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const ip = getClientIp(request)
     // 인증 확인
     const session = await auth()
     if (!session?.user) {
@@ -259,6 +269,28 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const body: CheckInInput = await request.json()
+    const sanitizedComment = sanitizeOptionalPlainText(body.comment)
+    await logIfSanitized({
+      label: 'checkin.comment',
+      before: body.comment,
+      after: sanitizedComment,
+      userId: session.user.id,
+      ip,
+    })
+
+    const writeLimit = evaluateSlidingWindowLimit({
+      key: `checkin-write:${session.user.id}`,
+      limit: 30,
+      windowMs: 60 * 1000,
+    })
+    if (!writeLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: '체크인 등록 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
+        },
+        { status: 429, headers: createRateLimitHeaders(writeLimit) }
+      )
+    }
 
     // 유효성 검사
     const errors: string[] = []
@@ -280,6 +312,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // === relation 분기 로직 (Requirements 2.7, 3.9, 11.1~11.3) ===
+    guardCheckinSpam(session.user.id!, body.spotId.trim())
+
     let resolvedRelation: SpotContentRelation | null = null
 
     try {
@@ -347,7 +381,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       photoUrl: body.photoUrl.trim(),
       sceneImageUrl: body.sceneImageUrl?.trim(),
       visitedAt: new Date(body.visitedAt),
-      comment: body.comment?.trim(),
+      comment: sanitizedComment,
       likeCount: 0,
       // relation 스냅샷 필드 (Requirements 2.7)
       ...(resolvedRelation && {
@@ -377,6 +411,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { status: 201 }
     )
   } catch (error) {
+    if (error instanceof SpamGuardError) {
+      return NextResponse.json(
+        { error: error.message },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(error.retryAfterSeconds) },
+        }
+      )
+    }
+
     console.error('Error creating checkin:', error)
     return NextResponse.json(
       { error: '인증 생성에 실패했습니다' },

@@ -23,7 +23,7 @@
 ### Phase 3 - later
 - [x] 8. Add full image conversion + thumbnail pipeline (`41 - Requirements 2, 3, 6`)
 - [x] 9. Add storage migration tooling for legacy uploads (`41 - Requirement 7`)
-- [ ] 10. Add API rate limiting, spam guard, input sanitization (`42 - Requirements 1, 2, 6`)
+- [x] 10. Add API rate limiting, spam guard, input sanitization (`42 - Requirements 1, 2, 6`)
 - [ ] 11. Add alerting, ops dashboard, backup/migration runbook (`43 - Requirements 1, 3, 4, 5`)
 - [ ] 12. Add broader deployment validators for images, PWA, SEO, performance, error pages (`44 - Requirements 1-6, 8`)
 
@@ -98,3 +98,39 @@
     - `npm test -- src/lib/upload/validation.test.ts src/lib/upload/quota.test.ts src/app/api/upload/__tests__/route.test.ts`
     - `npm run build`
     - `npm run type-check` (after `.next/types` regeneration)
+- 2026-05-24 spec 42 checkpoint:
+  - added shared security helpers under `src/lib/security/` for:
+    - sliding-window rate limiting
+    - security logging
+    - input sanitization
+    - spam guard thresholds
+    - upload abuse fingerprinting/hourly limits
+    - optional NSFW moderation handoff
+    - login lockout tracking
+  - applied API/IP throttling in `src/middleware.ts`
+  - applied write throttles + spam guards to:
+    - `POST /api/checkins`
+    - `POST /api/posts`
+    - `POST /api/posts/[id]/comments`
+    - `POST /api/reports`
+  - applied sanitization to:
+    - register name/nickname
+    - checkin comment
+    - post title/content
+    - comment content
+    - report text and URL fields
+  - hardened auth/session behavior:
+    - credentials email normalization
+    - failed-login lockout tracking
+    - successful login security logging
+    - 24h JWT/session max age
+  - extended upload route with:
+    - hourly upload limit
+    - duplicate fingerprint reuse
+    - NSFW moderation hook
+    - fingerprint metadata persistence
+  - verification:
+    - `npm test -- src/lib/security/rate-limit.test.ts src/lib/security/input-sanitizer.test.ts`
+    - `npm test -- src/app/api/upload/__tests__/route.test.ts`
+    - `npm run type-check`
+    - `npm run build`
