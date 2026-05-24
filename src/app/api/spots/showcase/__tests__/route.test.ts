@@ -5,11 +5,8 @@
  */
 
 import * as fc from 'fast-check'
-import {
-  isPlaceholderPhoto,
-  resolveThumbnailUrl,
-  ShowcaseSpotItem,
-} from '../route'
+import type { ShowcaseSpotItem } from '../route'
+import { isPlaceholderPhoto, resolveThumbnailUrl } from '../helpers'
 import { REAL_SPOT_PHOTO_FALLBACKS } from '@/components/landing/data/realSpotPhotoFallbacks'
 import { SpotCategory } from '@/types'
 

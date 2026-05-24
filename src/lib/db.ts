@@ -113,6 +113,7 @@ export const COLLECTIONS = {
   SPOT_LIFECYCLE_HISTORY: 'spot_lifecycle_history',
   SUPPLEMENT_REQUESTS: 'supplement_requests',
   AUDIT_LOGS: 'audit_logs',
+  UPLOAD_DAILY_USAGE: 'upload_daily_usage',
 } as const
 
 /**

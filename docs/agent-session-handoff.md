@@ -60,3 +60,14 @@
   - Completed implementation slices:
     - health endpoint + deployment env readiness validator
     - audit log foundation + admin audit log API + admin mutation hooks
+    - build blocker cleanup for `showcase` route exports and optional `web-push` resolution
+    - spec 41 upload/R2 foundation:
+      - authenticated `POST /api/upload`
+      - R2 upload via S3-compatible client (`@aws-sdk/client-s3`)
+      - MIME + magic-byte validation
+      - 10MB single-file limit
+      - 50MB/day per-user upload quota in MongoDB collection `upload_daily_usage`
+      - WebP original conversion plus `pin`/`card` thumbnails
+      - legacy-compatible response alias `imageUrl` plus `{ original, pin, card }`
+      - migration script `scripts/migrate-local-uploads-to-r2.mjs`
+      - helper `replaceLegacyUploadPathWithCdnUrl()`

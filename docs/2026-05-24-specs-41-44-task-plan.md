@@ -16,13 +16,13 @@
 - [x] 4. Verify targeted tests and type safety
 
 ### Phase 2 - next recommended slice
-- [ ] 5. Add upload/storage abstraction groundwork for R2 migration (`41 - Requirements 1, 5, 8`)
-- [ ] 6. Add authenticated upload guards and quota/fingerprint model skeleton (`41 - Requirement 4`, `42 - Requirement 4`)
+- [x] 5. Add upload/storage abstraction groundwork for R2 migration (`41 - Requirements 1, 5, 8`)
+- [x] 6. Add authenticated upload guards and quota/fingerprint model skeleton (`41 - Requirement 4`, `42 - Requirement 4`)
 - [x] 7. Add audit log model and admin action logging hooks (`43 - Requirement 2`)
 
 ### Phase 3 - later
-- [ ] 8. Add full image conversion + thumbnail pipeline (`41 - Requirements 2, 3, 6`)
-- [ ] 9. Add storage migration tooling for legacy uploads (`41 - Requirement 7`)
+- [x] 8. Add full image conversion + thumbnail pipeline (`41 - Requirements 2, 3, 6`)
+- [x] 9. Add storage migration tooling for legacy uploads (`41 - Requirement 7`)
 - [ ] 10. Add API rate limiting, spam guard, input sanitization (`42 - Requirements 1, 2, 6`)
 - [ ] 11. Add alerting, ops dashboard, backup/migration runbook (`43 - Requirements 1, 3, 4, 5`)
 - [ ] 12. Add broader deployment validators for images, PWA, SEO, performance, error pages (`44 - Requirements 1-6, 8`)
@@ -86,3 +86,15 @@
   - verification:
     - `npm test -- src/lib/audit-log.test.ts src/app/api/admin/audit-logs/__tests__/route.test.ts src/app/api/health/__tests__/route.test.ts src/lib/env-check.test.ts`
     - `npm run type-check`
+- 2026-05-24 spec 41 upload/R2 checkpoint:
+  - replaced local `public/uploads` persistence in `POST /api/upload` with authenticated R2 upload flow
+  - added MIME + magic-byte validation for JPEG/PNG/GIF/WebP
+  - raised server upload limit to 10MB and added per-user daily 50MB quota tracking in MongoDB (`upload_daily_usage`)
+  - added WebP conversion for original uploads plus `pin` 64x64 and `card` 256x256 thumbnails
+  - kept backward compatibility by still returning legacy `imageUrl` alias alongside `{ original, pin, card }`
+  - added `replaceLegacyUploadPathWithCdnUrl()` utility for `/uploads/...` migration
+  - added `scripts/migrate-local-uploads-to-r2.mjs` for legacy upload migration and spot photo rewriting
+  - verification:
+    - `npm test -- src/lib/upload/validation.test.ts src/lib/upload/quota.test.ts src/app/api/upload/__tests__/route.test.ts`
+    - `npm run build`
+    - `npm run type-check` (after `.next/types` regeneration)

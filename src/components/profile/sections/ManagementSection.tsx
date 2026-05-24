@@ -214,7 +214,7 @@ function SetPasswordForm({
 
 // ── 프로필 이미지 업로드 상수 ────────────────────────────────
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 const ALLOWED_TYPES_LABEL = 'JPG, PNG, GIF, WEBP'
 
@@ -246,9 +246,9 @@ function ProfileEditTab({ userId }: { userId: string }) {
       return
     }
 
-    // 파일 크기 검증 (5MB)
+    // 파일 크기 검증 (10MB)
     if (file.size > MAX_FILE_SIZE) {
-      setError('파일 크기는 5MB 이하여야 합니다')
+      setError('파일 크기는 10MB 이하여야 합니다')
       e.target.value = ''
       return
     }
@@ -367,7 +367,7 @@ function ProfileEditTab({ userId }: { userId: string }) {
             </div>
             <div className="text-xs text-neutral-400">
               <p>{ALLOWED_TYPES_LABEL}</p>
-              <p>최대 5MB</p>
+              <p>최대 10MB</p>
             </div>
           </div>
 

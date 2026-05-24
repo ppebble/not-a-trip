@@ -42,9 +42,9 @@ interface ImageUploadProps {
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 
 /**
- * 최대 파일 크기 (5MB)
+ * 최대 파일 크기 (10MB)
  */
-const MAX_FILE_SIZE = 5 * 1024 * 1024
+const MAX_FILE_SIZE = 10 * 1024 * 1024
 
 /**
  * ImageUpload 컴포넌트
@@ -74,7 +74,7 @@ export function ImageUpload({
       return '지원하지 않는 파일 형식입니다. (JPG, PNG, GIF, WEBP만 가능)'
     }
     if (file.size > MAX_FILE_SIZE) {
-      return '파일 크기는 5MB 이하여야 합니다'
+      return '파일 크기는 10MB 이하여야 합니다'
     }
     return null
   }, [])
@@ -343,7 +343,7 @@ export function ImageUpload({
             {isDragging ? '여기에 놓으세요' : '클릭하거나 드래그하여 사진 추가'}
           </p>
           <p className="mt-1 text-xs text-muted">
-            JPG, PNG, GIF, WEBP (최대 5MB) · 남은 슬롯: {remainingSlots}장
+            JPG, PNG, GIF, WEBP (최대 10MB) · 남은 슬롯: {remainingSlots}장
           </p>
         </div>
       )}
