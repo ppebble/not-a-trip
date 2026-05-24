@@ -2,6 +2,33 @@ import withSerwistInit from '@serwist/next'
 import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 
+function getR2RemotePattern():
+  | {
+      protocol: 'http' | 'https'
+      hostname: string
+      port?: string
+      pathname: string
+    }
+  | null {
+  const publicUrl = process.env.R2_PUBLIC_URL?.trim()
+
+  if (!publicUrl) {
+    return null
+  }
+
+  try {
+    const url = new URL(publicUrl)
+    return {
+      protocol: url.protocol.replace(':', '') as 'http' | 'https',
+      hostname: url.hostname,
+      port: url.port,
+      pathname: '/**',
+    }
+  } catch {
+    return null
+  }
+}
+
 const withSerwist = withSerwistInit({
   swSrc: 'src/sw.ts',
   swDest: 'public/sw.js',
@@ -115,6 +142,7 @@ const nextConfig: NextConfig = {
         hostname: 'localhost',
         pathname: '/uploads/**',
       },
+      ...(getR2RemotePattern() ? [getR2RemotePattern()!] : []),
     ],
   },
 }
