@@ -85,3 +85,13 @@
       - expanded admin dashboard metrics/trend UI
       - MongoDB backup/restore scripts and migration runner history/dry-run support
       - runbook: `docs/2026-05-25-spec43-ops-runbook.md`
+    - spec 44 deployment-readiness slice:
+      - added `src/lib/deployment/*` validator/analyzer suite for bundle size, image allowlists, PWA caching, SSR/CSR boundaries, SEO metadata, performance heuristics, and error pages
+      - added `src/app/not-found.tsx`
+      - upgraded `src/app/global-error.tsx` to include Sentry URL/user-agent context and home navigation
+      - added canonical metadata in `src/app/layout.tsx` and `src/lib/seo/metadata.ts`
+      - cleaned `next.config.ts` export chain while preserving dynamic R2 host support
+      - verification:
+        - `npm test -- src/lib/deployment/build-analyzer.test.ts src/lib/deployment/error-page-validator.test.ts src/lib/deployment/image-config-validator.test.ts src/lib/deployment/performance-auditor.test.ts src/lib/deployment/pwa-cache-validator.test.ts src/lib/deployment/seo-validator.test.ts src/lib/deployment/ssr-csr-boundary-checker.test.ts`
+        - `npm run type-check`
+        - `npm run build`

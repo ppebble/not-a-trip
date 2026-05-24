@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { CATEGORY_CONFIG, type SpotCategory } from '@/types/spot'
 
 // ============================================
-// SEO 데이터 인터페이스 (DB 조회 최소화용 경량 타입)
+// SEO ?곗씠???명꽣?섏씠??(DB 議고쉶 理쒖냼?붿슜 寃쎈웾 ???
 // ============================================
 
 export interface SpotSeoData {
@@ -29,26 +29,29 @@ export interface PostSeoData {
 }
 
 // ============================================
-// 유틸리티 함수
+// ?좏떥由ы떚 ?⑥닔
 // ============================================
 
-/** Base URL 반환 (환경 변수 기반, 미설정 시 localhost 폴백) */
+/** Base URL 諛섑솚 (?섍꼍 蹂??湲곕컲, 誘몄꽕????localhost ?대갚) */
 export function getBaseUrl(): string {
   return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 }
 
-/** 기본 메타데이터 생성 (조회 실패 시 폴백용) */
+/** 湲곕낯 硫뷀??곗씠???앹꽦 (議고쉶 ?ㅽ뙣 ???대갚?? */
 export function getDefaultMetadata(): Metadata {
   const baseUrl = getBaseUrl()
   const ogImage = `${baseUrl}/api/og?type=default`
   return {
-    title: 'Not a Trip - 팬들만 아는 특별한 여행지',
+    title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
     description:
-      '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+      '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
+    alternates: {
+      canonical: baseUrl,
+    },
     openGraph: {
-      title: 'Not a Trip - 팬들만 아는 특별한 여행지',
+      title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
       description:
-        '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+        '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
       images: [ogImage],
       url: baseUrl,
       type: 'website',
@@ -56,28 +59,28 @@ export function getDefaultMetadata(): Metadata {
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Not a Trip - 팬들만 아는 특별한 여행지',
+      title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
       description:
-        '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+        '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
       images: [ogImage],
     },
   }
 }
 
 // ============================================
-// 동적 메타데이터 생성 함수
+// ?숈쟻 硫뷀??곗씠???앹꽦 ?⑥닔
 // ============================================
 
-/** 스팟 페이지 메타데이터 생성 */
+/** ?ㅽ뙚 ?섏씠吏 硫뷀??곗씠???앹꽦 */
 export function generateSpotMetadata(spot: SpotSeoData): Metadata {
   const baseUrl = getBaseUrl()
   const title = `${spot.name} | Not a Trip`
 
-  // description 폴백: 비어있으면 카테고리+주소 조합
+  // description ?대갚: 鍮꾩뼱?덉쑝硫?移댄뀒怨좊━+二쇱냼 議고빀
   const description = spot.description
     ? spot.description
     : spot.category
-      ? `${CATEGORY_CONFIG[spot.category].label} · ${spot.address}`
+      ? `${CATEGORY_CONFIG[spot.category].label} 쨌 ${spot.address}`
       : spot.address
 
   const url = `${baseUrl}/spots/${spot.id}`
@@ -87,6 +90,9 @@ export function generateSpotMetadata(spot: SpotSeoData): Metadata {
   return {
     title,
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title,
       description,
@@ -104,15 +110,15 @@ export function generateSpotMetadata(spot: SpotSeoData): Metadata {
   }
 }
 
-/** 코스 페이지 메타데이터 생성 */
+/** 肄붿뒪 ?섏씠吏 硫뷀??곗씠???앹꽦 */
 export function generateRouteMetadata(route: RouteSeoData): Metadata {
   const baseUrl = getBaseUrl()
   const title = `${route.name} | Not a Trip`
 
-  // description 폴백: 비어있으면 스팟 이름 조합
+  // description ?대갚: 鍮꾩뼱?덉쑝硫??ㅽ뙚 ?대쫫 議고빀
   const description = route.description
-    ? `${route.description} · ${route.spots.length}개 스팟`
-    : `${route.spots.map((s) => s.spotName).join(', ')} 등 ${route.spots.length}개 스팟 코스`
+    ? `${route.description} 쨌 ${route.spots.length}媛??ㅽ뙚`
+    : `${route.spots.map((s) => s.spotName).join(', ')} ??${route.spots.length}媛??ㅽ뙚 肄붿뒪`
 
   const url = `${baseUrl}/routes/${route.id}`
   const ogImage = `${baseUrl}/api/og?type=route&id=${route.id}`
@@ -120,6 +126,9 @@ export function generateRouteMetadata(route: RouteSeoData): Metadata {
   return {
     title,
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title,
       description,
@@ -137,12 +146,12 @@ export function generateRouteMetadata(route: RouteSeoData): Metadata {
   }
 }
 
-/** 게시글 페이지 메타데이터 생성 */
+/** 寃뚯떆湲 ?섏씠吏 硫뷀??곗씠???앹꽦 */
 export function generatePostMetadata(post: PostSeoData): Metadata {
   const baseUrl = getBaseUrl()
-  const title = `${post.title} | Not a Trip 커뮤니티`
+  const title = `${post.title} | Not a Trip 而ㅻ??덊떚`
 
-  // content 150자 truncation
+  // content 150??truncation
   const description =
     post.content.length > 150
       ? `${post.content.slice(0, 150)}...`
@@ -153,6 +162,9 @@ export function generatePostMetadata(post: PostSeoData): Metadata {
   return {
     title,
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title,
       description,

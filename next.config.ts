@@ -147,7 +147,7 @@ const nextConfig: NextConfig = {
   },
 }
 
-// withSerwist → withSentryConfig 순서로 체이닝
+// Chain Serwist before Sentry so the generated service worker is preserved.
 export default withSentryConfig(withSerwist(nextConfig), {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
