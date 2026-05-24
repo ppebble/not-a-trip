@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { extractClientIp, logAdminAction } from '@/lib/audit-log'
 import type { StatusReportReviewRequest } from '@/types/report'
 
 /**
@@ -50,6 +51,25 @@ export async function PUT(
     }
 
     await collection.updateOne({ id }, { $set: { reviewStatus: 'resolved' } })
+
+    void logAdminAction({
+      adminId: session.user.id!,
+      adminName: session.user.name ?? session.user.email ?? undefined,
+      actionType: 'review_status_report',
+      resourceType: 'status_report',
+      resourceId: id,
+      changes: [
+        {
+          field: 'reviewStatus',
+          before: report.reviewStatus ?? 'pending',
+          after: 'resolved',
+        },
+      ],
+      ipAddress: extractClientIp(request.headers),
+    }).catch((auditError) => {
+      // eslint-disable-next-line no-console
+      console.error('Failed to write audit log:', auditError)
+    })
 
     return NextResponse.json({
       id,

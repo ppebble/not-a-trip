@@ -5,7 +5,6 @@ import type { ShowcaseCard } from './showcaseCards'
 import { REAL_SPOT_PHOTO_FALLBACKS } from './realSpotPhotoFallbacks'
 import { CARD_PLACEMENTS } from './showcaseCards'
 import type { ShowcaseSpotItem } from '@/app/api/spots/showcase/route'
-import { isPlaceholderPhoto as isPlaceholderPhotoFromRoute } from '@/app/api/spots/showcase/route'
 
 /**
  * 카테고리 순환 순서 (6장 슬라이스 시 각 카테고리 1장씩 보장)
@@ -262,7 +261,7 @@ export async function fetchProofImages(): Promise<
       if (
         spot.category &&
         spot.thumbnailUrl &&
-        !isPlaceholderPhotoFromRoute(spot.thumbnailUrl)
+        !isPlaceholderPhoto(spot.thumbnailUrl)
       ) {
         result[spot.category].push(spot.thumbnailUrl)
       }

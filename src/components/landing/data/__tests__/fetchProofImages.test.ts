@@ -5,7 +5,7 @@
  */
 
 import * as fc from 'fast-check'
-import { isPlaceholderPhoto } from '@/app/api/spots/showcase/route'
+import { isPlaceholderPhoto } from '@/app/api/spots/showcase/helpers'
 import type { ShowcaseSpotItem } from '@/app/api/spots/showcase/route'
 import type { SpotCategory } from '@/types/spot'
 

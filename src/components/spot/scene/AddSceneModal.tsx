@@ -28,8 +28,8 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
       return
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setError('파일 크기는 5MB 이하여야 합니다')
+    if (file.size > 10 * 1024 * 1024) {
+      setError('파일 크기는 10MB 이하여야 합니다')
       return
     }
 
@@ -179,7 +179,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
                     클릭하여 이미지 선택
                   </span>
                   <span className="mt-1 text-xs text-neutral-400">
-                    JPG, PNG, GIF, WEBP (최대 5MB)
+                    JPG, PNG, GIF, WEBP (최대 10MB)
                   </span>
                   <input
                     type="file"

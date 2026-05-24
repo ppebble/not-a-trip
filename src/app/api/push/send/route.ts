@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
+
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import type { PushNotificationPayload } from '@/lib/push-notifications'
 
-/**
- * 푸시 구독 MongoDB Document
- */
 interface PushSubscriptionDocument {
   endpoint: string
   keys: {
@@ -16,23 +14,26 @@ interface PushSubscriptionDocument {
   updatedAt: Date
 }
 
-/**
- * 알림 발송 요청 Body
- */
 interface SendNotificationBody {
-  /** 특정 유저에게만 발송 (없으면 전체) */
   userId?: string
-  /** 알림 페이로드 */
   payload: PushNotificationPayload
 }
 
-/**
- * POST /api/push/send - 푸시 알림 발송
- * Requirements: 4.3
- *
- * web-push 라이브러리 미설치 시 구독 정보만 조회하고
- * 실제 발송은 web-push 설정 후 활성화
- */
+interface WebPushModule {
+  setVapidDetails: (
+    subject: string,
+    publicKey: string,
+    privateKey: string
+  ) => void
+  sendNotification: (
+    subscription: {
+      endpoint: string
+      keys: { p256dh: string; auth: string }
+    },
+    payload: string
+  ) => Promise<unknown>
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body: SendNotificationBody = await request.json()
@@ -49,7 +50,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       COLLECTIONS.PUSH_SUBSCRIPTIONS
     )
 
-    // 대상 구독 조회
     const query = userId ? { userId } : {}
     const subscriptions = await collection.find(query).toArray()
 
@@ -75,7 +75,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     })
 
-    // web-push 라이브러리를 통한 실제 발송
     let sent = 0
     const failed: string[] = []
 
@@ -84,10 +83,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         await sendWebPush(sub, notificationPayload)
         sent++
       } catch (error) {
-        console.error(`푸시 발송 실패 (${sub.endpoint}):`, error)
+        // eslint-disable-next-line no-console
+        console.error(`Push send failed (${sub.endpoint}):`, error)
         failed.push(sub.endpoint)
 
-        // 410 Gone 또는 404 응답 시 구독 삭제
         if (isExpiredSubscription(error)) {
           await collection.deleteOne({ endpoint: sub.endpoint })
         }
@@ -101,7 +100,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       total: subscriptions.length,
     })
   } catch (error) {
-    console.error('푸시 알림 발송 실패:', error)
+    // eslint-disable-next-line no-console
+    console.error('Push notification send failed:', error)
     return NextResponse.json(
       { error: '알림 발송에 실패했습니다' },
       { status: 500 }
@@ -109,10 +109,35 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-/**
- * Web Push 발송 (web-push 라이브러리 래핑)
- * VAPID 키가 설정되지 않으면 스킵
- */
+async function loadWebPushModule(): Promise<WebPushModule | null> {
+  try {
+    const dynamicImport = new Function(
+      'modulePath',
+      'return import(modulePath)'
+    ) as (modulePath: string) => Promise<{ default?: unknown }>
+
+    const imported = (await dynamicImport('web-push')) as {
+      default?: WebPushModule
+    } & WebPushModule
+
+    return (imported.default ?? imported) as WebPushModule
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.message.includes('Cannot find module') ||
+        error.message.includes("Cannot find package 'web-push'"))
+    ) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'web-push package is not installed. Install it to enable push delivery.'
+      )
+      return null
+    }
+
+    throw error
+  }
+}
+
 async function sendWebPush(
   subscription: PushSubscriptionDocument,
   payload: string
@@ -122,60 +147,36 @@ async function sendWebPush(
   const vapidEmail = process.env.VAPID_EMAIL
 
   if (!vapidPublicKey || !vapidPrivateKey || !vapidEmail) {
-    console.warn('VAPID 키가 설정되지 않아 푸시 발송을 스킵합니다')
+    // eslint-disable-next-line no-console
+    console.warn('VAPID keys are not configured. Skipping push delivery.')
     return
   }
 
-  // web-push 동적 import (서버 전용)
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const webpush = require('web-push') as {
-      setVapidDetails: (
-        subject: string,
-        publicKey: string,
-        privateKey: string
-      ) => void
-      sendNotification: (
-        sub: { endpoint: string; keys: { p256dh: string; auth: string } },
-        payload: string
-      ) => Promise<unknown>
-    }
-
-    webpush.setVapidDetails(
-      `mailto:${vapidEmail}`,
-      vapidPublicKey,
-      vapidPrivateKey
-    )
-
-    await webpush.sendNotification(
-      {
-        endpoint: subscription.endpoint,
-        keys: subscription.keys,
-      },
-      payload
-    )
-  } catch (error) {
-    // web-push 미설치 시 경고만 출력
-    if (
-      error instanceof Error &&
-      error.message.includes('Cannot find module')
-    ) {
-      console.warn(
-        'web-push 패키지가 설치되지 않았습니다. npm install web-push로 설치해주세요.'
-      )
-      return
-    }
-    throw error
+  const webpush = await loadWebPushModule()
+  if (!webpush) {
+    return
   }
+
+  webpush.setVapidDetails(
+    `mailto:${vapidEmail}`,
+    vapidPublicKey,
+    vapidPrivateKey
+  )
+
+  await webpush.sendNotification(
+    {
+      endpoint: subscription.endpoint,
+      keys: subscription.keys,
+    },
+    payload
+  )
 }
 
-/**
- * 만료된 구독인지 확인
- */
 function isExpiredSubscription(error: unknown): boolean {
   if (error && typeof error === 'object' && 'statusCode' in error) {
     const statusCode = (error as { statusCode: number }).statusCode
     return statusCode === 404 || statusCode === 410
   }
+
   return false
 }

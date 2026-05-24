@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
+import { extractClientIp, logAdminAction } from '@/lib/audit-log'
 import {
   transitionStatus,
   getAllowedTransitions,
@@ -164,6 +165,21 @@ export async function PUT(
 
     const reasonStr = typeof reason === 'string' ? reason : ''
 
+    const spotsCollection = await getCollection(COLLECTIONS.SPOTS)
+    const existingSpot = await spotsCollection.findOne({
+      _id: new ObjectId(id),
+    })
+
+    if (!existingSpot) {
+      return NextResponse.json(
+        { error: '스팟을 찾을 수 없습니다' },
+        { status: 404 }
+      )
+    }
+
+    const previousStatus: SpotLifecycleStatus =
+      (existingSpot.lifecycleStatus as SpotLifecycleStatus) ?? 'approved'
+
     // 4. 상태 전이 실행
     const changedBy =
       (session.user as { id?: string; email?: string }).id ??
@@ -187,6 +203,30 @@ export async function PUT(
         { status: 400 }
       )
     }
+
+    void logAdminAction({
+      adminId: changedBy,
+      adminName: session.user.name ?? session.user.email ?? undefined,
+      actionType: 'transition_spot_lifecycle',
+      resourceType: 'spot',
+      resourceId: id,
+      changes: [
+        {
+          field: 'lifecycleStatus',
+          before: previousStatus,
+          after: result.newStatus ?? targetStatus,
+        },
+        {
+          field: 'reason',
+          before: null,
+          after: reasonStr,
+        },
+      ],
+      ipAddress: extractClientIp(request.headers),
+    }).catch((auditError) => {
+      // eslint-disable-next-line no-console
+      console.error('Failed to write audit log:', auditError)
+    })
 
     // 6. 성공 시 200 반환
     return NextResponse.json({
