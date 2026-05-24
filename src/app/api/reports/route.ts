@@ -14,6 +14,7 @@ import {
   sanitizeUrl,
   SpamGuardError,
 } from '@/lib/security'
+import { recordApiErrorMetric } from '@/lib/ops/metrics'
 
 interface SpotReportDocument {
   id: string
@@ -244,6 +245,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     console.error('Error creating report:', error)
+    await recordApiErrorMetric({ path: '/api/reports', statusCode: 500 })
     return NextResponse.json(
       { error: '제보 생성에 실패했습니다' },
       { status: 500 }

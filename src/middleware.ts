@@ -1,15 +1,30 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import type { NextFetchEvent, NextRequest } from 'next/server'
 import {
   createRateLimitHeaders,
   evaluateSlidingWindowLimit,
   getClientIp,
 } from '@/lib/security/rate-limit'
 
-export function middleware(request: NextRequest) {
+export function middleware(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl
 
   if (pathname.startsWith('/api/')) {
+    if (pathname === '/api/internal/ops/request') {
+      return NextResponse.next()
+    }
+
+    event.waitUntil(
+      fetch(new URL('/api/internal/ops/request', request.url), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-ops-ingest': '1',
+        },
+        body: JSON.stringify({ path: pathname }),
+      }).catch(() => undefined)
+    )
+
     const ip = getClientIp(request)
     const result = evaluateSlidingWindowLimit({
       key: `api-ip:${ip}`,

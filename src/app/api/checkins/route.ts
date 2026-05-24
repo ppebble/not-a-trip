@@ -25,6 +25,7 @@ import {
   sanitizeOptionalPlainText,
   SpamGuardError,
 } from '@/lib/security'
+import { recordApiErrorMetric } from '@/lib/ops/metrics'
 
 /**
  * CheckIn MongoDB Document
@@ -422,6 +423,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     console.error('Error creating checkin:', error)
+    await recordApiErrorMetric({ path: '/api/checkins', statusCode: 500 })
     return NextResponse.json(
       { error: '인증 생성에 실패했습니다' },
       { status: 500 }

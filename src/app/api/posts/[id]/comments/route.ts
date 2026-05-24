@@ -13,6 +13,7 @@ import {
   sanitizePlainText,
   SpamGuardError,
 } from '@/lib/security'
+import { recordApiErrorMetric } from '@/lib/ops/metrics'
 
 interface CommentDocument {
   _id?: ObjectId
@@ -248,6 +249,10 @@ export async function POST(
     }
 
     console.error('Error creating comment:', error)
+    await recordApiErrorMetric({
+      path: '/api/posts/[id]/comments',
+      statusCode: 500,
+    })
     return NextResponse.json(
       { error: 'Failed to create comment' },
       { status: 500 }

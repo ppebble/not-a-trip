@@ -78,3 +78,10 @@
       - sanitized input handling for register/checkin/post/comment/report payloads
       - upload abuse protections layered onto `POST /api/upload`
       - credentials login normalization, failed-attempt lockout, successful-login security logs, and 24h token/session max age
+    - spec 43 ops tooling slice:
+      - `src/lib/ops/*` helpers for alert delivery, request/error metrics, and dashboard aggregation
+      - `POST /api/ops/sentry-alert` webhook ingestion path for Slack/Discord notifications
+      - middleware-fed request metric ingestion route `/api/internal/ops/request`
+      - expanded admin dashboard metrics/trend UI
+      - MongoDB backup/restore scripts and migration runner history/dry-run support
+      - runbook: `docs/2026-05-25-spec43-ops-runbook.md`
