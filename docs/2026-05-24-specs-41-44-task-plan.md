@@ -25,7 +25,7 @@
 - [x] 9. Add storage migration tooling for legacy uploads (`41 - Requirement 7`)
 - [x] 10. Add API rate limiting, spam guard, input sanitization (`42 - Requirements 1, 2, 6`)
 - [x] 11. Add alerting, ops dashboard, backup/migration runbook (`43 - Requirements 1, 3, 4, 5`)
-- [ ] 12. Add broader deployment validators for images, PWA, SEO, performance, error pages (`44 - Requirements 1-6, 8`)
+- [x] 12. Add broader deployment validators for images, PWA, SEO, performance, error pages (`44 - Requirements 1-6, 8`)
 
 ## Detailed tasks
 
@@ -154,5 +154,31 @@
     - `docs/2026-05-25-spec43-ops-runbook.md`
   - verification:
     - `npm test -- src/lib/ops/alerting.test.ts src/lib/security/rate-limit.test.ts src/lib/security/input-sanitizer.test.ts`
+    - `npm run type-check`
+    - `npm run build`
+- 2026-05-25 spec 44 checkpoint:
+  - added deployment-readiness validator suite under `src/lib/deployment/` for:
+    - build/bundle analysis
+    - image remotePatterns review
+    - PWA cache/offline validation
+    - SSR/CSR boundary analysis
+    - SEO metadata/robots/sitemap validation
+    - performance heuristics
+    - error page validation
+  - added regression coverage:
+    - `src/lib/deployment/build-analyzer.test.ts`
+    - `src/lib/deployment/error-page-validator.test.ts`
+    - `src/lib/deployment/image-config-validator.test.ts`
+    - `src/lib/deployment/performance-auditor.test.ts`
+    - `src/lib/deployment/pwa-cache-validator.test.ts`
+    - `src/lib/deployment/seo-validator.test.ts`
+    - `src/lib/deployment/ssr-csr-boundary-checker.test.ts`
+  - strengthened production UX/config:
+    - added `src/app/not-found.tsx`
+    - expanded `src/app/global-error.tsx` with Sentry URL context + home navigation
+    - added canonical metadata to app shell + shared metadata helpers
+    - cleaned `next.config.ts` export chain while preserving dynamic R2 image allowlisting
+  - verification:
+    - `npm test -- src/lib/deployment/build-analyzer.test.ts src/lib/deployment/error-page-validator.test.ts src/lib/deployment/image-config-validator.test.ts src/lib/deployment/performance-auditor.test.ts src/lib/deployment/pwa-cache-validator.test.ts src/lib/deployment/seo-validator.test.ts src/lib/deployment/ssr-csr-boundary-checker.test.ts`
     - `npm run type-check`
     - `npm run build`

@@ -34,12 +34,16 @@ export const viewport: Viewport = {
 const baseUrl = getBaseUrl()
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: {
     template: '%s | Not a Trip',
-    default: 'Not a Trip - 팬들만 아는 특별한 여행지',
+    default: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
   },
   description:
-    '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+    '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
+  alternates: {
+    canonical: baseUrl,
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -50,16 +54,16 @@ export const metadata: Metadata = {
     siteName: 'Not a Trip',
     type: 'website',
     url: baseUrl,
-    title: 'Not a Trip - 팬들만 아는 특별한 여행지',
+    title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
     description:
-      '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+      '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
     images: [`${baseUrl}/api/og?type=default`],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Not a Trip - 팬들만 아는 특별한 여행지',
+    title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
     description:
-      '애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등 팬들만 아는 특별한 여행지를 발견하세요.',
+      '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
     images: [`${baseUrl}/api/og?type=default`],
   },
 }
