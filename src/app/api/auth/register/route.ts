@@ -1,11 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { getDb } from '@/lib/db'
+import {
+  getClientIp,
+  logIfSanitized,
+  sanitizeOptionalPlainText,
+  sanitizePlainText,
+} from '@/lib/security'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, password, name, nickname } = body
+    const ip = getClientIp(request)
+    const email = String(body.email ?? '')
+      .trim()
+      .toLowerCase()
+    const password = body.password
+    const name = sanitizePlainText(body.name)
+    const nickname = sanitizeOptionalPlainText(body.nickname) ?? name
+
+    await Promise.all([
+      logIfSanitized({
+        label: 'register.name',
+        before: body.name,
+        after: name,
+        ip,
+      }),
+      logIfSanitized({
+        label: 'register.nickname',
+        before: body.nickname,
+        after: nickname,
+        ip,
+      }),
+    ])
 
     // 유효성 검사
     if (!email || !password || !name) {

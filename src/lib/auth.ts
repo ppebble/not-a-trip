@@ -9,6 +9,12 @@ import { ObjectId } from 'mongodb'
 import bcrypt from 'bcryptjs'
 import clientPromise from './mongodb-client'
 import { getDb } from './db'
+import {
+  assertLoginNotLocked,
+  clearFailedLoginAttempts,
+  logSuccessfulLogin,
+  recordFailedLoginAttempt,
+} from './security'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
@@ -35,17 +41,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
 
+        const normalizedEmail = String(credentials.email).trim().toLowerCase()
+        const forwardedFor = request?.headers?.get('x-forwarded-for')
+        const ip =
+          forwardedFor?.split(',')[0]?.trim() ||
+          request?.headers?.get('x-real-ip') ||
+          undefined
+
+        await assertLoginNotLocked(normalizedEmail)
+
         const db = await getDb()
         const user = await db.collection('users').findOne({
-          email: credentials.email,
+          email: normalizedEmail,
         })
 
         if (!user || !user.password) {
+          await recordFailedLoginAttempt({ email: normalizedEmail, ip })
           return null
         }
 
@@ -55,8 +71,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         )
 
         if (!isPasswordValid) {
+          await recordFailedLoginAttempt({ email: normalizedEmail, ip })
           return null
         }
+
+        await clearFailedLoginAttempts(normalizedEmail)
+        await logSuccessfulLogin({
+          email: normalizedEmail,
+          userId: user._id.toString(),
+          ip,
+        })
 
         return {
           id: user._id.toString(),
@@ -70,6 +94,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 60 * 60 * 24,
+  },
+  jwt: {
+    maxAge: 60 * 60 * 24,
   },
   pages: {
     signIn: '/auth/signin',

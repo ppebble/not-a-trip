@@ -114,6 +114,9 @@ export const COLLECTIONS = {
   SUPPLEMENT_REQUESTS: 'supplement_requests',
   AUDIT_LOGS: 'audit_logs',
   UPLOAD_DAILY_USAGE: 'upload_daily_usage',
+  SECURITY_LOGS: 'security_logs',
+  UPLOAD_FINGERPRINTS: 'upload_fingerprints',
+  AUTH_LOGIN_ATTEMPTS: 'auth_login_attempts',
 } as const
 
 /**
