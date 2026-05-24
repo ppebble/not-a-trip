@@ -20,6 +20,7 @@ import {
 import { UploadQuotaError } from '@/lib/upload/quota'
 import { UploadValidationError } from '@/lib/upload/validation'
 import { StorageConfigError } from '@/lib/storage/r2'
+import { recordApiErrorMetric } from '@/lib/ops/metrics'
 import type { UploadApiSuccess } from '@/types/upload'
 
 /**
@@ -138,6 +139,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // eslint-disable-next-line no-console
     console.error('Error uploading file:', error)
+    await recordApiErrorMetric({ path: '/api/upload', statusCode: 500 })
     return NextResponse.json(
       { error: '파일 업로드에 실패했습니다.' },
       { status: 500 }

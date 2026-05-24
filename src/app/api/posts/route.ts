@@ -14,6 +14,7 @@ import {
   sanitizePlainText,
   SpamGuardError,
 } from '@/lib/security'
+import { recordApiErrorMetric } from '@/lib/ops/metrics'
 
 interface PostDocument {
   _id?: ObjectId
@@ -278,6 +279,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     console.error('Error creating post:', error)
+    await recordApiErrorMetric({ path: '/api/posts', statusCode: 500 })
     return NextResponse.json(
       { error: 'Failed to create post' },
       { status: 500 }

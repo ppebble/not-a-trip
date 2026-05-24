@@ -1,11 +1,14 @@
 /**
- * 마이그레이션 실행 래퍼
- * MONGODB_DB 환경변수를 명시적으로 설정하고 마이그레이션 스크립트를 실행
+ * Migration runner with dry-run/history support.
+ *
+ * Usage:
+ *   node scripts/run-migration.mjs <script-path> [--dry-run] [--collection <name>]
  */
 import { execSync } from 'child_process'
+import { basename } from 'path'
+import { MongoClient } from 'mongodb'
 import { readFileSync } from 'fs'
 
-// .env.local 파싱
 const envContent = readFileSync('.env.local', 'utf-8')
 const envVars = {}
 for (const line of envContent.split('\n')) {
@@ -18,25 +21,101 @@ for (const line of envContent.split('\n')) {
   envVars[key] = value
 }
 
-// MONGODB_URI에서 DB 이름 추출
-const uri = envVars['MONGODB_URI'] || 'mongodb://localhost:27017/not-a-trip'
+const uri = envVars.MONGODB_URI || 'mongodb://localhost:27017/not-a-trip'
 const dbMatch = uri.match(/\/([^/?]+)(\?|$)/)
-const dbName = dbMatch ? dbMatch[1] : 'not-a-trip'
+const dbName = envVars.MONGODB_DB || (dbMatch ? dbMatch[1] : 'not-a-trip')
 
-console.log(`📦 DB: ${dbName}`)
-console.log(`🔗 URI: ${uri}\n`)
+const args = process.argv.slice(2)
+const script = args[0]
 
-const script = process.argv[2]
 if (!script) {
-  console.error('Usage: node scripts/run-migration.mjs <script-path>')
+  console.error(
+    'Usage: node scripts/run-migration.mjs <script-path> [--dry-run] [--collection <name>]'
+  )
   process.exit(1)
 }
 
-execSync(`npx tsx ${script}`, {
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    ...envVars,
-    MONGODB_DB: dbName,
-  },
+const dryRun = args.includes('--dry-run')
+const collectionIndex = args.indexOf('--collection')
+const collectionName =
+  collectionIndex >= 0 ? args[collectionIndex + 1] || undefined : undefined
+const migrationName = basename(script)
+const startedAt = new Date()
+
+const client = new MongoClient(uri)
+await client.connect()
+const db = client.db(dbName)
+const migrations = db.collection('migrations')
+
+const existing = await migrations.findOne({
+  name: migrationName,
+  success: true,
 })
+
+if (existing && !dryRun) {
+  console.log(`Skipping already applied migration: ${migrationName}`)
+  await client.close()
+  process.exit(0)
+}
+
+const beforeCount = collectionName
+  ? await db.collection(collectionName).countDocuments()
+  : null
+
+try {
+  console.log(`DB: ${dbName}`)
+  console.log(`URI: ${uri}`)
+  console.log(`Migration: ${migrationName}`)
+  console.log(`Dry-run: ${dryRun ? 'yes' : 'no'}`)
+  if (collectionName) {
+    console.log(`Target collection: ${collectionName}`)
+    console.log(`Documents before: ${beforeCount}`)
+  }
+  console.log('')
+
+  execSync(`npx tsx ${script}`, {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      ...envVars,
+      MONGODB_DB: dbName,
+      MIGRATION_DRY_RUN: dryRun ? '1' : '0',
+      MIGRATION_COLLECTION: collectionName || '',
+    },
+  })
+
+  const afterCount = collectionName
+    ? await db.collection(collectionName).countDocuments()
+    : null
+  const affectedCount =
+    beforeCount !== null && afterCount !== null ? afterCount - beforeCount : null
+
+  await migrations.insertOne({
+    name: migrationName,
+    scriptPath: script,
+    collectionName: collectionName || null,
+    dryRun,
+    startedAt,
+    finishedAt: new Date(),
+    success: true,
+    beforeCount,
+    afterCount,
+    affectedCount,
+  })
+} catch (error) {
+  await migrations.insertOne({
+    name: migrationName,
+    scriptPath: script,
+    collectionName: collectionName || null,
+    dryRun,
+    startedAt,
+    finishedAt: new Date(),
+    success: false,
+    errorMessage: error instanceof Error ? error.message : String(error),
+    beforeCount,
+  })
+  await client.close()
+  throw error
+}
+
+await client.close()

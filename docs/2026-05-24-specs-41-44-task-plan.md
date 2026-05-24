@@ -24,7 +24,7 @@
 - [x] 8. Add full image conversion + thumbnail pipeline (`41 - Requirements 2, 3, 6`)
 - [x] 9. Add storage migration tooling for legacy uploads (`41 - Requirement 7`)
 - [x] 10. Add API rate limiting, spam guard, input sanitization (`42 - Requirements 1, 2, 6`)
-- [ ] 11. Add alerting, ops dashboard, backup/migration runbook (`43 - Requirements 1, 3, 4, 5`)
+- [x] 11. Add alerting, ops dashboard, backup/migration runbook (`43 - Requirements 1, 3, 4, 5`)
 - [ ] 12. Add broader deployment validators for images, PWA, SEO, performance, error pages (`44 - Requirements 1-6, 8`)
 
 ## Detailed tasks
@@ -132,5 +132,27 @@
   - verification:
     - `npm test -- src/lib/security/rate-limit.test.ts src/lib/security/input-sanitizer.test.ts`
     - `npm test -- src/app/api/upload/__tests__/route.test.ts`
+    - `npm run type-check`
+    - `npm run build`
+- 2026-05-25 spec 43 checkpoint:
+  - added `src/lib/ops/alerting.ts` with Slack/Discord webhook delivery, 3 retries, and repeated-error escalation tracking
+  - added `POST /api/ops/sentry-alert` for Sentry webhook forwarding into configured alert channels
+  - expanded admin dashboard summary with:
+    - today DAU
+    - today check-in count
+    - tracked 24h 5xx ratio
+    - today new users
+    - today new spots
+    - 7-day DAU trend
+    - 7-day check-in trend
+  - updated admin page UI to display the expanded operations metrics
+  - added middleware-driven request metric ingestion via `/api/internal/ops/request`
+  - added MongoDB operations tooling:
+    - `scripts/backup-mongodb.mjs`
+    - `scripts/restore-mongodb.mjs`
+    - upgraded `scripts/run-migration.mjs` with dry-run/history support
+    - `docs/2026-05-25-spec43-ops-runbook.md`
+  - verification:
+    - `npm test -- src/lib/ops/alerting.test.ts src/lib/security/rate-limit.test.ts src/lib/security/input-sanitizer.test.ts`
     - `npm run type-check`
     - `npm run build`
