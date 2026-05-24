@@ -1,10 +1,9 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SentryUserManager } from '@/components/common'
 
 interface ProvidersProps {
@@ -46,12 +45,31 @@ export function Providers({ children }: ProvidersProps) {
         <SentryUserManager />
         <QueryClientProvider client={queryClient}>
           {children}
-          {/* Show React Query DevTools in development */}
-          {process.env.NODE_ENV === 'development' && (
-            <ReactQueryDevtools initialIsOpen={false} />
-          )}
+          <DevOnlyReactQueryDevtools />
         </QueryClientProvider>
       </ThemeProvider>
     </SessionProvider>
   )
+}
+
+function DevOnlyReactQueryDevtools() {
+  const [Devtools, setDevtools] = useState<React.ComponentType<{
+    initialIsOpen?: boolean
+  }> | null>(null)
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return
+    }
+
+    import('@tanstack/react-query-devtools').then((mod) => {
+      setDevtools(() => mod.ReactQueryDevtools)
+    })
+  }, [])
+
+  if (!Devtools) {
+    return null
+  }
+
+  return <Devtools initialIsOpen={false} />
 }
