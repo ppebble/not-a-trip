@@ -7,6 +7,7 @@ import type {
 } from '@/types/audit-log'
 
 const RETENTION_DAYS = 90
+let ensureAuditLogIndexesPromise: Promise<void> | null = null
 
 export interface LogAdminActionInput {
   adminId: string
@@ -42,6 +43,16 @@ export async function logAdminAction(
   input: LogAdminActionInput
 ): Promise<void> {
   const collection = await getCollection(COLLECTIONS.AUDIT_LOGS)
+  if (!ensureAuditLogIndexesPromise) {
+    ensureAuditLogIndexesPromise = collection
+      .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+      .then(() => undefined)
+      .catch((error) => {
+        ensureAuditLogIndexesPromise = null
+        throw error
+      })
+  }
+  await ensureAuditLogIndexesPromise
   const record = createAuditLogRecord(input)
   await collection.insertOne(record)
 }

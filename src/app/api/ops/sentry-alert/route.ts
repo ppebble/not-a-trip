@@ -7,13 +7,33 @@ interface SentryWebhookPayload {
   url?: string
   culprit?: string
   fingerprint?: string[]
+  affectedUsers?: number | string
   metadata?: {
     title?: string
     value?: string
+    affectedUsers?: number | string
   }
   event?: {
     title?: string
+    affectedUsers?: number | string
   }
+}
+
+function parseAffectedUsers(
+  value: number | string | undefined
+): number | undefined {
+  if (typeof value === 'number' && Number.isFinite(value) && value >= 0) {
+    return value
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+    if (Number.isFinite(parsed) && parsed >= 0) {
+      return parsed
+    }
+  }
+
+  return undefined
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -37,10 +57,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       payload.fingerprint?.join(':') ||
       payload.metadata?.value ||
       title.toLowerCase().replace(/\s+/g, '-')
+    const affectedUsers =
+      parseAffectedUsers(payload.affectedUsers) ??
+      parseAffectedUsers(payload.event?.affectedUsers) ??
+      parseAffectedUsers(payload.metadata?.affectedUsers)
 
     const result = await sendConfiguredAlert({
       title,
       occurredAt: new Date().toISOString(),
+      affectedUsers,
       sentryUrl: payload.url,
       fingerprint,
     })
