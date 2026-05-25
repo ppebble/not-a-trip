@@ -1,22 +1,30 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { useAuth } from '@/hooks/useAuth'
-import { ThemeSelector } from '@/components/common/ThemeToggle'
 import { AppIcon } from '@/components/common/AppIcon'
 
-/** 헤더를 숨길 경로 목록 (랜딩 페이지) */
+const HeaderAuthControls = dynamic(() => import('./HeaderAuthControls'), {
+  ssr: false,
+  loading: () => <div className="h-8 w-20 animate-pulse rounded bg-muted/30" />,
+})
+
+const HeaderThemeSelectorHost = dynamic(
+  () => import('./HeaderThemeSelectorHost'),
+  {
+    ssr: false,
+    loading: () => <div className="h-9 w-9" aria-hidden="true" />,
+  }
+)
+
 const HIDDEN_HEADER_PATHS = ['/welcome']
 
 export function Header() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  // 랜딩 페이지에서는 헤더 숨김
   if (
     HIDDEN_HEADER_PATHS.some(
       (p) => pathname === p || pathname.startsWith(p + '/')
@@ -27,24 +35,23 @@ export function Header() {
 
   const handleResetTour = () => {
     try {
-      // 모든 페이지별 온보딩 키 초기화
       const keys = Object.keys(localStorage).filter((k) =>
         k.startsWith('not-a-trip-onboarding')
       )
       keys.forEach((k) => localStorage.removeItem(k))
       window.location.reload()
     } catch {
-      // localStorage 접근 실패 시 무시
+      // localStorage 접근 실패는 무시
     }
   }
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
   return (
     <>
-      {/* 헤더 높이만큼 스페이서 (fixed 헤더 아래 콘텐츠 밀어내기) */}
       <div className="h-14" aria-hidden="true" />
       <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          {/* 로고 */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-text-primary flex items-center gap-1.5 text-xl font-bold">
               <AppIcon name="logo" size="2xl" className="max-h-8" />
@@ -52,7 +59,6 @@ export function Header() {
             </span>
           </Link>
 
-          {/* 데스크톱 네비게이션 */}
           <nav className="hidden items-center gap-6 md:flex">
             <Link
               href="/"
@@ -74,13 +80,13 @@ export function Header() {
               href="/gallery"
               className="text-text-secondary text-sm transition hover:text-secondary-400"
             >
-              순례 인증
+              성지 인증
             </Link>
             <Link
               href="/routes"
               className="text-text-secondary text-sm transition hover:text-secondary-400"
             >
-              순례 코스
+              성지 코스
             </Link>
             <Link
               href="/spots/register"
@@ -92,77 +98,20 @@ export function Header() {
               onClick={handleResetTour}
               className="text-text-secondary text-sm transition hover:text-secondary-400"
             >
-              📖 가이드 다시 보기
+              온보딩 다시 보기
             </button>
             <Link
               href="/test/globe-fallback"
               className="text-sm text-yellow-400 transition hover:text-yellow-300"
             >
-              🧪 테스트
+              Globe 테스트
             </Link>
-            {isAuthenticated && user?.role === 'admin' && (
-              <Link
-                href="/admin"
-                className="text-sm text-orange-400 transition hover:text-orange-300"
-              >
-                ⚙️ 관리자
-              </Link>
-            )}
           </nav>
 
-          {/* 인증 영역 + 모바일 메뉴 버튼 */}
           <div className="flex items-center gap-3">
-            {isLoading ? (
-              <div className="h-8 w-20 animate-pulse rounded bg-muted/30" />
-            ) : isAuthenticated && user ? (
-              <div className="flex items-center gap-3">
-                <Link
-                  href={`/profile/${user.id}`}
-                  className="flex items-center gap-2 rounded-lg px-2 py-1 transition hover:bg-secondary-100"
-                >
-                  {user.image ? (
-                    <Image
-                      src={user.image}
-                      alt={user.name || '프로필'}
-                      width={28}
-                      height={28}
-                      className="h-7 w-7 rounded-full object-cover"
-                      referrerPolicy={
-                        user.image.startsWith('http')
-                          ? 'no-referrer'
-                          : undefined
-                      }
-                      unoptimized={!user.image.startsWith('http')}
-                    />
-                  ) : (
-                    <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-secondary-100">
-                      <AppIcon name="profile-front" size="xl" />
-                    </div>
-                  )}
-                  <span className="text-text-secondary hidden text-sm sm:block">
-                    {user.name || user.email}
-                  </span>
-                </Link>
-                <button
-                  onClick={() => logout()}
-                  className="rounded-lg bg-neutral-300 px-3 py-1.5 text-sm text-white transition hover:bg-neutral-400"
-                >
-                  로그아웃
-                </button>
-              </div>
-            ) : (
-              <Link
-                href="/auth/signin"
-                className="rounded-lg bg-primary px-3 py-1.5 text-sm text-white transition hover:bg-primary-600"
-              >
-                로그인
-              </Link>
-            )}
+            <HeaderAuthControls />
+            <HeaderThemeSelectorHost />
 
-            {/* 테마 토글 */}
-            <ThemeSelector />
-
-            {/* 모바일 햄버거 버튼 */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-text-secondary hover:text-text-primary flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-secondary-100 md:hidden"
@@ -201,20 +150,19 @@ export function Header() {
           </div>
         </div>
 
-        {/* 모바일 드롭다운 메뉴 */}
         {isMobileMenuOpen && (
           <nav className="border-t border-border bg-surface/95 backdrop-blur-sm md:hidden">
             <div className="space-y-1 px-4 py-3">
               <Link
                 href="/"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
                 className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
                 홈
               </Link>
               <Link
                 href="/contents"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
                 className={`block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100 ${
                   pathname.startsWith('/contents')
                     ? 'font-semibold text-secondary-400'
@@ -225,62 +173,47 @@ export function Header() {
               </Link>
               <Link
                 href="/gallery"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
                 className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
                 <AppIcon name="gallery" size="sm" />
-                순례 인증
+                성지 인증
               </Link>
               <Link
                 href="/routes"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
                 className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
                 <AppIcon name="map" size="sm" />
-                순례 코스
+                성지 코스
               </Link>
               <Link
                 href="/spots/register"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
                 className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
               >
                 스팟 등록
               </Link>
               <button
                 onClick={() => {
-                  setIsMobileMenuOpen(false)
+                  closeMobileMenu()
                   handleResetTour()
                 }}
                 className="text-text-secondary hover:text-text-primary block w-full rounded-lg px-3 py-2 text-left text-sm transition hover:bg-secondary-100"
               >
-                📖 가이드 다시 보기
+                온보딩 다시 보기
               </button>
               <Link
                 href="/test/globe-fallback"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={closeMobileMenu}
                 className="block rounded-lg px-3 py-2 text-sm text-yellow-400 transition hover:bg-secondary-100 hover:text-yellow-300"
               >
-                🧪 테스트
+                Globe 테스트
               </Link>
-              {isAuthenticated && user?.role === 'admin' && (
-                <Link
-                  href="/admin"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm text-orange-400 transition hover:bg-secondary-100 hover:text-orange-300"
-                >
-                  ⚙️ 관리자
-                </Link>
-              )}
-              {isAuthenticated && user && (
-                <Link
-                  href={`/profile/${user.id}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
-                >
-                  <AppIcon name="profile" size="sm" />
-                  마이페이지
-                </Link>
-              )}
+              <HeaderAuthControls
+                mobileMenuOpen
+                onMobileNavigate={closeMobileMenu}
+              />
             </div>
           </nav>
         )}

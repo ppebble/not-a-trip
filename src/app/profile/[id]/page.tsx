@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { SectionNavigation } from '@/components/profile/SectionNavigation'
 import { useUserInfo, useUserStats } from '@/hooks/useUserQueries'
+import { isProfileOwner } from '@/lib/profile-utils'
 import type { ProfileSection, ExtendedUserStats } from '@/types/profile'
 import type { UserStats } from '@/types/checkin'
 
@@ -101,7 +102,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo(userId)
   const { data: stats, isLoading: statsLoading } = useUserStats(userId)
 
-  const isOwner = session?.user?.id === userId
+  const isOwner = isProfileOwner(session?.user?.id, userId)
 
   const isLoading = userInfoLoading || statsLoading
 
