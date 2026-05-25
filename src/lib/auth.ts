@@ -52,6 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           forwardedFor?.split(',')[0]?.trim() ||
           request?.headers?.get('x-real-ip') ||
           undefined
+        const userAgent = request?.headers?.get('user-agent') || undefined
 
         await assertLoginNotLocked(normalizedEmail)
 
@@ -80,6 +81,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: normalizedEmail,
           userId: user._id.toString(),
           ip,
+          userAgent,
         })
 
         return {

@@ -117,6 +117,7 @@ export const COLLECTIONS = {
   SECURITY_LOGS: 'security_logs',
   UPLOAD_FINGERPRINTS: 'upload_fingerprints',
   AUTH_LOGIN_ATTEMPTS: 'auth_login_attempts',
+  AUTH_LOGIN_CONTEXTS: 'auth_login_contexts',
   OPS_METRICS: 'ops_metrics',
   ALERT_EVENTS: 'alert_events',
   MIGRATIONS: 'migrations',
