@@ -16,6 +16,14 @@ interface AuthError {
   error: string
 }
 
+interface LoginStatusResponse {
+  locked: boolean
+  reason?: string
+  lockedUntil?: string
+  remainingSeconds?: number
+  message?: string
+}
+
 export function useAuth() {
   const { data: session, status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
@@ -38,6 +46,25 @@ export function useAuth() {
       clearAuthError()
 
       try {
+        const statusResponse = await fetch('/api/auth/login-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        })
+
+        if (!statusResponse.ok) {
+          const statusResult =
+            (await statusResponse.json()) as LoginStatusResponse & AuthError
+
+          if (statusResponse.status === 423 && statusResult.locked) {
+            setAuthError(
+              statusResult.message ||
+                '로그인이 잠겼습니다. 잠시 후 다시 시도해주세요.'
+            )
+            return false
+          }
+        }
+
         const result = await signIn('credentials', {
           email,
           password,
