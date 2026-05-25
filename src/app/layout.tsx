@@ -1,10 +1,7 @@
-import type { Metadata, Viewport } from 'next'
+﻿import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
-import { Providers } from '@/lib/providers'
-import { Header } from '@/components/layout'
-import AppChromeDeferredHost from '@/components/app/AppChromeDeferredHost'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
@@ -30,10 +27,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     template: '%s | Not a Trip',
-    default: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
+    default: 'Not a Trip - 애니메이션·영화 성지순례 여행 기록',
   },
   description:
-    '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
+    '애니메이션과 영화의 배경지를 찾아, 덕질 경험을 기록하고 공유하는 성지순례 여행 플랫폼입니다.',
   alternates: {
     canonical: baseUrl,
   },
@@ -47,16 +44,16 @@ export const metadata: Metadata = {
     siteName: 'Not a Trip',
     type: 'website',
     url: baseUrl,
-    title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
+    title: 'Not a Trip - 애니메이션·영화 성지순례 여행 기록',
     description:
-      '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
+      '애니메이션과 영화의 배경지를 찾아, 덕질 경험을 기록하고 공유하는 성지순례 여행 플랫폼입니다.',
     images: [`${baseUrl}/api/og?type=default`],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Not a Trip - ?щ뱾留??꾨뒗 ?밸퀎???ы뻾吏',
+    title: 'Not a Trip - 애니메이션·영화 성지순례 여행 기록',
     description:
-      '?좊땲硫붿씠???깆??쒕?, ?곹솕 珥ъ쁺吏, 肄섏꽌???μ냼 ???щ뱾留??꾨뒗 ?밸퀎???ы뻾吏瑜?諛쒓껄?섏꽭??',
+      '애니메이션과 영화의 배경지를 찾아, 덕질 경험을 기록하고 공유하는 성지순례 여행 플랫폼입니다.',
     images: [`${baseUrl}/api/og?type=default`],
   },
 }
@@ -74,11 +71,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} antialiased`}>
         <GoogleAnalytics />
         <JsonLd data={generateWebSiteJsonLd()} />
-        <Providers>
-          <Header />
-          <main>{children}</main>
-          <AppChromeDeferredHost />
-        </Providers>
+        {children}
       </body>
     </html>
   )
