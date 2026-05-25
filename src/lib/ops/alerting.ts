@@ -52,6 +52,14 @@ async function deliverWebhook(url: string, payload: unknown): Promise<void> {
       return
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
+      if (attempt === RETRY_LIMIT) {
+        // eslint-disable-next-line no-console
+        console.error('Alert webhook delivery failed:', {
+          url,
+          attempt,
+          error: lastError.message,
+        })
+      }
     }
   }
 
