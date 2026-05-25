@@ -1,3 +1,5 @@
+import { REAL_SPOT_PHOTO_FALLBACKS } from '@/components/landing/data/realSpotPhotoFallbacks'
+
 export function isPlaceholderPhoto(photo: string | undefined | null): boolean {
   if (!photo) return true
 
@@ -12,7 +14,13 @@ export function resolveThumbnailUrl(
   spotId: string,
   photo: string | undefined | null
 ): string | null {
-  if (!photo) return null
+  if (!photo) {
+    return REAL_SPOT_PHOTO_FALLBACKS[spotId]?.imageUrl ?? null
+  }
+
+  if (isPlaceholderPhoto(photo)) {
+    return REAL_SPOT_PHOTO_FALLBACKS[spotId]?.imageUrl ?? null
+  }
 
   if (photo.startsWith('http://') || photo.startsWith('https://')) {
     return photo
@@ -20,10 +28,6 @@ export function resolveThumbnailUrl(
 
   if (photo.startsWith('/api/images/') || photo.startsWith('/uploads/')) {
     return photo
-  }
-
-  if (isPlaceholderPhoto(photo)) {
-    return null
   }
 
   return `/api/images/${spotId}/${encodeURIComponent(photo)}`

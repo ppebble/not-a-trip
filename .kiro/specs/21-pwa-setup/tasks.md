@@ -129,7 +129,7 @@
     - standalone 모드 활성화 시 InstallBottomSheet, InstallToast가 null 반환 검증
     - **Validates: Requirements 5.8, 6.7**
 
-- [-] 7. 체크포인트 - 설치 UI 검증
+- [x] 7. 체크포인트 - 설치 UI 검증
   - `npm run type-check` 및 `npm run build` 실행
   - pwaStore, InstallPromptListener, InstallBottomSheet, InstallToast 통합 확인
   - Ensure all tests pass, ask the user if questions arise.
@@ -160,7 +160,7 @@
     - localStorage에 키 없을 때 iOS Safari 환경에서 가이드 표시 검증
     - **Validates: Requirements 6.5, 6.6**
 
-- [ ] 9. 최종 체크포인트 - 전체 통합 검증
+- [x] 9. 최종 체크포인트 - 전체 통합 검증
   - `npm run type-check`, `npm run build`, `npm run test` 실행
   - 모든 PWA 컴포넌트 통합 확인: SerwistRegistration, InstallPromptListener, InstallBottomSheet, InstallToast, IosPwaGuide
   - 오프라인 페이지 빌드 포함 확인
