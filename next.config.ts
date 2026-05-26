@@ -43,19 +43,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
         port: '',
         pathname: '/**',
       },
@@ -136,11 +124,6 @@ const nextConfig: NextConfig = {
         hostname: 'p4.wallpaperbetter.com',
         port: '',
         pathname: '/**',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        pathname: '/uploads/**',
       },
       ...(getR2RemotePattern() ? [getR2RemotePattern()!] : []),
     ],

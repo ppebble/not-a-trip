@@ -7,10 +7,14 @@ const REMOTE_HOST_PATTERN = /hostname:\s*['"]([^'"]+)['"]/g
 
 const IGNORED_DIRECTORIES = new Set([
   '.git',
+  '.kiro',
   '.next',
   'coverage',
+  'docs',
   'node_modules',
   'public',
+  'scripts',
+  '__tests__',
 ])
 
 const PLACEHOLDER_HOSTS = new Set(['picsum.photos', 'via.placeholder.com'])
@@ -76,7 +80,13 @@ function extractReferencedHosts(fileContent: string): string[] {
   const hosts = new Set<string>()
 
   for (const match of fileContent.matchAll(URL_HOST_PATTERN)) {
-    hosts.add(match[1])
+    const host = match[1]
+
+    if (PLACEHOLDER_HOSTS.has(host) || host === 'localhost') {
+      continue
+    }
+
+    hosts.add(host)
   }
 
   return [...hosts]
