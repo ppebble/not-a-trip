@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 import type {
   DashboardSummaryResponse,
@@ -7,6 +7,12 @@ import type {
   SpotStatusReport,
   SpotSupplement,
 } from '@/types/report'
+import type {
+  CreateSupplementRequestInput,
+  ReportProcessingStatus,
+  SpotQualityReport,
+  SupplementRequest,
+} from '@/types/spot-quality'
 
 // ── Response Types ──────────────────────────────────────────
 
@@ -32,6 +38,34 @@ interface AdminSupplementsResponse {
   page: number
   limit: number
   totalPages: number
+}
+
+export type AdminQualityReport = SpotQualityReport & {
+  nearingDeadline?: boolean
+}
+
+interface AdminQualityReportsResponse {
+  reports: AdminQualityReport[]
+  total: number
+}
+
+interface AdminSupplementRequestsResponse {
+  requests: SupplementRequest[]
+  total: number
+}
+
+export interface ReviewQualityReportInput {
+  id: string
+  action: 'approved' | 'rejected' | 'deferred'
+  reason: string
+  closeSpot?: boolean
+}
+
+export interface CreateAdminSupplementRequestInput {
+  spotId: string
+  requestType: CreateSupplementRequestInput['requestType']
+  content: string
+  deadline: string
 }
 
 interface ContentMaster {
@@ -63,6 +97,18 @@ export const adminKeys = {
   reports: () => [...adminKeys.all, 'reports'] as const,
   reportList: (statusFilter: string, page: number) =>
     [...adminKeys.reports(), { statusFilter, page }] as const,
+  qualityReports: () => [...adminKeys.all, 'qualityReports'] as const,
+  qualityReportList: (
+    statusFilter: string,
+    urgentOnly: boolean,
+    spotId: string
+  ) =>
+    [
+      ...adminKeys.qualityReports(),
+      { statusFilter, urgentOnly, spotId },
+    ] as const,
+  supplementRequests: (spotId: string) =>
+    [...adminKeys.all, 'supplementRequests', spotId] as const,
   statusReports: () => [...adminKeys.all, 'statusReports'] as const,
   statusReportList: (
     reviewStatusFilter: string,
@@ -199,6 +245,99 @@ export function useAdminContentImages(search: string, page: number) {
   })
 }
 
+/** Admin quality report list query */
+export function useAdminQualityReports(
+  statusFilter: ReportProcessingStatus | 'open' | 'all',
+  urgentOnly: boolean,
+  spotId = ''
+) {
+  return useQuery({
+    queryKey: adminKeys.qualityReportList(statusFilter, urgentOnly, spotId),
+    queryFn: async (): Promise<AdminQualityReportsResponse> => {
+      const url = buildUrl(API_ROUTES.ADMIN.QUALITY_REPORTS, {
+        status: statusFilter === 'all' ? undefined : statusFilter,
+        urgentOnly: urgentOnly ? 'true' : undefined,
+        spotId: spotId || undefined,
+      })
+      const res = await fetch(url)
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Failed to fetch quality reports')
+      }
+      return res.json()
+    },
+  })
+}
+
+/** Admin supplement request list query */
+export function useAdminSupplementRequests(spotId?: string) {
+  return useQuery({
+    queryKey: adminKeys.supplementRequests(spotId ?? ''),
+    enabled: Boolean(spotId),
+    queryFn: async (): Promise<AdminSupplementRequestsResponse> => {
+      if (!spotId) return { requests: [], total: 0 }
+      const res = await fetch(API_ROUTES.SUPPLEMENTS.REQUESTS(spotId))
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Failed to fetch supplement requests')
+      }
+      return res.json()
+    },
+  })
+}
+
+/** Review quality report mutation */
+export function useReviewQualityReport() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, ...body }: ReviewQualityReportInput) => {
+      const res = await fetch(API_ROUTES.ADMIN.QUALITY_REPORT_REVIEW(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to review quality report')
+      }
+      return data as { message: string; report: AdminQualityReport }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminKeys.qualityReports() })
+      qc.invalidateQueries({ queryKey: adminKeys.dashboard() })
+    },
+  })
+}
+
+/** Create admin supplement request mutation */
+export function useCreateAdminSupplementRequest() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      spotId,
+      ...body
+    }: CreateAdminSupplementRequestInput) => {
+      const res = await fetch(API_ROUTES.SUPPLEMENTS.REQUESTS(spotId), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to create supplement request')
+      }
+      return data as { id: string; request: SupplementRequest }
+    },
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({
+        queryKey: adminKeys.supplementRequests(variables.spotId),
+      })
+      qc.invalidateQueries({ queryKey: adminKeys.qualityReports() })
+      qc.invalidateQueries({ queryKey: adminKeys.dashboard() })
+    },
+  })
+}
+
 // ── Invalidation Hooks ──────────────────────────────────────
 
 /** 대시보드 요약 캐시 무효화 */
@@ -238,5 +377,14 @@ export function useInvalidateAdminContentImages() {
   const qc = useQueryClient()
   return useCallback(() => {
     qc.invalidateQueries({ queryKey: adminKeys.contentImages() })
+  }, [qc])
+}
+
+/** Invalidate quality report caches */
+export function useInvalidateAdminQualityReports() {
+  const qc = useQueryClient()
+  return useCallback(() => {
+    qc.invalidateQueries({ queryKey: adminKeys.qualityReports() })
+    qc.invalidateQueries({ queryKey: adminKeys.dashboard() })
   }, [qc])
 }
