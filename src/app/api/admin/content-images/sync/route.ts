@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { getCollection, COLLECTIONS } from '@/lib/db'
-import { normalizeContentName } from '@/lib/content-utils'
 import { SpotCategory, ContentType } from '@/types'
 
 /**
@@ -31,6 +30,14 @@ interface ContentMasterDocument {
   spotCount: number
   createdAt: Date
   updatedAt: Date
+}
+
+interface ContentAggregate {
+  _id: { normalizedName: string }
+  displayName?: string
+  type?: ContentType
+  year?: number
+  spotCount?: number
 }
 
 /**
@@ -72,9 +79,59 @@ export async function POST(): Promise<NextResponse> {
       },
     ]
 
-    const aggregatedContents = await spotsCollection
-      .aggregate(pipeline)
+    const spotAggregates = await spotsCollection
+      .aggregate<ContentAggregate>(pipeline)
       .toArray()
+
+    const relationsCollection = await getCollection(
+      COLLECTIONS.SPOT_CONTENT_RELATIONS
+    )
+    const relationAggregates = await relationsCollection
+      .aggregate<ContentAggregate>([
+        {
+          $match: { status: 'active', contentName: { $exists: true, $ne: '' } },
+        },
+        {
+          $group: {
+            _id: {
+              normalizedName: {
+                $toLower: { $trim: { input: '$contentName' } },
+              },
+            },
+            displayName: { $first: '$contentName' },
+            type: { $first: '$contentType' },
+            spotIds: { $addToSet: '$spotId' },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            displayName: 1,
+            type: 1,
+            spotCount: { $size: '$spotIds' },
+          },
+        },
+      ])
+      .toArray()
+
+    const aggregateMap = new Map<string, ContentAggregate>()
+    for (const content of [...spotAggregates, ...relationAggregates]) {
+      const normalizedName = content._id.normalizedName as string
+      const existing = aggregateMap.get(normalizedName)
+      if (!existing) {
+        aggregateMap.set(normalizedName, content)
+        continue
+      }
+      existing.spotCount = Math.max(
+        Number(existing.spotCount ?? 0),
+        Number(content.spotCount ?? 0)
+      )
+      existing.displayName ||= content.displayName
+      existing.type ||= content.type
+      existing.year ||= content.year
+    }
+
+    const aggregatedContents = Array.from(aggregateMap.values())
 
     const now = new Date()
     let created = 0
@@ -93,7 +150,7 @@ export async function POST(): Promise<NextResponse> {
           { normalizedName },
           {
             $set: {
-              spotCount: content.spotCount as number,
+              spotCount: content.spotCount ?? 0,
               updatedAt: now,
             },
           }
@@ -103,9 +160,9 @@ export async function POST(): Promise<NextResponse> {
         // 새로 생성
         await contentMastersCollection.insertOne({
           normalizedName,
-          displayName: (content.displayName as string).trim(),
-          type: content.type as ContentType | undefined,
-          year: content.year as number | undefined,
+          displayName: (content.displayName ?? normalizedName).trim(),
+          type: content.type,
+          year: content.year,
           spotCount: content.spotCount as number,
           createdAt: now,
           updatedAt: now,

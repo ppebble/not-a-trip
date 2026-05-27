@@ -14,6 +14,10 @@ import {
 import { validateExternalLinks } from '@/lib/external-link-validation'
 import { convertRelatedContentToRelation } from '@/lib/relation-utils'
 import { expireOverdueSupplementRequests } from '@/lib/spot-quality/supplement-manager'
+import {
+  enrichRelatedContentWithMasterImages,
+  enrichRelationsWithMasterImages,
+} from '@/lib/content-master-images'
 
 // MongoDB document interface
 interface SpotDocument {
@@ -73,6 +77,10 @@ export async function GET(
       .find({ spotId: spot.id, status: 'active' })
       .sort({ displayPriority: 1 })
       .toArray()
+    const [enrichedRelations, enrichedRelatedContent] = await Promise.all([
+      enrichRelationsWithMasterImages(relations),
+      enrichRelatedContentWithMasterImages(spot.relatedContent),
+    ])
 
     const spotResponse: SpotResponse = {
       id: spot.id,
@@ -87,7 +95,7 @@ export async function GET(
         type: media.type as MediaInfo['type'],
         year: media.year,
       })),
-      relatedContent: spot.relatedContent,
+      relatedContent: enrichedRelatedContent,
       externalLinks: spot.externalLinks,
       authorId: spot.authorId,
       authorName: spot.authorName,
@@ -100,7 +108,7 @@ export async function GET(
       urgentReviewRequired: spot.urgentReviewRequired ?? false,
     }
 
-    return NextResponse.json({ ...spotResponse, relations })
+    return NextResponse.json({ ...spotResponse, relations: enrichedRelations })
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error fetching spot detail:', error)

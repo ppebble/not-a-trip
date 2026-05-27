@@ -88,6 +88,31 @@ interface ContentMastersResponse {
   totalPages: number
 }
 
+export interface AdminMediaScene {
+  id?: string
+  spotId?: string
+  imageUrl: string
+  animeTitle?: string
+  episodeInfo?: string
+  description?: string
+  likeCount?: number
+}
+
+export interface AdminSpotMediaResponse {
+  spot: {
+    id: string
+    name: string
+    photos: string[]
+  }
+  scenes: AdminMediaScene[]
+}
+
+export interface UpdateAdminSpotMediaInput {
+  spotId: string
+  photos: string[]
+  scenes: AdminMediaScene[]
+}
+
 // ── Query Key Factory ───────────────────────────────────────
 
 export const adminKeys = {
@@ -125,6 +150,8 @@ export const adminKeys = {
   contentImages: () => [...adminKeys.all, 'contentImages'] as const,
   contentImageList: (search: string, page: number) =>
     [...adminKeys.contentImages(), { search, page }] as const,
+  media: () => [...adminKeys.all, 'media'] as const,
+  spotMedia: (spotId: string) => [...adminKeys.media(), spotId] as const,
 }
 
 // ── Hooks ───────────────────────────────────────────────────
@@ -241,6 +268,51 @@ export function useAdminContentImages(search: string, page: number) {
       const res = await fetch(url)
       if (!res.ok) throw new Error('콘텐츠 이미지 목록 조회 실패')
       return res.json()
+    },
+  })
+}
+
+export function useAdminSpotMedia(spotId: string) {
+  return useQuery({
+    queryKey: adminKeys.spotMedia(spotId),
+    enabled: Boolean(spotId.trim()),
+    queryFn: async (): Promise<AdminSpotMediaResponse> => {
+      const res = await fetch(
+        '/api/admin/media/' + encodeURIComponent(spotId.trim())
+      )
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || '?? ??? ?? ??')
+      }
+      return data
+    },
+  })
+}
+
+export function useUpdateAdminSpotMedia() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      spotId,
+      photos,
+      scenes,
+    }: UpdateAdminSpotMediaInput) => {
+      const res = await fetch(
+        '/api/admin/media/' + encodeURIComponent(spotId.trim()),
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ photos, scenes }),
+        }
+      )
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || '?? ??? ?? ??')
+      }
+      return data as { success: true }
+    },
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: adminKeys.spotMedia(variables.spotId) })
     },
   })
 }

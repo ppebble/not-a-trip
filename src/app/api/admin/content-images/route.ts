@@ -6,6 +6,7 @@ import { ContentType } from '@/types'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import { existsSync } from 'fs'
+import { propagateContentMasterImage } from '@/lib/content-master-images'
 
 /**
  * MongoDB ContentMaster 문서 인터페이스
@@ -203,6 +204,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
       await collection.updateOne({ normalizedName }, { $set: updateData })
 
+      if (imageUrl) {
+        await propagateContentMasterImage(normalizedName, imageUrl)
+      }
+
       return NextResponse.json({
         success: true,
         message: '콘텐츠 이미지가 업데이트되었습니다',
@@ -279,6 +284,10 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
       { normalizedName },
       { $unset: { imageUrl: '' }, $set: { updatedAt: new Date() } }
     )
+
+    if (result.matchedCount > 0) {
+      await propagateContentMasterImage(normalizedName)
+    }
 
     if (result.matchedCount === 0) {
       return NextResponse.json(

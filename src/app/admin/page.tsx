@@ -104,6 +104,13 @@ export default function AdminDashboardPage() {
                 pendingCount={0}
                 href="/admin/content-images"
               />
+              <AdminDashboardCard
+                title="??? ??"
+                description="?? ?? ??? ?? ?? ???? ??/?????."
+                icon={<AppIcon name="spot" size={24} />}
+                pendingCount={0}
+                href="/admin/media"
+              />
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
