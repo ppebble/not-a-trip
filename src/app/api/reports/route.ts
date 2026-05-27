@@ -15,6 +15,7 @@ import {
   SpamGuardError,
 } from '@/lib/security'
 import { recordApiErrorMetric } from '@/lib/ops/metrics'
+import { detectDuplicateSuspicionForSpotReport } from '@/lib/spot-quality/report-processor'
 
 interface SpotReportDocument {
   id: string
@@ -39,6 +40,7 @@ interface SpotReportDocument {
   }[]
   episodeInfo: string
   additionalPhotos?: string[]
+  duplicateSuspected?: boolean
   reviewHistory?: []
   createdAt: Date
   updatedAt: Date
@@ -103,6 +105,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       totalPages: Math.ceil(total / limit),
     })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching reports:', error)
     return NextResponse.json(
       { error: '제보 목록 조회에 실패했습니다' },
@@ -200,6 +203,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     )
     const now = new Date()
     const reportId = await generateReportId()
+    const duplicateSuspected = await detectDuplicateSuspicionForSpotReport({
+      name: sanitizedBody.name,
+      coordinates: sanitizedBody.coordinates,
+    })
 
     const newReport: SpotReportDocument = {
       id: reportId,
@@ -219,6 +226,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       evidencePairs: sanitizedBody.evidencePairs,
       episodeInfo: sanitizedBody.episodeInfo.trim(),
       additionalPhotos: sanitizedBody.additionalPhotos,
+      duplicateSuspected,
       reviewHistory: [],
       createdAt: now,
       updatedAt: now,
@@ -244,6 +252,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
+    // eslint-disable-next-line no-console
     console.error('Error creating report:', error)
     await recordApiErrorMetric({ path: '/api/reports', statusCode: 500 })
     return NextResponse.json(

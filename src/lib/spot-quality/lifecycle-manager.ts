@@ -4,7 +4,6 @@
 // Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7
 // ============================================
 
-import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { ALLOWED_TRANSITIONS } from '@/types/spot-quality'
 import type {
@@ -50,7 +49,7 @@ export async function transitionStatus(
     const spotsCollection = await getCollection(COLLECTIONS.SPOTS)
 
     // 1. spots 컬렉션에서 스팟 조회
-    const spot = await spotsCollection.findOne({ _id: new ObjectId(spotId) })
+    const spot = await spotsCollection.findOne({ id: spotId })
 
     // 2. 스팟이 없으면 에러 반환
     if (!spot) {
@@ -74,7 +73,7 @@ export async function transitionStatus(
 
     // 5. spots 컬렉션 업데이트
     await spotsCollection.updateOne(
-      { _id: new ObjectId(spotId) },
+      { id: spotId },
       { $set: { lifecycleStatus: targetStatus, updatedAt: now } }
     )
 
@@ -84,10 +83,10 @@ export async function transitionStatus(
     )
 
     const historyEntry: Omit<LifecycleTransition, never> & {
-      spotId: ObjectId
+      spotId: string
       changedAt: Date
     } = {
-      spotId: new ObjectId(spotId),
+      spotId,
       from: currentStatus,
       to: targetStatus,
       reason,

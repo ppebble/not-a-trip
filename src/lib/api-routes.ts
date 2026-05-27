@@ -16,6 +16,7 @@ export const API_ROUTES = {
     FACILITIES: (id: string) => `/api/spots/${id}/facilities`,
     SCENES: (id: string) => `/api/spots/${id}/scenes`,
     RELATIONS: (id: string) => `/api/spots/${id}/relations`,
+    QUALITY_REPORTS: (id: string) => `/api/spots/${id}/quality-reports`,
     BY_CONTENT: '/api/spots/relations/by-content',
     COMMUNITY_SUMMARY: '/api/spots/community-summary',
   },
@@ -55,6 +56,9 @@ export const API_ROUTES = {
   // Spot Supplements (정보 보완)
   SUPPLEMENTS: {
     BASE: (spotId: string) => `/api/spots/${spotId}/supplements`,
+    REQUESTS: (spotId: string) =>
+      `/api/admin/spots/${spotId}/supplement-requests`,
+    RESPOND: (id: string) => `/api/supplement-requests/${id}/respond`,
   },
 
   // Spot Status Reports (상태 신고)
@@ -106,6 +110,9 @@ export const API_ROUTES = {
   ADMIN: {
     REPORTS: '/api/admin/reports',
     REPORT_DETAIL: (id: string) => `/api/admin/reports/${id}`,
+    QUALITY_REPORTS: '/api/admin/quality-reports',
+    QUALITY_REPORT_REVIEW: (id: string) =>
+      `/api/admin/quality-reports/${id}/review`,
     STATUS_REPORTS: '/api/admin/status-reports',
     STATUS_REPORT_DETAIL: (id: string) => `/api/admin/status-reports/${id}`,
     SUPPLEMENTS: '/api/admin/supplements',

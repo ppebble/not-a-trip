@@ -1,11 +1,13 @@
 const mockGetCollection = jest.fn()
 const mockGetTrackedApiErrorRate24h = jest.fn()
+const mockGetSlaStatistics = jest.fn()
 
 jest.mock('@/lib/db', () => ({
   COLLECTIONS: {
     SPOT_REPORTS: 'spot_reports',
     SPOT_SUPPLEMENTS: 'spot_supplements',
     SPOT_STATUS_REPORTS: 'spot_status_reports',
+    SPOT_QUALITY_REPORTS: 'spot_quality_reports',
     CHECKINS: 'checkins',
     POSTS: 'posts',
     COMMENTS: 'comments',
@@ -18,6 +20,10 @@ jest.mock('@/lib/db', () => ({
 jest.mock('./metrics', () => ({
   getTrackedApiErrorRate24h: (...args: unknown[]) =>
     mockGetTrackedApiErrorRate24h(...args),
+}))
+
+jest.mock('@/lib/spot-quality/report-processor', () => ({
+  getSlaStatistics: (...args: unknown[]) => mockGetSlaStatistics(...args),
 }))
 
 import { buildDashboardSummary } from './dashboard'
@@ -36,6 +42,11 @@ describe('ops dashboard summary', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGetTrackedApiErrorRate24h.mockResolvedValue(12.5)
+    mockGetSlaStatistics.mockResolvedValue({
+      complianceRate: 95,
+      averageProcessingTime: 18,
+      exceededCount: 1,
+    })
 
     const reportsCollection = createCollectionStub({
       countDocuments: jest
@@ -64,6 +75,9 @@ describe('ops dashboard summary', () => {
     })
     const statusReportsCollection = createCollectionStub({
       countDocuments: jest.fn().mockResolvedValue(5),
+    })
+    const qualityReportsCollection = createCollectionStub({
+      countDocuments: jest.fn().mockResolvedValue(6),
     })
     const checkinsCollection = createCollectionStub({
       countDocuments: jest
@@ -126,6 +140,8 @@ describe('ops dashboard summary', () => {
           return supplementsCollection
         case 'spot_status_reports':
           return statusReportsCollection
+        case 'spot_quality_reports':
+          return qualityReportsCollection
         case 'checkins':
           return checkinsCollection
         case 'posts':
@@ -148,11 +164,17 @@ describe('ops dashboard summary', () => {
     expect(result.pendingReports).toBe(3)
     expect(result.pendingSupplements).toBe(4)
     expect(result.pendingStatusReports).toBe(5)
+    expect(result.pendingQualityReports).toBe(6)
     expect(result.dauToday).toBe(3)
     expect(result.totalCheckInsToday).toBe(7)
     expect(result.errorRate24h).toBe(12.5)
     expect(result.newUsersToday).toBe(8)
     expect(result.newSpotsToday).toBe(9)
+    expect(result.qualitySla).toEqual({
+      complianceRate: 95,
+      averageProcessingTime: 18,
+      exceededCount: 1,
+    })
     expect(result.dauTrend).toHaveLength(7)
     expect(result.checkInTrend).toHaveLength(7)
     expect(result.generatedAt).toEqual(expect.any(String))

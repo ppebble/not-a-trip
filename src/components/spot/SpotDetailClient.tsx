@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import {
   useSpotDetailSuspense,
   useNearbyFacilities,
@@ -29,6 +29,13 @@ const StatusReportForm = dynamic(
   () =>
     import('@/components/report/StatusReportForm').then(
       (mod) => mod.StatusReportForm
+    ),
+  { loading: () => null }
+)
+const QualityReportForm = dynamic(
+  () =>
+    import('@/components/report/QualityReportForm').then(
+      (mod) => mod.QualityReportForm
     ),
   { loading: () => null }
 )
@@ -136,12 +143,14 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
     showStatusReportForm,
     handleStatusReportClick,
     closeStatusReportForm,
+    showQualityReportForm,
+    handleQualityReportClick,
+    closeQualityReportForm,
     showLoginModal,
     loginModalContext,
     supplementKey,
   } = useSpotDetailViewModel({ spotId, authorId: spot.authorId })
 
-  const router = useRouter()
   const searchParams = useSearchParams()
   // ?content=작품명 으로 진입 컨텍스트 전달 (작품 허브 → 스팟 상세 이동 시)
   const contentContext = searchParams.get('content') || undefined
@@ -216,10 +225,12 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
           showStatusReportForm={showStatusReportForm}
           handleStatusReportClick={handleStatusReportClick}
           closeStatusReportForm={closeStatusReportForm}
+          showQualityReportForm={showQualityReportForm}
+          handleQualityReportClick={handleQualityReportClick}
+          closeQualityReportForm={closeQualityReportForm}
           showLoginModal={showLoginModal}
           loginModalContext={loginModalContext}
           supplementKey={supplementKey}
-          router={router}
         />
       </main>
     </div>
@@ -238,10 +249,12 @@ interface SpotDetailContentProps {
   showStatusReportForm: boolean
   handleStatusReportClick: () => void
   closeStatusReportForm: () => void
+  showQualityReportForm: boolean
+  handleQualityReportClick: () => void
+  closeQualityReportForm: () => void
   showLoginModal: boolean
-  loginModalContext: 'supplement' | 'status'
+  loginModalContext: 'supplement' | 'status' | 'quality'
   supplementKey: number
-  router: ReturnType<typeof useRouter>
 }
 
 function SpotDetailContent({
@@ -255,10 +268,12 @@ function SpotDetailContent({
   showStatusReportForm,
   handleStatusReportClick,
   closeStatusReportForm,
+  showQualityReportForm,
+  handleQualityReportClick,
+  closeQualityReportForm,
   showLoginModal,
   loginModalContext,
   supplementKey,
-  router,
 }: SpotDetailContentProps) {
   const categoryConfig = spot.category
     ? CATEGORY_CONFIG[spot.category as SpotCategory]
@@ -311,6 +326,34 @@ function SpotDetailContent({
           {spot.spotStatus && spot.spotStatus !== 'normal' && (
             <div className="mb-2 md:mb-3">
               <SpotStatusIndicator status={spot.spotStatus} size="md" />
+            </div>
+          )}
+
+          {(spot.closureSuspected ||
+            spot.lifecycleStatus === 'closed' ||
+            (spot.pendingSupplementCount ?? 0) > 0 ||
+            spot.urgentReviewRequired) && (
+            <div className="mb-3 space-y-2">
+              {spot.lifecycleStatus === 'closed' && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                  이 스팟은 폐업/폐쇄가 확인된 상태입니다.
+                </div>
+              )}
+              {spot.closureSuspected && spot.lifecycleStatus !== 'closed' && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                  폐업 여부 확인 중입니다. 방문 전 최신 정보를 꼭 확인해 주세요.
+                </div>
+              )}
+              {(spot.pendingSupplementCount ?? 0) > 0 && (
+                <div className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-700">
+                  보완 요청 {spot.pendingSupplementCount}건이 진행 중입니다.
+                </div>
+              )}
+              {spot.urgentReviewRequired && (
+                <div className="rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-sm text-purple-700">
+                  동일 유형 신고가 누적되어 관리자 긴급 검토가 필요합니다.
+                </div>
+              )}
             </div>
           )}
 
@@ -500,6 +543,37 @@ function SpotDetailContent({
         </div>
       </div>
 
+      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
+        <div className="p-4 md:p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-text-primary text-lg font-bold md:text-xl">
+              정보 정확도 신고
+            </h2>
+            <button
+              onClick={handleQualityReportClick}
+              className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600"
+            >
+              {showQualityReportForm ? '닫기' : '품질 신고'}
+            </button>
+          </div>
+
+          <p className="mb-4 text-sm text-muted">
+            정보 오류, 폐업/폐쇄, 중복 스팟, 부적절 정보 등을 신고할 수
+            있습니다.
+          </p>
+
+          {showQualityReportForm && (
+            <div className="rounded-lg border border-red-100 p-4">
+              <QualityReportForm
+                spotId={spot.id}
+                onSuccess={closeQualityReportForm}
+                onCancel={closeQualityReportForm}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* 로그인 필요 모달 */}
       <LoginRequiredModal
         isOpen={showLoginModal}
@@ -507,7 +581,9 @@ function SpotDetailContent({
         description={
           loginModalContext === 'status'
             ? '상태 신고를 하려면 로그인이 필요합니다.'
-            : '정보 보완 제보를 하려면 로그인이 필요합니다.'
+            : loginModalContext === 'quality'
+              ? '품질 신고를 하려면 로그인이 필요합니다.'
+              : '정보 보완 제보를 하려면 로그인이 필요합니다.'
         }
       />
 

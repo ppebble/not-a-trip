@@ -5,7 +5,6 @@
 // ============================================
 
 import { NextRequest, NextResponse } from 'next/server'
-import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
 import { extractClientIp, logAdminAction } from '@/lib/audit-log'
 import {
@@ -50,17 +49,9 @@ export async function GET(
 
     const { id } = await params
 
-    // ObjectId 유효성 검증
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { error: '유효하지 않은 스팟 ID입니다' },
-        { status: 400 }
-      )
-    }
-
     // 2. spots 컬렉션에서 스팟 조회
     const spotsCollection = await getCollection(COLLECTIONS.SPOTS)
-    const spot = await spotsCollection.findOne({ _id: new ObjectId(id) })
+    const spot = await spotsCollection.findOne({ id })
 
     if (!spot) {
       return NextResponse.json(
@@ -81,7 +72,7 @@ export async function GET(
       COLLECTIONS.SPOT_LIFECYCLE_HISTORY
     )
     const history = await historyCollection
-      .find({ spotId: new ObjectId(id) })
+      .find({ spotId: id })
       .sort({ changedAt: -1 })
       .limit(20)
       .toArray()
@@ -128,14 +119,6 @@ export async function PUT(
 
     const { id } = await params
 
-    // ObjectId 유효성 검증
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { error: '유효하지 않은 스팟 ID입니다' },
-        { status: 400 }
-      )
-    }
-
     // 2. 요청 바디 파싱
     let body: { targetStatus?: unknown; reason?: unknown }
     try {
@@ -166,9 +149,7 @@ export async function PUT(
     const reasonStr = typeof reason === 'string' ? reason : ''
 
     const spotsCollection = await getCollection(COLLECTIONS.SPOTS)
-    const existingSpot = await spotsCollection.findOne({
-      _id: new ObjectId(id),
-    })
+    const existingSpot = await spotsCollection.findOne({ id })
 
     if (!existingSpot) {
       return NextResponse.json(

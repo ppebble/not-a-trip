@@ -32,9 +32,14 @@ interface UseSpotDetailViewModelReturn {
   handleStatusReportClick: () => void
   closeStatusReportForm: () => void
 
+  // 품질 신고 폼
+  showQualityReportForm: boolean
+  handleQualityReportClick: () => void
+  closeQualityReportForm: () => void
+
   // 로그인 모달
   showLoginModal: boolean
-  loginModalContext: 'supplement' | 'status'
+  loginModalContext: 'supplement' | 'status' | 'quality'
 }
 
 export function useSpotDetailViewModel({
@@ -60,11 +65,12 @@ export function useSpotDetailViewModel({
 
   // 상태 신고 폼 상태
   const [showStatusReportForm, setShowStatusReportForm] = useState(false)
+  const [showQualityReportForm, setShowQualityReportForm] = useState(false)
 
   // 로그인 모달 상태
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [loginModalContext, setLoginModalContext] = useState<
-    'supplement' | 'status'
+    'supplement' | 'status' | 'quality'
   >('supplement')
 
   // 스팟 삭제 핸들러
@@ -137,6 +143,19 @@ export function useSpotDetailViewModel({
     setShowStatusReportForm((prev) => !prev)
   }, [isAuthenticated])
 
+  const closeQualityReportForm = useCallback(() => {
+    setShowQualityReportForm(false)
+  }, [])
+
+  const handleQualityReportClick = useCallback(() => {
+    if (!isAuthenticated) {
+      setLoginModalContext('quality')
+      setShowLoginModal(true)
+      return
+    }
+    setShowQualityReportForm((prev) => !prev)
+  }, [isAuthenticated])
+
   return {
     hasEditPermission,
     hasDeletePermission,
@@ -150,6 +169,9 @@ export function useSpotDetailViewModel({
     showStatusReportForm,
     handleStatusReportClick,
     closeStatusReportForm,
+    showQualityReportForm,
+    handleQualityReportClick,
+    closeQualityReportForm,
     showLoginModal,
     loginModalContext,
   }

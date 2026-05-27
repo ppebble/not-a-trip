@@ -10,6 +10,7 @@ import {
   SpotContentRelation,
 } from '@/types'
 import type { SpotStatus } from '@/types/report'
+import type { SpotLifecycleStatus } from '@/types/spot-quality'
 import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 
 // Types for spot data
@@ -21,6 +22,10 @@ export interface SpotPin {
   category?: SpotCategory
   /** 인증 수 (인기 스팟 표시용) */
   checkInCount?: number
+  lifecycleStatus?: SpotLifecycleStatus
+  closureSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
 }
 
 export interface SpotPreviewData {
@@ -60,6 +65,12 @@ export interface SpotDetailData {
   firstReporterName?: string
   /** 스팟-작품 관계 목록 (30-spot-content-relation) */
   relations?: SpotContentRelation[]
+  lifecycleStatus?: SpotLifecycleStatus
+  closureSuspected?: boolean
+  closureConfirmedAt?: string
+  duplicateSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
 }
 
 // API response types

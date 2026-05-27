@@ -99,13 +99,19 @@ export default function AdminDashboardPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
               {[
                 ['오늘 DAU', summary?.dauToday ?? 0],
                 ['오늘 체크인', summary?.totalCheckInsToday ?? 0],
                 ['24시간 5xx 비율', `${summary?.errorRate24h ?? 0}%`],
                 ['오늘 신규 사용자', summary?.newUsersToday ?? 0],
                 ['오늘 신규 스팟', summary?.newSpotsToday ?? 0],
+                ['품질 신고 대기', summary?.pendingQualityReports ?? 0],
+                [
+                  '품질 SLA 준수율',
+                  `${summary?.qualitySla?.complianceRate ?? 0}%`,
+                ],
+                ['품질 SLA 초과', summary?.qualitySla?.exceededCount ?? 0],
               ].map(([label, value]) => (
                 <div
                   key={String(label)}

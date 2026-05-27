@@ -35,6 +35,8 @@ export async function GET(request: NextRequest) {
       nearby: result.nearbyItems,
       highDuplicates: result.highDuplicates,
       proximityWarnings: result.proximityWarnings,
+      total: result.nearbyItems.length,
+      radius,
     })
   } catch (error) {
     // graceful degradation: 중복 감지 실패 시 경고 없이 진행 허용
@@ -44,6 +46,8 @@ export async function GET(request: NextRequest) {
       nearby: [],
       highDuplicates: [],
       proximityWarnings: [],
+      total: 0,
+      radius,
     })
   }
 }

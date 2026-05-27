@@ -113,7 +113,8 @@ const createImagePinIcon = (
   thumbnailUrl: string,
   isHovered: boolean = false,
   category?: SpotCategory,
-  checkInCount?: number
+  checkInCount?: number,
+  isClosed?: boolean
 ) => {
   const size = isHovered ? PIN_SIZES.hovered : PIN_SIZES.base
   const categoryColor = getCategoryColor(category)
@@ -126,6 +127,7 @@ const createImagePinIcon = (
     : ''
 
   const isPopular = checkInCount && checkInCount >= 10
+  const opacity = isClosed ? 0.55 : 1
   const popularBadge = isPopular
     ? `<div style="position:absolute;top:-4px;right:-4px;background:linear-gradient(135deg,${MAP_THEME_COLORS.popularStart},${MAP_THEME_COLORS.popularEnd});color:white;font-size:10px;font-weight:bold;padding:2px 4px;border-radius:8px;box-shadow:0 2px 4px rgb(var(--color-text) / 0.2);z-index:10;">🔥${checkInCount}</div>`
     : ''
@@ -145,7 +147,7 @@ const createImagePinIcon = (
   return L.divIcon({
     className: `custom-image-spot-pin ${hoverClass}`,
     html: `
-      <div class="image-pin-container ${hoverClass}" style="width:${size}px;height:${size + 12}px;position:relative;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,${shadowIntensity}));transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);">
+      <div class="image-pin-container ${hoverClass}" style="width:${size}px;height:${size + 12}px;position:relative;cursor:pointer;opacity:${opacity};filter:drop-shadow(0 4px 8px rgba(0,0,0,${shadowIntensity}));transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);">
         <div class="image-circle" style="width:${size}px;height:${size}px;border-radius:50%;border:${borderWidth}px solid ${borderColor};overflow:hidden;background:${MAP_THEME_COLORS.markerPlaceholder};box-shadow:0 2px 8px rgb(var(--color-text) / 0.2);transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);${glowEffect}">
           ${imageContent}
         </div>
@@ -211,7 +213,8 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
       spot.thumbnailUrl,
       false,
       spot.category,
-      spot.checkInCount
+      spot.checkInCount,
+      spot.lifecycleStatus === 'closed'
     )
 
     // ── 마커 생성 ──
@@ -230,7 +233,8 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
           spot.thumbnailUrl,
           hovered,
           spot.category,
-          spot.checkInCount
+          spot.checkInCount,
+          spot.lifecycleStatus === 'closed'
         )
       )
       marker.setZIndexOffset(hovered ? Z_INDEX.hovered : Z_INDEX.base)
@@ -312,6 +316,7 @@ export default memo(function SpotPin({ spot, onSelect }: SpotPinProps) {
     spot.thumbnailUrl,
     spot.category,
     spot.checkInCount,
+    spot.lifecycleStatus,
   ])
 
   // React 렌더에서는 아무것도 렌더링하지 않음 — 마커는 Leaflet이 직접 관리

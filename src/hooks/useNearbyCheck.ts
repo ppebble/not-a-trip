@@ -17,6 +17,8 @@ export interface NearbyItem {
 /** 근처 검색 응답 */
 interface NearbyResponse {
   nearby: NearbyItem[]
+  highDuplicates: NearbyItem[]
+  proximityWarnings: NearbyItem[]
   total: number
   radius: number
 }
@@ -75,6 +77,8 @@ export function useNearbyCheck(
   return {
     ...query,
     nearbyItems: query.data?.nearby ?? [],
-    hasNearby: (query.data?.total ?? 0) > 0,
+    highDuplicates: query.data?.highDuplicates ?? [],
+    proximityWarnings: query.data?.proximityWarnings ?? [],
+    hasNearby: (query.data?.nearby.length ?? 0) > 0,
   }
 }
