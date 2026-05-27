@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import Link from 'next/link'
 import { CheckIn } from '@/types'
 import { AppIcon } from '@/components/common/AppIcon'
@@ -308,7 +309,7 @@ export function CheckInDetailModal({
           ) : activeCheckIn ? (
             <div className="relative aspect-video overflow-hidden rounded-lg">
               <Image
-                src={activeCheckIn.photoUrl}
+                src={getSafeImageSrc(activeCheckIn.photoUrl)}
                 alt="인증 사진"
                 fill
                 sizes="(max-width: 768px) 100vw, 672px"

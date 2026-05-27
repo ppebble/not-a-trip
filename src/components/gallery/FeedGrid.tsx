@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc, FALLBACK_IMAGE_SRC } from '@/lib/safe-image-src'
 import { CheckIn } from '@/types'
 
 /**
@@ -29,11 +30,7 @@ export interface FeedGridProps {
 
 /** 그리드 아이템 (정사각형 + 호버 오버레이) */
 function getFeedImageSrc(photoUrl: string, hasError: boolean): string {
-  if (hasError || photoUrl.includes('picsum.photos/seed/')) {
-    return '/icons/categories/other.webp'
-  }
-
-  return photoUrl
+  return hasError ? FALLBACK_IMAGE_SRC : getSafeImageSrc(photoUrl)
 }
 
 function FeedGridItem({

@@ -46,7 +46,7 @@ function resolveLandingPhoto(
     return photoUrl
   }
 
-  return REAL_SPOT_PHOTO_FALLBACKS[spotId]?.imageUrl ?? photoUrl ?? null
+  return REAL_SPOT_PHOTO_FALLBACKS[spotId]?.imageUrl ?? null
 }
 
 /**

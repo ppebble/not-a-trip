@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { CONTENT_TYPE_CONFIG, ContentType } from '@/types/spot'
 
 /**
@@ -111,7 +112,7 @@ function ContentCard({ content, onClick }: ContentCardProps) {
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100">
         {content.imageUrl && !imageError ? (
           <Image
-            src={content.imageUrl}
+            src={getSafeImageSrc(content.imageUrl)}
             alt={`${content.title} 포스터`}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"

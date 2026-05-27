@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { CATEGORY_CONFIG, type SpotCategory } from '@/types/spot'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 /**
  * 소셜 프루프 카드 컴포넌트
@@ -32,7 +33,9 @@ export function ProofCard({
   const [imageError, setImageError] = useState(false)
   const [sceneError, setSceneError] = useState(false)
   const categoryConfig = CATEGORY_CONFIG[categoryTag]
-  const hasScene = sceneImage && !sceneError
+  const safeImage = image ? getSafeImageSrc(image) : undefined
+  const safeSceneImage = sceneImage ? getSafeImageSrc(sceneImage) : undefined
+  const hasScene = safeSceneImage && !sceneError
 
   return (
     <article className="flex w-64 shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-surface md:w-72">
@@ -43,9 +46,9 @@ export function ProofCard({
           <div className="flex h-full">
             {/* 스팟 실제 사진 */}
             <div className="relative h-full w-1/2 overflow-hidden">
-              {image && !imageError ? (
+              {safeImage && !imageError ? (
                 <Image
-                  src={image}
+                  src={safeImage}
                   alt={`${spotName} 실제 사진`}
                   fill
                   className="object-cover"
@@ -64,7 +67,7 @@ export function ProofCard({
             {/* 작품 속 장면 */}
             <div className="relative h-full w-1/2 overflow-hidden">
               <Image
-                src={sceneImage}
+                src={safeSceneImage}
                 alt={`${spotName} 작품 속 장면`}
                 fill
                 className="object-cover"
@@ -76,10 +79,10 @@ export function ProofCard({
               </span>
             </div>
           </div>
-        ) : image && !imageError ? (
+        ) : safeImage && !imageError ? (
           /* 단일 이미지 (기존 레이아웃) */
           <Image
-            src={image}
+            src={safeImage}
             alt={`${spotName} 성지순례 인증`}
             fill
             className="object-cover"

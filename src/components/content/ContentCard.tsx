@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { CONTENT_TYPE_CONFIG } from '@/types'
 import type { ContentListItem } from './ContentListClient'
 
@@ -31,7 +32,7 @@ export function ContentCard({ content }: ContentCardProps) {
       <div className="relative aspect-[4/3] w-full bg-border/30">
         {content.imageUrl && !imageError ? (
           <Image
-            src={content.imageUrl}
+            src={getSafeImageSrc(content.imageUrl)}
             alt={`${content.contentName} 대표 이미지`}
             fill
             className="object-cover transition-transform group-hover:scale-105"

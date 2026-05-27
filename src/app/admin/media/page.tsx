@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useAdminAuth } from '@/hooks/useAdminAuth'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import {
   type AdminMediaScene,
   useAdminSpotMedia,
@@ -150,7 +151,7 @@ export default function AdminMediaPage() {
                     className="relative aspect-video overflow-hidden rounded-lg border"
                   >
                     <Image
-                      src={photo}
+                      src={getSafeImageSrc(photo)}
                       alt="스팟 사진"
                       fill
                       className="object-cover"
@@ -199,7 +200,7 @@ export default function AdminMediaPage() {
                       {scene.imageUrl ? (
                         <div className="relative aspect-video overflow-hidden rounded-lg border">
                           <Image
-                            src={scene.imageUrl}
+                            src={getSafeImageSrc(scene.imageUrl)}
                             alt="작품 장면"
                             fill
                             className="object-cover"

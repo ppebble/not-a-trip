@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { Scene } from '@/types'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { useLikedSceneIds } from '@/stores/likeStore'
 
 interface SceneImageModalProps {
@@ -33,6 +34,7 @@ export default function SceneImageModal({
   const imageContainerRef = useRef<HTMLDivElement>(null)
 
   const currentScene = scenes[currentIndex]
+  const currentSceneImageUrl = getSafeImageSrc(currentScene.imageUrl)
   const isLiked = likedSceneIds.has(currentScene.id)
 
   // 이전 장면으로 이동
@@ -235,7 +237,7 @@ export default function SceneImageModal({
           style={{ transform: `scale(${scale})` }}
         >
           <Image
-            src={currentScene.imageUrl}
+            src={currentSceneImageUrl}
             alt={currentScene.episodeInfo || '장면 이미지'}
             fill
             className="object-contain"

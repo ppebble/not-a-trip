@@ -10,6 +10,7 @@ import {
   RELATION_TYPE_LABELS,
 } from '@/types'
 import { ContentTypeIcon } from '@/components/common'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 // 콘텐츠 타입 라벨 설정
 const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
@@ -224,7 +225,7 @@ function RelationCard({ relation }: RelationCardProps) {
           {relation.contentImageUrl ? (
             <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-border">
               <Image
-                src={relation.contentImageUrl}
+                src={getSafeImageSrc(relation.contentImageUrl)}
                 alt={relation.contentName}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"
@@ -299,7 +300,7 @@ function RelatedContentCard({ content }: RelatedContentCardProps) {
           {content.imageUrl ? (
             <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-border">
               <Image
-                src={content.imageUrl}
+                src={getSafeImageSrc(content.imageUrl)}
                 alt={content.name}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"

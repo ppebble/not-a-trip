@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { AppIcon } from '@/components/common/AppIcon'
 
 /**
@@ -221,13 +222,15 @@ export function RankingList({
                   <div className="relative aspect-square w-full overflow-hidden">
                     {!hasImageError ? (
                       <Image
-                        src={item.photoUrl}
+                        src={getSafeImageSrc(item.photoUrl)}
                         alt={`${item.userName}님의 인증샷`}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={() => handleCheckInImageError(item.checkInId)}
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                        unoptimized={item.photoUrl.startsWith('http')}
+                        unoptimized={getSafeImageSrc(item.photoUrl).startsWith(
+                          'http'
+                        )}
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-3xl">

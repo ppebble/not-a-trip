@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import type { SpotCategory } from '@/types/spot'
 import type { ShowcaseCard } from './data/showcaseCards'
 import { getCategoryAccentColor } from './data/showcaseCards'
@@ -87,6 +88,7 @@ export function FloatingCard({
   const { width, height } = SIZE_CONFIG[size]
   const accentColor = getCategoryAccentColor(card.category)
   const iconSrc = `/icons/categories/${card.category}.webp`
+  const imageSrc = getSafeImageSrc(card.imageUrl)
   const altText = `${card.spotName} - ${card.contentName}`
   const iconSize = ICON_SIZE_CONFIG[size]
 
@@ -165,7 +167,7 @@ export function FloatingCard({
 
         {/* 실제 이미지 (유효한 경우에만 표시) */}
         <Image
-          src={card.imageUrl}
+          src={imageSrc}
           alt={altText}
           fill
           sizes={`${width}px`}

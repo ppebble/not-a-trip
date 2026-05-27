@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Scene } from '@/types'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { useLikedSceneIds } from '@/stores/likeStore'
 
 interface SceneCardProps {
@@ -30,6 +31,7 @@ export function SceneCard({
   // 낙관적 업데이트를 위한 로컬 좋아요 수 관리
   const [localLikeCount, setLocalLikeCount] = useState(scene.likeCount)
   const [prevLiked, setPrevLiked] = useState(liked)
+  const sceneImageUrl = getSafeImageSrc(scene.imageUrl)
 
   // liked 상태가 변경되면 localLikeCount 업데이트 (낙관적 업데이트)
   useEffect(() => {
@@ -64,7 +66,7 @@ export function SceneCard({
       aria-label={`${scene.episodeInfo || '장면'} 전체보기`}
     >
       <Image
-        src={scene.imageUrl}
+        src={sceneImageUrl}
         alt={scene.episodeInfo || '장면 이미지'}
         fill
         className="object-cover"
