@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
@@ -9,6 +9,7 @@ interface MascotLoaderProps {
   caption?: string
   size?: number
   className?: string
+  frames?: MascotVariant[]
 }
 
 const LOADER_FRAMES: MascotVariant[] = ['main', 'greeting', 'confirm', 'cheer']
@@ -18,20 +19,22 @@ export function MascotLoader({
   caption,
   size = 112,
   className = '',
+  frames = LOADER_FRAMES,
 }: MascotLoaderProps) {
   const [frameIndex, setFrameIndex] = useState(0)
+  const activeFrames = frames.length > 0 ? frames : LOADER_FRAMES
   const frame = useMemo(
-    () => LOADER_FRAMES[frameIndex % LOADER_FRAMES.length],
-    [frameIndex]
+    () => activeFrames[frameIndex % activeFrames.length],
+    [activeFrames, frameIndex]
   )
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setFrameIndex((prev) => (prev + 1) % LOADER_FRAMES.length)
+      setFrameIndex((prev) => (prev + 1) % activeFrames.length)
     }, 700)
 
     return () => window.clearInterval(timer)
-  }, [])
+  }, [activeFrames.length])
 
   return (
     <div
@@ -54,7 +57,7 @@ export function MascotLoader({
         />
       </div>
       <div className="flex items-center gap-1.5" aria-hidden="true">
-        {LOADER_FRAMES.map((variant, index) => (
+        {activeFrames.map((variant, index) => (
           <span
             key={variant}
             className={`h-2.5 w-2.5 rounded-full transition-all ${

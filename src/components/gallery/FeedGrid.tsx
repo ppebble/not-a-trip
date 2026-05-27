@@ -28,6 +28,14 @@ export interface FeedGridProps {
 }
 
 /** 그리드 아이템 (정사각형 + 호버 오버레이) */
+function getFeedImageSrc(photoUrl: string, hasError: boolean): string {
+  if (hasError || photoUrl.includes('picsum.photos/seed/')) {
+    return '/icons/categories/other.webp'
+  }
+
+  return photoUrl
+}
+
 function FeedGridItem({
   checkIn,
   spotName,
@@ -49,7 +57,7 @@ function FeedGridItem({
       aria-label={`${checkIn.userName}님의 ${spotName} 인증샷`}
     >
       <Image
-        src={imageError ? '/images/placeholder-spot.jpg' : checkIn.photoUrl}
+        src={getFeedImageSrc(checkIn.photoUrl, imageError)}
         alt={`${checkIn.userName}의 인증샷`}
         fill
         className="object-cover"

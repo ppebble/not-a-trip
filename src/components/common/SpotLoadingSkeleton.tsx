@@ -1,4 +1,7 @@
-﻿import { MascotLoader } from './MascotLoader'
+import { MascotLoader } from './MascotLoader'
+import type { MascotVariant } from './mascotAssets'
+
+const SPOT_LOADING_FRAMES: MascotVariant[] = ['greeting', 'confirm', 'cheer']
 
 /**
  * 스팟 데이터 로딩 중 표시되는 컴포넌트
@@ -17,6 +20,7 @@ export function SpotLoadingSkeleton() {
           label="숨은 장소를 찾고 있어요"
           caption="주변 스팟과 관련 정보를 정리하는 중입니다."
           size={112}
+          frames={SPOT_LOADING_FRAMES}
         />
       </div>
     </div>
