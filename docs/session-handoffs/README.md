@@ -4,6 +4,27 @@ This directory is the manual handoff surface for closing one agent session and s
 
 Use it when you are about to close Codex/OMX and want the next session to continue without reconstructing context from chat history.
 
+## Agent invocation contract
+
+When the user says any of the following, the agent must execute this document as a runbook:
+
+- "handoff 작업을 시작해"
+- "handoff process 시작"
+- "다음 세션 인수인계 작성해"
+- "세션 종료용 handoff 만들어"
+
+This is a **manual user-triggered process**, not an automatic hook. Do not run it merely because a session is long. Run it when the user asks for handoff, or when project instructions explicitly require handoff before ending a substantial session.
+
+Expected agent behavior after invocation:
+
+1. Inspect current repo state and recent work using the commands below.
+2. Create or update one handoff file under this directory.
+3. Record continuation-critical facts only.
+4. If the handoff itself changes files, commit it unless the user explicitly says not to commit.
+5. Report the handoff file path, commit SHA if committed, and final working-tree state.
+
+Do not ask whether to proceed unless there are destructive or ambiguous choices. The safe default is to create a new dated handoff file.
+
 ## When to write a handoff
 
 Write or update a handoff when any of these are true:
@@ -23,6 +44,7 @@ Skip a handoff for trivial, fully committed one-line fixes where `git log -1` is
    git status -sb
    git log --oneline -8
    git diff --stat
+   git diff --name-only
    ```
 
 2. Confirm required process references before any Git/PR text.
@@ -32,7 +54,11 @@ Skip a handoff for trivial, fully committed one-line fixes where `git log -1` is
    - `docs/git-workflow.md`
    - `AGENTS.md`
 
-3. Create a new file from `_template.md`.
+3. Decide whether to create or update a handoff file.
+
+   - If there is no handoff for the current workstream/date, create a new file from `_template.md`.
+   - If a same-day handoff already exists for the same workstream, update it.
+   - If in doubt, create a new file and cross-reference the previous one.
 
    Naming convention:
 
@@ -58,9 +84,36 @@ Skip a handoff for trivial, fully committed one-line fixes where `git log -1` is
    - exhaustive file lists when commits already encode the work
    - speculation that the next agent cannot verify
 
-5. If there are uncommitted user-authored changes, call them out explicitly and do not hide them inside your own summary.
+5. Capture ownership of uncommitted changes.
 
-6. Before final response, state the handoff file path and whether the working tree is clean.
+   - Separate user-authored changes from agent-authored changes when possible.
+   - If unsure who authored a change, mark it as "unattributed working-tree change".
+   - Do not stage unrelated user-authored changes silently.
+
+6. Verification for the handoff itself.
+
+   - Run `npx prettier --write docs/session-handoffs/<file>.md` when practical.
+   - If only docs changed, runtime tests are not required.
+   - If code changed since the last verified state, record which tests were already run and which should be run next.
+
+7. Commit behavior.
+
+   - Commit the handoff docs if they are the agent's own changes.
+   - Use a docs commit, for example:
+
+     ```bash
+     git add docs/session-handoffs/<file>.md
+     git commit -m "docs: update session handoff"
+     ```
+
+   - Follow repository commit rules and include Lore-style trailers when useful.
+
+8. Before final response, state:
+
+   - handoff file path
+   - whether it was committed
+   - final `git status -sb`
+   - safest next action for the next session
 
 ## Minimum acceptable handoff
 
@@ -71,3 +124,14 @@ A valid handoff must let the next agent answer these questions in under one minu
 3. What has already been verified?
 4. What must not be changed/re-litigated?
 5. What is the safest next action?
+
+## Quality bar
+
+The handoff is incomplete if it only says "work completed." It must preserve the operational state required for the next agent to continue safely:
+
+- exact branch
+- exact latest commits
+- pending files
+- verification status
+- constraints not to violate
+- next commands/actions
