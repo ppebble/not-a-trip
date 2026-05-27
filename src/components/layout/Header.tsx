@@ -6,20 +6,69 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AppIcon } from '@/components/common/AppIcon'
 
+type NavItem = {
+  href: string
+  label: string
+  icon?: 'gallery' | 'map' | 'spot' | 'content-wise'
+  match?: (pathname: string) => boolean
+}
+
 const HeaderAuthControls = dynamic(() => import('./HeaderAuthControls'), {
   ssr: false,
-  loading: () => <div className="h-8 w-20 animate-pulse rounded bg-muted/30" />,
+  loading: () => (
+    <div className="h-10 w-24 animate-pulse rounded-xl bg-muted/30" />
+  ),
 })
 
 const HeaderThemeSelectorHost = dynamic(
   () => import('./HeaderThemeSelectorHost'),
   {
     ssr: false,
-    loading: () => <div className="h-9 w-9" aria-hidden="true" />,
+    loading: () => <div className="h-10 w-10" aria-hidden="true" />,
   }
 )
 
 const HIDDEN_HEADER_PATHS = ['/welcome']
+
+const NAV_ITEMS: NavItem[] = [
+  { href: '/', label: '홈', match: (pathname) => pathname === '/' },
+  {
+    href: '/contents',
+    label: '작품 탐색',
+    icon: 'content-wise',
+    match: (pathname) => pathname.startsWith('/contents'),
+  },
+  {
+    href: '/gallery',
+    label: '성지 인증',
+    icon: 'gallery',
+    match: (pathname) => pathname.startsWith('/gallery'),
+  },
+  {
+    href: '/routes',
+    label: '성지 코스',
+    icon: 'map',
+    match: (pathname) => pathname.startsWith('/routes'),
+  },
+  {
+    href: '/spots/register',
+    label: '스팟 등록',
+    icon: 'spot',
+    match: (pathname) => pathname.startsWith('/spots/register'),
+  },
+]
+
+function getNavLinkClass(isActive: boolean, mobile = false) {
+  const base = mobile
+    ? 'flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-medium transition hover:bg-secondary-100'
+    : 'rounded-xl px-3 py-2 text-base font-medium transition hover:bg-secondary-100 hover:text-secondary-400'
+
+  return `${base} ${
+    isActive
+      ? 'bg-secondary-100 text-secondary-400'
+      : 'text-text-secondary hover:text-text-primary'
+  }`
+}
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -33,97 +82,67 @@ export function Header() {
     return null
   }
 
-  const handleResetTour = () => {
-    try {
-      const keys = Object.keys(localStorage).filter((k) =>
-        k.startsWith('not-a-trip-onboarding')
-      )
-      keys.forEach((k) => localStorage.removeItem(k))
-      window.location.reload()
-    } catch {
-      // localStorage 접근 실패는 무시
-    }
-  }
-
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
   return (
     <>
-      <div className="h-14" aria-hidden="true" />
+      <div className="h-16" aria-hidden="true" />
       <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-text-primary flex items-center gap-1.5 text-xl font-bold">
-              <AppIcon name="logo" size="2xl" className="max-h-8" />
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-5">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-2.5 rounded-xl py-1 pr-2 transition hover:opacity-90"
+            aria-label="Not a Trip 홈으로 이동"
+          >
+            <AppIcon
+              name="logo"
+              size="2xl"
+              className="max-h-9"
+              alt="Not a Trip"
+            />
+            <span className="text-text-primary truncate text-xl font-bold sm:text-2xl">
               Not a Trip
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-6 md:flex">
-            <Link
-              href="/"
-              className="text-text-secondary text-sm transition hover:text-secondary-400"
-            >
-              홈
-            </Link>
-            <Link
-              href="/contents"
-              className={`text-sm transition hover:text-secondary-400 ${
-                pathname.startsWith('/contents')
-                  ? 'font-semibold text-secondary-400'
-                  : 'text-text-secondary'
-              }`}
-            >
-              작품 탐색
-            </Link>
-            <Link
-              href="/gallery"
-              className="text-text-secondary text-sm transition hover:text-secondary-400"
-            >
-              성지 인증
-            </Link>
-            <Link
-              href="/routes"
-              className="text-text-secondary text-sm transition hover:text-secondary-400"
-            >
-              성지 코스
-            </Link>
-            <Link
-              href="/spots/register"
-              className="text-text-secondary text-sm transition hover:text-secondary-400"
-            >
-              스팟 등록
-            </Link>
-            <button
-              onClick={handleResetTour}
-              className="text-text-secondary text-sm transition hover:text-secondary-400"
-            >
-              온보딩 다시 보기
-            </button>
-            <Link
-              href="/test/globe-fallback"
-              className="text-sm text-yellow-400 transition hover:text-yellow-300"
-            >
-              Globe 테스트
-            </Link>
+          <nav
+            className="hidden items-center gap-1 lg:flex"
+            aria-label="주요 메뉴"
+          >
+            {NAV_ITEMS.map((item) => {
+              const isActive = item.match?.(pathname) ?? pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={getNavLinkClass(isActive)}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <HeaderAuthControls />
             <HeaderThemeSelectorHost />
 
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-text-secondary hover:text-text-primary flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-secondary-100 md:hidden"
-              aria-label="메뉴 열기"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              className="text-text-secondary hover:text-text-primary flex h-10 w-10 items-center justify-center rounded-xl transition hover:bg-secondary-100 lg:hidden"
+              aria-label={isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-header-menu"
             >
               {isMobileMenuOpen ? (
                 <svg
-                  className="h-5 w-5"
+                  className="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   strokeWidth={2}
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -133,11 +152,12 @@ export function Header() {
                 </svg>
               ) : (
                 <svg
-                  className="h-5 w-5"
+                  className="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   strokeWidth={2}
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -151,69 +171,34 @@ export function Header() {
         </div>
 
         {isMobileMenuOpen && (
-          <nav className="border-t border-border bg-surface/95 backdrop-blur-sm md:hidden">
+          <nav
+            id="mobile-header-menu"
+            className="border-t border-border bg-surface/95 backdrop-blur-sm lg:hidden"
+            aria-label="모바일 메뉴"
+          >
             <div className="space-y-1 px-4 py-3">
-              <Link
-                href="/"
-                onClick={closeMobileMenu}
-                className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
-              >
-                홈
-              </Link>
-              <Link
-                href="/contents"
-                onClick={closeMobileMenu}
-                className={`block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100 ${
-                  pathname.startsWith('/contents')
-                    ? 'font-semibold text-secondary-400'
-                    : 'text-text-secondary hover:text-text-primary'
-                }`}
-              >
-                작품 탐색
-              </Link>
-              <Link
-                href="/gallery"
-                onClick={closeMobileMenu}
-                className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
-              >
-                <AppIcon name="gallery" size="sm" />
-                성지 인증
-              </Link>
-              <Link
-                href="/routes"
-                onClick={closeMobileMenu}
-                className="text-text-secondary hover:text-text-primary flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
-              >
-                <AppIcon name="map" size="sm" />
-                성지 코스
-              </Link>
-              <Link
-                href="/spots/register"
-                onClick={closeMobileMenu}
-                className="text-text-secondary hover:text-text-primary block rounded-lg px-3 py-2 text-sm transition hover:bg-secondary-100"
-              >
-                스팟 등록
-              </Link>
-              <button
-                onClick={() => {
-                  closeMobileMenu()
-                  handleResetTour()
-                }}
-                className="text-text-secondary hover:text-text-primary block w-full rounded-lg px-3 py-2 text-left text-sm transition hover:bg-secondary-100"
-              >
-                온보딩 다시 보기
-              </button>
-              <Link
-                href="/test/globe-fallback"
-                onClick={closeMobileMenu}
-                className="block rounded-lg px-3 py-2 text-sm text-yellow-400 transition hover:bg-secondary-100 hover:text-yellow-300"
-              >
-                Globe 테스트
-              </Link>
-              <HeaderAuthControls
-                mobileMenuOpen
-                onMobileNavigate={closeMobileMenu}
-              />
+              {NAV_ITEMS.map((item) => {
+                const isActive =
+                  item.match?.(pathname) ?? pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeMobileMenu}
+                    className={getNavLinkClass(isActive, true)}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {item.icon && <AppIcon name={item.icon} size="sm" alt="" />}
+                    {item.label}
+                  </Link>
+                )
+              })}
+              <div className="border-t border-border pt-2">
+                <HeaderAuthControls
+                  mobileMenuOpen
+                  onMobileNavigate={closeMobileMenu}
+                />
+              </div>
             </div>
           </nav>
         )}
