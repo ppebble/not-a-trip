@@ -2,13 +2,17 @@
 
 ## Branch and State
 
-- Branch: `enhancement/admin-quality-reports-ui`
-- Working tree at handoff creation: contains this handoff/docs update and the user's AGENTS.md persona addition.
+- Branch: `develop`
+- Working tree at final handoff update: this handoff file is being updated after PR merge.
 - Recent baseline includes merged spec 40 work at `0d7f7fa`.
-- PR status: not confirmed in this session; next session should run `git remote -v` and `gh pr status` if GitHub CLI is available.
+- PR status: PR #859 was created from `enhancement/admin-quality-reports-ui` into `develop` and merged successfully.
+- Merge commit: `d089bda Merge pull request #859 from ppebble/enhancement/admin-quality-reports-ui`.
 
 ## Latest Commits
 
+- `d089bda Merge pull request #859 from ppebble/enhancement/admin-quality-reports-ui` — merged this workstream into `develop`.
+- `f911e41 docs: clarify user-triggered handoff runbook` — makes handoff creation a user-triggered runbook.
+- `bd15a35 docs: add manual session handoff process` — adds handoff directory, template, and initial handoff.
 - `0a573d6 fix: relax api rate limiting for app entry` — splits API rate limits by read/write/path, disables dev rate limiting by default, prevents 429 retry storms, and sends authenticated landing users to `/map`.
 - `ece4d54 fix: guard placeholder image sources` — blocks `picsum.photos` / placeholder image URLs from reaching `next/image` without allowlisting placeholder hosts.
 - `0350bbb feat: unify admin media management` — unifies content master images and adds admin media editing for spot photos/scenes.
@@ -31,10 +35,13 @@
 ## Verification Evidence
 
 - `npm run type-check` — passed after image/rate-limit/auth changes.
+- `npm run type-check` — passed again after `npm run build` regenerated `.next/types`.
+- `npm run lint` — passed before PR/merge; existing repo-wide warnings remain.
+- `npm run build` — passed before PR/merge; existing repo-wide warnings remain.
 - `npx jest --runInBand --runTestsByPath src/components/landing/data/__tests__/fetchProofImages.test.ts src/app/api/spots/showcase/__tests__/route.test.ts` — passed after image placeholder work.
 - `npx jest --runInBand --runTestsByPath src/lib/security/rate-limit.test.ts src/app/api/auth/login-status/__tests__/route.test.ts` — passed after rate-limit/auth work.
 - Changed-file `npx next lint --file ...` — passed for the modified rate-limit/auth files; earlier image lint passed with existing unrelated warnings in `OptimizedImage` and `fetchShowcaseSpots`.
-- `npm run build` passed earlier in the media-management workstream; run it again before PR because later commits changed middleware/auth/docs.
+- PR #859 merge was completed after the verification above.
 
 ## Known Constraints / Do Not Re-open
 
@@ -51,16 +58,18 @@
   - initial `/map` load without 429 spam
   - admin media/content image editing
   - admin quality report review and supplement request actions
-- Branch contains many feature slices; PR should be reviewed by commit group rather than as one undifferentiated diff.
-- Push/PR/merge status was not confirmed after the latest commits.
+- Browser smoke test remains recommended because this session did not run an interactive browser:
+  - incognito login from landing page should land on `/map`
+  - initial `/map` load should not spam 429s
+  - admin media/content image editing should render and save
+  - admin quality report review and supplement request actions should render and save
+- This handoff update may exist as a small docs commit after merge if committed separately on `develop`.
 
 ## Recommended Next Actions
 
-1. Run `git status -sb` and confirm whether this handoff/docs update is committed.
-2. Run `npm run build` before PR because middleware/auth behavior changed after the last known build.
-3. Browser-smoke the login redirect and initial API 429 behavior.
-4. Push branch and open/update PR using the repository PR template.
-5. If merging, verify target branch and PR checks first.
+1. Start next session on `develop` and run `git pull --ff-only origin develop`.
+2. Run browser smoke tests for login redirect, initial API 429 behavior, and admin media/quality report flows.
+3. If issues are found, branch from `develop` for a focused fix.
 
 ## Useful Commands for Next Session
 
