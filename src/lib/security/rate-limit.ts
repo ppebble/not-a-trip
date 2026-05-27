@@ -12,6 +12,13 @@ export interface RateLimitResult {
   retryAfterSeconds: number
 }
 
+export interface ApiRateLimitPolicy {
+  bucket: 'read' | 'write'
+  limit: number
+  windowMs: number
+  pathname: string
+}
+
 type StoreRecord = number[]
 
 const globalStore = globalThis as typeof globalThis & {
@@ -71,6 +78,39 @@ export function createRateLimitHeaders(result: RateLimitResult): Headers {
   }
 
   return headers
+}
+
+export function shouldBypassApiRateLimit(
+  nodeEnv: string | undefined = process.env.NODE_ENV,
+  enableDevRateLimit: string | undefined = process.env.ENABLE_DEV_RATE_LIMIT
+): boolean {
+  return nodeEnv === 'development' && enableDevRateLimit !== 'true'
+}
+
+export function getApiRateLimitPolicy({
+  method,
+  pathname,
+  nodeEnv = process.env.NODE_ENV,
+  enableDevRateLimit = process.env.ENABLE_DEV_RATE_LIMIT,
+}: {
+  method: string
+  pathname: string
+  nodeEnv?: string
+  enableDevRateLimit?: string
+}): ApiRateLimitPolicy | null {
+  if (shouldBypassApiRateLimit(nodeEnv, enableDevRateLimit)) {
+    return null
+  }
+
+  const normalizedMethod = method.toUpperCase()
+  const isRead = normalizedMethod === 'GET' || normalizedMethod === 'HEAD'
+
+  return {
+    bucket: isRead ? 'read' : 'write',
+    limit: isRead ? 300 : 40,
+    windowMs: 60 * 1000,
+    pathname,
+  }
 }
 
 export function getClientIp(request: Request): string {

@@ -3,6 +3,7 @@ import type { NextFetchEvent, NextRequest } from 'next/server'
 import {
   createRateLimitHeaders,
   evaluateSlidingWindowLimit,
+  getApiRateLimitPolicy,
   getClientIp,
 } from '@/lib/security/rate-limit'
 
@@ -25,24 +26,31 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
       }).catch(() => undefined)
     )
 
-    const ip = getClientIp(request)
-    const result = evaluateSlidingWindowLimit({
-      key: `api-ip:${ip}`,
-      limit: 60,
-      windowMs: 60 * 1000,
+    const policy = getApiRateLimitPolicy({
+      method: request.method,
+      pathname,
     })
-    const headers = createRateLimitHeaders(result)
 
-    if (!result.allowed) {
-      return NextResponse.json(
-        { error: '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.' },
-        { status: 429, headers }
-      )
+    if (policy) {
+      const ip = getClientIp(request)
+      const result = evaluateSlidingWindowLimit({
+        key: `api:${policy.bucket}:${ip}:${policy.pathname}`,
+        limit: policy.limit,
+        windowMs: policy.windowMs,
+      })
+      const headers = createRateLimitHeaders(result)
+
+      if (!result.allowed) {
+        return NextResponse.json(
+          { error: 'Too many requests. Please try again later.' },
+          { status: 429, headers }
+        )
+      }
+
+      const response = NextResponse.next()
+      headers.forEach((value, key) => response.headers.set(key, value))
+      return response
     }
-
-    const response = NextResponse.next()
-    headers.forEach((value, key) => response.headers.set(key, value))
-    return response
   }
 
   if (pathname === '/') {

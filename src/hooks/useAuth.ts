@@ -89,12 +89,15 @@ export function useAuth() {
 
   // 소셜 로그인
   const loginWithProvider = useCallback(
-    async (provider: 'google' | 'kakao' | 'naver' | 'twitter') => {
+    async (
+      provider: 'google' | 'kakao' | 'naver' | 'twitter',
+      callbackUrl = '/map'
+    ) => {
       setIsLoading(true)
       clearAuthError()
 
       try {
-        await signIn(provider, { callbackUrl: '/' })
+        await signIn(provider, { callbackUrl })
       } catch {
         setAuthError('소셜 로그인 중 오류가 발생했습니다.')
       } finally {

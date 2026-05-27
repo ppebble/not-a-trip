@@ -2,6 +2,8 @@ import {
   createRateLimitHeaders,
   evaluateSlidingWindowLimit,
   getClientIp,
+  getApiRateLimitPolicy,
+  shouldBypassApiRateLimit,
 } from './rate-limit'
 
 describe('rate limit', () => {
@@ -53,5 +55,42 @@ describe('rate limit', () => {
     })
 
     expect(getClientIp(request)).toBe('203.0.113.10')
+  })
+
+  test('bypasses api rate limit in development by default', () => {
+    expect(shouldBypassApiRateLimit('development', undefined)).toBe(true)
+    expect(
+      getApiRateLimitPolicy({
+        method: 'GET',
+        pathname: '/api/spots',
+        nodeEnv: 'development',
+      })
+    ).toBeNull()
+  })
+
+  test('separates read and write api policies by method and path', () => {
+    expect(
+      getApiRateLimitPolicy({
+        method: 'GET',
+        pathname: '/api/spots',
+        nodeEnv: 'production',
+      })
+    ).toMatchObject({
+      bucket: 'read',
+      limit: 300,
+      pathname: '/api/spots',
+    })
+
+    expect(
+      getApiRateLimitPolicy({
+        method: 'POST',
+        pathname: '/api/spots',
+        nodeEnv: 'production',
+      })
+    ).toMatchObject({
+      bucket: 'write',
+      limit: 40,
+      pathname: '/api/spots',
+    })
   })
 })
