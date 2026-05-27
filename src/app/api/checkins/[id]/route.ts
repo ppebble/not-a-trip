@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { CheckIn, UserStats } from '@/types'
@@ -17,9 +17,14 @@ interface CheckInDocument {
   visitedAt: Date
   comment?: string
   likeCount: number
+  relationId?: string
+  contentId?: string
+  contentName?: string
   createdAt: Date
   updatedAt?: Date
 }
+
+const CHECKIN_ID_PATTERN = /^CHECKIN-\d+$/
 
 /**
  * 유저 통계 업데이트
@@ -63,6 +68,14 @@ export async function GET(
 ): Promise<NextResponse> {
   try {
     const { id } = await params
+
+    if (!CHECKIN_ID_PATTERN.test(id)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 인증 ID 형식입니다.' },
+        { status: 400 }
+      )
+    }
+
     const collection = await getCollection<CheckInDocument>(
       COLLECTIONS.CHECKINS
     )
@@ -71,7 +84,7 @@ export async function GET(
 
     if (!checkin) {
       return NextResponse.json(
-        { error: '인증을 찾을 수 없습니다' },
+        { error: '인증 정보를 찾을 수 없습니다.' },
         { status: 404 }
       )
     }
@@ -87,6 +100,9 @@ export async function GET(
       visitedAt: checkin.visitedAt,
       comment: checkin.comment,
       likeCount: checkin.likeCount,
+      relationId: checkin.relationId,
+      contentId: checkin.contentId,
+      contentName: checkin.contentName,
       createdAt: checkin.createdAt,
       updatedAt: checkin.updatedAt,
     }
@@ -95,7 +111,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching checkin:', error)
     return NextResponse.json(
-      { error: '인증 조회에 실패했습니다' },
+      { error: '인증 조회에 실패했습니다.' },
       { status: 500 }
     )
   }
@@ -113,7 +129,7 @@ export async function DELETE(
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json(
-        { error: '로그인이 필요합니다' },
+        { error: '로그인이 필요합니다.' },
         { status: 401 }
       )
     }
@@ -127,29 +143,26 @@ export async function DELETE(
 
     if (!checkin) {
       return NextResponse.json(
-        { error: '인증을 찾을 수 없습니다' },
+        { error: '인증 정보를 찾을 수 없습니다.' },
         { status: 404 }
       )
     }
 
-    // 본인 확인
     if (checkin.userId !== session.user.id) {
       return NextResponse.json(
-        { error: '본인의 인증만 삭제할 수 있습니다' },
+        { error: '본인의 인증만 삭제할 수 있습니다.' },
         { status: 403 }
       )
     }
 
     await collection.deleteOne({ id })
-
-    // 유저 통계 업데이트
     await updateUserStats(session.user.id!)
 
-    return NextResponse.json({ message: '인증이 삭제되었습니다' })
+    return NextResponse.json({ message: '인증이 삭제되었습니다.' })
   } catch (error) {
     console.error('Error deleting checkin:', error)
     return NextResponse.json(
-      { error: '인증 삭제에 실패했습니다' },
+      { error: '인증 삭제에 실패했습니다.' },
       { status: 500 }
     )
   }

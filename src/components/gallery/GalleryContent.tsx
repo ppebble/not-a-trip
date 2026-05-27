@@ -1,6 +1,8 @@
-'use client'
+﻿'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
+import { CheckIn } from '@/types'
+import { CheckInDetailModal } from '@/components/checkin/CheckInDetailModal'
 import { FeedTab } from './FeedTab'
 import { HallOfFameTab } from './HallOfFameTab'
 import { ContentTab } from './ContentTab'
@@ -8,15 +10,6 @@ import { ContentTab } from './ContentTab'
 /**
  * GalleryContent 컴포넌트
  * activeTab에 따라 적절한 콘텐츠를 렌더링합니다.
- *
- * Requirements:
- * - 3.1: 탭에 따른 콘텐츠 영역 분기 처리
- * - 3.5: 작품별 탭에서 작품 선택 시 해당 작품 체크인만 필터링
- *
- * 각 탭별 컴포넌트:
- * - feed: FeedTab (Task 6.1에서 구현 완료)
- * - hall-of-fame: HallOfFameTab (Task 7.3에서 구현 완료)
- * - content: ContentTab (Task 8.2, 8.3에서 구현)
  */
 
 export type GalleryTab = 'feed' | 'hall-of-fame' | 'content'
@@ -26,9 +19,6 @@ export interface GalleryContentProps {
   selectedContent?: string
 }
 
-/**
- * 콘텐츠 로딩 스켈레톤
- */
 function ContentSkeleton() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
@@ -50,29 +40,56 @@ function ContentSkeleton() {
   )
 }
 
-/**
- * GalleryContent 메인 컴포넌트
- * activeTab에 따라 적절한 탭 콘텐츠를 렌더링합니다.
- */
 export function GalleryContent({
   activeTab,
   selectedContent,
 }: GalleryContentProps) {
+  const [selectedCheckIn, setSelectedCheckIn] = useState<CheckIn | null>(null)
+  const [selectedCheckInId, setSelectedCheckInId] = useState<string | null>(
+    null
+  )
+
+  const closeDetailModal = () => {
+    setSelectedCheckIn(null)
+    setSelectedCheckInId(null)
+  }
+
   return (
-    <section
-      role="tabpanel"
-      id={`tabpanel-${activeTab}`}
-      aria-labelledby={`tab-${activeTab}`}
-      className="min-h-[400px]"
-    >
-      <Suspense fallback={<ContentSkeleton />}>
-        {activeTab === 'feed' && <FeedTab />}
-        {activeTab === 'hall-of-fame' && <HallOfFameTab />}
-        {activeTab === 'content' && (
-          <ContentTab selectedContent={selectedContent} />
-        )}
-      </Suspense>
-    </section>
+    <>
+      <section
+        role="tabpanel"
+        id={`tabpanel-${activeTab}`}
+        aria-labelledby={`tab-${activeTab}`}
+        className="min-h-[400px]"
+      >
+        <Suspense fallback={<ContentSkeleton />}>
+          {activeTab === 'feed' && (
+            <FeedTab
+              onCheckInClick={(checkIn) => setSelectedCheckIn(checkIn)}
+            />
+          )}
+          {activeTab === 'hall-of-fame' && (
+            <HallOfFameTab
+              onCheckInClick={(checkInId) => setSelectedCheckInId(checkInId)}
+            />
+          )}
+          {activeTab === 'content' && (
+            <ContentTab
+              selectedContent={selectedContent}
+              onCheckInClick={(checkIn) => setSelectedCheckIn(checkIn)}
+            />
+          )}
+        </Suspense>
+      </section>
+
+      {(selectedCheckIn || selectedCheckInId) && (
+        <CheckInDetailModal
+          checkIn={selectedCheckIn ?? undefined}
+          checkInId={selectedCheckInId ?? undefined}
+          onClose={closeDetailModal}
+        />
+      )}
+    </>
   )
 }
 
