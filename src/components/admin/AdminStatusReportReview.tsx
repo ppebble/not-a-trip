@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import type { SpotStatusReport, SpotStatus } from '@/types/report'
 
 const SPOT_STATUS_LABELS: Record<string, string> = {
@@ -165,7 +166,7 @@ export function AdminStatusReportReview({
             </h3>
             <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg">
               <Image
-                src={report.photoUrl}
+                src={getSafeImageSrc(report.photoUrl)}
                 alt="증거 사진"
                 fill
                 sizes="(max-width: 768px) 50vw, 384px"

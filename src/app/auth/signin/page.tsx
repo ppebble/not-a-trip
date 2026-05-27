@@ -16,10 +16,21 @@ const oauthErrorMessages: Record<string, string> = {
   Configuration: '서버 설정에 문제가 있습니다. 관리자에게 문의하세요.',
 }
 
+function normalizeCallbackUrl(callbackUrl: string): string {
+  if (!callbackUrl.startsWith('/') || callbackUrl.startsWith('//')) {
+    return '/map'
+  }
+
+  return callbackUrl === '/' || callbackUrl === '/welcome'
+    ? '/map'
+    : callbackUrl
+}
+
 function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/'
+  const requestedCallbackUrl = searchParams.get('callbackUrl') || '/map'
+  const callbackUrl = normalizeCallbackUrl(requestedCallbackUrl)
   const urlError = searchParams.get('error')
   const {
     loginWithCredentials,
@@ -48,7 +59,7 @@ function SignInForm() {
       {/* 소셜 로그인 버튼 */}
       <div className="space-y-3">
         <button
-          onClick={() => loginWithProvider('google')}
+          onClick={() => loginWithProvider('google', callbackUrl)}
           disabled={isLoading}
           className="flex w-full items-center justify-center gap-3 rounded-lg bg-surface px-4 py-3 text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
         >
@@ -74,7 +85,7 @@ function SignInForm() {
         </button>
 
         <button
-          onClick={() => loginWithProvider('kakao')}
+          onClick={() => loginWithProvider('kakao', callbackUrl)}
           disabled={isLoading}
           className="flex w-full items-center justify-center gap-3 rounded-lg bg-[#FEE500] px-4 py-3 text-[#191919] transition hover:bg-[#FDD800] disabled:opacity-50"
         >
@@ -85,7 +96,7 @@ function SignInForm() {
         </button>
 
         <button
-          onClick={() => loginWithProvider('naver')}
+          onClick={() => loginWithProvider('naver', callbackUrl)}
           disabled={isLoading}
           className="flex w-full items-center justify-center gap-3 rounded-lg bg-[#03C75A] px-4 py-3 text-white transition hover:bg-[#02B350] disabled:opacity-50"
         >
@@ -94,7 +105,7 @@ function SignInForm() {
         </button>
 
         <button
-          onClick={() => loginWithProvider('twitter')}
+          onClick={() => loginWithProvider('twitter', callbackUrl)}
           disabled={isLoading}
           className="flex w-full items-center justify-center gap-3 rounded-lg bg-black px-4 py-3 text-white transition hover:bg-neutral-900 disabled:opacity-50"
         >

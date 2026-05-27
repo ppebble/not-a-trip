@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { CheckIn } from '@/types'
 import { useCheckInGallery } from '@/hooks/useGalleryQueries'
 import { CheckInDetailModal } from './CheckInDetailModal'
@@ -147,7 +148,7 @@ export function CheckInGallery({
             className={`group relative aspect-square overflow-hidden rounded-lg${isFewItems(checkins.length) ? 'max-w-[200px]' : ''}`}
           >
             <Image
-              src={checkin.photoUrl}
+              src={getSafeImageSrc(checkin.photoUrl)}
               alt={`${checkin.userName}의 인증샷`}
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

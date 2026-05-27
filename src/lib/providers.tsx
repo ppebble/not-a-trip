@@ -10,6 +10,18 @@ interface ProvidersProps {
   children: React.ReactNode
 }
 
+function isRateLimitError(error: unknown): boolean {
+  if (typeof error === 'object' && error !== null && 'status' in error) {
+    return (error as { status?: unknown }).status === 429
+  }
+
+  if (error instanceof Error) {
+    return /(^|\s)429(\s|$)|Too Many Requests/i.test(error.message)
+  }
+
+  return false
+}
+
 export function Providers({ children }: ProvidersProps) {
   const [queryClient] = useState(
     () =>
@@ -18,14 +30,16 @@ export function Providers({ children }: ProvidersProps) {
           queries: {
             staleTime: 5 * 60 * 1000,
             gcTime: 10 * 60 * 1000,
-            retry: 3,
+            retry: (failureCount, error) =>
+              !isRateLimitError(error) && failureCount < 3,
             retryDelay: (attemptIndex) =>
               Math.min(1000 * 2 ** attemptIndex, 30000),
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
           },
           mutations: {
-            retry: 1,
+            retry: (failureCount, error) =>
+              !isRateLimitError(error) && failureCount < 1,
           },
         },
       })

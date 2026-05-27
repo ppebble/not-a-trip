@@ -2,6 +2,7 @@
 
 import { useState, memo } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc, FALLBACK_IMAGE_SRC } from '@/lib/safe-image-src'
 import { CheckIn, Badge } from '@/types'
 
 export interface ComparisonCardProps {
@@ -78,7 +79,7 @@ export const ComparisonCard = memo(function ComparisonCard({
             {/* 오른쪽: 유저 인증샷 */}
             <div className="absolute inset-y-0 right-0 w-1/2 overflow-hidden border-l-2 border-white">
               <Image
-                src={checkIn.photoUrl}
+                src={getSafeImageSrc(checkIn.photoUrl)}
                 alt={`${checkIn.userName}님의 인증샷`}
                 fill
                 className="object-cover"
@@ -98,7 +99,11 @@ export const ComparisonCard = memo(function ComparisonCard({
         ) : (
           /* 단일 이미지 모드 */
           <Image
-            src={imageError ? '/images/placeholder-spot.jpg' : checkIn.photoUrl}
+            src={
+              imageError
+                ? FALLBACK_IMAGE_SRC
+                : getSafeImageSrc(checkIn.photoUrl)
+            }
             alt={`${checkIn.userName}님의 인증샷`}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"

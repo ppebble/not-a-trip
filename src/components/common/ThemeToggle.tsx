@@ -74,7 +74,7 @@ export function ThemeSelector() {
 
   // 하이드레이션 안전성: 마운트 전 플레이스홀더
   if (!mounted) {
-    return <div className="h-9 w-9" />
+    return <div className="h-10 w-10" />
   }
 
   const currentTheme = theme ?? 'system'
@@ -85,7 +85,7 @@ export function ThemeSelector() {
     <div className="relative" ref={containerRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-300 transition hover:bg-neutral-700 hover:text-white"
+        className="flex h-10 w-10 items-center justify-center rounded-xl text-neutral-300 transition hover:bg-neutral-700 hover:text-white"
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label={`현재: ${currentLabel}. 클릭하여 테마 선택`}

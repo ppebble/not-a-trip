@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
 
         {dataLoading ? (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-5">
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
@@ -68,7 +68,7 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-5">
               <AdminDashboardCard
                 title="제보 관리"
                 description="사용자 제출 신규 제보를 검토하고 승인/반려합니다."
@@ -91,11 +91,25 @@ export default function AdminDashboardPage() {
                 href="/admin/status-reports"
               />
               <AdminDashboardCard
+                title="품질 신고 검토"
+                description="스팟 정보 오류, 폐업, 중복 신고를 검토합니다."
+                icon="🛠️"
+                pendingCount={summary?.pendingQualityReports ?? 0}
+                href="/admin/quality-reports"
+              />
+              <AdminDashboardCard
                 title="콘텐츠 이미지 관리"
                 description="콘텐츠 마스터 이미지를 관리합니다."
                 icon={<AppIcon name="gallery" size={24} />}
                 pendingCount={0}
                 href="/admin/content-images"
+              />
+              <AdminDashboardCard
+                title="??? ??"
+                description="?? ?? ??? ?? ?? ???? ??/?????."
+                icon={<AppIcon name="spot" size={24} />}
+                pendingCount={0}
+                href="/admin/media"
               />
             </div>
 

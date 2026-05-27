@@ -1,5 +1,6 @@
 import Image, { ImageProps } from 'next/image'
 import { blurPlaceholderProps } from '@/lib/image-utils'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 interface OptimizedImageProps extends Omit<
   ImageProps,
@@ -31,12 +32,15 @@ export function OptimizedImage({
   ...props
 }: OptimizedImageProps) {
   const blurProps = disableBlur ? {} : blurPlaceholderProps
-  const shouldSkipOptimization = isExternalUrl(props.src)
+  const safeSrc =
+    typeof props.src === 'string' ? getSafeImageSrc(props.src) : props.src
+  const shouldSkipOptimization = isExternalUrl(safeSrc)
 
   return (
     <Image
       {...blurProps}
       {...props}
+      src={safeSrc}
       unoptimized={shouldSkipOptimization || props.unoptimized}
     />
   )

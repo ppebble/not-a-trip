@@ -125,7 +125,7 @@ export async function GET(): Promise<NextResponse> {
         // 이미지 URL 결정 (relatedContent > ContentMasters)
         const normalizedName = normalizeContentName(media.title)
         const imageUrl =
-          media.imageUrl || contentMasterImageMap.get(normalizedName)
+          contentMasterImageMap.get(normalizedName) || media.imageUrl
 
         return {
           title: media.title,

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { WelcomePageClient } from '@/components/landing/WelcomePageClient'
 import {
   fetchShowcaseSpots,
   fetchCategoryImages,
   fetchProofImages,
 } from '@/components/landing/data/fetchShowcaseSpots'
+import { auth } from '@/lib/auth'
 
 export const metadata: Metadata = {
   title: '환영합니다',
@@ -18,6 +20,11 @@ export const metadata: Metadata = {
 }
 
 export default async function WelcomePage() {
+  const session = await auth()
+  if (session?.user) {
+    redirect('/map')
+  }
+
   const [showcaseSpots, categoryImages, proofImages] = await Promise.all([
     fetchShowcaseSpots(),
     fetchCategoryImages(),

@@ -10,6 +10,7 @@
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import { Scene, SpotContentRelation, RELATION_TYPE_LABELS } from '@/types'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 // ============================================
 // Types
@@ -252,12 +253,14 @@ export function SceneComparison({
               >
                 <div className="relative aspect-video">
                   <Image
-                    src={scene.imageUrl}
+                    src={getSafeImageSrc(scene.imageUrl)}
                     alt={scene.description || `${scene.animeTitle} 장면`}
                     fill
                     sizes="(max-width: 640px) 100vw, 50vw"
                     className="object-cover"
-                    unoptimized={scene.imageUrl.startsWith('http')}
+                    unoptimized={getSafeImageSrc(scene.imageUrl).startsWith(
+                      'http'
+                    )}
                   />
                 </div>
                 <div className="p-3">

@@ -11,6 +11,7 @@ import {
   usePreviewPosition,
 } from '@/stores/uiStore'
 import { useSpotPreview } from '@/hooks/useSpots'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 interface SpotPreviewProps {
   className?: string
@@ -82,6 +83,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
   }
 
   const position = calculatePosition()
+  const previewPhotoUrl = spot?.photoUrl ? getSafeImageSrc(spot.photoUrl) : ''
 
   return (
     <div
@@ -140,15 +142,15 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
           </button>
 
           <div className="relative h-44 w-full overflow-hidden rounded-t-xl">
-            {spot.photoUrl ? (
+            {previewPhotoUrl ? (
               <Image
-                src={spot.photoUrl}
+                src={previewPhotoUrl}
                 alt={spot.name}
                 fill
                 className="object-cover"
                 sizes="384px"
                 priority
-                unoptimized={spot.photoUrl.startsWith('http')}
+                unoptimized={previewPhotoUrl.startsWith('http')}
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-accent-surface">

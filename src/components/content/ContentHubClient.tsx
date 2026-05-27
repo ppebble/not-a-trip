@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { useSpots, SpotDetailData } from '@/hooks/useSpots'
@@ -595,7 +596,7 @@ function CheckInCard({ checkIn }: { checkIn: CheckIn }) {
       <div className="relative aspect-square overflow-hidden bg-neutral-100">
         {checkIn.photoUrl && !imageError ? (
           <Image
-            src={checkIn.photoUrl}
+            src={getSafeImageSrc(checkIn.photoUrl)}
             alt={`${checkIn.userName}의 인증`}
             fill
             sizes="(max-width: 640px) 50vw, 33vw"

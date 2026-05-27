@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 import { ContentTypeIcon } from '@/components/common'
 import { ContentType, CONTENT_TYPE_CONFIG } from '@/types'
 import {
@@ -254,7 +255,7 @@ export default function AdminContentImagesPage() {
                     {content.imageUrl ? (
                       <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-gray-200">
                         <Image
-                          src={content.imageUrl}
+                          src={getSafeImageSrc(content.imageUrl)}
                           alt={content.displayName}
                           fill
                           sizes="64px"
