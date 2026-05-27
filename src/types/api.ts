@@ -7,6 +7,7 @@ import type {
   NearbyFacility,
 } from './spot'
 import type { SpotStatus } from './report'
+import type { SpotLifecycleStatus } from './spot-quality'
 
 // ============================================
 // API Response Types
@@ -32,6 +33,12 @@ export interface SpotResponse {
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
+  lifecycleStatus?: SpotLifecycleStatus
+  closureSuspected?: boolean
+  closureConfirmedAt?: string
+  duplicateSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
 }
 
 export interface SpotDetailData {
@@ -56,6 +63,12 @@ export interface SpotDetailData {
   firstReporterId?: string
   /** 최초 제보자 이름 (09-spot-report-wiki) */
   firstReporterName?: string
+  lifecycleStatus?: SpotLifecycleStatus
+  closureSuspected?: boolean
+  closureConfirmedAt?: string
+  duplicateSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
 }
 
 export interface CreateSpotInput {

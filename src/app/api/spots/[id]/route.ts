@@ -13,6 +13,7 @@ import {
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
 import { convertRelatedContentToRelation } from '@/lib/relation-utils'
+import { expireOverdueSupplementRequests } from '@/lib/spot-quality/supplement-manager'
 
 // MongoDB document interface
 interface SpotDocument {
@@ -36,6 +37,12 @@ interface SpotDocument {
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
+  lifecycleStatus?: 'draft' | 'pending' | 'approved' | 'archived' | 'closed'
+  closureSuspected?: boolean
+  closureConfirmedAt?: Date
+  duplicateSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -49,6 +56,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
+    await expireOverdueSupplementRequests()
     const { id } = await params
     const collection = await getCollection<SpotDocument>('spots')
     const spot = await collection.findOne({ id })
@@ -84,10 +92,17 @@ export async function GET(
       authorId: spot.authorId,
       authorName: spot.authorName,
       isGuestSpot: spot.isGuestSpot,
+      lifecycleStatus: spot.lifecycleStatus ?? 'approved',
+      closureSuspected: spot.closureSuspected ?? false,
+      closureConfirmedAt: spot.closureConfirmedAt?.toISOString(),
+      duplicateSuspected: spot.duplicateSuspected ?? false,
+      pendingSupplementCount: spot.pendingSupplementCount ?? 0,
+      urgentReviewRequired: spot.urgentReviewRequired ?? false,
     }
 
     return NextResponse.json({ ...spotResponse, relations })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching spot detail:', error)
     return NextResponse.json(
       { error: 'Failed to fetch spot detail' },
@@ -216,6 +231,7 @@ export async function PUT(
       message: '스팟이 수정되었습니다',
     })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error updating spot:', error)
     return NextResponse.json(
       { error: '스팟 수정에 실패했습니다' },
@@ -285,6 +301,7 @@ export async function DELETE(
       message: '스팟이 삭제되었습니다',
     })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error deleting spot:', error)
     return NextResponse.json(
       { error: '스팟 삭제에 실패했습니다' },

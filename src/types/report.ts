@@ -76,6 +76,7 @@ export interface SpotReport {
   reviewHistory?: ReviewHistory[]
   /** 승인 시 생성된 스팟 ID */
   approvedSpotId?: string
+  duplicateSuspected?: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -212,11 +213,17 @@ export interface DashboardSummaryResponse {
   pendingReports: number
   pendingSupplements: number
   pendingStatusReports: number
+  pendingQualityReports?: number
   dauToday: number
   totalCheckInsToday: number
   errorRate24h: number
   newUsersToday: number
   newSpotsToday: number
+  qualitySla?: {
+    complianceRate: number
+    averageProcessingTime: number
+    exceededCount: number
+  }
   dauTrend: Array<{ date: string; count: number }>
   checkInTrend: Array<{ date: string; count: number }>
   generatedAt: string

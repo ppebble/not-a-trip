@@ -10,6 +10,7 @@ import {
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
 import { convertRelatedContentToRelation } from '@/lib/relation-utils'
+import { expireOverdueSupplementRequests } from '@/lib/spot-quality/supplement-manager'
 
 /**
  * 정규식 특수문자 이스케이프 처리
@@ -73,6 +74,12 @@ interface SpotDocument {
   authorId?: string
   authorName?: string
   isGuestSpot?: boolean
+  lifecycleStatus?: 'draft' | 'pending' | 'approved' | 'archived' | 'closed'
+  closureSuspected?: boolean
+  closureConfirmedAt?: Date
+  duplicateSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -87,6 +94,7 @@ interface SpotDocument {
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    await expireOverdueSupplementRequests()
     const collection = await getCollection<SpotDocument>('spots')
 
     // 쿼리 파라미터 파싱
@@ -160,6 +168,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       category: spot.category,
       checkInCount: 0, // 지도 핀 표시용 — 인기 뱃지는 별도 API에서 처리
       contentName: spot.relatedContent?.[0]?.name,
+      lifecycleStatus: spot.lifecycleStatus,
+      closureSuspected: spot.closureSuspected,
+      pendingSupplementCount: spot.pendingSupplementCount,
+      urgentReviewRequired: spot.urgentReviewRequired,
     }))
 
     return NextResponse.json({ spots: spotPins, total: spotPins.length })
@@ -258,6 +270,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       authorName:
         session.user.name || session.user.email?.split('@')[0] || '익명',
       isGuestSpot: false,
+      lifecycleStatus: 'approved',
+      closureSuspected: false,
+      duplicateSuspected: false,
+      pendingSupplementCount: 0,
+      urgentReviewRequired: false,
       createdAt: now,
       updatedAt: now,
     }

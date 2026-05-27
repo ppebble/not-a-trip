@@ -1,6 +1,7 @@
 import { COLLECTIONS, getCollection } from '@/lib/db'
 import type { DashboardSummaryResponse } from '@/types/report'
 import { getTrackedApiErrorRate24h } from './metrics'
+import { getSlaStatistics } from '@/lib/spot-quality/report-processor'
 
 interface ActivityDocument {
   userId?: string
@@ -20,30 +21,41 @@ function formatDayKey(date: Date): string {
 }
 
 async function getPendingReviewCounts() {
-  const [reportsCol, supplementsCol, statusReportsCol] = await Promise.all([
-    getCollection(COLLECTIONS.SPOT_REPORTS),
-    getCollection(COLLECTIONS.SPOT_SUPPLEMENTS),
-    getCollection(COLLECTIONS.SPOT_STATUS_REPORTS),
-  ])
-
-  const [pendingReports, pendingSupplements, pendingStatusReports] =
+  const [reportsCol, supplementsCol, statusReportsCol, qualityReportsCol] =
     await Promise.all([
-      reportsCol.countDocuments({ status: 'pending' }),
-      supplementsCol.countDocuments({
-        $or: [
-          { status: 'pending' },
-          { status: { $exists: false }, approved: { $ne: true } },
-        ],
-      }),
-      statusReportsCol.countDocuments({
-        $or: [
-          { reviewStatus: 'pending' },
-          { reviewStatus: { $exists: false } },
-        ],
-      }),
+      getCollection(COLLECTIONS.SPOT_REPORTS),
+      getCollection(COLLECTIONS.SPOT_SUPPLEMENTS),
+      getCollection(COLLECTIONS.SPOT_STATUS_REPORTS),
+      getCollection(COLLECTIONS.SPOT_QUALITY_REPORTS),
     ])
 
-  return { pendingReports, pendingSupplements, pendingStatusReports }
+  const [
+    pendingReports,
+    pendingSupplements,
+    pendingStatusReports,
+    pendingQualityReports,
+  ] = await Promise.all([
+    reportsCol.countDocuments({ status: 'pending' }),
+    supplementsCol.countDocuments({
+      $or: [
+        { status: 'pending' },
+        { status: { $exists: false }, approved: { $ne: true } },
+      ],
+    }),
+    statusReportsCol.countDocuments({
+      $or: [{ reviewStatus: 'pending' }, { reviewStatus: { $exists: false } }],
+    }),
+    qualityReportsCol.countDocuments({
+      status: { $in: ['pending', 'in_review', 'sla_exceeded'] },
+    }),
+  ])
+
+  return {
+    pendingReports,
+    pendingSupplements,
+    pendingStatusReports,
+    pendingQualityReports,
+  }
 }
 
 async function getDistinctUserIdsSince(
@@ -161,6 +173,7 @@ export async function buildDashboardSummary(): Promise<DashboardSummaryResponse>
     errorRate24h,
     newUsersToday,
     newSpotsToday,
+    qualitySla,
     dauTrend,
     checkInTrend,
   ] = await Promise.all([
@@ -170,6 +183,7 @@ export async function buildDashboardSummary(): Promise<DashboardSummaryResponse>
     getTrackedApiErrorRate24h(),
     usersCollection.countDocuments({ createdAt: { $gte: today } }),
     spotsCollection.countDocuments({ createdAt: { $gte: today } }),
+    getSlaStatistics(),
     getDauTrend(),
     getCheckInTrend(),
   ])
@@ -181,6 +195,7 @@ export async function buildDashboardSummary(): Promise<DashboardSummaryResponse>
     errorRate24h,
     newUsersToday,
     newSpotsToday,
+    qualitySla,
     dauTrend,
     checkInTrend,
     generatedAt: new Date().toISOString(),

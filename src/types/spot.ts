@@ -1,4 +1,5 @@
 import { SpotStatus } from './report'
+import type { SpotLifecycleStatus } from './spot-quality'
 
 // ============================================
 // External Link Types (외부 링크)
@@ -261,6 +262,12 @@ export interface Spot {
   spotStatus?: SpotStatus
   /** 상태 신고 누적 수 (09-spot-report-wiki) */
   statusReportCount?: number
+  lifecycleStatus?: SpotLifecycleStatus
+  closureSuspected?: boolean
+  closureConfirmedAt?: Date
+  duplicateSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
 }
 
 export interface SpotPin {
@@ -273,6 +280,10 @@ export interface SpotPin {
   checkInCount?: number
   /** 연결된 작품명 (relatedContent[0].name) */
   contentName?: string
+  lifecycleStatus?: SpotLifecycleStatus
+  closureSuspected?: boolean
+  pendingSupplementCount?: number
+  urgentReviewRequired?: boolean
 }
 
 export interface SpotPreviewData {
