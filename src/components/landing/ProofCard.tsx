@@ -38,9 +38,9 @@ export function ProofCard({
   const hasScene = safeSceneImage && !sceneError
 
   return (
-    <article className="flex w-64 shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-surface md:w-72">
+    <article className="flex w-64 shrink-0 flex-col overflow-hidden rounded-[1.35rem] border border-border bg-surface shadow-lg shadow-primary-500/5 dark:border-white/10 md:w-72">
       {/* 이미지 영역 */}
-      <div className="relative h-36 w-full bg-accent-surface">
+      <div className="relative h-40 w-full bg-accent-surface">
         {hasScene ? (
           /* 좌우 분할: 스팟 사진 | 작품 장면 */
           <div className="flex h-full">
@@ -58,7 +58,7 @@ export function ProofCard({
               ) : (
                 <ImageFallback />
               )}
-              <span className="absolute bottom-1 left-1 rounded-sm bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">
+              <span className="absolute bottom-2 left-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
                 실제
               </span>
             </div>
@@ -74,7 +74,7 @@ export function ProofCard({
                 sizes="(max-width: 768px) 128px, 144px"
                 onError={() => setSceneError(true)}
               />
-              <span className="absolute bottom-1 right-1 rounded-sm bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">
+              <span className="absolute bottom-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
                 작품
               </span>
             </div>
@@ -95,10 +95,10 @@ export function ProofCard({
       </div>
 
       {/* 콘텐츠 영역 */}
-      <div className="flex flex-1 flex-col gap-2 p-3">
+      <div className="flex flex-1 flex-col gap-2.5 p-4">
         {/* 카테고리 태그 */}
         <span
-          className="w-fit rounded-sm px-2 py-0.5 text-xs font-medium"
+          className="w-fit rounded-full px-2.5 py-1 text-xs font-medium"
           style={{
             backgroundColor: categoryConfig.bgColor,
             color: categoryConfig.fgColor,
@@ -108,7 +108,7 @@ export function ProofCard({
         </span>
 
         {/* 스팟 이름 + 작품명 */}
-        <h3 className="text-sm font-semibold text-main-text">
+        <h3 className="text-sm font-semibold leading-snug tracking-[-0.01em] text-main-text">
           {spotName}
           {contentName && (
             <span
@@ -122,7 +122,9 @@ export function ProofCard({
         </h3>
 
         {/* 코멘트 */}
-        <p className="line-clamp-2 text-xs text-sub-text">{comment}</p>
+        <p className="line-clamp-2 text-xs leading-relaxed text-sub-text">
+          {comment}
+        </p>
       </div>
     </article>
   )

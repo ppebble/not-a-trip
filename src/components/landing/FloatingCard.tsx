@@ -94,7 +94,7 @@ export function FloatingCard({
 
   return (
     <div
-      className="group relative rounded-lg border border-white/10 shadow-lg backdrop-blur-sm transition-all duration-300 will-change-transform hover:scale-105 hover:shadow-2xl hover:shadow-white/10"
+      className="group relative rounded-[1rem] border border-white/25 shadow-xl shadow-primary-500/10 backdrop-blur-sm transition-all duration-300 will-change-transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/20 dark:border-white/10"
       style={{
         width,
         height,
@@ -107,14 +107,14 @@ export function FloatingCard({
       {card.additionalContentNames &&
         card.additionalContentNames.length > 0 && (
           <div
-            className="absolute -right-1 -top-1 z-20 flex items-center justify-center rounded-full border border-white/20 bg-white/90 shadow-md backdrop-blur-sm"
+            className="absolute -right-1 -top-1 z-20 flex items-center justify-center rounded-full border border-border bg-surface/95 shadow-md backdrop-blur-sm dark:border-white/20"
             style={{
               width: size === 'sm' ? 22 : size === 'md' ? 26 : 30,
               height: size === 'sm' ? 22 : size === 'md' ? 26 : 30,
             }}
           >
             <span
-              className={`font-bold text-gray-800 ${size === 'sm' ? 'text-[9px]' : size === 'md' ? 'text-[10px]' : 'text-xs'}`}
+              className={`font-bold text-main-text ${size === 'sm' ? 'text-[9px]' : size === 'md' ? 'text-[10px]' : 'text-xs'}`}
             >
               +{card.additionalContentNames.length}
             </span>
@@ -122,7 +122,7 @@ export function FloatingCard({
         )}
 
       {/* 카드 내부 콘텐츠 (overflow-hidden 적용) */}
-      <div className="absolute inset-0 overflow-hidden rounded-lg">
+      <div className="absolute inset-0 overflow-hidden rounded-[1rem]">
         {/* 배경 하이라이트 효과 */}
         <div
           className="absolute inset-0 opacity-15"
@@ -186,7 +186,7 @@ export function FloatingCard({
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-6">
           {/* 카테고리 태그 */}
           <div
-            className="mb-1 inline-flex items-center rounded px-1.5 py-0.5"
+            className="mb-1 inline-flex items-center rounded-full px-1.5 py-0.5"
             style={{ backgroundColor: `${accentColor}33` }}
           >
             <span

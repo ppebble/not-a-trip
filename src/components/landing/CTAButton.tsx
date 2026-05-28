@@ -17,9 +17,9 @@ interface CTAButtonProps {
 
 const variantStyles = {
   primary:
-    'bg-primary-500 text-white hover:bg-primary-600 focus-visible:ring-primary-500',
+    'bg-primary-500 text-white shadow-lg shadow-primary-500/25 hover:bg-primary-600 focus-visible:ring-primary-500',
   secondary:
-    'bg-secondary-100 text-secondary-700 hover:bg-secondary-200 focus-visible:ring-secondary-500',
+    'bg-secondary-100 text-secondary-700 shadow-sm hover:bg-secondary-200 focus-visible:ring-secondary-500',
 } as const
 
 const sizeStyles = {
@@ -36,7 +36,7 @@ export function CTAButton({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${variantStyles[variant]} ${sizeStyles[size]} `}
+      className={`inline-flex items-center justify-center rounded-full font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${variantStyles[variant]} ${sizeStyles[size]} `}
     >
       {label}
     </Link>

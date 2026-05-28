@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProofCard } from './ProofCard'
@@ -235,11 +235,12 @@ export function SocialProofSection({
       <div className="mx-auto max-w-6xl px-4">
         {/* 섹션 헤더 */}
         <header className="mb-10 text-center md:mb-14">
-          <h2 className="mb-3 text-2xl font-bold text-main-text md:text-3xl lg:text-4xl">
-            함께 <span className="text-primary-500">덕질</span>하는 즐거움
+          <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl lg:text-4xl">
+            다른 팬들은{' '}
+            <span className="text-primary-500">이렇게 다녀왔어요</span>
           </h2>
-          <p className="text-base text-sub-text md:text-lg">
-            다른 팬들의 성지순례 경험을 만나보세요
+          <p className="text-base leading-7 text-sub-text md:text-lg">
+            인증 사진과 짧은 후기로 현장 분위기를 먼저 살펴보세요
           </p>
         </header>
 
@@ -249,7 +250,7 @@ export function SocialProofSection({
           <button
             type="button"
             onClick={goPrev}
-            className="hidden shrink-0 rounded-full border border-border bg-surface p-3 text-sub-text shadow-sm transition-colors hover:bg-background hover:text-main-text md:block"
+            className="hidden shrink-0 rounded-full border border-border bg-surface/90 p-3 text-sub-text shadow-sm transition-colors hover:border-primary-500/40 hover:bg-background hover:text-main-text dark:border-white/10 md:block"
             aria-label="이전 카드"
           >
             <ChevronLeftIcon />
@@ -276,7 +277,7 @@ export function SocialProofSection({
               }}
               onTransitionEnd={handleTransitionEnd}
             >
-              {extended.map((proof, i) => (
+              {extended.map((proof) => (
                 <div
                   key={proof.id}
                   data-card
@@ -300,7 +301,7 @@ export function SocialProofSection({
           <button
             type="button"
             onClick={goNext}
-            className="hidden shrink-0 rounded-full border border-border bg-surface p-3 text-sub-text shadow-sm transition-colors hover:bg-background hover:text-main-text md:block"
+            className="hidden shrink-0 rounded-full border border-border bg-surface/90 p-3 text-sub-text shadow-sm transition-colors hover:border-primary-500/40 hover:bg-background hover:text-main-text dark:border-white/10 md:block"
             aria-label="다음 카드"
           >
             <ChevronRightIcon />

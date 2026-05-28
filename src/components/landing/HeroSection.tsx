@@ -49,7 +49,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
     return (
       <section
         ref={ref}
-        className="relative flex min-h-screen flex-col overflow-hidden bg-background"
+        className="relative flex min-h-screen flex-col overflow-visible bg-gradient-to-b from-primary-50 via-background to-background dark:from-[#171321] dark:via-background dark:to-background"
         aria-label="히어로 섹션"
       >
         {/* 랜딩 전용 미니 헤더 */}
@@ -57,25 +57,32 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
 
         {/* 배경 글로우 블롭 */}
         <div
-          className="pointer-events-none absolute inset-0 overflow-hidden"
+          className="pointer-events-none absolute -inset-x-16 -bottom-56 -top-24 overflow-visible"
           aria-hidden="true"
         >
           <div
-            className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full opacity-20 blur-[140px]"
+            className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full opacity-25 blur-[140px] dark:opacity-20"
             style={{
               background:
                 'radial-gradient(circle, #7c3aed 0%, transparent 70%)',
             }}
           />
           <div
-            className="absolute -bottom-32 right-0 h-[500px] w-[500px] rounded-full opacity-15 blur-[120px]"
+            className="absolute -bottom-44 right-0 h-[560px] w-[560px] rounded-full opacity-20 blur-[120px] dark:opacity-15"
             style={{
               background:
                 'radial-gradient(circle, #1d4ed8 0%, transparent 70%)',
             }}
           />
           <div
-            className="opacity-8 absolute left-1/2 top-1/2 h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]"
+            className="absolute -bottom-64 left-1/2 h-[420px] w-[760px] -translate-x-1/2 rounded-full opacity-10 blur-[120px] dark:opacity-[0.12]"
+            style={{
+              background:
+                'radial-gradient(ellipse, #7c3aed 0%, transparent 72%)',
+            }}
+          />
+          <div
+            className="absolute left-1/2 top-1/2 h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-[100px] dark:opacity-[0.08]"
             style={{
               background:
                 'radial-gradient(ellipse, #6d28d9 0%, transparent 70%)',
@@ -88,36 +95,36 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
           {/* 좌측: 텍스트 + 검색 + 칩 */}
           <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-left">
             {/* 상단 뱃지 */}
-            <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-primary-500/30 bg-primary-500/10 px-3 py-1 text-xs font-medium text-primary-400">
+            <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-primary-500/20 bg-surface/80 px-3 py-1 text-xs font-medium text-primary-700 shadow-sm backdrop-blur-sm dark:border-primary-400/25 dark:bg-white/10 dark:text-primary-300">
               <span>🗺️</span>
-              <span>팬들만 아는 특별한 여행지 플랫폼</span>
+              <span>팬들이 남긴 실제 장소를 모아봤어요</span>
             </div>
 
             {/* 헤드라인 */}
-            <h1 className="mb-4 text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
-              관광지가 아닌
+            <h1 className="mb-5 text-4xl font-semibold leading-[1.08] tracking-[-0.045em] text-main-text md:text-5xl lg:text-6xl">
+              좋아하는 장면을
               <br />
-              <span className="bg-gradient-to-r from-primary-400 to-purple-400 bg-clip-text text-transparent">
-                성지
+              <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-500 bg-clip-text text-transparent dark:from-primary-300 dark:via-primary-400 dark:to-secondary-300">
+                여행지
               </span>
-              를 탐험하세요
+              로 만나보세요
             </h1>
 
-            <p className="mb-8 max-w-md text-base text-white/60 md:text-lg">
-              애니메이션 성지순례, 영화 촬영지, 콘서트 장소 등
+            <p className="mb-8 max-w-md text-base leading-7 text-sub-text md:text-lg md:leading-8">
+              애니메이션 성지, 촬영지, 콘서트 장소까지.
               <br className="hidden sm:block" />
-              팬들만 아는 특별한 여행지를 발견하세요.
+              지도에서 찾고 코스로 따라가며 방문 기록까지 남겨보세요.
             </p>
 
             {/* 검색창 */}
             <form onSubmit={handleSearch} className="mb-5 w-full max-w-md">
-              <div className="bg-white/8 focus-within:bg-white/12 flex overflow-hidden rounded-xl border border-white/15 backdrop-blur-md transition-all focus-within:border-primary-500/60">
+              <div className="flex overflow-hidden rounded-2xl border border-border bg-surface/90 shadow-xl shadow-primary-500/10 backdrop-blur-md transition-all focus-within:border-primary-500/60 focus-within:bg-background dark:border-white/15 dark:bg-white/10 dark:focus-within:bg-white/[0.14]">
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="작품명, 장소명으로 검색..."
-                  className="flex-1 bg-transparent px-4 py-3 text-sm text-white placeholder-white/40 outline-none"
+                  className="flex-1 bg-transparent px-4 py-3 text-sm text-main-text placeholder-muted outline-none"
                   aria-label="성지 검색"
                 />
                 <button
@@ -126,7 +133,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
                   aria-label="검색"
                 >
                   <SearchIcon />
-                  <span className="hidden sm:inline">탐색</span>
+                  <span className="hidden sm:inline">찾기</span>
                 </button>
               </div>
             </form>
@@ -138,7 +145,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
                   key={chip.value}
                   type="button"
                   onClick={() => handleChip(chip.value)}
-                  className="bg-white/8 rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white/70 backdrop-blur-sm transition hover:border-primary-500/50 hover:bg-primary-500/15 hover:text-white active:scale-95"
+                  className="rounded-full border border-border bg-surface/80 px-3 py-1.5 text-xs font-medium text-sub-text shadow-sm backdrop-blur-sm transition hover:border-primary-500/50 hover:bg-primary-50 hover:text-main-text active:scale-95 dark:border-white/15 dark:bg-white/10 dark:text-white/75 dark:hover:bg-primary-500/15 dark:hover:text-white"
                 >
                   {chip.label}
                 </button>
@@ -150,7 +157,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
           <div className="relative flex flex-1 items-center justify-center">
             {/* 콜라주 뒤 글로우 */}
             <div
-              className="pointer-events-none absolute inset-0 rounded-full opacity-25 blur-[70px]"
+              className="pointer-events-none absolute inset-0 rounded-full opacity-20 blur-[70px] dark:opacity-25"
               style={{
                 background:
                   'radial-gradient(circle, #7c3aed 0%, transparent 65%)',
@@ -170,8 +177,8 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
           className="relative z-10 flex justify-center pb-8"
           aria-hidden="true"
         >
-          <div className="flex flex-col items-center gap-1 text-white/30">
-            <span className="text-xs">스크롤하여 더 보기</span>
+          <div className="flex flex-col items-center gap-1 text-muted dark:text-white/35">
+            <span className="text-xs">아래에서 탐색 방법 보기</span>
             <ChevronDownIcon />
           </div>
         </div>

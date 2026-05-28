@@ -107,7 +107,7 @@ export function WelcomePageClient({
 
       {/* SocialProofSection — 자동 스크롤 슬라이더 */}
       <div
-        className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        className="h-px bg-gradient-to-r from-transparent via-border to-transparent dark:via-white/10"
         aria-hidden="true"
       />
       <SocialProofSection proofImages={proofImages} />
