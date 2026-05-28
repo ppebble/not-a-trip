@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useAdminAuth } from '@/hooks/useAdminAuth'
 import { useAdminDashboardSummary } from '@/hooks/useAdminQueries'
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
                       </div>
                       <div className="h-2 rounded-full bg-neutral-100">
                         <div
-                          className="h-2 rounded-full bg-secondary"
+                          className="h-2 rounded-full bg-secondary-500"
                           style={{
                             width: `${Math.max(
                               8,

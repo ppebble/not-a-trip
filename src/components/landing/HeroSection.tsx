@@ -49,7 +49,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
     return (
       <section
         ref={ref}
-        className="relative flex min-h-screen flex-col overflow-visible bg-gradient-to-b from-primary-50 via-background to-background dark:from-[#171321] dark:via-background dark:to-background"
+        className="relative flex min-h-screen flex-col overflow-visible bg-gradient-to-b from-primary-50 via-background to-background dark:from-slate-950 dark:via-background dark:to-background"
         aria-label="히어로 섹션"
       >
         {/* 랜딩 전용 미니 헤더 */}
@@ -64,28 +64,28 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full opacity-25 blur-[140px] dark:opacity-20"
             style={{
               background:
-                'radial-gradient(circle, #7c3aed 0%, transparent 70%)',
+                'radial-gradient(circle, #4f46e5 0%, transparent 70%)',
             }}
           />
           <div
             className="absolute -bottom-44 right-0 h-[560px] w-[560px] rounded-full opacity-20 blur-[120px] dark:opacity-15"
             style={{
               background:
-                'radial-gradient(circle, #1d4ed8 0%, transparent 70%)',
+                'radial-gradient(circle, #0d9488 0%, transparent 70%)',
             }}
           />
           <div
             className="absolute -bottom-64 left-1/2 h-[420px] w-[760px] -translate-x-1/2 rounded-full opacity-10 blur-[120px] dark:opacity-[0.12]"
             style={{
               background:
-                'radial-gradient(ellipse, #7c3aed 0%, transparent 72%)',
+                'radial-gradient(ellipse, #f97316 0%, transparent 72%)',
             }}
           />
           <div
             className="absolute left-1/2 top-1/2 h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-[100px] dark:opacity-[0.08]"
             style={{
               background:
-                'radial-gradient(ellipse, #6d28d9 0%, transparent 70%)',
+                'radial-gradient(ellipse, #6366f1 0%, transparent 70%)',
             }}
           />
         </div>
@@ -104,7 +104,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             <h1 className="mb-5 text-4xl font-semibold leading-[1.08] tracking-[-0.045em] text-main-text md:text-5xl lg:text-6xl">
               좋아하는 장면을
               <br />
-              <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-500 bg-clip-text text-transparent dark:from-primary-300 dark:via-primary-400 dark:to-secondary-300">
+              <span className="bg-gradient-to-r from-primary-600 via-secondary-600 to-sunset-500 bg-clip-text text-transparent dark:from-primary-600 dark:via-secondary-500 dark:to-sunset-600">
                 여행지
               </span>
               로 만나보세요
@@ -145,7 +145,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
                   key={chip.value}
                   type="button"
                   onClick={() => handleChip(chip.value)}
-                  className="rounded-full border border-border bg-surface/80 px-3 py-1.5 text-xs font-medium text-sub-text shadow-sm backdrop-blur-sm transition hover:border-primary-500/50 hover:bg-primary-50 hover:text-main-text active:scale-95 dark:border-white/15 dark:bg-white/10 dark:text-white/75 dark:hover:bg-primary-500/15 dark:hover:text-white"
+                  className="rounded-full border border-border bg-surface/80 px-3 py-1.5 text-xs font-medium text-sub-text shadow-sm backdrop-blur-sm transition hover:border-secondary-500/50 hover:bg-secondary-50 hover:text-main-text active:scale-95 dark:border-white/15 dark:bg-white/10 dark:text-white/75 dark:hover:bg-secondary-500/15 dark:hover:text-white"
                 >
                   {chip.label}
                 </button>
@@ -160,7 +160,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
               className="pointer-events-none absolute inset-0 rounded-full opacity-20 blur-[70px] dark:opacity-25"
               style={{
                 background:
-                  'radial-gradient(circle, #7c3aed 0%, transparent 65%)',
+                  'radial-gradient(circle, #0d9488 0%, transparent 65%)',
               }}
               aria-hidden="true"
             />

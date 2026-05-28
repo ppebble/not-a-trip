@@ -13,11 +13,13 @@ interface HeaderAuthControlsProps {
 
 function getAdminLinkClass(isActive: boolean, mobile = false) {
   const base = mobile
-    ? 'flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-semibold transition hover:bg-orange-50 hover:text-orange-500'
-    : 'rounded-xl px-3 py-2 text-base font-semibold transition hover:bg-orange-50 hover:text-orange-500'
+    ? 'flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-semibold transition hover:bg-sunset-50 hover:text-sunset-600 dark:hover:bg-sunset-500/15 dark:hover:text-sunset-600'
+    : 'rounded-xl px-3 py-2 text-base font-semibold transition hover:bg-sunset-50 hover:text-sunset-600 dark:hover:bg-sunset-500/15 dark:hover:text-sunset-600'
 
   return `${base} ${
-    isActive ? 'bg-orange-50 text-orange-500' : 'text-orange-400'
+    isActive
+      ? 'bg-sunset-50 text-sunset-600 dark:bg-sunset-500/15 dark:text-sunset-600'
+      : 'text-sunset-500 dark:text-sunset-600'
   }`
 }
 
@@ -49,7 +51,7 @@ export default function HeaderAuthControls({
             <Link
               href={`/profile/${user.id}`}
               onClick={onMobileNavigate}
-              className="text-text-secondary hover:text-text-primary flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-medium transition hover:bg-secondary-100"
+              className="flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-medium text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
             >
               <AppIcon name="profile" size="sm" alt="" />
               마이페이지
@@ -59,7 +61,7 @@ export default function HeaderAuthControls({
                 onMobileNavigate?.()
                 logout()
               }}
-              className="text-text-secondary hover:text-text-primary block w-full rounded-xl px-3.5 py-3 text-left text-base font-medium transition hover:bg-secondary-100"
+              className="block w-full rounded-xl px-3.5 py-3 text-left text-base font-medium text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary"
             >
               로그아웃
             </button>
@@ -115,7 +117,7 @@ export default function HeaderAuthControls({
               <AppIcon name="profile-front" size="xl" alt="" />
             </div>
           )}
-          <span className="text-text-secondary hidden max-w-32 truncate text-base font-medium xl:block">
+          <span className="hidden max-w-32 truncate text-base font-medium text-text-secondary xl:block">
             {user.name || user.email}
           </span>
         </Link>

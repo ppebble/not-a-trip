@@ -3,29 +3,41 @@
 @tailwind utilities;
 
 :root {
-  /* === Primary (Midnight Violet — 마스코트 눈/가방 색상 기반) === */
-  --color-primary-50: 245 243 255;
-  --color-primary-100: 237 233 254;
-  --color-primary-200: 221 214 254;
-  --color-primary-300: 196 181 253;
-  --color-primary-400: 167 139 250;
-  --color-primary-500: 139 92 246;
-  --color-primary-600: 124 58 237;
-  --color-primary-700: 109 40 217;
-  --color-primary-800: 91 33 182;
-  --color-primary-900: 76 29 149;
+  /* === Primary (Harbor Indigo — 보라 단색을 낮춘 신뢰/탐색 축) === */
+  --color-primary-50: 238 242 255;
+  --color-primary-100: 224 231 255;
+  --color-primary-200: 199 210 254;
+  --color-primary-300: 165 180 252;
+  --color-primary-400: 129 140 248;
+  --color-primary-500: 99 102 241;
+  --color-primary-600: 79 70 229;
+  --color-primary-700: 67 56 202;
+  --color-primary-800: 55 48 163;
+  --color-primary-900: 49 46 129;
 
-  /* === Secondary (Soft Lavender — 마스코트 꽃/액세서리 기반) === */
-  --color-secondary-50: 250 245 255;
-  --color-secondary-100: 243 232 255;
-  --color-secondary-200: 233 213 255;
-  --color-secondary-300: 216 180 254;
-  --color-secondary-400: 192 132 252;
-  --color-secondary-500: 168 85 247;
-  --color-secondary-600: 147 51 234;
-  --color-secondary-700: 126 34 206;
-  --color-secondary-800: 107 33 168;
-  --color-secondary-900: 88 28 135;
+  /* === Secondary (Sea Teal — 여행/지도/발견 보조 축) === */
+  --color-secondary-50: 240 253 250;
+  --color-secondary-100: 204 251 241;
+  --color-secondary-200: 153 246 228;
+  --color-secondary-300: 94 234 212;
+  --color-secondary-400: 45 212 191;
+  --color-secondary-500: 20 184 166;
+  --color-secondary-600: 13 148 136;
+  --color-secondary-700: 15 118 110;
+  --color-secondary-800: 17 94 89;
+  --color-secondary-900: 19 78 74;
+
+  /* === Sunset (Warm Accent — CTA 보조/성공 순간/여행 감성) === */
+  --color-sunset-50: 255 247 237;
+  --color-sunset-100: 255 237 213;
+  --color-sunset-200: 254 215 170;
+  --color-sunset-300: 253 186 116;
+  --color-sunset-400: 251 146 60;
+  --color-sunset-500: 249 115 22;
+  --color-sunset-600: 234 88 12;
+  --color-sunset-700: 194 65 12;
+  --color-sunset-800: 154 52 18;
+  --color-sunset-900: 124 45 18;
 
   /* === Neutral (Zinc/Cool Gray — 마스코트 은발/깔끔한 톤 기반) === */
   --color-neutral-50: 250 250 250;
@@ -40,52 +52,52 @@
   --color-neutral-900: 24 24 27;
 
   /* === 시맨틱 역할 토큰 (직접 RGB 값 저장 — 중첩 var() 회피) === */
-  --color-background: 255 255 255;
-  --color-surface: 250 250 250;
-  --color-accent-surface: 244 244 245;
-  --color-text: 9 9 11;
-  --color-text-secondary: 63 63 70;
+  --color-background: 255 252 247;
+  --color-surface: 255 255 255;
+  --color-accent-surface: 240 253 250;
+  --color-text: 15 23 42;
+  --color-text-secondary: 71 85 105;
   --color-muted: 113 113 122;
-  --color-border: 228 228 231;
+  --color-border: 226 232 240;
   --color-danger: 239 68 68;
   --color-danger-surface: 254 242 242;
 
   /* === 카테고리 컬러 (bg/fg 쌍) === */
-  --category-anime-bg: 238 232 252;
-  --category-anime-fg: 76 64 168;
-  --category-sports-bg: 209 240 228;
-  --category-sports-fg: 20 108 88;
-  --category-movie-drama-bg: 218 228 248;
-  --category-movie-drama-fg: 42 68 128;
-  --category-music-bg: 218 242 228;
-  --category-music-fg: 28 100 58;
-  --category-game-bg: 248 228 242;
-  --category-game-fg: 138 42 108;
-  --category-other-bg: 236 234 232;
-  --category-other-fg: 82 78 72;
+  --category-anime-bg: 232 238 255;
+  --category-anime-fg: 67 56 202;
+  --category-sports-bg: 204 251 241;
+  --category-sports-fg: 15 118 110;
+  --category-movie-drama-bg: 219 234 254;
+  --category-movie-drama-fg: 29 78 216;
+  --category-music-bg: 220 252 231;
+  --category-music-fg: 22 101 52;
+  --category-game-bg: 255 237 213;
+  --category-game-fg: 194 65 12;
+  --category-other-bg: 241 245 249;
+  --category-other-fg: 71 85 105;
 
   /* === 콘텐츠 타입 컬러 (bg/fg 쌍) === */
-  --content-anime-bg: 238 232 252;
-  --content-anime-fg: 76 64 168;
-  --content-movie-bg: 218 228 248;
-  --content-movie-fg: 42 68 128;
-  --content-drama-bg: 242 228 250;
-  --content-drama-fg: 108 42 138;
-  --content-sports-team-bg: 209 240 228;
-  --content-sports-team-fg: 20 108 88;
-  --content-artist-bg: 218 242 228;
-  --content-artist-fg: 28 100 58;
-  --content-game-bg: 248 228 242;
-  --content-game-fg: 138 42 108;
-  --content-other-bg: 236 234 232;
-  --content-other-fg: 82 78 72;
+  --content-anime-bg: 232 238 255;
+  --content-anime-fg: 67 56 202;
+  --content-movie-bg: 219 234 254;
+  --content-movie-fg: 29 78 216;
+  --content-drama-bg: 245 243 255;
+  --content-drama-fg: 109 40 217;
+  --content-sports-team-bg: 204 251 241;
+  --content-sports-team-fg: 15 118 110;
+  --content-artist-bg: 220 252 231;
+  --content-artist-fg: 22 101 52;
+  --content-game-bg: 255 237 213;
+  --content-game-fg: 194 65 12;
+  --content-other-bg: 241 245 249;
+  --content-other-fg: 71 85 105;
 
   /* === 링크 타입 컬러 === */
-  --link-official: 95 82 200;
-  --link-ticket: 16 185 129;
+  --link-official: 79 70 229;
+  --link-ticket: 13 148 136;
   --link-schedule: 245 158 11;
-  --link-sns: 155 134 212;
-  --link-other: 148 142 134;
+  --link-sns: 236 72 153;
+  --link-other: 100 116 139;
 
   /* === Border Radius 토큰 === */
   --radius-sm: 0.5rem;
@@ -95,29 +107,41 @@
 }
 
 .dark {
-  /* === Primary (Indigo — 다크 모드 밝기 반전) === */
-  --color-primary-50: 14 12 28;
-  --color-primary-100: 22 18 48;
-  --color-primary-200: 34 28 72;
-  --color-primary-300: 48 40 100;
-  --color-primary-400: 68 58 138;
-  --color-primary-500: 124 112 218;
-  --color-primary-600: 155 146 232;
-  --color-primary-700: 189 183 242;
-  --color-primary-800: 218 214 248;
-  --color-primary-900: 238 237 252;
+  /* === Primary (다크 모드 — 인디고 글로우) === */
+  --color-primary-50: 17 24 39;
+  --color-primary-100: 30 41 82;
+  --color-primary-200: 49 46 129;
+  --color-primary-300: 67 56 202;
+  --color-primary-400: 99 102 241;
+  --color-primary-500: 129 140 248;
+  --color-primary-600: 165 180 252;
+  --color-primary-700: 199 210 254;
+  --color-primary-800: 224 231 255;
+  --color-primary-900: 238 242 255;
 
-  /* === Secondary (Lavender — 다크 모드 밝기 반전) === */
-  --color-secondary-50: 18 14 28;
-  --color-secondary-100: 30 22 48;
-  --color-secondary-200: 46 34 72;
-  --color-secondary-300: 64 48 100;
-  --color-secondary-400: 88 68 138;
-  --color-secondary-500: 155 134 212;
-  --color-secondary-600: 178 160 228;
-  --color-secondary-700: 200 186 240;
-  --color-secondary-800: 222 212 248;
-  --color-secondary-900: 248 244 255;
+  /* === Secondary (다크 모드 — 바다빛 보조 축) === */
+  --color-secondary-50: 10 28 32;
+  --color-secondary-100: 19 48 52;
+  --color-secondary-200: 17 78 74;
+  --color-secondary-300: 15 118 110;
+  --color-secondary-400: 20 184 166;
+  --color-secondary-500: 45 212 191;
+  --color-secondary-600: 94 234 212;
+  --color-secondary-700: 153 246 228;
+  --color-secondary-800: 204 251 241;
+  --color-secondary-900: 240 253 250;
+
+  /* === Sunset (다크 모드 — 따뜻한 하이라이트) === */
+  --color-sunset-50: 42 22 12;
+  --color-sunset-100: 67 28 12;
+  --color-sunset-200: 124 45 18;
+  --color-sunset-300: 154 52 18;
+  --color-sunset-400: 194 65 12;
+  --color-sunset-500: 249 115 22;
+  --color-sunset-600: 251 146 60;
+  --color-sunset-700: 253 186 116;
+  --color-sunset-800: 255 237 213;
+  --color-sunset-900: 255 247 237;
 
   /* === Neutral (다크 모드 — 밝기 반전) === */
   --color-neutral-50: 20 18 16;
@@ -132,52 +156,52 @@
   --color-neutral-900: 250 248 245;
 
   /* === 시맨틱 역할 토큰 (다크 모드) === */
-  --color-background: 20 18 28;
-  --color-surface: 28 26 38;
-  --color-accent-surface: 38 34 52;
-  --color-text: 242 240 238;
-  --color-text-secondary: 200 196 190;
-  --color-muted: 112 106 100;
-  --color-border: 54 50 46;
+  --color-background: 15 23 42;
+  --color-surface: 24 32 52;
+  --color-accent-surface: 30 41 59;
+  --color-text: 248 250 252;
+  --color-text-secondary: 203 213 225;
+  --color-muted: 148 163 184;
+  --color-border: 51 65 85;
   --color-danger: 248 113 113;
   --color-danger-surface: 60 20 20;
 
   /* === 카테고리 컬러 (다크 모드 — WCAG AA 대비 충족) === */
-  --category-anime-bg: 48 40 72;
-  --category-anime-fg: 218 214 248;
-  --category-sports-bg: 16 58 48;
-  --category-sports-fg: 168 232 212;
-  --category-movie-drama-bg: 28 42 78;
-  --category-movie-drama-fg: 178 198 238;
-  --category-music-bg: 18 62 38;
-  --category-music-fg: 172 232 192;
-  --category-game-bg: 68 28 58;
-  --category-game-fg: 238 186 228;
-  --category-other-bg: 48 46 44;
-  --category-other-fg: 204 200 196;
+  --category-anime-bg: 49 46 129;
+  --category-anime-fg: 224 231 255;
+  --category-sports-bg: 17 78 74;
+  --category-sports-fg: 153 246 228;
+  --category-movie-drama-bg: 30 64 175;
+  --category-movie-drama-fg: 191 219 254;
+  --category-music-bg: 20 83 45;
+  --category-music-fg: 187 247 208;
+  --category-game-bg: 124 45 18;
+  --category-game-fg: 255 237 213;
+  --category-other-bg: 51 65 85;
+  --category-other-fg: 226 232 240;
 
   /* === 콘텐츠 타입 컬러 (다크 모드) === */
-  --content-anime-bg: 48 40 72;
-  --content-anime-fg: 218 214 248;
-  --content-movie-bg: 28 42 78;
-  --content-movie-fg: 178 198 238;
-  --content-drama-bg: 58 32 72;
-  --content-drama-fg: 228 186 242;
-  --content-sports-team-bg: 16 58 48;
-  --content-sports-team-fg: 168 232 212;
-  --content-artist-bg: 18 62 38;
-  --content-artist-fg: 172 232 192;
-  --content-game-bg: 68 28 58;
-  --content-game-fg: 238 186 228;
-  --content-other-bg: 48 46 44;
-  --content-other-fg: 204 200 196;
+  --content-anime-bg: 49 46 129;
+  --content-anime-fg: 224 231 255;
+  --content-movie-bg: 30 64 175;
+  --content-movie-fg: 191 219 254;
+  --content-drama-bg: 76 29 149;
+  --content-drama-fg: 237 233 254;
+  --content-sports-team-bg: 17 78 74;
+  --content-sports-team-fg: 153 246 228;
+  --content-artist-bg: 20 83 45;
+  --content-artist-fg: 187 247 208;
+  --content-game-bg: 124 45 18;
+  --content-game-fg: 255 237 213;
+  --content-other-bg: 51 65 85;
+  --content-other-fg: 226 232 240;
 
   /* === 링크 타입 컬러 (다크 모드 — 밝기 상향) === */
-  --link-official: 155 146 232;
-  --link-ticket: 52 211 153;
-  --link-schedule: 252 211 77;
-  --link-sns: 200 186 240;
-  --link-other: 186 180 172;
+  --link-official: 165 180 252;
+  --link-ticket: 94 234 212;
+  --link-schedule: 251 191 36;
+  --link-sns: 244 114 182;
+  --link-other: 203 213 225;
 }
 
 body {

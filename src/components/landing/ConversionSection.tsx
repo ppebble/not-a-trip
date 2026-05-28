@@ -37,7 +37,7 @@ export const ConversionSection = forwardRef<
   return (
     <section
       ref={ref}
-      className="bg-gradient-to-b from-background to-primary-50/50 py-16 dark:to-background md:py-24"
+      className="bg-gradient-to-b from-background via-secondary-50/30 to-sunset-50/40 py-16 dark:via-secondary-500/10 dark:to-background md:py-24"
       aria-label="전환 영역"
     >
       <div className="mx-auto max-w-2xl px-4 text-center">
@@ -49,7 +49,7 @@ export const ConversionSection = forwardRef<
         {/* 설치 유도 카피 */}
         <header className="mb-10">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl">
-            나만의 <span className="text-primary-500">여권</span>을 만들고
+            나만의 <span className="text-sunset-500">여권</span>을 만들고
             <br />
             다음 여행을 가볍게 시작해요
           </h2>
@@ -112,9 +112,9 @@ function PassportIllustration() {
           y2="190"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0%" stopColor="#faf5ff" />
-          <stop offset="48%" stopColor="#eef2ff" />
-          <stop offset="100%" stopColor="#f8fafc" />
+          <stop offset="0%" stopColor="#eef2ff" />
+          <stop offset="48%" stopColor="#f0fdfa" />
+          <stop offset="100%" stopColor="#fff7ed" />
         </linearGradient>
       </defs>
 
@@ -154,7 +154,7 @@ function PassportIllustration() {
         width="96"
         height="126"
         rx="4"
-        className="stroke-indigo-300/80 dark:stroke-primary-300/40"
+        className="stroke-secondary-500/55 dark:stroke-primary-300/40"
         strokeWidth="1.4"
         fill="none"
       />
@@ -164,7 +164,7 @@ function PassportIllustration() {
         x="80"
         y="72"
         textAnchor="middle"
-        className="fill-violet-700 dark:fill-primary-200"
+        className="fill-primary-700 dark:fill-primary-200"
         fontSize="10"
         fontWeight="bold"
         letterSpacing="2"
@@ -177,20 +177,20 @@ function PassportIllustration() {
         cx="80"
         cy="110"
         r="24"
-        className="fill-violet-50 dark:fill-primary-800/50"
+        className="fill-secondary-50 dark:fill-primary-800/50"
       />
       <circle
         cx="80"
         cy="110"
         r="24"
-        className="stroke-violet-400/80 dark:stroke-primary-300"
+        className="stroke-secondary-500/65 dark:stroke-primary-300"
         strokeWidth="1.8"
         fill="none"
       />
 
       {/* 마스코트 눈 */}
-      <circle cx="72" cy="106" r="3" className="fill-indigo-500" />
-      <circle cx="88" cy="106" r="3" className="fill-indigo-500" />
+      <circle cx="72" cy="106" r="3" className="fill-primary-500" />
+      <circle cx="88" cy="106" r="3" className="fill-primary-500" />
       <circle
         cx="73"
         cy="105"
@@ -207,7 +207,7 @@ function PassportIllustration() {
       {/* 마스코트 입 (미소) */}
       <path
         d="M74 116 Q80 122 86 116"
-        className="stroke-violet-600 dark:stroke-primary-200"
+        className="stroke-primary-600 dark:stroke-primary-200"
         strokeWidth="1.8"
         fill="none"
         strokeLinecap="round"
@@ -220,7 +220,7 @@ function PassportIllustration() {
         width="72"
         height="4"
         rx="2"
-        className="fill-indigo-300/75 dark:fill-primary-400/30"
+        className="fill-secondary-300/75 dark:fill-primary-400/30"
       />
       <rect
         x="52"
@@ -228,7 +228,7 @@ function PassportIllustration() {
         width="56"
         height="4"
         rx="2"
-        className="fill-violet-300/65 dark:fill-primary-400/20"
+        className="fill-sunset-300/65 dark:fill-primary-400/20"
       />
 
       {/* 여권 스탬프 (체크인 도장) */}
@@ -236,7 +236,7 @@ function PassportIllustration() {
         cx="120"
         cy="60"
         r="16"
-        className="stroke-fuchsia-500/80 dark:stroke-secondary-400"
+        className="stroke-sunset-500/80 dark:stroke-secondary-400"
         strokeWidth="1.5"
         fill="none"
         strokeDasharray="3 2"
@@ -246,7 +246,7 @@ function PassportIllustration() {
         x="120"
         y="63"
         textAnchor="middle"
-        className="fill-fuchsia-600 dark:fill-secondary-400"
+        className="fill-sunset-600 dark:fill-secondary-400"
         fontSize="7"
         fontWeight="bold"
       >
