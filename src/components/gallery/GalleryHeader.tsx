@@ -15,12 +15,27 @@ import { AppIcon } from '@/components/common/AppIcon'
 export interface GalleryHeaderProps {
   totalCheckIns: number
   todayCheckIns: number
+  isLoading?: boolean
+  isError?: boolean
 }
 
 export function GalleryHeader({
   totalCheckIns,
   todayCheckIns,
+  isLoading = false,
+  isError = false,
 }: GalleryHeaderProps) {
+  const totalLabel = isLoading
+    ? '집계 중'
+    : isError
+      ? '확인 불가'
+      : totalCheckIns.toLocaleString()
+  const todayLabel = isLoading
+    ? '집계 중'
+    : isError
+      ? '확인 불가'
+      : todayCheckIns.toLocaleString()
+
   return (
     <header className="border-b border-border bg-surface px-4 py-6">
       <div className="mx-auto max-w-6xl">
@@ -38,8 +53,12 @@ export function GalleryHeader({
             </span>
             <div>
               <span className="font-semibold text-sub-text">총 인증</span>{' '}
-              <span className="font-bold text-primary">
-                {totalCheckIns.toLocaleString()}
+              <span
+                className={`font-bold ${
+                  isError ? 'text-amber-600' : 'text-primary'
+                }`}
+              >
+                {totalLabel}
               </span>
             </div>
           </div>
@@ -49,8 +68,12 @@ export function GalleryHeader({
             </span>
             <div>
               <span className="font-semibold text-sub-text">오늘 인증</span>{' '}
-              <span className="font-bold text-green-600">
-                {todayCheckIns.toLocaleString()}
+              <span
+                className={`font-bold ${
+                  isError ? 'text-amber-600' : 'text-green-600'
+                }`}
+              >
+                {todayLabel}
               </span>
             </div>
           </div>

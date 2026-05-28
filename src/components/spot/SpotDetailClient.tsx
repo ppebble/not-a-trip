@@ -163,7 +163,7 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
           <div className="flex items-center justify-between">
             <div>
               <Link
-                href="/"
+                href="/map"
                 className="flex items-center gap-2 text-primary hover:text-primary-600"
               >
                 <ArrowLeftIcon size="md" />
@@ -480,99 +480,20 @@ function SpotDetailContent({
         />
       </div>
 
-      {/* 정보 보완 섹션 */}
-      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
-        <div className="p-4 md:p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-text-primary text-lg font-bold md:text-xl">
-              정보 보완
-            </h2>
-            <button
-              onClick={handleSupplementClick}
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
-            >
-              {showSupplementForm ? '닫기' : '정보 수정 제안'}
-            </button>
-          </div>
-
-          {showSupplementForm && (
-            <div className="mb-4 rounded-lg border border-primary-100 p-4">
-              <SupplementForm
-                spotId={spot.id}
-                onSuccess={handleSupplementSuccess}
-                onCancel={closeSupplementForm}
-              />
-            </div>
-          )}
-
-          <ContributorList key={supplementKey} spotId={spot.id} />
-        </div>
-      </div>
-
-      {/* 스팟 상태 신고 섹션 */}
-      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
-        <div className="p-4 md:p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-text-primary text-lg font-bold md:text-xl">
-              현재 상태 신고
-            </h2>
-            <button
-              onClick={handleStatusReportClick}
-              className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              {showStatusReportForm ? '닫기' : '상태 신고'}
-            </button>
-          </div>
-
-          {spot.spotStatus && (
-            <div className="mb-3 flex items-center gap-2">
-              <span className="text-text-secondary text-sm">현재 상태:</span>
-              <SpotStatusIndicator status={spot.spotStatus} />
-            </div>
-          )}
-
-          {showStatusReportForm && (
-            <div className="rounded-lg border border-amber-100 p-4">
-              <StatusReportForm
-                spotId={spot.id}
-                onSuccess={closeStatusReportForm}
-                onCancel={closeStatusReportForm}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
-        <div className="p-4 md:p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-text-primary text-lg font-bold md:text-xl">
-              정보 정확도 신고
-            </h2>
-            <button
-              onClick={handleQualityReportClick}
-              className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600"
-            >
-              {showQualityReportForm ? '닫기' : '품질 신고'}
-            </button>
-          </div>
-
-          <p className="mb-4 text-sm text-muted">
-            정보 오류, 폐업/폐쇄, 중복 스팟, 부적절 정보 등을 신고할 수
-            있습니다.
-          </p>
-
-          {showQualityReportForm && (
-            <div className="rounded-lg border border-red-100 p-4">
-              <QualityReportForm
-                spotId={spot.id}
-                onSuccess={closeQualityReportForm}
-                onCancel={closeQualityReportForm}
-              />
-            </div>
-          )}
-        </div>
-      </div>
+      <SpotReportHub
+        spot={spot}
+        showSupplementForm={showSupplementForm}
+        showStatusReportForm={showStatusReportForm}
+        showQualityReportForm={showQualityReportForm}
+        handleSupplementClick={handleSupplementClick}
+        handleSupplementSuccess={handleSupplementSuccess}
+        closeSupplementForm={closeSupplementForm}
+        handleStatusReportClick={handleStatusReportClick}
+        closeStatusReportForm={closeStatusReportForm}
+        handleQualityReportClick={handleQualityReportClick}
+        closeQualityReportForm={closeQualityReportForm}
+        supplementKey={supplementKey}
+      />
 
       {/* 로그인 필요 모달 */}
       <LoginRequiredModal
@@ -618,6 +539,197 @@ function SpotDetailContent({
   )
 }
 
+interface SpotReportHubProps {
+  spot: SpotDetailData
+  showSupplementForm: boolean
+  showStatusReportForm: boolean
+  showQualityReportForm: boolean
+  handleSupplementClick: () => void
+  handleSupplementSuccess: () => void
+  closeSupplementForm: () => void
+  handleStatusReportClick: () => void
+  closeStatusReportForm: () => void
+  handleQualityReportClick: () => void
+  closeQualityReportForm: () => void
+  supplementKey: number
+}
+
+function SpotReportHub({
+  spot,
+  showSupplementForm,
+  showStatusReportForm,
+  showQualityReportForm,
+  handleSupplementClick,
+  handleSupplementSuccess,
+  closeSupplementForm,
+  handleStatusReportClick,
+  closeStatusReportForm,
+  handleQualityReportClick,
+  closeQualityReportForm,
+  supplementKey,
+}: SpotReportHubProps) {
+  const activeLabel = showSupplementForm
+    ? '정보 수정 제안'
+    : showStatusReportForm
+      ? '상태 신고'
+      : showQualityReportForm
+        ? '품질 신고'
+        : null
+
+  return (
+    <section className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
+      <div className="p-4 md:p-6">
+        <div className="mb-4">
+          <h2 className="text-text-primary text-lg font-bold md:text-xl">
+            정보 제보 및 수정
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            잘못된 정보, 폐업/접근 불가, 중복·부적절한 내용을 한 곳에서 제보할
+            수 있습니다.
+          </p>
+        </div>
+
+        <div className="mb-4 grid gap-3 md:grid-cols-3">
+          <ReportHubAction
+            title="정보 수정 제안"
+            description="주소, 설명, 사진처럼 보완할 정보가 있을 때"
+            tone="primary"
+            isActive={showSupplementForm}
+            onClick={() => {
+              if (showSupplementForm) {
+                closeSupplementForm()
+                return
+              }
+              closeStatusReportForm()
+              closeQualityReportForm()
+              handleSupplementClick()
+            }}
+          />
+          <ReportHubAction
+            title="상태 신고"
+            description="폐업, 임시 휴무, 접근 제한 등 방문 상태가 바뀌었을 때"
+            tone="warning"
+            isActive={showStatusReportForm}
+            onClick={() => {
+              if (showStatusReportForm) {
+                closeStatusReportForm()
+                return
+              }
+              closeSupplementForm()
+              closeQualityReportForm()
+              handleStatusReportClick()
+            }}
+          />
+          <ReportHubAction
+            title="품질 신고"
+            description="중복 스팟, 부적절 정보, 명백한 오류가 있을 때"
+            tone="danger"
+            isActive={showQualityReportForm}
+            onClick={() => {
+              if (showQualityReportForm) {
+                closeQualityReportForm()
+                return
+              }
+              closeSupplementForm()
+              closeStatusReportForm()
+              handleQualityReportClick()
+            }}
+          />
+        </div>
+
+        {spot.spotStatus && (
+          <div className="mb-4 flex items-center gap-2 rounded-lg bg-accent-surface px-3 py-2">
+            <span className="text-text-secondary text-sm">현재 상태:</span>
+            <SpotStatusIndicator status={spot.spotStatus} />
+          </div>
+        )}
+
+        {activeLabel && (
+          <div className="mb-4 rounded-lg border border-border p-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold text-main-text">
+                {activeLabel}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  closeSupplementForm()
+                  closeStatusReportForm()
+                  closeQualityReportForm()
+                }}
+                className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-sub-text transition hover:bg-accent-surface"
+              >
+                닫기
+              </button>
+            </div>
+
+            {showSupplementForm && (
+              <SupplementForm
+                spotId={spot.id}
+                onSuccess={handleSupplementSuccess}
+                onCancel={closeSupplementForm}
+              />
+            )}
+            {showStatusReportForm && (
+              <StatusReportForm
+                spotId={spot.id}
+                onSuccess={closeStatusReportForm}
+                onCancel={closeStatusReportForm}
+              />
+            )}
+            {showQualityReportForm && (
+              <QualityReportForm
+                spotId={spot.id}
+                onSuccess={closeQualityReportForm}
+                onCancel={closeQualityReportForm}
+              />
+            )}
+          </div>
+        )}
+
+        <ContributorList key={supplementKey} spotId={spot.id} />
+      </div>
+    </section>
+  )
+}
+
+function ReportHubAction({
+  title,
+  description,
+  tone,
+  isActive,
+  onClick,
+}: {
+  title: string
+  description: string
+  tone: 'primary' | 'warning' | 'danger'
+  isActive: boolean
+  onClick: () => void
+}) {
+  const toneClass =
+    tone === 'primary'
+      ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/15'
+      : tone === 'warning'
+        ? 'border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100'
+        : 'border-red-300 bg-red-50 text-red-700 hover:bg-red-100'
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-xl border p-4 text-left transition ${toneClass} ${
+        isActive ? 'ring-2 ring-primary/40' : ''
+      }`}
+      aria-pressed={isActive}
+    >
+      <span className="block font-semibold">{isActive ? '닫기' : title}</span>
+      <span className="mt-1 block text-xs leading-relaxed opacity-80">
+        {description}
+      </span>
+    </button>
+  )
+}
+
 interface SpotDetailErrorProps {
   error: Error
   onRetry?: () => void
@@ -647,10 +759,10 @@ function SpotDetailError({ error, onRetry }: SpotDetailErrorProps) {
               </button>
             )}
             <Link
-              href="/"
+              href="/map"
               className="inline-flex items-center rounded-md border border-border px-4 py-2 text-primary transition-colors hover:bg-primary-50"
             >
-              메인으로 돌아가기
+              지도로 돌아가기
             </Link>
           </div>
         </div>
@@ -674,10 +786,10 @@ function SpotNotFound() {
             요청하신 스팟이 존재하지 않거나 삭제되었습니다.
           </p>
           <Link
-            href="/"
+            href="/map"
             className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-600"
           >
-            메인으로 돌아가기
+            지도로 돌아가기
           </Link>
         </div>
       </div>

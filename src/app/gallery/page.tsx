@@ -5,14 +5,16 @@ import { Suspense, useState, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { GalleryContent } from '@/components/gallery/GalleryContent'
 import { FloatingActionButton } from '@/components/gallery/FloatingActionButton'
+import { GalleryHeader } from '@/components/gallery/GalleryHeader'
+import { GalleryTabs } from '@/components/gallery/GalleryTabs'
 import { Spot, UserBadge } from '@/types'
 import {
   GalleryPageSkeleton as GalleryPageSkeletonUI,
-  SkeletonBlock,
   GalleryGridSkeleton,
 } from '@/components/common/SkeletonUI'
 import { useOnboarding } from '@/hooks/useOnboarding'
 import { GALLERY_PAGE_STEPS } from '@/lib/tour-config'
+import { useGalleryStats } from '@/hooks/useGalleryQueries'
 
 const SpotSearchModal = dynamic(
   () =>
@@ -137,15 +139,9 @@ function GalleryPageContent() {
 
   return (
     <main className="min-h-screen bg-surface">
-      {/* GalleryHeader 컴포넌트 영역 (Task 2.1에서 구현) */}
-      <Suspense fallback={<HeaderSkeleton />}>
-        <GalleryHeaderPlaceholder />
-      </Suspense>
+      <GalleryHeaderWithStats />
 
-      {/* GalleryTabs 컴포넌트 영역 (Task 3.1에서 구현) */}
-      <Suspense fallback={<TabsSkeleton />}>
-        <GalleryTabsPlaceholder activeTab={activeTab} />
-      </Suspense>
+      <GalleryTabs activeTab={activeTab} />
 
       {/* GalleryContent 컴포넌트 영역 (Task 3.2에서 구현) */}
       <Suspense fallback={<ContentSkeleton />}>
@@ -202,35 +198,6 @@ function GalleryPageContent() {
 }
 
 /**
- * 헤더 스켈레톤
- */
-function HeaderSkeleton() {
-  return (
-    <div className="border-b border-neutral-200 bg-surface px-4 py-6">
-      <div className="mx-auto max-w-6xl">
-        <SkeletonBlock className="h-8 w-32" />
-        <SkeletonBlock className="mt-2 h-4 w-48 bg-surface" />
-      </div>
-    </div>
-  )
-}
-
-/**
- * 탭 스켈레톤
- */
-function TabsSkeleton() {
-  return (
-    <div className="border-b border-neutral-200 bg-surface px-4 py-3">
-      <div className="mx-auto flex max-w-6xl gap-2">
-        <SkeletonBlock className="h-10 w-28" />
-        <SkeletonBlock className="h-10 w-28" />
-        <SkeletonBlock className="h-10 w-28" />
-      </div>
-    </div>
-  )
-}
-
-/**
  * 콘텐츠 스켈레톤
  */
 function ContentSkeleton() {
@@ -241,71 +208,16 @@ function ContentSkeleton() {
   )
 }
 
-/**
- * GalleryHeader 플레이스홀더
- * Task 2.1에서 실제 컴포넌트로 교체 예정
- * Requirements 5.1, 5.2, 5.3
- */
-function GalleryHeaderPlaceholder() {
-  return (
-    <div className="border-b border-neutral-200 bg-surface px-4 py-6">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="text-2xl font-bold text-main-text">순례 인증</h1>
-        <p className="mt-1 text-sm text-sub-text">오타쿠들의 발자취</p>
-        {/* 통계 영역 - Task 2.1에서 실제 데이터로 교체 */}
-        <div className="mt-4 flex gap-6">
-          <div className="text-sm text-sub-text">
-            <span className="font-semibold text-main-text">총 인증</span>{' '}
-            <span className="text-neutral-400">--</span>
-          </div>
-          <div className="text-sm text-sub-text">
-            <span className="font-semibold text-main-text">오늘 인증</span>{' '}
-            <span className="text-neutral-400">--</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/**
- * GalleryTabs 플레이스홀더
- * Task 3.1에서 실제 컴포넌트로 교체 예정
- * Requirements 3.1
- */
-function GalleryTabsPlaceholder({
-  activeTab,
-}: {
-  activeTab: 'feed' | 'hall-of-fame' | 'content'
-}) {
-  const tabs = [
-    { id: 'feed', label: '실시간 피드' },
-    { id: 'hall-of-fame', label: '명예의 전당' },
-    { id: 'content', label: '콘텐츠별' },
-  ] as const
+function GalleryHeaderWithStats() {
+  const { data, isLoading, isError } = useGalleryStats()
 
   return (
-    <div className="sticky top-0 z-10 border-b border-neutral-200 bg-surface px-4 py-3">
-      <div className="mx-auto flex max-w-6xl gap-2" role="tablist">
-        {tabs.map((tab) => (
-          <a
-            key={tab.id}
-            href={`/gallery?tab=${tab.id}`}
-            className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-              activeTab === tab.id
-                ? 'bg-primary text-white shadow-md'
-                : 'bg-primary-50 text-secondary hover:bg-surface'
-            }`}
-            aria-selected={activeTab === tab.id}
-            role="tab"
-            id={`tab-${tab.id}`}
-            aria-controls={`tabpanel-${tab.id}`}
-          >
-            {tab.label}
-          </a>
-        ))}
-      </div>
-    </div>
+    <GalleryHeader
+      totalCheckIns={data?.totalCheckIns ?? 0}
+      todayCheckIns={data?.todayCheckIns ?? 0}
+      isLoading={isLoading}
+      isError={isError}
+    />
   )
 }
 

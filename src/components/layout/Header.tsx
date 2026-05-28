@@ -33,6 +33,12 @@ const HIDDEN_HEADER_PATHS = ['/welcome']
 const NAV_ITEMS: NavItem[] = [
   { href: '/', label: '홈', match: (pathname) => pathname === '/' },
   {
+    href: '/map',
+    label: '지도 탐색',
+    icon: 'map',
+    match: (pathname) => pathname === '/map',
+  },
+  {
     href: '/contents',
     label: '작품 탐색',
     icon: 'content-wise',

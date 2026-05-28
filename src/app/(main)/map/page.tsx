@@ -3,7 +3,7 @@
 import { AppIcon } from '@/components/common/AppIcon'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useSpots } from '@/hooks/useSpots'
 import CategoryFilter from '@/components/map/CategoryFilter'
 import ContentSearchFilter from '@/components/map/ContentSearchFilter'
@@ -117,7 +117,10 @@ function MapContent() {
   const router = useRouter()
   const selectedCategories = useSelectedCategories()
   const searchQuery = useSearchQuery()
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const isNoCategorySelected = selectedCategories.length === 0
+  const hasNarrowedCategories =
+    selectedCategories.length !== VALID_CATEGORIES.length
 
   const {
     data: spots,
@@ -172,7 +175,31 @@ function MapContent() {
 
       {/* 필터 영역 (상단 통합 바) */}
       <div className="absolute left-0 right-0 top-0 z-[1000]">
-        <div className="flex items-center border-b border-neutral-200 bg-surface/95 px-4 py-3 shadow-sm backdrop-blur-sm">
+        <div className="flex border-b border-neutral-200 bg-surface/95 px-4 py-3 shadow-sm backdrop-blur-sm md:hidden">
+          <button
+            type="button"
+            onClick={() => setIsMobileFilterOpen((prev) => !prev)}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
+            aria-expanded={isMobileFilterOpen}
+            aria-controls="map-filter-panel"
+          >
+            <AppIcon name="map" size={16} />
+            {isMobileFilterOpen ? '필터 닫기' : '검색·필터 열기'}
+          </button>
+          {(searchQuery || hasNarrowedCategories) && (
+            <span className="ml-3 self-center truncate text-xs text-sub-text">
+              {searchQuery
+                ? `"${searchQuery}" 검색 중`
+                : `${selectedCategories.length}개 카테고리 선택`}
+            </span>
+          )}
+        </div>
+        <div
+          id="map-filter-panel"
+          className={`items-center border-b border-neutral-200 bg-surface/95 px-4 py-3 shadow-sm backdrop-blur-sm md:flex ${
+            isMobileFilterOpen ? 'flex' : 'hidden'
+          }`}
+        >
           <ContentSearchFilter />
           <div className="mx-2 h-8 w-px flex-shrink-0 bg-neutral-300" />
           <div className="min-w-0 flex-1">
