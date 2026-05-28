@@ -104,7 +104,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             <h1 className="mb-5 text-4xl font-semibold leading-[1.08] tracking-[-0.045em] text-main-text md:text-5xl lg:text-6xl">
               좋아하는 장면을
               <br />
-              <span className="bg-gradient-to-r from-primary-600 via-secondary-600 to-sunset-500 bg-clip-text text-transparent dark:from-primary-600 dark:via-secondary-500 dark:to-sunset-600">
+              <span className="text-primary-600 dark:text-primary-300">
                 여행지
               </span>
               로 만나보세요

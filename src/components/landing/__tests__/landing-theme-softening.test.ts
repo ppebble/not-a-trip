@@ -70,4 +70,20 @@ describe('landing theme and softer visual tone', () => {
     expect(conversion).toContain('fill-secondary-300/75')
     expect(conversion).toContain('fill-sunset-300/65')
   })
+  it('강조 문구는 무지개형 그라데이션 텍스트 대신 단색 브랜드 텍스트를 사용한다', () => {
+    const hero = read('src/components/landing/HeroSection.tsx')
+    const entry = read('src/components/landing/EntryPointSection.tsx')
+    const howItWorks = read('src/components/landing/HowItWorksSection.tsx')
+
+    for (const source of [hero, entry, howItWorks]) {
+      expect(source).not.toContain('bg-clip-text text-transparent')
+      expect(source).not.toContain(
+        'from-primary-600 via-secondary-600 to-sunset-500'
+      )
+    }
+
+    expect(hero).toContain('text-primary-600 dark:text-primary-300')
+    expect(entry).toContain('text-primary-600 dark:text-primary-300')
+    expect(howItWorks).toContain('text-primary-600 dark:text-primary-300')
+  })
 })

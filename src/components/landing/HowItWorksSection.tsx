@@ -45,7 +45,7 @@ export function HowItWorksSection() {
         <header className="mb-12 text-center md:mb-16">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl lg:text-4xl">
             복잡하게 말고,{' '}
-            <span className="bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent dark:from-primary-300 dark:to-secondary-300">
+            <span className="text-primary-600 dark:text-primary-300">
               이렇게 찾습니다
             </span>
           </h2>
