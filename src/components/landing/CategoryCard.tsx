@@ -39,8 +39,8 @@ interface CategoryCardProps {
  */
 function getCategoryStyles(colorToken: string) {
   return {
-    backgroundColor: `rgb(var(--${colorToken}-bg) / 0.3)`,
-    borderColor: `rgb(var(--${colorToken}-fg) / 0.3)`,
+    backgroundColor: `rgb(var(--${colorToken}-bg) / 0.22)`,
+    borderColor: `rgb(var(--${colorToken}-fg) / 0.24)`,
   }
 }
 
@@ -69,7 +69,7 @@ export function CategoryCard({
 
   return (
     <article
-      className={`category-card group relative flex flex-col overflow-hidden rounded-xl border backdrop-blur-sm transition-transform duration-300 ${
+      className={`category-card group relative flex flex-col overflow-hidden rounded-[1.5rem] border shadow-lg shadow-primary-500/5 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 ${
         !reducedMotion && isHighEnd ? 'hover:scale-[1.02]' : ''
       }`}
       style={{
@@ -104,10 +104,10 @@ export function CategoryCard({
       </div>
 
       {/* 카드 콘텐츠 */}
-      <div className="flex flex-1 flex-col gap-3 p-4 md:p-5">
+      <div className="flex flex-1 flex-col gap-3 bg-surface/70 p-5 dark:bg-black/10 md:p-6">
         {/* 마스코트 소품 + 제목 */}
         <div className="flex items-center gap-3">
-          <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg">
+          <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-background/60">
             {!mascotError ? (
               <Image
                 src={mascotProp}
@@ -127,7 +127,10 @@ export function CategoryCard({
               </span>
             )}
           </div>
-          <h3 className="text-lg font-bold md:text-xl" style={accentStyles}>
+          <h3
+            className="text-lg font-semibold tracking-[-0.01em] md:text-xl"
+            style={accentStyles}
+          >
             {title}
           </h3>
         </div>
@@ -140,10 +143,10 @@ export function CategoryCard({
         {/* 더 보기 링크 */}
         <Link
           href={`/map?category=${category}`}
-          className="mt-auto inline-flex items-center gap-1 self-start text-sm font-medium transition-colors hover:underline"
+          className="mt-auto inline-flex items-center gap-1 self-start rounded-full px-0 text-sm font-semibold transition-colors hover:underline"
           style={accentStyles}
         >
-          더 보기
+          지도에서 보기
           <svg
             className="h-4 w-4"
             fill="none"

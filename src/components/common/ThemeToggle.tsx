@@ -85,7 +85,7 @@ export function ThemeSelector() {
     <div className="relative" ref={containerRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex h-10 w-10 items-center justify-center rounded-xl text-neutral-300 transition hover:bg-neutral-700 hover:text-white"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface/85 text-sub-text shadow-sm backdrop-blur-sm transition hover:border-primary-500/40 hover:bg-primary-50 hover:text-main-text dark:border-white/15 dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20 dark:hover:text-white"
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label={`현재: ${currentLabel}. 클릭하여 테마 선택`}
@@ -98,7 +98,7 @@ export function ThemeSelector() {
 
       {isOpen && (
         <div
-          className="absolute right-0 top-full z-[9999] mt-1 w-44 overflow-hidden rounded-lg bg-surface shadow-lg ring-1 ring-black/5"
+          className="absolute right-0 top-full z-[9999] mt-2 w-44 overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-primary-500/10 ring-1 ring-black/5 dark:border-white/10"
           role="menu"
           aria-label="테마 선택"
         >
@@ -113,8 +113,8 @@ export function ThemeSelector() {
                 }}
                 className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-sm transition-colors ${
                   isActive
-                    ? 'bg-primary-50 font-medium text-primary'
-                    : 'text-text-secondary hover:bg-secondary-100'
+                    ? 'bg-primary-50 font-medium text-primary dark:bg-white/10 dark:text-primary-300'
+                    : 'text-sub-text hover:bg-accent-surface hover:text-main-text'
                 }`}
                 role="menuitem"
               >

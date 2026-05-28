@@ -8,26 +8,26 @@ const STEPS = [
   {
     step: '01',
     icon: '🔍',
-    title: '작품/아티스트 검색',
-    description: '좋아하는 애니메이션, 영화, 아티스트 이름으로 검색하세요',
+    title: '떠오른 이름 검색',
+    description: '작품, 아티스트, 장소 이름 중 기억나는 것만 입력하세요',
   },
   {
     step: '02',
     icon: '🗺️',
-    title: '지도에서 확인',
-    description: '전 세계 성지 스팟이 지도 위에 핀으로 표시됩니다',
+    title: '지도에서 거리감 확인',
+    description: '근처 스팟과 이동 흐름을 한눈에 확인합니다',
   },
   {
     step: '03',
     icon: '📸',
-    title: '현장 방문 & 인증',
-    description: '직접 방문하고 사진으로 순례 인증을 남기세요',
+    title: '현장에서 기록 남기기',
+    description: '방문 사진과 짧은 메모로 그 순간을 저장하세요',
   },
   {
     step: '04',
     icon: '🏅',
-    title: '뱃지 & 코스 완성',
-    description: '인증을 쌓아 뱃지를 모으고 나만의 순례 코스를 만드세요',
+    title: '나만의 코스 완성',
+    description: '방문 기록이 쌓이면 다음 여행 코스가 더 쉬워집니다',
   },
 ]
 
@@ -43,14 +43,14 @@ export function HowItWorksSection() {
       <div className="mx-auto max-w-6xl px-4">
         {/* 헤더 */}
         <header className="mb-12 text-center md:mb-16">
-          <h2 className="mb-3 text-2xl font-bold text-white md:text-3xl lg:text-4xl">
-            이런 식으로{' '}
-            <span className="bg-gradient-to-r from-primary-400 to-purple-400 bg-clip-text text-transparent">
-              찾습니다
+          <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl lg:text-4xl">
+            복잡하게 말고,{' '}
+            <span className="bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent dark:from-primary-300 dark:to-secondary-300">
+              이렇게 찾습니다
             </span>
           </h2>
-          <p className="text-base text-white/50 md:text-lg">
-            4단계로 나만의 성지순례를 시작하세요
+          <p className="text-base leading-7 text-sub-text md:text-lg">
+            검색부터 기록까지 끊기지 않게 이어지는 흐름입니다
           </p>
         </header>
 
@@ -59,7 +59,7 @@ export function HowItWorksSection() {
           {STEPS.map((step, index) => (
             <div
               key={step.step}
-              className="relative flex flex-col items-center text-center"
+              className="relative flex flex-col items-center rounded-[1.5rem] border border-border bg-surface/80 p-6 text-center shadow-sm shadow-primary-500/5 dark:border-white/10 dark:bg-white/[0.05]"
             >
               {/* 연결선 (마지막 제외) */}
               {index < STEPS.length - 1 && (
@@ -70,7 +70,7 @@ export function HowItWorksSection() {
               )}
 
               {/* 아이콘 원 */}
-              <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-primary-500/30 bg-primary-500/10 text-2xl">
+              <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-primary-500/25 bg-primary-500/10 text-2xl">
                 {step.icon}
                 {/* 스텝 번호 */}
                 <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500 text-[10px] font-bold text-white">
@@ -78,10 +78,10 @@ export function HowItWorksSection() {
                 </span>
               </div>
 
-              <h3 className="mb-2 text-base font-semibold text-white">
+              <h3 className="mb-2 text-base font-semibold tracking-[-0.01em] text-main-text">
                 {step.title}
               </h3>
-              <p className="text-sm leading-relaxed text-white/50">
+              <p className="text-sm leading-relaxed text-sub-text">
                 {step.description}
               </p>
             </div>
