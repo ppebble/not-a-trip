@@ -77,7 +77,7 @@ function StorytellingSectionWithGSAP({
       <div className="mx-auto max-w-6xl px-4">
         <header className="mb-12 text-center md:mb-16">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl lg:text-4xl">
-            취향별로 <span className="text-primary-500">골라볼까요?</span>
+            취향별로 <span className="text-secondary-600">골라볼까요?</span>
           </h2>
           <p className="text-base leading-7 text-sub-text md:text-lg">
             장르마다 다른 분위기의 스팟을 카드로 먼저 살펴보세요
@@ -133,7 +133,7 @@ function StorytellingSectionFallback({
       <div className="mx-auto max-w-6xl px-4">
         <header className="mb-12 text-center md:mb-16">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl lg:text-4xl">
-            취향별로 <span className="text-primary-500">골라볼까요?</span>
+            취향별로 <span className="text-secondary-600">골라볼까요?</span>
           </h2>
           <p className="text-base leading-7 text-sub-text md:text-lg">
             장르마다 다른 분위기의 스팟을 카드로 먼저 살펴보세요

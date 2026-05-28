@@ -38,7 +38,7 @@ const ENTRY_POINTS: EntryPoint[] = [
 export function EntryPointSection() {
   return (
     <section
-      className="bg-gradient-to-b from-background to-primary-50/40 py-16 dark:to-background md:py-24"
+      className="bg-gradient-to-b from-background via-secondary-50/35 to-sunset-50/30 py-16 dark:via-secondary-500/10 dark:to-background md:py-24"
       aria-label="목적별 진입점"
     >
       <div className="mx-auto max-w-6xl px-4">
@@ -46,7 +46,7 @@ export function EntryPointSection() {
         <header className="mb-12 text-center">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl">
             오늘은 어떻게{' '}
-            <span className="bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent dark:from-primary-300 dark:to-secondary-300">
+            <span className="bg-gradient-to-r from-primary-600 via-secondary-600 to-sunset-500 bg-clip-text text-transparent dark:from-primary-600 dark:via-secondary-500 dark:to-sunset-600">
               떠나볼까요?
             </span>
           </h2>
@@ -61,10 +61,10 @@ export function EntryPointSection() {
             <Link
               key={entry.href}
               href={entry.href}
-              className="group flex flex-col items-center rounded-[1.5rem] border border-border bg-surface/85 p-8 text-center shadow-sm shadow-primary-500/5 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-primary-500/45 hover:bg-background hover:shadow-xl hover:shadow-primary-500/10 dark:border-white/10 dark:bg-white/[0.06] dark:hover:bg-white/10"
+              className="group flex flex-col items-center rounded-[1.5rem] border border-border bg-surface/85 p-8 text-center shadow-sm shadow-secondary-500/5 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-secondary-500/45 hover:bg-background hover:shadow-xl hover:shadow-secondary-500/10 dark:border-white/10 dark:bg-white/[0.06] dark:hover:bg-white/10"
             >
               {/* 아이콘 */}
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-primary-500/20 bg-primary-500/10 text-3xl transition-transform group-hover:scale-105">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-secondary-500/20 bg-secondary-500/10 text-3xl transition-transform group-hover:scale-105">
                 {entry.icon}
               </div>
 
