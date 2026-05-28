@@ -38,4 +38,29 @@ describe('travel-inspired global color system', () => {
       "DEFAULT: 'rgb(var(--color-text-secondary) / <alpha-value>)'"
     )
   })
+  it('라이트 모드 표면은 노란 기를 낮추고 경계 대비를 확보한다', () => {
+    const globals = read('src/app/globals.css')
+
+    expect(globals).toContain('--color-background: 250 250 249')
+    expect(globals).toContain('--color-accent-surface: 241 245 249')
+    expect(globals).toContain('--color-border: 203 213 225')
+    expect(globals).not.toContain('--color-background: 255 252 247')
+  })
+
+  it('헤더 선택 상태는 라이트 모드에서 형광 보조색 대신 고대비 인디고를 쓴다', () => {
+    const header = read('src/components/layout/Header.tsx')
+
+    expect(header).toContain('bg-primary-50 text-primary-700')
+    expect(header).toContain('ring-primary-200')
+    expect(header).toContain('dark:bg-secondary-500/15 dark:text-secondary-600')
+    expect(header).not.toContain("? 'bg-secondary-100 text-secondary-400'")
+  })
+
+  it('튜토리얼 다이얼로그 제목과 보조 액션 위계를 고정한다', () => {
+    const onboardingTour = read('src/components/common/OnboardingTour.tsx')
+
+    expect(onboardingTour).toContain('mb-2 text-lg font-bold')
+    expect(onboardingTour).toContain('underline underline-offset-4')
+    expect(onboardingTour).toContain('text-gray-500')
+  })
 })

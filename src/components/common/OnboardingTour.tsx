@@ -219,7 +219,7 @@ export default function OnboardingTour({
         className="fixed z-[10000] w-80 max-w-[calc(100vw-32px)] rounded-xl bg-white p-5 shadow-2xl dark:bg-gray-800"
         style={{ top: tooltipPos.top, left: tooltipPos.left }}
       >
-        <h3 className="mb-2 text-base font-bold text-gray-900 dark:text-gray-100">
+        <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
           {step.title}
         </h3>
         <p className="mb-5 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
@@ -230,7 +230,7 @@ export default function OnboardingTour({
           <div className="flex items-center gap-2">
             <button
               onClick={onSkip}
-              className="text-sm text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+              className="text-sm text-gray-500 underline underline-offset-4 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               type="button"
             >
               건너뛰기
@@ -239,7 +239,7 @@ export default function OnboardingTour({
             {onDismiss && (
               <button
                 onClick={onDismiss}
-                className="text-sm text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+                className="text-sm text-gray-500 underline underline-offset-4 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 type="button"
               >
                 다시 보지 않기
