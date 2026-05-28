@@ -58,7 +58,7 @@
   - Primary: Harbor Indigo for core actions, focus, route/navigation confidence.
   - Secondary: Sea Teal for discovery, map, category exploration, hover states.
   - Sunset: warm accent for admin/special states, passport/check-in warmth, subtle highlights.
-  - Background: warm off-white in light mode, deep slate/navy in dark mode.
+  - Background: restrained stone/off-white in light mode, deep slate/navy in dark mode; borders must stay visibly darker than warm surfaces.
   - Category/content colors: related but varied; use category tokens rather than ad hoc Tailwind colors.
 - Typography: Pretendard/system; prefer `font-semibold`, relaxed line height, and slight negative tracking on large display text.
 - Spacing/layout rhythm: mobile-first, generous card padding, section rhythm of 16–24 spacing units.

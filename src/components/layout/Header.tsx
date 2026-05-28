@@ -66,13 +66,13 @@ const NAV_ITEMS: NavItem[] = [
 
 function getNavLinkClass(isActive: boolean, mobile = false) {
   const base = mobile
-    ? 'flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-medium transition hover:bg-secondary-100'
-    : 'rounded-xl px-3 py-2 text-base font-medium transition hover:bg-secondary-100 hover:text-secondary-400'
+    ? 'flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-base font-medium transition hover:bg-accent-surface hover:text-text-primary dark:hover:bg-secondary-500/15 dark:hover:text-secondary-600'
+    : 'rounded-xl px-3 py-2 text-base font-medium transition hover:bg-accent-surface hover:text-text-primary dark:hover:bg-secondary-500/15 dark:hover:text-secondary-600'
 
   return `${base} ${
     isActive
-      ? 'bg-secondary-100 text-secondary-400'
-      : 'text-text-secondary hover:text-text-primary'
+      ? 'bg-primary-50 text-primary-700 ring-1 ring-primary-200 dark:bg-secondary-500/15 dark:text-secondary-600 dark:ring-secondary-500/20'
+      : 'text-text-secondary'
   }`
 }
 
@@ -106,7 +106,7 @@ export function Header() {
               className="max-h-9"
               alt="Not a Trip"
             />
-            <span className="text-text-primary truncate text-xl font-bold sm:text-2xl">
+            <span className="truncate text-xl font-bold text-text-primary sm:text-2xl">
               Not a Trip
             </span>
           </Link>
@@ -136,7 +136,7 @@ export function Header() {
 
             <button
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-              className="text-text-secondary hover:text-text-primary flex h-10 w-10 items-center justify-center rounded-xl transition hover:bg-secondary-100 lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-text-secondary transition hover:bg-secondary-100 hover:text-text-primary lg:hidden"
               aria-label={isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-header-menu"

@@ -52,13 +52,13 @@
   --color-neutral-900: 24 24 27;
 
   /* === 시맨틱 역할 토큰 (직접 RGB 값 저장 — 중첩 var() 회피) === */
-  --color-background: 255 252 247;
+  --color-background: 250 250 249;
   --color-surface: 255 255 255;
-  --color-accent-surface: 240 253 250;
+  --color-accent-surface: 241 245 249;
   --color-text: 15 23 42;
   --color-text-secondary: 71 85 105;
   --color-muted: 113 113 122;
-  --color-border: 226 232 240;
+  --color-border: 203 213 225;
   --color-danger: 239 68 68;
   --color-danger-surface: 254 242 242;
 
