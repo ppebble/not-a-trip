@@ -46,7 +46,7 @@ export function EntryPointSection() {
         <header className="mb-12 text-center">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl">
             오늘은 어떻게{' '}
-            <span className="bg-gradient-to-r from-primary-600 via-secondary-600 to-sunset-500 bg-clip-text text-transparent dark:from-primary-600 dark:via-secondary-500 dark:to-sunset-600">
+            <span className="text-primary-600 dark:text-primary-300">
               떠나볼까요?
             </span>
           </h2>

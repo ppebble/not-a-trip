@@ -63,4 +63,16 @@ describe('travel-inspired global color system', () => {
     expect(onboardingTour).toContain('underline underline-offset-4')
     expect(onboardingTour).toContain('text-gray-500')
   })
+  it('후속 이미지 데이터 수집 요구사항은 외부 핫링크 제거 기준을 명시한다', () => {
+    const requirements = read(
+      '.kiro/specs/47-real-image-data-collection/requirements.md'
+    )
+
+    expect(requirements).toContain('External_Hotlink')
+    expect(requirements).toContain('Owned_Image_Asset')
+    expect(requirements).toContain('upload.wikimedia.org')
+    expect(requirements).toContain(
+      'THE app SHALL NOT render External_Hotlink URLs'
+    )
+  })
 })
