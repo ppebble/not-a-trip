@@ -44,6 +44,11 @@ interface ContentNamesResponse {
   total: number
 }
 
+interface CheckInStatsResponse {
+  totalCheckIns: number
+  todayCheckIns: number
+}
+
 // ── Query Key Factory ───────────────────────────────────────
 
 export const galleryKeys = {
@@ -52,6 +57,7 @@ export const galleryKeys = {
   checkinList: (params: Record<string, unknown>) =>
     [...galleryKeys.checkins(), params] as const,
   ranking: () => [...galleryKeys.all, 'ranking'] as const,
+  stats: () => [...galleryKeys.all, 'stats'] as const,
   contentList: (contentType?: string) =>
     [...galleryKeys.all, 'contentList', contentType ?? 'all'] as const,
   checkinCount: (spotId: string) =>
@@ -101,6 +107,22 @@ export function useHallOfFameRanking() {
       return res.json()
     },
     staleTime: 5 * 60 * 1000,
+  })
+}
+
+/**
+ * 갤러리 상단 인증 통계 조회 훅
+ * Requirements: spec 46 / 3.1-3.4
+ */
+export function useGalleryStats() {
+  return useQuery({
+    queryKey: galleryKeys.stats(),
+    queryFn: async (): Promise<CheckInStatsResponse> => {
+      const res = await fetch(API_ROUTES.CHECKINS.STATS)
+      if (!res.ok) throw new Error('갤러리 통계 조회 실패')
+      return res.json()
+    },
+    staleTime: 60 * 1000,
   })
 }
 
