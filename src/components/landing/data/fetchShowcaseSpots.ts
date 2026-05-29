@@ -1,5 +1,7 @@
 import { getCollection } from '@/lib/db'
 import { COLLECTIONS } from '@/lib/db'
+import type { DataReviewStatus } from '@/lib/real-image-data'
+import { isExternalHotlinkUrl } from '@/lib/real-image-data'
 import type { SpotCategory } from '@/types/spot'
 import type { ShowcaseCard } from './showcaseCards'
 import { REAL_SPOT_PHOTO_FALLBACKS } from './realSpotPhotoFallbacks'
@@ -24,6 +26,7 @@ interface SpotDocument {
   photos: string[]
   category?: SpotCategory
   relatedContent?: { name: string }[]
+  reviewStatus?: DataReviewStatus
 }
 
 interface RelationDocument {
@@ -35,7 +38,11 @@ interface RelationDocument {
 
 function isPlaceholderPhoto(url?: string | null): boolean {
   if (!url) return true
-  return url.includes('picsum.photos/seed/') || url.startsWith('/icons/')
+  return (
+    url.includes('picsum.photos/seed/') ||
+    isExternalHotlinkUrl(url) ||
+    url.startsWith('/icons/')
+  )
 }
 
 function resolveLandingPhoto(
@@ -70,6 +77,7 @@ export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
         const spots = await collection
           .find({
             category,
+            reviewStatus: 'approved',
             'photos.0': { $exists: true, $ne: '' },
           })
           .project({
@@ -78,6 +86,7 @@ export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
             photos: 1,
             category: 1,
             relatedContent: 1,
+            reviewStatus: 1,
           })
           .limit(2)
           .toArray()
@@ -191,7 +200,11 @@ export async function fetchCategoryImages(): Promise<
     const results = await Promise.all(
       CATEGORY_ORDER.map(async (category) => {
         const spot = await collection.findOne(
-          { category, 'photos.0': { $exists: true, $ne: '' } },
+          {
+            category,
+            reviewStatus: 'approved',
+            'photos.0': { $exists: true, $ne: '' },
+          },
           { projection: { id: 1, photos: 1 } }
         )
         return {

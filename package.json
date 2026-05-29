@@ -16,6 +16,7 @@
     "type-check": "tsc --noEmit",
     "backup:db": "node scripts/backup-mongodb.mjs",
     "restore:db": "node scripts/restore-mongodb.mjs",
+    "validate:images": "node scripts/validate-approved-images.mjs",
     "prepare": "husky install",
     "commit": "git-cz"
   },

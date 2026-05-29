@@ -60,20 +60,24 @@ const arbitraryCategory = fc.constantFrom(...SPOT_CATEGORIES)
 
 /** 실제 사진 URL arbitrary */
 const arbitraryRealPhotoUrl = fc.oneof(
-  fc.constant('https://upload.wikimedia.org/wikipedia/commons/test.jpg'),
   fc.constant('https://example.com/photo.jpg'),
+  fc.constant('https://cdn.not-a-trip.example/assets/photo.webp'),
   fc.constant('https://storage.googleapis.com/bucket/photo.jpg'),
   fc
     .webUrl()
     .filter(
       (url) =>
-        !url.includes('picsum.photos/seed/') && !url.startsWith('/icons/')
+        !url.includes('picsum.photos/seed/') &&
+        !url.startsWith('/icons/') &&
+        !url.includes('upload.wikimedia.org') &&
+        !url.includes('commons.wikimedia.org')
     )
 )
 
 /** 플레이스홀더 URL arbitrary */
 const arbitraryPlaceholderUrl = fc.oneof(
   fc.constant('https://picsum.photos/seed/test/400/300'),
+  fc.constant('https://upload.wikimedia.org/wikipedia/commons/test.jpg'),
   fc.constant('/icons/categories/animation.webp'),
   fc.constant('/icons/categories/sports.webp'),
   fc

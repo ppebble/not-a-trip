@@ -1,10 +1,12 @@
 import { REAL_SPOT_PHOTO_FALLBACKS } from '@/components/landing/data/realSpotPhotoFallbacks'
+import { isExternalHotlinkUrl } from '@/lib/real-image-data'
 
 export function isPlaceholderPhoto(photo: string | undefined | null): boolean {
   if (!photo) return true
 
   return (
     photo.includes('picsum.photos/seed/') ||
+    isExternalHotlinkUrl(photo) ||
     photo.startsWith('/icons/') ||
     photo.startsWith('data:image/svg+xml')
   )
