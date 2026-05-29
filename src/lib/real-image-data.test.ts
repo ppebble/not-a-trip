@@ -93,6 +93,9 @@ describe('real image data validation', () => {
   })
 
   it('returns controlled local fallback images by spot prefix', () => {
+    expect(getControlledFallbackImageForSpot('REAL-ANI-001')).toBe(
+      '/images/spots/animation/real-ani-001-suga-shrine.webp'
+    )
     expect(getControlledFallbackImageForSpot('REAL-SPO-002')).toBe(
       '/images/showcase/camp-nou.webp'
     )

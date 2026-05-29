@@ -17,6 +17,11 @@ import type {
   ExternalLink,
   ExternalLinkType,
 } from '../src/types'
+import { ANIMATION_SPOT_IMAGE_ASSET_BY_ID } from '../src/lib/animation-spot-image-assets'
+import type {
+  DataReviewStatus,
+  SourceEvidence,
+} from '../src/lib/real-image-data'
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
 const MONGODB_DB = process.env.MONGODB_DB || 'not-a-trip'
@@ -38,6 +43,8 @@ interface SeedSpot {
   category: SpotCategory
   relatedContent: RelatedContent[]
   externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
+  sourceUrls?: SourceEvidence[]
+  reviewStatus?: DataReviewStatus
   authorName: string
   isGuestSpot: boolean
   createdAt: Date
@@ -1270,8 +1277,30 @@ const GAME_SPOTS: SeedSpot[] = [
 // ============================================
 // 모든 스팟 데이터 합치기
 // ============================================
+const APPROVED_ANIMATION_SPOTS: SeedSpot[] = ANIMATION_SPOTS.map((spot) => {
+  const asset = ANIMATION_SPOT_IMAGE_ASSET_BY_ID[spot.id]
+
+  if (!asset) {
+    return spot
+  }
+
+  return {
+    ...spot,
+    photos: [asset.ownedUrl],
+    reviewStatus: 'approved',
+    sourceUrls: [
+      {
+        url: asset.source.sourcePageUrl,
+        label: `${spot.id} 실제 장소 사진 출처`,
+        evidenceType: 'wiki',
+        collectedAt: asset.source.collectedAt,
+      },
+    ],
+  }
+})
+
 const ALL_REAL_SPOTS: SeedSpot[] = [
-  ...ANIMATION_SPOTS,
+  ...APPROVED_ANIMATION_SPOTS,
   ...SPORTS_SPOTS,
   ...MOVIE_DRAMA_SPOTS,
   ...MUSIC_SPOTS,

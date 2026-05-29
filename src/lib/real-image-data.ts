@@ -1,4 +1,5 @@
 import type { SpotCategory } from '@/types/spot'
+import { ANIMATION_SPOT_IMAGE_ASSET_BY_ID } from './animation-spot-image-assets'
 
 export const DATA_REVIEW_STATUSES = [
   'draft',
@@ -139,6 +140,11 @@ export function getControlledFallbackImageForSpot(
   spotId: string,
   category: SpotCategory = 'other'
 ): string {
+  const animationAsset = ANIMATION_SPOT_IMAGE_ASSET_BY_ID[spotId]
+  if (animationAsset) {
+    return animationAsset.ownedUrl
+  }
+
   const matchedCategory =
     Object.entries(SPOT_CATEGORY_FALLBACKS).find(([prefix]) =>
       spotId.startsWith(prefix)

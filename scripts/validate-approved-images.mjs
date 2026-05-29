@@ -27,9 +27,10 @@ async function loadEntries(inputPath) {
   if (Array.isArray(parsed)) return parsed
   if (Array.isArray(parsed.images)) return parsed.images
   if (Array.isArray(parsed.entries)) return parsed.entries
+  if (Array.isArray(parsed.records)) return parsed.records
 
   throw new Error(
-    'Input manifest must be an array or an object with images/entries array.'
+    'Input manifest must be an array or an object with images/entries/records array.'
   )
 }
 
@@ -49,9 +50,7 @@ async function validateEntry(entry) {
     }
   }
 
-  const parsed = new URL(url)
-
-  if (parsed.protocol === 'file:' || url.startsWith('/')) {
+  if (url.startsWith('file:') || url.startsWith('/')) {
     return {
       spotId,
       url,
@@ -62,6 +61,8 @@ async function validateEntry(entry) {
       action: 'none',
     }
   }
+
+  const parsed = new URL(url)
 
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS)
