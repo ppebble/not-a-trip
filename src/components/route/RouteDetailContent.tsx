@@ -179,17 +179,17 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                 {DIFFICULTY_LABEL[route.difficulty]}
               </span>
             </div>
-            <h1 className="text-text-primary text-2xl font-bold">
+            <h1 className="text-2xl font-bold text-text-primary">
               {route.name}
             </h1>
-            <p className="text-text-secondary mt-2 text-sm">
+            <p className="mt-2 text-sm text-text-secondary">
               {route.description}
             </p>
           </div>
         </div>
 
         {/* 메타 정보 */}
-        <div className="text-text-secondary mb-4 flex flex-wrap gap-4 text-sm">
+        <div className="mb-4 flex flex-wrap gap-4 text-sm text-text-secondary">
           <span className="flex items-center gap-1">
             <AppIcon name="spot" size={16} />
             {availableSpots.length}곳
@@ -294,7 +294,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
 
       {/* 코스 지도 */}
       <div className="rounded-lg bg-surface p-4 shadow-sm">
-        <h2 className="text-text-primary mb-3 text-lg font-semibold">
+        <h2 className="mb-3 text-lg font-semibold text-text-primary">
           코스 지도
         </h2>
         <RouteMap
@@ -311,7 +311,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         className="rounded-lg bg-surface p-4 shadow-sm"
         data-tour="route-spot-list"
       >
-        <h2 className="text-text-primary mb-3 text-lg font-semibold">
+        <h2 className="mb-3 text-lg font-semibold text-text-primary">
           코스 순서 ({availableSpots.length}곳)
         </h2>
         {availableSpots.length === 1 && (
@@ -336,7 +336,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
                       <AppIcon name="location" size={20} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-text-primary text-sm font-medium">
+                      <p className="text-sm font-medium text-text-primary">
                         {route.startPoint.name}
                       </p>
                       <p className="truncate text-xs text-muted">

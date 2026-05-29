@@ -97,7 +97,7 @@ function EmptyState({
   return (
     <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">📸</div>
-      <p className="text-text-secondary text-lg font-medium">{message}</p>
+      <p className="text-lg font-medium text-text-secondary">{message}</p>
       <p className="mt-2 text-sm text-secondary">{subMessage}</p>
     </div>
   )
@@ -108,7 +108,7 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="col-span-3 flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-5xl">😢</div>
-      <p className="text-text-secondary text-lg font-medium">
+      <p className="text-lg font-medium text-text-secondary">
         데이터를 불러올 수 없습니다
       </p>
       <p className="mt-2 text-sm text-secondary">

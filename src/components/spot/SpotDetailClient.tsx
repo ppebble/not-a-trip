@@ -169,7 +169,7 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
                 <ArrowLeftIcon size="md" />
                 <span>지도로 돌아가기</span>
               </Link>
-              <h1 className="text-text-primary mt-2 text-xl font-bold">
+              <h1 className="mt-2 text-xl font-bold text-text-primary">
                 특별한 여행지
               </h1>
             </div>
@@ -445,7 +445,7 @@ function SpotDetailContent({
       {/* Location Map */}
       <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
         <div className="p-6">
-          <h2 className="text-text-primary mb-4 text-2xl font-bold">
+          <h2 className="mb-4 text-2xl font-bold text-text-primary">
             위치 및 근처 편의시설
           </h2>
           <div className="h-96 w-full overflow-hidden rounded-lg border border-border">
@@ -453,7 +453,7 @@ function SpotDetailContent({
           </div>
           {facilities.length > 0 && (
             <div className="mt-4">
-              <p className="text-text-secondary text-sm">
+              <p className="text-sm text-text-secondary">
                 근처 편의시설 {facilities.length}개가 표시됩니다. 마커를
                 클릭하면 상세 정보를 확인할 수 있습니다.
               </p>
@@ -580,7 +580,7 @@ function SpotReportHub({
     <section className="overflow-hidden rounded-lg border border-border bg-surface shadow-md">
       <div className="p-4 md:p-6">
         <div className="mb-4">
-          <h2 className="text-text-primary text-lg font-bold md:text-xl">
+          <h2 className="text-lg font-bold text-text-primary md:text-xl">
             정보 제보 및 수정
           </h2>
           <p className="mt-1 text-sm text-muted">
@@ -639,7 +639,7 @@ function SpotReportHub({
 
         {spot.spotStatus && (
           <div className="mb-4 flex items-center gap-2 rounded-lg bg-accent-surface px-3 py-2">
-            <span className="text-text-secondary text-sm">현재 상태:</span>
+            <span className="text-sm text-text-secondary">현재 상태:</span>
             <SpotStatusIndicator status={spot.spotStatus} />
           </div>
         )}

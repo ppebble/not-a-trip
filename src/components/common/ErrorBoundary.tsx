@@ -93,7 +93,7 @@ class ErrorBoundary extends React.Component<
               문제가 발생했습니다
             </p>
 
-            <p className="text-text-secondary mt-2 text-sm">
+            <p className="mt-2 text-sm text-text-secondary">
               잠시 후 다시 시도하면 대부분 정상적으로 복구됩니다.
             </p>
 

@@ -9,7 +9,7 @@ export function EmptyFilterOverlay() {
   return (
     <div className="pointer-events-none absolute inset-0 z-[999] flex items-center justify-center">
       <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-border bg-surface/95 px-8 py-7 text-center shadow-xl backdrop-blur-md">
-        <div className="text-text-secondary mb-3 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium text-text-secondary">
           <FilterIcon size="sm" className="text-primary" />
           필터 선택 필요
         </div>

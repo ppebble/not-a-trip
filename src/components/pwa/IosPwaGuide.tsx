@@ -58,14 +58,14 @@ export function IosPwaGuide() {
 
       <div className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="text-text-secondary mb-2 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium text-text-secondary">
             <span className="text-base">🍎</span>
             iPhone / iPad 설치 안내
           </div>
           <h2 className="text-text text-base font-bold">
             Not a Trip을 홈 화면에 추가하세요
           </h2>
-          <p className="text-text-secondary mt-1 text-sm leading-5">
+          <p className="mt-1 text-sm leading-5 text-text-secondary">
             Safari에서는 공유 메뉴에서 직접 설치해야 더 빠르게 지도를 열 수
             있습니다.
           </p>
@@ -94,7 +94,7 @@ export function IosPwaGuide() {
 
       <div className="mb-4 flex items-center gap-4 rounded-2xl bg-accent-surface px-4 py-3">
         <MascotIllustration variant="greeting" size="sm" className="shrink-0" />
-        <p className="text-text-secondary text-xs leading-5">
+        <p className="text-xs leading-5 text-text-secondary">
           설치 후에는 브라우저 주소창 없이 바로 열리고, 지도와 성지 탐색이 더
           앱처럼 동작합니다.
         </p>
@@ -123,7 +123,7 @@ export function IosPwaGuide() {
 
       <button
         onClick={handleDismiss}
-        className="text-text-secondary hover:text-text mt-4 w-full rounded-xl border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent-surface"
+        className="hover:text-text mt-4 w-full rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-accent-surface"
       >
         다시 보지 않기
       </button>
@@ -152,7 +152,7 @@ function GuideStep({
           <span className="text-base">{icon}</span>
           <p className="text-text text-sm font-semibold">{title}</p>
         </div>
-        <p className="text-text-secondary mt-1 text-xs leading-5">
+        <p className="mt-1 text-xs leading-5 text-text-secondary">
           {description}
         </p>
       </div>

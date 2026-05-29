@@ -116,7 +116,10 @@ function replaceInObject(value) {
 
   if (value && typeof value === 'object') {
     return Object.fromEntries(
-      Object.entries(value).map(([key, nested]) => [key, replaceInObject(nested)])
+      Object.entries(value).map(([key, nested]) => [
+        key,
+        replaceInObject(nested),
+      ])
     )
   }
 
@@ -144,7 +147,9 @@ try {
       const original =
         format === 'webp'
           ? buffer
-          : await sharp(buffer, { animated: true }).webp({ quality: 80 }).toBuffer()
+          : await sharp(buffer, { animated: true })
+              .webp({ quality: 80 })
+              .toBuffer()
       const pin = await sharp(buffer, { animated: true })
         .resize(64, 64, { fit: 'cover', position: 'centre' })
         .webp({ quality: 80 })
@@ -178,7 +183,9 @@ try {
   await client.connect()
   const db = client.db(dbName)
   const spots = db.collection('spots')
-  const allSpots = await spots.find({ photos: { $exists: true, $ne: [] } }).toArray()
+  const allSpots = await spots
+    .find({ photos: { $exists: true, $ne: [] } })
+    .toArray()
 
   for (const spot of allSpots) {
     const nextPhotos = replaceInObject(spot.photos)

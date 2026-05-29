@@ -314,7 +314,7 @@ export function CheckInModal({
             {/* 스팟 정보 */}
             <div className="mb-4 rounded-lg bg-surface p-3">
               <p className="text-sm text-secondary">인증 장소</p>
-              <p className="text-text-primary font-medium">{spotName}</p>
+              <p className="font-medium text-text-primary">{spotName}</p>
             </div>
 
             {/* Relations 로딩/에러 상태 */}

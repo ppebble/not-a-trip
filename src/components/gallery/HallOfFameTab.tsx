@@ -88,7 +88,7 @@ export function HallOfFameTab({
       <div className="mx-auto max-w-4xl px-4 py-6">
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="mb-4 text-5xl">😢</div>
-          <p className="text-text-secondary text-lg font-medium">
+          <p className="text-lg font-medium text-text-secondary">
             데이터를 불러올 수 없습니다
           </p>
           <p className="mt-2 text-sm text-secondary">
@@ -121,7 +121,7 @@ export function HallOfFameTab({
           <div className="mb-4">
             <AppIcon name="hall-of-fame" size={60} />
           </div>
-          <p className="text-text-secondary text-lg font-medium">
+          <p className="text-lg font-medium text-text-secondary">
             아직 랭킹 데이터가 없습니다
           </p>
           <p className="mt-2 text-sm text-secondary">

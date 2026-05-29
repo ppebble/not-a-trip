@@ -62,7 +62,7 @@ export const ExternalLinkCard = memo(function ExternalLinkCard({
 
       {/* 텍스트 영역 */}
       <div className="min-w-0 flex-1">
-        <p className="text-text-primary truncate font-medium">{link.label}</p>
+        <p className="truncate font-medium text-text-primary">{link.label}</p>
         <p className="truncate text-sm text-muted">{config.label}</p>
       </div>
 

@@ -69,7 +69,7 @@ export function RecommendedRoutes() {
     <div className="space-y-8">
       {/* 공식 추천 코스 섹션 */}
       <section>
-        <h2 className="text-text-primary mb-3 flex items-center gap-2 text-lg font-bold">
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-text-primary">
           <AppIcon name="course-main" size="xl" />
           공식 추천 코스
         </h2>
@@ -90,7 +90,7 @@ export function RecommendedRoutes() {
 
       {/* 인기 코스 섹션 */}
       <section>
-        <h2 className="text-text-primary mb-3 flex items-center gap-2 text-lg font-bold">
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-text-primary">
           <AppIcon name="course-popular" size="xl" />
           인기 코스
         </h2>

@@ -139,7 +139,7 @@ function SetPasswordForm({
       <div>
         <label
           htmlFor="set-email"
-          className="text-text-secondary mb-1 block text-sm font-medium"
+          className="mb-1 block text-sm font-medium text-text-secondary"
         >
           이메일 (로그인 ID)
         </label>
@@ -149,14 +149,14 @@ function SetPasswordForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="text-text-primary w-full rounded-lg border border-border bg-surface px-4 py-3 placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="example@email.com"
         />
       </div>
       <div>
         <label
           htmlFor="new-password"
-          className="text-text-secondary mb-1 block text-sm font-medium"
+          className="mb-1 block text-sm font-medium text-text-secondary"
         >
           비밀번호
         </label>
@@ -167,14 +167,14 @@ function SetPasswordForm({
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
-          className="text-text-primary w-full rounded-lg border border-border bg-surface px-4 py-3 placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="최소 6자 이상"
         />
       </div>
       <div>
         <label
           htmlFor="confirm-password"
-          className="text-text-secondary mb-1 block text-sm font-medium"
+          className="mb-1 block text-sm font-medium text-text-secondary"
         >
           비밀번호 확인
         </label>
@@ -185,7 +185,7 @@ function SetPasswordForm({
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           minLength={6}
-          className="text-text-primary w-full rounded-lg border border-border bg-surface px-4 py-3 placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="비밀번호 재입력"
         />
       </div>
@@ -317,13 +317,13 @@ function ProfileEditTab({ userId }: { userId: string }) {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-text-primary text-base font-semibold">프로필 편집</h3>
+      <h3 className="text-base font-semibold text-text-primary">프로필 편집</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* 이름 변경 */}
         <div>
           <label
             htmlFor="profile-name"
-            className="text-text-secondary mb-1 block text-sm font-medium"
+            className="mb-1 block text-sm font-medium text-text-secondary"
           >
             이름
           </label>
@@ -336,7 +336,7 @@ function ProfileEditTab({ userId }: { userId: string }) {
               setError(null)
               setSuccess(false)
             }}
-            className="text-text-primary w-full rounded-lg border border-border bg-surface px-4 py-3 placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="이름을 입력해주세요"
             maxLength={60}
           />
@@ -344,7 +344,7 @@ function ProfileEditTab({ userId }: { userId: string }) {
 
         {/* 프로필 이미지 파일 업로드 */}
         <div>
-          <label className="text-text-secondary mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-text-secondary">
             프로필 이미지{' '}
             <span className="text-xs text-neutral-400">(선택사항)</span>
           </label>
@@ -483,7 +483,7 @@ function AccountsTab() {
           </div>
         )}
         <div>
-          <p className="text-text-primary font-semibold">
+          <p className="font-semibold text-text-primary">
             {user?.name || '사용자'}
           </p>
           <p className="text-sm text-sub-text">{user?.email || ''}</p>
@@ -499,7 +499,7 @@ function AccountsTab() {
 
       {/* 연결된 계정 목록 */}
       <div className="rounded-lg border border-border bg-surface p-4">
-        <h3 className="text-text-primary mb-4 text-base font-semibold">
+        <h3 className="mb-4 text-base font-semibold text-text-primary">
           연결된 계정
         </h3>
         <div className="space-y-3">
@@ -515,7 +515,7 @@ function AccountsTab() {
                 <div className="flex items-center gap-3">
                   <ProviderIcon provider={provider.id} />
                   <div>
-                    <p className="text-text-primary text-sm font-medium">
+                    <p className="text-sm font-medium text-text-primary">
                       {provider.name}
                     </p>
                     <p className="text-xs text-sub-text">
@@ -551,7 +551,7 @@ function AccountsTab() {
             <div className="flex items-center gap-3">
               <span className="text-lg">🔑</span>
               <div>
-                <p className="text-text-primary text-sm font-medium">
+                <p className="text-sm font-medium text-text-primary">
                   이메일/비밀번호
                 </p>
                 <p className="text-xs text-sub-text">
@@ -571,10 +571,10 @@ function AccountsTab() {
       {/* 비밀번호 설정 폼 (소셜 전용 계정만) */}
       {!hasPassword && (
         <div className="rounded-lg border border-border bg-surface p-4">
-          <h3 className="text-text-primary mb-2 text-base font-semibold">
+          <h3 className="mb-2 text-base font-semibold text-text-primary">
             이메일/비밀번호 설정
           </h3>
-          <p className="text-text-secondary mb-4 text-sm">
+          <p className="mb-4 text-sm text-text-secondary">
             이메일(ID)과 비밀번호를 설정하면 이메일/비밀번호로도 로그인할 수
             있습니다.
           </p>
@@ -632,12 +632,12 @@ function NotificationsTab() {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-text-primary text-base font-semibold">알림 설정</h3>
+      <h3 className="text-base font-semibold text-text-primary">알림 설정</h3>
 
       <div className="rounded-lg border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-text-primary text-sm font-medium">푸시 알림</p>
+            <p className="text-sm font-medium text-text-primary">푸시 알림</p>
             <p className="mt-0.5 text-xs text-sub-text">
               새로운 활동 및 업데이트 알림을 받습니다
             </p>

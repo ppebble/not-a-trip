@@ -88,7 +88,9 @@ try {
     ? await db.collection(collectionName).countDocuments()
     : null
   const affectedCount =
-    beforeCount !== null && afterCount !== null ? afterCount - beforeCount : null
+    beforeCount !== null && afterCount !== null
+      ? afterCount - beforeCount
+      : null
 
   await migrations.insertOne({
     name: migrationName,

@@ -21,7 +21,7 @@ export default function PostDetailClient() {
           <div className="flex items-center gap-2">
             <Link
               href="/community"
-              className="hover:text-text-secondary text-secondary"
+              className="text-secondary hover:text-text-secondary"
             >
               ← 커뮤니티
             </Link>
