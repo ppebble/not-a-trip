@@ -54,4 +54,13 @@ describe('validateImageRemotePatterns', () => {
     expect(result.configuredHosts).not.toContain('via.placeholder.com')
     expect(result.configuredHosts).not.toContain('localhost')
   })
+
+  it('keeps Wikimedia hotlink hosts out of the current production config', () => {
+    const result = validateImageRemotePatterns({
+      repoRoot: process.cwd(),
+    })
+
+    expect(result.configuredHosts).not.toContain('upload.wikimedia.org')
+    expect(result.configuredHosts).not.toContain('commons.wikimedia.org')
+  })
 })

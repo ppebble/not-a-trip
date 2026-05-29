@@ -53,7 +53,7 @@ export default function NewReportPage() {
         <div className="mx-auto max-w-lg">
           <Link
             href="/reports"
-            className="hover:text-text-primary flex items-center gap-2 text-sm text-secondary"
+            className="flex items-center gap-2 text-sm text-secondary hover:text-text-primary"
           >
             <svg
               className="h-4 w-4"

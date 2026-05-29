@@ -27,7 +27,7 @@ export function ContributorList({ spotId }: ContributorListProps) {
 
   return (
     <div>
-      <h3 className="text-text-secondary mb-2 flex items-center gap-1.5 text-sm font-medium">
+      <h3 className="mb-2 flex items-center gap-1.5 text-sm font-medium text-text-secondary">
         <AppIcon name="checkin2" size={16} />
         정보 기여자
       </h3>

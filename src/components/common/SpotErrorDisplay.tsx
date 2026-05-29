@@ -29,7 +29,7 @@ export function SpotErrorDisplay({ error, onRetry }: SpotErrorDisplayProps) {
           스팟 데이터를 불러오지 못했습니다
         </p>
 
-        <p className="text-text-secondary mt-2 text-sm">
+        <p className="mt-2 text-sm text-text-secondary">
           잠시 후 다시 시도하거나 네트워크 상태를 확인해 주세요.
         </p>
 

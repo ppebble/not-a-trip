@@ -113,7 +113,7 @@ export default function PasswordModal({
           <div className="mb-6">
             <label
               htmlFor="modal-password"
-              className="text-text-secondary mb-2 block text-sm font-medium"
+              className="mb-2 block text-sm font-medium text-text-secondary"
             >
               비밀번호
             </label>

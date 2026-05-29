@@ -11,7 +11,7 @@ export function SpotLoadingSkeleton() {
   return (
     <div className="flex h-full w-full items-center justify-center bg-neutral-100 px-6 dark:bg-background">
       <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 text-center shadow-lg">
-        <div className="text-text-secondary mb-3 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent-surface px-3 py-1 text-xs font-medium text-text-secondary">
           탐색 준비 중
         </div>
 

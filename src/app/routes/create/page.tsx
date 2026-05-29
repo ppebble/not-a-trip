@@ -15,7 +15,7 @@ export default function RouteCreatePage() {
         <div className="mb-4">
           <Link
             href="/routes"
-            className="hover:text-text-primary text-sm text-secondary transition-colors"
+            className="text-sm text-secondary transition-colors hover:text-text-primary"
           >
             ← 코스 목록으로
           </Link>

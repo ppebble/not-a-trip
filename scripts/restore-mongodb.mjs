@@ -13,7 +13,13 @@ if (!archivePath || !targetDb) {
 
 const result = spawnSync(
   'mongorestore',
-  [`--uri=${uri}`, `--nsFrom=*`, `--nsTo=${targetDb}.*`, `--archive=${archivePath}`, '--gzip'],
+  [
+    `--uri=${uri}`,
+    `--nsFrom=*`,
+    `--nsTo=${targetDb}.*`,
+    `--archive=${archivePath}`,
+    '--gzip',
+  ],
   { stdio: 'inherit' }
 )
 

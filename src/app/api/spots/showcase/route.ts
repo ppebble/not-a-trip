@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { getCollection } from '@/lib/db'
+import type { DataReviewStatus } from '@/lib/real-image-data'
 import { SpotCategory } from '@/types'
 
 import { resolveThumbnailUrl } from './helpers'
@@ -17,6 +18,7 @@ interface SpotDocument {
   name: string
   photos: string[]
   category?: SpotCategory
+  reviewStatus?: DataReviewStatus
 }
 
 const SHOWCASE_CATEGORIES: SpotCategory[] = [
@@ -42,6 +44,7 @@ export async function GET(): Promise<NextResponse> {
             {
               $match: {
                 category,
+                reviewStatus: 'approved',
                 'photos.0': { $exists: true, $ne: '' },
               },
             },

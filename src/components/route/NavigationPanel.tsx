@@ -217,7 +217,7 @@ export function NavigationPanel({
               )}
               <button
                 onClick={onEndRoute}
-                className="text-text-secondary rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm transition-colors hover:bg-accent-surface"
+                className="rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-accent-surface"
               >
                 종료
               </button>
@@ -234,7 +234,7 @@ export function NavigationPanel({
               )}
               <button
                 onClick={onEndRoute}
-                className="text-text-secondary rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm transition-colors hover:bg-accent-surface"
+                className="rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-accent-surface"
               >
                 종료
               </button>
@@ -249,7 +249,7 @@ export function NavigationPanel({
               </button>
               <button
                 onClick={onEndRoute}
-                className="text-text-secondary rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm transition-colors hover:bg-accent-surface"
+                className="rounded-lg border-2 border-border bg-surface px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-accent-surface"
               >
                 종료
               </button>

@@ -164,7 +164,7 @@ export default function DirectionsButton({
             <button
               key={app.key}
               onClick={() => handleSelect(app.key)}
-              className="text-text-secondary flex w-full items-center gap-2.5 px-3 py-2.5 text-sm transition-colors hover:bg-primary-50 active:bg-surface"
+              className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-primary-50 active:bg-surface"
               role="menuitem"
             >
               <span className="flex h-5 w-5 items-center justify-center text-base">

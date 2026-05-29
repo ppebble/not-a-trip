@@ -156,7 +156,7 @@ function PostListError({
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">😢</div>
-      <p className="text-text-secondary mb-2">
+      <p className="mb-2 text-text-secondary">
         게시글을 불러오는데 실패했습니다
       </p>
       <p className="mb-4 text-sm text-secondary">{error.message}</p>
@@ -177,7 +177,7 @@ function PostListEmpty() {
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="mb-4 text-4xl">📝</div>
-      <p className="text-text-secondary mb-2">아직 게시글이 없습니다</p>
+      <p className="mb-2 text-text-secondary">아직 게시글이 없습니다</p>
       <p className="text-sm text-secondary">첫 번째 게시글을 작성해보세요!</p>
     </div>
   )

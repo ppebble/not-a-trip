@@ -226,7 +226,7 @@ export function GuidePanel({
           ) : (
             <button
               onClick={onEndRoute}
-              className="text-text-secondary w-full rounded-lg border-2 border-border bg-surface py-3 text-sm transition-colors hover:bg-accent-surface"
+              className="w-full rounded-lg border-2 border-border bg-surface py-3 text-sm text-text-secondary transition-colors hover:bg-accent-surface"
             >
               코스 종료
             </button>

@@ -21,14 +21,17 @@ const CLONE_COUNT = 4
 
 /** 실제 사진 URL arbitrary (플레이스홀더 아닌 URL) */
 const arbitraryRealPhotoUrl = fc.oneof(
-  fc.constant('https://upload.wikimedia.org/wikipedia/commons/test.jpg'),
   fc.constant('https://example.com/photo.jpg'),
+  fc.constant('https://cdn.not-a-trip.example/assets/photo.webp'),
   fc.constant('https://storage.googleapis.com/bucket/photo.jpg'),
   fc
     .webUrl()
     .filter(
       (url) =>
-        !url.includes('picsum.photos/seed/') && !url.startsWith('/icons/')
+        !url.includes('picsum.photos/seed/') &&
+        !url.startsWith('/icons/') &&
+        !url.includes('upload.wikimedia.org') &&
+        !url.includes('commons.wikimedia.org')
     )
 )
 

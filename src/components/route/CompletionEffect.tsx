@@ -67,11 +67,11 @@ export function CompletionEffect({
       {/* 축하 카드 */}
       <div className="relative z-10 mx-4 w-full max-w-sm animate-[scaleIn_0.4s_ease-out] rounded-2xl bg-surface p-8 text-center shadow-2xl">
         <div className="mb-4 text-6xl">🏆</div>
-        <h2 className="text-text-primary mb-2 text-2xl font-bold">
+        <h2 className="mb-2 text-2xl font-bold text-text-primary">
           완주 축하!
         </h2>
         <p className="mb-1 text-sm text-muted">코스를 모두 완주했습니다</p>
-        <p className="text-text-secondary mb-6 text-lg font-semibold">
+        <p className="mb-6 text-lg font-semibold text-text-secondary">
           {routeName}
         </p>
         <button
