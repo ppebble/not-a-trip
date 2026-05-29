@@ -9,7 +9,7 @@ import {
 
 describe('ANIMATION_SPOT_IMAGE_ASSETS', () => {
   it('curates locally owned real photos for animation pilgrimage spots', () => {
-    expect(ANIMATION_SPOT_IMAGE_ASSETS.length).toBeGreaterThanOrEqual(10)
+    expect(ANIMATION_SPOT_IMAGE_ASSETS.length).toBeGreaterThanOrEqual(20)
 
     for (const asset of ANIMATION_SPOT_IMAGE_ASSETS) {
       expect(asset.spotId).toMatch(/^REAL-ANI-\d{3}$/)

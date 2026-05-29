@@ -94,6 +94,7 @@ export const COMPATIBLE_IMAGE_LICENSES = new Set([
   'cc by 2.0',
   'cc by 3.0',
   'cc by 4.0',
+  'cc by-sa 2.0',
   'cc by-sa 3.0',
   'cc by-sa 4.0',
   'public domain',

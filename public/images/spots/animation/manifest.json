@@ -291,6 +291,296 @@
       ],
       "reviewStatus": "approved",
       "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-030",
+      "localUrl": "/images/spots/animation/real-ani-030-toyosato-elementary.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-030-toyosato-elementary.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/The_old_building_of_Toyosato_Elementary_School_2.JPG",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:The_old_building_of_Toyosato_Elementary_School_2.JPG",
+        "author": "Tokumeigakarinoaoshima",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Tokumeigakarinoaoshima, CC0 1.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-030-toyosato-elementary.webp",
+          "width": 960,
+          "height": 707,
+          "contentHash": "3fcfa0c4b6c2ccb042bf6aa6454ca66120d0d391903bf946f4efbd7193b9680d",
+          "byteSize": 120870
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-031",
+      "localUrl": "/images/spots/animation/real-ani-031-chichibu-bridge.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-031-chichibu-bridge.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anohana_chichibubashi.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Anohana_chichibubashi.jpg",
+        "author": "I_LOVE_WIKI",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "I_LOVE_WIKI, CC BY-SA 3.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-031-chichibu-bridge.webp",
+          "width": 960,
+          "height": 638,
+          "contentHash": "1e8819de05f776738813ae73cb52f892d4411191d870be6b23700080a906e413",
+          "byteSize": 92906
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-032",
+      "localUrl": "/images/spots/animation/real-ani-032-shirakawa-go-ogimachi.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-032-shirakawa-go-ogimachi.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Ogimachi_Village-02.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Ogimachi_Village-02.jpg",
+        "author": "Bernard Gagnon",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Bernard Gagnon, CC BY-SA 3.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-032-shirakawa-go-ogimachi.webp",
+          "width": 960,
+          "height": 720,
+          "contentHash": "948f506caec9aaa2b78ca567d327e8da6b9ac0aed308c581e40cfcf43c928970",
+          "byteSize": 205202
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-033",
+      "localUrl": "/images/spots/animation/real-ani-033-yakushima-shiratani-unsuikyo.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-033-yakushima-shiratani-unsuikyo.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Shiratani_Unsui_Gorge_18.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Shiratani_Unsui_Gorge_18.jpg",
+        "author": "?64",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "?64, CC BY 4.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-033-yakushima-shiratani-unsuikyo.webp",
+          "width": 960,
+          "height": 640,
+          "contentHash": "20b7540b934f7b8862f58808ae1ee3e1c1710383b57315fb1dc33dbd8dee51cf",
+          "byteSize": 216654
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-034",
+      "localUrl": "/images/spots/animation/real-ani-034-tomonoura.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-034-tomonoura.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Tomonoura_Gangi.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Tomonoura_Gangi.jpg",
+        "author": "Yanajin",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Yanajin, CC BY-SA 3.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-034-tomonoura.webp",
+          "width": 960,
+          "height": 720,
+          "contentHash": "0d59c15d70fdfc819419a50bdd010ce9de3174b7b6a1bfd7a4e26bc60bd4e245",
+          "byteSize": 116574
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-035",
+      "localUrl": "/images/spots/animation/real-ani-035-numazu-uchiura.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-035-numazu-uchiura.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Fuji_and_Awa_Island_from_Uchiura_Bay.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Mount_Fuji_and_Awa_Island_from_Uchiura_Bay.jpg",
+        "author": "Alpsdake",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Alpsdake, CC BY-SA 4.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-035-numazu-uchiura.webp",
+          "width": 960,
+          "height": 640,
+          "contentHash": "685e257928f3421a1dacb68566dece64934bff631cf5ef8c143ddcbeb138972f",
+          "byteSize": 52036
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-036",
+      "localUrl": "/images/spots/animation/real-ani-036-seiseki-sakuragaoka.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-036-seiseki-sakuragaoka.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Seiseki-sakuragaoka-station.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Seiseki-sakuragaoka-station.jpg",
+        "author": "Sphl",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Sphl, CC BY-SA 3.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-036-seiseki-sakuragaoka.webp",
+          "width": 800,
+          "height": 600,
+          "contentHash": "c4a1c22b1ee8a81a5a38352bccbf0ee0b0322adb429ccc1aca3ee4865f7b491b",
+          "byteSize": 96058
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-037",
+      "localUrl": "/images/spots/animation/real-ani-037-uji-bridge.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-037-uji-bridge.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Uji_Jinja_(Uji%2C_Kyoto)_Bridge_hdsr_S5_191.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Uji_Jinja_(Uji%2C_Kyoto)_Bridge_hdsr_S5_191.jpg",
+        "author": "Hyppolyte de Saint-Rambert",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Hyppolyte de Saint-Rambert, CC BY 4.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-037-uji-bridge.webp",
+          "width": 960,
+          "height": 1279,
+          "contentHash": "98bbc8929f667f00defef31a1ff01c95162e527d2d775d03689cb0c1609d7c80",
+          "byteSize": 143518
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-038",
+      "localUrl": "/images/spots/animation/real-ani-038-ogaki-station.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-038-ogaki-station.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/JRC-Ogaki-STA.jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:JRC-Ogaki-STA.jpg",
+        "author": "MaedaAkihiko",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "MaedaAkihiko, CC BY-SA 4.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-038-ogaki-station.webp",
+          "width": 960,
+          "height": 640,
+          "contentHash": "775e1aa22a50c19ec9996df6ad79fddb2c546daa5a976de9a790df80fbaa8ba9",
+          "byteSize": 82708
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
+    },
+    {
+      "spotId": "REAL-ANI-039",
+      "localUrl": "/images/spots/animation/real-ani-039-lake-suwa.webp",
+      "ownedUrl": "/images/spots/animation/real-ani-039-lake-suwa.webp",
+      "source": {
+        "originalUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Suwa%2C_Nagano_Prefecture%3B_May_2019_(03).jpg",
+        "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Lake_Suwa%2C_Nagano_Prefecture%3B_May_2019_(03).jpg",
+        "author": "Sei F",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/deed.en",
+        "collectedAt": "2026-05-29T09:11:57.009Z",
+        "reviewStatus": "approved",
+        "attributionText": "Sei F, CC BY-SA 2.0",
+        "lastHttpStatus": 200,
+        "lastValidatedAt": "2026-05-29T09:11:57.009Z"
+      },
+      "derivatives": [
+        {
+          "variant": "card",
+          "url": "/images/spots/animation/real-ani-039-lake-suwa.webp",
+          "width": 960,
+          "height": 640,
+          "contentHash": "7812d956f868a1f3f0d86a578a7ad7a0b9b3e21144b5076cbea00b0aad4bbb17",
+          "byteSize": 31762
+        }
+      ],
+      "reviewStatus": "approved",
+      "version": "2026-05-29"
     }
   ]
 }
