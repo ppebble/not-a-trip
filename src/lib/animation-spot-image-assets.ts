@@ -622,6 +622,318 @@ export const ANIMATION_SPOT_IMAGE_ASSETS = [
     reviewStatus: 'approved',
     version: '2026-05-29',
   },
+  {
+    spotId: 'REAL-ANI-040',
+    ownedUrl: '/images/spots/animation/real-ani-040-kanda-myojin.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Kanda_Myojin_Honden_1.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Kanda_Myojin_Honden_1.jpg',
+      author: 'Zairon',
+      license: 'CC BY-SA 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Zairon, CC BY-SA 4.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-040-kanda-myojin.webp',
+        width: 960,
+        height: 721,
+        contentHash:
+          'a78ea96e1e41ec4a9e4da7a6ce3b365f54069bb4c1e1efca81db9e7f1cf660d9',
+        byteSize: 84164,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-041',
+    ownedUrl:
+      '/images/spots/animation/real-ani-041-akihabara-radio-kaikan.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/AKIHABARA_New_Radio_Kaikan.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:AKIHABARA_New_Radio_Kaikan.jpg',
+      author: 'Yuukokusya',
+      license: 'CC BY-SA 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Yuukokusya, CC BY-SA 4.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-041-akihabara-radio-kaikan.webp',
+        width: 960,
+        height: 1707,
+        contentHash:
+          'c8b4b8951881d0820819ebe948fe63e0de4d5acaa6bb584c43b28f0db4a65a7a',
+        byteSize: 180262,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-042',
+    ownedUrl: '/images/spots/animation/real-ani-042-shinjuku-gyoen.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Impression_of_Shinjuku_Gyoen%2C_Tokyo_(3).jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Impression_of_Shinjuku_Gyoen%2C_Tokyo_(3).jpg',
+      author: 'CarstenOtto',
+      license: 'CC BY-SA 3.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'CarstenOtto, CC BY-SA 3.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-042-shinjuku-gyoen.webp',
+        width: 960,
+        height: 720,
+        contentHash:
+          'f30c48e947be8eaee49ef6a45f0e113ece85e7f05b5550ad2a1f3d190cbefa90',
+        byteSize: 182830,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-043',
+    ownedUrl: '/images/spots/animation/real-ani-043-odaiba-rainbow-bridge.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/20190322_Odaiba_Rainbow_Bridge.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:20190322_Odaiba_Rainbow_Bridge.jpg',
+      author: 'Balon Greyjoy',
+      license: 'CC0 1.0',
+      licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Balon Greyjoy, CC0 1.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-043-odaiba-rainbow-bridge.webp',
+        width: 960,
+        height: 640,
+        contentHash:
+          '270e614b712cf63784fd055357de656af33f420a317297b4fd87f8160661061c',
+        byteSize: 53226,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-044',
+    ownedUrl: '/images/spots/animation/real-ani-044-tokyo-big-sight.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Tokyo_Big_Sight_Inc.%2C_at_Ariake%2C_Koto%2C_Tokyo_(2018-08-09)_02.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Tokyo_Big_Sight_Inc.%2C_at_Ariake%2C_Koto%2C_Tokyo_(2018-08-09)_02.jpg',
+      author: 'Lombroso',
+      license: 'CC BY-SA 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Lombroso, CC BY-SA 4.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-044-tokyo-big-sight.webp',
+        width: 960,
+        height: 720,
+        contentHash:
+          '53cf2d06956947c6d729a8cd57419c3b45c1145ca843d7c9767de0022c167e00',
+        byteSize: 65412,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-045',
+    ownedUrl:
+      '/images/spots/animation/real-ani-045-ikebukuro-sunshine-60-street.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Sunshine_60_Street_2020-04-19.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Sunshine_60_Street_2020-04-19.jpg',
+      author: 'Asanagi',
+      license: 'CC0 1.0',
+      licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Asanagi, CC0 1.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-045-ikebukuro-sunshine-60-street.webp',
+        width: 960,
+        height: 720,
+        contentHash:
+          'a807c78d3710496a921f962f94831d6573e8f928d189536f987a30c7c780f7bf',
+        byteSize: 117470,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-046',
+    ownedUrl: '/images/spots/animation/real-ani-046-nakano-broadway.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Nakano_broadway_entrance.JPG',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Nakano_broadway_entrance.JPG',
+      author: 'Kentin',
+      license: 'CC BY-SA 3.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Kentin, CC BY-SA 3.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-046-nakano-broadway.webp',
+        width: 960,
+        height: 1280,
+        contentHash:
+          '6aee9ab850ea02e244d3ba94995cafbfb543cb1c3e34493ee2d2b223fda56f1d',
+        byteSize: 61066,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-047',
+    ownedUrl: '/images/spots/animation/real-ani-047-oizumi-anime-gate.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Oizumi_Anime_Gate_2022-05-19.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Oizumi_Anime_Gate_2022-05-19.jpg',
+      author: 'Asanagi',
+      license: 'CC0 1.0',
+      licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Asanagi, CC0 1.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-047-oizumi-anime-gate.webp',
+        width: 960,
+        height: 540,
+        contentHash:
+          'fea814cbdcb7d707376073609f6c34b2dd5e85cbd797f6d96aed128081e8f3c2',
+        byteSize: 90638,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-048',
+    ownedUrl: '/images/spots/animation/real-ani-048-toei-animation-museum.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Toei_Animation_Museum_2024-07-21.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Toei_Animation_Museum_2024-07-21.jpg',
+      author: 'Asanagi',
+      license: 'CC0 1.0',
+      licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Asanagi, CC0 1.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-048-toei-animation-museum.webp',
+        width: 960,
+        height: 540,
+        contentHash:
+          'c70fad89a8208ab3ffd657a81b3c44364cba5b4a3c6661fb03f0ec782e5932ed',
+        byteSize: 132520,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
+  {
+    spotId: 'REAL-ANI-049',
+    ownedUrl: '/images/spots/animation/real-ani-049-sazae-san-dori.webp',
+    source: {
+      originalUrl:
+        'https://commons.wikimedia.org/wiki/Special:FilePath/Sazae-san-dori_Street_and_Fukuoka_Tower_2.jpg',
+      sourcePageUrl:
+        'https://commons.wikimedia.org/wiki/File:Sazae-san-dori_Street_and_Fukuoka_Tower_2.jpg',
+      author: 'Soramimi',
+      license: 'CC BY-SA 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/deed.en',
+      collectedAt: '2026-05-29T09:41:46.529Z',
+      reviewStatus: 'approved',
+      attributionText: 'Soramimi, CC BY-SA 4.0',
+      lastHttpStatus: 200,
+      lastValidatedAt: '2026-05-29T09:41:46.529Z',
+    },
+    derivatives: [
+      {
+        variant: 'card',
+        url: '/images/spots/animation/real-ani-049-sazae-san-dori.webp',
+        width: 960,
+        height: 720,
+        contentHash:
+          'd195d2b530ac56e03ae9ccdd4ac4c344445f11f4fbeb4b095c948f25a22f4b5f',
+        byteSize: 83934,
+      },
+    ],
+    reviewStatus: 'approved',
+    version: '2026-05-29',
+  },
 ] as const satisfies readonly AssetManifestEntry[]
 
 export type AnimationSpotImageAsset =
