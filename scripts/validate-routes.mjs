@@ -88,7 +88,10 @@ function validateRoute(route, spotIds, contentNames, failures) {
   if (!Number.isFinite(route.totalDistance) || route.totalDistance < 0) {
     failures.push(`${label}: totalDistance must be finite and non-negative`)
   }
-  if (!Number.isFinite(route.estimatedDuration) || route.estimatedDuration <= 0) {
+  if (
+    !Number.isFinite(route.estimatedDuration) ||
+    route.estimatedDuration <= 0
+  ) {
     failures.push(`${label}: estimatedDuration must be finite and positive`)
   }
   if (!route.createdAt || !route.updatedAt) {
@@ -99,25 +102,45 @@ function validateRoute(route, spotIds, contentNames, failures) {
     if (!spotIds.has(spot.spotId)) {
       failures.push(`${label}: spot ${spot.spotId} does not exist`)
     }
-    if (!spot.coordinates || !Number.isFinite(spot.coordinates.lat) || !Number.isFinite(spot.coordinates.lng)) {
-      failures.push(`${label}: spot ${spot.spotId || index} has invalid coordinates`)
+    if (
+      !spot.coordinates ||
+      !Number.isFinite(spot.coordinates.lat) ||
+      !Number.isFinite(spot.coordinates.lng)
+    ) {
+      failures.push(
+        `${label}: spot ${spot.spotId || index} has invalid coordinates`
+      )
     }
-    if (route.isPublic === true && /picsum\.photos|placeholder|dummy/i.test(spot.thumbnailUrl || '')) {
-      failures.push(`${label}: public route has placeholder thumbnail: ${spot.thumbnailUrl}`)
+    if (
+      route.isPublic === true &&
+      /picsum\.photos|placeholder|dummy/i.test(spot.thumbnailUrl || '')
+    ) {
+      failures.push(
+        `${label}: public route has placeholder thumbnail: ${spot.thumbnailUrl}`
+      )
     }
     if (index === 0) {
       if (spot.distanceFromPrev !== null || spot.walkTimeFromPrev !== null) {
-        failures.push(`${label}: first spot must have null distance/time from previous`)
+        failures.push(
+          `${label}: first spot must have null distance/time from previous`
+        )
       }
     } else {
-      if (!Number.isFinite(spot.distanceFromPrev) || spot.distanceFromPrev < 0) {
-        failures.push(`${label}: spot ${spot.spotId} has invalid distanceFromPrev`)
+      if (
+        !Number.isFinite(spot.distanceFromPrev) ||
+        spot.distanceFromPrev < 0
+      ) {
+        failures.push(
+          `${label}: spot ${spot.spotId} has invalid distanceFromPrev`
+        )
       }
       if (
         spot.walkTimeFromPrev !== null &&
         (!Number.isFinite(spot.walkTimeFromPrev) || spot.walkTimeFromPrev < 0)
       ) {
-        failures.push(`${label}: spot ${spot.spotId} has invalid walkTimeFromPrev`)
+        failures.push(
+          `${label}: spot ${spot.spotId} has invalid walkTimeFromPrev`
+        )
       }
     }
   }
@@ -132,20 +155,28 @@ function validateRoute(route, spotIds, contentNames, failures) {
     if (route.isPublic !== true) {
       failures.push(`${label}: seeded route must be public`)
     }
-    if (!Array.isArray(route.sourceAudit.sourceUrls) || route.sourceAudit.sourceUrls.length === 0) {
+    if (
+      !Array.isArray(route.sourceAudit.sourceUrls) ||
+      route.sourceAudit.sourceUrls.length === 0
+    ) {
       failures.push(`${label}: seeded route missing source URLs`)
     }
     if (!route.sourceAudit.sourceSummary) {
       failures.push(`${label}: seeded route missing source summary`)
     }
     if (typeof route.sourceAudit.allStopsAlreadyInDb !== 'boolean') {
-      failures.push(`${label}: seeded route must document whether all stops already existed`)
+      failures.push(
+        `${label}: seeded route must document whether all stops already existed`
+      )
     }
     if (
       route.sourceAudit.allStopsAlreadyInDb === false &&
-      (!Array.isArray(route.sourceAudit.newSpotIds) || route.sourceAudit.newSpotIds.length === 0)
+      (!Array.isArray(route.sourceAudit.newSpotIds) ||
+        route.sourceAudit.newSpotIds.length === 0)
     ) {
-      failures.push(`${label}: seeded route with new stops must list sourceAudit.newSpotIds`)
+      failures.push(
+        `${label}: seeded route with new stops must list sourceAudit.newSpotIds`
+      )
     }
   }
 }

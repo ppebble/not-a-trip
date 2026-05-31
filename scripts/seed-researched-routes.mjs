@@ -166,7 +166,11 @@ const routePlans = [
     description:
       '시부야 교차로와 109를 먼저 걷고, 닌텐도 도쿄와 포켓몬 센터 메가 도쿄까지 이어가는 도심 팝컬처 코스입니다.',
     spotIds: ['REAL-ANI-020', 'REAL-ANI-021', 'REAL-GAM-002', 'REAL-GAM-003'],
-    relatedContentNames: ['최애의 아이 (【推しの子】)', '슈퍼 마리오', '포켓몬스터'],
+    relatedContentNames: [
+      '최애의 아이 (【推しの子】)',
+      '슈퍼 마리오',
+      '포켓몬스터',
+    ],
     regionTags: ['도쿄', '시부야', '이케부쿠로'],
     isOfficial: true,
     sourceSummary:
@@ -299,7 +303,13 @@ const routePlans = [
     name: '우지 유포니엄 현지 체험 확장 코스',
     description:
       '게이한 우지역에서 우지교, 우지신사, 다이키치야마 전망대, 아가타신사까지 걷는 「울려라! 유포니엄」 우지 핵심 순례 코스입니다.',
-    spotIds: ['REAL-ANI-050', 'REAL-ANI-037', 'REAL-ANI-051', 'REAL-ANI-052', 'REAL-ANI-053'],
+    spotIds: [
+      'REAL-ANI-050',
+      'REAL-ANI-037',
+      'REAL-ANI-051',
+      'REAL-ANI-052',
+      'REAL-ANI-053',
+    ],
     relatedContentNames: ['울려라! 유포니엄'],
     regionTags: ['교토', '우지'],
     isOfficial: true,
@@ -338,7 +348,17 @@ async function main() {
     const contentByName = new Map(
       (
         await contentCollection
-          .find({}, { projection: { displayName: 1, normalizedName: 1, type: 1, imageUrl: 1 } })
+          .find(
+            {},
+            {
+              projection: {
+                displayName: 1,
+                normalizedName: 1,
+                type: 1,
+                imageUrl: 1,
+              },
+            }
+          )
           .toArray()
       ).flatMap((content) =>
         [content.displayName, content.normalizedName]
@@ -356,9 +376,9 @@ async function main() {
     )
 
     const existingIds = new Set(
-      (await routesCollection.find({}, { projection: { id: 1 } }).toArray()).map(
-        (route) => route.id
-      )
+      (
+        await routesCollection.find({}, { projection: { id: 1 } }).toArray()
+      ).map((route) => route.id)
     )
 
     const contentNames = new Set(contentByName.keys())
@@ -402,7 +422,9 @@ async function main() {
       })
 
       if (!existing && existingIds.has(route.id)) {
-        throw new Error(`Cannot insert ${route.id}: id already exists without matching seedKey`)
+        throw new Error(
+          `Cannot insert ${route.id}: id already exists without matching seedKey`
+        )
       }
 
       const result = await routesCollection.updateOne(
@@ -526,7 +548,9 @@ async function upsertNewSpots(
     for (const [index, content] of spot.relatedContent.entries()) {
       const contentMaster = contentByName.get(content.name)
       if (!contentMaster) {
-        throw new Error(`${spot.id} references missing content: ${content.name}`)
+        throw new Error(
+          `${spot.id} references missing content: ${content.name}`
+        )
       }
 
       await relationsCollection.updateOne(
@@ -583,7 +607,11 @@ async function upsertNewSpots(
 
   if (MODE === 'apply') {
     const affectedContentNames = [
-      ...new Set(newSpotPlans.flatMap((spot) => spot.relatedContent.map((content) => content.name))),
+      ...new Set(
+        newSpotPlans.flatMap((spot) =>
+          spot.relatedContent.map((content) => content.name)
+        )
+      ),
     ]
     for (const contentName of affectedContentNames) {
       const spotIds = await relationsCollection.distinct('spotId', {
@@ -693,7 +721,9 @@ function buildRoute(plan, spotById, contentNames, existingIds) {
     (contentName) => !contentNames.has(contentName)
   )
   if (missingContents.length > 0) {
-    throw new Error(`${plan.id} has missing content names: ${missingContents.join(', ')}`)
+    throw new Error(
+      `${plan.id} has missing content names: ${missingContents.join(', ')}`
+    )
   }
 
   if (existingIds.has(plan.id)) {
@@ -739,8 +769,14 @@ function buildRoute(plan, spotById, contentNames, existingIds) {
     0
   )
   const estimatedDuration =
-    Math.ceil((movementMinutes + orderedSpots.length * STOP_BUFFER_MINUTES) / 5) * 5
-  const difficulty = pickDifficulty(totalDistance, estimatedDuration, orderedSpots.length)
+    Math.ceil(
+      (movementMinutes + orderedSpots.length * STOP_BUFFER_MINUTES) / 5
+    ) * 5
+  const difficulty = pickDifficulty(
+    totalDistance,
+    estimatedDuration,
+    orderedSpots.length
+  )
   const now = new Date()
 
   return {
@@ -808,7 +844,9 @@ function estimateMovementMinutes(distanceMeters) {
     return estimateWalkTimeMinutes(distanceMeters)
   }
   const speed =
-    distanceMeters <= 50000 ? TRANSIT_SPEED_M_PER_MIN : LONG_DISTANCE_SPEED_M_PER_MIN
+    distanceMeters <= 50000
+      ? TRANSIT_SPEED_M_PER_MIN
+      : LONG_DISTANCE_SPEED_M_PER_MIN
   return Math.ceil(distanceMeters / speed) + TRANSIT_BUFFER_MINUTES
 }
 
@@ -823,14 +861,16 @@ function getTravelMode(distanceMeters) {
 }
 
 function pickDifficulty(totalDistance, estimatedDuration, spotCount) {
-  if (totalDistance <= 5000 && estimatedDuration <= 150 && spotCount <= 3) return 'easy'
+  if (totalDistance <= 5000 && estimatedDuration <= 150 && spotCount <= 3)
+    return 'easy'
   if (totalDistance <= 30000 && estimatedDuration <= 240) return 'moderate'
   return 'hard'
 }
 
 function buildSpotNote(index, spotName, mode) {
   if (index === 0) return `${spotName}에서 코스를 시작합니다.`
-  if (mode === 'walking') return `${spotName}까지 도보 이동이 현실적인 구간입니다.`
+  if (mode === 'walking')
+    return `${spotName}까지 도보 이동이 현실적인 구간입니다.`
   if (mode === 'transit') return `${spotName}까지 대중교통 이동을 권장합니다.`
   return `${spotName}까지 장거리 이동이 필요하므로 시간 여유를 두세요.`
 }
