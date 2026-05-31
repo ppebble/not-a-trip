@@ -62,7 +62,8 @@ const sherlockSpot = {
     },
     {
       url: 'https://www.visitlondon.com/things-to-do/place/48930-sherlock-holmes-museum',
-      label: 'Visit London listing for Sherlock Holmes Museum at 221B Baker Street',
+      label:
+        'Visit London listing for Sherlock Holmes Museum at 221B Baker Street',
       evidenceType: 'official_tourism',
       collectedAt: now,
     },
@@ -154,7 +155,9 @@ const operations = [
 
 if (APPLY) {
   for (const op of operations) {
-    await db.collection(op.collection).updateOne(op.filter, op.update, op.options)
+    await db
+      .collection(op.collection)
+      .updateOne(op.filter, op.update, op.options)
   }
 }
 
