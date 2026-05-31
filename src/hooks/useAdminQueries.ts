@@ -282,7 +282,7 @@ export function useAdminSpotMedia(spotId: string) {
       )
       const data = await res.json()
       if (!res.ok) {
-        throw new Error(data.error || '?? ??? ?? ??')
+        throw new Error(data.error || '스팟 미디어 조회 실패')
       }
       return data
     },
@@ -307,7 +307,7 @@ export function useUpdateAdminSpotMedia() {
       )
       const data = await res.json()
       if (!res.ok) {
-        throw new Error(data.error || '?? ??? ?? ??')
+        throw new Error(data.error || '스팟 미디어 저장 실패')
       }
       return data as { success: true }
     },

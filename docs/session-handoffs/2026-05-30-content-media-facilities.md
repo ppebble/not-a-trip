@@ -1,4 +1,4 @@
-﻿# Session Handoff — 2026-05-30 — Content Media, Facilities, and Course Data Prep
+# Session Handoff — 2026-05-30 — Content Media, Facilities, and Course Data Prep
 
 ## Branch and State
 
@@ -12,7 +12,7 @@
 - `6dfc028 feat(data): add third verified animation spot batch` — latest committed seed/data batch before the current uncommitted cleanup and enrichment pass.
 - `66b0829 feat(data): add more verified animation pilgrimage spots` — earlier committed animation spot expansion.
 - `12ac199 feat(data): ground animation spots with real local photos` — earlier committed replacement of placeholder media with grounded local photos.
-- `65a5e7c enhancement: ?? ??? ??? ?? ??? ??` — mojibake subject exists in history; do not use it as a pattern for new commits.
+- `65a5e7c` — historical commit subject is mojibake; do not use it as a pattern for new commits.
 - `23a6b1e Merge pull request #866 from ppebble/chore/51--session-handoff` — previous handoff merge point.
 
 ## Completed This Session
@@ -48,14 +48,14 @@
   - `unavailableCount: 0`
   - `reverseGeocoded: 398`
   - each facility has `fullAddress`, `addressSource: "nominatim_reverse_geocode"`, and `addressUpdatedAt`.
-- Fixed spot detail map legend labels that showed `???` for every facility type except the pilgrimage spot itself.
+- Fixed spot detail map legend labels that showed fallback question-mark labels for every facility type except the pilgrimage spot itself.
 - Updated facility Google Maps links so chain stores search with name + full address + coordinates, not name-only. This prevents nationwide chain-store result ambiguity.
 
 ## Verification Evidence
 
 - `npm run type-check` — passed after the current code state; proves TypeScript still compiles with the new content/facility/map changes.
 - `npm test -- --runTestsByPath __tests__/content-discovery/filterContents.unit.test.ts` — passed; proves content discovery filters out topic-like and non-target records.
-- `npm test -- --runTestsByPath __tests__/map/spot-detail-map-labels.unit.test.ts` — passed; proves facility legend labels no longer resolve to fallback `???`.
+- `npm test -- --runTestsByPath __tests__/map/spot-detail-map-labels.unit.test.ts` — passed; proves facility legend labels no longer resolve to fallback question-mark labels.
 - `npm test -- --runTestsByPath __tests__/spot/facility-card-map-url.unit.test.ts __tests__/map/spot-detail-map-labels.unit.test.ts` — passed; proves full-address map URL construction and legend labels.
 - `npm run build` — passed after deleting stale `.next` cache from an earlier `/admin/media` PageNotFoundError; existing lint warnings are unrelated pre-existing noise.
 - DB verification from this session:

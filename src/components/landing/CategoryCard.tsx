@@ -1,25 +1,42 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import type { SpotCategory } from '@/types/spot'
 
-/** 카테고리별 이모지 매핑 — mascotProp 이미지 로드 실패 시 폴백 */
-const CATEGORY_EMOJI: Record<SpotCategory, string> = {
-  animation: '🎬',
-  sports: '⚽',
-  movie_drama: '🎥',
-  music: '🎵',
-  game: '🎮',
-  other: '📍',
+const CATEGORY_META: Record<
+  SpotCategory,
+  {
+    eyebrow: string
+    routeHint: string
+  }
+> = {
+  animation: {
+    eyebrow: 'ANIME PILGRIMAGE',
+    routeHint: '장면 배경 · 성지순례',
+  },
+  sports: {
+    eyebrow: 'SPORTS VENUE',
+    routeHint: '경기장 · 팬 투어',
+  },
+  movie_drama: {
+    eyebrow: 'SCREEN LOCATION',
+    routeHint: '영화 · 드라마 촬영지',
+  },
+  music: {
+    eyebrow: 'MUSIC LANDMARK',
+    routeHint: '공연장 · 아티스트 장소',
+  },
+  game: {
+    eyebrow: 'GAME WORLD',
+    routeHint: '게임 배경 · 테마 스팟',
+  },
+  other: {
+    eyebrow: 'CULTURE SPOT',
+    routeHint: '숨은 명소 · 팬덤 장소',
+  },
 }
-
-/**
- * 카테고리 카드 컴포넌트
- * 스토리텔링 섹션에서 각 카테고리를 소개하는 카드
- * Requirements: 2.4, 2.5, 2.6, 2.7, 2.8, 3.4
- */
 
 interface CategoryCardProps {
   category: SpotCategory
@@ -33,20 +50,31 @@ interface CategoryCardProps {
   reducedMotion: boolean
 }
 
-/**
- * 카테고리별 CSS 변수 기반 인라인 스타일 생성
- * Tailwind의 arbitrary value로는 CSS 변수 동적 참조가 어려워 인라인 스타일 사용
- */
 function getCategoryStyles(colorToken: string) {
   return {
-    backgroundColor: `rgb(var(--${colorToken}-bg) / 0.22)`,
-    borderColor: `rgb(var(--${colorToken}-fg) / 0.24)`,
+    backgroundColor: `rgb(var(--${colorToken}-bg) / 0.16)`,
   }
 }
 
-function getCategoryAccentStyle(colorToken: string) {
+function getAccentStyle(colorToken: string) {
   return {
     color: `rgb(var(--${colorToken}-fg))`,
+  }
+}
+
+function getAccentSurfaceStyle(colorToken: string) {
+  return {
+    backgroundColor: `rgb(var(--${colorToken}-fg) / 0.1)`,
+    borderColor: `rgb(var(--${colorToken}-fg) / 0.18)`,
+    color: `rgb(var(--${colorToken}-fg))`,
+  }
+}
+
+function getPhotoFallbackStyle(colorToken: string) {
+  return {
+    background:
+      `radial-gradient(circle at 22% 18%, rgb(var(--${colorToken}-fg) / 0.24), transparent 34%), ` +
+      `linear-gradient(135deg, rgb(var(--${colorToken}-bg) / 0.88), rgb(var(--surface) / 0.9))`,
   }
 }
 
@@ -54,23 +82,22 @@ export function CategoryCard({
   category,
   title,
   description,
-  mascotProp,
   spotImage,
   colorToken,
   index,
   isHighEnd,
   reducedMotion,
 }: CategoryCardProps) {
-  const [imageError, setImageError] = useState(false)
-  const [mascotError, setMascotError] = useState(false)
-
+  const [imageFailed, setImageFailed] = useState(false)
+  const meta = CATEGORY_META[category]
   const cardStyles = getCategoryStyles(colorToken)
-  const accentStyles = getCategoryAccentStyle(colorToken)
+  const accentStyles = getAccentStyle(colorToken)
+  const chipStyles = getAccentSurfaceStyle(colorToken)
 
   return (
     <article
-      className={`category-card group relative flex flex-col overflow-hidden rounded-[1.5rem] border shadow-lg shadow-primary-500/5 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 ${
-        !reducedMotion && isHighEnd ? 'hover:scale-[1.02]' : ''
+      className={`category-card group relative flex min-h-[25rem] flex-col overflow-hidden rounded-[1.6rem] shadow-lg shadow-primary-500/5 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 ${
+        !reducedMotion && isHighEnd ? 'hover:-translate-y-1' : ''
       }`}
       style={{
         ...cardStyles,
@@ -80,71 +107,73 @@ export function CategoryCard({
       data-index={index}
       data-category={category}
     >
-      {/* 스팟 이미지 영역 */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
-        {!imageError ? (
-          <Image
-            src={spotImage}
-            alt={`${title} 대표 이미지`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div
-            className="flex h-full w-full items-center justify-center"
-            style={{ backgroundColor: `rgb(var(--${colorToken}-bg) / 0.6)` }}
-          >
-            <span className="text-lg font-semibold" style={accentStyles}>
-              {title}
+      <div className="relative overflow-hidden p-5 pb-0">
+        <div
+          className="relative h-48 overflow-hidden rounded-[1.25rem] shadow-inner"
+          style={getPhotoFallbackStyle(colorToken)}
+        >
+          {!imageFailed ? (
+            <Image
+              src={spotImage}
+              alt={`${title} 대표 스팟 사진`}
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              onError={() => setImageFailed(true)}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+              <span className="text-sm font-semibold text-sub-text">
+                대표 스팟 사진을 불러오지 못했습니다
+              </span>
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/20" />
+
+          <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-3">
+            <span className="rounded-full border border-white/30 bg-black/35 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+              {meta.eyebrow}
+            </span>
+            <span className="rounded-full bg-black/35 px-2 py-1 text-xs font-semibold text-white/85 backdrop-blur-sm">
+              {String(index + 1).padStart(2, '0')}
             </span>
           </div>
-        )}
+
+          <div className="absolute inset-x-4 bottom-4">
+            <p className="text-xs font-semibold text-white/80">
+              {meta.routeHint}
+            </p>
+            <p className="mt-1 line-clamp-1 text-lg font-black tracking-[-0.03em] text-white">
+              {title}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* 카드 콘텐츠 */}
-      <div className="flex flex-1 flex-col gap-3 bg-surface/70 p-5 dark:bg-black/10 md:p-6">
-        {/* 마스코트 소품 + 제목 */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-background/60">
-            {!mascotError ? (
-              <Image
-                src={mascotProp}
-                alt={`${title} 카테고리 아이콘`}
-                fill
-                className="object-contain"
-                sizes="40px"
-                onError={() => setMascotError(true)}
-              />
-            ) : (
-              <span
-                className="text-lg"
-                role="img"
-                aria-label={`${title} 아이콘`}
-              >
-                {CATEGORY_EMOJI[category]}
-              </span>
-            )}
-          </div>
+      <div className="flex flex-1 flex-col gap-4 p-5 md:p-6">
+        <div className="flex items-start justify-between gap-4">
           <h3
-            className="text-lg font-semibold tracking-[-0.01em] md:text-xl"
+            className="text-xl font-semibold tracking-[-0.02em] md:text-2xl"
             style={accentStyles}
           >
             {title}
           </h3>
+          <span
+            className="mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full"
+            style={{ backgroundColor: `rgb(var(--${colorToken}-fg))` }}
+            aria-hidden="true"
+          />
         </div>
 
-        {/* 설명 */}
         <p className="text-sm leading-relaxed text-sub-text md:text-base">
           {description}
         </p>
 
-        {/* 더 보기 링크 */}
         <Link
           href={`/map?category=${category}`}
-          className="mt-auto inline-flex items-center gap-1 self-start rounded-full px-0 text-sm font-semibold transition-colors hover:underline"
-          style={accentStyles}
+          className="mt-auto inline-flex items-center gap-2 self-start rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:bg-background/70"
+          style={chipStyles}
         >
           지도에서 보기
           <svg

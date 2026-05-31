@@ -53,7 +53,17 @@ next-env.d.ts
 velog-post.md
 
 # user uploaded files
-/public/uploads/
+!/public/uploads/
+/public/uploads/*
+!/public/uploads/contents/
+/public/uploads/contents/*
+!/public/uploads/contents/covers/
+!/public/uploads/contents/covers/*.webp
+!/public/uploads/spots/
+/public/uploads/spots/*
+!/public/uploads/spots/replacements/
+!/public/uploads/spots/replacements/*.jpg
+!/public/uploads/spots/replacements/*.webp
 
 # code example files (steering reference only)
 .kiro/steering/code-example/

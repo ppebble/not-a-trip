@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useAdminAuth } from '@/hooks/useAdminAuth'
 import { useAdminDashboardSummary } from '@/hooks/useAdminQueries'
@@ -105,8 +105,8 @@ export default function AdminDashboardPage() {
                 href="/admin/content-images"
               />
               <AdminDashboardCard
-                title="??? ??"
-                description="?? ?? ??? ?? ?? ???? ??/?????."
+                title="스팟 미디어"
+                description="스팟별 대표 이미지와 장면 사진을 검토/관리합니다."
                 icon={<AppIcon name="spot" size={24} />}
                 pendingCount={0}
                 href="/admin/media"

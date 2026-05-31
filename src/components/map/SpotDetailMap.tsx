@@ -29,16 +29,16 @@ const FACILITY_THEME_COLORS: Record<FacilityType, string> = {
 }
 
 const facilityTypeLabels: Record<FacilityType, string> = {
-  restaurant: '???',
-  convenience_store: '???',
-  cafe: '??',
-  station: '?/???',
-  other: '??',
-  coin_locker: '?? ??',
-  solo_dining: '?? ??',
-  charging_cafe: '??/????',
-  public_restroom: '???',
-  goods_shop: '???',
+  restaurant: '음식점',
+  convenience_store: '편의점',
+  cafe: '카페',
+  station: '역/정류장',
+  other: '기타',
+  coin_locker: '코인 로커',
+  solo_dining: '혼밥 식당',
+  charging_cafe: '충전/와이파이',
+  public_restroom: '화장실',
+  goods_shop: '굿즈/잡화',
 }
 
 function createMapPin(

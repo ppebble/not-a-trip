@@ -58,92 +58,93 @@ export interface CardPlacement {
  *   → 6장 슬라이스 시 각 카테고리 1장씩 보장
  */
 export const SHOWCASE_CARDS: ShowcaseCard[] = [
-  // ─── 1차 순환 (인덱스 0~5) ───
   {
     id: 'sc-1',
-    spotName: '가마쿠라코코마에역',
+    spotName: '가마쿠라코코마에역 건널목',
     contentName: '슬램덩크',
     category: 'animation',
-    imageUrl: '/images/showcase/kamakura.webp',
+    imageUrl:
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-002-kamakurakokomae-crossing.webp',
   },
   {
     id: 'sc-2',
-    spotName: '캄프 노우',
+    spotName: '캄프 누',
     contentName: 'FC 바르셀로나',
     category: 'sports',
-    imageUrl: '/images/showcase/camp-nou.webp',
+    imageUrl: '/uploads/spots/replacements/campnou-fd1ffbdfbd42.jpg',
   },
   {
     id: 'sc-3',
-    spotName: '킹스크로스역 9¾ 플랫폼',
-    contentName: '해리 포터',
+    spotName: '글렌피난 고가교',
+    contentName: '해리포터 시리즈',
     category: 'movie_drama',
-    imageUrl: '/images/showcase/kings-cross.webp',
+    imageUrl: '/uploads/spots/replacements/real-mov-001-1913f25dddcbee.webp',
   },
   {
     id: 'sc-4',
-    spotName: '애비 로드',
+    spotName: '애비 로드 횡단보도',
     contentName: '비틀즈',
     category: 'music',
-    imageUrl: '/images/showcase/abbey-road.webp',
+    imageUrl: '/uploads/scenes/REAL-MUS-001-scene-0.jpg',
   },
   {
     id: 'sc-5',
-    spotName: '닌텐도 본사',
+    spotName: '닌텐도 도쿄',
     contentName: '닌텐도',
     category: 'game',
-    imageUrl: '/images/showcase/nintendo-hq.webp',
+    imageUrl: '/uploads/scenes/REAL-GAM-002-scene-0.jpg',
   },
   {
     id: 'sc-6',
-    spotName: '페트라',
-    contentName: '인디아나 존스',
+    spotName: '셜록 홈즈 박물관',
+    contentName: '셜록 홈즈',
     category: 'other',
-    imageUrl: '/images/showcase/petra.webp',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/3/33/221B_Baker_Street%2C_London_-_Sherlock_Holmes_Museum.jpg',
   },
-
-  // ─── 2차 순환 (인덱스 6~11) ───
   {
     id: 'sc-7',
-    spotName: '지브리 미술관',
-    contentName: '스튜디오 지브리',
+    spotName: '스가 신사',
+    contentName: '너의 이름은',
     category: 'animation',
-    imageUrl: '/images/showcase/ghibli-museum.webp',
+    imageUrl:
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-001-suga-shrine.webp',
   },
   {
     id: 'sc-8',
     spotName: '올드 트래포드',
     contentName: '맨체스터 유나이티드',
     category: 'sports',
-    imageUrl: '/images/showcase/old-trafford.webp',
+    imageUrl: '/uploads/spots/replacements/oldtrafford-7f887cb9ba62.jpg',
   },
   {
     id: 'sc-9',
-    spotName: '두브로브니크 구시가지',
-    contentName: '왕좌의 게임',
+    spotName: '북촌 한옥마을',
+    contentName: '도깨비',
     category: 'movie_drama',
-    imageUrl: '/images/showcase/dubrovnik.webp',
+    imageUrl: '/uploads/spots/replacements/real-mov-002-479e2e36332ac0.webp',
   },
   {
     id: 'sc-10',
     spotName: '도쿄돔',
     contentName: '도쿄돔 콘서트',
     category: 'music',
-    imageUrl: '/images/showcase/tokyo-dome.webp',
+    imageUrl: '/uploads/scenes/REAL-MUS-002-scene-0.jpg',
   },
   {
     id: 'sc-11',
-    spotName: 'LA 컨벤션 센터',
-    contentName: 'E3 게임쇼',
+    spotName: '포켓몬 센터 메가 도쿄',
+    contentName: '포켓몬',
     category: 'game',
-    imageUrl: '/images/showcase/la-convention.webp',
+    imageUrl: '/uploads/scenes/REAL-GAM-003-scene-0.jpg',
   },
   {
     id: 'sc-12',
-    spotName: '앙코르 와트',
-    contentName: '앙코르 와트',
+    spotName: '셜록 홈즈 박물관',
+    contentName: '셜록 홈즈',
     category: 'other',
-    imageUrl: '/images/showcase/angkor-wat.webp',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/3/33/221B_Baker_Street%2C_London_-_Sherlock_Holmes_Museum.jpg',
   },
 ]
 

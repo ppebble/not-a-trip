@@ -17,8 +17,14 @@
     "backup:db": "node scripts/backup-mongodb.mjs",
     "restore:db": "node scripts/restore-mongodb.mjs",
     "validate:images": "node scripts/validate-approved-images.mjs",
+    "routes:seed:dry": "node scripts/seed-researched-routes.mjs",
+    "routes:seed:apply": "node scripts/seed-researched-routes.mjs --apply",
+    "routes:validate": "node scripts/validate-routes.mjs",
+    "routes:validate:seeded": "node scripts/validate-routes.mjs --seeded-only",
     "prepare": "husky install",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "landing:photos:dry": "node scripts/seed-landing-spot-photos.mjs",
+    "landing:photos:apply": "node scripts/seed-landing-spot-photos.mjs --apply"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.1",

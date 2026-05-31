@@ -7,14 +7,11 @@ import { MascotIllustration } from './MascotIllustration'
 
 interface ErrorBoundaryProps {
   children: React.ReactNode
-  /** 단순 UI 폴백 (ReactNode) */
   fallback?: React.ReactNode
-  /** Render Props 패턴 — 에러 정보와 reset 함수를 받아 커스텀 에러 UI를 렌더링 */
   renderFallback?: (props: {
     error: Error
     reset: () => void
   }) => React.ReactNode
-  /** 에러 상태 초기화 시 호출되는 콜백 */
   onReset?: () => void
 }
 
@@ -23,14 +20,6 @@ interface ErrorBoundaryState {
   error: Error | null
 }
 
-/**
- * 공통 ErrorBoundary 컴포넌트
- *
- * 하위 컴포넌트 트리에서 발생한 렌더링 에러를 포착하고 대체 UI를 표시한다.
- * fallback 우선순위: renderFallback > fallback > 기본 에러 UI
- *
- * Requirements: 1.1, 1.2, 1.3, 1.4
- */
 class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
@@ -61,7 +50,6 @@ class ErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError && this.state.error) {
-      // 우선순위 1: renderFallback (Render Props)
       if (this.props.renderFallback) {
         return this.props.renderFallback({
           error: this.state.error,
@@ -69,12 +57,10 @@ class ErrorBoundary extends React.Component<
         })
       }
 
-      // 우선순위 2: fallback (ReactNode)
       if (this.props.fallback) {
         return this.props.fallback
       }
 
-      // 우선순위 3: 기본 에러 UI
       return (
         <div className="flex h-full w-full items-center justify-center bg-neutral-100 p-8 dark:bg-background">
           <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 text-center shadow-lg">
@@ -112,7 +98,6 @@ class ErrorBoundary extends React.Component<
       )
     }
 
-    // 에러가 없으면 자식을 그대로 렌더링 (투명성)
     return this.props.children
   }
 }

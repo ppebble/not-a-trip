@@ -24,10 +24,9 @@ import type { SpotCategory } from '@/types/spot'
 interface WelcomePageClientProps {
   /** 서버에서 fetch한 쇼케이스 스팟 데이터 */
   showcaseSpots: ShowcaseCard[]
-  /** 카테고리별 대표 스팟 이미지 URL */
-  categoryImages: Record<SpotCategory, string>
   /** 소셜 프루프용 카테고리별 스팟 이미지 목록 */
-  proofImages: Record<SpotCategory, string[]>
+  categoryImages: Record<SpotCategory, string>
+  proofImages: Record<string, string[]>
 }
 
 export function WelcomePageClient({
