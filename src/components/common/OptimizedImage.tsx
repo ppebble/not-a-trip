@@ -1,11 +1,16 @@
-import Image, { ImageProps } from 'next/image'
+import Image, { type ImageProps } from 'next/image'
 import { blurPlaceholderProps } from '@/lib/image-utils'
 import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 interface OptimizedImageProps extends Omit<
   ImageProps,
-  'placeholder' | 'blurDataURL'
+  'alt' | 'placeholder' | 'blurDataURL'
 > {
+  /**
+   * Meaningful alternative text is required for informative images.
+   * Decorative images must intentionally pass alt="".
+   */
+  alt: string
   /** blur placeholder 비활성화 (로컬 이미지 등) */
   disableBlur?: boolean
 }
@@ -28,6 +33,7 @@ function isExternalUrl(src: ImageProps['src']): boolean {
  * @requirements 1.1, 5.4
  */
 export function OptimizedImage({
+  alt,
   disableBlur = false,
   ...props
 }: OptimizedImageProps) {
@@ -40,6 +46,7 @@ export function OptimizedImage({
     <Image
       {...blurProps}
       {...props}
+      alt={alt}
       src={safeSrc}
       unoptimized={shouldSkipOptimization || props.unoptimized}
     />
