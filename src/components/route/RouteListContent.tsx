@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { RouteCard } from '@/components/route/RouteCard'
 import {
   RouteFilterBar,
@@ -10,6 +10,8 @@ import { SkeletonBlock } from '@/components/common/SkeletonUI'
 import { AppIcon } from '@/components/common/AppIcon'
 import { useRouteList } from '@/hooks/useRouteQueries'
 import type { Route } from '@/types/route'
+
+const EMPTY_ROUTES: Route[] = []
 
 function RouteCardSkeleton() {
   return (
@@ -58,12 +60,15 @@ export function RouteListContent() {
 
   const { data, isLoading } = useRouteList(debouncedFilters, page)
 
-  const currentPageRoutes = data?.routes ?? []
+  const currentPageRoutes = data?.routes ?? EMPTY_ROUTES
   const totalPages = data?.totalPages ?? 1
 
   // 페이지 변경 시 누적
-  const routes =
-    page === 1 ? currentPageRoutes : [...allRoutes, ...currentPageRoutes]
+  const routes = useMemo(
+    () =>
+      page === 1 ? currentPageRoutes : [...allRoutes, ...currentPageRoutes],
+    [allRoutes, currentPageRoutes, page]
+  )
 
   // 무한 스크롤 IntersectionObserver
   useEffect(() => {
