@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import { SubTabNavigation } from '@/components/profile/SubTabNavigation'
 import { useUserPosts, useUserComments } from '@/hooks/useUserQueries'
+import { buildCommunityDetailHref } from '@/lib/community-routes'
 import type { UserPost, UserComment } from '@/types/profile'
 
 interface CommunitySectionProps {
@@ -99,11 +100,10 @@ function PostsTab({ posts, isLoading, isOwner }: PostsTabProps) {
 
   return (
     <div className="space-y-3">
-      {posts.map((post) => (
-        <Link
-          key={post.id}
-          href={`/community/posts/${post.id}`}
-          className="block rounded-xl border border-neutral-100 bg-surface p-4 shadow-sm transition-colors hover:bg-neutral-50"
+      {posts.map((post, index) => (
+        <CommunityActivityCard
+          key={post.id || `post-${index}`}
+          href={buildCommunityDetailHref(post.id)}
         >
           <h3 className="truncate font-semibold text-neutral-800">
             {post.title || post.contentPreview}
@@ -149,7 +149,7 @@ function PostsTab({ posts, isLoading, isOwner }: PostsTabProps) {
               {post.commentCount}
             </span>
           </div>
-        </Link>
+        </CommunityActivityCard>
       ))}
     </div>
   )
@@ -173,11 +173,10 @@ function CommentsTab({ comments, isLoading }: CommentsTabProps) {
 
   return (
     <div className="space-y-3">
-      {comments.map((comment) => (
-        <Link
-          key={comment.id}
-          href={`/community/posts/${comment.postId}`}
-          className="block rounded-xl border border-neutral-100 bg-surface p-4 shadow-sm transition-colors hover:bg-neutral-50"
+      {comments.map((comment, index) => (
+        <CommunityActivityCard
+          key={comment.id || `comment-${index}`}
+          href={buildCommunityDetailHref(comment.postId)}
         >
           <p className="line-clamp-2 text-neutral-800">
             {comment.contentPreview}
@@ -189,13 +188,37 @@ function CommentsTab({ comments, isLoading }: CommentsTabProps) {
               원문: <span className="text-primary">{comment.postTitle}</span>
             </span>
           </div>
-        </Link>
+        </CommunityActivityCard>
       ))}
     </div>
   )
 }
 
 // ── 공통 컴포넌트 ──────────────────────────────────────────
+
+interface CommunityActivityCardProps {
+  href: string | null
+  children: ReactNode
+}
+
+function CommunityActivityCard({ href, children }: CommunityActivityCardProps) {
+  const className =
+    'block rounded-xl border border-neutral-100 bg-surface p-4 shadow-sm transition-colors hover:bg-neutral-50'
+
+  if (!href) {
+    return (
+      <article data-disabled="true" className={className}>
+        {children}
+      </article>
+    )
+  }
+
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  )
+}
 
 interface EmptyStateProps {
   message: string
