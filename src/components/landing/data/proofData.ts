@@ -119,8 +119,7 @@ export const PROOF_DUMMY_DATA: ProofData[] = [
     contentName: '용과 같이',
     comment:
       '용과 같이 카무로초의 실제 모델, 네온사인 거리를 걸으면 게임 속에 들어온 기분이에요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Kabukicho%20%2853084208633%29.jpg',
+    image: '/uploads/spots/replacements/real-gam-001-32171b51e344d8.webp',
   },
   {
     id: '13',
@@ -142,13 +141,12 @@ export const PROOF_DUMMY_DATA: ProofData[] = [
   },
   {
     id: '15',
-    categoryTag: 'other',
-    spotName: '셜록 홈즈 박물관',
-    contentName: '셜록 홈즈',
+    categoryTag: 'movie_drama',
+    spotName: '호비튼 무비 세트',
+    contentName: '반지의 제왕',
     comment:
-      '221B 베이커 스트리트 문패 앞에서 셜록 홈즈 세계에 들어온 기분이 들었어요',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/3/33/221B_Baker_Street%2C_London_-_Sherlock_Holmes_Museum.jpg',
+      '샤이어 마을 세트장이 그대로 남아 있어 판타지 여행지에 들어온 느낌이에요',
+    image: '/uploads/spots/replacements/hobbiton-4308cdfe0114.jpg',
   },
   {
     id: '16',
@@ -163,42 +161,38 @@ export const PROOF_DUMMY_DATA: ProofData[] = [
   {
     id: '17',
     categoryTag: 'animation',
-    spotName: '하코네 유모토',
-    contentName: '신세기 에반게리온',
+    spotName: '아키하바라',
+    contentName: '슈타인즈 게이트',
     comment:
-      '에반게리온의 제3신도쿄시 모델, 온천 마을 곳곳에 에바 콜라보가 숨어있어요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Hakone-yumoto.jpg',
+      '라디오회관과 전자상가 골목을 걷다 보면 시간여행이 시작될 것 같은 분위기예요',
+    image: '/uploads/spots/replacements/real-ani-010-22623e39b4319d.webp',
   },
   {
     id: '18',
     categoryTag: 'animation',
-    spotName: '시부야 스크램블 교차로',
-    contentName: '주술회전',
+    spotName: '신주쿠교엔',
+    contentName: '언어의 정원',
     comment:
-      '주술회전 시부야 사변의 무대, 하치코 앞에서 고죠 사토루를 떠올리며 사진 찍었어요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya%20Scramble%20crossing.jpg',
+      '비 오는 날 정자와 정원을 걸으면 영화 속 장면의 차분한 공기가 그대로 느껴져요',
+    image: '/images/spots/animation/real-ani-042-shinjuku-gyoen.webp',
   },
   {
     id: '19',
     categoryTag: 'animation',
-    spotName: '구마모토현청 루피 동상',
-    contentName: '원피스',
+    spotName: '나라공원',
+    contentName: '여러 애니메이션 배경',
     comment:
-      '원피스 작가 오다 에이이치로의 고향, 밀짚모자 해적단 동상 10개를 찾아다니는 재미가 있어요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Kumamoto%20Prefectural%20office%20new.jpg',
+      '사슴과 오래된 공원이 어우러진 풍경이라 일본 배경 애니의 산책 장면을 떠올리기 좋아요',
+    image: '/images/spots/animation/real-ani-011-nara-park.webp',
   },
   {
     id: '20',
     categoryTag: 'animation',
-    spotName: '히타시 오야마댐',
-    contentName: '진격의 거인',
+    spotName: '도요사토 초등학교 구교사',
+    contentName: '케이온!',
     comment:
-      '진격의 거인 작가 이사야마 하지메의 고향, 댐 앞 에렌·미카사·아르민 동상이 압도적이에요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Oyama%20Dam.jpg',
+      '방과후 티타임의 부실 분위기가 남아 있어 케이온 팬이라면 오래 머물게 돼요',
+    image: '/images/spots/animation/real-ani-030-toyosato-elementary.webp',
   },
   {
     id: '21',
@@ -213,21 +207,19 @@ export const PROOF_DUMMY_DATA: ProofData[] = [
   {
     id: '22',
     categoryTag: 'animation',
-    spotName: '모토스코 캠프장',
-    contentName: '유루캠△',
+    spotName: '스와호',
+    contentName: '너의 이름은',
     comment:
-      '유루캠 1화의 그 캠프장! 후지산을 바라보며 컵라면 먹는 린의 기분을 직접 느낄 수 있어요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Lake%20Motosu%20%282015-12-17%29.jpg',
+      '호수와 산 능선이 겹치는 풍경이 영화 속 마을을 떠올리게 해 성지순례 코스로 좋아요',
+    image: '/images/spots/animation/real-ani-039-lake-suwa.webp',
   },
   {
     id: '23',
     categoryTag: 'animation',
-    spotName: '메이지무라 박물관',
-    contentName: '귀멸의 칼날',
+    spotName: '히다후루카와역',
+    contentName: '너의 이름은',
     comment:
-      '귀멸의 칼날 나비저택의 모델, 다이쇼 시대 건축물이 그대로 보존되어 있어 팬이라면 감동이에요',
-    image:
-      'https://commons.wikimedia.org/wiki/Special:FilePath/Meiji%20Mura%2020220718%2004.jpg',
+      '영화 속 역 장면을 떠올리며 플랫폼과 마을 풍경을 함께 둘러보기 좋은 장소예요',
+    image: '/images/spots/animation/real-ani-007-hida-furukawa-station.webp',
   },
 ]

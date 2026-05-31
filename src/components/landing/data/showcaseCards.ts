@@ -99,8 +99,7 @@ export const SHOWCASE_CARDS: ShowcaseCard[] = [
     spotName: '셜록 홈즈 박물관',
     contentName: '셜록 홈즈',
     category: 'other',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/3/33/221B_Baker_Street%2C_London_-_Sherlock_Holmes_Museum.jpg',
+    imageUrl: '/icons/categories/other.webp',
   },
   {
     id: 'sc-7',
@@ -143,8 +142,7 @@ export const SHOWCASE_CARDS: ShowcaseCard[] = [
     spotName: '셜록 홈즈 박물관',
     contentName: '셜록 홈즈',
     category: 'other',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/3/33/221B_Baker_Street%2C_London_-_Sherlock_Holmes_Museum.jpg',
+    imageUrl: '/icons/categories/other.webp',
   },
 ]
 

@@ -71,8 +71,7 @@ export const CATEGORY_STORIES: CategoryStoryConfig[] = [
     description:
       '셜록 홈즈의 베이커가 221B, 엘비스의 그레이스랜드 같은 숨겨진 명소를 발견하세요',
     mascotProp: '/icons/categories/other.webp',
-    spotImage:
-      'https://upload.wikimedia.org/wikipedia/commons/3/33/221B_Baker_Street%2C_London_-_Sherlock_Holmes_Museum.jpg',
+    spotImage: '/icons/categories/other.webp',
     colorToken: 'category-other',
   },
 ]
