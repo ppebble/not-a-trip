@@ -1,8 +1,16 @@
 ﻿# Session Handoffs
 
-This directory is the manual handoff surface for closing one agent session and starting the next.
+This directory is the manual handoff surface for closing one agent session and starting the next. It also keeps lightweight continuation notes from the older handoff workflow.
 
-Use it when you are about to close Codex/OMX and want the next session to continue without reconstructing context from chat history.
+Use it when Codex/OMX work must continue in a later session without reconstructing context from chat history.
+
+## Directory map
+
+- `_template.md` — template for a dated session handoff file.
+- `YYYY-MM-DD-short-topic.md` — concrete session handoff records.
+- `status.md` — rolling snapshot of the current branch/workstream state.
+- `workflow.md` — repeatable continuation workflow and reference documents.
+- `todo.md` — candidate next-session tasks.
 
 ## Agent invocation contract
 
