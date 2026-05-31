@@ -1,15 +1,15 @@
-﻿'use client'
+'use client'
 
 /**
- * SpotMarkerLayer - 以??덈꺼 湲곕컲 2?④퀎 ? + MarkerClusterGroup
+ * SpotMarkerLayer - 줌 레벨 기반 3단계 마커 + MarkerClusterGroup
  *
- * 以??덈꺼???곕씪 ? ?뺥깭瑜??먮룞 ?꾪솚:
- * - ??12 (愿묒뿭): 移댄뀒怨좊━ ?대え吏 ?꾪듃 (22px) ??DOM 鍮꾩슜 理쒖냼
- * - 13~15 (以묎컙): 移댄뀒怨좊━ 而щ윭 ? + ?ㅽ뙚 ?대쫫 ?쇰꺼 (32px)
- * - ??16 (洹쇱젒): ?대?吏 ?먰삎 ? (48px) ???대윭?ㅽ꽣 ?댁젣
+ * 줌 레벨에 따라 마커 형태를 자동 전환한다:
+ * - 12 이하(광역): 카테고리 약어 점 마커(22px)로 DOM 비용 최소화
+ * - 13~15(중간): 카테고리 컬러 점 + 스팟 이름 라벨(32px)
+ * - 16 이상(근접): 스팟 이미지 원형 핀(48px), 클러스터 해제
  *
- * 以?蹂寃???紐⑤뱺 留덉빱???꾩씠肄섏쓣 ?쇨큵 援먯껜?쒕떎.
- * ?대윭?ㅽ꽣留곸? 以???15?먯꽌留??쒖꽦?붾맂??
+ * 줌 변경 시 모든 마커 아이콘을 일괄 교체한다.
+ * 클러스터링은 줌 15까지만 활성화된다.
  */
 
 import { useEffect, useRef } from 'react'
@@ -29,7 +29,7 @@ interface SpotMarkerLayerProps {
   onSpotSelect?: (spotId: string) => void
 }
 
-// ??? ?곗튂 ?붾컮?댁뒪 媛먯? ??????????????????????????????????????????????????????
+// 터치 디바이스 감지
 function detectTouchDevice(): boolean {
   if (typeof window === 'undefined') return false
   return (
@@ -49,7 +49,7 @@ if (typeof window !== 'undefined') {
   )
 }
 
-// ??? 移댄뀒怨좊━ ?좏떥 ???????????????????????????????????????????????????????????
+// 카테고리 약어
 const CATEGORY_EMOJI: Record<SpotCategory, string> = {
   animation: 'A',
   sports: 'S',
@@ -88,7 +88,7 @@ const getCategoryIconPath = (category?: SpotCategory): string => {
   return CATEGORY_CONFIG[category]?.icon || '/icons/categories/other.webp'
 }
 
-// ??? 以??덈꺼蹂??꾩씠肄??앹꽦 ???????????????????????????????????????????????????
+// 줌 레벨별 아이콘 생성
 
 type ZoomTier = 'dot' | 'label' | 'image'
 
@@ -98,7 +98,7 @@ function getZoomTier(zoom: number): ZoomTier {
   return 'image'
 }
 
-/** 愿묒뿭 (??2): 移댄뀒怨좊━ ?대え吏 ?꾪듃 ??22px, ?대?吏 ?놁쓬, shadow ?놁쓬 */
+/** 광역(12 이하): 카테고리 약어 점 마커, 이미지 없음, shadow 없음 */
 function createDotIcon(category?: SpotCategory): L.DivIcon {
   const color = getCategoryColor(category)
   const emoji = getCategoryEmoji(category)
@@ -110,11 +110,11 @@ function createDotIcon(category?: SpotCategory): L.DivIcon {
   })
 }
 
-/** 以묎컙 (13~15): 移댄뀒怨좊━ 而щ윭 ? + ?ㅽ뙚 ?대쫫 ???대?吏 ?놁쓬 */
+/** 중간(13~15): 카테고리 컬러 점 + 스팟 이름 라벨, 이미지 없음 */
 function createLabelIcon(name: string, category?: SpotCategory): L.DivIcon {
   const color = getCategoryColor(category)
   const emoji = getCategoryEmoji(category)
-  // ?대쫫? 理쒕? 8?먮줈 truncate
+  // 이름은 최대 8자로 truncate
   const displayName = name.length > 8 ? `${name.slice(0, 8)}...` : name
   return L.divIcon({
     className: 'spot-label-pin',
@@ -127,7 +127,7 @@ function createLabelIcon(name: string, category?: SpotCategory): L.DivIcon {
   })
 }
 
-/** 洹쇱젒 (??6): ?대?吏 ?먰삎 ? ??48px */
+/** 근접(16 이상): 이미지 원형 핀 48px */
 function createImageIcon(
   thumbnailUrl: string,
   category?: SpotCategory
@@ -152,7 +152,7 @@ function createImageIcon(
   })
 }
 
-/** ?몃쾭 ?꾩씠肄?(以??덈꺼 臾닿?, ??긽 ?대?吏 ? ?뺣?) */
+/** 호버 아이콘: 줌 레벨과 무관하게 항상 이미지 핀 형태 */
 function createHoveredIcon(
   thumbnailUrl: string,
   category?: SpotCategory
@@ -177,7 +177,7 @@ function createHoveredIcon(
   })
 }
 
-/** 以??덈꺼??留욌뒗 ?꾩씠肄?諛섑솚 */
+/** 줌 레벨에 맞는 아이콘 반환 */
 function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
   switch (tier) {
     case 'dot':
@@ -189,7 +189,7 @@ function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
   }
 }
 
-// ??? ?대윭?ㅽ꽣 ?꾩씠肄??????????????????????????????????????????????????????????
+// 클러스터 아이콘
 function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const count = cluster.getChildCount()
   let size = 36
@@ -216,7 +216,7 @@ function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   })
 }
 
-// ??? 硫붿씤 而댄룷?뚰듃 ???????????????????????????????????????????????????????????
+// 메인 컴포넌트
 export default function SpotMarkerLayer({
   spots,
   onSpotSelect,
@@ -237,7 +237,7 @@ export default function SpotMarkerLayer({
   onSpotSelectRef.current = onSpotSelect
   spotsRef.current = spots
 
-  // ?대윭?ㅽ꽣 洹몃９ ?앹꽦 (??踰덈쭔)
+  // 클러스터 그룹 생성(1회)
   useEffect(() => {
     const clusterGroup = L.markerClusterGroup({
       maxClusterRadius: 50,
@@ -253,16 +253,16 @@ export default function SpotMarkerLayer({
     const currentMarkers = markersRef.current
     map.addLayer(clusterGroup)
 
-    // 以?蹂寃????꾩씠肄??쇨큵 援먯껜
+    // 줌 변경 시 아이콘 일괄 교체
     const onZoomEnd = () => {
       const newTier = getZoomTier(map.getZoom())
       if (newTier === currentTierRef.current) return
       currentTierRef.current = newTier
 
-      // ?몃쾭 ?댁젣
+      // 호버 해제
       hoveredRef.current = null
 
-      // 紐⑤뱺 留덉빱 ?꾩씠肄?援먯껜
+      // 모든 마커 아이콘 교체
       markersRef.current.forEach((marker, id) => {
         const spot = spotsRef.current.find((s) => s.id === id)
         if (spot) marker.setIcon(getIconForZoom(spot, newTier))
@@ -287,7 +287,7 @@ export default function SpotMarkerLayer({
     const newSpotIds = new Set(spots.map((s) => s.id))
     const tier = currentTierRef.current
 
-    // ?쒓굅
+    // 제거
     const toRemove: L.Marker[] = []
     currentMarkers.forEach((marker, id) => {
       if (!newSpotIds.has(id)) {
@@ -297,7 +297,7 @@ export default function SpotMarkerLayer({
     })
     if (toRemove.length > 0) clusterGroup.removeLayers(toRemove)
 
-    // 異붽?
+    // 추가
     const toAdd: L.Marker[] = []
     for (const spot of spots) {
       if (currentMarkers.has(spot.id)) continue
@@ -305,7 +305,7 @@ export default function SpotMarkerLayer({
       const icon = getIconForZoom(spot, tier)
       const marker = L.marker(spot.coordinates, { icon })
 
-      // ?대┃
+      // 클릭
       marker.on('click', () => {
         if (_isTouchDevice) {
           const ts = touchStateRef.current
@@ -327,12 +327,12 @@ export default function SpotMarkerLayer({
         onSpotSelectRef.current?.(spot.id)
       })
 
-      // ?몃쾭
+      // 호버
       marker.on('mouseover', () => {
         if (_isTouchDevice) return
         if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current)
         hoverTimerRef.current = setTimeout(() => {
-          // ?댁쟾 ?몃쾭 ?댁젣
+          // 이전 호버 해제
           if (hoveredRef.current && hoveredRef.current.id !== spot.id) {
             const prev = currentMarkers.get(hoveredRef.current.id)
             const prevSpot = spotsRef.current.find(

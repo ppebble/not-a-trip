@@ -14,7 +14,6 @@ import type { SpotCategory } from '@/types/spot'
 interface StorytellingSectionProps {
   isHighEnd: boolean
   reducedMotion: boolean
-  /** 카테고리별 대표 스팟 이미지 URL */
   categoryImages: Record<SpotCategory, string>
 }
 
@@ -25,12 +24,6 @@ export function StorytellingSection({
 }: StorytellingSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // 카테고리 스토리에 실제 이미지 적용
-  const storiesWithImages = CATEGORY_STORIES.map((story) => ({
-    ...story,
-    spotImage: categoryImages[story.category] || story.spotImage,
-  }))
-
   // GSAP 애니메이션: 고성능 + 모션 허용 시에만 로드
   if (isHighEnd && !reducedMotion) {
     return (
@@ -38,7 +31,8 @@ export function StorytellingSection({
         containerRef={containerRef}
         isHighEnd={isHighEnd}
         reducedMotion={reducedMotion}
-        stories={storiesWithImages}
+        stories={CATEGORY_STORIES}
+        categoryImages={categoryImages}
       />
     )
   }
@@ -47,7 +41,8 @@ export function StorytellingSection({
     <StorytellingSectionFallback
       isHighEnd={isHighEnd}
       reducedMotion={reducedMotion}
-      stories={storiesWithImages}
+      stories={CATEGORY_STORIES}
+      categoryImages={categoryImages}
     />
   )
 }
@@ -61,11 +56,13 @@ function StorytellingSectionWithGSAP({
   isHighEnd,
   reducedMotion,
   stories,
+  categoryImages,
 }: {
   containerRef: React.RefObject<HTMLDivElement | null>
   isHighEnd: boolean
   reducedMotion: boolean
   stories: typeof CATEGORY_STORIES
+  categoryImages: Record<SpotCategory, string>
 }) {
   useGSAPAnimation(containerRef)
 
@@ -100,6 +97,7 @@ function StorytellingSectionWithGSAP({
             >
               <CategoryCard
                 {...story}
+                spotImage={categoryImages[story.category] || story.spotImage}
                 index={index}
                 isHighEnd={isHighEnd}
                 reducedMotion={reducedMotion}
@@ -120,10 +118,12 @@ function StorytellingSectionFallback({
   isHighEnd,
   reducedMotion,
   stories,
+  categoryImages,
 }: {
   isHighEnd: boolean
   reducedMotion: boolean
   stories: typeof CATEGORY_STORIES
+  categoryImages: Record<SpotCategory, string>
 }) {
   return (
     <section
@@ -157,6 +157,7 @@ function StorytellingSectionFallback({
             >
               <CategoryCard
                 {...story}
+                spotImage={categoryImages[story.category] || story.spotImage}
                 index={index}
                 isHighEnd={isHighEnd}
                 reducedMotion={reducedMotion}

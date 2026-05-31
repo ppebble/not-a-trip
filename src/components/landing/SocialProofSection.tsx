@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProofCard } from './ProofCard'
@@ -48,20 +48,16 @@ const CARD_GAP = 16
 const CLONE_COUNT = 4
 
 /**
- * proofData에 실제 스팟 이미지를 주입하고 무한 순환용 클론을 생성한다.
- * - 카테고리별로 순서대로 이미지를 배분
- * - 이미지가 없는 카테고리는 다른 카테고리의 이미지를 빌려옴
+ * proofData의 카드별 스팟 사진을 유지하고 무한 순환용 클론을 생성한다.
+ * - 각 카드가 특정 스팟을 표시하므로 카테고리 이미지 풀을 임의 배정하지 않는다.
  * - sceneImage는 실제 장면 이미지가 없으므로 제거 (단일 실사 카드)
  * - checkinData가 있으면 서버 체크인 데이터를 우선 사용
  * @public 테스트 가능하도록 export (Property 7 검증용)
  */
 export function getExtendedData(
-  proofImages: Record<SpotCategory, string[]>,
+  _proofImages: Record<SpotCategory, string[]>,
   checkinData?: SocialProofCheckin[]
 ) {
-  // 카테고리별 이미지 인덱스 카운터
-  const counters: Record<string, number> = {}
-
   // checkinData가 있으면 서버 데이터를 더미 데이터 앞에 배치
   let baseData: ProofData[]
 
@@ -93,28 +89,10 @@ export function getExtendedData(
     baseData = [...PROOF_DUMMY_DATA]
   }
 
-  const data: ProofData[] = baseData.map((item) => {
-    // 이미 서버 체크인 데이터인 경우 이미지 교체 불필요
-    if (item.id.startsWith('checkin-')) {
-      return { ...item, sceneImage: undefined }
-    }
-
-    const cat = item.categoryTag
-    const images = proofImages[cat] || []
-
-    let img: string | undefined
-    if (images.length > 0) {
-      const idx = counters[cat] ?? 0
-      counters[cat] = idx + 1
-      img = images[idx % images.length]
-    }
-
-    return {
-      ...item,
-      image: img || item.image, // DB 이미지가 있으면 사용, 없으면 원본 유지
-      sceneImage: undefined, // 실제 장면 이미지가 없으므로 제거 → 단일 카드
-    }
-  })
+  const data: ProofData[] = baseData.map((item) => ({
+    ...item,
+    sceneImage: undefined,
+  }))
 
   const len = data.length
   const prefixClones = data.slice(-CLONE_COUNT).map((d, i) => ({

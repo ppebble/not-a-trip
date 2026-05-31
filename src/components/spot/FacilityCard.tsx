@@ -11,6 +11,10 @@ import {
   LockerSize,
 } from '@/types/facility'
 import MicroVoteButton from './MicroVoteButton'
+import {
+  buildFacilityGoogleMapsSearchUrl,
+  hasUsableFacilityAddress,
+} from '@/lib/facility-map-url'
 
 interface FacilityCardProps {
   facility: NearbyFacility
@@ -295,7 +299,7 @@ export default memo(function FacilityCard({
   }
 
   const handleMapClick = () => {
-    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.name)}`
+    const googleMapsUrl = buildFacilityGoogleMapsSearchUrl(facility)
     window.open(googleMapsUrl, '_blank', 'noopener,noreferrer')
   }
 
@@ -307,7 +311,7 @@ export default memo(function FacilityCard({
     setVoteData(result)
   }
 
-  const showAddress = facility.address && facility.address !== '주소 정보 없음'
+  const showAddress = hasUsableFacilityAddress(facility.address)
   const isOtaku = OTAKU_TYPES.includes(facility.type as OtakuFacilityType)
 
   // VerificationBadge에 실시간 투표 데이터 반영

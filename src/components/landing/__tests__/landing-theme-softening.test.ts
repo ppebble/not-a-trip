@@ -86,4 +86,21 @@ describe('landing theme and softer visual tone', () => {
     expect(entry).toContain('text-primary-600 dark:text-primary-300')
     expect(howItWorks).toContain('text-primary-600 dark:text-primary-300')
   })
+  it('uses actual spot photos instead of category icons for landing card visuals', () => {
+    const categoryCard = read('src/components/landing/CategoryCard.tsx')
+    const floatingCard = read('src/components/landing/FloatingCard.tsx')
+    const fetchShowcaseSpots = read(
+      'src/components/landing/data/fetchShowcaseSpots.ts'
+    )
+
+    expect(categoryCard).toContain("from 'next/image'")
+    expect(categoryCard).toContain('spotImage')
+    expect(categoryCard).toContain('<Image')
+    expect(categoryCard).not.toContain('/icons/categories/')
+    expect(floatingCard).not.toContain('/icons/categories/')
+    expect(fetchShowcaseSpots).toContain(
+      "url.includes('/uploads/contents/covers/')"
+    )
+    expect(fetchShowcaseSpots).toContain('fetchCategoryImages')
+  })
 })
