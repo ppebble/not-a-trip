@@ -41,7 +41,7 @@ export function InstallBottomSheet() {
 
   return (
     <div
-      className="animate-slide-up fixed inset-x-0 bottom-0 z-[1100] rounded-t-2xl border-t border-border bg-surface px-4 pb-safe-bottom pt-4 shadow-2xl"
+      className="animate-slide-up fixed inset-x-0 bottom-0 z-40 rounded-t-2xl border-t border-border bg-surface px-4 pb-safe-bottom pt-4 shadow-2xl"
       role="dialog"
       aria-label="앱 설치 안내"
     >

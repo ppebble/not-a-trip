@@ -48,7 +48,7 @@ jest.mock('../CheckInDetailModal', () => ({
 
 jest.mock('next/image', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return function MockImage(props: any) {
+  return function MockImage({ fill: _fill, ...props }: any) {
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     return <img {...props} />
   }

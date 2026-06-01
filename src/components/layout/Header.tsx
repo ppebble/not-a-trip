@@ -93,7 +93,7 @@ export function Header() {
   return (
     <>
       <div className="h-16" aria-hidden="true" />
-      <header className="fixed left-0 right-0 top-0 z-[1100] border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
+      <header className="fixed left-0 right-0 top-0 z-40 border-b border-border bg-surface/95 pt-safe-top backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-5">
           <Link
             href="/"

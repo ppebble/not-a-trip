@@ -42,6 +42,22 @@ export interface CheckIn {
   updatedAt?: Date
 }
 
+export interface CheckInLikeStatus {
+  liked: boolean
+  likeCount: number
+}
+
+export interface CheckInComment {
+  id: string
+  checkInId: string
+  content: string
+  authorName: string
+  authorImage?: string
+  userId: string
+  canDelete: boolean
+  createdAt: Date
+}
+
 /** 인증 생성 입력 */
 export interface CheckInInput {
   spotId: string

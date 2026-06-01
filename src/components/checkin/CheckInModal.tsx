@@ -7,6 +7,7 @@ import { CheckInInput, UserBadge, SpotContentRelation, Scene } from '@/types'
 import { useUploadQueueStore } from '@/stores/uploadQueueStore'
 import RelationSelector from './RelationSelector'
 import { getSceneImageForContent } from '@/components/spot/SceneComparison'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 interface CheckInModalProps {
   isOpen: boolean
@@ -352,7 +353,7 @@ export function CheckInModal({
                 </p>
                 <div className="relative aspect-video overflow-hidden rounded-lg">
                   <Image
-                    src={effectiveSceneImageUrl}
+                    src={getSafeImageSrc(effectiveSceneImageUrl)}
                     alt="참고 장면"
                     fill
                     sizes="(max-width: 768px) 50vw, 256px"

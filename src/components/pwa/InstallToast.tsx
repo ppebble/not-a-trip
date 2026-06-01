@@ -41,7 +41,7 @@ export function InstallToast() {
 
   return (
     <div
-      className="animate-slide-up fixed bottom-4 right-4 z-[1100] w-80 rounded-xl border border-border bg-surface p-4 shadow-xl"
+      className="animate-slide-up fixed bottom-4 right-4 z-40 w-80 rounded-xl border border-border bg-surface p-4 shadow-xl"
       role="dialog"
       aria-label="앱 설치 안내"
     >
