@@ -1,3 +1,4 @@
+import { runtimeLogger } from '@/lib/runtime-logger'
 // ============================================
 // 스팟 라이프사이클 상태 전이 관리 모듈
 // Spec: 40-spot-quality-workflow
@@ -99,7 +100,7 @@ export async function transitionStatus(
     // 7. 성공 결과 반환
     return { success: true, newStatus: targetStatus }
   } catch (error) {
-    console.error('[lifecycle-manager] transitionStatus error:', error)
+    runtimeLogger.error('[lifecycle-manager] transitionStatus error:', error)
     return {
       success: false,
       error:

@@ -1,3 +1,4 @@
+import { runtimeLogger } from '@/lib/runtime-logger'
 import { COLLECTIONS, getCollection } from '@/lib/db'
 
 export interface SecurityLogDocument {
@@ -22,7 +23,6 @@ export async function writeSecurityLog(
       createdAt: new Date(),
     })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Failed to write security log:', error)
+    runtimeLogger.error('Failed to write security log:', error)
   }
 }

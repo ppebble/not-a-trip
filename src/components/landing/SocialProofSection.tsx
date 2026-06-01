@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProofCard } from './ProofCard'
-import { PROOF_DUMMY_DATA } from './data/proofData'
+import { LANDING_PROOF_CARDS } from './data/proofData'
 import type { ProofData } from './data/proofData'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import type { SpotCategory } from '@/types/spot'
@@ -84,9 +84,9 @@ export function getExtendedData(
     })
 
     // 서버 데이터 + 더미 데이터 결합 (서버 데이터 우선)
-    baseData = [...checkinProofData, ...PROOF_DUMMY_DATA]
+    baseData = [...checkinProofData, ...LANDING_PROOF_CARDS]
   } else {
-    baseData = [...PROOF_DUMMY_DATA]
+    baseData = [...LANDING_PROOF_CARDS]
   }
 
   const data: ProofData[] = baseData.map((item) => ({

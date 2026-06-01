@@ -1,3 +1,4 @@
+import { runtimeLogger } from '@/lib/runtime-logger'
 import { MongoClient, Db, Collection, Document } from 'mongodb'
 
 // MongoDB connection configuration
@@ -46,10 +47,10 @@ export async function connectToDatabase(): Promise<{
     cachedClient = client
     cachedDb = db
 
-    console.log('Connected to MongoDB successfully')
+    runtimeLogger.info('Connected to MongoDB successfully')
     return { client, db }
   } catch (error) {
-    console.error('Failed to connect to MongoDB:', error)
+    runtimeLogger.error('Failed to connect to MongoDB:', error)
     throw new Error('Database connection failed')
   }
 }
@@ -73,7 +74,7 @@ export async function closeDatabaseConnection(): Promise<void> {
     await cachedClient.close()
     cachedClient = null
     cachedDb = null
-    console.log('MongoDB connection closed')
+    runtimeLogger.info('MongoDB connection closed')
   }
 }
 

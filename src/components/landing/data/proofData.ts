@@ -10,7 +10,7 @@ export interface ProofData {
   sceneImage?: string
 }
 
-export const PROOF_DUMMY_DATA: ProofData[] = [
+export const LANDING_PROOF_CARDS: ProofData[] = [
   {
     id: '1',
     categoryTag: 'animation',
