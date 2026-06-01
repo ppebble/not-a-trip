@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-01T18:17:18.374Z",
+  "generatedAt": "2026-06-01T18:44:01.354Z",
   "command": "npx eslint src --format json",
   "scope": "src",
   "policy": {
@@ -8,17 +8,17 @@
   },
   "summary": {
     "errors": 0,
-    "warnings": 94,
+    "warnings": 86,
     "categories": {
       "reactHooksExhaustiveDeps": 0,
       "jsxA11y": 0,
-      "productionConsole": 59,
+      "productionConsole": 51,
       "noExplicitAny": 0,
       "unusedVariables": 30,
       "otherWarnings": 5
     },
     "rules": {
-      "no-console": 64,
+      "no-console": 56,
       "@typescript-eslint/no-unused-vars": 30
     }
   },

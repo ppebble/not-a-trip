@@ -1,3 +1,4 @@
+import { runtimeLogger } from '@/lib/runtime-logger'
 import { getCollection } from '@/lib/db'
 import { COLLECTIONS } from '@/lib/db'
 import type { DataReviewStatus } from '@/lib/real-image-data'
@@ -189,7 +190,7 @@ export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
 
     return [...cards, ...supplementalCards].slice(0, maxCards)
   } catch (error) {
-    console.error(
+    runtimeLogger.error(
       '[fetchShowcaseSpots] DB 조회 실패, 정적 스팟 사진 사용:',
       error
     )
@@ -219,7 +220,7 @@ export async function fetchCategoryImages(): Promise<
 
     return result
   } catch (error) {
-    console.error(
+    runtimeLogger.error(
       '[fetchCategoryImages] DB 조회 실패, 정적 스팟 사진 사용:',
       error
     )
@@ -289,7 +290,7 @@ export async function fetchProofImages(): Promise<
 
     return result
   } catch (error) {
-    console.warn(
+    runtimeLogger.warn(
       '[fetchProofImages] Showcase API 호출 실패, 정적 스팟 사진 사용:',
       error
     )
@@ -370,7 +371,10 @@ export async function fetchSocialProofCheckins(): Promise<
 
     return results
   } catch (error) {
-    console.error('[fetchSocialProofCheckins] 체크인 데이터 조회 실패:', error)
+    runtimeLogger.error(
+      '[fetchSocialProofCheckins] 체크인 데이터 조회 실패:',
+      error
+    )
     return []
   }
 }

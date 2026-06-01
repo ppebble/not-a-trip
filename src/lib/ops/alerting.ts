@@ -1,3 +1,4 @@
+import { runtimeLogger } from '@/lib/runtime-logger'
 import { COLLECTIONS, getCollection } from '@/lib/db'
 
 const RETRY_LIMIT = 3
@@ -53,8 +54,7 @@ async function deliverWebhook(url: string, payload: unknown): Promise<void> {
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
       if (attempt === RETRY_LIMIT) {
-        // eslint-disable-next-line no-console
-        console.error('Alert webhook delivery failed:', {
+        runtimeLogger.error('Alert webhook delivery failed:', {
           url,
           attempt,
           error: lastError.message,

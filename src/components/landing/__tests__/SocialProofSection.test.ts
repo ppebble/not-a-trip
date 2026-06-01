@@ -1,5 +1,5 @@
 import { getExtendedData } from '../SocialProofSection'
-import { PROOF_DUMMY_DATA } from '../data/proofData'
+import { LANDING_PROOF_CARDS } from '../data/proofData'
 import type { SpotCategory } from '@/types/spot'
 
 const CLONE_COUNT = 4
@@ -21,9 +21,9 @@ describe('SocialProofSection spot-specific images', () => {
       extended.length - CLONE_COUNT
     )
 
-    expect(originalCards).toHaveLength(PROOF_DUMMY_DATA.length)
+    expect(originalCards).toHaveLength(LANDING_PROOF_CARDS.length)
 
-    for (const sourceCard of PROOF_DUMMY_DATA) {
+    for (const sourceCard of LANDING_PROOF_CARDS) {
       const renderedCard = originalCards.find(
         (card) => card.id === sourceCard.id
       )
@@ -56,7 +56,7 @@ describe('SocialProofSection spot-specific images', () => {
   })
 
   it('does not ship category icons as proof-card photos', () => {
-    for (const card of PROOF_DUMMY_DATA) {
+    for (const card of LANDING_PROOF_CARDS) {
       expect(card.image).not.toContain('/icons/categories/')
       expect(card.sceneImage).toBeUndefined()
     }
@@ -86,6 +86,6 @@ describe('SocialProofSection spot-specific images', () => {
       contentName: '체크인 작품',
       image: 'https://example.com/checkin.jpg',
     })
-    expect(originalCards[1].id).toBe(PROOF_DUMMY_DATA[0].id)
+    expect(originalCards[1].id).toBe(LANDING_PROOF_CARDS[0].id)
   })
 })
