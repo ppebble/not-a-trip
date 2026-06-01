@@ -1,0 +1,10 @@
+{
+  "description": "Spec 53 route-level First Load JS budgets. Values are kB from Next.js production build output with narrow launch headroom over the 2026-06-02 measured baseline.",
+  "sharedFirstLoadJsKb": 230,
+  "routes": {
+    "/spots/[id]": 310,
+    "/routes/[id]": 285,
+    "/gallery": 280,
+    "/map": 275
+  }
+}
