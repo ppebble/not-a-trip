@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest",
@@ -24,7 +24,10 @@
     "prepare": "husky install",
     "commit": "git-cz",
     "landing:photos:dry": "node scripts/seed-landing-spot-photos.mjs",
-    "landing:photos:apply": "node scripts/seed-landing-spot-photos.mjs --apply"
+    "landing:photos:apply": "node scripts/seed-landing-spot-photos.mjs --apply",
+    "lint:release": "node scripts/check-lint-release-warnings.mjs",
+    "build:route-budget": "node scripts/check-route-js-budget.mjs",
+    "release:check": "npm run lint && npm run lint:release && npm run type-check && npm run build:route-budget"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.1",
