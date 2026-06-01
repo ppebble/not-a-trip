@@ -70,6 +70,10 @@ export const API_ROUTES = {
   CHECKINS: {
     BASE: '/api/checkins',
     DETAIL: (id: string) => `/api/checkins/${id}`,
+    LIKE: (id: string) => `/api/checkins/${id}/like`,
+    COMMENTS: (id: string) => `/api/checkins/${id}/comments`,
+    COMMENT_DETAIL: (id: string, commentId: string) =>
+      `/api/checkins/${id}/comments/${commentId}`,
     RANKING: '/api/checkins/ranking',
     STATS: '/api/checkins/stats',
   },

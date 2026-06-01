@@ -48,7 +48,7 @@ export function IosPwaGuide() {
 
   return (
     <div
-      className="animate-slide-up fixed inset-x-0 bottom-0 z-[1100] rounded-t-3xl border-t border-border bg-surface px-4 pb-safe-bottom pt-4 shadow-2xl md:bottom-auto md:left-auto md:right-4 md:top-4 md:w-[360px] md:rounded-3xl md:border"
+      className="animate-slide-up fixed inset-x-0 bottom-0 z-40 rounded-t-3xl border-t border-border bg-surface px-4 pb-safe-bottom pt-4 shadow-2xl md:bottom-auto md:left-auto md:right-4 md:top-4 md:w-[360px] md:rounded-3xl md:border"
       role="dialog"
       aria-label="iOS 앱 설치 안내"
     >

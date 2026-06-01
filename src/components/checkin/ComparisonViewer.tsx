@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
+import { getSafeImageSrc } from '@/lib/safe-image-src'
 
 interface ComparisonViewerProps {
   sceneImageUrl: string
@@ -24,6 +25,8 @@ export function ComparisonViewer({
   const [sliderPosition, setSliderPosition] = useState(50)
   const containerRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
+  const safeSceneImageUrl = getSafeImageSrc(sceneImageUrl)
+  const safeUserPhotoUrl = getSafeImageSrc(userPhotoUrl)
 
   const updateSliderPosition = useCallback((clientX: number) => {
     if (!containerRef.current) return
@@ -78,7 +81,7 @@ export function ComparisonViewer({
         <div className="grid grid-cols-2 gap-2">
           <div className="relative aspect-video overflow-hidden rounded-lg">
             <Image
-              src={sceneImageUrl}
+              src={safeSceneImageUrl}
               alt="작품 속 장면"
               fill
               sizes="(max-width: 768px) 50vw, 384px"
@@ -90,7 +93,7 @@ export function ComparisonViewer({
           </div>
           <div className="relative aspect-video overflow-hidden rounded-lg">
             <Image
-              src={userPhotoUrl}
+              src={safeUserPhotoUrl}
               alt="인증샷"
               fill
               sizes="(max-width: 768px) 50vw, 384px"
@@ -132,7 +135,7 @@ export function ComparisonViewer({
         {/* 인증샷 (뒤) */}
         <div className="absolute inset-0">
           <Image
-            src={userPhotoUrl}
+            src={safeUserPhotoUrl}
             alt="인증샷"
             fill
             sizes="(max-width: 768px) 50vw, 384px"
@@ -151,7 +154,7 @@ export function ComparisonViewer({
             style={{ width: `${100 / (sliderPosition / 100)}%` }}
           >
             <Image
-              src={sceneImageUrl}
+              src={safeSceneImageUrl}
               alt="작품 속 장면"
               fill
               sizes="(max-width: 768px) 50vw, 384px"

@@ -89,6 +89,8 @@ export const COLLECTIONS = {
   CONTENT_MASTERS: 'content_masters',
   // 인증 시스템 컬렉션 (07-pilgrimage-checkin)
   CHECKINS: 'checkins',
+  CHECKIN_LIKES: 'checkin_likes',
+  CHECKIN_COMMENTS: 'checkin_comments',
   BADGES: 'badges',
   USER_BADGES: 'user_badges',
   USER_STATS: 'user_stats',

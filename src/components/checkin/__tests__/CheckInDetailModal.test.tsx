@@ -28,6 +28,10 @@ jest.mock('../ComparisonViewer', () => ({
   ),
 }))
 
+jest.mock('@/lib/device-id', () => ({
+  getDeviceId: () => 'device-1',
+}))
+
 const baseCheckIn: CheckIn = {
   id: 'CHECKIN-001',
   spotId: 'spot-1',
@@ -48,6 +52,20 @@ describe('CheckInDetailModal', () => {
     jest.clearAllMocks()
     global.fetch = fetchMock as never
     fetchMock.mockImplementation((input: string) => {
+      if (input.includes('/api/checkins/CHECKIN-001/like')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ liked: false, likeCount: 5 }),
+        })
+      }
+
+      if (input.includes('/api/checkins/CHECKIN-001/comments')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ comments: [], total: 0 }),
+        })
+      }
+
       if (input.includes('/api/spots/spot-1/courses')) {
         return Promise.resolve({
           ok: true,
@@ -101,6 +119,20 @@ describe('CheckInDetailModal', () => {
         json: async () => baseCheckIn,
       }))
       .mockImplementation((input: string) => {
+        if (input.includes('/api/checkins/CHECKIN-001/like')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ liked: false, likeCount: 5 }),
+          })
+        }
+
+        if (input.includes('/api/checkins/CHECKIN-001/comments')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ comments: [], total: 0 }),
+          })
+        }
+
         if (input.includes('/api/spots/spot-1/courses')) {
           return Promise.resolve({
             ok: true,
@@ -138,6 +170,163 @@ describe('CheckInDetailModal', () => {
     })
 
     expect(fetchMock).toHaveBeenCalledWith('/api/checkins/CHECKIN-001')
+  })
+
+  test('toggles check-in like and exposes the confirmed count', async () => {
+    const onCheckInUpdated = jest.fn()
+    fetchMock.mockImplementation((input: string, init?: RequestInit) => {
+      if (
+        input.includes('/api/checkins/CHECKIN-001/like') &&
+        init?.method === 'POST'
+      ) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ liked: true, likeCount: 6 }),
+        })
+      }
+
+      if (input.includes('/api/checkins/CHECKIN-001/like')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ liked: false, likeCount: 5 }),
+        })
+      }
+
+      if (input.includes('/api/checkins/CHECKIN-001/comments')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ comments: [], total: 0 }),
+        })
+      }
+
+      if (input.includes('/api/spots/spot-1/courses')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ courses: [] }),
+        })
+      }
+
+      if (input.includes('/api/spots/spot-1')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ name: '서울타워' }),
+        })
+      }
+
+      return Promise.resolve({
+        ok: false,
+        json: async () => ({ error: 'unknown' }),
+      })
+    })
+
+    render(
+      <CheckInDetailModal
+        checkIn={baseCheckIn}
+        onCheckInUpdated={onCheckInUpdated}
+        onClose={jest.fn()}
+      />
+    )
+
+    const likeButton = await screen.findByRole('button', {
+      name: '인증 좋아요',
+    })
+    expect(likeButton).toHaveTextContent('5')
+
+    fireEvent.click(likeButton)
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: '인증 좋아요 취소' })
+      ).toHaveTextContent('6')
+    })
+    expect(onCheckInUpdated).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'CHECKIN-001', likeCount: 6 }),
+      true
+    )
+  })
+
+  test('keeps uploader caption separate from the check-in comment thread', async () => {
+    fetchMock.mockImplementation((input: string, init?: RequestInit) => {
+      if (input.includes('/api/checkins/CHECKIN-001/like')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ liked: false, likeCount: 5 }),
+        })
+      }
+
+      if (
+        input.includes('/api/checkins/CHECKIN-001/comments') &&
+        init?.method === 'POST'
+      ) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            id: 'comment-2',
+            checkInId: 'CHECKIN-001',
+            content: '새 댓글',
+            authorName: '댓글러',
+            userId: 'user-2',
+            canDelete: true,
+            createdAt: new Date('2026-05-02T00:00:00.000Z'),
+          }),
+        })
+      }
+
+      if (input.includes('/api/checkins/CHECKIN-001/comments')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            comments: [
+              {
+                id: 'comment-1',
+                checkInId: 'CHECKIN-001',
+                content: '기존 댓글',
+                authorName: '댓글러',
+                userId: 'user-2',
+                canDelete: false,
+                createdAt: new Date('2026-05-01T00:00:00.000Z'),
+              },
+            ],
+            total: 1,
+          }),
+        })
+      }
+
+      if (input.includes('/api/spots/spot-1/courses')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ courses: [] }),
+        })
+      }
+
+      if (input.includes('/api/spots/spot-1')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ name: '서울타워' }),
+        })
+      }
+
+      return Promise.resolve({
+        ok: false,
+        json: async () => ({ error: 'unknown' }),
+      })
+    })
+
+    render(<CheckInDetailModal checkIn={baseCheckIn} onClose={jest.fn()} />)
+
+    expect(await screen.findByText('업로더 캡션')).toBeInTheDocument()
+    expect(screen.getByText('멋진 장소였어요')).toBeInTheDocument()
+    expect(await screen.findByText('기존 댓글')).toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('새 댓글'), {
+      target: { value: '새 댓글' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '댓글 등록' }))
+
+    await waitFor(() => {
+      expect(screen.getAllByText('새 댓글').length).toBeGreaterThanOrEqual(2)
+    })
+    expect(screen.getByText('멋진 장소였어요')).toBeInTheDocument()
   })
 
   test('closes on Escape and restores focus to the trigger element on unmount', async () => {

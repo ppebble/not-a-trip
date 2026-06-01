@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { getSafeImageSrc } from '@/lib/safe-image-src'
-import { CheckIn } from '@/types'
+import { CheckIn, CheckInLikeStatus } from '@/types'
 import { useCheckInGallery } from '@/hooks/useGalleryQueries'
+import { API_ROUTES } from '@/lib/api-routes'
+import { getDeviceId } from '@/lib/device-id'
 import { CheckInDetailModal } from './CheckInDetailModal'
 
 interface CheckInGalleryProps {
@@ -29,6 +31,12 @@ export function CheckInGallery({
   const [page, setPage] = useState(1)
   const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest')
   const [allCheckins, setAllCheckins] = useState<CheckIn[]>([])
+  const [checkInOverrides, setCheckInOverrides] = useState<
+    Record<string, Partial<CheckIn>>
+  >({})
+  const [likedByViewer, setLikedByViewer] = useState<Record<string, boolean>>(
+    {}
+  )
   const [selectedCheckIn, setSelectedCheckIn] = useState<CheckIn | null>(null)
 
   const { data, isLoading } = useCheckInGallery(
@@ -40,11 +48,61 @@ export function CheckInGallery({
   )
 
   // 페이지 변경 시 누적 데이터 관리
-  const checkins =
+  const fetchedCheckins =
     page === 1
       ? (data?.checkins ?? [])
       : [...allCheckins, ...(data?.checkins ?? [])]
+  const checkins = fetchedCheckins.map((checkin) => ({
+    ...checkin,
+    ...checkInOverrides[checkin.id],
+  }))
   const total = data?.total ?? 0
+  const visibleCheckInIds = checkins.map((checkin) => checkin.id).join('|')
+
+  useEffect(() => {
+    if (!visibleCheckInIds || typeof fetch === 'undefined') return
+
+    let cancelled = false
+    const deviceId = getDeviceId()
+    const headers = deviceId ? { 'X-Device-Id': deviceId } : undefined
+
+    const fetchLikeStatuses = async () => {
+      const visibleIds = visibleCheckInIds.split('|').filter(Boolean)
+      const missingIds = visibleIds.filter(
+        (id) => likedByViewer[id] === undefined
+      )
+      if (missingIds.length === 0) return
+
+      const entries = await Promise.all(
+        missingIds.map(async (id) => {
+          try {
+            const response = await fetch(API_ROUTES.CHECKINS.LIKE(id), {
+              headers,
+            })
+            if (!response.ok) return [id, false] as const
+
+            const body: CheckInLikeStatus = await response.json()
+            return [id, body.liked] as const
+          } catch {
+            return [id, false] as const
+          }
+        })
+      )
+
+      if (cancelled) return
+
+      setLikedByViewer((current) => ({
+        ...current,
+        ...Object.fromEntries(entries),
+      }))
+    }
+
+    fetchLikeStatuses()
+
+    return () => {
+      cancelled = true
+    }
+  }, [likedByViewer, visibleCheckInIds])
 
   const handleLoadMore = () => {
     setAllCheckins(checkins)
@@ -55,6 +113,23 @@ export function CheckInGallery({
     setSortBy(newSort)
     setPage(1)
     setAllCheckins([])
+  }
+
+  const handleCheckInUpdated = (updatedCheckIn: CheckIn, liked?: boolean) => {
+    setCheckInOverrides((current) => ({
+      ...current,
+      [updatedCheckIn.id]: {
+        likeCount: updatedCheckIn.likeCount,
+        updatedAt: updatedCheckIn.updatedAt,
+      },
+    }))
+    if (liked !== undefined) {
+      setLikedByViewer((current) => ({
+        ...current,
+        [updatedCheckIn.id]: liked,
+      }))
+    }
+    setSelectedCheckIn(updatedCheckIn)
   }
 
   const formatDate = (date: Date) => {
@@ -155,6 +230,34 @@ export function CheckInGallery({
               className="object-cover transition-transform group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/45 px-2 py-1 text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <svg
+                data-testid={`checkin-like-indicator-${checkin.id}`}
+                data-liked={likedByViewer[checkin.id] ? 'true' : 'false'}
+                className={
+                  likedByViewer[checkin.id]
+                    ? 'h-4 w-4 text-red-400'
+                    : 'h-4 w-4 text-white'
+                }
+                fill={likedByViewer[checkin.id] ? 'currentColor' : 'none'}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+              <span className="text-xs font-medium">{checkin.likeCount}</span>
+              <span className="sr-only">
+                {likedByViewer[checkin.id]
+                  ? '내가 좋아요를 누른 인증'
+                  : '내가 좋아요를 누르지 않은 인증'}
+              </span>
+            </div>
             <div className="absolute bottom-0 left-0 right-0 p-2 text-white opacity-0 transition-opacity group-hover:opacity-100">
               <p className="truncate text-sm font-medium">{checkin.userName}</p>
               <p className="text-xs opacity-80">
@@ -182,6 +285,7 @@ export function CheckInGallery({
       {selectedCheckIn && (
         <CheckInDetailModal
           checkIn={selectedCheckIn}
+          onCheckInUpdated={handleCheckInUpdated}
           onClose={() => setSelectedCheckIn(null)}
         />
       )}
