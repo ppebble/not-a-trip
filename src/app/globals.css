@@ -244,18 +244,14 @@ html {
   background: rgb(var(--color-primary-500));
 }
 
-/* Focus styles — 키보드 탐색 시에만 표시 */
-*:focus {
+/* Focus styles: keep keyboard focus visible while suppressing pointer-only focus noise. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus:not(
+    :focus-visible
+  ) {
   outline: none;
 }
 
-*:focus-visible {
-  outline: 2px solid rgb(var(--color-primary-500));
-  outline-offset: 2px;
-}
-
-/* Button focus styles */
-button:focus-visible {
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid rgb(var(--color-primary-500));
   outline-offset: 2px;
 }
@@ -414,8 +410,26 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-fade-in-up,
+  .loading-shimmer,
+  .animate-loading-bar,
   .animate-fade-slide-in {
-    animation: none;
+    animation: none !important;
   }
 }
 
