@@ -3,10 +3,14 @@
  */
 
 import fc from 'fast-check'
-import { render, cleanup } from '@testing-library/react'
+import { render, cleanup, fireEvent } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SpotPreviewData } from '@/types'
 import SpotPreview from '../SpotPreview'
+
+const mockClosePreview = jest.fn()
+const mockSetPreviewHovered = jest.fn()
+const mockRouterPush = jest.fn()
 
 // Cleanup after each test to prevent DOM element accumulation
 afterEach(() => {
@@ -75,12 +79,12 @@ function containsRequiredInfo(
  */
 jest.mock('@/stores/uiStore', () => ({
   useUIStore: () => ({
-    closePreview: jest.fn(),
-    setPreviewHovered: jest.fn(),
+    closePreview: mockClosePreview,
+    setPreviewHovered: mockSetPreviewHovered,
   }),
-  useIsPreviewOpen: () => true, // Always open for testing
-  usePreviewSpotId: () => 'test-spot-id', // Mock spot ID
-  usePreviewPosition: () => ({ x: 100, y: 100 }), // Mock position
+  useIsPreviewOpen: () => true,
+  usePreviewSpotId: () => 'test-spot-id',
+  usePreviewPosition: () => ({ x: 100, y: 100 }),
 }))
 
 /**
@@ -101,7 +105,7 @@ jest.mock('@/hooks/useSpots', () => ({
  */
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: mockRouterPush,
   }),
 }))
 
@@ -113,14 +117,15 @@ jest.mock('next/image', () => {
   return function MockImage({
     src,
     alt,
-    priority,
-    fill,
-    sizes,
-    quality,
-    placeholder,
-    blurDataURL,
-    loader,
-    onLoadingComplete,
+    priority: _priority,
+    fill: _fill,
+    sizes: _sizes,
+    quality: _quality,
+    placeholder: _placeholder,
+    blurDataURL: _blurDataURL,
+    loader: _loader,
+    onLoadingComplete: _onLoadingComplete,
+    unoptimized: _unoptimized,
     ...props
   }: {
     src: string
@@ -133,6 +138,7 @@ jest.mock('next/image', () => {
     blurDataURL?: string
     loader?: unknown
     onLoadingComplete?: unknown
+    unoptimized?: boolean
     [key: string]: unknown
   }) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -156,6 +162,9 @@ describe('SpotPreview Required Information Property Tests', () => {
   afterEach(() => {
     queryClient.clear()
     mockSpotData = null
+    mockClosePreview.mockClear()
+    mockSetPreviewHovered.mockClear()
+    mockRouterPush.mockClear()
   })
 
   test('Property 2: 스팟 미리보기 필수 정보 포함', () => {
@@ -304,6 +313,33 @@ describe('SpotPreview Required Information Property Tests', () => {
         }
       ),
       { numRuns: 100 }
+    )
+  })
+
+  test('Detail navigation closes the preview before pushing the detail route', () => {
+    mockSpotData = {
+      id: 'test-spot-id',
+      name: 'Test spot',
+      description: 'Preview description',
+      photoUrl: '',
+      address: 'Preview address',
+    }
+
+    const { getAllByRole } = render(
+      <QueryClientProvider client={queryClient}>
+        <SpotPreview />
+      </QueryClientProvider>
+    )
+
+    const detailButton = getAllByRole('button').at(-1)
+    expect(detailButton).toBeTruthy()
+
+    fireEvent.click(detailButton!)
+
+    expect(mockClosePreview).toHaveBeenCalledTimes(1)
+    expect(mockRouterPush).toHaveBeenCalledWith('/spots/test-spot-id')
+    expect(mockClosePreview.mock.invocationCallOrder[0]).toBeLessThan(
+      mockRouterPush.mock.invocationCallOrder[0]
     )
   })
 })

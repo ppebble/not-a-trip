@@ -10,6 +10,8 @@ import {
 } from '@/stores/bottomSheetStore'
 import { useBottomSheet } from '@/hooks/useBottomSheet'
 import { useSpotPreview } from '@/hooks/useSpots'
+import { useMapStore } from '@/stores/mapStore'
+import { useUIStore } from '@/stores/uiStore'
 
 export default function BottomSheet() {
   const router = useRouter()
@@ -26,8 +28,10 @@ export default function BottomSheet() {
   if (!isOpen || !spotId) return null
 
   const handleDetailClick = () => {
-    router.push(`/spots/${spotId}`)
     close()
+    useUIStore.getState().closePreview()
+    useMapStore.getState().setSelectedSpot(null)
+    router.push(`/spots/${spotId}`)
   }
 
   const displayHeight = isDragging
@@ -98,6 +102,15 @@ export default function BottomSheet() {
                   {spot.address}
                 </p>
               </div>
+
+              <button
+                type="button"
+                onClick={handleDetailClick}
+                className="flex-shrink-0 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-surface transition-colors hover:bg-primary-600"
+                aria-label={`Open details for ${spot.name}`}
+              >
+                Details
+              </button>
             </div>
 
             {(heightState === 'half' || heightState === 'full') && (
@@ -119,7 +132,9 @@ export default function BottomSheet() {
                 </p>
 
                 <button
+                  type="button"
                   onClick={handleDetailClick}
+                  aria-label={`Open details for ${spot.name}`}
                   className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
                 >
                   <span>자세히 보기</span>

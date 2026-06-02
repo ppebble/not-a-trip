@@ -1,32 +1,84 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 import fc from 'fast-check'
 import { render, cleanup } from '@testing-library/react'
-import { SpotPin as SpotPinType } from '@/types'
-import SpotPin from '../SpotPin'
-import { MapContainer } from 'react-leaflet'
+import type { SpotPin as SpotPinType } from '@/types'
 
-// Cleanup after each test to prevent DOM element accumulation
-afterEach(() => {
-  cleanup()
+const mockMarkerFactory = jest.fn(() => ({
+  on: jest.fn(),
+  setIcon: jest.fn(),
+  setZIndexOffset: jest.fn(),
+  addTo: jest.fn(),
+  remove: jest.fn(),
+}))
+const mockDivIcon = jest.fn((options) => ({
+  ...options,
+  __kind: 'mockDivIcon',
+}))
+
+jest.mock('@/stores/mapStore', () => ({
+  useMapStore: () => ({ setSelectedSpot: jest.fn() }),
+}))
+
+jest.mock('@/stores/uiStore', () => {
+  const useUIStore = () => ({ openPreview: jest.fn(), closePreview: jest.fn() })
+  useUIStore.getState = () => ({
+    previewSpotId: null,
+    isPreviewHovered: false,
+    closePreview: jest.fn(),
+  })
+  return { useUIStore }
 })
 
-// Feature: anime-pilgrimage-map, Property 1: 스팟 핀 좌표 일치
-// Validates: Requirements 1.2
+jest.mock('@/stores/bottomSheetStore', () => ({
+  useBottomSheetStore: () => ({ open: jest.fn() }),
+}))
 
-/**
- * Generators for property-based testing
- */
+jest.mock('react-leaflet', () => ({
+  MapContainer: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="map-container">{children}</div>
+  ),
+  useMap: () => ({
+    latLngToContainerPoint: jest.fn(() => ({ x: 100, y: 100 })),
+  }),
+}))
 
-// Generate valid coordinates (latitude: -90 to 90, longitude: -180 to 180)
+jest.mock('leaflet', () => ({
+  __esModule: true,
+  default: {
+    divIcon: mockDivIcon,
+    marker: mockMarkerFactory,
+    Icon: { Default: { imagePath: '' } },
+  },
+  divIcon: mockDivIcon,
+  marker: mockMarkerFactory,
+  Icon: { Default: { imagePath: '' } },
+}))
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn(() => ({ matches: false })),
+})
+Object.defineProperty(navigator, 'maxTouchPoints', {
+  configurable: true,
+  value: 0,
+})
+delete (window as unknown as { ontouchstart?: unknown }).ontouchstart
+
+const SpotPin = require('../SpotPin').default
+
+afterEach(() => {
+  cleanup()
+  jest.clearAllMocks()
+})
+
 const coordinatesArbitrary = fc.tuple(
   fc.double({ min: -90, max: 90, noNaN: true }),
   fc.double({ min: -180, max: 180, noNaN: true })
 ) as fc.Arbitrary<[number, number]>
 
-// Generate valid SpotPin objects
 const spotPinArbitrary = fc.record({
   id: fc
     .string({ minLength: 1, maxLength: 50 })
@@ -38,188 +90,71 @@ const spotPinArbitrary = fc.record({
   thumbnailUrl: fc.webUrl(),
 })
 
-/**
- * Helper function to extract coordinates from rendered SpotPin component
- * This function simulates how the Leaflet Marker component receives coordinates
- */
-function extractCoordinatesFromSpotPin(spotPin: SpotPinType): [number, number] {
-  // In the actual SpotPin component, coordinates are passed directly to the Marker
-  // The Marker component uses the position prop which should match spot.coordinates
-  return spotPin.coordinates
+function expectMarkerCreatedAt(spotData: SpotPinType) {
+  render(<SpotPin spot={spotData} />)
+  expect(mockMarkerFactory).toHaveBeenCalledWith(
+    spotData.coordinates,
+    expect.objectContaining({ icon: expect.any(Object) })
+  )
 }
 
-/**
- * Helper function to check if two coordinate pairs are equivalent
- * Handles floating point precision issues
- */
-function coordinatesAreEquivalent(
-  coords1: [number, number],
-  coords2: [number, number],
-  tolerance: number = 1e-10
-): boolean {
-  const [lat1, lng1] = coords1
-  const [lat2, lng2] = coords2
-
-  return Math.abs(lat1 - lat2) < tolerance && Math.abs(lng1 - lng2) < tolerance
-}
-
-/**
- * Mock Zustand stores for testing
- */
-jest.mock('@/stores/mapStore', () => ({
-  useMapStore: () => ({
-    selectedSpotId: null,
-    setSelectedSpot: jest.fn(),
-  }),
-}))
-
-jest.mock('@/stores/uiStore', () => ({
-  useUIStore: () => ({
-    openPreview: jest.fn(),
-    closePreview: jest.fn(),
-  }),
-  useIsPreviewHovered: () => false,
-}))
-
-/**
- * Mock Leaflet and react-leaflet components for testing
- */
-jest.mock('react-leaflet', () => ({
-  Marker: ({
-    position,
-    children,
-  }: {
-    position: [number, number]
-    children: React.ReactNode
-  }) => (
-    <div data-testid="marker" data-position={JSON.stringify(position)}>
-      {children}
-    </div>
-  ),
-  Popup: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="popup">{children}</div>
-  ),
-  MapContainer: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="map-container">{children}</div>
-  ),
-  useMap: () => ({
-    latLngToContainerPoint: jest.fn(() => ({ x: 100, y: 100 })),
-  }),
-}))
-
-jest.mock('leaflet', () => ({
-  divIcon: jest.fn(() => ({ iconSize: [32, 32] })),
-}))
-
-describe('SpotPin Coordinates Property Tests', () => {
-  test('Property 1: 스팟 핀 좌표 일치', () => {
+describe('SpotPin coordinate property tests', () => {
+  test('Property 1: spot pin marker coordinates match spot coordinates', () => {
     fc.assert(
       fc.property(spotPinArbitrary, (spotData: SpotPinType) => {
-        // Cleanup before each iteration to prevent DOM element accumulation
         cleanup()
-
-        // Render the SpotPin component within a MapContainer
-        const { getByTestId } = render(
-          <MapContainer center={[0, 0]} zoom={10}>
-            <SpotPin spot={spotData} />
-          </MapContainer>
-        )
-
-        // Extract the coordinates from the rendered Marker component
-        const markerElement = getByTestId('marker')
-        const renderedPosition = JSON.parse(
-          markerElement.getAttribute('data-position') || '[]'
-        ) as [number, number]
-
-        // Extract coordinates using our helper function
-        const expectedCoordinates = extractCoordinatesFromSpotPin(spotData)
-
-        // Verify that the rendered coordinates match the original spot coordinates
-        return coordinatesAreEquivalent(renderedPosition, expectedCoordinates)
+        jest.clearAllMocks()
+        expectMarkerCreatedAt(spotData)
       }),
       { numRuns: 100 }
     )
   })
 
-  test('Property 1 Edge Case: Extreme coordinate values', () => {
+  test('Property 1 Edge Case: extreme coordinate values', () => {
     fc.assert(
       fc.property(
         fc.record({
           id: fc.string({ minLength: 1 }).filter((s) => s.trim().length > 0),
           name: fc.string({ minLength: 1 }).filter((s) => s.trim().length > 0),
           coordinates: fc.constantFrom(
-            [-90, -180] as [number, number], // South-West extreme
-            [90, 180] as [number, number], // North-East extreme
-            [0, 0] as [number, number], // Equator/Prime Meridian
-            [-90, 180] as [number, number], // South-East extreme
-            [90, -180] as [number, number] // North-West extreme
+            [-90, -180] as [number, number],
+            [90, 180] as [number, number],
+            [0, 0] as [number, number],
+            [-90, 180] as [number, number],
+            [90, -180] as [number, number]
           ),
           thumbnailUrl: fc.webUrl(),
         }),
         (spotData: SpotPinType) => {
-          // Cleanup before each iteration to prevent DOM element accumulation
           cleanup()
-
-          const { getByTestId } = render(
-            <MapContainer center={[0, 0]} zoom={10}>
-              <SpotPin spot={spotData} />
-            </MapContainer>
-          )
-
-          const markerElement = getByTestId('marker')
-          const renderedPosition = JSON.parse(
-            markerElement.getAttribute('data-position') || '[]'
-          ) as [number, number]
-
-          const expectedCoordinates = extractCoordinatesFromSpotPin(spotData)
-
-          return coordinatesAreEquivalent(renderedPosition, expectedCoordinates)
+          jest.clearAllMocks()
+          expectMarkerCreatedAt(spotData)
         }
       ),
       { numRuns: 100 }
     )
   })
 
-  test('Property 1 Edge Case: Precision boundary values', () => {
+  test('Property 1 Edge Case: precision boundary values', () => {
     fc.assert(
       fc.property(
         fc.record({
           id: fc.string({ minLength: 1 }).filter((s) => s.trim().length > 0),
           name: fc.string({ minLength: 1 }).filter((s) => s.trim().length > 0),
           coordinates: fc.tuple(
-            // Generate coordinates with high precision
-            fc.double({ min: -90, max: 90, noNaN: true }).map(
-              (n) => Math.round(n * 1000000) / 1000000 // 6 decimal places precision
-            ),
-            fc.double({ min: -180, max: 180, noNaN: true }).map(
-              (n) => Math.round(n * 1000000) / 1000000 // 6 decimal places precision
-            )
+            fc
+              .double({ min: -90, max: 90, noNaN: true })
+              .map((n) => Math.round(n * 1000000) / 1000000),
+            fc
+              .double({ min: -180, max: 180, noNaN: true })
+              .map((n) => Math.round(n * 1000000) / 1000000)
           ) as fc.Arbitrary<[number, number]>,
           thumbnailUrl: fc.webUrl(),
         }),
         (spotData: SpotPinType) => {
-          // Cleanup before each iteration to prevent DOM element accumulation
           cleanup()
-
-          const { getByTestId } = render(
-            <MapContainer center={[0, 0]} zoom={10}>
-              <SpotPin spot={spotData} />
-            </MapContainer>
-          )
-
-          const markerElement = getByTestId('marker')
-          const renderedPosition = JSON.parse(
-            markerElement.getAttribute('data-position') || '[]'
-          ) as [number, number]
-
-          const expectedCoordinates = extractCoordinatesFromSpotPin(spotData)
-
-          // Use a slightly more lenient tolerance for high-precision coordinates
-          return coordinatesAreEquivalent(
-            renderedPosition,
-            expectedCoordinates,
-            1e-6
-          )
+          jest.clearAllMocks()
+          expectMarkerCreatedAt(spotData)
         }
       ),
       { numRuns: 100 }

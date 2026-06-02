@@ -1535,4 +1535,8 @@ async function seedRealSpots() {
   }
 }
 
-seedRealSpots()
+if (
+  process.argv[1]?.replaceAll('\\', '/').endsWith('/scripts/seed-real-spots.ts')
+) {
+  seedRealSpots()
+}

@@ -189,6 +189,12 @@ function getIconForZoom(spot: SpotPinType, tier: ZoomTier): L.DivIcon {
   }
 }
 
+function closeSpotInteractionOverlays() {
+  useUIStore.getState().closePreview()
+  useBottomSheetStore.getState().close()
+  useMapStore.getState().setSelectedSpot(null)
+}
+
 // 클러스터 아이콘
 function createClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const count = cluster.getChildCount()
@@ -271,9 +277,14 @@ export default function SpotMarkerLayer({
     map.on('zoomend', onZoomEnd)
 
     return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current)
+      const touchTimer = touchStateRef.current.timer
+      if (touchTimer) clearTimeout(touchTimer)
       map.off('zoomend', onZoomEnd)
       map.removeLayer(clusterGroup)
       clusterGroupRef.current = null
+      hoveredRef.current = null
+      touchStateRef.current = { id: '', count: 0, timer: null }
       currentMarkers.clear()
     }
   }, [map])
@@ -323,6 +334,7 @@ export default function SpotMarkerLayer({
           ts.count = 0
           return
         }
+        closeSpotInteractionOverlays()
         useMapStore.getState().setSelectedSpot(spot.id)
         onSpotSelectRef.current?.(spot.id)
       })
