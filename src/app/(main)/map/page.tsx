@@ -12,6 +12,9 @@ import {
   useSearchQuery,
   useFilterStore,
 } from '@/stores/filterStore'
+import { useBottomSheetStore } from '@/stores/bottomSheetStore'
+import { useMapStore } from '@/stores/mapStore'
+import { useUIStore } from '@/stores/uiStore'
 import { MapSkeleton } from '@/components/common/SkeletonUI'
 import { SpotLoadingSkeleton } from '@/components/common/SpotLoadingSkeleton'
 import { SpotErrorDisplay } from '@/components/common/SpotErrorDisplay'
@@ -134,6 +137,14 @@ function MapContent() {
     isNoCategorySelected ? undefined : selectedCategories,
     searchQuery || undefined
   )
+
+  useEffect(() => {
+    return () => {
+      useUIStore.getState().closePreview()
+      useBottomSheetStore.getState().close()
+      useMapStore.getState().setSelectedSpot(null)
+    }
+  }, [])
 
   // spots 참조가 바뀌지 않으면 동일 배열 반환 → SpotPin memo 유지
   // early return 위에 위치해야 Rules of Hooks 준수

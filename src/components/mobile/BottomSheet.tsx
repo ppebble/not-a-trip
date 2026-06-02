@@ -10,6 +10,8 @@ import {
 } from '@/stores/bottomSheetStore'
 import { useBottomSheet } from '@/hooks/useBottomSheet'
 import { useSpotPreview } from '@/hooks/useSpots'
+import { useMapStore } from '@/stores/mapStore'
+import { useUIStore } from '@/stores/uiStore'
 
 export default function BottomSheet() {
   const router = useRouter()
@@ -26,8 +28,10 @@ export default function BottomSheet() {
   if (!isOpen || !spotId) return null
 
   const handleDetailClick = () => {
-    router.push(`/spots/${spotId}`)
     close()
+    useUIStore.getState().closePreview()
+    useMapStore.getState().setSelectedSpot(null)
+    router.push(`/spots/${spotId}`)
   }
 
   const displayHeight = isDragging

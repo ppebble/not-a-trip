@@ -38,6 +38,7 @@ export default function SpotPreview({ className = '' }: SpotPreviewProps) {
 
   const handleDetailClick = () => {
     if (previewSpotId) {
+      closePreview()
       router.push(`/spots/${previewSpotId}`)
     }
   }
