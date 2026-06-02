@@ -44,14 +44,14 @@
 - [x] 2. Add env readiness validator
   - Centralize production-readiness checks for:
     - `MONGODB_URI`
-    - `NEXTAUTH_URL`
-    - `NEXTAUTH_SECRET`
+    - `AUTH_URL`
+    - `AUTH_SECRET`
     - optional OAuth provider pairs
     - optional Sentry group completeness
   - Report hard errors vs warnings separately
   - Flag placeholder/weak secrets
   - Enforce `mongodb://` or `mongodb+srv://`
-  - Enforce `https://` for `NEXTAUTH_URL` in production mode
+  - Enforce `https://` for `AUTH_URL` in production mode
   - _Requirements: 44.7.1, 44.7.2, 44.7.3, 44.7.5, 44.7.6, 44.7.7_
 
 - [x] 3. Add regression tests

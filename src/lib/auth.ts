@@ -16,7 +16,13 @@ import {
   recordFailedLoginAttempt,
 } from './security'
 
+const authSecret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET
+const trustAuthHost =
+  process.env.AUTH_TRUST_HOST === 'true' || process.env.VERCEL === '1'
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret: authSecret,
+  trustHost: trustAuthHost,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({

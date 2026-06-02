@@ -52,7 +52,7 @@
 3. WHEN the Showcase_API returns an empty array for a category, THE fetchProofImages SHALL use an empty array `[]` for that category in the result.
 4. IF the Showcase_API call fails (network error or non-2xx response), THEN THE fetchProofImages SHALL return the Category_Icon_Fallback record `{ animation: '/icons/categories/animation.webp', ... }`.
 5. THE fetchProofImages SHALL filter out Placeholder_Photo URLs from the API response before returning.
-6. WHERE the application is running in a server-side context (Next.js Server Component), THE fetchProofImages SHALL use an absolute URL constructed from `process.env.NEXTAUTH_URL` or `http://localhost:3000` as the base.
+6. WHERE the application is running in a server-side context (Next.js Server Component), THE fetchProofImages SHALL use an absolute URL constructed from `process.env.AUTH_URL` or `http://localhost:3000` as the base.
 
 ---
 

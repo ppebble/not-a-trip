@@ -29,7 +29,7 @@ sequenceDiagram
     participant RSPF as REAL_SPOT_PHOTO_FALLBACKS
 
     WP->>FPI: fetchProofImages() [Promise.all 병렬]
-    FPI->>API: GET {NEXTAUTH_URL}/api/spots/showcase
+    FPI->>API: GET {AUTH_URL}/api/spots/showcase
     API->>DB: find({ category, photos[0] exists }) × 6 categories
     DB-->>API: SpotDocument[]
     API->>RSPF: resolveThumbnailUrl(spotId, photos[0])
@@ -121,7 +121,7 @@ export async function fetchProofImages(): Promise<Record<SpotCategory, string[]>
   }
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    const baseUrl = process.env.AUTH_URL || 'http://localhost:3000'
     const res = await fetch(`${baseUrl}/api/spots/showcase`, {
       next: { revalidate: 3600 }, // 1시간 캐시
     })
@@ -293,7 +293,7 @@ function isPlaceholderPhoto(url?: string | null): boolean {
 - 정상 API 응답 → 올바른 Record 변환
 - API 실패 → iconFallback 반환 + console.warn 호출
 - 플레이스홀더 URL 포함 응답 → 필터링 후 반환
-- NEXTAUTH_URL 환경 변수 → 올바른 base URL 사용
+- AUTH_URL 환경 변수 → 올바른 base URL 사용
 
 ### 속성 기반 테스트 (fast-check)
 

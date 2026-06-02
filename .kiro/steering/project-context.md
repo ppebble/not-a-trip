@@ -113,6 +113,6 @@ src/
 
 ```env
 MONGODB_URI=mongodb://localhost:27017/anime-pilgrimage
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=...
+AUTH_URL=http://localhost:3000
+AUTH_SECRET=...
 ```

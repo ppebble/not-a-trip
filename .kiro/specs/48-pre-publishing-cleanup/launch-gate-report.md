@@ -56,7 +56,7 @@ Validated by build/static generation and route inventory:
 | Variable group | Status | Notes |
 | --- | --- | --- |
 | MongoDB (`MONGODB_URI`, `MONGODB_DB`) | `required` | Production `MONGODB_URI` must be hosted and valid; `MONGODB_DB` optional override documented. |
-| NextAuth (`NEXTAUTH_URL`, `NEXTAUTH_SECRET`) | `required` | Production URL must be `https://`; secret must replace placeholder. |
+| Auth.js (`AUTH_URL`, `AUTH_SECRET`, `AUTH_TRUST_HOST`) | `required` | Production URL must be `https://`; secret must replace placeholder. |
 | OAuth provider IDs/secrets | `optional` | Providers stay disabled/incomplete unless both ID and secret are configured. |
 | Public URL/analytics/maps | `optional/required-by-feature` | `NEXT_PUBLIC_BASE_URL` must be HTTPS in production; Maps key required for Places autocomplete. |
 | Sentry (`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_WEBHOOK_SECRET`) | `optional but recommended` | Partial Sentry config is a warning; webhook secret documented. |
@@ -111,4 +111,4 @@ Env usage comparison result: no non-internal `process.env.*` usage is missing fr
 
 ## Final Recommendation
 
-Proceed as `ready-with-deferrals` only if production environment variables are set with real values and the release operator accepts the documented warning debt. Do not publish if `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `NEXT_PUBLIC_BASE_URL`, `MONGODB_URI`, or required storage credentials are still local placeholders in the production host.
+Proceed as `ready-with-deferrals` only if production environment variables are set with real values and the release operator accepts the documented warning debt. Do not publish if `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_BASE_URL`, `MONGODB_URI`, or required storage credentials are still local placeholders in the production host.

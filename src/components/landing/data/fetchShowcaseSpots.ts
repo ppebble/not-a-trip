@@ -252,7 +252,10 @@ export async function fetchProofImages(): Promise<
   )
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    const baseUrl =
+      process.env.AUTH_URL ||
+      process.env.NEXTAUTH_URL ||
+      'http://localhost:3000'
     const res = await fetch(`${baseUrl}/api/spots/showcase`, {
       next: { revalidate: 3600 },
     })

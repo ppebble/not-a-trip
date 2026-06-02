@@ -97,14 +97,14 @@ graph LR
 
     subgraph "공통 변수"
         MDB[MONGODB_URI]
-        AUTH[NEXTAUTH_SECRET]
+        AUTH[AUTH_SECRET]
         OAUTH[OAuth Keys]
     end
 
     subgraph "환경별 고유 변수"
         URL["NEXT_PUBLIC_BASE_URL<br/>dev: localhost:3000<br/>prod: not-a-trip.com"]
         GAKEY["NEXT_PUBLIC_GA_MEASUREMENT_ID<br/>prod only"]
-        NAURL["NEXTAUTH_URL<br/>환경별 도메인"]
+        NAURL["AUTH_URL<br/>환경별 도메인"]
     end
 ```
 
@@ -335,8 +335,8 @@ const posts = await postsCollection.find({}, { projection: { _id: 1, updatedAt: 
 | `NEXT_PUBLIC_BASE_URL` | 사이트 기본 URL (sitemap, OG 이미지, canonical URL) | 전체 |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 측정 ID | Production |
 | `MONGODB_URI` | MongoDB 연결 문자열 | 전체 |
-| `NEXTAUTH_URL` | NextAuth 콜백 URL | 전체 |
-| `NEXTAUTH_SECRET` | NextAuth 암호화 키 | 전체 |
+| `AUTH_URL` | NextAuth 콜백 URL | 전체 |
+| `AUTH_SECRET` | NextAuth 암호화 키 | 전체 |
 | OAuth 키들 | Google, Kakao, Naver, Twitter | 전체 |
 
 
