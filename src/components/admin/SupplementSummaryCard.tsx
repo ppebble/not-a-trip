@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { AdminStatusBadge } from './AdminReviewPrimitives'
 import type { SpotSupplement } from '@/types/report'
 
 const SUPPLEMENT_TYPE_LABELS: Record<string, string> = {
@@ -13,33 +14,18 @@ const SUPPLEMENT_TYPE_LABELS: Record<string, string> = {
 export function SupplementStatusBadge({ status }: { status: string }) {
   const config: Record<
     string,
-    { label: string; bgColor: string; textColor: string }
+    {
+      label: string
+      tone: React.ComponentProps<typeof AdminStatusBadge>['tone']
+    }
   > = {
-    pending: {
-      label: '대기중',
-      bgColor: 'bg-amber-100',
-      textColor: 'text-amber-700',
-    },
-    approved: {
-      label: '승인',
-      bgColor: 'bg-green-100',
-      textColor: 'text-green-700',
-    },
-    rejected: {
-      label: '반려',
-      bgColor: 'bg-red-100',
-      textColor: 'text-red-700',
-    },
+    pending: { label: '대기중', tone: 'warning' },
+    approved: { label: '승인', tone: 'success' },
+    rejected: { label: '반려', tone: 'danger' },
   }
   const c = config[status] || config.pending
 
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${c.bgColor} ${c.textColor}`}
-    >
-      {c.label}
-    </span>
-  )
+  return <AdminStatusBadge tone={c.tone}>{c.label}</AdminStatusBadge>
 }
 
 interface SupplementSummaryCardProps {

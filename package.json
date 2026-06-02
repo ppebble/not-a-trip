@@ -27,7 +27,10 @@
     "landing:photos:apply": "node scripts/seed-landing-spot-photos.mjs --apply",
     "lint:release": "node scripts/check-lint-release-warnings.mjs",
     "build:route-budget": "node scripts/check-route-js-budget.mjs",
-    "release:check": "npm run lint && npm run lint:release && npm run type-check && npm run build:route-budget"
+    "release:check": "npm run lint && npm run lint:release && npm run type-check && npm run build:route-budget",
+    "design-token:scan": "node scripts/check-design-token-raw-utilities.mjs",
+    "design-token:check": "node scripts/check-design-token-raw-utilities.mjs --check",
+    "design-token:update-baseline": "node scripts/check-design-token-raw-utilities.mjs --update-baseline"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.1",

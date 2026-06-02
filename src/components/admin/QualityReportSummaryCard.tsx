@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { AdminStatusBadge } from './AdminReviewPrimitives'
 import type { AdminQualityReport } from '@/hooks/useAdminQueries'
 import type {
   QualityReportType,
@@ -23,12 +24,15 @@ const STATUS_LABELS: Record<ReportProcessingStatus, string> = {
   sla_exceeded: 'SLA 초과',
 }
 
-const STATUS_CLASSES: Record<ReportProcessingStatus, string> = {
-  pending: 'bg-amber-100 text-amber-700',
-  in_review: 'bg-blue-100 text-blue-700',
-  resolved: 'bg-green-100 text-green-700',
-  rejected: 'bg-red-100 text-red-700',
-  sla_exceeded: 'bg-purple-100 text-purple-700',
+const STATUS_TONES: Record<
+  ReportProcessingStatus,
+  React.ComponentProps<typeof AdminStatusBadge>['tone']
+> = {
+  pending: 'warning',
+  in_review: 'info',
+  resolved: 'success',
+  rejected: 'danger',
+  sla_exceeded: 'critical',
 }
 
 export function QualityReportStatusBadge({
@@ -37,13 +41,9 @@ export function QualityReportStatusBadge({
   status: ReportProcessingStatus
 }) {
   return (
-    <span
-      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-        STATUS_CLASSES[status] ?? STATUS_CLASSES.pending
-      }`}
-    >
+    <AdminStatusBadge tone={STATUS_TONES[status] ?? STATUS_TONES.pending}>
       {STATUS_LABELS[status] ?? status}
-    </span>
+    </AdminStatusBadge>
   )
 }
 
@@ -76,14 +76,10 @@ export const QualityReportSummaryCard = React.memo(
               </span>
               <QualityReportStatusBadge status={report.status} />
               {report.isUrgent && (
-                <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
-                  긴급
-                </span>
+                <AdminStatusBadge tone="danger">긴급</AdminStatusBadge>
               )}
               {report.nearingDeadline && report.status !== 'sla_exceeded' && (
-                <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
-                  마감 임박
-                </span>
+                <AdminStatusBadge tone="warning">마감 임박</AdminStatusBadge>
               )}
             </div>
             <p className="mt-1.5 truncate text-sm font-medium text-neutral-800">
