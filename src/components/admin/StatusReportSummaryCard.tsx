@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { AdminStatusBadge } from './AdminReviewPrimitives'
 import type { SpotStatusReport } from '@/types/report'
 
 const SPOT_STATUS_LABELS: Record<string, string> = {
@@ -14,28 +15,17 @@ const SPOT_STATUS_LABELS: Record<string, string> = {
 export function ReviewStatusBadge({ reviewStatus }: { reviewStatus: string }) {
   const config: Record<
     string,
-    { label: string; bgColor: string; textColor: string }
+    {
+      label: string
+      tone: React.ComponentProps<typeof AdminStatusBadge>['tone']
+    }
   > = {
-    pending: {
-      label: '대기 중',
-      bgColor: 'bg-amber-100',
-      textColor: 'text-amber-700',
-    },
-    resolved: {
-      label: '확인 완료',
-      bgColor: 'bg-green-100',
-      textColor: 'text-green-700',
-    },
+    pending: { label: '대기 중', tone: 'warning' },
+    resolved: { label: '확인 완료', tone: 'success' },
   }
   const c = config[reviewStatus] || config.pending
 
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${c.bgColor} ${c.textColor}`}
-    >
-      {c.label}
-    </span>
-  )
+  return <AdminStatusBadge tone={c.tone}>{c.label}</AdminStatusBadge>
 }
 
 interface StatusReportSummaryCardProps {

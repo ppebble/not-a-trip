@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "generatedBy": "npm run design-token:scan -- --update-baseline",
+  "mode": "baseline-delta",
+  "surfaces": {
+    "admin": {
+      "total": 300,
+      "files": {
+        "src/components/admin/AdminDashboardCard.tsx": 7,
+        "src/components/admin/AdminQualityReportList.tsx": 14,
+        "src/components/admin/AdminQualityReportReview.tsx": 60,
+        "src/components/admin/AdminReportList.tsx": 16,
+        "src/components/admin/AdminReportReview.tsx": 52,
+        "src/components/admin/AdminStatusReportList.tsx": 21,
+        "src/components/admin/AdminStatusReportReview.tsx": 35,
+        "src/components/admin/AdminSupplementList.tsx": 16,
+        "src/components/admin/AdminSupplementReview.tsx": 51,
+        "src/components/admin/QualityReportSummaryCard.tsx": 7,
+        "src/components/admin/ReportSummaryCard.tsx": 7,
+        "src/components/admin/StatusReportSummaryCard.tsx": 7,
+        "src/components/admin/SupplementSummaryCard.tsx": 7
+      }
+    },
+    "checkin": {
+      "total": 198,
+      "files": {
+        "src/components/checkin/BadgeEarnedModal.tsx": 15,
+        "src/components/checkin/CheckInButton.tsx": 3,
+        "src/components/checkin/CheckInDetailModal.tsx": 41,
+        "src/components/checkin/CheckInGallery.tsx": 20,
+        "src/components/checkin/CheckInModal.tsx": 50,
+        "src/components/checkin/ComparisonViewer.tsx": 18,
+        "src/components/checkin/QuickCheckIn.tsx": 41,
+        "src/components/checkin/RelationSelector.tsx": 10
+      }
+    },
+    "mobile": {
+      "total": 53,
+      "files": {
+        "src/components/mobile/BottomSheet.tsx": 19,
+        "src/components/mobile/GpsErrorFallback.tsx": 1,
+        "src/components/mobile/LocationButton.tsx": 3,
+        "src/components/mobile/SwipeableGallery.tsx": 6,
+        "src/components/mobile/ViewfinderOverlay.tsx": 24
+      }
+    },
+    "profile": {
+      "total": 183,
+      "files": {
+        "src/components/profile/BadgeCard.tsx": 17,
+        "src/components/profile/ContentProgressCard.tsx": 13,
+        "src/components/profile/ProfileHeader.tsx": 8,
+        "src/components/profile/SectionNavigation.tsx": 3,
+        "src/components/profile/sections/ActivitySection.tsx": 14,
+        "src/components/profile/sections/CollectionSection.tsx": 18,
+        "src/components/profile/sections/CommunitySection.tsx": 12,
+        "src/components/profile/sections/ContributionSection.tsx": 33,
+        "src/components/profile/sections/ManagementSection.tsx": 47,
+        "src/components/profile/SubTabNavigation.tsx": 4,
+        "src/components/profile/TrophyRoom.tsx": 14
+      }
+    }
+  },
+  "total": 734
+}
