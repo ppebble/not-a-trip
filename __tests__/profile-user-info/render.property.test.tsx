@@ -4,13 +4,12 @@
 
 import * as fc from 'fast-check'
 import { render, cleanup, within } from '@testing-library/react'
-import type { ImgHTMLAttributes } from 'react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import type { ExtendedUserStats } from '@/types/profile'
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />,
+  default: () => null,
 }))
 
 jest.mock('@/components/common/AppIcon', () => ({
@@ -30,12 +29,21 @@ const emptyStats: ExtendedUserStats = {
   postCount: 0,
 }
 
-describe('Feature: 37-profile-user-info, Property 4: 유저 이름 렌더링', () => {
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function accessibleTextPattern(value: string): RegExp {
+  const escapedParts = value.trim().split(/\s+/).map(escapeRegExp)
+  return new RegExp(`^${escapedParts.join('\\s+')}$`)
+}
+
+describe('Feature: 37-profile-user-info, Property 4: user name rendering', () => {
   afterEach(() => {
     cleanup()
   })
 
-  it('유효한 userInfo.name은 항상 헤더에 표시된다', () => {
+  it('renders every valid userInfo.name as the profile heading', () => {
     fc.assert(
       fc.property(
         fc
@@ -57,7 +65,9 @@ describe('Feature: 37-profile-user-info, Property 4: 유저 이름 렌더링', (
           )
 
           expect(
-            within(container).getByRole('heading', { name: name.trim() })
+            within(container).getByRole('heading', {
+              name: accessibleTextPattern(name),
+            })
           ).toBeInTheDocument()
           unmount()
         }
