@@ -5,9 +5,9 @@ import type { DataReviewStatus } from '@/lib/real-image-data'
 import { isExternalHotlinkUrl } from '@/lib/real-image-data'
 import type { SpotCategory } from '@/types/spot'
 import type { ShowcaseCard } from './showcaseCards'
-import { REAL_SPOT_PHOTO_FALLBACKS } from './realSpotPhotoFallbacks'
 import { CARD_PLACEMENTS, SHOWCASE_CARDS } from './showcaseCards'
 import type { ShowcaseSpotItem } from '@/app/api/spots/showcase/route'
+import { resolveThumbnailUrl } from '@/app/api/spots/showcase/helpers'
 
 const CATEGORY_ORDER: SpotCategory[] = [
   'animation',
@@ -34,6 +34,15 @@ interface SpotDocument {
   reviewStatus?: DataReviewStatus
 }
 
+interface ContentDocument {
+  id?: string
+  normalizedName: string
+  displayName: string
+  imageUrl?: string
+  type?: string
+  spotCount?: number
+}
+
 interface RelationDocument {
   spotId: string
   contentName: string
@@ -41,15 +50,41 @@ interface RelationDocument {
   displayPriority: number
 }
 
+const CONTENT_TYPE_TO_CATEGORY: Record<string, SpotCategory> = {
+  anime: 'animation',
+  sports_team: 'sports',
+  movie: 'movie_drama',
+  drama: 'movie_drama',
+  artist: 'music',
+  game: 'game',
+  other: 'other',
+}
+
 function isPlaceholderPhoto(url?: string | null): boolean {
   if (!url) return true
   return (
     url.includes('picsum.photos/seed/') ||
     isExternalHotlinkUrl(url) ||
+    url.includes('/images/showcase/') ||
     url.startsWith('/icons/') ||
-    url.includes('/uploads/contents/covers/') ||
     url.includes('placeholder') ||
     url.includes('dummy')
+  )
+}
+
+function isBlockedContentImage(url?: string | null): boolean {
+  if (!url) return true
+
+  const normalized = url.trim()
+  if (!normalized) return true
+
+  return (
+    normalized.includes('picsum.photos/seed/') ||
+    isExternalHotlinkUrl(normalized) ||
+    normalized.startsWith('/icons/') ||
+    normalized.includes('placeholder') ||
+    normalized.includes('dummy') ||
+    normalized.startsWith('data:image/svg+xml')
   )
 }
 
@@ -57,11 +92,7 @@ function resolveLandingPhoto(
   spotId: string,
   photoUrl?: string | null
 ): string | null {
-  if (photoUrl && !isPlaceholderPhoto(photoUrl)) {
-    return photoUrl
-  }
-
-  return REAL_SPOT_PHOTO_FALLBACKS[spotId]?.imageUrl ?? null
+  return resolveThumbnailUrl(spotId, photoUrl)
 }
 
 function getStaticCardsByCategory(): Record<SpotCategory, ShowcaseCard[]> {
@@ -76,7 +107,48 @@ function getStaticCardsByCategory(): Record<SpotCategory, ShowcaseCard[]> {
   )
 }
 
-async function buildShowcaseCards(): Promise<ShowcaseCard[]> {
+async function buildContentShowcaseCards(): Promise<ShowcaseCard[]> {
+  const maxCards = CARD_PLACEMENTS.length
+  const collection = await getCollection<ContentDocument>(
+    COLLECTIONS.CONTENT_MASTERS
+  )
+
+  const contents = await collection
+    .find({
+      imageUrl: { $exists: true, $ne: '' },
+      spotCount: { $gt: 0 },
+    })
+    .sort({ spotCount: -1, updatedAt: -1 })
+    .limit(maxCards)
+    .project({
+      id: 1,
+      normalizedName: 1,
+      displayName: 1,
+      imageUrl: 1,
+      type: 1,
+      spotCount: 1,
+    })
+    .toArray()
+
+  return contents
+    .filter((content) => !isBlockedContentImage(content.imageUrl))
+    .map((content, index) => {
+      const contentName =
+        content.displayName || content.normalizedName || `작품 ${index + 1}`
+      const category =
+        CONTENT_TYPE_TO_CATEGORY[String(content.type ?? 'other')] ?? 'other'
+
+      return {
+        id: `content-${content.normalizedName || content.id || index}`,
+        spotName: `${content.spotCount ?? 0}개 스팟`,
+        contentName,
+        category,
+        imageUrl: content.imageUrl!.trim(),
+      }
+    })
+}
+
+async function buildSpotShowcaseCards(): Promise<ShowcaseCard[]> {
   const maxCards = CARD_PLACEMENTS.length
   const collection = await getCollection<SpotDocument>('spots')
 
@@ -177,9 +249,9 @@ export async function fetchShowcaseSpots(): Promise<ShowcaseCard[]> {
   const maxCards = CARD_PLACEMENTS.length
 
   try {
-    const cards = await buildShowcaseCards()
+    const cards = await buildContentShowcaseCards()
 
-    if (cards.length >= 6) {
+    if (cards.length >= 4) {
       return cards.slice(0, maxCards)
     }
 
@@ -204,7 +276,7 @@ export async function fetchCategoryImages(): Promise<
   const fallbackByCategory = getStaticCardsByCategory()
 
   try {
-    const cards = await buildShowcaseCards()
+    const cards = await buildSpotShowcaseCards()
     const result = CATEGORY_ORDER.reduce(
       (acc, category) => {
         const dbCard = cards.find((card) => card.category === category)
