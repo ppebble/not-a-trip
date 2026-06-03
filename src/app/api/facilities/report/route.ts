@@ -3,6 +3,7 @@ import { getCollection } from '@/lib/db'
 import { FacilityType, OtakuFacilityType } from '@/types'
 import { OtakuFacilityDetails } from '@/types/facility'
 import { VALID_FACILITY_TYPES } from '@/lib/facility-utils'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 const OTAKU_FACILITY_TYPES: OtakuFacilityType[] = [
   'coin_locker',
@@ -95,7 +96,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { status: 201 }
     )
   } catch (error) {
-    console.error('Error reporting facility:', error)
+    runtimeLogger.error('Error reporting facility:', error)
     return NextResponse.json(
       { error: '편의시설 제보에 실패했습니다' },
       { status: 500 }

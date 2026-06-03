@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Route } from '@/types/route'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/contents/[name]/courses - 작품 관련 코스 조회
@@ -36,7 +37,7 @@ export async function GET(
       total: courses.length,
     })
   } catch (error) {
-    console.error('Error fetching content courses:', error)
+    runtimeLogger.error('Error fetching content courses:', error)
     return NextResponse.json(
       { error: '관련 코스 조회에 실패했습니다' },
       { status: 500 }

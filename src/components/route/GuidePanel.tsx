@@ -73,7 +73,7 @@ export function GuidePanel({
   checkedSpotIds,
   currentSpotIndex,
   progress,
-  currentPosition,
+  currentPosition: _currentPosition,
   accuracy,
   onCheckIn,
   onEndRoute,

@@ -63,16 +63,16 @@ describe('travel-inspired global color system', () => {
     expect(onboardingTour).toContain('underline underline-offset-4')
     expect(onboardingTour).toContain('text-gray-500')
   })
-  it('후속 이미지 데이터 수집 요구사항은 외부 핫링크 제거 기준을 명시한다', () => {
-    const requirements = read(
-      '.kiro/specs/47-real-image-data-collection/requirements.md'
-    )
+  it('blocks external hotlink image hosts in runtime image policy', () => {
+    const nextConfig = read('next.config.ts')
+    const realImageData = read('src/lib/real-image-data.ts')
+    const showcaseHelpers = read('src/app/api/spots/showcase/helpers.ts')
 
-    expect(requirements).toContain('External_Hotlink')
-    expect(requirements).toContain('Owned_Image_Asset')
-    expect(requirements).toContain('upload.wikimedia.org')
-    expect(requirements).toContain(
-      'THE app SHALL NOT render External_Hotlink URLs'
-    )
+    expect(nextConfig).not.toContain("hostname: 'upload.wikimedia.org'")
+    expect(nextConfig).not.toContain("hostname: 'commons.wikimedia.org'")
+    expect(realImageData).toContain('EXTERNAL_HOTLINK_HOSTS')
+    expect(realImageData).toContain("'upload.wikimedia.org'")
+    expect(realImageData).toContain("'commons.wikimedia.org'")
+    expect(showcaseHelpers).toContain('isExternalHotlinkUrl(photo)')
   })
 })

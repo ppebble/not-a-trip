@@ -1,5 +1,5 @@
 import fc from 'fast-check'
-import { Spot, MediaInfo, Coordinates } from '@/types'
+import { Spot, MediaInfo } from '@/types'
 
 /**
  * Property 9: 스팟 데이터 직렬화 라운드트립

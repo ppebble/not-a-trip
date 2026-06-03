@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Badge, DEFAULT_BADGE_DEFINITIONS } from '@/types'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * Badge MongoDB Document
@@ -66,7 +67,7 @@ export async function GET(): Promise<NextResponse> {
 
     return NextResponse.json({ badges: result, total: result.length })
   } catch (error) {
-    console.error('Error fetching badges:', error)
+    runtimeLogger.error('Error fetching badges:', error)
     return NextResponse.json(
       { error: '뱃지 목록 조회에 실패했습니다' },
       { status: 500 }

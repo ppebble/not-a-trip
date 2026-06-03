@@ -36,6 +36,13 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
+  webpack(config, { dev }) {
+    if (!dev) {
+      config.cache = false
+    }
+
+    return config
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200],

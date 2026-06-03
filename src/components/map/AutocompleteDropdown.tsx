@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { SpotCategory } from '@/types'
 import { CategoryIcon } from '@/components/common'
 import type { AutocompleteItem } from '@/hooks/useAutocomplete'
 
@@ -16,21 +15,6 @@ interface AutocompleteDropdownProps {
   onSelect: (item: AutocompleteItem) => void
   onClose: () => void
   isOpen: boolean
-}
-
-/**
- * 카테고리 라벨 가져오기
- */
-function getCategoryLabel(category: SpotCategory): string {
-  const labels: Record<SpotCategory, string> = {
-    animation: '애니메이션',
-    sports: '스포츠',
-    movie_drama: '영화/드라마',
-    music: '음악/콘서트',
-    game: '게임',
-    other: '기타',
-  }
-  return labels[category] || '기타'
 }
 
 /**

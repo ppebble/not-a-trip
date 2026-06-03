@@ -3,6 +3,7 @@
 import React from 'react'
 import * as Sentry from '@sentry/nextjs'
 import { AlertTriangleIcon } from '@/components/icons'
+import { runtimeLogger } from '@/lib/runtime-logger'
 import { MascotIllustration } from './MascotIllustration'
 
 interface ErrorBoundaryProps {
@@ -34,7 +35,7 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.error('[ErrorBoundary]', error, errorInfo)
+    runtimeLogger.error('[ErrorBoundary]', error, errorInfo)
 
     if (Sentry.isInitialized()) {
       Sentry.captureException(error, {

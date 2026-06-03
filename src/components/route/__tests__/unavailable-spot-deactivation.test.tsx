@@ -23,7 +23,7 @@ import type { RouteSpot } from '@/types/route'
 // ============================================
 
 jest.mock('@/components/common/DirectionsButton', () => {
-  return function MockDirectionsButton(props: {
+  return function MockDirectionsButton(_props: {
     lat: number
     lng: number
     destinationName?: string

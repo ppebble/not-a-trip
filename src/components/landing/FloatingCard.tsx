@@ -103,6 +103,7 @@ export function FloatingCard({
             sizes={`${width}px`}
             className="object-cover"
             unoptimized={isRemoteImageSrc(imageSrc)}
+            priority={index === 0}
             onError={() => setImageFailed(true)}
           />
         ) : (

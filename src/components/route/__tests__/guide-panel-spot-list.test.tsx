@@ -24,7 +24,7 @@ import type { RouteSpot } from '@/types/route'
 
 // DirectionsButton은 외부 지도 앱 연동이므로 mock 처리
 jest.mock('@/components/common/DirectionsButton', () => {
-  return function MockDirectionsButton(props: {
+  return function MockDirectionsButton(_props: {
     lat: number
     lng: number
     destinationName?: string

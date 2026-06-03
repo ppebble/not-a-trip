@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/supplements - 유저의 정보보완 신청 목록
@@ -34,7 +35,7 @@ export async function GET(
 
     return NextResponse.json({ supplements: result })
   } catch (error) {
-    console.error('Error fetching user supplements:', error)
+    runtimeLogger.error('Error fetching user supplements:', error)
     return NextResponse.json(
       { error: '정보보완 목록 조회에 실패했습니다' },
       { status: 500 }

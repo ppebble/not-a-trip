@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { FacilityVoteDocument } from '@/types/facility'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * POST /api/facilities/[id]/vote — 마이크로 투표 API
@@ -117,7 +118,7 @@ export async function POST(
     // 9. 응답
     return NextResponse.json({ verificationScore, upvotes, downvotes })
   } catch (error) {
-    console.error('Error voting on facility:', error)
+    runtimeLogger.error('Error voting on facility:', error)
     return NextResponse.json(
       { error: '투표 처리에 실패했습니다' },
       { status: 500 }

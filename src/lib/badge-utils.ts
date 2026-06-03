@@ -7,6 +7,7 @@
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Badge, UserBadge, DEFAULT_BADGES } from '@/types'
 import { calculateContentProgress } from '@/lib/content-progress'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 interface CheckInDocument {
   id: string
@@ -159,7 +160,7 @@ export async function checkAndAwardBadges(
               }
             } catch (progressError) {
               // relation 기반 계산 실패 시 content_progress 뱃지 평가 건너뛰기 (H4, Requirements 11.6)
-              console.error(
+              runtimeLogger.error(
                 `Content progress 뱃지 평가 건너뛰기 (${badge.code}):`,
                 progressError
               )
@@ -176,7 +177,7 @@ export async function checkAndAwardBadges(
       }
     }
   } catch (error) {
-    console.error('Error checking badges:', error)
+    runtimeLogger.error('Error checking badges:', error)
   }
 
   return earnedBadges
