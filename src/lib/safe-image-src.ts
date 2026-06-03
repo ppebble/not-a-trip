@@ -27,3 +27,10 @@ export function getSafeImageSrc(
 ): string {
   return isDisallowedPlaceholderImageSrc(src) ? fallbackSrc : src!.trim()
 }
+
+export function isRemoteImageSrc(src: string | null | undefined): boolean {
+  if (!src) return false
+
+  const normalized = src.trim().toLowerCase()
+  return normalized.startsWith('http://') || normalized.startsWith('https://')
+}

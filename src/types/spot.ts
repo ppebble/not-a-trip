@@ -183,7 +183,7 @@ export const CATEGORY_SECTIONS: Record<SpotCategory, SectionType[]> = {
   movie_drama: ['scenes'],
   sports: ['events'],
   music: ['events'],
-  game: ['scenes', 'events'],
+  game: ['scenes'],
   other: ['info'],
 }
 
@@ -199,7 +199,6 @@ export const SECTION_HEADERS: Record<
   events: {
     sports: '경기 일정',
     music: '공연 정보',
-    game: 'e스포츠 경기',
   },
   info: {
     other: '정보',

@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { getSafeImageSrc, isRemoteImageSrc } from '@/lib/safe-image-src'
 import type { SpotCategory } from '@/types/spot'
 
 const CATEGORY_META: Record<
@@ -93,6 +94,7 @@ export function CategoryCard({
   const cardStyles = getCategoryStyles(colorToken)
   const accentStyles = getAccentStyle(colorToken)
   const chipStyles = getAccentSurfaceStyle(colorToken)
+  const safeSpotImage = getSafeImageSrc(spotImage)
 
   return (
     <article
@@ -114,11 +116,12 @@ export function CategoryCard({
         >
           {!imageFailed ? (
             <Image
-              src={spotImage}
+              src={safeSpotImage}
               alt={`${title} 대표 스팟 사진`}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              unoptimized={isRemoteImageSrc(safeSpotImage)}
               onError={() => setImageFailed(true)}
             />
           ) : (

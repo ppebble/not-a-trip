@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { getSafeImageSrc } from '@/lib/safe-image-src'
+import { getSafeImageSrc, isRemoteImageSrc } from '@/lib/safe-image-src'
 import type { SpotCategory } from '@/types/spot'
 import type { ShowcaseCard } from './data/showcaseCards'
 import { getCategoryAccentColor } from './data/showcaseCards'
@@ -102,6 +102,7 @@ export function FloatingCard({
             fill
             sizes={`${width}px`}
             className="object-cover"
+            unoptimized={isRemoteImageSrc(imageSrc)}
             onError={() => setImageFailed(true)}
           />
         ) : (
