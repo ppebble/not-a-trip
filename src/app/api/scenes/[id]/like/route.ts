@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * 클라이언트 IP 추출
@@ -81,7 +82,7 @@ export async function GET(
       likeCount: scene.likeCount || 0,
     })
   } catch (error) {
-    console.error('Error getting like status:', error)
+    runtimeLogger.error('Error getting like status:', error)
     return NextResponse.json(
       { error: 'Failed to get like status' },
       { status: 500 }
@@ -164,7 +165,7 @@ export async function POST(
       })
     }
   } catch (error) {
-    console.error('Error toggling like:', error)
+    runtimeLogger.error('Error toggling like:', error)
     return NextResponse.json(
       { error: 'Failed to toggle like' },
       { status: 500 }
@@ -231,7 +232,7 @@ export async function DELETE(
       likeCount: result.likeCount,
     })
   } catch (error) {
-    console.error('Error unliking scene:', error)
+    runtimeLogger.error('Error unliking scene:', error)
     return NextResponse.json(
       { error: 'Failed to unlike scene' },
       { status: 500 }

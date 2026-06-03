@@ -46,9 +46,6 @@ export function ActivitySection({ userId, isOwner }: ActivitySectionProps) {
   const [activeTab, setActiveTab] = useState<ActivityTab>('checkins')
 
   const isCompletionsEnabled = activeTab === 'completions'
-  const isBadgesEnabled = activeTab === 'badges'
-  const isProgressEnabled = activeTab === 'progress'
-
   const { data: completions = [], isLoading: completionsLoading } =
     useUserCompletions(userId, isCompletionsEnabled)
   const { data: badges = [], isLoading: badgesLoading } = useUserBadges(userId)
@@ -67,9 +64,7 @@ export function ActivitySection({ userId, isOwner }: ActivitySectionProps) {
       </div>
 
       {/* 인증 갤러리 탭 */}
-      {activeTab === 'checkins' && (
-        <CheckInGalleryTab userId={userId} isOwner={isOwner} />
-      )}
+      {activeTab === 'checkins' && <CheckInGalleryTab userId={userId} />}
 
       {/* 코스 완주 탭 */}
       {activeTab === 'completions' && (
@@ -99,10 +94,9 @@ export function ActivitySection({ userId, isOwner }: ActivitySectionProps) {
 
 interface CheckInGalleryTabProps {
   userId: string
-  isOwner: boolean
 }
 
-function CheckInGalleryTab({ userId, isOwner }: CheckInGalleryTabProps) {
+function CheckInGalleryTab({ userId }: CheckInGalleryTabProps) {
   return <CheckInGallery userId={userId} limit={12} />
 }
 

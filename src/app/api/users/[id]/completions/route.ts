@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/completions - 유저의 코스 완주 기록
@@ -49,7 +50,7 @@ export async function GET(
 
     return NextResponse.json({ completions: result })
   } catch (error) {
-    console.error('Error fetching user completions:', error)
+    runtimeLogger.error('Error fetching user completions:', error)
     return NextResponse.json(
       { error: '완주 기록 조회에 실패했습니다' },
       { status: 500 }

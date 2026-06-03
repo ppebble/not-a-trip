@@ -43,10 +43,17 @@ const postArbitrary = fc.record({
 })
 
 // Generate array of posts
-const postsArrayArbitrary = fc.array(postArbitrary, {
-  minLength: 1,
-  maxLength: 10,
-})
+const postsArrayArbitrary = fc
+  .array(postArbitrary, {
+    minLength: 1,
+    maxLength: 10,
+  })
+  .map((posts) =>
+    posts.map((post, index) => ({
+      ...post,
+      id: `${post.id}-${index}`,
+    }))
+  )
 
 /**
  * Helper function to check if rendered content contains required information

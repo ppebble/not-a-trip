@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * 이번 주 시작일 계산 (월요일 00:00:00 UTC)
@@ -133,7 +134,7 @@ export async function GET(): Promise<NextResponse> {
 
     return NextResponse.json(response)
   } catch (error) {
-    console.error('Error fetching ranking:', error)
+    runtimeLogger.error('Error fetching ranking:', error)
     return NextResponse.json(
       { error: '랭킹 조회에 실패했습니다' },
       { status: 500 }

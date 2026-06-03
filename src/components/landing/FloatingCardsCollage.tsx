@@ -37,9 +37,9 @@ interface FloatingCardsCollageProps {
  * - 데스크톱(> 1024px): 12장
  */
 function getCardCount(width: number): number {
-  if (width < 768) return 6
-  if (width < 1024) return 9
-  return 12
+  if (width < 768) return 3
+  if (width < 1024) return 4
+  return 6
 }
 
 export function FloatingCardsCollage({
@@ -47,7 +47,7 @@ export function FloatingCardsCollage({
   showcaseSpots,
   className = '',
 }: FloatingCardsCollageProps) {
-  const [cardCount, setCardCount] = useState(12)
+  const [cardCount, setCardCount] = useState(4)
 
   useEffect(() => {
     setCardCount(getCardCount(window.innerWidth))

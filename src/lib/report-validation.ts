@@ -7,7 +7,6 @@ import type {
   CreateSpotReportInput,
   CreateStatusReportInput,
   SpotStatus,
-  ReportStatus,
 } from '@/types/report'
 
 export interface ValidationError {

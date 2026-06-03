@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id] - 유저 기본 정보 조회
@@ -45,7 +46,7 @@ export async function GET(
           : user.createdAt,
     })
   } catch (error) {
-    console.error('Error fetching user info:', error)
+    runtimeLogger.error('Error fetching user info:', error)
     return NextResponse.json(
       { error: '유저 정보 조회에 실패했습니다' },
       { status: 500 }
@@ -133,7 +134,7 @@ export async function PUT(
           : updatedUser!.updatedAt,
     })
   } catch (error) {
-    console.error('Error updating user profile:', error)
+    runtimeLogger.error('Error updating user profile:', error)
     return NextResponse.json(
       { error: '프로필 업데이트에 실패했습니다' },
       { status: 500 }

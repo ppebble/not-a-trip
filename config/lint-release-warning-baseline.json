@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-01T18:44:01.354Z",
+  "generatedAt": "2026-06-03T18:34:13.942Z",
   "command": "npx eslint src --format json",
   "scope": "src",
   "policy": {
@@ -8,41 +8,16 @@
   },
   "summary": {
     "errors": 0,
-    "warnings": 86,
+    "warnings": 0,
     "categories": {
       "reactHooksExhaustiveDeps": 0,
       "jsxA11y": 0,
-      "productionConsole": 51,
+      "productionConsole": 0,
       "noExplicitAny": 0,
-      "unusedVariables": 30,
-      "otherWarnings": 5
+      "unusedVariables": 0,
+      "otherWarnings": 0
     },
-    "rules": {
-      "no-console": 56,
-      "@typescript-eslint/no-unused-vars": 30
-    }
+    "rules": {}
   },
-  "examples": {
-    "productionConsole": [
-      "src\\app\\api\\admin\\content-images\\route.ts:88:5 no-console",
-      "src\\app\\api\\admin\\content-images\\route.ts:245:5 no-console",
-      "src\\app\\api\\admin\\content-images\\route.ts:304:5 no-console",
-      "src\\app\\api\\admin\\content-images\\sync\\route.ts:182:5 no-console",
-      "src\\app\\api\\auth\\register\\route.ts:98:5 no-console"
-    ],
-    "unusedVariables": [
-      "src\\app\\spots\\[id]\\__tests__\\spot-detail-required-info.test.tsx:198:5 @typescript-eslint/no-unused-vars",
-      "src\\app\\spots\\[id]\\__tests__\\spot-detail-required-info.test.tsx:199:5 @typescript-eslint/no-unused-vars",
-      "src\\app\\spots\\[id]\\__tests__\\spot-detail-required-info.test.tsx:200:5 @typescript-eslint/no-unused-vars",
-      "src\\app\\spots\\[id]\\__tests__\\spot-detail-required-info.test.tsx:201:5 @typescript-eslint/no-unused-vars",
-      "src\\app\\spots\\[id]\\__tests__\\spot-detail-required-info.test.tsx:202:5 @typescript-eslint/no-unused-vars"
-    ],
-    "otherWarnings": [
-      "src\\components\\landing\\data\\__tests__\\fetchProofImages.test.ts:301:31 no-console",
-      "src\\components\\landing\\data\\__tests__\\fetchProofImages.test.ts:305:5 no-console",
-      "src\\components\\landing\\data\\__tests__\\fetchProofImages.test.ts:310:5 no-console",
-      "src\\components\\landing\\data\\__tests__\\fetchProofImages.test.ts:381:12 no-console",
-      "src\\components\\landing\\data\\__tests__\\fetchProofImages.test.ts:402:12 no-console"
-    ]
-  }
+  "examples": {}
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/comments - 유저의 댓글 목록
@@ -48,7 +49,7 @@ export async function GET(
 
     return NextResponse.json({ comments: result })
   } catch (error) {
-    console.error('Error fetching user comments:', error)
+    runtimeLogger.error('Error fetching user comments:', error)
     return NextResponse.json(
       { error: '댓글 목록 조회에 실패했습니다' },
       { status: 500 }

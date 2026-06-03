@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { Scene, CreateSceneInput } from '@/types'
 import { ObjectId } from 'mongodb'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 // MongoDB document interface
 interface SceneDocument {
@@ -55,7 +56,7 @@ export async function GET(
 
     return NextResponse.json({ scenes: sceneList, total: sceneList.length })
   } catch (error) {
-    console.error('Error fetching scenes:', error)
+    runtimeLogger.error('Error fetching scenes:', error)
     return NextResponse.json(
       { error: 'Failed to fetch scenes' },
       { status: 500 }
@@ -116,7 +117,7 @@ export async function POST(
 
     return NextResponse.json(createdScene, { status: 201 })
   } catch (error) {
-    console.error('Error creating scene:', error)
+    runtimeLogger.error('Error creating scene:', error)
     return NextResponse.json(
       { error: 'Failed to create scene' },
       { status: 500 }

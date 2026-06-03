@@ -99,7 +99,7 @@ export const SHOWCASE_CARDS: ShowcaseCard[] = [
     spotName: '셜록 홈즈 박물관',
     contentName: '셜록 홈즈',
     category: 'other',
-    imageUrl: '/icons/categories/other.webp',
+    imageUrl: '/uploads/spots/replacements/hobbiton-4308cdfe0114.jpg',
   },
   {
     id: 'sc-7',
@@ -142,7 +142,7 @@ export const SHOWCASE_CARDS: ShowcaseCard[] = [
     spotName: '셜록 홈즈 박물관',
     contentName: '셜록 홈즈',
     category: 'other',
-    imageUrl: '/icons/categories/other.webp',
+    imageUrl: '/uploads/spots/replacements/haeundae-1915ed7e7338.jpg',
   },
 ]
 

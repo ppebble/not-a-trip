@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/posts - 유저의 게시글 목록
@@ -42,7 +43,7 @@ export async function GET(
 
     return NextResponse.json({ posts: result })
   } catch (error) {
-    console.error('Error fetching user posts:', error)
+    runtimeLogger.error('Error fetching user posts:', error)
     return NextResponse.json(
       { error: '게시글 목록 조회에 실패했습니다' },
       { status: 500 }

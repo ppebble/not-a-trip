@@ -13,6 +13,14 @@ import {
 } from '@/types'
 import SpotDetailPage from '@/components/spot/SpotDetailClient'
 
+jest.mock('next/dynamic', () => {
+  return function mockDynamic() {
+    return function MockDynamicComponent() {
+      return null
+    }
+  }
+})
+
 // Cleanup after each test to prevent DOM element accumulation
 afterEach(() => {
   cleanup()
@@ -195,14 +203,15 @@ jest.mock('next/image', () => {
   return function MockImage({
     src,
     alt,
-    priority,
-    fill,
-    sizes,
-    quality,
-    placeholder,
-    blurDataURL,
-    loader,
-    onLoadingComplete,
+    priority: _priority,
+    fill: _fill,
+    sizes: _sizes,
+    quality: _quality,
+    placeholder: _placeholder,
+    blurDataURL: _blurDataURL,
+    loader: _loader,
+    onLoadingComplete: _onLoadingComplete,
+    unoptimized: _unoptimized,
     ...props
   }: {
     src: string
@@ -215,6 +224,7 @@ jest.mock('next/image', () => {
     blurDataURL?: string
     loader?: unknown
     onLoadingComplete?: unknown
+    unoptimized?: boolean
     [key: string]: unknown
   }) {
     // eslint-disable-next-line @next/next/no-img-element
