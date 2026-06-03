@@ -235,3 +235,24 @@ git log --oneline --graph
 git status
 git diff
 ```
+
+## main/develop 포함 파일 기준
+
+### main 브랜치에 남길 파일
+
+- 런타임 코드: `src/`, `public/`, `prisma/`, `scripts/`, 설정 파일
+- 배포 검증 코드: `*.test.*`, `__tests__/`, CI에서 실행되는 테스트와 릴리즈 게이트
+- 저장소 운영 필수 문서: `.github/PULL_REQUEST_TEMPLATE.md`, `docs/commit-convention.md`, `docs/git-workflow.md`
+- 세션 인수인계 절차의 최소 템플릿: `docs/session-handoffs/README.md`, `docs/session-handoffs/_template.md`
+
+### develop 브랜치에만 둘 파일
+
+- Kiro/스펙/작업 메모: `.kiro/`
+- 완료된 이슈·작업계획·증거 문서: `docs/20*.md`, `docs/issues/`, `docs/*architecture.md`, `docs/*requirements*.md`
+- 실제 세션 인수인계 기록: `docs/session-handoffs/20*.md`, `docs/session-handoffs/status.md`, `docs/session-handoffs/todo.md`, `docs/session-handoffs/workflow.md`
+
+### 금지 사항
+
+- 테스트 파일을 main에서 제거하지 않는다. main 배포 전 CI가 `npm run lint`, `npm run type-check`, `npm run test:ci`, `npm run release:check`로 회귀를 막아야 한다.
+- develop을 main에 무차별 merge하지 않는다. main 배포 PR은 런타임 코드, 배포 검증 코드, 필수 운영 문서만 포함하도록 정리한다.
+- docs/.kiro 정리는 main용 릴리즈 브랜치에서만 수행하고, develop의 작업 문서는 보존한다.
