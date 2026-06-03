@@ -1,4 +1,4 @@
-﻿import fs from 'fs'
+import fs from 'fs'
 import path from 'path'
 
 const projectRoot = path.resolve(__dirname, '../../')
@@ -47,19 +47,17 @@ describe('spec 52 design-system motion and focus hardening', () => {
     }
   })
 
-  it('tracks raw token drift with an owned enforcement path instead of hiding debt', () => {
-    const tokenAudit = read(
-      '.kiro/specs/52-design-system-motion-focus-hardening/token-audit.md'
-    )
+  it('keeps raw design-token drift enforcement in code instead of develop-only specs', () => {
+    const tokenScanTest = read('src/lib/design-token-raw-utility-scan.test.ts')
+    const tokenScanScript = read('scripts/check-design-token-raw-utilities.mjs')
+    const workflow = read('docs/git-workflow.md')
 
-    expect(tokenAudit).toContain('Design_Token_Contract: `deferred`')
-    expect(tokenAudit).toContain('Raw utility enforcement: `deferred`')
-    expect(tokenAudit).toContain('frontend/design-system maintainers')
-    expect(tokenAudit).toContain('src/components/admin')
-    expect(tokenAudit).toContain('src/components/checkin')
-    expect(tokenAudit).toContain('src/components/mobile')
-    expect(tokenAudit).toContain('src/components/profile')
-    expect(tokenAudit).toContain('banned raw semantic classes')
-    expect(tokenAudit).toContain('Remaining Unenforced Scope')
+    expect(tokenScanTest).toContain('--check')
+    expect(tokenScanScript).toContain('SCAN_SURFACES')
+    expect(tokenScanScript).toContain('RAW_PALETTES')
+    expect(tokenScanScript).toContain('BANNED_SHADOWS')
+    expect(workflow).toContain(
+      'docs/.kiro 정리는 main용 릴리즈 브랜치에서만 수행'
+    )
   })
 })

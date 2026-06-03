@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
 import { getDb } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/account/linked-accounts
@@ -40,8 +41,7 @@ export async function GET(): Promise<NextResponse> {
       email: user?.email || null,
     })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Account] 연결된 계정 목록 조회 실패:', error)
+    runtimeLogger.error('[Account] 연결된 계정 목록 조회 실패:', error)
     return NextResponse.json(
       { error: '처리 중 오류가 발생했습니다.' },
       { status: 500 }
@@ -106,15 +106,13 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
       .collection('accounts')
       .deleteOne({ userId, provider, providerAccountId })
 
-    // eslint-disable-next-line no-console
-    console.log(
+    runtimeLogger.info(
       `[Account Linking] 연결 해제 — userId: ${session.user.id}, provider: ${provider}`
     )
 
     return NextResponse.json({ message: '계정 연결이 해제되었습니다.' })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Account] 계정 연결 해제 실패:', error)
+    runtimeLogger.error('[Account] 계정 연결 해제 실패:', error)
     return NextResponse.json(
       { error: '처리 중 오류가 발생했습니다.' },
       { status: 500 }

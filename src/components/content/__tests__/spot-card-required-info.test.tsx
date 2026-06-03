@@ -49,9 +49,10 @@ jest.mock('next/image', () => {
   return function MockImage({
     src,
     alt,
-    fill,
-    sizes,
-    priority,
+    fill: _fill,
+    sizes: _sizes,
+    priority: _priority,
+    unoptimized: _unoptimized,
     ...props
   }: {
     src: string
@@ -59,6 +60,7 @@ jest.mock('next/image', () => {
     fill?: boolean
     sizes?: string
     priority?: boolean
+    unoptimized?: boolean
     [key: string]: unknown
   }) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -79,7 +81,7 @@ jest.mock('@/components/common', () => ({
  * Mock MapPinIcon
  */
 jest.mock('@/components/icons', () => ({
-  MapPinIcon: ({ size }: { size?: number }) => (
+  MapPinIcon: ({ size: _size }: { size?: number }) => (
     <span data-testid="map-pin-icon">📍</span>
   ),
 }))

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { UserStats } from '@/types'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/stats - 유저 통계 조회 (확장)
@@ -51,7 +52,7 @@ export async function GET(
       postCount,
     })
   } catch (error) {
-    console.error('Error fetching user stats:', error)
+    runtimeLogger.error('Error fetching user stats:', error)
     return NextResponse.json(
       { error: '유저 통계 조회에 실패했습니다' },
       { status: 500 }

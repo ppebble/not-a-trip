@@ -5,6 +5,7 @@ import { validatePostInput } from '@/lib/post-validation'
 import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
+import { runtimeLogger } from '@/lib/runtime-logger'
 import {
   createRateLimitHeaders,
   evaluateSlidingWindowLimit,
@@ -120,7 +121,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ posts: postList, total: postList.length })
   } catch (error) {
-    console.error('Error fetching posts:', error)
+    runtimeLogger.error('Error fetching posts:', error)
     return NextResponse.json(
       { error: 'Failed to fetch posts' },
       { status: 500 }
@@ -278,7 +279,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    console.error('Error creating post:', error)
+    runtimeLogger.error('Error creating post:', error)
     await recordApiErrorMetric({ path: '/api/posts', statusCode: 500 })
     return NextResponse.json(
       { error: 'Failed to create post' },

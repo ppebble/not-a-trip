@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { getCollection } from '@/lib/db'
 import type { DataReviewStatus } from '@/lib/real-image-data'
 import { SpotCategory } from '@/types'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 import { resolveThumbnailUrl } from './helpers'
 
@@ -118,8 +119,7 @@ export async function GET(): Promise<NextResponse> {
 
     return NextResponse.json(showcaseItems)
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('[GET /api/spots/showcase] DB query failed:', error)
+    runtimeLogger.error('[GET /api/spots/showcase] DB query failed:', error)
     return NextResponse.json(
       { error: 'Failed to fetch showcase spots' },
       { status: 500 }

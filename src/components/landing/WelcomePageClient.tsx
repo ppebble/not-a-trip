@@ -1,20 +1,34 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { HeroSection } from './HeroSection'
-import { EntryPointSection } from './EntryPointSection'
-import { HowItWorksSection } from './HowItWorksSection'
-import { StorytellingSection } from './StorytellingSection'
-import { SocialProofSection } from './SocialProofSection'
-import { ConversionSection } from './ConversionSection'
-import { FloatingCTA } from './FloatingCTA'
 import { useDeviceCapability } from '@/hooks/useDeviceCapability'
 import { useScrollPosition } from '@/hooks/useScrollPosition'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { usePwaStore } from '@/stores/pwaStore'
 import type { ShowcaseCard } from './data/showcaseCards'
 import type { SpotCategory } from '@/types/spot'
+
+const EntryPointSection = dynamic(() =>
+  import('./EntryPointSection').then((mod) => mod.EntryPointSection)
+)
+const HowItWorksSection = dynamic(() =>
+  import('./HowItWorksSection').then((mod) => mod.HowItWorksSection)
+)
+const StorytellingSection = dynamic(() =>
+  import('./StorytellingSection').then((mod) => mod.StorytellingSection)
+)
+const SocialProofSection = dynamic(() =>
+  import('./SocialProofSection').then((mod) => mod.SocialProofSection)
+)
+const ConversionSection = dynamic(() =>
+  import('./ConversionSection').then((mod) => mod.ConversionSection)
+)
+const FloatingCTA = dynamic(() =>
+  import('./FloatingCTA').then((mod) => mod.FloatingCTA)
+)
 
 /**
  * 랜딩 페이지 클라이언트 컴포넌트

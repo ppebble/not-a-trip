@@ -1,4 +1,5 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { runtimeLogger } from '@/lib/runtime-logger'
+import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { CheckIn, UserStats } from '@/types'
@@ -109,7 +110,7 @@ export async function GET(
 
     return NextResponse.json(result)
   } catch (error) {
-    console.error('Error fetching checkin:', error)
+    runtimeLogger.error('Error fetching checkin:', error)
     return NextResponse.json(
       { error: '인증 조회에 실패했습니다.' },
       { status: 500 }
@@ -160,7 +161,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: '인증이 삭제되었습니다.' })
   } catch (error) {
-    console.error('Error deleting checkin:', error)
+    runtimeLogger.error('Error deleting checkin:', error)
     return NextResponse.json(
       { error: '인증 삭제에 실패했습니다.' },
       { status: 500 }

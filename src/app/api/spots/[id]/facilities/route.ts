@@ -1,4 +1,5 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { runtimeLogger } from '@/lib/runtime-logger'
+import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection } from '@/lib/db'
 import {
@@ -171,7 +172,7 @@ export async function GET(
 
     return NextResponse.json(nearbyFacilities)
   } catch (error) {
-    console.error('Error fetching nearby facilities:', error)
+    runtimeLogger.error('Error fetching nearby facilities:', error)
     return NextResponse.json(
       { error: 'Failed to fetch nearby facilities' },
       { status: 500 }
