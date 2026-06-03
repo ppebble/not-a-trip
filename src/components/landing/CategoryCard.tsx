@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getSafeImageSrc, isRemoteImageSrc } from '@/lib/safe-image-src'
 import type { SpotCategory } from '@/types/spot'
 
@@ -37,6 +37,15 @@ const CATEGORY_META: Record<
     eyebrow: 'CULTURE SPOT',
     routeHint: '숨은 명소 · 팬덤 장소',
   },
+}
+
+const CATEGORY_IMAGE_FALLBACKS: Record<SpotCategory, string> = {
+  animation: '/images/spots/animation/real-ani-001-suga-shrine.webp',
+  sports: '/uploads/spots/replacements/campnou-fd1ffbdfbd42.jpg',
+  movie_drama: '/uploads/spots/replacements/real-mov-001-1913f25dddcbee.webp',
+  music: '/uploads/scenes/REAL-MUS-001-scene-0.jpg',
+  game: '/uploads/scenes/REAL-GAM-002-scene-0.jpg',
+  other: '/uploads/spots/replacements/hobbiton-4308cdfe0114.jpg',
 }
 
 interface CategoryCardProps {
@@ -89,12 +98,22 @@ export function CategoryCard({
   isHighEnd,
   reducedMotion,
 }: CategoryCardProps) {
+  const fallbackImage = CATEGORY_IMAGE_FALLBACKS[category]
+  const safeSpotImage = useMemo(
+    () => getSafeImageSrc(spotImage, fallbackImage),
+    [spotImage, fallbackImage]
+  )
+  const [activeImage, setActiveImage] = useState(safeSpotImage)
   const [imageFailed, setImageFailed] = useState(false)
   const meta = CATEGORY_META[category]
   const cardStyles = getCategoryStyles(colorToken)
   const accentStyles = getAccentStyle(colorToken)
   const chipStyles = getAccentSurfaceStyle(colorToken)
-  const safeSpotImage = getSafeImageSrc(spotImage)
+
+  useEffect(() => {
+    setActiveImage(safeSpotImage)
+    setImageFailed(false)
+  }, [safeSpotImage])
 
   return (
     <article
@@ -116,13 +135,21 @@ export function CategoryCard({
         >
           {!imageFailed ? (
             <Image
-              src={safeSpotImage}
+              key={activeImage}
+              src={activeImage}
               alt={`${title} 대표 스팟 사진`}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              unoptimized={isRemoteImageSrc(safeSpotImage)}
-              onError={() => setImageFailed(true)}
+              unoptimized={isRemoteImageSrc(activeImage)}
+              onError={() => {
+                if (activeImage !== fallbackImage) {
+                  setActiveImage(fallbackImage)
+                  return
+                }
+
+                setImageFailed(true)
+              }}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center px-6 text-center">

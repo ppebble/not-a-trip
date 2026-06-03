@@ -97,10 +97,10 @@ describe('real image data validation', () => {
       '/images/spots/animation/real-ani-001-suga-shrine.webp'
     )
     expect(getControlledFallbackImageForSpot('REAL-SPO-002')).toBe(
-      '/images/showcase/camp-nou.webp'
+      '/uploads/spots/replacements/campnou-fd1ffbdfbd42.jpg'
     )
     expect(getControlledFallbackImageForSpot('UNKNOWN')).toBe(
-      '/images/showcase/petra.webp'
+      '/uploads/spots/replacements/hobbiton-4308cdfe0114.jpg'
     )
   })
 

@@ -1,8 +1,13 @@
-export const FALLBACK_IMAGE_SRC = '/icons/categories/other.webp'
+export const FALLBACK_IMAGE_SRC =
+  '/uploads/spots/replacements/hobbiton-4308cdfe0114.jpg'
 
 const DISALLOWED_PLACEHOLDER_PATTERNS = [
   'picsum.photos/seed/',
   'via.placeholder.com',
+  '/images/showcase/',
+  '/icons/',
+  'dummy',
+  'placeholder',
 ]
 
 export function isDisallowedPlaceholderImageSrc(

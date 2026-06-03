@@ -96,11 +96,19 @@ describe('landing theme and softer visual tone', () => {
     expect(categoryCard).toContain("from 'next/image'")
     expect(categoryCard).toContain('spotImage')
     expect(categoryCard).toContain('<Image')
+    expect(categoryCard).toContain('CATEGORY_IMAGE_FALLBACKS')
+    expect(categoryCard).toContain(
+      '/images/spots/animation/real-ani-001-suga-shrine.webp'
+    )
+    expect(categoryCard).toContain(
+      '/uploads/spots/replacements/campnou-fd1ffbdfbd42.jpg'
+    )
+    expect(categoryCard).toContain('/uploads/scenes/REAL-MUS-001-scene-0.jpg')
+    expect(categoryCard).toContain('/uploads/scenes/REAL-GAM-002-scene-0.jpg')
     expect(categoryCard).not.toContain('/icons/categories/')
     expect(floatingCard).not.toContain('/icons/categories/')
-    expect(fetchShowcaseSpots).toContain(
-      "url.includes('/uploads/contents/covers/')"
-    )
+    expect(fetchShowcaseSpots).toContain('buildContentShowcaseCards')
+    expect(fetchShowcaseSpots).toContain('COLLECTIONS.CONTENT_MASTERS')
     expect(fetchShowcaseSpots).toContain('fetchCategoryImages')
   })
 })
