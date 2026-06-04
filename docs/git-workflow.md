@@ -235,3 +235,10 @@ git log --oneline --graph
 git status
 git diff
 ```
+
+
+## Release Validation Scope
+
+- main/develop 포함 파일 기준으로 릴리스 검증 범위를 판단한다.
+- 테스트 파일을 main에서 제거하지 않는다.
+- develop을 main에 무차별 merge하지 않는다.

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useMemo } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Map as LeafletMap, divIcon, DivIcon } from 'leaflet'
 import { SpotDetailData } from '@/hooks/useSpots'
@@ -140,6 +140,38 @@ export default function SpotDetailMap({
 
   const mapCenter: [number, number] = [lat, lng]
   const mapZoom = 15
+  const visibleSpotLocations = useMemo(() => {
+    const subLocations = spot.subLocations ?? []
+
+    return subLocations.length > 0
+      ? subLocations.map((subLocation) => ({
+          id: subLocation.id,
+          name: subLocation.name,
+          address: subLocation.address,
+          description: subLocation.description,
+          coordinates: [
+            subLocation.coordinates.lat,
+            subLocation.coordinates.lng,
+          ] as [number, number],
+        }))
+      : [
+          {
+            id: spot.id,
+            name: spot.name,
+            address: spot.address,
+            description: spot.description,
+            coordinates: [lat, lng] as [number, number],
+          },
+        ]
+  }, [
+    lat,
+    lng,
+    spot.address,
+    spot.description,
+    spot.id,
+    spot.name,
+    spot.subLocations,
+  ])
 
   const fitMapBounds = useCallback(() => {
     const map = mapRef.current
@@ -147,8 +179,14 @@ export default function SpotDetailMap({
 
     map.invalidateSize()
 
-    if (hasValidCoordinates && facilities.length > 0) {
-      const allPoints = [[lat, lng], ...facilities.map((f) => f.coordinates)]
+    if (
+      hasValidCoordinates &&
+      (visibleSpotLocations.length > 1 || facilities.length > 0)
+    ) {
+      const allPoints = [
+        ...visibleSpotLocations.map((location) => location.coordinates),
+        ...facilities.map((f) => f.coordinates),
+      ]
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const L = (window as any).L
@@ -161,7 +199,7 @@ export default function SpotDetailMap({
         map.fitBounds(latLngBounds, { padding: [20, 20] })
       }
     }
-  }, [lat, lng, facilities, hasValidCoordinates])
+  }, [facilities, hasValidCoordinates, visibleSpotLocations])
 
   useResizeObserver(containerRef, fitMapBounds)
 
@@ -198,19 +236,25 @@ export default function SpotDetailMap({
           crossOrigin=""
         />
 
-        <Marker position={[lat, lng]} icon={spotIcon}>
-          <Popup>
-            <div className="spot-detail-popup-content p-2 text-main-text">
-              <h3 className="font-bold text-main-text">{spot.name}</h3>
-              <p className="mt-1 text-sm text-sub-text">{spot.address}</p>
-              {spot.description && (
-                <p className="mt-2 line-clamp-3 text-sm text-sub-text">
-                  {spot.description}
-                </p>
-              )}
-            </div>
-          </Popup>
-        </Marker>
+        {visibleSpotLocations.map((location) => (
+          <Marker
+            key={location.id}
+            position={location.coordinates}
+            icon={spotIcon}
+          >
+            <Popup>
+              <div className="spot-detail-popup-content p-2 text-main-text">
+                <h3 className="font-bold text-main-text">{location.name}</h3>
+                <p className="mt-1 text-sm text-sub-text">{location.address}</p>
+                {location.description && (
+                  <p className="mt-2 line-clamp-3 text-sm text-sub-text">
+                    {location.description}
+                  </p>
+                )}
+              </div>
+            </Popup>
+          </Marker>
+        ))}
 
         {facilities.map((facility) => {
           const coords = facility.coordinates

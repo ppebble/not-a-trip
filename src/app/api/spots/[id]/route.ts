@@ -10,6 +10,7 @@ import {
   UpdateSpotInput,
   ExternalLink,
   SpotContentRelation,
+  SpotSubLocation,
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
 import { convertRelatedContentToRelation } from '@/lib/relation-utils'
@@ -30,6 +31,7 @@ interface SpotDocument {
     lat: number
     lng: number
   }
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   relatedMedia: {
     title: string
@@ -89,6 +91,7 @@ export async function GET(
       photos: spot.photos,
       address: spot.address,
       coordinates: [spot.coordinates.lat, spot.coordinates.lng],
+      subLocations: spot.subLocations ?? [],
       category: spot.category,
       relatedMedia: spot.relatedMedia?.map((media) => ({
         title: media.title,
@@ -205,6 +208,9 @@ export async function PUT(
         lat: body.coordinates.lat,
         lng: body.coordinates.lng,
       }
+    }
+    if (body.subLocations !== undefined) {
+      updateFields.subLocations = body.subLocations
     }
     if (body.category) updateFields.category = body.category
     if (body.photos) updateFields.photos = body.photos

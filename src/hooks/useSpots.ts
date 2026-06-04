@@ -8,6 +8,7 @@ import {
   RelatedContent,
   ExternalLink,
   SpotContentRelation,
+  SpotSubLocation,
 } from '@/types'
 import type { SpotStatus } from '@/types/report'
 import type { SpotLifecycleStatus } from '@/types/spot-quality'
@@ -16,9 +17,13 @@ import { API_ROUTES, buildUrl } from '@/lib/api-routes'
 // Types for spot data
 export interface SpotPin {
   id: string
+  pinId?: string
   name: string
+  displayName?: string
   coordinates: [number, number]
   thumbnailUrl: string
+  subLocationName?: string
+  isSubLocation?: boolean
   category?: SpotCategory
   /** 인증 수 (인기 스팟 표시용) */
   checkInCount?: number
@@ -49,6 +54,7 @@ export interface SpotDetailData {
   photos: string[]
   address: string
   coordinates: [number, number]
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   /** @deprecated relatedContent 사용 권장 */
   relatedMedia?: MediaInfo[]

@@ -5,6 +5,7 @@ import type {
   ExternalLink,
   Coordinates,
   NearbyFacility,
+  SpotSubLocation,
 } from './spot'
 import type { SpotStatus } from './report'
 import type { SpotLifecycleStatus } from './spot-quality'
@@ -25,6 +26,7 @@ export interface SpotResponse {
   photos: string[]
   address: string
   coordinates: [number, number]
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   /** @deprecated relatedContent 사용 권장 */
   relatedMedia?: MediaInfo[]
@@ -48,6 +50,7 @@ export interface SpotDetailData {
   photos: string[]
   address: string
   coordinates: [number, number]
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   /** @deprecated relatedContent 사용 권장 */
   relatedMedia?: MediaInfo[]
@@ -76,6 +79,7 @@ export interface CreateSpotInput {
   description: string
   address: string
   coordinates: Coordinates
+  subLocations?: SpotSubLocation[]
   category: SpotCategory
   photos?: string[]
   relatedContent?: RelatedContent[]
@@ -89,6 +93,7 @@ export interface UpdateSpotInput {
   description?: string
   address?: string
   coordinates?: Coordinates
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   photos?: string[]
   relatedContent?: RelatedContent[]

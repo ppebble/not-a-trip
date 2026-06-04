@@ -236,6 +236,15 @@ export interface RelatedContent {
   imageUrl?: string
 }
 
+export interface SpotSubLocation {
+  id: string
+  name: string
+  address: string
+  coordinates: Coordinates
+  description?: string
+  photoUrl?: string
+}
+
 export interface Spot {
   id: string
   name: string
@@ -243,6 +252,7 @@ export interface Spot {
   photos: string[]
   address: string
   coordinates: Coordinates
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   /** @deprecated relatedContent 사용 권장 */
   relatedMedia?: MediaInfo[]
@@ -272,9 +282,13 @@ export interface Spot {
 
 export interface SpotPin {
   id: string
+  pinId?: string
   name: string
+  displayName?: string
   coordinates: [number, number]
   thumbnailUrl: string
+  subLocationName?: string
+  isSubLocation?: boolean
   category?: SpotCategory
   /** 인증 수 (인기 스팟 표시용) */
   checkInCount?: number

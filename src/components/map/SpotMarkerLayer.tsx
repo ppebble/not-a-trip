@@ -270,7 +270,7 @@ export default function SpotMarkerLayer({
 
       // 모든 마커 아이콘 교체
       markersRef.current.forEach((marker, id) => {
-        const spot = spotsRef.current.find((s) => s.id === id)
+        const spot = spotsRef.current.find((s) => (s.pinId ?? s.id) === id)
         if (spot) marker.setIcon(getIconForZoom(spot, newTier))
       })
     }
@@ -295,7 +295,7 @@ export default function SpotMarkerLayer({
     if (!clusterGroup) return
 
     const currentMarkers = markersRef.current
-    const newSpotIds = new Set(spots.map((s) => s.id))
+    const newSpotIds = new Set(spots.map((s) => s.pinId ?? s.id))
     const tier = currentTierRef.current
 
     // 제거
@@ -311,7 +311,8 @@ export default function SpotMarkerLayer({
     // 추가
     const toAdd: L.Marker[] = []
     for (const spot of spots) {
-      if (currentMarkers.has(spot.id)) continue
+      const markerKey = spot.pinId ?? spot.id
+      if (currentMarkers.has(markerKey)) continue
 
       const icon = getIconForZoom(spot, tier)
       const marker = L.marker(spot.coordinates, { icon })
@@ -345,10 +346,10 @@ export default function SpotMarkerLayer({
         if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current)
         hoverTimerRef.current = setTimeout(() => {
           // 이전 호버 해제
-          if (hoveredRef.current && hoveredRef.current.id !== spot.id) {
+          if (hoveredRef.current && hoveredRef.current.id !== markerKey) {
             const prev = currentMarkers.get(hoveredRef.current.id)
             const prevSpot = spotsRef.current.find(
-              (s) => s.id === hoveredRef.current!.id
+              (s) => (s.pinId ?? s.id) === hoveredRef.current!.id
             )
             if (prev && prevSpot) {
               prev.setIcon(getIconForZoom(prevSpot, currentTierRef.current))
@@ -357,7 +358,7 @@ export default function SpotMarkerLayer({
           }
           marker.setIcon(createHoveredIcon(spot.thumbnailUrl, spot.category))
           marker.setZIndexOffset(10000)
-          hoveredRef.current = { id: spot.id }
+          hoveredRef.current = { id: markerKey }
           const point = map.latLngToContainerPoint(spot.coordinates)
           useUIStore.getState().openPreview(spot.id, { x: point.x, y: point.y })
         }, 100)
@@ -377,7 +378,7 @@ export default function SpotMarkerLayer({
         }, 250)
       })
 
-      currentMarkers.set(spot.id, marker)
+      currentMarkers.set(markerKey, marker)
       toAdd.push(marker)
     }
 

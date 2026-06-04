@@ -7,6 +7,7 @@ import {
   CreateSpotInput,
   RelatedContent,
   ExternalLink,
+  SpotSubLocation,
 } from '@/types'
 import { validateExternalLinks } from '@/lib/external-link-validation'
 import { convertRelatedContentToRelation } from '@/lib/relation-utils'
@@ -63,6 +64,7 @@ interface SpotDocument {
     lat: number
     lng: number
   }
+  subLocations?: SpotSubLocation[]
   category?: SpotCategory
   relatedMedia: {
     title: string
@@ -160,19 +162,40 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // Transform to SpotPin format for map display
     // checkInCount는 별도 집계 없이 spot 문서에 캐시된 값 사용 (없으면 0)
-    const spotPins: SpotPin[] = spots.map((spot) => ({
-      id: spot.id,
-      name: spot.name,
-      coordinates: [spot.coordinates.lat, spot.coordinates.lng],
-      thumbnailUrl: spot.photos[0] || '',
-      category: spot.category,
-      checkInCount: 0, // 지도 핀 표시용 — 인기 뱃지는 별도 API에서 처리
-      contentName: spot.relatedContent?.[0]?.name,
-      lifecycleStatus: spot.lifecycleStatus,
-      closureSuspected: spot.closureSuspected,
-      pendingSupplementCount: spot.pendingSupplementCount,
-      urgentReviewRequired: spot.urgentReviewRequired,
-    }))
+    const spotPins: SpotPin[] = spots.flatMap((spot) => {
+      const basePin: SpotPin = {
+        id: spot.id,
+        pinId: spot.id,
+        name: spot.name,
+        displayName: spot.name,
+        coordinates: [spot.coordinates.lat, spot.coordinates.lng],
+        thumbnailUrl: spot.photos[0] || '',
+        category: spot.category,
+        checkInCount: 0,
+        contentName: spot.relatedContent?.[0]?.name,
+        lifecycleStatus: spot.lifecycleStatus,
+        closureSuspected: spot.closureSuspected,
+        pendingSupplementCount: spot.pendingSupplementCount,
+        urgentReviewRequired: spot.urgentReviewRequired,
+      }
+
+      const subLocationPins =
+        spot.subLocations?.map((subLocation) => ({
+          ...basePin,
+          pinId: `${spot.id}:${subLocation.id}`,
+          name: `${spot.name} · ${subLocation.name}`,
+          displayName: spot.name,
+          coordinates: [
+            subLocation.coordinates.lat,
+            subLocation.coordinates.lng,
+          ] as [number, number],
+          thumbnailUrl: subLocation.photoUrl || basePin.thumbnailUrl,
+          subLocationName: subLocation.name,
+          isSubLocation: true,
+        })) ?? []
+
+      return subLocationPins.length > 0 ? subLocationPins : [basePin]
+    })
 
     return NextResponse.json({ spots: spotPins, total: spotPins.length })
   } catch (error) {
@@ -262,6 +285,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         lat: body.coordinates.lat,
         lng: body.coordinates.lng,
       },
+      subLocations: body.subLocations || [],
       category: body.category,
       relatedMedia: [], // 기존 호환성 유지
       relatedContent: body.relatedContent || [],
