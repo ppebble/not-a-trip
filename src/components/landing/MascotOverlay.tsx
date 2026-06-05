@@ -20,7 +20,7 @@ interface MascotOverlayProps {
 }
 
 /** 마스코트 이미지 경로 */
-const MASCOT_IMAGE_PATH = '/icons/raw/0329/캐릭터_메인_최종.webp'
+const MASCOT_IMAGE_PATH = '/icons/mascot/mascot-main-full.webp'
 
 export function MascotOverlay({
   reducedMotion,
