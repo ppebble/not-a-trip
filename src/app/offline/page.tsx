@@ -39,7 +39,7 @@ export default function OfflinePage() {
       <div className="flex max-w-sm flex-col items-center text-center">
         {/* 마스코트 일러스트 */}
         <Image
-          src="/icons/raw/0329/캐릭터정면1.webp"
+          src="/icons/mascot/mascot-profile-front-full.webp"
           alt="Not a Trip 마스코트"
           width={180}
           height={180}
