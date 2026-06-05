@@ -2,10 +2,10 @@
 
 ## Branch and State
 
-- Branch: `hotfix/885--develop-code-sync`
-- Base / target branch if known: existing hotfix branch tracking `origin/hotfix/885--develop-code-sync`; earlier direct push to protected `develop` was rejected, so PR flow is still required.
+- Branch: `feat/886--onepiece-sub-locations-theme-zindex`
+- Base / target branch if known: `develop`. Work was split off from `hotfix/885--develop-code-sync` because PR #885 was already merged under a different head branch; keep review flow on the new branch only.
 - Working tree before final commit: code + docs changes staged/commit pending in this session.
-- PR status: PR #885 was previously merged to `main`; `develop` still needs a PR/update path because direct push is protected.
+- PR status: PR #885 was previously merged to `main` from `hotfix/885--release-warning-lcp-cleanup`; this work now needs a fresh PR from `feat/886--onepiece-sub-locations-theme-zindex` to `develop` because direct push is protected.
 
 ## Latest Commits
 
@@ -50,7 +50,7 @@
 
 ## Recommended Next Actions
 
-1. Push this branch and open/update PR to `develop` because direct push is protected.
+1. Open a fresh PR from `feat/886--onepiece-sub-locations-theme-zindex` to `develop` because direct push is protected; do not reuse PR #885 or its branch naming.
 2. Source legally reusable statue photos, upload to R2, and set parent/sub-location `photoUrl` values.
 3. Run full release checks if this branch becomes a release candidate: `npm run release:check`.
 
