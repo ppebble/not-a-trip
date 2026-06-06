@@ -12,9 +12,37 @@ export type MascotVariant =
   | 'surprised'
   | 'shy'
   | 'sleepy'
+  | 'prayer'
+  | 'explorer'
+  | 'lookout'
+  | 'treasureMap'
+  | 'offering'
+  | 'souvenir'
+  | 'passport'
+  | 'tea'
+  | 'meditation'
+  | 'food'
+  | 'boat'
+  | 'stoneStack'
 
 export type MascotMiniVariant =
-  | Exclude<MascotVariant, 'main' | 'profileFront'>
+  | Exclude<
+      MascotVariant,
+      | 'main'
+      | 'profileFront'
+      | 'prayer'
+      | 'explorer'
+      | 'lookout'
+      | 'treasureMap'
+      | 'offering'
+      | 'souvenir'
+      | 'passport'
+      | 'tea'
+      | 'meditation'
+      | 'food'
+      | 'boat'
+      | 'stoneStack'
+    >
   | 'peace'
 
 // Primary mascot assets use semantic names. Do not add numbered runtime paths.
@@ -34,6 +62,18 @@ export const MASCOT_ASSETS: Record<MascotVariant, string> = {
   surprised: '/icons/mascot/mascot-surprised.webp',
   shy: '/icons/mascot/mascot-shy.webp',
   sleepy: '/icons/mascot/mascot-sleepy.webp',
+  prayer: '/icons/mascot/mascot-prayer.webp',
+  explorer: '/icons/mascot/mascot-explorer.webp',
+  lookout: '/icons/mascot/mascot-lookout.webp',
+  treasureMap: '/icons/mascot/mascot-treasure-map.webp',
+  offering: '/icons/mascot/mascot-offering.webp',
+  souvenir: '/icons/mascot/mascot-souvenir.webp',
+  passport: '/icons/mascot/mascot-passport.webp',
+  tea: '/icons/mascot/mascot-tea.webp',
+  meditation: '/icons/mascot/mascot-meditation.webp',
+  food: '/icons/mascot/mascot-food.webp',
+  boat: '/icons/mascot/mascot-boat.webp',
+  stoneStack: '/icons/mascot/mascot-stone-stack.webp',
 }
 
 export const MASCOT_MINI_ASSETS: Record<MascotMiniVariant, string> = {
@@ -50,6 +90,8 @@ export const MASCOT_MINI_ASSETS: Record<MascotMiniVariant, string> = {
   sleepy: '/icons/mascot/mascot-sleepy-mini.webp',
   peace: '/icons/mascot/mascot-peace-mini.webp',
 }
+
+export const APP_ICON_SOURCE = MASCOT_ASSETS.explorer
 
 export const MAP_MARKER_ASSETS = {
   spot: '/icons/map-markers/spot.webp',
