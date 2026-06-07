@@ -86,7 +86,7 @@ const SIZE_MAP: Record<IconSize, number> = {
 
 interface ContentTypeIconProps {
   type: ContentType
-  size?: IconSize
+  size?: IconSize | number
   className?: string
 }
 
@@ -101,7 +101,7 @@ export function ContentTypeIcon({
 }: ContentTypeIconProps) {
   const iconPath = CONTENT_TYPE_ICON_PATH[type] || CONTENT_TYPE_ICON_PATH.other
   const fallback = CONTENT_TYPE_FALLBACK[type] || CONTENT_TYPE_FALLBACK.other
-  const pixelSize = SIZE_MAP[size]
+  const pixelSize = typeof size === 'number' ? size : SIZE_MAP[size]
 
   return (
     <span
@@ -138,7 +138,7 @@ export function ContentTypeIcon({
 
 interface CategoryIconProps {
   category: SpotCategory
-  size?: IconSize
+  size?: IconSize | number
   className?: string
 }
 
@@ -153,7 +153,7 @@ export function CategoryIcon({
 }: CategoryIconProps) {
   const iconPath = CATEGORY_ICON_PATH[category] || CATEGORY_ICON_PATH.other
   const fallback = CATEGORY_FALLBACK[category] || CATEGORY_FALLBACK.other
-  const pixelSize = SIZE_MAP[size]
+  const pixelSize = typeof size === 'number' ? size : SIZE_MAP[size]
 
   return (
     <span
@@ -190,7 +190,7 @@ export function CategoryIcon({
 
 interface LinkTypeIconProps {
   linkType: ExternalLinkType
-  size?: IconSize
+  size?: IconSize | number
   className?: string
 }
 
@@ -205,7 +205,7 @@ export function LinkTypeIcon({
 }: LinkTypeIconProps) {
   const iconPath = LINK_TYPE_ICON_PATH[linkType] || LINK_TYPE_ICON_PATH.other
   const fallback = LINK_TYPE_FALLBACK[linkType] || LINK_TYPE_FALLBACK.other
-  const pixelSize = SIZE_MAP[size]
+  const pixelSize = typeof size === 'number' ? size : SIZE_MAP[size]
 
   return (
     <span
