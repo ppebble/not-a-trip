@@ -2,9 +2,11 @@
 
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AppIcon } from '@/components/common/AppIcon'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 
 type NavItem = {
   href: string
@@ -100,11 +102,12 @@ export function Header() {
             className="flex min-w-0 items-center gap-2.5 rounded-xl py-1 pr-2 transition hover:opacity-90"
             aria-label="Not a Trip 홈으로 이동"
           >
-            <AppIcon
-              name="logo"
-              size="2xl"
-              className="max-h-9"
+            <Image
+              src={MASCOT_ASSETS.lookout}
               alt="Not a Trip"
+              width={40}
+              height={40}
+              className="h-9 w-9 object-contain"
             />
             <span className="truncate text-xl font-bold text-text-primary sm:text-2xl">
               Not a Trip

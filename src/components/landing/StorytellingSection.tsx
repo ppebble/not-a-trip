@@ -1,8 +1,10 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { CATEGORY_STORIES } from './data/categoryStories'
 import { CategoryCard } from './CategoryCard'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 import type { SpotCategory } from '@/types/spot'
 
 /**
@@ -15,6 +17,20 @@ interface StorytellingSectionProps {
   isHighEnd: boolean
   reducedMotion: boolean
   categoryImages: Record<SpotCategory, string>
+}
+
+function SectionMascot() {
+  return (
+    <div className="mb-10 flex justify-center" aria-hidden="true">
+      <Image
+        src={MASCOT_ASSETS.peace}
+        alt=""
+        width={88}
+        height={88}
+        className="h-20 w-20 object-contain md:h-24 md:w-24"
+      />
+    </div>
+  )
 }
 
 export function StorytellingSection({
@@ -81,6 +97,8 @@ function StorytellingSectionWithGSAP({
           </p>
         </header>
 
+        <SectionMascot />
+
         <div
           ref={containerRef}
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -139,6 +157,8 @@ function StorytellingSectionFallback({
             장르마다 다른 분위기의 스팟을 카드로 먼저 살펴보세요
           </p>
         </header>
+
+        <SectionMascot />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {stories.map((story, index) => (

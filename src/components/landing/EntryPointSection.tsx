@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 
 /**
  * 랜딩 페이지 목적별 진입점 섹션
@@ -56,6 +58,16 @@ export function EntryPointSection() {
         </header>
 
         {/* 진입점 카드 그리드 — 모바일 세로 스택, 태블릿 이상 가로 병렬 */}
+        <div className="mb-10 flex justify-center" aria-hidden="true">
+          <Image
+            src={MASCOT_ASSETS.boat}
+            alt=""
+            width={88}
+            height={88}
+            className="h-20 w-20 object-contain md:h-24 md:w-24"
+          />
+        </div>
+
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {ENTRY_POINTS.map((entry) => (
             <Link

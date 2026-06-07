@@ -18,7 +18,7 @@ const CONTENT_TYPE_ICON_PATH: Record<ContentType, string> = {
 }
 
 const CATEGORY_ICON_PATH: Record<SpotCategory, string> = {
-  animation: '/icons/categories/animation.webp',
+  animation: '/icons/mascot/mascot-confirm.webp',
   sports: '/icons/categories/sports.webp',
   movie_drama: '/icons/categories/movie_drama.webp',
   music: '/icons/categories/music.webp',

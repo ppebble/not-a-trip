@@ -48,8 +48,8 @@ export function GalleryHeader({
         {/* 통계 영역 - Requirements 5.3 */}
         <div className="mt-4 flex gap-6">
           <div className="flex items-center gap-2 text-sm">
-            <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-surface">
-              <AppIcon name="checkin" size={20} />
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-surface p-1">
+              <AppIcon name="checkin" size={24} />
             </span>
             <div>
               <span className="font-semibold text-sub-text">총 인증</span>{' '}
@@ -63,8 +63,8 @@ export function GalleryHeader({
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-green-100">
-              <AppIcon name="today-checkin" size={20} />
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 p-1">
+              <AppIcon name="today-checkin" size={24} />
             </span>
             <div>
               <span className="font-semibold text-sub-text">오늘 인증</span>{' '}

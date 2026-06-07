@@ -230,7 +230,7 @@ export default function OnboardingTour({
           <div className="flex items-center gap-2">
             <button
               onClick={onSkip}
-              className="text-sm text-gray-500 underline underline-offset-4 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className="text-xs font-medium text-gray-700 underline underline-offset-4 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
               type="button"
             >
               건너뛰기
@@ -239,7 +239,7 @@ export default function OnboardingTour({
             {onDismiss && (
               <button
                 onClick={onDismiss}
-                className="text-sm text-gray-500 underline underline-offset-4 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="text-xs font-medium text-gray-700 underline underline-offset-4 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
                 type="button"
               >
                 다시 보지 않기
