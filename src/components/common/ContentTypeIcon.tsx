@@ -113,7 +113,7 @@ export function ContentTypeIcon({
         alt={type}
         width={pixelSize}
         height={pixelSize}
-        className="h-full w-full"
+        className="h-full w-full object-contain"
         onError={(e) => {
           // SVG 로드 실패 시 fallback 이모티콘으로 대체
           const target = e.currentTarget
@@ -165,7 +165,7 @@ export function CategoryIcon({
         alt={category}
         width={pixelSize}
         height={pixelSize}
-        className="h-full w-full"
+        className="h-full w-full object-contain"
         onError={(e) => {
           // SVG 로드 실패 시 fallback 이모티콘으로 대체
           const target = e.currentTarget
@@ -217,7 +217,7 @@ export function LinkTypeIcon({
         alt={linkType}
         width={pixelSize}
         height={pixelSize}
-        className="h-full w-full"
+        className="h-full w-full object-contain"
         onError={(e) => {
           // SVG 로드 실패 시 fallback 이모티콘으로 대체
           const target = e.currentTarget
