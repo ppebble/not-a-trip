@@ -19,11 +19,11 @@ const CONTENT_TYPE_ICON_PATH: Record<ContentType, string> = {
 
 const CATEGORY_ICON_PATH: Record<SpotCategory, string> = {
   animation: '/icons/mascot/mascot-confirm.webp',
-  sports: '/icons/categories/sports.webp',
-  movie_drama: '/icons/categories/movie_drama.webp',
-  music: '/icons/categories/music.webp',
-  game: '/icons/categories/game.webp',
-  other: '/icons/categories/other.webp',
+  sports: '/icons/mascot/mascot-sports.webp',
+  movie_drama: '/icons/mascot/mascot-movie.webp',
+  music: '/icons/mascot/mascot-music.webp',
+  game: '/icons/mascot/mascot-game.webp',
+  other: '/icons/mascot/mascot-etc.webp',
 }
 
 const LINK_TYPE_ICON_PATH: Record<ExternalLinkType, string> = {

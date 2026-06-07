@@ -8,31 +8,14 @@ import {
   useSelectedCategories,
   ALL_CATEGORIES,
 } from '@/stores/filterStore'
-import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 
 const MAP_CATEGORY_ICON: Record<SpotCategory, string> = {
-  animation: MASCOT_ASSETS.confirm,
-  sports: MASCOT_ASSETS.sports,
-  movie_drama: MASCOT_ASSETS.movie,
-  music: MASCOT_ASSETS.music,
-  game: MASCOT_ASSETS.game,
-  other: MASCOT_ASSETS.etc,
-}
-
-function getMapCategoryIconSize(category: SpotCategory) {
-  if (category === 'animation') {
-    return {
-      width: 56,
-      height: 44,
-      className: 'h-11 w-14',
-    }
-  }
-
-  return {
-    width: 44,
-    height: 44,
-    className: 'h-11 w-11',
-  }
+  animation: '/icons/categories/animation.webp',
+  sports: '/icons/categories/sports.webp',
+  movie_drama: '/icons/categories/movie_drama.webp',
+  music: '/icons/categories/music.webp',
+  game: '/icons/categories/game.webp',
+  other: '/icons/categories/other.webp',
 }
 
 /**
@@ -75,7 +58,7 @@ export default function CategoryFilter() {
       {/* 전체 선택 버튼 */}
       <button
         onClick={handleSelectAll}
-        className={`h-12 flex-shrink-0 rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
+        className={`h-9 flex-shrink-0 rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
           isAllSelected
             ? 'border-primary bg-primary text-white shadow-md'
             : 'line-through/90 border-neutral-300 bg-neutral-200/90 text-neutral-500 dark:text-neutral-500'
@@ -88,13 +71,12 @@ export default function CategoryFilter() {
       {ALL_CATEGORIES.map((category) => {
         const config = CATEGORY_CONFIG[category]
         const isSelected = selectedCategories.includes(category)
-        const iconSize = getMapCategoryIconSize(category)
 
         return (
           <button
             key={category}
             onClick={() => handleCategoryToggle(category)}
-            className={`flex h-12 flex-shrink-0 items-center gap-2 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
+            className={`flex h-9 flex-shrink-0 items-center gap-1.5 overflow-hidden rounded-full border px-4 text-sm font-bold shadow-sm transition-all ${
               isSelected
                 ? 'border-transparent shadow-md'
                 : 'line-through/90 border-neutral-300 bg-neutral-200/90 text-neutral-500 dark:text-neutral-500'
@@ -112,9 +94,9 @@ export default function CategoryFilter() {
               <Image
                 src={MAP_CATEGORY_ICON[category]}
                 alt=""
-                width={iconSize.width}
-                height={iconSize.height}
-                className={`${iconSize.className} object-contain`}
+                width={20}
+                height={20}
+                className="h-5 w-5 object-contain"
               />
             </div>
             <span className={isSelected ? 'drop-shadow-sm' : ''}>
