@@ -80,7 +80,7 @@ export default function CategoryFilter() {
             <div className={isSelected ? '' : 'opacity-40 grayscale'}>
               <CategoryIcon
                 category={category}
-                size={category === 'animation' ? '2xl' : 'lg'}
+                size={category === 'animation' ? 'xl' : 'lg'}
               />
             </div>
             <span className={isSelected ? 'drop-shadow-sm' : ''}>
