@@ -4,6 +4,12 @@ export type MascotVariant =
   | 'cheer'
   | 'greeting'
   | 'confirm'
+  | 'sports'
+  | 'music'
+  | 'etc'
+  | 'game'
+  | 'movie'
+  | 'controller'
   | 'thinking'
   | 'love'
   | 'bored'
@@ -32,6 +38,12 @@ export type MascotMiniVariant =
       | 'main'
       | 'profileFront'
       | 'prayer'
+      | 'sports'
+      | 'music'
+      | 'etc'
+      | 'game'
+      | 'movie'
+      | 'controller'
       | 'explorer'
       | 'lookout'
       | 'treasureMap'
@@ -55,6 +67,12 @@ export const MASCOT_ASSETS: Record<MascotVariant, string> = {
   cheer: '/icons/mascot/mascot-cheer.webp',
   greeting: '/icons/mascot/mascot-greeting.webp',
   confirm: '/icons/mascot/mascot-confirm.webp',
+  sports: '/icons/mascot/mascot-sports.webp',
+  music: '/icons/mascot/mascot-music.webp',
+  etc: '/icons/mascot/mascot-etc.webp',
+  game: '/icons/mascot/mascot-game.webp',
+  movie: '/icons/mascot/mascot-movie.webp',
+  controller: '/icons/mascot/mascot-controller.webp',
   thinking: '/icons/mascot/mascot-thinking.webp',
   love: '/icons/mascot/mascot-love.webp',
   bored: '/icons/mascot/mascot-bored.webp',
