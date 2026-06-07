@@ -61,7 +61,7 @@ describe('travel-inspired global color system', () => {
 
     expect(onboardingTour).toContain('mb-2 text-lg font-bold')
     expect(onboardingTour).toContain('underline underline-offset-4')
-    expect(onboardingTour).toContain('text-gray-500')
+    expect(onboardingTour).toContain('text-xs font-medium text-gray-700')
   })
   it('blocks external hotlink image hosts in runtime image policy', () => {
     const nextConfig = read('next.config.ts')
@@ -73,6 +73,6 @@ describe('travel-inspired global color system', () => {
     expect(realImageData).toContain('EXTERNAL_HOTLINK_HOSTS')
     expect(realImageData).toContain("'upload.wikimedia.org'")
     expect(realImageData).toContain("'commons.wikimedia.org'")
-    expect(showcaseHelpers).toContain('isExternalHotlinkUrl(photo)')
+    expect(showcaseHelpers).toContain('isExternalHotlinkUrl(normalized)')
   })
 })
