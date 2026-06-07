@@ -56,16 +56,6 @@ export function MascotLoader({
           className="animate-fade-in object-contain p-2"
         />
       </div>
-      <div className="flex items-center gap-1.5" aria-hidden="true">
-        {activeFrames.map((variant, index) => (
-          <span
-            key={variant}
-            className={`h-2.5 w-2.5 rounded-full transition-all ${
-              index === frameIndex ? 'scale-110 bg-primary-500' : 'bg-border'
-            }`}
-          />
-        ))}
-      </div>
       <p className="text-sm font-medium text-main-text">{label}</p>
       {caption ? (
         <p className="text-center text-xs text-sub-text">{caption}</p>

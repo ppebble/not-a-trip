@@ -19,6 +19,7 @@ export type MascotVariant =
   | 'offering'
   | 'souvenir'
   | 'passport'
+  | 'peace'
   | 'tea'
   | 'meditation'
   | 'food'
@@ -69,6 +70,7 @@ export const MASCOT_ASSETS: Record<MascotVariant, string> = {
   offering: '/icons/mascot/mascot-offering.webp',
   souvenir: '/icons/mascot/mascot-souvenir.webp',
   passport: '/icons/mascot/mascot-passport.webp',
+  peace: '/icons/mascot/mascot-peace.webp',
   tea: '/icons/mascot/mascot-tea.webp',
   meditation: '/icons/mascot/mascot-meditation.webp',
   food: '/icons/mascot/mascot-food.webp',

@@ -4,6 +4,9 @@
  * 서버 컴포넌트 (인터랙션 없음)
  */
 
+import Image from 'next/image'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
+
 const STEPS = [
   {
     step: '01',
@@ -55,6 +58,16 @@ export function HowItWorksSection() {
         </header>
 
         {/* 스텝 그리드 */}
+        <div className="mb-10 flex justify-center" aria-hidden="true">
+          <Image
+            src={MASCOT_ASSETS.explorer}
+            alt=""
+            width={88}
+            height={88}
+            className="h-20 w-20 object-contain md:h-24 md:w-24"
+          />
+        </div>
+
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((step, index) => (
             <div
