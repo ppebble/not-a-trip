@@ -99,15 +99,15 @@ export function Header() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-5">
           <Link
             href="/"
-            className="flex min-w-0 items-center gap-2.5 rounded-xl py-1 pr-2 transition hover:opacity-90"
+            className="flex min-w-0 items-center gap-3 rounded-xl py-1 pr-2 transition hover:opacity-90"
             aria-label="Not a Trip 홈으로 이동"
           >
             <Image
               src={MASCOT_ASSETS.lookout}
               alt="Not a Trip"
-              width={40}
-              height={40}
-              className="h-9 w-9 object-contain"
+              width={52}
+              height={52}
+              className="h-12 w-12 object-contain"
             />
             <span className="truncate text-xl font-bold text-text-primary sm:text-2xl">
               Not a Trip
