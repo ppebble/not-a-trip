@@ -11,6 +11,13 @@ const LONG_DISTANCE_SPEED_M_PER_MIN = 1200
 const TRANSIT_BUFFER_MINUTES = 20
 const STOP_BUFFER_MINUTES = 25
 const LEGACY_TEST_ROUTE_IDS = ['ROUTE-001', 'ROUTE-002']
+const UJI_FACILITY_SPOT_IDS = new Set([
+  'REAL-ANI-037',
+  'REAL-ANI-050',
+  'REAL-ANI-051',
+  'REAL-ANI-052',
+  'REAL-ANI-053',
+])
 
 loadEnv()
 
@@ -18,6 +25,291 @@ const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017'
 const dbName = process.env.MONGODB_DB || extractDbNameFromUri(mongoUri)
 
 const newSpotPlans = [
+  {
+    id: 'REAL-ANI-037',
+    name: '우지 강변 다리 일대',
+    description:
+      '우지교와 우지 강변을 잇는 산책 구간입니다. 「울려라! 유포니엄」 우지 순례에서 게이한 우지역과 우지 신사 사이를 연결하는 핵심 동선입니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-037-uji-bridge.webp',
+    ],
+    address: '일본 교토부 우지시 우지 강변 일대',
+    coordinates: { lat: 34.8911, lng: 135.8077 },
+    category: 'animation',
+    relatedContent: [{ name: '울려라! 유포니엄', type: 'anime', year: 2015 }],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-037-official',
+        type: 'official',
+        label: '우지시 관광 정보',
+        url: 'https://www.city.uji.kyoto.jp/site/uji-kankou/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.city.uji.kyoto.jp/site/uji-kankou/',
+      'https://jatrabridge.com/2024/05/12/12298/pilgrimage-to-hibike-euphonium/',
+      'https://futurely.blog/visit_animation/eupho-uji-202312/',
+    ],
+    sourceSummary:
+      '우지 강변과 우지교는 공식 관광권의 실제 장소이며 유포니엄 팬 순례 동선에서 반복적으로 언급됩니다.',
+  },
+  {
+    id: 'REAL-ANI-040',
+    name: '간다묘진 신사',
+    description:
+      '아키하바라와 오차노미즈 사이에 있는 신사입니다. 아키하바라 팝컬처 순례 동선의 출발점으로 적합하며 러브 라이브 팬 방문지로도 알려져 있습니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-040-kanda-myojin.webp',
+    ],
+    address: '일본 도쿄도 지요다구 소토칸다 2-16-2',
+    coordinates: { lat: 35.702, lng: 139.7677 },
+    category: 'animation',
+    relatedContent: [
+      { name: '러브 라이브! School idol project', type: 'anime', year: 2013 },
+    ],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-040-official',
+        type: 'official',
+        label: '간다묘진',
+        url: 'https://www.kandamyoujin.or.jp/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.gotokyo.org/en/destinations/central-tokyo/akihabara/',
+      'https://www.japan.travel/en/spot/2178/',
+    ],
+    sourceSummary:
+      'GO TOKYO와 JNTO 자료가 아키하바라 권역과 간다묘진 방문 동선을 설명합니다.',
+  },
+  {
+    id: 'REAL-ANI-041',
+    name: '아키하바라 라디오회관',
+    description:
+      'JR 아키하바라역 앞의 대표 상업 시설입니다. 「STEINS;GATE」 팬 순례와 아키하바라 애니·게임 쇼핑 동선의 핵심 지점입니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-041-akihabara-radio-kaikan.webp',
+    ],
+    address: '일본 도쿄도 지요다구 소토칸다 1-15-16',
+    coordinates: { lat: 35.6987, lng: 139.7712 },
+    category: 'animation',
+    relatedContent: [{ name: 'STEINS;GATE', type: 'anime', year: 2011 }],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-041-official',
+        type: 'official',
+        label: '아키하바라 라디오회관',
+        url: 'https://www.akihabara-radiokaikan.co.jp/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.gotokyo.org/en/spot/1771/index.html',
+      'https://www.gotokyo.org/en/destinations/central-tokyo/akihabara/',
+    ],
+    sourceSummary:
+      'GO TOKYO의 아키하바라 관광 정보와 라디오회관 위치 정보를 기준으로 코스 중간 지점으로 구성했습니다.',
+  },
+  {
+    id: 'REAL-ANI-042',
+    name: '신주쿠 교엔',
+    description:
+      '신주쿠 도심의 대형 정원입니다. 「언어의 정원」 배경지로 널리 알려진 애니메이션 순례 지점입니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-042-shinjuku-gyoen.webp',
+    ],
+    address: '일본 도쿄도 신주쿠구 나이토마치 11',
+    coordinates: { lat: 35.6852, lng: 139.71 },
+    category: 'animation',
+    relatedContent: [{ name: '언어의 정원', type: 'anime', year: 2013 }],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-042-official',
+        type: 'official',
+        label: '신주쿠 교엔',
+        url: 'https://www.env.go.jp/garden/shinjukugyoen/english/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.env.go.jp/garden/shinjukugyoen/english/',
+      'https://www.gotokyo.org/en/destinations/western-tokyo/shinjuku/',
+    ],
+    sourceSummary:
+      '환경성 공식 신주쿠 교엔 정보와 GO TOKYO 신주쿠 권역 자료를 기준으로 실제 방문 지점을 확인했습니다.',
+  },
+  {
+    id: 'REAL-ANI-043',
+    name: '오다이바 레인보우 브리지',
+    description:
+      '도쿄만과 오다이바를 상징하는 전망 구간입니다. 오다이바 애니·이벤트 방문 코스의 진입 지점으로 구성했습니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-043-odaiba-rainbow-bridge.webp',
+    ],
+    address: '일본 도쿄도 미나토구·고토구 오다이바 일대',
+    coordinates: { lat: 35.6366, lng: 139.7631 },
+    category: 'animation',
+    relatedContent: [{ name: '디지몬 어드벤처', type: 'anime', year: 1999 }],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-043-official',
+        type: 'official',
+        label: 'GO TOKYO 오다이바',
+        url: 'https://www.gotokyo.org/en/destinations/southern-tokyo/odaiba/index.html',
+      },
+    ],
+    sourceUrls: [
+      'https://www.gotokyo.org/en/destinations/southern-tokyo/odaiba/index.html',
+      'https://www.japan.travel/en/spot/371',
+    ],
+    sourceSummary:
+      'GO TOKYO와 JNTO의 오다이바·레인보우 브리지 관광 정보를 기준으로 이벤트 코스의 시작점으로 배치했습니다.',
+  },
+  {
+    id: 'REAL-ANI-044',
+    name: '도쿄 빅사이트',
+    description:
+      '아리아케의 대형 전시장입니다. 코미케 등 애니·게임 이벤트 방문 동선에서 반복적으로 등장하는 실재 거점입니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-044-tokyo-big-sight.webp',
+    ],
+    address: '일본 도쿄도 고토구 아리아케 3-11-1',
+    coordinates: { lat: 35.63, lng: 139.7946 },
+    category: 'animation',
+    relatedContent: [
+      {
+        name: '러브 라이브! 니지가사키 학원 스쿨 아이돌 동호회',
+        type: 'anime',
+        year: 2020,
+      },
+    ],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-044-official',
+        type: 'official',
+        label: '도쿄 빅사이트',
+        url: 'https://www.bigsight.jp/english/visitor/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.bigsight.jp/english/visitor/',
+      'https://www.gotokyo.org/en/destinations/southern-tokyo/odaiba/index.html',
+    ],
+    sourceSummary:
+      '도쿄 빅사이트 공식 정보와 오다이바·아리아케 관광 자료를 기준으로 실제 이벤트 거점임을 확인했습니다.',
+  },
+  {
+    id: 'REAL-ANI-045',
+    name: '이케부쿠로 선샤인60 거리',
+    description:
+      '이케부쿠로의 쇼핑·서브컬처 동선 중심 거리입니다. 포켓몬 센터 메가 도쿄로 이어지는 방문 경로에 포함했습니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-045-ikebukuro-sunshine-60-street.webp',
+    ],
+    address: '일본 도쿄도 도시마구 히가시이케부쿠로 선샤인60 거리 일대',
+    coordinates: { lat: 35.7295, lng: 139.7187 },
+    category: 'animation',
+    relatedContent: [{ name: '포켓몬스터', type: 'anime', year: 1997 }],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-045-official',
+        type: 'official',
+        label: '포켓몬센터 메가 도쿄',
+        url: 'https://www.pokemon.co.jp/shop/en/pokecen/megatokyo/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.pokemon.co.jp/shop/en/pokecen/megatokyo/',
+      'https://www.gotokyo.org/en/destinations/western-tokyo/ikebukuro/',
+    ],
+    sourceSummary:
+      '이케부쿠로 선샤인시티 권역과 포켓몬센터 공식 점포 정보를 기준으로 쇼핑 코스 지점으로 구성했습니다.',
+  },
+  {
+    id: 'REAL-ANI-046',
+    name: '나카노 브로드웨이',
+    description:
+      '나카노역 북쪽의 대표 서브컬처 쇼핑몰입니다. 애니·만화 굿즈와 중고 컬렉터 상점이 밀집한 방문 지점입니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-046-nakano-broadway.webp',
+    ],
+    address: '일본 도쿄도 나카노구 나카노 5-52-15',
+    coordinates: { lat: 35.709, lng: 139.6657 },
+    category: 'animation',
+    relatedContent: [{ name: '포켓몬스터', type: 'anime', year: 1997 }],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-046-official',
+        type: 'official',
+        label: 'GO TOKYO 나카노',
+        url: 'https://www.gotokyo.org/en/destinations/western-tokyo/nakano/',
+      },
+    ],
+    sourceUrls: [
+      'https://www.gotokyo.org/en/destinations/western-tokyo/nakano/',
+      'https://www.japan.travel/id/experiences-in-japan/3363/',
+    ],
+    sourceSummary:
+      'GO TOKYO와 JNTO가 나카노 브로드웨이를 애니·만화·서브컬처 쇼핑 거점으로 소개합니다.',
+  },
+  {
+    id: 'REAL-ANI-047',
+    name: '오이즈미 애니메 게이트',
+    description:
+      '오이즈미가쿠엔역 인근의 애니메이션 캐릭터 전시 산책 지점입니다. 네리마 애니메이션 산업 코스의 출발점입니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-047-oizumi-anime-gate.webp',
+    ],
+    address: '일본 도쿄도 네리마구 히가시오이즈미 1초메 일대',
+    coordinates: { lat: 35.7498, lng: 139.5872 },
+    category: 'animation',
+    relatedContent: [
+      { name: '드래곤볼', type: 'anime', year: 1986 },
+      { name: '원피스', type: 'anime', year: 1999 },
+    ],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-047-official',
+        type: 'official',
+        label: 'GO TOKYO 오이즈미 애니메 게이트',
+        url: 'https://www.gotokyo.org/en/spot/1696/index.html',
+      },
+    ],
+    sourceUrls: [
+      'https://www.gotokyo.org/en/spot/1696/index.html',
+      'https://animetourism88.com/en/places/toei-animation-museum/',
+    ],
+    sourceSummary:
+      'GO TOKYO가 오이즈미 애니메 게이트를 네리마 애니 산업의 상징적 지점으로 설명합니다.',
+  },
+  {
+    id: 'REAL-ANI-048',
+    name: '도에이 애니메이션 뮤지엄',
+    description:
+      '도에이 애니메이션 스튜디오 인근의 전시 시설입니다. 드래곤볼·원피스 등 도에이 작품 팬 방문지로 구성했습니다.',
+    photos: [
+      'https://pub-fb19ed767e5747d6b5dbc403bfce5486.r2.dev/spots/animation/real-ani-048-toei-animation-museum.webp',
+    ],
+    address: '일본 도쿄도 네리마구 히가시오이즈미 2-10-5',
+    coordinates: { lat: 35.7517, lng: 139.5915 },
+    category: 'animation',
+    relatedContent: [
+      { name: '드래곤볼', type: 'anime', year: 1986 },
+      { name: '원피스', type: 'anime', year: 1999 },
+    ],
+    externalLinks: [
+      {
+        id: 'REAL-ANI-048-official',
+        type: 'official',
+        label: '도에이 애니메이션 뮤지엄',
+        url: 'https://museum.toei-anim.co.jp/en/',
+      },
+    ],
+    sourceUrls: [
+      'https://museum.toei-anim.co.jp/en/',
+      'https://animetourism88.com/en/places/toei-animation-museum/',
+    ],
+    sourceSummary:
+      '도에이 애니메이션 뮤지엄 공식 정보와 Anime Tourism 자료를 기준으로 네리마 애니 산업 동선에 포함했습니다.',
+  },
   {
     id: 'REAL-ANI-050',
     name: '京阪宇治駅',
@@ -629,6 +921,8 @@ async function upsertNewSpots(
 }
 
 function buildFacilitiesForSpot(spot) {
+  if (!UJI_FACILITY_SPOT_IDS.has(spot.id)) return []
+
   const sharedUjiFacilities = [
     {
       sourceId: `manual:${spot.id}:keihan-uji-station`,
