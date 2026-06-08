@@ -74,6 +74,34 @@ function formatMatchesMimeType(
   }
 }
 
+function getFileExtension(fileName: string): string | null {
+  const extension = fileName
+    .trim()
+    .toLowerCase()
+    .match(/\.([a-z0-9]+)$/)?.[1]
+  return extension ?? null
+}
+
+function formatMatchesExtension(
+  extension: string | null,
+  detectedFormat: DetectedImageFormat
+): boolean {
+  if (!extension) return false
+
+  switch (detectedFormat) {
+    case 'jpeg':
+      return extension === 'jpg' || extension === 'jpeg'
+    case 'png':
+      return extension === 'png'
+    case 'gif':
+      return extension === 'gif'
+    case 'webp':
+      return extension === 'webp'
+    default:
+      return false
+  }
+}
+
 export function validateUploadFile(
   file: File,
   buffer: Buffer
@@ -94,9 +122,16 @@ export function validateUploadFile(
     throw new UploadValidationError('파일의 실제 형식을 확인할 수 없습니다.')
   }
 
-  if (
-    !formatMatchesMimeType(file.type as AllowedImageMimeType, detectedFormat)
-  ) {
+  const mimeMatches = formatMatchesMimeType(
+    file.type as AllowedImageMimeType,
+    detectedFormat
+  )
+  const extensionMatches = formatMatchesExtension(
+    getFileExtension(file.name),
+    detectedFormat
+  )
+
+  if (!mimeMatches && !extensionMatches) {
     throw new UploadValidationError(
       '파일 확장자 또는 MIME 타입과 실제 파일 형식이 일치하지 않습니다.'
     )
