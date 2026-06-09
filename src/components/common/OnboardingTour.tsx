@@ -1,6 +1,12 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  type CSSProperties,
+} from 'react'
 import { TourStep } from '@/hooks/useOnboarding'
 
 interface OnboardingTourProps {
@@ -97,10 +103,18 @@ export default function OnboardingTour({
     left: 0,
   })
   const tooltipRef = useRef<HTMLDivElement>(null)
-  const nextButtonRef = useRef<HTMLButtonElement>(null)
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null)
 
   const step = steps[currentStep]
   const isLastStep = currentStep === steps.length - 1
+
+  const restoreFocus = useCallback(() => {
+    const target = step?.target
+      ? document.querySelector<HTMLElement>(step.target)
+      : null
+    const fallback = previouslyFocusedRef.current
+    ;(target || fallback)?.focus?.({ preventScroll: true })
+  }, [step])
 
   // 대상 요소 위치 계산
   const updateTargetRect = useCallback(() => {
@@ -156,33 +170,54 @@ export default function OnboardingTour({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onSkip()
+        restoreFocus()
+        if (onDismiss) {
+          onDismiss()
+        } else {
+          onSkip()
+        }
       }
     }
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isActive, onSkip])
+  }, [isActive, onDismiss, onSkip, restoreFocus])
 
-  // 투어 활성화 시 첫 번째 버튼에 포커스
   useEffect(() => {
-    if (isActive && nextButtonRef.current) {
-      nextButtonRef.current.focus()
-    }
+    if (!isActive) return
+    previouslyFocusedRef.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null
   }, [isActive, currentStep])
 
   if (!isActive || !step) return null
 
   const handleNext = () => {
     if (isLastStep) {
+      restoreFocus()
       onComplete()
     } else {
       onNext()
     }
   }
 
+  const handleSkip = () => {
+    restoreFocus()
+    if (onDismiss) {
+      onDismiss()
+    } else {
+      onSkip()
+    }
+  }
+
+  const handleDismiss = () => {
+    restoreFocus()
+    onDismiss?.()
+  }
+
   // box-shadow 기반 하이라이트: 대상 요소 크기의 투명 박스 + 거대한 box-shadow로 나머지 어둡게
-  const highlightStyle: React.CSSProperties = targetRect
+  const highlightStyle: CSSProperties = targetRect
     ? {
         position: 'fixed',
         top: targetRect.top - HIGHLIGHT_PADDING,
@@ -200,14 +235,10 @@ export default function OnboardingTour({
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
+      aria-live="polite"
       aria-describedby={tooltipId}
-      className="fixed inset-0 z-[9999]"
+      className="pointer-events-none fixed inset-0 z-[9999]"
     >
-      {/* 오버레이 클릭 방지 레이어 */}
-      <div className="fixed inset-0" aria-hidden="true" />
-
       {/* 하이라이트 영역 */}
       {targetRect && <div style={highlightStyle} aria-hidden="true" />}
 
@@ -216,7 +247,7 @@ export default function OnboardingTour({
         ref={tooltipRef}
         id={tooltipId}
         role="tooltip"
-        className="fixed z-[10000] w-80 max-w-[calc(100vw-32px)] rounded-xl bg-white p-5 shadow-2xl dark:bg-gray-800"
+        className="pointer-events-auto fixed z-[10000] w-80 max-w-[calc(100vw-32px)] rounded-xl bg-white p-5 shadow-2xl dark:bg-gray-800"
         style={{ top: tooltipPos.top, left: tooltipPos.left }}
       >
         <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -229,7 +260,7 @@ export default function OnboardingTour({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
-              onClick={onSkip}
+              onClick={handleSkip}
               className="text-xs font-medium text-gray-700 underline underline-offset-4 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
               type="button"
             >
@@ -238,7 +269,7 @@ export default function OnboardingTour({
 
             {onDismiss && (
               <button
-                onClick={onDismiss}
+                onClick={handleDismiss}
                 className="text-xs font-medium text-gray-700 underline underline-offset-4 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
                 type="button"
               >
@@ -254,7 +285,6 @@ export default function OnboardingTour({
             </span>
 
             <button
-              ref={nextButtonRef}
               onClick={handleNext}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
               type="button"

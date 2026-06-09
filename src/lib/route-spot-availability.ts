@@ -3,45 +3,42 @@
  *
  * A route spot is unavailable only when its backing spot document is gone or
  * the backing spot is explicitly marked as unavailable by one of the supported
- * status fields.
+ * status fields. Missing or unknown status aliases stay available so legacy
+ * route data cannot collapse into an all-lost course page.
  */
 
 export interface RouteSpotAvailabilitySource {
   id?: string
-  status?: string
-  spotStatus?: string
-  lifecycleStatus?: string
+  status?: string | null
+  spotStatus?: string | null
+  lifecycleStatus?: string | null
 }
 
-const LEGACY_UNAVAILABLE_STATUSES = new Set(['lost'])
-const SPOT_STATUS_UNAVAILABLE_STATUSES = new Set(['demolished'])
-const LIFECYCLE_UNAVAILABLE_STATUSES = new Set(['closed'])
+const EXPLICIT_UNAVAILABLE_STATUSES = new Set([
+  'lost',
+  'removed',
+  'deleted',
+  'closed',
+  'closure',
+  'demolished',
+  'unavailable',
+  'inactive',
+  'archived',
+])
+
+function hasExplicitUnavailableStatus(
+  value: string | null | undefined
+): boolean {
+  if (!value) return false
+  return EXPLICIT_UNAVAILABLE_STATUSES.has(value.trim().toLowerCase())
+}
 
 export function isRouteSpotAvailable(
   spot: RouteSpotAvailabilitySource | undefined
 ): boolean {
   if (!spot) return false
 
-  if (
-    spot.status &&
-    LEGACY_UNAVAILABLE_STATUSES.has(spot.status.toLowerCase())
-  ) {
-    return false
-  }
-
-  if (
-    spot.spotStatus &&
-    SPOT_STATUS_UNAVAILABLE_STATUSES.has(spot.spotStatus.toLowerCase())
-  ) {
-    return false
-  }
-
-  if (
-    spot.lifecycleStatus &&
-    LIFECYCLE_UNAVAILABLE_STATUSES.has(spot.lifecycleStatus.toLowerCase())
-  ) {
-    return false
-  }
-
-  return true
+  return ![spot.status, spot.spotStatus, spot.lifecycleStatus].some(
+    hasExplicitUnavailableStatus
+  )
 }

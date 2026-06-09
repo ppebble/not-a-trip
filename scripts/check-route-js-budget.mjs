@@ -97,6 +97,15 @@ function findBuildWarnings(output) {
   const cleanOutput = stripAnsi(output)
   return cleanOutput
     .split(/\r?\n/)
+    .filter(
+      (line) =>
+        ![
+          /No build cache found/,
+          /No auth token provided/,
+          /Will not create release/,
+          /Will not upload source maps/,
+        ].some((pattern) => pattern.test(line))
+    )
     .filter((line) =>
       [
         /^\s*⚠/,

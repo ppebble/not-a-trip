@@ -33,6 +33,16 @@ function isGifUrl(src: ImageProps['src']): boolean {
   return src.split(/[?#]/, 1)[0].toLowerCase().endsWith('.gif')
 }
 
+function isLocalStaticAsset(src: ImageProps['src']): boolean {
+  if (typeof src !== 'string') {
+    return false
+  }
+
+  return ['/icons/', '/uploads/', '/images/'].some((prefix) =>
+    src.startsWith(prefix)
+  )
+}
+
 /**
  * OptimizedImage - next/image 래퍼 컴포넌트
  * - blur placeholder를 자동 적용하여 로딩 중 UX 개선
@@ -48,7 +58,8 @@ export function OptimizedImage({
   const blurProps = disableBlur ? {} : blurPlaceholderProps
   const safeSrc =
     typeof props.src === 'string' ? getSafeImageSrc(props.src) : props.src
-  const shouldSkipOptimization = isExternalUrl(safeSrc) || isGifUrl(safeSrc)
+  const shouldSkipOptimization =
+    isExternalUrl(safeSrc) || isGifUrl(safeSrc) || isLocalStaticAsset(safeSrc)
 
   return (
     <Image

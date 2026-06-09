@@ -297,6 +297,12 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <h2 className="mb-3 text-lg font-semibold text-text-primary">
           코스 지도
         </h2>
+        <a
+          href="#route-after-map"
+          className="sr-only focus:not-sr-only focus:mb-3 focus:inline-flex focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+        >
+          코스 지도 건너뛰기
+        </a>
         <RouteMap
           spots={route.spots}
           startPoint={route.startPoint}
@@ -304,6 +310,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           currentSpotIndex={nav.isNavigating ? nav.currentSpotIndex : undefined}
           checkedSpotIds={nav.isNavigating ? nav.checkedSpotIds : undefined}
         />
+        <div id="route-after-map" tabIndex={-1} />
       </div>
 
       {/* 스팟 순서 목록 */}
