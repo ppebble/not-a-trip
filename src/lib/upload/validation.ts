@@ -7,6 +7,12 @@ export const ALLOWED_IMAGE_MIME_TYPES = [
   'image/webp',
 ] as const
 
+const UNRELIABLE_BROWSER_MIME_TYPES = new Set([
+  '',
+  'application/octet-stream',
+  'binary/octet-stream',
+])
+
 export type AllowedImageMimeType = (typeof ALLOWED_IMAGE_MIME_TYPES)[number]
 export type DetectedImageFormat = 'jpeg' | 'png' | 'gif' | 'webp'
 
@@ -106,26 +112,39 @@ export function validateUploadFile(
   file: File,
   buffer: Buffer
 ): DetectedImageFormat {
-  if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type as AllowedImageMimeType)) {
+  if (file.size > TEN_MB) {
     throw new UploadValidationError(
-      '지원되지 않는 파일 형식입니다. JPEG, PNG, GIF, WebP만 업로드할 수 있습니다.'
+      '\ud30c\uc77c \ud06c\uae30\ub294 10MB \uc774\ud558\uc5ec\uc57c \ud569\ub2c8\ub2e4.'
     )
   }
 
-  if (file.size > TEN_MB) {
-    throw new UploadValidationError('파일 크기는 10MB 이하여야 합니다.')
+  const mimeType = file.type || ''
+  const normalizedMimeType = mimeType.toLowerCase()
+  const isAllowedMime = ALLOWED_IMAGE_MIME_TYPES.includes(
+    normalizedMimeType as AllowedImageMimeType
+  )
+  const isUnreliableMime = UNRELIABLE_BROWSER_MIME_TYPES.has(normalizedMimeType)
+
+  if (!isAllowedMime && !isUnreliableMime) {
+    throw new UploadValidationError(
+      '\uc9c0\uc6d0\ub418\uc9c0 \uc54a\ub294 \ud30c\uc77c \ud615\uc2dd\uc785\ub2c8\ub2e4. JPEG, PNG, GIF, WebP\ub9cc \uc5c5\ub85c\ub4dc\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+    )
   }
 
   const detectedFormat = detectImageFormat(buffer)
 
   if (!detectedFormat) {
-    throw new UploadValidationError('파일의 실제 형식을 확인할 수 없습니다.')
+    throw new UploadValidationError(
+      '\ud30c\uc77c\uc758 \uc2e4\uc81c \ud615\uc2dd\uc744 \ud655\uc778\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.'
+    )
   }
 
-  const mimeMatches = formatMatchesMimeType(
-    file.type as AllowedImageMimeType,
-    detectedFormat
-  )
+  const mimeMatches =
+    isAllowedMime &&
+    formatMatchesMimeType(
+      normalizedMimeType as AllowedImageMimeType,
+      detectedFormat
+    )
   const extensionMatches = formatMatchesExtension(
     getFileExtension(file.name),
     detectedFormat
@@ -133,7 +152,7 @@ export function validateUploadFile(
 
   if (!mimeMatches && !extensionMatches) {
     throw new UploadValidationError(
-      '파일 확장자 또는 MIME 타입과 실제 파일 형식이 일치하지 않습니다.'
+      '\ud30c\uc77c \ud655\uc7a5\uc790 \ub610\ub294 MIME \ud0c0\uc785\uacfc \uc2e4\uc81c \ud30c\uc77c \ud615\uc2dd\uc774 \uc77c\uce58\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.'
     )
   }
 

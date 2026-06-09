@@ -35,6 +35,7 @@ export function MascotIllustration({
         priority={priority}
         sizes="(max-width: 768px) 80px, 144px"
         className="object-contain drop-shadow-lg"
+        unoptimized
       />
     </div>
   )

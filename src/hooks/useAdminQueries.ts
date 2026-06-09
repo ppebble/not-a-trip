@@ -160,9 +160,10 @@ export const adminKeys = {
  * 관리자 대시보드 요약 데이터 조회 훅
  * Requirements: 5.1, 5.2
  */
-export function useAdminDashboardSummary() {
+export function useAdminDashboardSummary(enabled = true) {
   return useQuery({
     queryKey: adminKeys.dashboardSummary(),
+    enabled,
     queryFn: async (): Promise<DashboardSummaryResponse> => {
       const res = await fetch(API_ROUTES.ADMIN.DASHBOARD_SUMMARY)
       if (!res.ok) {

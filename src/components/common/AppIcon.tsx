@@ -96,6 +96,7 @@ export function AppIcon({
       height={pixelSize}
       className={`object-contain ${className}`}
       style={{ width: 'auto', height: 'auto' }}
+      unoptimized
     />
   )
 }

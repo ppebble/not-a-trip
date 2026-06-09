@@ -218,6 +218,7 @@ export default function RouteMap({
         ref={mapRef}
         zoomControl={true}
         scrollWheelZoom={true}
+        keyboard={false}
       >
         <TileLayer
           attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'

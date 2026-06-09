@@ -15,12 +15,21 @@ interface ContentCardProps {
   content: ContentListItem
 }
 
+function shouldBypassOptimizer(src: string): boolean {
+  return ['/uploads/', '/icons/', '/images/'].some((prefix) =>
+    src.startsWith(prefix)
+  )
+}
+
 export function ContentCard({ content }: ContentCardProps) {
   const [imageError, setImageError] = useState(false)
   const typeConfig = CONTENT_TYPE_CONFIG[content.contentType]
   const typeLabel = isDiscoverableContentType(content.contentType)
     ? DISCOVERABLE_CONTENT_TYPE_LABELS[content.contentType]
     : '콘텐츠'
+  const safeImageSrc = content.imageUrl
+    ? getSafeImageSrc(content.imageUrl)
+    : undefined
 
   return (
     <Link
@@ -28,14 +37,15 @@ export function ContentCard({ content }: ContentCardProps) {
       className="group block overflow-hidden rounded-lg border border-border bg-background transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <div className="relative aspect-[4/3] w-full bg-border/30">
-        {content.imageUrl && !imageError ? (
+        {safeImageSrc && !imageError ? (
           <Image
-            src={getSafeImageSrc(content.imageUrl)}
+            src={safeImageSrc}
             alt={`${content.contentName} 대표 썸네일`}
             fill
             className="object-cover transition-transform group-hover:scale-105"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             onError={() => setImageError(true)}
+            unoptimized={shouldBypassOptimizer(safeImageSrc)}
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -45,6 +55,7 @@ export function ContentCard({ content }: ContentCardProps) {
               width={48}
               height={48}
               className="opacity-40"
+              unoptimized
             />
           </div>
         )}
