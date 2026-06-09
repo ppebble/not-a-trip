@@ -15,7 +15,7 @@ export default function AdminDashboardPage() {
     data: summary,
     isLoading: dataLoading,
     error,
-  } = useAdminDashboardSummary()
+  } = useAdminDashboardSummary(isAuthorized)
 
   if (authLoading) {
     return (

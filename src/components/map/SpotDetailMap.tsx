@@ -183,7 +183,7 @@ export default function SpotDetailMap({
         dragging={true}
         touchZoom={true}
         boxZoom={true}
-        keyboard={true}
+        keyboard={false}
         whenReady={() => {
           mapRef.current?.invalidateSize()
         }}
