@@ -39,10 +39,18 @@ describe('upload validation', () => {
   test('rejects mismatched mime type and magic bytes', () => {
     expect(() =>
       validateUploadFile(
-        createFile('image/png', 1024),
+        createFile('image/png', 1024, 'test.png'),
         Buffer.from([0xff, 0xd8, 0xff])
       )
     ).toThrow('MIME 타입과 실제 파일 형식')
+  })
+
+  test('accepts png uploads when browser MIME is wrong but extension and magic bytes are png', () => {
+    const buffer = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+
+    expect(
+      validateUploadFile(createFile('image/jpeg', 1024, 'scene.png'), buffer)
+    ).toBe('png')
   })
 
   test('accepts valid webp uploads', () => {

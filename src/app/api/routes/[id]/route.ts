@@ -3,6 +3,7 @@ import { getCollection } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { Route, RouteDifficulty } from '@/types/route'
 import { calculateRouteDistances } from '@/lib/route-utils'
+import { isRouteSpotAvailable } from '@/lib/route-spot-availability'
 
 const VALID_DIFFICULTIES: RouteDifficulty[] = ['easy', 'moderate', 'hard']
 
@@ -46,7 +47,7 @@ export async function GET(
     const spotIds = route.spots.map((s) => s.spotId)
     const existingSpots = await spotsCollection
       .find({ id: { $in: spotIds } })
-      .project({ id: 1, status: 1 })
+      .project({ id: 1, status: 1, spotStatus: 1, lifecycleStatus: 1 })
       .toArray()
 
     const existingSpotMap = new Map(existingSpots.map((s) => [s.id, s]))
@@ -54,8 +55,8 @@ export async function GET(
     let hasChanges = false
     const updatedSpots = route.spots.map((spot) => {
       const dbSpot = existingSpotMap.get(spot.spotId)
-      // 스팟이 삭제되었거나 '소실됨' 상태인 경우
-      const isAvailable = dbSpot !== undefined && dbSpot.status !== 'lost'
+      // 스팟이 삭제되었거나 명시적으로 소실/폐쇄 상태인 경우
+      const isAvailable = isRouteSpotAvailable(dbSpot)
       if (spot.isAvailable !== isAvailable) {
         hasChanges = true
       }

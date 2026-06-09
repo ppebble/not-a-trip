@@ -23,7 +23,11 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
     if (!file) return
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-    if (!allowedTypes.includes(file.type)) {
+    const allowedExtensions = /\.(jpe?g|png|gif|webp)$/i
+    if (
+      !allowedTypes.includes(file.type) &&
+      !allowedExtensions.test(file.name)
+    ) {
       setError('지원하지 않는 파일 형식입니다. (JPG, PNG, GIF, WEBP만 가능)')
       return
     }
