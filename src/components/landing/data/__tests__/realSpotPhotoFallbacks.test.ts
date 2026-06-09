@@ -6,7 +6,7 @@ describe('REAL_SPOT_PHOTO_FALLBACKS', () => {
     for (const fallback of Object.values(REAL_SPOT_PHOTO_FALLBACKS)) {
       expect(isExternalHotlinkUrl(fallback.imageUrl)).toBe(false)
       expect(fallback.imageUrl).toMatch(
-        /^\/images\/(?:showcase|spots\/animation)\//
+        /^\/(?:images\/(?:showcase|spots\/animation)|uploads\/(?:spots\/replacements|scenes))\//
       )
     }
   })

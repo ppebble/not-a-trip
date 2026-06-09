@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * 푸시 구독 MongoDB Document
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('푸시 구독 등록 실패:', error)
+    runtimeLogger.error('푸시 구독 등록 실패:', error)
     return NextResponse.json(
       { error: '구독 등록에 실패했습니다' },
       { status: 500 }
@@ -85,7 +86,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('푸시 구독 해제 실패:', error)
+    runtimeLogger.error('푸시 구독 해제 실패:', error)
     return NextResponse.json(
       { error: '구독 해제에 실패했습니다' },
       { status: 500 }

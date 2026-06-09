@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { getBaseUrl } from '@/lib/seo/metadata'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /** 정적 페이지 사이트맵 엔트리 생성 */
 function getStaticPages(baseUrl: string): MetadataRoute.Sitemap {
@@ -79,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...staticPages, ...spotEntries, ...routeEntries, ...postEntries]
   } catch (error) {
-    console.error('사이트맵 생성 중 DB 조회 실패:', error)
+    runtimeLogger.error('사이트맵 생성 중 DB 조회 실패:', error)
     return staticPages
   }
 }

@@ -60,15 +60,10 @@ describe('landing theme and softer visual tone', () => {
   it('라이트 모드 여권 일러스트는 단색 보라 면을 피하고 내부 대비를 확보한다', () => {
     const conversion = read('src/components/landing/ConversionSection.tsx')
 
-    expect(conversion).toContain('id="passportLightBody"')
-    expect(conversion).toContain('stopColor="#eef2ff"')
-    expect(conversion).toContain('stopColor="#f0fdfa"')
-    expect(conversion).toContain('stopColor="#fff7ed"')
-    expect(conversion).toContain('stroke-neutral-300 dark:stroke-primary-400')
-    expect(conversion).toContain('stroke-secondary-500/55')
-    expect(conversion).toContain('stroke-secondary-500/65')
-    expect(conversion).toContain('fill-secondary-300/75')
-    expect(conversion).toContain('fill-sunset-300/65')
+    expect(conversion).toContain("from 'next/image'")
+    expect(conversion).toContain('MASCOT_ASSETS.passport')
+    expect(conversion).toContain('h-36 w-36 object-contain md:h-44 md:w-44')
+    expect(conversion).not.toContain('id="passportLightBody"')
   })
   it('강조 문구는 무지개형 그라데이션 텍스트 대신 단색 브랜드 텍스트를 사용한다', () => {
     const hero = read('src/components/landing/HeroSection.tsx')
@@ -96,11 +91,19 @@ describe('landing theme and softer visual tone', () => {
     expect(categoryCard).toContain("from 'next/image'")
     expect(categoryCard).toContain('spotImage')
     expect(categoryCard).toContain('<Image')
+    expect(categoryCard).toContain('CATEGORY_IMAGE_FALLBACKS')
+    expect(categoryCard).toContain(
+      '/images/spots/animation/real-ani-001-suga-shrine.webp'
+    )
+    expect(categoryCard).toContain(
+      '/uploads/spots/replacements/campnou-fd1ffbdfbd42.jpg'
+    )
+    expect(categoryCard).toContain('/uploads/scenes/REAL-MUS-001-scene-0.jpg')
+    expect(categoryCard).toContain('/uploads/scenes/REAL-GAM-002-scene-0.jpg')
     expect(categoryCard).not.toContain('/icons/categories/')
     expect(floatingCard).not.toContain('/icons/categories/')
-    expect(fetchShowcaseSpots).toContain(
-      "url.includes('/uploads/contents/covers/')"
-    )
+    expect(fetchShowcaseSpots).toContain('buildContentShowcaseCards')
+    expect(fetchShowcaseSpots).toContain('COLLECTIONS.CONTENT_MASTERS')
     expect(fetchShowcaseSpots).toContain('fetchCategoryImages')
   })
 })

@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb'
 import bcrypt from 'bcryptjs'
 import { auth } from '@/lib/auth'
 import { getDb } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * POST /api/account/set-password
@@ -75,13 +76,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     )
 
-    // eslint-disable-next-line no-console
-    console.log(`[Account] 이메일/비밀번호 설정 — userId: ${session.user.id}`)
+    runtimeLogger.info(
+      `[Account] 이메일/비밀번호 설정 — userId: ${session.user.id}`
+    )
 
     return NextResponse.json({ message: '이메일과 비밀번호가 설정되었습니다.' })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Account] 비밀번호 설정 실패:', error)
+    runtimeLogger.error('[Account] 비밀번호 설정 실패:', error)
     return NextResponse.json(
       { error: '처리 중 오류가 발생했습니다.' },
       { status: 500 }

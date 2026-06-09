@@ -1,9 +1,11 @@
 'use client'
 
 import { forwardRef, useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { FloatingCardsCollage } from './FloatingCardsCollage'
 import { LandingHeader } from './LandingHeader'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 import type { ShowcaseCard } from './data/showcaseCards'
 
 /**
@@ -179,7 +181,13 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
         >
           <div className="flex flex-col items-center gap-1 text-muted dark:text-white/35">
             <span className="text-xs">아래에서 탐색 방법 보기</span>
-            <ChevronDownIcon />
+            <Image
+              src={MASCOT_ASSETS.cheer}
+              alt=""
+              width={48}
+              height={48}
+              className="h-12 w-12 object-contain"
+            />
           </div>
         </div>
       </section>
@@ -202,24 +210,6 @@ function SearchIcon() {
     >
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.35-4.35" />
-    </svg>
-  )
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m6 9 6 6 6-6" />
     </svg>
   )
 }

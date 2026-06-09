@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 interface RouteDocument {
   id: string
@@ -39,7 +40,7 @@ export async function GET(
 
     return NextResponse.json({ courses })
   } catch (error) {
-    console.error('Error fetching courses for spot:', error)
+    runtimeLogger.error('Error fetching courses for spot:', error)
     return NextResponse.json(
       { error: 'Failed to fetch courses' },
       { status: 500 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { runtimeLogger } from '@/lib/runtime-logger'
 import {
   CheckIn,
   CheckInInput,
@@ -245,7 +246,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json(response)
   } catch (error) {
-    console.error('Error fetching checkins:', error)
+    runtimeLogger.error('Error fetching checkins:', error)
     return NextResponse.json(
       { error: '인증 목록 조회에 실패했습니다' },
       { status: 500 }
@@ -358,7 +359,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     } catch (relError) {
       // relations 조회 실패 시 400 에러 (M2 수정사항, Requirements 3.9)
-      console.error('Relations 조회 실패:', relError)
+      runtimeLogger.error('Relations 조회 실패:', relError)
       return NextResponse.json(
         { error: '작품 정보를 조회할 수 없습니다' },
         { status: 400 }
@@ -422,7 +423,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    console.error('Error creating checkin:', error)
+    runtimeLogger.error('Error creating checkin:', error)
     await recordApiErrorMetric({ path: '/api/checkins', statusCode: 500 })
     return NextResponse.json(
       { error: '인증 생성에 실패했습니다' },

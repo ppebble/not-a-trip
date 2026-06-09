@@ -5,6 +5,7 @@
  */
 
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 export interface ContentProgressInput {
   userId: string
@@ -76,7 +77,7 @@ export async function calculateContentProgress(
     return { contentName, totalSpots, checkedSpots, progress }
   } catch (error) {
     // 계산 실패 시 graceful skip + 에러 로깅 (H4 수정사항)
-    console.error('Content progress 계산 실패:', error)
+    runtimeLogger.error('Content progress 계산 실패:', error)
     return { contentName, totalSpots: 0, checkedSpots: 0, progress: 0 }
   }
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { SpotCategory, CATEGORY_CONFIG } from '@/types'
 import { useShallow } from 'zustand/react/shallow'
 import {
@@ -7,7 +8,15 @@ import {
   useSelectedCategories,
   ALL_CATEGORIES,
 } from '@/stores/filterStore'
-import { CategoryIcon } from '@/components/common'
+
+const MAP_CATEGORY_ICON: Record<SpotCategory, string> = {
+  animation: '/icons/categories/animation.webp',
+  sports: '/icons/categories/sports.webp',
+  movie_drama: '/icons/categories/movie_drama.webp',
+  music: '/icons/categories/music.webp',
+  game: '/icons/categories/game.webp',
+  other: '/icons/categories/other.webp',
+}
 
 /**
  * 카테고리 필터 컴포넌트
@@ -77,10 +86,17 @@ export default function CategoryFilter() {
               color: isSelected ? config.fgColor : undefined,
             }}
           >
-            <div className={isSelected ? '' : 'opacity-40 grayscale'}>
-              <CategoryIcon
-                category={category}
-                size={category === 'animation' ? '2xl' : 'lg'}
+            <div
+              className={`flex items-center justify-center ${
+                isSelected ? '' : 'opacity-40 grayscale'
+              }`}
+            >
+              <Image
+                src={MAP_CATEGORY_ICON[category]}
+                alt=""
+                width={20}
+                height={20}
+                className="h-5 w-5 object-contain"
               />
             </div>
             <span className={isSelected ? 'drop-shadow-sm' : ''}>

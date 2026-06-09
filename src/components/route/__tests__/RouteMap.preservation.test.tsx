@@ -45,6 +45,8 @@ jest.mock('react-leaflet', () => {
     MapContainer: React.forwardRef(function MockMapContainer(
       {
         children,
+        className,
+        style,
         ...props
       }: { children: React.ReactNode; [key: string]: unknown },
       ref: React.Ref<unknown>
@@ -65,7 +67,12 @@ jest.mock('react-leaflet', () => {
           (ref as React.MutableRefObject<unknown>).current = mapInstance
       }, [ref, mapInstance])
       return (
-        <div data-testid="map-container" {...props}>
+        <div
+          data-testid="map-container"
+          className={className as string | undefined}
+          style={style as React.CSSProperties | undefined}
+          data-map-props={JSON.stringify(props)}
+        >
           {children}
         </div>
       )

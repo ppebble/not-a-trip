@@ -1210,7 +1210,7 @@ const GAME_SPOTS: SeedSpot[] = [
     photos: ['https://picsum.photos/seed/lol-park/800/600'],
     address: '대한민국 서울특별시 종로구 종로 33',
     coordinates: { lat: 37.57, lng: 126.992 },
-    category: 'game',
+    category: 'sports',
     relatedContent: [
       { name: '리그 오브 레전드 (League of Legends)', type: 'game' },
       { name: 'T1', type: 'sports_team', additionalInfo: 'e스포츠' },

@@ -9,8 +9,8 @@ import { ExternalLinkCard } from './ExternalLinkCard'
 interface EventInfoSectionProps {
   /** 스팟 ID */
   spotId: string
-  /** 카테고리 (sports, music, game) */
-  category: 'sports' | 'music' | 'game'
+  /** 카테고리 (sports, music) */
+  category: 'sports' | 'music'
   /** 외부 링크 목록 */
   externalLinks: ExternalLink[]
 }
@@ -46,10 +46,6 @@ export function EventInfoSection({
         title: '등록된 공연 정보가 없습니다',
         description: '공연장 홈페이지나 예매 링크를 추가해보세요!',
       },
-      game: {
-        title: '등록된 e스포츠 정보가 없습니다',
-        description: '대회 일정이나 스트리밍 링크를 추가해보세요!',
-      },
     }
 
   const emptyMessage = emptyMessages[category] || emptyMessages.sports
@@ -69,7 +65,6 @@ export function EventInfoSection({
             '경기 일정 확인 및 티켓 예매를 위한 링크입니다.'}
           {category === 'music' &&
             '공연 일정 확인 및 티켓 예매를 위한 링크입니다.'}
-          {category === 'game' && 'e스포츠 대회 일정 및 관련 정보 링크입니다.'}
         </p>
 
         {/* 외부 링크 그리드 또는 빈 상태 */}
@@ -101,8 +96,6 @@ export function EventInfoSection({
                     '경기 당일은 혼잡할 수 있으니 미리 예매하세요!'}
                   {category === 'music' &&
                     '인기 공연은 빠르게 매진되니 예매 일정을 확인하세요!'}
-                  {category === 'game' &&
-                    '대회 일정에 맞춰 방문하면 특별한 경험을 할 수 있어요!'}
                 </p>
               </div>
             </div>

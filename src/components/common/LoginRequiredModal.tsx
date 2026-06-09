@@ -23,7 +23,6 @@ export function LoginRequiredModal({
   title = '로그인이 필요한 서비스입니다',
   description = '이 기능을 사용하려면 로그인이 필요합니다.',
   callbackUrl,
-  onClose,
 }: LoginRequiredModalProps) {
   const router = useRouter()
   const pathname = usePathname()

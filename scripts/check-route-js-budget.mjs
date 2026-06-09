@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -22,6 +28,8 @@ const budgets = JSON.parse(
 )
 
 function runBuild() {
+  rmSync(resolve(repoRoot, '.next'), { recursive: true, force: true })
+
   const result = spawnSync('npx next build', {
     cwd: repoRoot,
     encoding: 'utf8',
@@ -85,12 +93,41 @@ function parseBuildOutput(output) {
   return measurements
 }
 
+function findBuildWarnings(output) {
+  const cleanOutput = stripAnsi(output)
+  return cleanOutput
+    .split(/\r?\n/)
+    .filter(
+      (line) =>
+        ![
+          /No build cache found/,
+          /No auth token provided/,
+          /Will not create release/,
+          /Will not upload source maps/,
+        ].some((pattern) => pattern.test(line))
+    )
+    .filter((line) =>
+      [
+        /^\s*⚠/,
+        /\bWarning:/,
+        /^Browserslist:/,
+        /^<w>\s+\[webpack\./,
+        /The Next\.js plugin was not detected/,
+      ].some((pattern) => pattern.test(line))
+    )
+}
+
 const output =
   parseOnlyPath && existsSync(parseOnlyPath)
     ? readFileSync(parseOnlyPath, 'utf8')
     : runBuild()
 const measurements = parseBuildOutput(output)
 const failures = []
+const buildWarnings = findBuildWarnings(output)
+
+if (buildWarnings.length > 0) {
+  failures.push(`Build warnings detected: ${buildWarnings.length}`)
+}
 
 if (typeof measurements.sharedFirstLoadJsKb !== 'number') {
   failures.push('Missing shared First Load JS measurement')
@@ -119,6 +156,7 @@ const report = {
     ? relative(repoRoot, parseOnlyPath)
     : relative(repoRoot, latestLogPath),
   budgets,
+  buildWarnings,
   measurements: {
     sharedFirstLoadJsKb: measurements.sharedFirstLoadJsKb,
     routes: Object.fromEntries(

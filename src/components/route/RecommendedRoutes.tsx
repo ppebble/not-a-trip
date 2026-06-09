@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { RouteCard } from '@/components/route/RouteCard'
-import { AppIcon } from '@/components/common/AppIcon'
 import { SkeletonBlock } from '@/components/common/SkeletonUI'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 import type { Route } from '@/types/route'
 
 interface RecommendedData {
@@ -69,8 +70,14 @@ export function RecommendedRoutes() {
     <div className="space-y-8">
       {/* 공식 추천 코스 섹션 */}
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-text-primary">
-          <AppIcon name="course-main" size="xl" />
+        <h2 className="mb-3 flex items-center gap-3 text-lg font-bold text-text-primary">
+          <Image
+            src={MASCOT_ASSETS.passport}
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain"
+          />
           공식 추천 코스
         </h2>
         {isLoading ? (
@@ -90,8 +97,14 @@ export function RecommendedRoutes() {
 
       {/* 인기 코스 섹션 */}
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-text-primary">
-          <AppIcon name="course-popular" size="xl" />
+        <h2 className="mb-3 flex items-center gap-3 text-lg font-bold text-text-primary">
+          <Image
+            src={MASCOT_ASSETS.explorer}
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain"
+          />
           인기 코스
         </h2>
         {isLoading ? (

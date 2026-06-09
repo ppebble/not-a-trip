@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { runtimeLogger } from '@/lib/runtime-logger'
 import {
   fetchTotalSpotsMap,
   fetchCheckedSpotsMap,
@@ -27,7 +28,7 @@ export async function GET(
 
     return NextResponse.json({ progress, total: progress.length })
   } catch (error) {
-    console.error('Error fetching progress:', error)
+    runtimeLogger.error('Error fetching progress:', error)
     return NextResponse.json(
       { error: '진행률 조회에 실패했습니다' },
       { status: 500 }

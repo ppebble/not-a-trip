@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { CATEGORY_CONFIG, type SpotCategory } from '@/types/spot'
-import { getSafeImageSrc } from '@/lib/safe-image-src'
+import { getSafeImageSrc, isRemoteImageSrc } from '@/lib/safe-image-src'
 
 /**
  * 소셜 프루프 카드 컴포넌트
@@ -53,6 +53,7 @@ export function ProofCard({
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 128px, 144px"
+                  unoptimized={isRemoteImageSrc(safeImage)}
                   onError={() => setImageError(true)}
                 />
               ) : (
@@ -72,6 +73,7 @@ export function ProofCard({
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 128px, 144px"
+                unoptimized={isRemoteImageSrc(safeSceneImage)}
                 onError={() => setSceneError(true)}
               />
               <span className="absolute bottom-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
@@ -87,6 +89,7 @@ export function ProofCard({
             fill
             className="object-cover"
             sizes="(max-width: 768px) 256px, 288px"
+            unoptimized={isRemoteImageSrc(safeImage)}
             onError={() => setImageError(true)}
           />
         ) : (

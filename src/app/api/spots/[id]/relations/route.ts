@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { SpotContentRelation } from '@/types'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/spots/[id]/relations - 스팟별 관계 목록 조회
@@ -40,7 +41,7 @@ export async function GET(
 
     return NextResponse.json({ relations, total: relations.length })
   } catch (error) {
-    console.error('Error fetching spot relations:', error)
+    runtimeLogger.error('Error fetching spot relations:', error)
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다' },
       { status: 500 }

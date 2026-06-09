@@ -8,20 +8,13 @@ function read(relativePath: string): string {
 }
 
 describe('spec 46 user journey UX hardening', () => {
-  test('documents requirements and task checklist for the executed scope', () => {
-    const requirements = read(
-      '.kiro/specs/46-user-journey-ux-hardening/requirements.md'
-    )
-    const tasks = read('.kiro/specs/46-user-journey-ux-hardening/tasks.md')
+  test('keeps release validation independent from develop-only Kiro specs', () => {
+    const workflow = read('docs/git-workflow.md')
 
-    expect(requirements).toContain('지도 탐색 전역 진입점 노출')
-    expect(requirements).toContain('스팟 상세 복귀 경로 정확화')
-    expect(requirements).toContain('갤러리 실제 통계와 실제 탭 컴포넌트 사용')
-    expect(requirements).toContain('스팟 상세 제보 진입점 통합')
-    expect(requirements).toContain('모바일 지도 필터 점유 면적 축소')
-    expect(tasks).toContain('Requirements trace')
+    expect(workflow).toContain('main/develop 포함 파일 기준')
+    expect(workflow).toContain('테스트 파일을 main에서 제거하지 않는다')
+    expect(workflow).toContain('develop을 main에 무차별 merge하지 않는다')
   })
-
   test('global header exposes map navigation without removing existing IA', () => {
     const header = read('src/components/layout/Header.tsx')
 
