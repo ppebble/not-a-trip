@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { SpotCategory, ContentType } from '@/types'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * MongoDB Spot 문서 인터페이스 (필요한 필드만)
@@ -179,7 +180,7 @@ export async function POST(): Promise<NextResponse> {
       total: aggregatedContents.length,
     })
   } catch (error) {
-    console.error('Error syncing content masters:', error)
+    runtimeLogger.error('Error syncing content masters:', error)
     return NextResponse.json(
       { error: '콘텐츠 마스터 동기화에 실패했습니다' },
       { status: 500 }

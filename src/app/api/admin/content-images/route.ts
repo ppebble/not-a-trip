@@ -7,6 +7,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import { existsSync } from 'fs'
 import { propagateContentMasterImage } from '@/lib/content-master-images'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * MongoDB ContentMaster 문서 인터페이스
@@ -85,7 +86,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       totalPages: Math.ceil(total / limit),
     })
   } catch (error) {
-    console.error('Error fetching content masters:', error)
+    runtimeLogger.error('Error fetching content masters:', error)
     return NextResponse.json(
       { error: '콘텐츠 목록 조회에 실패했습니다' },
       { status: 500 }
@@ -242,7 +243,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       })
     }
   } catch (error) {
-    console.error('Error uploading content image:', error)
+    runtimeLogger.error('Error uploading content image:', error)
     return NextResponse.json(
       { error: '콘텐츠 이미지 업로드에 실패했습니다' },
       { status: 500 }
@@ -301,7 +302,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
       message: '콘텐츠 이미지가 삭제되었습니다',
     })
   } catch (error) {
-    console.error('Error deleting content image:', error)
+    runtimeLogger.error('Error deleting content image:', error)
     return NextResponse.json(
       { error: '콘텐츠 이미지 삭제에 실패했습니다' },
       { status: 500 }

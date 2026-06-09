@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/checkins/stats - 갤러리 통계 조회
@@ -27,7 +28,7 @@ export async function GET(): Promise<NextResponse> {
       todayCheckIns,
     })
   } catch (error) {
-    console.error('Error fetching checkin stats:', error)
+    runtimeLogger.error('Error fetching checkin stats:', error)
     return NextResponse.json(
       { error: '통계 조회에 실패했습니다' },
       { status: 500 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/reports - 유저의 신규 스팟 제보 목록
@@ -31,7 +32,7 @@ export async function GET(
 
     return NextResponse.json({ reports: result })
   } catch (error) {
-    console.error('Error fetching user reports:', error)
+    runtimeLogger.error('Error fetching user reports:', error)
     return NextResponse.json(
       { error: '제보 목록 조회에 실패했습니다' },
       { status: 500 }

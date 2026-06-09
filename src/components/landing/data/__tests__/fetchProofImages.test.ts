@@ -51,6 +51,7 @@ describe('fetchProofImages', () => {
   afterEach(() => {
     global.fetch = originalFetch
     console.warn = originalConsoleWarn
+    delete process.env.AUTH_URL
     delete process.env.NEXTAUTH_URL
   })
 
@@ -120,8 +121,8 @@ describe('fetchProofImages', () => {
     )
   })
 
-  test('uses NEXTAUTH_URL when available', async () => {
-    process.env.NEXTAUTH_URL = 'https://not-a-trip.vercel.app'
+  test('uses AUTH_URL when available', async () => {
+    process.env.AUTH_URL = 'https://not-a-trip.vercel.app'
     global.fetch = jest
       .fn()
       .mockResolvedValue({ ok: true, json: async () => [] } as Response)
@@ -135,7 +136,24 @@ describe('fetchProofImages', () => {
     )
   })
 
-  test('uses localhost base URL when NEXTAUTH_URL is absent', async () => {
+  test('falls back to legacy NEXTAUTH_URL when AUTH_URL is absent', async () => {
+    delete process.env.AUTH_URL
+    process.env.NEXTAUTH_URL = 'https://legacy.not-a-trip.vercel.app'
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => [] } as Response)
+
+    const { fetchProofImages } = await import('../fetchShowcaseSpots')
+    await fetchProofImages()
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      'https://legacy.not-a-trip.vercel.app/api/spots/showcase',
+      expect.objectContaining({ next: { revalidate: 3600 } })
+    )
+  })
+
+  test('uses localhost base URL when AUTH_URL is absent', async () => {
+    delete process.env.AUTH_URL
     delete process.env.NEXTAUTH_URL
     global.fetch = jest
       .fn()

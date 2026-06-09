@@ -4,6 +4,7 @@ import { Comment, CreateCommentInput } from '@/types'
 import { ObjectId } from 'mongodb'
 import { auth } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
+import { runtimeLogger } from '@/lib/runtime-logger'
 import {
   createRateLimitHeaders,
   evaluateSlidingWindowLimit,
@@ -96,7 +97,7 @@ export async function GET(
       total: commentList.length,
     })
   } catch (error) {
-    console.error('Error fetching comments:', error)
+    runtimeLogger.error('Error fetching comments:', error)
     return NextResponse.json(
       { error: 'Failed to fetch comments' },
       { status: 500 }
@@ -248,7 +249,7 @@ export async function POST(
       )
     }
 
-    console.error('Error creating comment:', error)
+    runtimeLogger.error('Error creating comment:', error)
     await recordApiErrorMetric({
       path: '/api/posts/[id]/comments',
       statusCode: 500,

@@ -41,33 +41,33 @@ export type AppIconType =
   | 'course-popular'
   | 'profile-front'
 
-const ICON_MAP: Record<AppIconType, string> = {
-  gallery: '갤러리.webp',
-  distance: '거리.webp',
-  official: '공식.webp',
-  'hall-of-fame': '명예의_전당.webp',
-  bookmark: '북마크.webp',
-  duration: '소요시간.webp',
-  spot: '스팟.webp',
-  'today-checkin': '오늘의_인증.webp',
-  completion: '완주.webp',
-  location: '위치.webp',
-  user: '유저.webp',
-  popular: '인기.webp',
-  checkin: '인증.webp',
-  checkin2: '인증2.webp',
-  'content-wise': '작품별.webp',
-  map: '지도.webp',
-  recommend: '추천.webp',
-  logo: '캐릭터_메인_최종.webp',
-  route: '코스.webp',
-  profile: '프로필.webp',
-  settings: '설정톱니바퀴.webp',
-  'light-mode': '기본모드.webp',
-  'dark-mode': '다크모드.webp',
-  'course-main': '순례코스.webp',
-  'course-popular': '순례코스인기.webp',
-  'profile-front': '캐릭터정면1.webp',
+const ICON_PATHS: Record<AppIconType, string> = {
+  gallery: '/icons/ui/gallery.webp',
+  distance: '/icons/ui/distance.webp',
+  official: '/icons/ui/official.webp',
+  'hall-of-fame': '/icons/ui/hall-of-fame.webp',
+  bookmark: '/icons/ui/bookmark.webp',
+  duration: '/icons/ui/duration.webp',
+  spot: '/icons/map-markers/spot.webp',
+  'today-checkin': '/icons/ui/today-checkin.webp',
+  completion: '/icons/ui/completion.webp',
+  location: '/icons/map-markers/current-location.webp',
+  user: '/icons/ui/user.webp',
+  popular: '/icons/map-markers/popular.webp',
+  checkin: '/icons/ui/checkin.webp',
+  checkin2: '/icons/ui/checkin-secondary.webp',
+  'content-wise': '/icons/ui/content-wise.webp',
+  map: '/icons/map-markers/map.webp',
+  recommend: '/icons/ui/recommend.webp',
+  logo: '/icons/mascot/mascot-main-full.webp',
+  route: '/icons/ui/route.webp',
+  profile: '/icons/ui/profile.webp',
+  settings: '/icons/ui/settings.webp',
+  'light-mode': '/icons/ui/light-mode.webp',
+  'dark-mode': '/icons/ui/dark-mode.webp',
+  'course-main': '/icons/ui/course-main.webp',
+  'course-popular': '/icons/ui/course-popular.webp',
+  'profile-front': '/icons/mascot/mascot-profile-front-full.webp',
 }
 
 interface AppIconProps {
@@ -83,19 +83,19 @@ export function AppIcon({
   className = '',
   alt = '',
 }: AppIconProps) {
-  const fileName = ICON_MAP[name]
-  if (!fileName) return null
+  const iconPath = ICON_PATHS[name]
+  if (!iconPath) return null
 
   const pixelSize = typeof size === 'number' ? size : SIZE_MAP[size] || 20
 
   return (
     <Image
-      src={`/icons/raw/0329/${fileName}`}
+      src={iconPath}
       alt={alt || name}
       width={pixelSize}
       height={pixelSize}
       className={`object-contain ${className}`}
-      style={{ width: 'auto', height: 'auto' }}
+      style={{ width: pixelSize, height: pixelSize }}
       unoptimized
     />
   )

@@ -101,12 +101,12 @@ export const COMPATIBLE_IMAGE_LICENSES = new Set([
 ])
 
 export const CATEGORY_LOCAL_FALLBACK_IMAGES: Record<SpotCategory, string> = {
-  animation: '/images/showcase/kamakura.webp',
-  sports: '/images/showcase/camp-nou.webp',
-  movie_drama: '/images/showcase/kings-cross.webp',
-  music: '/images/showcase/abbey-road.webp',
-  game: '/images/showcase/nintendo-hq.webp',
-  other: '/images/showcase/petra.webp',
+  animation: '/images/spots/animation/real-ani-001-suga-shrine.webp',
+  sports: '/uploads/spots/replacements/campnou-fd1ffbdfbd42.jpg',
+  movie_drama: '/uploads/spots/replacements/real-mov-001-1913f25dddcbee.webp',
+  music: '/uploads/scenes/REAL-MUS-001-scene-0.jpg',
+  game: '/uploads/scenes/REAL-GAM-002-scene-0.jpg',
+  other: '/uploads/spots/replacements/hobbiton-4308cdfe0114.jpg',
 }
 
 const SPOT_CATEGORY_FALLBACKS: Record<string, SpotCategory> = {

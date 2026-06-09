@@ -1,10 +1,12 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { ProofCard } from './ProofCard'
 import { LANDING_PROOF_CARDS } from './data/proofData'
 import type { ProofData } from './data/proofData'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
+import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 import type { SpotCategory } from '@/types/spot'
 
 /**
@@ -223,6 +225,16 @@ export function SocialProofSection({
         </header>
 
         {/* 슬라이더 + 화살표 컨테이너 */}
+        <div className="mb-10 flex justify-center" aria-hidden="true">
+          <Image
+            src={MASCOT_ASSETS.souvenir}
+            alt=""
+            width={88}
+            height={88}
+            className="h-20 w-20 object-contain md:h-24 md:w-24"
+          />
+        </div>
+
         <div className="relative flex items-center gap-3 md:gap-5">
           {/* 좌측 화살표 (데스크톱 전용) */}
           <button

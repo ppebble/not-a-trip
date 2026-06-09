@@ -36,6 +36,13 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
+  webpack(config, { dev }) {
+    if (!dev) {
+      config.cache = false
+    }
+
+    return config
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200],
@@ -111,7 +118,7 @@ export default withSentryConfig(withSerwist(nextConfig), {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
-  silent: !process.env.CI,
+  silent: !process.env.CI || !process.env.SENTRY_AUTH_TOKEN,
   widenClientFileUpload: true,
   tunnelRoute: '/monitoring',
   webpack: {

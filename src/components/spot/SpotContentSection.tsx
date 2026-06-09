@@ -41,10 +41,8 @@ export function SpotContentSection({
   const sections = CATEGORY_SECTIONS[category] || ['info']
 
   // 이벤트 섹션을 표시할 수 있는 카테고리인지 확인
-  const isEventCategory = (
-    cat: SpotCategory
-  ): cat is 'sports' | 'music' | 'game' => {
-    return cat === 'sports' || cat === 'music' || cat === 'game'
+  const isEventCategory = (cat: SpotCategory): cat is 'sports' | 'music' => {
+    return cat === 'sports' || cat === 'music'
   }
 
   return (

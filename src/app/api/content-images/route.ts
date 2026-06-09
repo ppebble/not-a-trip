@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import { normalizeContentName } from '@/lib/content-utils'
 import { ContentType } from '@/types'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * MongoDB ContentMaster 문서 인터페이스
@@ -68,7 +69,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ images })
   } catch (error) {
-    console.error('Error fetching content images:', error)
+    runtimeLogger.error('Error fetching content images:', error)
     return NextResponse.json(
       { error: '콘텐츠 이미지 조회에 실패했습니다' },
       { status: 500 }

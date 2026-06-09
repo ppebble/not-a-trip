@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { getDb } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 import {
   getClientIp,
   logIfSanitized,
@@ -95,7 +96,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error('회원가입 에러:', error)
+    runtimeLogger.error('회원가입 에러:', error)
     return NextResponse.json(
       { error: '회원가입 처리 중 오류가 발생했습니다.' },
       { status: 500 }

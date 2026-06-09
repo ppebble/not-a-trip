@@ -29,8 +29,14 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Run release lint gate
+        run: npm run lint:release
+
       - name: Run Prettier check
         run: npm run format:check
 
       - name: Run tests
         run: npm run test --passWithNoTests
+
+      - name: Run route budget build gate
+        run: npm run build:route-budget

@@ -123,7 +123,7 @@ export function IosPwaGuide() {
 
       <button
         onClick={handleDismiss}
-        className="hover:text-text mt-4 w-full rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-accent-surface"
+        className="hover:text-text mt-4 w-full rounded-xl border border-border px-4 py-2.5 text-xs font-medium text-gray-700 transition-colors hover:bg-accent-surface dark:text-gray-300"
       >
         다시 보지 않기
       </button>

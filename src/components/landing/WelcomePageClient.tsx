@@ -1,20 +1,38 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { HeroSection } from './HeroSection'
-import { EntryPointSection } from './EntryPointSection'
-import { HowItWorksSection } from './HowItWorksSection'
-import { StorytellingSection } from './StorytellingSection'
-import { SocialProofSection } from './SocialProofSection'
-import { ConversionSection } from './ConversionSection'
-import { FloatingCTA } from './FloatingCTA'
 import { useDeviceCapability } from '@/hooks/useDeviceCapability'
 import { useScrollPosition } from '@/hooks/useScrollPosition'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
-import { usePwaStore } from '@/stores/pwaStore'
 import type { ShowcaseCard } from './data/showcaseCards'
 import type { SpotCategory } from '@/types/spot'
+
+const EntryPointSection = dynamic(() =>
+  import('./EntryPointSection').then((mod) => mod.EntryPointSection)
+)
+const HowItWorksSection = dynamic(
+  () => import('./HowItWorksSection').then((mod) => mod.HowItWorksSection),
+  { ssr: false }
+)
+const StorytellingSection = dynamic(
+  () => import('./StorytellingSection').then((mod) => mod.StorytellingSection),
+  { ssr: false }
+)
+const SocialProofSection = dynamic(
+  () => import('./SocialProofSection').then((mod) => mod.SocialProofSection),
+  { ssr: false }
+)
+const ConversionSection = dynamic(
+  () => import('./ConversionSection').then((mod) => mod.ConversionSection),
+  { ssr: false }
+)
+const FloatingCTA = dynamic(
+  () => import('./FloatingCTA').then((mod) => mod.FloatingCTA),
+  { ssr: false }
+)
 
 /**
  * 랜딩 페이지 클라이언트 컴포넌트
@@ -49,8 +67,6 @@ export function WelcomePageClient({
 
   // PWA standalone 모드 감지
   const [isStandalone, setIsStandalone] = useState(false)
-  const triggerInstall = usePwaStore((s) => s.triggerInstall)
-  const isInstallable = usePwaStore((s) => s.isInstallable)
 
   useEffect(() => {
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
@@ -65,12 +81,9 @@ export function WelcomePageClient({
 
   // FloatingCTA 핸들러
   const handleInstallClick = async () => {
-    if (!isInstallable) {
-      // 설치 프롬프트 미지원 시 ConversionSection으로 스크롤
-      conversionRef.current?.scrollIntoView({ behavior: 'smooth' })
-      return
-    }
-    await triggerInstall()
+    // 설치 프롬프트 상태는 아래쪽 ConversionSection에서만 로드한다.
+    // Floating CTA는 초기 번들을 줄이기 위해 설치 영역으로 이동만 담당한다.
+    conversionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const handleExploreClick = () => {

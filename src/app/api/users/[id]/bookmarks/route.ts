@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { runtimeLogger } from '@/lib/runtime-logger'
 
 /**
  * GET /api/users/[id]/bookmarks - 유저가 저장한 코스 목록
@@ -60,7 +61,7 @@ export async function GET(
 
     return NextResponse.json({ bookmarks: result })
   } catch (error) {
-    console.error('Error fetching user bookmarks:', error)
+    runtimeLogger.error('Error fetching user bookmarks:', error)
     return NextResponse.json(
       { error: '저장한 코스 조회에 실패했습니다' },
       { status: 500 }

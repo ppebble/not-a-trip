@@ -186,7 +186,7 @@ function MapContent() {
 
       {/* 필터 영역 (상단 통합 바) */}
       <div className="absolute left-0 right-0 top-0 z-[1000]">
-        <div className="flex border-b border-neutral-200 bg-surface/95 px-4 py-3 shadow-sm backdrop-blur-sm md:hidden">
+        <div className="flex border-b border-neutral-200/80 bg-neutral-50/95 px-4 py-3 shadow-sm shadow-neutral-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-slate-900/90 md:hidden">
           <button
             type="button"
             onClick={() => setIsMobileFilterOpen((prev) => !prev)}
@@ -207,7 +207,7 @@ function MapContent() {
         </div>
         <div
           id="map-filter-panel"
-          className={`items-center border-b border-neutral-200 bg-surface/95 px-4 py-3 shadow-sm backdrop-blur-sm md:flex ${
+          className={`items-center border-b border-neutral-200/80 bg-neutral-50/95 px-4 py-3 shadow-sm shadow-neutral-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-slate-900/90 md:flex ${
             isMobileFilterOpen ? 'flex' : 'hidden'
           }`}
         >

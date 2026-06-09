@@ -117,34 +117,43 @@ export function validateEnv(
     )
   }
 
-  const nextAuthUrl = env.NEXTAUTH_URL?.trim()
-  if (!nextAuthUrl) {
-    push('error', 'NEXTAUTH_URL', 'NEXTAUTH_URL is required.')
-  } else if (!isValidHttpUrl(nextAuthUrl)) {
+  const authUrl = env.AUTH_URL?.trim() || env.NEXTAUTH_URL?.trim()
+  if (!authUrl) {
+    push('error', 'AUTH_URL', 'AUTH_URL is required.')
+  } else if (!isValidHttpUrl(authUrl)) {
     push(
       'error',
-      'NEXTAUTH_URL',
-      'NEXTAUTH_URL must be a valid http:// or https:// URL.'
+      'AUTH_URL',
+      'AUTH_URL must be a valid http:// or https:// URL.'
     )
-  } else if (mode === 'production' && !nextAuthUrl.startsWith('https://')) {
+  } else if (mode === 'production' && !authUrl.startsWith('https://')) {
+    push('error', 'AUTH_URL', 'AUTH_URL must use https:// in production.')
+  }
+
+  if (!env.AUTH_URL?.trim() && env.NEXTAUTH_URL?.trim()) {
     push(
-      'error',
+      'warning',
       'NEXTAUTH_URL',
-      'NEXTAUTH_URL must use https:// in production.'
+      'NEXTAUTH_URL is a legacy alias; set AUTH_URL for Auth.js v5 production deployments.'
     )
   }
 
-  const nextAuthSecret = env.NEXTAUTH_SECRET?.trim()
-  if (!nextAuthSecret) {
-    push('error', 'NEXTAUTH_SECRET', 'NEXTAUTH_SECRET is required.')
-  } else if (
-    PLACEHOLDER_VALUES.has(nextAuthSecret) ||
-    nextAuthSecret.length < 16
-  ) {
+  const authSecret = env.AUTH_SECRET?.trim() || env.NEXTAUTH_SECRET?.trim()
+  if (!authSecret) {
+    push('error', 'AUTH_SECRET', 'AUTH_SECRET is required.')
+  } else if (PLACEHOLDER_VALUES.has(authSecret) || authSecret.length < 16) {
     push(
       'error',
+      'AUTH_SECRET',
+      'AUTH_SECRET must not be a placeholder and must be at least 16 characters long.'
+    )
+  }
+
+  if (!env.AUTH_SECRET?.trim() && env.NEXTAUTH_SECRET?.trim()) {
+    push(
+      'warning',
       'NEXTAUTH_SECRET',
-      'NEXTAUTH_SECRET must not be a placeholder and must be at least 16 characters long.'
+      'NEXTAUTH_SECRET is a legacy alias; set AUTH_SECRET for Auth.js v5 production deployments.'
     )
   }
 

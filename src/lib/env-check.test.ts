@@ -3,8 +3,8 @@ import { validateEnv } from './env-check'
 describe('validateEnv', () => {
   const validEnv = {
     MONGODB_URI: 'mongodb://localhost:27017/not-a-trip',
-    NEXTAUTH_URL: 'https://notatrip.example.com',
-    NEXTAUTH_SECRET: 'super-secret-value-123',
+    AUTH_URL: 'https://notatrip.example.com',
+    AUTH_SECRET: 'super-secret-value-123',
     NEXT_PUBLIC_BASE_URL: 'https://notatrip.example.com',
     NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-1234567890',
   }
@@ -16,11 +16,11 @@ describe('validateEnv', () => {
     expect(result.errors).toHaveLength(0)
   })
 
-  test('fails when NEXTAUTH_URL is not https in production', () => {
+  test('fails when AUTH_URL is not https in production', () => {
     const result = validateEnv(
       {
         ...validEnv,
-        NEXTAUTH_URL: 'http://notatrip.example.com',
+        AUTH_URL: 'http://notatrip.example.com',
       },
       { mode: 'production' }
     )
@@ -29,17 +29,17 @@ describe('validateEnv', () => {
     expect(result.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          key: 'NEXTAUTH_URL',
+          key: 'AUTH_URL',
         }),
       ])
     )
   })
 
-  test('fails when NEXTAUTH_SECRET is a placeholder or too short', () => {
+  test('fails when AUTH_SECRET is a placeholder or too short', () => {
     const result = validateEnv(
       {
         ...validEnv,
-        NEXTAUTH_SECRET: 'your-secret-key-here',
+        AUTH_SECRET: 'your-secret-key-here',
       },
       { mode: 'production' }
     )
@@ -48,7 +48,7 @@ describe('validateEnv', () => {
     expect(result.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          key: 'NEXTAUTH_SECRET',
+          key: 'AUTH_SECRET',
         }),
       ])
     )
