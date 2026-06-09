@@ -169,9 +169,9 @@ function SpotDetailPage({ spot, spotId, facilities }: SpotDetailPageProps) {
                 <ArrowLeftIcon size="md" />
                 <span>지도로 돌아가기</span>
               </Link>
-              <h1 className="mt-2 text-xl font-bold text-text-primary">
+              <p className="mt-2 text-xl font-bold text-text-primary">
                 특별한 여행지
-              </h1>
+              </p>
             </div>
 
             <div className="flex items-center gap-2">
@@ -448,9 +448,16 @@ function SpotDetailContent({
           <h2 className="mb-4 text-2xl font-bold text-text-primary">
             위치 및 근처 편의시설
           </h2>
+          <a
+            href="#spot-after-map"
+            className="sr-only focus:not-sr-only focus:mb-3 focus:inline-flex focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+          >
+            스팟 지도 건너뛰기
+          </a>
           <div className="h-96 w-full overflow-hidden rounded-lg border border-border">
             <SpotDetailMap spot={spot} facilities={facilities} />
           </div>
+          <div id="spot-after-map" tabIndex={-1} />
           {facilities.length > 0 && (
             <div className="mt-4">
               <p className="text-sm text-text-secondary">

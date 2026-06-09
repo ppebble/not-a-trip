@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import { useCreateScene } from '@/hooks/useScenes'
+import { useAuth } from '@/hooks/useAuth'
 import { API_ROUTES } from '@/lib/api-routes'
 
 interface AddSceneModalProps {
@@ -9,8 +10,18 @@ interface AddSceneModalProps {
   onClose: () => void
 }
 
+const ALLOWED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+]
+const ALLOWED_IMAGE_EXTENSION_PATTERN = /\.(jpe?g|png|gif|webp)$/i
+const AUTH_REQUIRED_MESSAGE = 'Log in to upload an image.'
+
 export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
   const createScene = useCreateScene()
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [episodeInfo, setEpisodeInfo] = useState('')
@@ -18,15 +29,30 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
   const [error, setError] = useState('')
   const [isUploading, setIsUploading] = useState(false)
 
+  const resetFile = () => {
+    setImageFile(null)
+    setImagePreview(null)
+  }
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-    const allowedExtensions = /\.(jpe?g|png|gif|webp)$/i
+    if (isAuthLoading) {
+      setError('Checking login status. Try again shortly.')
+      e.target.value = ''
+      return
+    }
+
+    if (!isAuthenticated) {
+      setError(AUTH_REQUIRED_MESSAGE)
+      e.target.value = ''
+      return
+    }
+
     if (
-      !allowedTypes.includes(file.type) &&
-      !allowedExtensions.test(file.name)
+      !ALLOWED_IMAGE_TYPES.includes(file.type) &&
+      !ALLOWED_IMAGE_EXTENSION_PATTERN.test(file.name)
     ) {
       setError('지원하지 않는 파일 형식입니다. (JPG, PNG, GIF, WEBP만 가능)')
       return
@@ -50,6 +76,16 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (isAuthLoading) {
+      setError('Checking login status. Try again shortly.')
+      return
+    }
+
+    if (!isAuthenticated) {
+      setError(AUTH_REQUIRED_MESSAGE)
+      return
+    }
 
     if (!imageFile) {
       setError('이미지를 선택해주세요')
@@ -91,6 +127,8 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
   }
 
   const isSubmitting = isUploading || createScene.isPending
+  const isFileSelectionDisabled =
+    isAuthLoading || !isAuthenticated || isSubmitting
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
@@ -100,7 +138,9 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
             작품 속 장면 추가
           </h3>
           <button
+            type="button"
             onClick={onClose}
+            aria-label="Close add scene dialog"
             className="text-neutral-400 hover:text-neutral-600"
           >
             <svg
@@ -108,6 +148,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -119,8 +160,29 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
           </button>
         </div>
 
+        {isAuthLoading && (
+          <div
+            className="mb-4 rounded-lg bg-blue-50 p-3 text-sm text-blue-700"
+            role="status"
+          >
+            Checking login status.
+          </div>
+        )}
+
+        {!isAuthLoading && !isAuthenticated && (
+          <div
+            className="mb-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-700"
+            role="status"
+          >
+            {AUTH_REQUIRED_MESSAGE}
+          </div>
+        )}
+
         {error && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+          <div
+            className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600"
+            role="alert"
+          >
             {error}
           </div>
         )}
@@ -143,10 +205,8 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
                   </div>
                   <button
                     type="button"
-                    onClick={() => {
-                      setImageFile(null)
-                      setImagePreview(null)
-                    }}
+                    onClick={resetFile}
+                    aria-label="Remove selected image"
                     className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white shadow-md hover:bg-red-600"
                   >
                     <svg
@@ -154,6 +214,7 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -165,7 +226,13 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
                   </button>
                 </div>
               ) : (
-                <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-50 p-6 transition-colors hover:border-primary-400 hover:bg-neutral-100">
+                <label
+                  className={
+                    isFileSelectionDisabled
+                      ? 'flex cursor-not-allowed flex-col items-center justify-center rounded-lg border-2 border-dashed border-neutral-200 bg-neutral-50 p-6 opacity-60'
+                      : 'flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-50 p-6 transition-colors hover:border-primary-400 hover:bg-neutral-100'
+                  }
+                >
                   <svg
                     className="mb-2 h-10 w-10 text-neutral-400"
                     fill="none"
@@ -187,8 +254,9 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
                   </span>
                   <input
                     type="file"
-                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    accept="image/jpeg,image/png,image/gif,image/webp,.jpg,.jpeg,.png,.gif,.webp"
                     onChange={handleFileChange}
+                    disabled={isFileSelectionDisabled}
                     className="hidden"
                   />
                 </label>
@@ -232,8 +300,8 @@ export function AddSceneModal({ spotId, onClose }: AddSceneModalProps) {
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-600 disabled:opacity-50"
+              disabled={isSubmitting || isAuthLoading || !isAuthenticated}
+              className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? '업로드 중...' : '추가하기'}
             </button>
