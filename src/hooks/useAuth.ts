@@ -129,8 +129,9 @@ export function useAuth() {
           return false
         }
 
-        // 회원가입 성공 후 자동 로그인
-        return await loginWithCredentials(data.email, data.password)
+        // 회원가입은 계정 생성까지만 수행한다.
+        // 실제 로그인은 로그인 화면에서 사용자가 방식을 명시적으로 선택해야 한다.
+        return true
       } catch {
         setAuthError('회원가입 중 오류가 발생했습니다.')
         return false
@@ -138,7 +139,7 @@ export function useAuth() {
         setIsLoading(false)
       }
     },
-    [loginWithCredentials, clearAuthError, setAuthError]
+    [clearAuthError, setAuthError]
   )
 
   // 로그아웃 (낙관적 업데이트 적용)

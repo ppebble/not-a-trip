@@ -46,7 +46,8 @@ export default function RegisterPage() {
     })
 
     if (success) {
-      router.push('/')
+      const email = encodeURIComponent(formData.email.trim().toLowerCase())
+      router.push(`/auth/signin?registered=1&email=${email}`)
     }
   }
 
