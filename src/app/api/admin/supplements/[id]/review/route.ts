@@ -3,6 +3,15 @@ import { getCollection, COLLECTIONS } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import type { SupplementReviewRequest } from '@/types/report'
 
+function getSupplementReviewStatus(supplement: unknown) {
+  const record = supplement as { approved?: unknown; status?: unknown }
+  return typeof record.status === 'string'
+    ? record.status
+    : record.approved === true
+      ? 'approved'
+      : 'pending'
+}
+
 /**
  * PUT /api/admin/supplements/[id]/review - 정보 보완 검토 (승인/반려)
  * Requirements: 2.2, 2.3, 2.4, 2.5
@@ -62,7 +71,7 @@ export async function PUT(
     }
 
     // 이미 처리된 supplement
-    if (supplement.status !== 'pending') {
+    if (getSupplementReviewStatus(supplement) !== 'pending') {
       return NextResponse.json(
         { error: '이미 처리된 정보 보완입니다' },
         { status: 400 }
@@ -112,6 +121,54 @@ export async function PUT(
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error reviewing supplement:', error)
+    return NextResponse.json(
+      { error: '서버 오류가 발생했습니다' },
+      { status: 500 }
+    )
+  }
+}
+
+/**
+ * DELETE /api/admin/supplements/[id]/review - 검토 큐에서 정보 보완 항목 삭제
+ */
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: '로그인이 필요합니다' },
+        { status: 401 }
+      )
+    }
+
+    if (session.user.role !== 'admin') {
+      return NextResponse.json(
+        { error: '관리자 권한이 필요합니다' },
+        { status: 403 }
+      )
+    }
+
+    const { id } = await params
+    const supplementsCol = await getCollection(COLLECTIONS.SPOT_SUPPLEMENTS)
+    const result = await supplementsCol.deleteOne({ id })
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { error: '정보 보완을 찾을 수 없습니다' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({
+      id,
+      message: '정보 보완 검토 항목이 삭제되었습니다',
+    })
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error deleting supplement:', error)
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다' },
       { status: 500 }
