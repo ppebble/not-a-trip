@@ -66,7 +66,13 @@ export async function PUT(
       COLLECTIONS.SPOT_STATUS_REPORTS
     )
     await statusReportsCol.updateMany(
-      { spotId, reviewStatus: 'pending' },
+      {
+        spotId,
+        $or: [
+          { reviewStatus: 'pending' },
+          { reviewStatus: { $exists: false } },
+        ],
+      },
       { $set: { reviewStatus: 'resolved' } }
     )
 

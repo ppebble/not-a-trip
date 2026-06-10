@@ -59,7 +59,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     ])
 
     return NextResponse.json({
-      supplements,
+      supplements: supplements.map((supplement) => ({
+        ...supplement,
+        status:
+          supplement.status ??
+          (supplement.approved === true ? 'approved' : 'pending'),
+      })),
       total,
       page,
       limit,

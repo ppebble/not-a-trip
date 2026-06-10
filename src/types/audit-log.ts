@@ -1,6 +1,7 @@
 export type AuditActionType =
   | 'review_spot_report'
   | 'review_status_report'
+  | 'delete_status_report'
   | 'transition_spot_lifecycle'
 
 export type AuditResourceType = 'spot_report' | 'status_report' | 'spot'
