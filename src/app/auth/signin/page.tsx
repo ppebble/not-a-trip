@@ -32,6 +32,8 @@ function SignInForm() {
   const requestedCallbackUrl = searchParams.get('callbackUrl') || '/map'
   const callbackUrl = normalizeCallbackUrl(requestedCallbackUrl)
   const urlError = searchParams.get('error')
+  const registered = searchParams.get('registered') === '1'
+  const registeredEmail = searchParams.get('email') || ''
   const {
     loginWithCredentials,
     loginWithProvider,
@@ -40,7 +42,10 @@ function SignInForm() {
     clearError,
   } = useAuth()
 
-  const [email, setEmail] = useState('')
+  const [selectedLoginMethod, setSelectedLoginMethod] = useState<
+    'none' | 'email'
+  >('none')
+  const [email, setEmail] = useState(registeredEmail)
   const [password, setPassword] = useState('')
 
   // OAuth 에러 파라미터가 URL에 있으면 해당 메시지 표시
@@ -56,6 +61,28 @@ function SignInForm() {
 
   return (
     <div className="space-y-6 rounded-lg bg-surface p-8 shadow-xl">
+      {registered && (
+        <div className="rounded-lg border border-green-500 bg-green-500/10 p-3 text-sm text-green-700">
+          회원가입이 완료되었습니다. 자동 로그인하지 않았습니다. 아래에서 로그인
+          방식을 직접 선택하세요.
+        </div>
+      )}
+
+      {(error || oauthError) && (
+        <div className="rounded-lg border border-red-500 bg-red-500/10 p-3 text-sm text-red-500">
+          {oauthError || error}
+          {error && !oauthError && (
+            <button
+              type="button"
+              onClick={clearError}
+              className="ml-2 underline"
+            >
+              닫기
+            </button>
+          )}
+        </div>
+      )}
+
       {/* 소셜 로그인 버튼 */}
       <div className="space-y-3">
         <button
@@ -125,65 +152,73 @@ function SignInForm() {
         </div>
       </div>
 
+      <button
+        type="button"
+        onClick={() => {
+          setSelectedLoginMethod('email')
+          setPassword('')
+          clearError()
+        }}
+        disabled={isLoading}
+        className={`w-full rounded-lg border px-4 py-3 text-sm font-medium transition disabled:opacity-50 ${
+          selectedLoginMethod === 'email'
+            ? 'border-primary bg-primary/10 text-primary'
+            : 'border-border bg-background text-main-text hover:border-primary hover:text-primary'
+        }`}
+      >
+        {registered ? '가입한 계정으로 로그인' : '이메일로 로그인'}
+      </button>
+
       {/* 이메일 로그인 폼 */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {(error || oauthError) && (
-          <div className="rounded-lg border border-red-500 bg-red-500/10 p-3 text-sm text-red-500">
-            {oauthError || error}
-            {error && !oauthError && (
-              <button onClick={clearError} className="ml-2 underline">
-                닫기
-              </button>
-            )}
+      {selectedLoginMethod === 'email' && (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="mb-1 block text-sm font-medium text-main-text"
+            >
+              이메일
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full rounded-lg border border-border bg-background px-4 py-3 text-main-text placeholder-sub-text focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="email@example.com"
+            />
           </div>
-        )}
 
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-1 block text-sm font-medium text-main-text"
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-1 block text-sm font-medium text-main-text"
+            >
+              비밀번호
+            </label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full rounded-lg border border-border bg-background px-4 py-3 text-main-text placeholder-sub-text focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full rounded-lg bg-primary py-3 text-white transition hover:bg-primary-600 disabled:opacity-50"
           >
-            이메일
-          </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-main-text placeholder-sub-text focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="email@example.com"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="password"
-            className="mb-1 block text-sm font-medium text-main-text"
-          >
-            비밀번호
-          </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-main-text placeholder-sub-text focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="••••••••"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full rounded-lg bg-primary py-3 text-white transition hover:bg-primary-600 disabled:opacity-50"
-        >
-          {isLoading ? '로그인 중...' : '로그인'}
-        </button>
-      </form>
+            {isLoading ? '로그인 중...' : '로그인'}
+          </button>
+        </form>
+      )}
 
       <p className="text-center text-sm text-sub-text">
         계정이 없으신가요?{' '}
