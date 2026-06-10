@@ -64,7 +64,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     ])
 
     return NextResponse.json({
-      reports,
+      reports: reports.map((report) => ({
+        ...report,
+        reviewStatus: report.reviewStatus ?? 'pending',
+      })),
       total,
       page,
       limit,

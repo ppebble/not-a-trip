@@ -101,6 +101,33 @@ export function AdminStatusReportReview({
     }
   }
 
+  const handleDelete = async () => {
+    if (!confirm('이 상태 신고 검토 항목을 삭제하시겠습니까?')) {
+      return
+    }
+
+    try {
+      setLoading(true)
+      setError(null)
+      setSuccessMessage(null)
+
+      const res = await fetch(`/api/admin/status-reports/${report.id}/review`, {
+        method: 'DELETE',
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || '삭제 처리 실패')
+      }
+
+      onReviewComplete()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '오류가 발생했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="space-y-6 p-6">
@@ -241,6 +268,22 @@ export function AdminStatusReportReview({
             이미 확인 완료된 상태 신고입니다
           </div>
         )}
+
+        <section className="rounded-lg border border-red-100 bg-red-50 p-4">
+          <h3 className="mb-2 text-sm font-semibold text-red-700">
+            검토 항목 삭제
+          </h3>
+          <p className="mb-3 text-xs text-red-600">
+            잘못 접수되었거나 중복된 상태 신고만 삭제하세요.
+          </p>
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+          >
+            {loading ? '처리중...' : '삭제'}
+          </button>
+        </section>
       </div>
     </div>
   )

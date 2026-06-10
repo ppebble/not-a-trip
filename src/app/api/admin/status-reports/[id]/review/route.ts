@@ -85,3 +85,64 @@ export async function PUT(
     )
   }
 }
+
+/**
+ * DELETE /api/admin/status-reports/[id]/review - 검토 큐에서 상태 신고 항목 삭제
+ */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: '로그인이 필요합니다' },
+        { status: 401 }
+      )
+    }
+
+    if (session.user.role !== 'admin') {
+      return NextResponse.json(
+        { error: '관리자 권한이 필요합니다' },
+        { status: 403 }
+      )
+    }
+
+    const { id } = await params
+    const collection = await getCollection(COLLECTIONS.SPOT_STATUS_REPORTS)
+    const result = await collection.deleteOne({ id })
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { error: '상태 신고를 찾을 수 없습니다' },
+        { status: 404 }
+      )
+    }
+
+    void logAdminAction({
+      adminId: session.user.id!,
+      adminName: session.user.name ?? session.user.email ?? undefined,
+      actionType: 'delete_status_report',
+      resourceType: 'status_report',
+      resourceId: id,
+      changes: [],
+      ipAddress: extractClientIp(request.headers),
+    }).catch((auditError) => {
+      // eslint-disable-next-line no-console
+      console.error('Failed to write audit log:', auditError)
+    })
+
+    return NextResponse.json({
+      id,
+      message: '상태 신고 검토 항목이 삭제되었습니다',
+    })
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error deleting status report:', error)
+    return NextResponse.json(
+      { error: '서버 오류가 발생했습니다' },
+      { status: 500 }
+    )
+  }
+}
