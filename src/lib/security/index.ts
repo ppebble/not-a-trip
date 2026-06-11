@@ -1,6 +1,7 @@
 export * from './auth-security'
 export * from './input-sanitizer'
 export * from './nsfw-moderation'
+export * from './pwned-passwords'
 export * from './rate-limit'
 export * from './security-log'
 export * from './spam-guard'
