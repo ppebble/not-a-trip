@@ -108,6 +108,7 @@ export const API_ROUTES = {
   ACCOUNT: {
     LINKED_ACCOUNTS: '/api/account/linked-accounts',
     SET_PASSWORD: '/api/account/set-password',
+    CHANGE_PASSWORD: '/api/account/change-password',
   },
 
   // Admin
