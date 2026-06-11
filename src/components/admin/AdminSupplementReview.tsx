@@ -132,10 +132,8 @@ export function AdminSupplementReview({
         {/* 헤더 */}
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-bold text-neutral-800">
-              정보 보완 상세
-            </h2>
-            <p className="mt-1 text-sm text-neutral-500">
+            <h2 className="text-xl font-bold text-main-text">정보 보완 상세</h2>
+            <p className="mt-1 text-sm text-sub-text">
               스팟 ID: {supplement.spotId}
             </p>
           </div>
@@ -143,26 +141,26 @@ export function AdminSupplementReview({
         </div>
 
         {/* 기본 정보 */}
-        <section className="rounded-lg border border-neutral-200 bg-surface p-4">
-          <h3 className="mb-3 text-sm font-semibold text-neutral-700">
+        <section className="rounded-lg border border-border bg-surface p-4">
+          <h3 className="mb-3 text-sm font-semibold text-main-text">
             기본 정보
           </h3>
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <dt className="text-neutral-400">보완 유형</dt>
-              <dd className="mt-0.5 font-medium text-neutral-700">
+              <dt className="text-sub-text">보완 유형</dt>
+              <dd className="mt-0.5 font-medium text-main-text">
                 {SUPPLEMENT_TYPE_LABELS[supplement.type] || supplement.type}
               </dd>
             </div>
             <div>
-              <dt className="text-neutral-400">기여자</dt>
-              <dd className="mt-0.5 font-medium text-neutral-700">
+              <dt className="text-sub-text">기여자</dt>
+              <dd className="mt-0.5 font-medium text-main-text">
                 {supplement.contributorName}
               </dd>
             </div>
             <div>
-              <dt className="text-neutral-400">제출일</dt>
-              <dd className="mt-0.5 font-medium text-neutral-700">
+              <dt className="text-sub-text">제출일</dt>
+              <dd className="mt-0.5 font-medium text-main-text">
                 {new Date(supplement.createdAt).toLocaleDateString('ko-KR', {
                   year: 'numeric',
                   month: 'long',
@@ -174,39 +172,39 @@ export function AdminSupplementReview({
         </section>
 
         {/* 보완 내용 */}
-        <section className="rounded-lg border border-neutral-200 bg-surface p-4">
-          <h3 className="mb-3 text-sm font-semibold text-neutral-700">
+        <section className="rounded-lg border border-border bg-surface p-4">
+          <h3 className="mb-3 text-sm font-semibold text-main-text">
             보완 내용
           </h3>
-          <p className="whitespace-pre-wrap text-sm text-neutral-700">
+          <p className="whitespace-pre-wrap text-sm text-main-text">
             {supplement.content}
           </p>
         </section>
 
         {/* 씬 정보 (scene_info 타입) */}
         {supplement.type === 'scene_info' && supplement.sceneInfo && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
-            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
+          <section className="rounded-lg border border-border bg-surface p-4">
+            <h3 className="mb-3 text-sm font-semibold text-main-text">
               씬 정보
             </h3>
             <dl className="space-y-2 text-sm">
               <div>
-                <dt className="text-neutral-400">작품명</dt>
-                <dd className="mt-0.5 font-medium text-neutral-700">
+                <dt className="text-sub-text">작품명</dt>
+                <dd className="mt-0.5 font-medium text-main-text">
                   {supplement.sceneInfo.animeTitle}
                 </dd>
               </div>
               {supplement.sceneInfo.episodeInfo && (
                 <div>
-                  <dt className="text-neutral-400">에피소드</dt>
-                  <dd className="mt-0.5 font-medium text-neutral-700">
+                  <dt className="text-sub-text">에피소드</dt>
+                  <dd className="mt-0.5 font-medium text-main-text">
                     {supplement.sceneInfo.episodeInfo}
                   </dd>
                 </div>
               )}
               {supplement.sceneInfo.captureImageUrl && (
                 <div>
-                  <dt className="mb-1 text-neutral-400">캡처 이미지</dt>
+                  <dt className="mb-1 text-sub-text">캡처 이미지</dt>
                   <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg">
                     <Image
                       src={supplement.sceneInfo.captureImageUrl}
@@ -224,8 +222,8 @@ export function AdminSupplementReview({
 
         {/* 사진 (photo 타입) */}
         {supplement.photos && supplement.photos.length > 0 && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
-            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
+          <section className="rounded-lg border border-border bg-surface p-4">
+            <h3 className="mb-3 text-sm font-semibold text-main-text">
               첨부 사진 ({supplement.photos.length}장)
             </h3>
             <div className="grid grid-cols-2 gap-3">
@@ -249,9 +247,9 @@ export function AdminSupplementReview({
 
         {/* 반려 사유 (이미 반려된 경우) */}
         {supplement.status === 'rejected' && supplement.rejectionReason && (
-          <div className="rounded-lg bg-red-50 p-4">
-            <p className="text-sm font-medium text-red-700">반려 사유</p>
-            <p className="mt-1 text-sm text-red-600">
+          <div className="rounded-lg bg-danger-surface p-4">
+            <p className="text-sm font-medium text-danger">반려 사유</p>
+            <p className="mt-1 text-sm text-danger">
               {supplement.rejectionReason}
             </p>
           </div>
@@ -259,12 +257,10 @@ export function AdminSupplementReview({
 
         {/* 검토 액션 (pending 상태일 때만) */}
         {isPending && (
-          <section className="rounded-lg border border-neutral-200 bg-surface p-4">
-            <h3 className="mb-3 text-sm font-semibold text-neutral-700">
-              검토
-            </h3>
+          <section className="rounded-lg border border-border bg-surface p-4">
+            <h3 className="mb-3 text-sm font-semibold text-main-text">검토</h3>
 
-            {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
+            {error && <p className="mb-3 text-sm text-danger">{error}</p>}
 
             {showRejectForm ? (
               <div className="space-y-3">
@@ -276,13 +272,13 @@ export function AdminSupplementReview({
                   }}
                   placeholder="반려 사유를 입력하세요 (필수)"
                   rows={3}
-                  className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400"
+                  className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={handleReject}
                     disabled={loading}
-                    className="flex-1 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+                    className="flex-1 rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-danger/90 disabled:opacity-50"
                   >
                     {loading ? '처리중...' : '❌ 반려 확인'}
                   </button>
@@ -293,7 +289,7 @@ export function AdminSupplementReview({
                       setError(null)
                     }}
                     disabled={loading}
-                    className="rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200 disabled:opacity-50"
+                    className="rounded-lg bg-muted/15 px-4 py-2 text-sm font-medium text-sub-text transition-colors hover:bg-muted/25 disabled:opacity-50"
                   >
                     취소
                   </button>
@@ -304,14 +300,14 @@ export function AdminSupplementReview({
                 <button
                   onClick={handleApprove}
                   disabled={loading}
-                  className="flex-1 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
+                  className="flex-1 rounded-lg bg-secondary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-secondary-700 disabled:opacity-50"
                 >
                   {loading ? '처리중...' : '✅ 승인'}
                 </button>
                 <button
                   onClick={() => setShowRejectForm(true)}
                   disabled={loading}
-                  className="flex-1 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+                  className="flex-1 rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-danger/90 disabled:opacity-50"
                 >
                   ❌ 반려
                 </button>
@@ -322,22 +318,22 @@ export function AdminSupplementReview({
 
         {/* 이미 처리된 보완 안내 */}
         {!isPending && supplement.status !== 'rejected' && (
-          <div className="rounded-lg bg-neutral-50 p-4 text-center text-sm text-neutral-500">
+          <div className="rounded-lg bg-muted/10 p-4 text-center text-sm text-sub-text">
             이미 처리된 정보 보완입니다
           </div>
         )}
 
-        <section className="rounded-lg border border-red-100 bg-red-50 p-4">
-          <h3 className="mb-2 text-sm font-semibold text-red-700">
+        <section className="rounded-lg border border-danger bg-danger-surface p-4">
+          <h3 className="mb-2 text-sm font-semibold text-danger">
             검토 항목 삭제
           </h3>
-          <p className="mb-3 text-xs text-red-600">
+          <p className="mb-3 text-xs text-danger">
             잘못 접수되었거나 중복된 정보 보완 요청만 삭제하세요.
           </p>
           <button
             onClick={handleDelete}
             disabled={loading}
-            className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+            className="w-full rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-danger/90 disabled:opacity-50"
           >
             {loading ? '처리중...' : '삭제'}
           </button>
@@ -354,18 +350,18 @@ function SupplementStatusBadge({ status }: { status: string }) {
   > = {
     pending: {
       label: '대기중',
-      bgColor: 'bg-amber-100',
-      textColor: 'text-amber-700',
+      bgColor: 'bg-sunset-100',
+      textColor: 'text-sunset-700',
     },
     approved: {
       label: '승인',
-      bgColor: 'bg-green-100',
-      textColor: 'text-green-700',
+      bgColor: 'bg-secondary-100',
+      textColor: 'text-secondary-700',
     },
     rejected: {
       label: '반려',
-      bgColor: 'bg-red-100',
-      textColor: 'text-red-700',
+      bgColor: 'bg-danger-surface',
+      textColor: 'text-danger',
     },
   }
   const c = config[status] || config.pending

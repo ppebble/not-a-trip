@@ -16,3 +16,4 @@ postcss.config.mjs
 
 # 마크다운
 *.md
+.omx
