@@ -214,6 +214,137 @@ function SetPasswordForm({
 
 // ── 프로필 이미지 업로드 상수 ────────────────────────────────
 
+function ChangePasswordForm({
+  onSubmit,
+  isPending,
+  error,
+}: {
+  onSubmit: (currentPassword: string, newPassword: string) => Promise<void>
+  isPending: boolean
+  error: string | null
+}) {
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [validationError, setValidationError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setValidationError(null)
+    setSuccess(false)
+
+    if (!currentPassword) {
+      setValidationError('현재 비밀번호를 입력해주세요.')
+      return
+    }
+    if (newPassword.length < 6) {
+      setValidationError('새 비밀번호는 최소 6자 이상이어야 합니다.')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      setValidationError('새 비밀번호가 일치하지 않습니다.')
+      return
+    }
+    if (currentPassword === newPassword) {
+      setValidationError('기존과 다른 새 비밀번호를 입력해주세요.')
+      return
+    }
+
+    try {
+      await onSubmit(currentPassword, newPassword)
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      setSuccess(true)
+    } catch {
+      // error is exposed by the mutation hook.
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label
+          htmlFor="current-password"
+          className="mb-1 block text-sm font-medium text-text-secondary"
+        >
+          현재 비밀번호
+        </label>
+        <input
+          id="current-password"
+          type="password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="현재 비밀번호"
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="change-new-password"
+          className="mb-1 block text-sm font-medium text-text-secondary"
+        >
+          새 비밀번호
+        </label>
+        <input
+          id="change-new-password"
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          required
+          minLength={6}
+          autoComplete="new-password"
+          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="최소 6자 이상"
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="change-confirm-password"
+          className="mb-1 block text-sm font-medium text-text-secondary"
+        >
+          새 비밀번호 확인
+        </label>
+        <input
+          id="change-confirm-password"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          minLength={6}
+          autoComplete="new-password"
+          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="새 비밀번호 재입력"
+        />
+      </div>
+
+      {(validationError || error) && (
+        <p className="rounded-lg border border-danger bg-danger-surface p-3 text-sm text-danger">
+          {validationError || error}
+        </p>
+      )}
+      {success && (
+        <p className="rounded-lg border border-secondary-600 bg-secondary-100 p-3 text-sm text-secondary-700">
+          비밀번호가 변경되었습니다. 다음 로그인부터 새 비밀번호를 사용하세요.
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={isPending}
+        className="w-full rounded-lg bg-primary py-3 text-surface transition hover:opacity-90 disabled:opacity-50"
+      >
+        {isPending ? '변경 중...' : '비밀번호 변경'}
+      </button>
+    </form>
+  )
+}
+
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 const ALLOWED_TYPES_LABEL = 'JPG, PNG, GIF, WEBP'
@@ -442,6 +573,9 @@ function AccountsTab() {
     setPassword,
     isSettingPassword,
     setPasswordError,
+    changePassword,
+    isChangingPassword,
+    changePasswordError,
   } = useLinkedAccounts()
 
   const [actionError, setActionError] = useState<string | null>(null)
@@ -569,6 +703,23 @@ function AccountsTab() {
       </div>
 
       {/* 비밀번호 설정 폼 (소셜 전용 계정만) */}
+      {hasPassword && (
+        <div className="rounded-lg border border-border bg-surface p-4">
+          <h3 className="mb-2 text-base font-semibold text-text-primary">
+            비밀번호 변경
+          </h3>
+          <p className="mb-4 text-sm text-text-secondary">
+            브라우저가 유출된 비밀번호를 경고했다면 즉시 다른 비밀번호로
+            변경하세요.
+          </p>
+          <ChangePasswordForm
+            onSubmit={changePassword}
+            isPending={isChangingPassword}
+            error={changePasswordError}
+          />
+        </div>
+      )}
+
       {!hasPassword && (
         <div className="rounded-lg border border-border bg-surface p-4">
           <h3 className="mb-2 text-base font-semibold text-text-primary">

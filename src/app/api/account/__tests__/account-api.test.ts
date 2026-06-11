@@ -63,6 +63,10 @@ jest.mock('bcryptjs', () => ({
   ),
 }))
 
+jest.mock('@/lib/security', () => ({
+  validateNewPasswordSecurity: jest.fn(() => Promise.resolve({ ok: true })),
+}))
+
 // --- Imports (after mocks) ---
 import { GET, DELETE } from '../linked-accounts/route'
 import { POST } from '../set-password/route'

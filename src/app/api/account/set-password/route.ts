@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 import { auth } from '@/lib/auth'
 import { getDb } from '@/lib/db'
 import { runtimeLogger } from '@/lib/runtime-logger'
+import { validateNewPasswordSecurity } from '@/lib/security'
 
 /**
  * POST /api/account/set-password
@@ -32,6 +33,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { error: '비밀번호는 최소 6자 이상이어야 합니다.' },
         { status: 400 }
+      )
+    }
+
+    const passwordSecurity = await validateNewPasswordSecurity(password)
+    if (!passwordSecurity.ok) {
+      return NextResponse.json(
+        { error: passwordSecurity.error },
+        { status: passwordSecurity.status }
       )
     }
 

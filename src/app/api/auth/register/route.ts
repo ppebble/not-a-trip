@@ -7,6 +7,7 @@ import {
   logIfSanitized,
   sanitizeOptionalPlainText,
   sanitizePlainText,
+  validateNewPasswordSecurity,
 } from '@/lib/security'
 
 export async function POST(request: NextRequest) {
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
     const email = String(body.email ?? '')
       .trim()
       .toLowerCase()
-    const password = body.password
+    const password = typeof body.password === 'string' ? body.password : ''
     const name = sanitizePlainText(body.name)
     const nickname = sanitizeOptionalPlainText(body.nickname) ?? name
 
@@ -57,6 +58,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: '비밀번호는 최소 6자 이상이어야 합니다.' },
         { status: 400 }
+      )
+    }
+
+    const passwordSecurity = await validateNewPasswordSecurity(password)
+    if (!passwordSecurity.ok) {
+      return NextResponse.json(
+        { error: passwordSecurity.error },
+        { status: passwordSecurity.status }
       )
     }
 
