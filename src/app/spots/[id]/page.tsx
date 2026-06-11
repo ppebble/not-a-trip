@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import {
   generateSpotMetadata,
+  getCanonicalUrl,
   getDefaultMetadata,
   type SpotSeoData,
 } from '@/lib/seo/metadata'
-import { generateSpotJsonLd } from '@/lib/seo/json-ld'
+import { generateBreadcrumbJsonLd, generateSpotJsonLd } from '@/lib/seo/json-ld'
 import JsonLd from '@/components/seo/JsonLd'
 import SpotDetailClient from '@/components/spot/SpotDetailClient'
 
@@ -70,6 +71,15 @@ export default async function SpotDetailPage({
   return (
     <>
       {spot && <JsonLd data={generateSpotJsonLd(spot)} />}
+      {spot && (
+        <JsonLd
+          data={generateBreadcrumbJsonLd([
+            { name: '홈', url: getCanonicalUrl('/') },
+            { name: '스팟', url: getCanonicalUrl('/map') },
+            { name: spot.name, url: getCanonicalUrl(`/spots/${spot.id}`) },
+          ])}
+        />
+      )}
       <SpotDetailClient />
     </>
   )

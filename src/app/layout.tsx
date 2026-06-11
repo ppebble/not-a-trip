@@ -4,8 +4,16 @@ import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
-import { generateWebSiteJsonLd } from '@/lib/seo/json-ld'
-import { getBaseUrl } from '@/lib/seo/metadata'
+import {
+  generateOrganizationJsonLd,
+  generateWebSiteJsonLd,
+} from '@/lib/seo/json-ld'
+import {
+  DEFAULT_SEO_KEYWORDS,
+  DEFAULT_SITE_DESCRIPTION,
+  DEFAULT_SITE_TITLE,
+  getBaseUrl,
+} from '@/lib/seo/metadata'
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -27,10 +35,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     template: '%s | Not a Trip',
-    default: 'Not a Trip - 애니메이션·영화 성지순례 여행 기록',
+    default: DEFAULT_SITE_TITLE,
   },
-  description:
-    '애니메이션과 영화의 배경지를 찾아, 덕질 경험을 기록하고 공유하는 성지순례 여행 플랫폼입니다.',
+  description: DEFAULT_SITE_DESCRIPTION,
+  keywords: DEFAULT_SEO_KEYWORDS,
   alternates: {
     canonical: baseUrl,
   },
@@ -44,16 +52,14 @@ export const metadata: Metadata = {
     siteName: 'Not a Trip',
     type: 'website',
     url: baseUrl,
-    title: 'Not a Trip - 애니메이션·영화 성지순례 여행 기록',
-    description:
-      '애니메이션과 영화의 배경지를 찾아, 덕질 경험을 기록하고 공유하는 성지순례 여행 플랫폼입니다.',
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_SITE_DESCRIPTION,
     images: [`${baseUrl}/api/og?type=default`],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Not a Trip - 애니메이션·영화 성지순례 여행 기록',
-    description:
-      '애니메이션과 영화의 배경지를 찾아, 덕질 경험을 기록하고 공유하는 성지순례 여행 플랫폼입니다.',
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_SITE_DESCRIPTION,
     images: [`${baseUrl}/api/og?type=default`],
   },
 }
@@ -71,6 +77,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} antialiased`}>
         <GoogleAnalytics />
         <JsonLd data={generateWebSiteJsonLd()} />
+        <JsonLd data={generateOrganizationJsonLd()} />
         {children}
       </body>
     </html>
