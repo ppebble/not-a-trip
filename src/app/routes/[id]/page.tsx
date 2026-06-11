@@ -2,10 +2,14 @@ import type { Metadata } from 'next'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import {
   generateRouteMetadata,
+  getCanonicalUrl,
   getDefaultMetadata,
   type RouteSeoData,
 } from '@/lib/seo/metadata'
-import { generateRouteJsonLd } from '@/lib/seo/json-ld'
+import {
+  generateBreadcrumbJsonLd,
+  generateRouteJsonLd,
+} from '@/lib/seo/json-ld'
 import JsonLd from '@/components/seo/JsonLd'
 import RouteDetailClient from '@/components/route/RouteDetailClient'
 
@@ -66,6 +70,15 @@ export default async function RouteDetailPage({
   return (
     <>
       {route && <JsonLd data={generateRouteJsonLd(route)} />}
+      {route && (
+        <JsonLd
+          data={generateBreadcrumbJsonLd([
+            { name: '홈', url: getCanonicalUrl('/') },
+            { name: '코스', url: getCanonicalUrl('/routes') },
+            { name: route.name, url: getCanonicalUrl(`/routes/${route.id}`) },
+          ])}
+        />
+      )}
       <RouteDetailClient />
     </>
   )

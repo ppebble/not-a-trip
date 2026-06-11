@@ -1,5 +1,11 @@
 import { Metadata } from 'next'
 import { ContentHubClient } from '@/components/content/ContentHubClient'
+import {
+  DEFAULT_SEO_KEYWORDS,
+  SITE_NAME,
+  getCanonicalUrl,
+  getDefaultOgImage,
+} from '@/lib/seo/metadata'
 
 interface ContentHubPageProps {
   params: Promise<{ name: string }>
@@ -14,13 +20,31 @@ export async function generateMetadata({
 }: ContentHubPageProps): Promise<Metadata> {
   const { name } = await params
   const contentName = decodeURIComponent(name)
+  const canonicalUrl = getCanonicalUrl(
+    `/contents/${encodeURIComponent(contentName)}`
+  )
+  const title = `${contentName} 작품 허브`
+  const description = `${contentName} 관련 성지순례 스팟, 코스, 인증 정보를 한눈에 확인하세요.`
 
   return {
-    title: `${contentName} - 작품 허브 | Not a Trip`,
-    description: `${contentName} 관련 성지순례 스팟, 코스, 인증 정보를 한눈에 확인하세요.`,
+    title,
+    description,
+    keywords: [
+      contentName,
+      '작품 허브',
+      '작품별 성지순례',
+      ...DEFAULT_SEO_KEYWORDS,
+    ],
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: `${contentName} - 작품 허브`,
-      description: `${contentName} 관련 성지순례 스팟, 코스, 인증 정보를 한눈에 확인하세요.`,
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+      siteName: SITE_NAME,
+      images: [getDefaultOgImage()],
     },
   }
 }
