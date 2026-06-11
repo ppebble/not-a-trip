@@ -22,6 +22,11 @@ interface UnlinkError {
   error: string
 }
 
+interface ChangePasswordInput {
+  currentPassword: string
+  newPassword: string
+}
+
 // ── Query Keys ──────────────────────────────────────────────
 
 export const linkedAccountKeys = {
@@ -101,6 +106,24 @@ export function useLinkedAccounts() {
     },
   })
 
+  const changePasswordMutation = useMutation({
+    mutationFn: async ({
+      currentPassword,
+      newPassword,
+    }: ChangePasswordInput) => {
+      const res = await fetch(API_ROUTES.ACCOUNT.CHANGE_PASSWORD, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      })
+      if (!res.ok) {
+        const data: UnlinkError = await res.json()
+        throw new Error(data.error || '비밀번호 변경 실패')
+      }
+      return res.json()
+    },
+  })
+
   // 계정 연결 래퍼 (signIn 호출)
   const linkAccount = useCallback((provider: string) => {
     signIn(provider, { callbackUrl: '/settings/account' })
@@ -122,6 +145,16 @@ export function useLinkedAccounts() {
     [setPasswordMutation]
   )
 
+  const changePassword = useCallback(
+    async (currentPassword: string, newPassword: string) => {
+      await changePasswordMutation.mutateAsync({
+        currentPassword,
+        newPassword,
+      })
+    },
+    [changePasswordMutation]
+  )
+
   return {
     accounts: data?.accounts ?? [],
     hasPassword: data?.hasPassword ?? false,
@@ -135,5 +168,8 @@ export function useLinkedAccounts() {
     setPassword,
     isSettingPassword: setPasswordMutation.isPending,
     setPasswordError: setPasswordMutation.error?.message ?? null,
+    changePassword,
+    isChangingPassword: changePasswordMutation.isPending,
+    changePasswordError: changePasswordMutation.error?.message ?? null,
   }
 }
