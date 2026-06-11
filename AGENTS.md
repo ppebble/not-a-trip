@@ -36,6 +36,7 @@ Adhere to the following behavioral constraints strictly:
 
 ## Workflow Expectation
 
+- For any repository work that will create commits or PRs, create or identify a GitHub issue first, create the work branch with that issue number, open a PR into `develop`, and merge through that PR. Do not invent placeholder issue numbers or push directly to protected branches.
 - Before opening a PR, confirm the branch name, commit message style, and PR body format all align with the repository documentation.
 - When uncertain, prefer the repository template and docs over default Codex habits.
 - When the user asks to start the handoff process (for example, "handoff 작업을 시작해" or "다음 세션 인수인계 작성해"), execute the runbook in `docs/session-handoffs/README.md` and create/update a handoff file from `docs/session-handoffs/_template.md`.
