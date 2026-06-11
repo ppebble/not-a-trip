@@ -9,6 +9,8 @@
   - develop PR #899 merged: <https://github.com/ppebble/not-a-trip/pull/899>
   - develop PR #900 merged: <https://github.com/ppebble/not-a-trip/pull/900>
   - main PR #901 merged: <https://github.com/ppebble/not-a-trip/pull/901>
+  - handoff PR #902 closed: branch prefix `docs/` failed branch validation.
+  - handoff PR #903 opened from `chore/902--credential-hardening-handoff`.
 
 ## Latest Commits
 
