@@ -248,7 +248,7 @@ export function SocialProofSection({
 
           {/* 슬라이더 뷰포트 */}
           <div
-            className="min-w-0 flex-1 overflow-hidden"
+            className="min-w-0 flex-1 overflow-hidden [contain:paint]"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onTouchStart={handleTouchStart}

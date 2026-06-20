@@ -92,7 +92,7 @@ export function WelcomePageClient({
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen overflow-x-hidden bg-background">
       {/* 히어로 — SSR 시점부터 바로 렌더 (스켈레톤 없음) */}
       <HeroSection
         ref={heroRef}

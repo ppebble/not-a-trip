@@ -23,7 +23,7 @@ export function FloatingCTA({
 }: FloatingCTAProps) {
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-40 pb-safe-bottom transition-transform duration-300 ease-in-out ${
+      className={`fixed bottom-0 left-0 right-0 z-40 w-full max-w-full pb-safe-bottom transition-transform duration-300 ease-in-out ${
         visible ? 'translate-y-0' : 'translate-y-full'
       }`}
       role="complementary"
