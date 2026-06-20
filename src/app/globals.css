@@ -204,6 +204,12 @@
   --link-other: 203 213 225;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   color: rgb(var(--color-text));
   background: rgb(var(--color-background));
