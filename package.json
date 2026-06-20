@@ -22,6 +22,7 @@
     "routes:seed:apply": "node scripts/seed-researched-routes.mjs --apply",
     "routes:validate": "node scripts/validate-routes.mjs",
     "routes:validate:seeded": "node scripts/validate-routes.mjs --seeded-only",
+    "qa:landing-mobile-overflow": "node scripts/verify-landing-mobile-overflow.mjs",
     "prepare": "husky install",
     "commit": "git-cz",
     "landing:photos:dry": "node scripts/seed-landing-spot-photos.mjs",

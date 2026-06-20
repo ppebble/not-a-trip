@@ -52,7 +52,8 @@ describe('landing theme and softer visual tone', () => {
   it('히어로 배경 글로우는 화면 높이 경계에서 잘리지 않도록 아래로 이어진다', () => {
     const hero = read('src/components/landing/HeroSection.tsx')
 
-    expect(hero).toContain('overflow-visible')
+    expect(hero).toContain('overflow-hidden')
+    expect(hero).toContain('inset-x-0')
     expect(hero).toContain('-bottom-56')
     expect(hero).toContain('-bottom-64')
   })

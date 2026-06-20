@@ -51,7 +51,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
     return (
       <section
         ref={ref}
-        className="relative flex min-h-screen flex-col overflow-visible bg-gradient-to-b from-primary-50 via-background to-background dark:from-slate-950 dark:via-background dark:to-background"
+        className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-b from-primary-50 via-background to-background dark:from-slate-950 dark:via-background dark:to-background"
         aria-label="히어로 섹션"
       >
         {/* 랜딩 전용 미니 헤더 */}
@@ -59,7 +59,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
 
         {/* 배경 글로우 블롭 */}
         <div
-          className="pointer-events-none absolute -inset-x-16 -bottom-56 -top-24 overflow-visible"
+          className="pointer-events-none absolute inset-x-0 -bottom-56 -top-24 overflow-hidden"
           aria-hidden="true"
         >
           <div
@@ -169,7 +169,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             <FloatingCardsCollage
               reducedMotion={reducedMotion}
               showcaseSpots={showcaseSpots}
-              className="h-80 w-80 md:h-[480px] md:w-[480px] lg:h-[min(640px,55vh)] lg:w-[min(640px,55vh)]"
+              className="h-[calc(100vw-2rem)] max-h-80 w-[calc(100vw-2rem)] max-w-80 md:h-[480px] md:w-[480px] md:max-w-none lg:h-[min(640px,55vh)] lg:w-[min(640px,55vh)]"
             />
           </div>
         </div>
