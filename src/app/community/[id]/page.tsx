@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { ObjectId } from 'mongodb'
 import { getCollection, COLLECTIONS } from '@/lib/db'
-import {
-  generatePostMetadata,
-  getDefaultMetadata,
-  type PostSeoData,
-} from '@/lib/seo/metadata'
+import { generatePostMetadata, type PostSeoData } from '@/lib/seo/metadata'
 import PostDetailClient from '@/components/community/PostDetailClient'
+import JsonLd from '@/components/seo/JsonLd'
+import { generateBreadcrumbJsonLd, generatePostJsonLd } from '@/lib/seo/json-ld'
 
 /** 경량 projection으로 게시글 SEO 데이터 조회 */
 async function getPostSeoData(id: string): Promise<PostSeoData | null> {
@@ -45,7 +44,7 @@ export async function generateMetadata({
   const post = await getPostSeoData(id)
 
   if (!post) {
-    return getDefaultMetadata()
+    notFound()
   }
 
   return generatePostMetadata(post)
@@ -56,6 +55,26 @@ export default async function PostDetailPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  await params
-  return <PostDetailClient />
+  const { id } = await params
+  const post = await getPostSeoData(id)
+
+  if (!post) notFound()
+
+  return (
+    <>
+      <JsonLd data={generatePostJsonLd(post)} />
+      <JsonLd
+        data={generateBreadcrumbJsonLd([
+          { name: '홈', path: '/welcome' },
+          { name: '커뮤니티', path: '/gallery' },
+          { name: post.title, path: `/community/${post.id}` },
+        ])}
+      />
+      <article>
+        <h1>{post.title}</h1>
+        <p>{post.content.slice(0, 160)}</p>
+      </article>
+      <PostDetailClient />
+    </>
+  )
 }

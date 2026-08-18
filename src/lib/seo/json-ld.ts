@@ -1,4 +1,4 @@
-import type { SpotSeoData, RouteSeoData } from './metadata'
+import type { PostSeoData, SpotSeoData, RouteSeoData } from './metadata'
 import { getBaseUrl } from './metadata'
 import { CATEGORY_CONFIG } from '@/types/spot'
 
@@ -11,6 +11,7 @@ export function generateSpotJsonLd(spot: SpotSeoData): Record<string, unknown> {
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'TouristAttraction',
+    url: `${getBaseUrl()}/spots/${spot.id}`,
     name: spot.name,
     address: spot.address,
     geo: {
@@ -48,11 +49,42 @@ export function generateRouteJsonLd(
   return {
     '@context': 'https://schema.org',
     '@type': 'TouristTrip',
+    url: `${getBaseUrl()}/routes/${route.id}`,
     name: route.name,
     description,
     itinerary: route.spots.map((spot) => ({
       '@type': 'TouristAttraction',
       name: spot.spotName,
+    })),
+  }
+}
+
+export function generatePostJsonLd(post: PostSeoData): Record<string, unknown> {
+  const baseUrl = getBaseUrl()
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    url: `${baseUrl}/community/${post.id}`,
+    mainEntityOfPage: `${baseUrl}/community/${post.id}`,
+    headline: post.title,
+    description: post.content.slice(0, 160),
+    author: { '@type': 'Organization', name: 'Not a Trip' },
+    publisher: { '@type': 'Organization', name: 'Not a Trip' },
+  }
+}
+
+export function generateBreadcrumbJsonLd(
+  items: Array<{ name: string; path: string }>
+): Record<string, unknown> {
+  const baseUrl = getBaseUrl()
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `${baseUrl}${item.path}`,
     })),
   }
 }

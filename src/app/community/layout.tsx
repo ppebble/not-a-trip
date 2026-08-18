@@ -5,6 +5,7 @@ import { getBaseUrl } from '@/lib/seo/metadata'
 const baseUrl = getBaseUrl()
 
 export const metadata: Metadata = {
+  alternates: { canonical: `${baseUrl}/gallery` },
   title: '커뮤니티',
   description:
     '팬들과 함께 성지 방문 경험을 나누고 정보를 공유하세요. 스팟 후기, 여행 팁, 작품 이야기를 자유롭게 올릴 수 있습니다.',

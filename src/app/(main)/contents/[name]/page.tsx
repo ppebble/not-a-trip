@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { ContentHubClient } from '@/components/content/ContentHubClient'
+import { generateContentMetadata } from '@/lib/seo/metadata'
 
 interface ContentHubPageProps {
   params: Promise<{ name: string }>
@@ -15,14 +16,10 @@ export async function generateMetadata({
   const { name } = await params
   const contentName = decodeURIComponent(name)
 
-  return {
-    title: `${contentName} - 작품 허브 | Not a Trip`,
-    description: `${contentName} 관련 성지순례 스팟, 코스, 인증 정보를 한눈에 확인하세요.`,
-    openGraph: {
-      title: `${contentName} - 작품 허브`,
-      description: `${contentName} 관련 성지순례 스팟, 코스, 인증 정보를 한눈에 확인하세요.`,
-    },
-  }
+  return generateContentMetadata(
+    contentName,
+    `/contents/${encodeURIComponent(contentName)}`
+  )
 }
 
 /**

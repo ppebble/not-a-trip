@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getCollection, COLLECTIONS } from '@/lib/db'
+import { generateRouteMetadata, type RouteSeoData } from '@/lib/seo/metadata'
 import {
-  generateRouteMetadata,
-  getDefaultMetadata,
-  type RouteSeoData,
-} from '@/lib/seo/metadata'
-import { generateRouteJsonLd } from '@/lib/seo/json-ld'
+  generateBreadcrumbJsonLd,
+  generateRouteJsonLd,
+} from '@/lib/seo/json-ld'
 import JsonLd from '@/components/seo/JsonLd'
 import RouteDetailClient from '@/components/route/RouteDetailClient'
 
@@ -49,7 +49,7 @@ export async function generateMetadata({
   const route = await getRouteSeoData(id)
 
   if (!route) {
-    return getDefaultMetadata()
+    notFound()
   }
 
   return generateRouteMetadata(route)
@@ -63,9 +63,27 @@ export default async function RouteDetailPage({
   const { id } = await params
   const route = await getRouteSeoData(id)
 
+  if (!route) notFound()
+
   return (
     <>
-      {route && <JsonLd data={generateRouteJsonLd(route)} />}
+      <JsonLd data={generateRouteJsonLd(route)} />
+      <JsonLd
+        data={generateBreadcrumbJsonLd([
+          { name: '홈', path: '/welcome' },
+          { name: '코스', path: '/routes' },
+          { name: route.name, path: `/routes/${route.id}` },
+        ])}
+      />
+      <main>
+        <h1>{route.name}</h1>
+        <p>{route.description}</p>
+        <ul>
+          {route.spots.map((spot) => (
+            <li key={spot.spotName}>{spot.spotName}</li>
+          ))}
+        </ul>
+      </main>
       <RouteDetailClient />
     </>
   )

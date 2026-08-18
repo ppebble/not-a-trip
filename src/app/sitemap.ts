@@ -7,7 +7,7 @@ import { runtimeLogger } from '@/lib/runtime-logger'
 function getStaticPages(baseUrl: string): MetadataRoute.Sitemap {
   return [
     {
-      url: baseUrl,
+      url: `${baseUrl}/welcome`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1.0,
@@ -25,7 +25,7 @@ function getStaticPages(baseUrl: string): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/community`,
+      url: `${baseUrl}/contents`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.7,
@@ -47,7 +47,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const [spots, routes, posts] = await Promise.all([
       spotsCollection
-        .find({}, { projection: { id: 1, updatedAt: 1 } })
+        .find(
+          {
+            $or: [
+              { lifecycleStatus: 'approved' },
+              { lifecycleStatus: { $exists: false } },
+            ],
+          },
+          { projection: { id: 1, updatedAt: 1 } }
+        )
         .toArray(),
       routesCollection
         .find({ isPublic: true }, { projection: { id: 1, updatedAt: 1 } })

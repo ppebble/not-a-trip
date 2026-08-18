@@ -34,7 +34,13 @@ export interface PostSeoData {
 
 /** Base URL 반환 (환경 변수 기반, 미설정 시 localhost 폴백) */
 export function getBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+  const configuredUrl = process.env.NEXT_PUBLIC_BASE_URL?.trim()
+
+  if (!configuredUrl && process.env.NODE_ENV === 'production') {
+    throw new Error('NEXT_PUBLIC_BASE_URL is required in production')
+  }
+
+  return (configuredUrl || 'http://localhost:3000').replace(/\/$/, '')
 }
 
 /** 기본 메타데이터 생성 (조회 실패 시 폴백용) */
@@ -176,6 +182,30 @@ export function generatePostMetadata(post: PostSeoData): Metadata {
       card: 'summary_large_image',
       title,
       description,
+    },
+  }
+}
+
+export function generateContentMetadata(
+  contentName: string,
+  pathname: string
+): Metadata {
+  const baseUrl = getBaseUrl()
+  const title = `${contentName} 성지순례 스팟·코스 | Not a Trip`
+  const description = `${contentName} 관련 성지순례 스팟, 여행 코스, 현장 인증 정보를 한곳에서 확인하세요.`
+  const url = `${baseUrl}${pathname}`
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+      siteName: 'Not a Trip',
+      images: [`${baseUrl}/api/og?type=default`],
     },
   }
 }
