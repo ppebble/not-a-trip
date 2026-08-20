@@ -62,10 +62,13 @@ export function validateSeoMetadata(options?: {
       layoutSource.includes('alternates:') ||
       metadataUtilSource.includes('alternates:'),
     hasAbsoluteOgImages:
-      layoutSource.includes('`${baseUrl}/api/og?type=default`') &&
+      (layoutSource.includes('getDefaultOgImage') ||
+        layoutSource.includes('`${baseUrl}/api/og?type=default`')) &&
       metadataUtilSource.includes(
         '`${baseUrl}/api/og?type=spot&id=${spot.id}`'
-      ),
+      ) &&
+      metadataUtilSource.includes('PRODUCTION_BASE_URL') &&
+      metadataUtilSource.includes('isLocalUrl'),
   }
 
   const issues: ValidationIssue[] = []

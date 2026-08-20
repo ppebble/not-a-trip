@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getCollection, COLLECTIONS } from '@/lib/db'
-import { generateSpotMetadata, type SpotSeoData } from '@/lib/seo/metadata'
+import {
+  generateSpotMetadata,
+  getCanonicalUrl,
+  type SpotSeoData,
+} from '@/lib/seo/metadata'
 import { generateBreadcrumbJsonLd, generateSpotJsonLd } from '@/lib/seo/json-ld'
 import JsonLd from '@/components/seo/JsonLd'
 import SpotDetailClient from '@/components/spot/SpotDetailClient'
@@ -49,6 +53,8 @@ export async function generateMetadata({
   const { id } = await params
   const spot = await getSpotSeoData(id)
 
+  if (!spot) notFound()
+
   if (!spot) {
     notFound()
   }
@@ -68,14 +74,16 @@ export default async function SpotDetailPage({
 
   return (
     <>
-      <JsonLd data={generateSpotJsonLd(spot)} />
-      <JsonLd
-        data={generateBreadcrumbJsonLd([
-          { name: '홈', path: '/welcome' },
-          { name: '스팟', path: '/gallery' },
-          { name: spot.name, path: `/spots/${spot.id}` },
-        ])}
-      />
+      {spot && <JsonLd data={generateSpotJsonLd(spot)} />}
+      {spot && (
+        <JsonLd
+          data={generateBreadcrumbJsonLd([
+            { name: '홈', url: getCanonicalUrl('/') },
+            { name: '스팟', url: getCanonicalUrl('/map') },
+            { name: spot.name, url: getCanonicalUrl(`/spots/${spot.id}`) },
+          ])}
+        />
+      )}
       <main>
         <h1>{spot.name}</h1>
         <p>{spot.description || spot.address}</p>

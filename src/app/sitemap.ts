@@ -9,11 +9,23 @@ function getStaticPages(baseUrl: string): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/welcome`,
       lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/map`,
+      lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1.0,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contents`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
@@ -23,12 +35,6 @@ function getStaticPages(baseUrl: string): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contents`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
     },
   ]
 }
