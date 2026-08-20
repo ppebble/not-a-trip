@@ -1,4 +1,4 @@
-import type { SpotSeoData, RouteSeoData } from './metadata'
+import type { PostSeoData, SpotSeoData, RouteSeoData } from './metadata'
 import {
   DEFAULT_SITE_DESCRIPTION,
   SITE_NAME,
@@ -63,6 +63,21 @@ export function generateRouteJsonLd(
       '@type': 'TouristAttraction',
       name: spot.spotName,
     })),
+  }
+}
+
+export function generatePostJsonLd(post: PostSeoData): Record<string, unknown> {
+  const baseUrl = getBaseUrl()
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    url: `${baseUrl}/community/${post.id}`,
+    mainEntityOfPage: `${baseUrl}/community/${post.id}`,
+    headline: post.title,
+    description: post.content.slice(0, 160),
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME },
   }
 }
 

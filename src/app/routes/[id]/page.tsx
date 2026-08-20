@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import {
   generateRouteMetadata,
   getCanonicalUrl,
-  getDefaultMetadata,
   type RouteSeoData,
 } from '@/lib/seo/metadata'
 import {
@@ -52,8 +52,10 @@ export async function generateMetadata({
   const { id } = await params
   const route = await getRouteSeoData(id)
 
+  if (!route) notFound()
+
   if (!route) {
-    return getDefaultMetadata()
+    notFound()
   }
 
   return generateRouteMetadata(route)
@@ -67,6 +69,8 @@ export default async function RouteDetailPage({
   const { id } = await params
   const route = await getRouteSeoData(id)
 
+  if (!route) notFound()
+
   return (
     <>
       {route && <JsonLd data={generateRouteJsonLd(route)} />}
@@ -79,6 +83,15 @@ export default async function RouteDetailPage({
           ])}
         />
       )}
+      <main>
+        <h1>{route.name}</h1>
+        <p>{route.description}</p>
+        <ul>
+          {route.spots.map((spot) => (
+            <li key={spot.spotName}>{spot.spotName}</li>
+          ))}
+        </ul>
+      </main>
       <RouteDetailClient />
     </>
   )

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getCollection, COLLECTIONS } from '@/lib/db'
 import {
   generateSpotMetadata,
   getCanonicalUrl,
-  getDefaultMetadata,
   type SpotSeoData,
 } from '@/lib/seo/metadata'
 import { generateBreadcrumbJsonLd, generateSpotJsonLd } from '@/lib/seo/json-ld'
@@ -53,8 +53,10 @@ export async function generateMetadata({
   const { id } = await params
   const spot = await getSpotSeoData(id)
 
+  if (!spot) notFound()
+
   if (!spot) {
-    return getDefaultMetadata()
+    notFound()
   }
 
   return generateSpotMetadata(spot)
@@ -68,6 +70,8 @@ export default async function SpotDetailPage({
   const { id } = await params
   const spot = await getSpotSeoData(id)
 
+  if (!spot) notFound()
+
   return (
     <>
       {spot && <JsonLd data={generateSpotJsonLd(spot)} />}
@@ -80,6 +84,11 @@ export default async function SpotDetailPage({
           ])}
         />
       )}
+      <main>
+        <h1>{spot.name}</h1>
+        <p>{spot.description || spot.address}</p>
+        <p>{spot.address}</p>
+      </main>
       <SpotDetailClient />
     </>
   )
