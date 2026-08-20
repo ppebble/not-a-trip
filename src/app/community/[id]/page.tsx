@@ -6,6 +6,7 @@ import { generatePostMetadata, type PostSeoData } from '@/lib/seo/metadata'
 import PostDetailClient from '@/components/community/PostDetailClient'
 import JsonLd from '@/components/seo/JsonLd'
 import { generateBreadcrumbJsonLd, generatePostJsonLd } from '@/lib/seo/json-ld'
+import { getCanonicalUrl } from '@/lib/seo/metadata'
 
 /** 경량 projection으로 게시글 SEO 데이터 조회 */
 async function getPostSeoData(id: string): Promise<PostSeoData | null> {
@@ -65,9 +66,9 @@ export default async function PostDetailPage({
       <JsonLd data={generatePostJsonLd(post)} />
       <JsonLd
         data={generateBreadcrumbJsonLd([
-          { name: '홈', path: '/welcome' },
-          { name: '커뮤니티', path: '/gallery' },
-          { name: post.title, path: `/community/${post.id}` },
+          { name: '?', url: getCanonicalUrl('/') },
+          { name: '????', url: getCanonicalUrl('/gallery') },
+          { name: post.title, url: getCanonicalUrl('/community/' + post.id) },
         ])}
       />
       <article>

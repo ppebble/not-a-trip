@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getCollection, COLLECTIONS } from '@/lib/db'
-import { generateRouteMetadata, type RouteSeoData } from '@/lib/seo/metadata'
+import {
+  generateRouteMetadata,
+  getCanonicalUrl,
+  type RouteSeoData,
+} from '@/lib/seo/metadata'
 import {
   generateBreadcrumbJsonLd,
   generateRouteJsonLd,
@@ -48,6 +52,8 @@ export async function generateMetadata({
   const { id } = await params
   const route = await getRouteSeoData(id)
 
+  if (!route) notFound()
+
   if (!route) {
     notFound()
   }
@@ -67,14 +73,16 @@ export default async function RouteDetailPage({
 
   return (
     <>
-      <JsonLd data={generateRouteJsonLd(route)} />
-      <JsonLd
-        data={generateBreadcrumbJsonLd([
-          { name: '홈', path: '/welcome' },
-          { name: '코스', path: '/routes' },
-          { name: route.name, path: `/routes/${route.id}` },
-        ])}
-      />
+      {route && <JsonLd data={generateRouteJsonLd(route)} />}
+      {route && (
+        <JsonLd
+          data={generateBreadcrumbJsonLd([
+            { name: '홈', url: getCanonicalUrl('/') },
+            { name: '코스', url: getCanonicalUrl('/routes') },
+            { name: route.name, url: getCanonicalUrl(`/routes/${route.id}`) },
+          ])}
+        />
+      )}
       <main>
         <h1>{route.name}</h1>
         <p>{route.description}</p>
