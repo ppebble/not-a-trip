@@ -84,11 +84,6 @@ export default async function SpotDetailPage({
           ])}
         />
       )}
-      <main>
-        <h1>{spot.name}</h1>
-        <p>{spot.description || spot.address}</p>
-        <p>{spot.address}</p>
-      </main>
       <SpotDetailClient />
     </>
   )
