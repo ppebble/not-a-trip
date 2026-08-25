@@ -1,10 +1,7 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 
 /**
- * 랜딩 페이지 목적별 진입점 섹션
- * "작품으로 찾기", "코스로 따라가기", "인증 둘러보기" 3개 카드 진입점
+ * 랜딩 페이지 정보 탐색 진입점 섹션
  * 서버 컴포넌트 (인터랙션 없음, Link만 사용)
  * Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7
  */
@@ -19,21 +16,21 @@ interface EntryPoint {
 const ENTRY_POINTS: EntryPoint[] = [
   {
     icon: '🎬',
-    title: '작품으로 찾기',
-    description: '이름만 떠올라도 관련 스팟을 바로 모아볼 수 있어요',
+    title: '작품별 장소 찾기',
+    description: '작품과 아티스트별로 연결된 실제 장소를 모아봅니다',
     href: '/contents',
   },
   {
     icon: '🗺️',
-    title: '코스로 따라가기',
-    description: '처음 가는 도시에서도 순서대로 따라가면 됩니다',
-    href: '/routes',
+    title: '지도에서 위치 확인',
+    description: '지역과 카테고리별 장소를 지도 위에서 비교합니다',
+    href: '/map',
   },
   {
-    icon: '📸',
-    title: '인증 둘러보기',
-    description: '다른 팬들의 사진과 후기로 분위기를 먼저 확인해요',
-    href: '/gallery',
+    icon: '🧭',
+    title: '추천 코스 살펴보기',
+    description: '예상 시간과 난이도가 정리된 방문 동선을 확인합니다',
+    href: '/routes',
   },
 ]
 
@@ -47,26 +44,15 @@ export function EntryPointSection() {
         {/* 헤더 */}
         <header className="mb-12 text-center">
           <h2 className="mb-3 text-2xl font-semibold tracking-[-0.025em] text-main-text md:text-3xl">
-            오늘은 어떻게{' '}
+            어떤 정보부터{' '}
             <span className="text-primary-600 dark:text-primary-300">
-              떠나볼까요?
+              찾아볼까요?
             </span>
           </h2>
           <p className="text-base leading-7 text-sub-text md:text-lg">
-            원하는 시작점만 고르면 나머지는 자연스럽게 이어집니다
+            작품, 위치, 동선 중 지금 필요한 기준으로 바로 시작하세요
           </p>
         </header>
-
-        {/* 진입점 카드 그리드 — 모바일 세로 스택, 태블릿 이상 가로 병렬 */}
-        <div className="mb-10 flex justify-center" aria-hidden="true">
-          <Image
-            src={MASCOT_ASSETS.boat}
-            alt=""
-            width={88}
-            height={88}
-            className="h-20 w-20 object-contain md:h-24 md:w-24"
-          />
-        </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {ENTRY_POINTS.map((entry) => (

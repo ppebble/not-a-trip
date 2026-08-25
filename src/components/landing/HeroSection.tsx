@@ -1,15 +1,13 @@
 'use client'
 
 import { forwardRef, useState } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { FloatingCardsCollage } from './FloatingCardsCollage'
 import { LandingHeader } from './LandingHeader'
-import { MASCOT_ASSETS } from '@/components/common/mascotAssets'
 import type { ShowcaseCard } from './data/showcaseCards'
 
 /**
- * 히어로 섹션 컴포넌트 — 발견형 검색 히어로
+ * 히어로 섹션 컴포넌트 — 정보 탐색형 검색 히어로
  * - 랜딩 전용 미니 헤더
  * - 강한 카피 + 검색창 + 카테고리 칩 6개
  * - 우측 플로팅 카드 콜라주 (실제 스팟 썸네일)
@@ -51,7 +49,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
     return (
       <section
         ref={ref}
-        className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-b from-primary-50 via-background to-background dark:from-slate-950 dark:via-background dark:to-background"
+        className="relative flex min-h-[700px] flex-col overflow-hidden bg-gradient-to-b from-primary-50 via-background to-background dark:from-slate-950 dark:via-background dark:to-background md:min-h-[760px] lg:min-h-[680px]"
         aria-label="히어로 섹션"
       >
         {/* 랜딩 전용 미니 헤더 */}
@@ -93,29 +91,29 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
         </div>
 
         {/* 메인 콘텐츠 */}
-        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center gap-8 px-4 pb-16 pt-24 lg:flex-row lg:items-center lg:gap-12 lg:pt-0">
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center gap-8 px-4 pb-14 pt-16 lg:flex-row lg:items-center lg:gap-12 lg:py-12">
           {/* 좌측: 텍스트 + 검색 + 칩 */}
           <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-left">
             {/* 상단 뱃지 */}
             <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-primary-500/20 bg-surface/80 px-3 py-1 text-xs font-medium text-primary-700 shadow-sm backdrop-blur-sm dark:border-primary-400/25 dark:bg-white/10 dark:text-primary-300">
-              <span>🗺️</span>
-              <span>팬들이 남긴 실제 장소를 모아봤어요</span>
+              <span>🧭</span>
+              <span>팬 여행을 위한 실제 장소 정보 가이드</span>
             </div>
 
             {/* 헤드라인 */}
-            <h1 className="mb-5 text-4xl font-semibold leading-[1.08] tracking-[-0.045em] text-main-text md:text-5xl lg:text-6xl">
-              좋아하는 장면을
+            <h1 className="mb-5 text-4xl font-semibold leading-[1.08] tracking-[-0.045em] text-main-text md:text-5xl">
+              좋아하는 작품의
               <br />
               <span className="text-primary-600 dark:text-primary-300">
-                여행지
+                실제 장소
               </span>
-              로 만나보세요
+              를 찾아보세요
             </h1>
 
             <p className="mb-8 max-w-md text-base leading-7 text-sub-text md:text-lg md:leading-8">
-              애니메이션 성지, 촬영지, 콘서트 장소까지.
+              애니메이션, 영화, 스포츠, 음악과 게임까지.
               <br className="hidden sm:block" />
-              지도에서 찾고 코스로 따라가며 방문 기록까지 남겨보세요.
+              작품별 스팟과 지도 위치, 추천 코스를 한곳에서 확인하세요.
             </p>
 
             {/* 검색창 */}
@@ -125,7 +123,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="작품명, 장소명으로 검색..."
+                  placeholder="작품명 또는 장소명으로 검색..."
                   className="flex-1 bg-transparent px-4 py-3 text-sm text-main-text placeholder-muted outline-none"
                   aria-label="성지 검색"
                 />
@@ -135,7 +133,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
                   aria-label="검색"
                 >
                   <SearchIcon />
-                  <span className="hidden sm:inline">찾기</span>
+                  <span className="hidden sm:inline">정보 찾기</span>
                 </button>
               </div>
             </form>
@@ -170,23 +168,6 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
               reducedMotion={reducedMotion}
               showcaseSpots={showcaseSpots}
               className="h-[calc(100vw-2rem)] max-h-80 w-[calc(100vw-2rem)] max-w-80 md:h-[480px] md:w-[480px] md:max-w-none lg:h-[min(640px,55vh)] lg:w-[min(640px,55vh)]"
-            />
-          </div>
-        </div>
-
-        {/* 하단 스크롤 힌트 */}
-        <div
-          className="relative z-10 flex justify-center pb-8"
-          aria-hidden="true"
-        >
-          <div className="flex flex-col items-center gap-1 text-muted dark:text-white/35">
-            <span className="text-xs">아래에서 탐색 방법 보기</span>
-            <Image
-              src={MASCOT_ASSETS.cheer}
-              alt=""
-              width={48}
-              height={48}
-              className="h-12 w-12 object-contain"
             />
           </div>
         </div>
