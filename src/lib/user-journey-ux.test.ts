@@ -15,15 +15,19 @@ describe('spec 46 user journey UX hardening', () => {
     expect(workflow).toContain('테스트 파일을 main에서 제거하지 않는다')
     expect(workflow).toContain('develop을 main에 무차별 merge하지 않는다')
   })
-  test('global header exposes map navigation without removing existing IA', () => {
+  test('global header prioritizes public information without hiding participation', () => {
     const header = read('src/components/layout/Header.tsx')
 
+    expect(header).toContain('const PRIMARY_NAV_ITEMS')
+    expect(header).toContain('const PARTICIPATION_NAV_ITEMS')
     expect(header).toContain("href: '/map'")
-    expect(header).toContain("label: '지도 탐색'")
+    expect(header).toContain("label: '장소'")
     expect(header).toContain("href: '/contents'")
     expect(header).toContain("href: '/gallery'")
     expect(header).toContain("href: '/routes'")
     expect(header).toContain("href: '/spots/register'")
+    expect(header).toContain('정보 탐색')
+    expect(header).toContain('정보에 참여하기')
   })
 
   test('spot detail returns directly to map instead of root redirect branch', () => {

@@ -32,39 +32,45 @@ const HeaderThemeSelectorHost = dynamic(
 
 const HIDDEN_HEADER_PATHS = ['/welcome']
 
-const NAV_ITEMS: NavItem[] = [
-  { href: '/', label: '홈', match: (pathname) => pathname === '/' },
-  {
-    href: '/map',
-    label: '지도 탐색',
-    icon: 'map',
-    match: (pathname) => pathname === '/map',
-  },
+const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
     href: '/contents',
-    label: '작품 탐색',
+    label: '작품',
     icon: 'content-wise',
     match: (pathname) => pathname.startsWith('/contents'),
   },
   {
+    href: '/map',
+    label: '장소',
+    icon: 'map',
+    match: (pathname) => pathname === '/map',
+  },
+  {
+    href: '/routes',
+    label: '코스',
+    icon: 'map',
+    match: (pathname) => pathname.startsWith('/routes'),
+  },
+]
+
+const PARTICIPATION_NAV_ITEMS: NavItem[] = [
+  {
     href: '/gallery',
-    label: '성지 인증',
+    label: '방문 기록',
     icon: 'gallery',
     match: (pathname) => pathname.startsWith('/gallery'),
   },
   {
-    href: '/routes',
-    label: '성지 코스',
-    icon: 'map',
-    match: (pathname) => pathname.startsWith('/routes'),
-  },
-  {
     href: '/spots/register',
-    label: '스팟 등록',
+    label: '장소 제보',
     icon: 'spot',
     match: (pathname) => pathname.startsWith('/spots/register'),
   },
 ]
+
+function isNavItemActive(item: NavItem, pathname: string) {
+  return item.match?.(pathname) ?? pathname === item.href
+}
 
 function getNavLinkClass(isActive: boolean, mobile = false) {
   const base = mobile
@@ -91,6 +97,9 @@ export function Header() {
   }
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
+  const isParticipationActive = PARTICIPATION_NAV_ITEMS.some((item) =>
+    isNavItemActive(item, pathname)
+  )
 
   return (
     <>
@@ -118,8 +127,8 @@ export function Header() {
             className="hidden items-center gap-1 lg:flex"
             aria-label="주요 메뉴"
           >
-            {NAV_ITEMS.map((item) => {
-              const isActive = item.match?.(pathname) ?? pathname === item.href
+            {PRIMARY_NAV_ITEMS.map((item) => {
+              const isActive = isNavItemActive(item, pathname)
               return (
                 <Link
                   key={item.href}
@@ -131,6 +140,50 @@ export function Header() {
                 </Link>
               )
             })}
+            <span className="mx-2 h-5 w-px bg-border" aria-hidden="true" />
+            <details className="group relative">
+              <summary
+                className={`${getNavLinkClass(isParticipationActive)} flex cursor-pointer list-none items-center gap-1.5 [&::-webkit-details-marker]:hidden`}
+                aria-label="참여 메뉴 열기"
+              >
+                참여
+                <svg
+                  className="h-4 w-4 transition group-open:rotate-180"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m6 9 6 6 6-6"
+                  />
+                </svg>
+              </summary>
+              <div className="absolute right-0 top-[calc(100%+0.5rem)] w-48 rounded-2xl border border-border bg-surface p-2 shadow-lg">
+                <p className="text-text-tertiary px-3 pb-1 pt-2 text-xs font-semibold">
+                  정보에 참여하기
+                </p>
+                {PARTICIPATION_NAV_ITEMS.map((item) => {
+                  const isActive = isNavItemActive(item, pathname)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={getNavLinkClass(isActive, true)}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {item.icon && (
+                        <AppIcon name={item.icon} size="sm" alt="" />
+                      )}
+                      {item.label}
+                    </Link>
+                  )
+                })}
+              </div>
+            </details>
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
@@ -185,24 +238,56 @@ export function Header() {
             className="border-t border-border bg-surface/95 backdrop-blur-sm lg:hidden"
             aria-label="모바일 메뉴"
           >
-            <div className="space-y-1 px-4 py-3">
-              {NAV_ITEMS.map((item) => {
-                const isActive =
-                  item.match?.(pathname) ?? pathname === item.href
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={closeMobileMenu}
-                    className={getNavLinkClass(isActive, true)}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    {item.icon && <AppIcon name={item.icon} size="sm" alt="" />}
-                    {item.label}
-                  </Link>
-                )
-              })}
-              <div className="border-t border-border pt-2">
+            <div className="px-4 py-3">
+              <p className="text-text-tertiary px-3.5 pb-1 pt-1 text-xs font-semibold">
+                정보 탐색
+              </p>
+              <div className="space-y-1">
+                {PRIMARY_NAV_ITEMS.map((item) => {
+                  const isActive = isNavItemActive(item, pathname)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={closeMobileMenu}
+                      className={getNavLinkClass(isActive, true)}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {item.icon && (
+                        <AppIcon name={item.icon} size="sm" alt="" />
+                      )}
+                      {item.label}
+                    </Link>
+                  )
+                })}
+              </div>
+
+              <div className="mt-3 border-t border-border pt-3">
+                <p className="text-text-tertiary px-3.5 pb-1 text-xs font-semibold">
+                  참여
+                </p>
+                <div className="space-y-1">
+                  {PARTICIPATION_NAV_ITEMS.map((item) => {
+                    const isActive = isNavItemActive(item, pathname)
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeMobileMenu}
+                        className={getNavLinkClass(isActive, true)}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {item.icon && (
+                          <AppIcon name={item.icon} size="sm" alt="" />
+                        )}
+                        {item.label}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-3 border-t border-border pt-2">
                 <HeaderAuthControls
                   mobileMenuOpen
                   onMobileNavigate={closeMobileMenu}

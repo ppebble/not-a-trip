@@ -27,7 +27,7 @@
 
 ## Information architecture
 
-- Primary navigation: home, works, places/map, curated routes
+- Primary navigation: works, places/map, curated routes; the brand logo owns the home action
 - Secondary navigation: check-ins, place contribution, account and settings
 - Core routes/screens: `/welcome`, `/contents`, `/contents/[name]`, `/map`, `/spots/[id]`, `/routes`, `/routes/[id]`
 - Content hierarchy: search intent -> work/place context -> visit information -> map/route action -> optional contribution
@@ -52,7 +52,7 @@
 ## Components
 
 - Existing components to reuse: `LandingHeader`, `HeroSection`, `EntryPointSection`, `StorytellingSection`, `CategoryCard`, semantic design tokens
-- New/changed components: `InformationStandardsSection`; information-first variants of hero and entry-point copy
+- New/changed components: `InformationStandardsSection`; information-first variants of hero, entry-point copy, and global header navigation
 - Variants and states: real empty states must not be replaced with fictional testimonials
 - Token/component ownership: palette variables remain in `src/app/globals.css`; Tailwind exposure remains in `tailwind.config.ts`; components use semantic and category tokens instead of new raw colors
 
@@ -97,4 +97,4 @@
 
 - [ ] Define which spot fields qualify as verified and how the last-reviewed date is exposed / product owner / trust labeling
 - [ ] Decide when real check-in volume is sufficient to restore community proof on the landing page / product owner / social proof
-- [ ] Validate the primary navigation reduction in the next independent work unit / frontend / global IA
+- [x] Validate the primary navigation reduction in an independent work unit / frontend / global IA / 2026-08-26
