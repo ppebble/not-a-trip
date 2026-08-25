@@ -37,15 +37,17 @@ describe('landing theme and softer visual tone', () => {
   it('핵심 카드/히어로 섹션은 시맨틱 텍스트 토큰과 부드러운 라운딩을 사용한다', () => {
     const hero = read('src/components/landing/HeroSection.tsx')
     const entry = read('src/components/landing/EntryPointSection.tsx')
-    const howItWorks = read('src/components/landing/HowItWorksSection.tsx')
+    const informationStandards = read(
+      'src/components/landing/InformationStandardsSection.tsx'
+    )
     const proofCard = read('src/components/landing/ProofCard.tsx')
 
     expect(hero).toContain('text-main-text')
     expect(hero).toContain('text-sub-text')
     expect(entry).toContain('text-main-text')
     expect(entry).toContain('rounded-[1.5rem]')
-    expect(howItWorks).toContain('text-main-text')
-    expect(howItWorks).toContain('rounded-[1.5rem]')
+    expect(informationStandards).toContain('text-main-text')
+    expect(informationStandards).toContain('rounded-[1.5rem]')
     expect(proofCard).toContain('rounded-[1.35rem]')
   })
 
@@ -69,9 +71,11 @@ describe('landing theme and softer visual tone', () => {
   it('강조 문구는 무지개형 그라데이션 텍스트 대신 단색 브랜드 텍스트를 사용한다', () => {
     const hero = read('src/components/landing/HeroSection.tsx')
     const entry = read('src/components/landing/EntryPointSection.tsx')
-    const howItWorks = read('src/components/landing/HowItWorksSection.tsx')
+    const informationStandards = read(
+      'src/components/landing/InformationStandardsSection.tsx'
+    )
 
-    for (const source of [hero, entry, howItWorks]) {
+    for (const source of [hero, entry, informationStandards]) {
       expect(source).not.toContain('bg-clip-text text-transparent')
       expect(source).not.toContain(
         'from-primary-600 via-secondary-600 to-sunset-500'
@@ -80,7 +84,9 @@ describe('landing theme and softer visual tone', () => {
 
     expect(hero).toContain('text-primary-600 dark:text-primary-300')
     expect(entry).toContain('text-primary-600 dark:text-primary-300')
-    expect(howItWorks).toContain('text-primary-600 dark:text-primary-300')
+    expect(informationStandards).toContain(
+      'text-primary-600 dark:text-primary-300'
+    )
   })
   it('uses actual spot photos instead of category icons for landing card visuals', () => {
     const categoryCard = read('src/components/landing/CategoryCard.tsx')
