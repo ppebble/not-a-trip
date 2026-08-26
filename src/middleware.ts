@@ -11,7 +11,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl
 
   if (pathname.startsWith('/api/')) {
-    if (pathname === '/api/internal/ops/request') {
+    if (pathname.startsWith('/api/internal/ops/')) {
       return NextResponse.next()
     }
 
