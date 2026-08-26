@@ -219,6 +219,7 @@ export interface DashboardSummaryResponse {
   errorRate24h: number
   newUsersToday: number
   newSpotsToday: number
+  pageViewsToday: number
   qualitySla?: {
     complianceRate: number
     averageProcessingTime: number
@@ -226,6 +227,7 @@ export interface DashboardSummaryResponse {
   }
   dauTrend: Array<{ date: string; count: number }>
   checkInTrend: Array<{ date: string; count: number }>
+  pageViewTrend: Array<{ date: string; count: number }>
   generatedAt: string
 }
 

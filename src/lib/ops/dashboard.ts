@@ -1,6 +1,6 @@
 import { COLLECTIONS, getCollection } from '@/lib/db'
 import type { DashboardSummaryResponse } from '@/types/report'
-import { getTrackedApiErrorRate24h } from './metrics'
+import { getTrackedApiErrorRate24h, getTrackedPageViewTrend } from './metrics'
 import { getSlaStatistics } from '@/lib/spot-quality/report-processor'
 
 interface ActivityDocument {
@@ -176,6 +176,7 @@ export async function buildDashboardSummary(): Promise<DashboardSummaryResponse>
     qualitySla,
     dauTrend,
     checkInTrend,
+    pageViewTrend,
   ] = await Promise.all([
     getPendingReviewCounts(),
     getDauToday(),
@@ -186,6 +187,7 @@ export async function buildDashboardSummary(): Promise<DashboardSummaryResponse>
     getSlaStatistics(),
     getDauTrend(),
     getCheckInTrend(),
+    getTrackedPageViewTrend(),
   ])
 
   return {
@@ -198,6 +200,8 @@ export async function buildDashboardSummary(): Promise<DashboardSummaryResponse>
     qualitySla,
     dauTrend,
     checkInTrend,
+    pageViewsToday: pageViewTrend.at(-1)?.count ?? 0,
+    pageViewTrend,
     generatedAt: new Date().toISOString(),
   }
 }
