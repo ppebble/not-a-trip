@@ -127,6 +127,11 @@ export const API_ROUTES = {
     DASHBOARD_SUMMARY: '/api/admin/dashboard/summary',
   },
 
+  // Internal first-party telemetry
+  INTERNAL: {
+    PAGE_VIEW: '/api/internal/ops/page-view',
+  },
+
   // Content Names (자동완성)
   CONTENT_NAMES: '/api/content-names',
 

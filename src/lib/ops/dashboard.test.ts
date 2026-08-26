@@ -1,5 +1,6 @@
 const mockGetCollection = jest.fn()
 const mockGetTrackedApiErrorRate24h = jest.fn()
+const mockGetTrackedPageViewTrend = jest.fn()
 const mockGetSlaStatistics = jest.fn()
 
 jest.mock('@/lib/db', () => ({
@@ -20,6 +21,8 @@ jest.mock('@/lib/db', () => ({
 jest.mock('./metrics', () => ({
   getTrackedApiErrorRate24h: (...args: unknown[]) =>
     mockGetTrackedApiErrorRate24h(...args),
+  getTrackedPageViewTrend: (...args: unknown[]) =>
+    mockGetTrackedPageViewTrend(...args),
 }))
 
 jest.mock('@/lib/spot-quality/report-processor', () => ({
@@ -42,6 +45,12 @@ describe('ops dashboard summary', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGetTrackedApiErrorRate24h.mockResolvedValue(12.5)
+    mockGetTrackedPageViewTrend.mockResolvedValue(
+      Array.from({ length: 7 }, (_, index) => ({
+        date: `2026-08-${String(20 + index).padStart(2, '0')}`,
+        count: index + 10,
+      }))
+    )
     mockGetSlaStatistics.mockResolvedValue({
       complianceRate: 95,
       averageProcessingTime: 18,
@@ -170,6 +179,7 @@ describe('ops dashboard summary', () => {
     expect(result.errorRate24h).toBe(12.5)
     expect(result.newUsersToday).toBe(8)
     expect(result.newSpotsToday).toBe(9)
+    expect(result.pageViewsToday).toBe(16)
     expect(result.qualitySla).toEqual({
       complianceRate: 95,
       averageProcessingTime: 18,
@@ -177,6 +187,7 @@ describe('ops dashboard summary', () => {
     })
     expect(result.dauTrend).toHaveLength(7)
     expect(result.checkInTrend).toHaveLength(7)
+    expect(result.pageViewTrend).toHaveLength(7)
     expect(result.generatedAt).toEqual(expect.any(String))
   })
 })

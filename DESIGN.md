@@ -1,118 +1,100 @@
 # Design
 
 ## Source of truth
+
 - Status: Active
-- Last refreshed: 2026-05-29
-- Primary product surfaces: landing `/welcome`, map `/map`, content discovery, gallery/check-in, route planning, spot detail/reporting.
-- Evidence reviewed:
-  - `src/app/globals.css` — CSS variable color tokens and semantic roles.
-  - `tailwind.config.ts` — Tailwind token exposure.
-  - `src/components/layout/Header.tsx` and `HeaderAuthControls.tsx` — global navigation color usage.
-  - `src/components/landing/*` — landing hero, cards, CTA, and theme behavior.
-  - `.kiro/specs/22-landing-page/design.md`, `.kiro/specs/23-landing-page-polish/design.md`, `.kiro/specs/27-theme-selector-menu/design.md` — prior landing/theme intent.
-  - External travel references reviewed on 2026-05-29: Airbnb-style warm coral accents, Expedia-style blue/gold trust/excitement, and general travel palettes using neutral backgrounds with teal/coral/amber accents.
+- Last refreshed: 2026-08-26
+- Primary product surfaces: `/welcome`, `/contents`, `/map`, `/routes`, `/spots/[id]`
+- Evidence reviewed: live production pages, public API inventory, `src/components/landing`, `src/components/layout/Header.tsx`, `src/app/globals.css`, design tokens in `tailwind.config.ts`, repository QA reports, prior landing/theme specs under `.kiro/specs`
 
 ## Brand
-- Personality: fan-travel companion, warm, exploratory, trustworthy, slightly playful.
-- Trust signals: readable map/data UI, stable CTA hierarchy, clear categories, restrained motion, consistent semantic tokens.
-- Avoid: one-note purple surfaces, every button having a different color, low-contrast pastel text, hard-edged heavy typography, neon overload.
+
+- Personality: knowledgeable, calm, fan-aware, practical
+- Trust signals: real-place photography, clear work-to-place relationships, map context, route duration and difficulty, visible information provenance when available
+- Avoid: fabricated community momentum, decorative sections without a user job, repeated install prompts, game-like terminology before the information value is clear
 
 ## Product goals
-- Goals:
-  - Help fans discover real-world places connected to works, artists, teams, and scenes.
-  - Make map exploration, route following, and check-in proof feel connected.
-  - Keep the interface approachable in both light and dark modes.
-- Non-goals:
-  - Do not turn the app into a generic travel agency booking interface.
-  - Do not replace category colors with arbitrary decorative colors per component.
-- Success signals:
-  - Primary actions remain obvious.
-  - Cards feel varied but not chaotic.
-  - Light/dark modes share the same brand logic.
+
+- Goals: help fans find real places connected to works and prepare a visit with useful context
+- Non-goals: presenting Not a Trip as a social network before sustained community activity exists; making PWA installation a primary conversion goal
+- Success signals: search or curated discovery leads to a content, spot, map, or route detail; users can understand what information is available before signing in
 
 ## Personas and jobs
-- Primary personas:
-  - Fan traveler planning a location visit.
-  - Casual browser looking for places from a favorite work.
-  - Community contributor uploading proof/check-ins.
-- User jobs:
-  - Search by work/place.
-  - Browse by category.
-  - Follow a route.
-  - Save/report/verify a spot.
-- Key contexts of use: mobile-first travel planning, outdoor navigation, quick browsing before/while traveling.
+
+- Primary personas: first-time fan traveler, location researcher, itinerary planner
+- User jobs: find a place by work or name; understand where it is; compare relevant places; follow a practical route
+- Key contexts of use: trip research on desktop, in-transit lookup on mobile, on-site map use
 
 ## Information architecture
-- Primary navigation: home, map, contents, gallery, routes, spot registration, profile/auth.
-- Core routes/screens: `/welcome`, `/map`, `/contents`, `/gallery`, `/routes`, `/spots/[id]`, `/reports`.
-- Content hierarchy: value proposition → search/discovery → category/story cards → social proof → conversion CTA.
+
+- Primary navigation: works, places/map, curated routes; the brand logo owns the home action
+- Secondary navigation: check-ins, place contribution, account and settings
+- Core routes/screens: `/welcome`, `/contents`, `/contents/[name]`, `/map`, `/spots/[id]`, `/routes`, `/routes/[id]`
+- Content hierarchy: search intent -> work/place context -> visit information -> map/route action -> optional contribution
 
 ## Design principles
-- Principle 1: One dominant action color, multiple supporting travel hues.
-- Principle 2: Semantic tokens first; component-specific colors only for category/status meaning.
-- Principle 3: Surfaces should feel continuous across scroll sections, not like isolated panels.
-- Tradeoffs: keep purple/indigo brand recognition, but balance it with teal for discovery and sunset for warm travel moments.
+
+- Information before participation: show useful public data before asking users to sign in, install, upload, or post.
+- Evidence before social proof: community activity is displayed only when it comes from real production records.
+- One section, one job: avoid repeating the same discovery choices through chips, cards, process diagrams, and floating prompts.
+- Map as a view, not the whole identity: map exploration supports the information architecture rather than replacing it.
+- Tradeoffs: retain the mascot as a restrained brand accent, but do not use it as filler in every section.
 
 ## Visual language
-- Color:
-  - Primary: Harbor Indigo for core actions, focus, route/navigation confidence.
-  - Secondary: Sea Teal for discovery, map, category exploration, hover states.
-  - Sunset: warm accent for admin/special states, passport/check-in warmth, subtle highlights.
-  - Background: restrained stone/off-white in light mode, deep slate/navy in dark mode; borders must stay visibly darker than warm surfaces.
-  - Category/content colors: related but varied; use category tokens rather than ad hoc Tailwind colors.
-- Typography: Pretendard/system; prefer `font-semibold`, relaxed line height, and slight negative tracking on large display text.
-- Spacing/layout rhythm: mobile-first, generous card padding, section rhythm of 16–24 spacing units.
-- Shape/radius/elevation: rounded cards (`1rem–1.5rem`), soft shadows, avoid sharp rectangular panels on marketing surfaces.
-- Motion: subtle hover lift and fade/slide; respect reduced motion.
-- Imagery/iconography: real spot images first, mascot/icons as supportive cues.
+
+- Color: existing Harbor Indigo primary, Sea Teal secondary, Sunset accent, and neutral semantic tokens; neutral surfaces carry most informational content
+- Typography: Pretendard with strong Korean readability, concise headings, and comfortable body line height
+- Spacing/layout rhythm: compact editorial sections with a maximum content width; avoid full-screen height unless the user job benefits
+- Shape/radius/elevation: existing rounded cards with lower shadow emphasis for information surfaces
+- Motion: optional and short; content must remain visible when motion libraries fail or reduced motion is requested
+- Imagery/iconography: real location images first, work covers second, mascot only as a small brand accent
 
 ## Components
-- Existing components to reuse:
-  - `ThemeSelector`, `Header`, `CTAButton`, landing cards, `ProofCard`, category/content token configs.
-- New/changed components:
-  - `LandingThemeProvider` for landing theme parity without full session/query providers.
-- Variants and states:
-  - Primary button: indigo.
-  - Secondary/support action: teal or neutral surface.
-  - Warm/special accent: sunset.
-  - Category chips/cards: category tokens.
-- Token/component ownership:
-  - Global palette lives in `src/app/globals.css`.
-  - Tailwind token exposure lives in `tailwind.config.ts`.
-  - Do not hardcode new brand hex colors in components unless SVG/gradient limitations require it.
+
+- Existing components to reuse: `LandingHeader`, `HeroSection`, `EntryPointSection`, `StorytellingSection`, `CategoryCard`, semantic design tokens
+- New/changed components: `InformationStandardsSection`; information-first variants of hero, entry-point copy, and global header navigation
+- Variants and states: real empty states must not be replaced with fictional testimonials
+- Token/component ownership: palette variables remain in `src/app/globals.css`; Tailwind exposure remains in `tailwind.config.ts`; components use semantic and category tokens instead of new raw colors
 
 ## Accessibility
-- Target standard: practical WCAG AA contrast for text and controls.
-- Keyboard/focus behavior: use visible focus rings based on primary token.
-- Contrast/readability: pastel fills must pair with dark enough foreground tokens.
-- Screen-reader semantics: preserve route/section labels and button labels.
-- Reduced motion and sensory considerations: avoid essential information in animation only.
+
+- Target standard: WCAG 2.1 AA for core public discovery flows
+- Keyboard/focus behavior: all search, chips, cards, and links remain keyboard reachable with visible focus states
+- Contrast/readability: semantic text and surface tokens; no text rendered only through imagery
+- Screen-reader semantics: one `h1`, ordered section headings, descriptive labels, decorative mascots hidden
+- Reduced motion and sensory considerations: content is immediately visible without animation and respects reduced-motion preference
 
 ## Responsive behavior
-- Supported breakpoints/devices: mobile-first through desktop.
-- Layout adaptations: stack cards on mobile; preserve CTA reachability.
-- Touch/hover differences: hover color/lift should be enhancement only.
+
+- Supported breakpoints/devices: 280px minimum defensive width, 390px primary mobile, tablet, 1440px desktop
+- Layout adaptations: single-column mobile cards, bounded horizontal content, desktop grids without off-canvas document overflow
+- Touch/hover differences: touch does not depend on hover; targets remain at least 44px where practical
 
 ## Interaction states
-- Loading: skeleton/shimmer on neutral/accent surfaces.
-- Empty: mascot/icon plus clear recovery action.
-- Error: danger token, concise recovery path.
-- Success: secondary/sunset can support positive/check-in moments without replacing primary action hierarchy.
-- Disabled: reduce opacity and preserve text contrast where possible.
-- Offline/slow network: keep fallback content visible and avoid blank marketing sections.
+
+- Loading: preserve layout and show useful text before deferred visual content
+- Empty: state the absence honestly and point to available information paths
+- Error: keep navigation and retry context available
+- Success: route users to a concrete content, place, map, or route result
+- Disabled: explain why an action is unavailable
+- Offline/slow network: retain PWA support as infrastructure, not primary landing-page promotion
 
 ## Content voice
-- Tone: warm, direct, fan-aware, not corporate.
-- Terminology: use “장소”, “스팟”, “코스”, “인증”, “여권” consistently.
-- Microcopy rules: prefer conversational guidance over command-heavy phrasing.
+
+- Tone: direct, factual, concise, fan-aware without exaggerated enthusiasm
+- Terminology: use `작품`, `장소`, `스팟`, `코스`, `방문 정보`; reserve `인증` for real user check-ins
+- Microcopy rules: describe what the user will see after an action; do not imply user counts or testimonials without production data
 
 ## Implementation constraints
-- Framework/styling system: Next.js App Router, Tailwind, CSS variables, `next-themes`.
-- Design-token constraints: use semantic tokens (`background`, `surface`, `main-text`, `sub-text`) and role tokens (`primary`, `secondary`, `sunset`).
-- Performance constraints: avoid adding runtime color libraries or heavy visual dependencies.
-- Compatibility constraints: dark mode is class-based; landing must not force `.dark`.
-- Test/screenshot expectations: token changes require static token tests plus type/lint/build verification; visual screenshots are recommended for future pixel-level work.
+
+- Framework/styling system: Next.js App Router, React, Tailwind CSS, existing semantic tokens
+- Design-token constraints: no raw color utility expansion without updating the repository token baseline
+- Performance constraints: server-render useful public text; dynamically load only non-critical interaction and animation
+- Compatibility constraints: preserve `/` first-visit routing, returning-user `/map` routing, authentication behavior, and public SEO metadata
+- Test/screenshot expectations: targeted Jest contracts, lint, type-check, build, 390px and 1440px screenshots, horizontal overflow check
 
 ## Open questions
-- [ ] Should the mascot/logo asset itself be recolored to match Harbor Indigo/Sea Teal/Sunset? Owner: design/product. Impact: stronger brand consistency.
-- [ ] Should admin-only surfaces keep sunset accents or move to a stricter utility/status palette? Owner: product. Impact: admin IA clarity.
+
+- [ ] Define which spot fields qualify as verified and how the last-reviewed date is exposed / product owner / trust labeling
+- [ ] Decide when real check-in volume is sufficient to restore community proof on the landing page / product owner / social proof
+- [x] Validate the primary navigation reduction in an independent work unit / frontend / global IA / 2026-08-26

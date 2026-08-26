@@ -113,8 +113,9 @@ export default function AdminDashboardPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
               {[
+                ['오늘 페이지 조회', summary?.pageViewsToday ?? 0],
                 ['오늘 DAU', summary?.dauToday ?? 0],
                 ['오늘 체크인', summary?.totalCheckInsToday ?? 0],
                 ['24시간 5xx 비율', `${summary?.errorRate24h ?? 0}%`],
@@ -139,7 +140,49 @@ export default function AdminDashboardPage() {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+              <section className="rounded-xl border border-neutral-200 bg-surface p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-neutral-800">
+                    최근 7일 페이지 조회
+                  </h2>
+                  <span className="text-xs text-neutral-500">
+                    공개 화면 · KST
+                  </span>
+                </div>
+                <div className="mt-4 space-y-3">
+                  {summary?.pageViewTrend.map((point) => (
+                    <div key={point.date}>
+                      <div className="mb-1 flex items-center justify-between text-sm">
+                        <span className="text-neutral-500">
+                          {formatTrendLabel(point.date)}
+                        </span>
+                        <span className="font-medium text-neutral-800">
+                          {point.count}
+                        </span>
+                      </div>
+                      <div className="h-2 rounded-full bg-neutral-100">
+                        <div
+                          className="h-2 rounded-full bg-primary"
+                          style={{
+                            width: `${Math.max(
+                              8,
+                              ((point.count || 0) /
+                                Math.max(
+                                  ...((summary?.pageViewTrend ?? []).map(
+                                    (item) => item.count
+                                  ) || [1])
+                                )) *
+                                100
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
               <section className="rounded-xl border border-neutral-200 bg-surface p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-neutral-800">

@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import JsonLd from '@/components/seo/JsonLd'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
+import PageViewTracker from '@/components/analytics/PageViewTracker'
 import {
   generateOrganizationJsonLd,
   generateWebSiteJsonLd,
@@ -76,6 +77,7 @@ export default function RootLayout({
       </head>
       <body className={`${pretendard.variable} antialiased`}>
         <GoogleAnalytics />
+        <PageViewTracker />
         <JsonLd data={generateWebSiteJsonLd()} />
         <JsonLd data={generateOrganizationJsonLd()} />
         {children}
