@@ -69,6 +69,16 @@ describe('real image data validation', () => {
     )
   })
 
+  it('accepts the reusable CC BY 2.5 license used by legacy Commons photos', () => {
+    expect(
+      validateLicensedImageMetadata({
+        ...baseLicensedImage,
+        license: 'CC BY 2.5',
+        licenseUrl: 'https://creativecommons.org/licenses/by/2.5/',
+      })
+    ).toEqual([])
+  })
+
   it('rejects broken or rate-limited source statuses', () => {
     for (const status of [404, 410, 429, 500]) {
       const issues = validateLicensedImageMetadata({
