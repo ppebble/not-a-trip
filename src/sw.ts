@@ -49,19 +49,6 @@ const serwist = new Serwist({
         ],
       }),
     },
-    // 외부 타일 서버 (Carto): CacheFirst (요구사항 3.7)
-    {
-      matcher: /^https:\/\/.*basemaps\.cartocdn\.com/,
-      handler: new CacheFirst({
-        cacheName: 'external-tiles',
-        plugins: [
-          new ExpirationPlugin({
-            maxEntries: 500,
-            maxAgeSeconds: 30 * 24 * 60 * 60,
-          }),
-        ],
-      }),
-    },
     // 스팟 데이터 API: StaleWhileRevalidate
     {
       matcher: /\/api\/spots/,
