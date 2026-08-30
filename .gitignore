@@ -24,6 +24,7 @@ docs/velog/
 
 # production
 /build
+/backups/
 
 # misc
 .DS_Store

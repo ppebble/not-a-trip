@@ -1,4 +1,10 @@
 import { spawnSync } from 'child_process'
+import {
+  describeMongoTarget,
+  loadRepositoryEnv,
+} from './lib/load-repository-env.mjs'
+
+loadRepositoryEnv()
 
 const archivePath = process.argv[2]
 const targetDb = process.argv[3]
@@ -10,6 +16,9 @@ if (!archivePath || !targetDb) {
   )
   process.exit(1)
 }
+
+console.log(`Restore source target: ${describeMongoTarget(uri)}`)
+console.log(`Restore destination database: ${targetDb}`)
 
 const result = spawnSync(
   'mongorestore',
