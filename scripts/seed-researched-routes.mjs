@@ -1,5 +1,9 @@
 import fs from 'node:fs'
 import { MongoClient } from 'mongodb'
+import {
+  JAPAN_PILGRIMAGE_ROUTE_EXPANSION,
+  JAPAN_PILGRIMAGE_ROUTE_SPOTS,
+} from './data/japan-pilgrimage-route-expansion.mjs'
 
 const MODE = process.argv.includes('--apply') ? 'apply' : 'dry-run'
 const RESEARCHED_AT = '2026-05-31'
@@ -315,9 +319,7 @@ const newSpotPlans = [
     name: '京阪宇治駅',
     description:
       '우지 강과 우지교 바로 옆에 있는 게이한 우지선 종착역입니다. 「울려라! 유포니엄」 우지 순례의 출발점으로 자주 언급되는 실제 역입니다.',
-    photos: [
-      'https://upload.wikimedia.org/wikipedia/commons/7/7f/Keihan_Uji_station.jpg',
-    ],
+    photos: ['/images/spots/animation/real-ani-050-keihan-uji-station.webp'],
     address: '일본 교토부 우지시 우지오토가와 5-2',
     coordinates: { lat: 34.8951, lng: 135.8068 },
     category: 'animation',
@@ -343,9 +345,7 @@ const newSpotPlans = [
     name: '宇治神社',
     description:
       '우지 강 동쪽에 있는 신사로, 「울려라! 유포니엄」 순례기에서 우지 강변·다이키치야마 동선과 함께 자주 묶이는 장소입니다.',
-    photos: [
-      'https://upload.wikimedia.org/wikipedia/commons/8/84/101127_Uji-jinja_Uji_Kyoto_pref_Japan01s3.jpg',
-    ],
+    photos: ['/images/spots/animation/real-ani-051-uji-shrine.webp'],
     address: '일본 교토부 우지시 우지야마다 1',
     coordinates: { lat: 34.8917, lng: 135.8116 },
     category: 'animation',
@@ -372,9 +372,7 @@ const newSpotPlans = [
     name: '大吉山展望台',
     description:
       '우지 시내와 강변을 내려다보는 전망 지점입니다. 「울려라! 유포니엄」 팬 방문기에서 도보 체감 난이도가 함께 언급되는 핵심 순례 지점입니다.',
-    photos: [
-      'https://upload.wikimedia.org/wikipedia/commons/1/18/Mataburi_Uji%2C_Uji-shi%2C_Ky%C5%8Dto-fu_611-0021%2C_Japan_-_panoramio_%281%29.jpg',
-    ],
+    photos: ['/images/spots/animation/real-ani-052-daikichiyama-view.webp'],
     address: '일본 교토부 우지시 우지 히가시우치 일대',
     coordinates: { lat: 34.8899, lng: 135.8181 },
     category: 'animation',
@@ -389,6 +387,7 @@ const newSpotPlans = [
     ],
     sourceUrls: [
       'https://www.city.uji.kyoto.jp/site/uji-kankou/',
+      'https://commons.wikimedia.org/wiki/File:THE%20VIEW%20OF%20UJI%20CITY.jpg',
       'https://libert.co.jp/pilgrimage-guild/eupho-pilgrimage/',
       'https://www.reddit.com/r/HibikeEuphonium/comments/1grqmal/',
       'https://www.reddit.com/r/HibikeEuphonium/comments/1hjboyo/',
@@ -401,9 +400,7 @@ const newSpotPlans = [
     name: '縣神社',
     description:
       '아가타 축제로 알려진 우지의 신사입니다. 「울려라! 유포니엄」 순례 글에서 우지교·강변과 함께 축제 장면 동선으로 다뤄집니다.',
-    photos: [
-      'https://upload.wikimedia.org/wikipedia/commons/7/75/AgataJinja-M1277.jpg',
-    ],
+    photos: ['/images/spots/animation/real-ani-053-agata-shrine.webp'],
     address: '일본 교토부 우지시 우지렌게 72',
     coordinates: { lat: 34.8901, lng: 135.8044 },
     category: 'animation',
@@ -418,7 +415,7 @@ const newSpotPlans = [
     ],
     sourceUrls: [
       'https://www.agatajinjya.com/',
-      'https://commons.wikimedia.org/wiki/File:AgataJinja-M1277.jpg',
+      'https://commons.wikimedia.org/wiki/File:Agata%20Shrine%2C%20Uji%2C%20Kyoto%20-%20Apr%208%2C%202017.jpg',
       'https://magazine.tabist.co.jp/area/kansai/15107/',
       'https://menehunephoto.net/entry/2015/03/29/153932',
     ],
@@ -456,22 +453,16 @@ const routePlans = [
     seedKey: 'researched-2026-05-30-shibuya-game-idol',
     name: '시부야 게임·아이돌 팝컬처 코스',
     description:
-      '시부야 교차로와 109를 먼저 걷고, 닌텐도 도쿄와 포켓몬 센터 메가 도쿄까지 이어가는 도심 팝컬처 코스입니다.',
-    spotIds: ['REAL-ANI-020', 'REAL-ANI-021', 'REAL-GAM-002', 'REAL-GAM-003'],
-    relatedContentNames: [
-      '최애의 아이 (【推しの子】)',
-      '슈퍼 마리오',
-      '포켓몬스터',
-    ],
-    regionTags: ['도쿄', '시부야', '이케부쿠로'],
+      '시부야 교차로와 109를 먼저 걷고, 시부야 PARCO의 닌텐도 도쿄까지 이어가는 도심 팝컬처 코스입니다.',
+    spotIds: ['REAL-ANI-020', 'REAL-ANI-021', 'REAL-GAM-002'],
+    relatedContentNames: ['최애의 아이 (【推しの子】)', '슈퍼 마리오'],
+    regionTags: ['도쿄', '시부야'],
     isOfficial: true,
     sourceSummary:
-      'GO TOKYO의 시부야 문화권 설명, Nintendo TOKYO 공식 주소, 포켓몬센터 공식 점포 정보를 묶어 시부야 중심 방문 후 이케부쿠로 포켓몬 거점으로 이동합니다.',
+      'GO TOKYO의 시부야 문화권 설명과 Nintendo TOKYO 공식 주소를 기준으로 도보 이동 가능한 시부야 중심 동선만 구성합니다.',
     sourceUrls: [
       'https://www.gotokyo.org/en/destinations/western-tokyo/shibuya/index.html',
       'https://www.nintendo.com/jp/officialstore/index.html',
-      'https://shop.pokemon.co.jp/ja/shop/pokemoncenter-shibuya/',
-      'https://www.pokemon.co.jp/shop/en/pokecen/megatokyo/',
     ],
   },
   {
@@ -618,6 +609,7 @@ const routePlans = [
       'https://www.reddit.com/r/HibikeEuphonium/comments/1szqmr5/should_i_be_based_in_kyoto_or_uji_proper_for_a/',
     ],
   },
+  ...JAPAN_PILGRIMAGE_ROUTE_EXPANSION,
 ]
 
 main().catch((error) => {
@@ -659,6 +651,51 @@ async function main() {
       )
     )
 
+    const existingRouteIds = new Set(
+      (
+        await routesCollection.find({}, { projection: { id: 1 } }).toArray()
+      ).map((route) => route.id)
+    )
+
+    const spotIds = [...new Set(routePlans.flatMap((route) => route.spotIds))]
+    const spots = await spotsCollection
+      .find({ id: { $in: spotIds } })
+      .project({ _id: 0, id: 1, name: 1, coordinates: 1, photos: 1 })
+      .toArray()
+    const existingSpotIds = new Set(spots.map((spot) => spot.id))
+    const newSpotPlanIds = new Set(newSpotPlans.map((spot) => spot.id))
+    const catalogSpotById = new Map(
+      JAPAN_PILGRIMAGE_ROUTE_SPOTS.map((spot) => [spot.id, spot])
+    )
+    const missingCatalogSpotIds = spotIds.filter(
+      (spotId) => !existingSpotIds.has(spotId) && !newSpotPlanIds.has(spotId)
+    )
+    const requiredContentNames = [
+      ...new Set(routePlans.flatMap((route) => route.relatedContentNames)),
+    ]
+    const missingContentNames = requiredContentNames.filter(
+      (contentName) => !contentByName.has(contentName)
+    )
+
+    if (
+      MODE === 'apply' &&
+      (missingCatalogSpotIds.length > 0 || missingContentNames.length > 0)
+    ) {
+      throw new Error(
+        [
+          'Route apply preflight failed. Seed the researched spot catalog first with `npx tsx scripts/seed-real-spots.ts --append`.',
+          missingCatalogSpotIds.length > 0
+            ? `Missing spot IDs: ${missingCatalogSpotIds.join(', ')}`
+            : null,
+          missingContentNames.length > 0
+            ? `Missing content names: ${missingContentNames.join(', ')}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join('\n')
+      )
+    }
+
     const spotUpserts = await upsertNewSpots(
       spotsCollection,
       relationsCollection,
@@ -667,33 +704,40 @@ async function main() {
       contentByName
     )
 
-    const existingIds = new Set(
-      (
-        await routesCollection.find({}, { projection: { id: 1 } }).toArray()
-      ).map((route) => route.id)
-    )
-
-    const contentNames = new Set(contentByName.keys())
-
-    const spotIds = [...new Set(routePlans.flatMap((route) => route.spotIds))]
-    const spots = await spotsCollection
-      .find({ id: { $in: spotIds } })
-      .project({ _id: 0, id: 1, name: 1, coordinates: 1, photos: 1 })
-      .toArray()
     const spotById = new Map(spots.map((spot) => [spot.id, spot]))
     for (const spot of newSpotPlans) {
-      if (!spotById.has(spot.id)) {
-        spotById.set(spot.id, {
-          id: spot.id,
-          name: spot.name,
-          coordinates: spot.coordinates,
-          photos: spot.photos,
+      spotById.set(spot.id, {
+        id: spot.id,
+        name: spot.name,
+        coordinates: spot.coordinates,
+        photos: spot.photos,
+      })
+    }
+    for (const spotId of spotIds) {
+      const catalogSpot = catalogSpotById.get(spotId)
+      if (!spotById.has(spotId) && catalogSpot) {
+        spotById.set(spotId, {
+          id: catalogSpot.id,
+          name: catalogSpot.name,
+          coordinates: catalogSpot.coordinates,
+          photos: catalogSpot.photos,
         })
       }
     }
 
+    const contentNames = new Set([
+      ...contentByName.keys(),
+      ...requiredContentNames,
+    ])
+
     const plannedRoutes = routePlans.map((plan) =>
-      buildRoute(plan, spotById, contentNames, existingIds)
+      buildRoute(
+        plan,
+        spotById,
+        contentNames,
+        existingRouteIds,
+        existingSpotIds
+      )
     )
 
     printPlan(plannedRoutes)
@@ -713,7 +757,7 @@ async function main() {
         'sourceAudit.seedKey': route.sourceAudit.seedKey,
       })
 
-      if (!existing && existingIds.has(route.id)) {
+      if (!existing && existingRouteIds.has(route.id)) {
         throw new Error(
           `Cannot insert ${route.id}: id already exists without matching seedKey`
         )
@@ -1005,7 +1049,13 @@ function normalizeContentId(contentName) {
     .replace(/^_+|_+$/g, '')
 }
 
-function buildRoute(plan, spotById, contentNames, existingIds) {
+function buildRoute(
+  plan,
+  spotById,
+  contentNames,
+  existingRouteIds,
+  existingSpotIds
+) {
   const missingSpots = plan.spotIds.filter((spotId) => !spotById.has(spotId))
   if (missingSpots.length > 0) {
     throw new Error(`${plan.id} has missing spots: ${missingSpots.join(', ')}`)
@@ -1020,7 +1070,7 @@ function buildRoute(plan, spotById, contentNames, existingIds) {
     )
   }
 
-  if (existingIds.has(plan.id)) {
+  if (existingRouteIds.has(plan.id)) {
     // Allowed only when the existing document is this seed. The apply path checks that.
   }
 
@@ -1062,10 +1112,11 @@ function buildRoute(plan, spotById, contentNames, existingIds) {
     (sum, spot) => sum + estimateMovementMinutes(spot.distanceFromPrev),
     0
   )
-  const estimatedDuration =
+  const calculatedDuration =
     Math.ceil(
       (movementMinutes + orderedSpots.length * STOP_BUFFER_MINUTES) / 5
     ) * 5
+  const estimatedDuration = plan.estimatedDurationMinutes || calculatedDuration
   const difficulty = pickDifficulty(
     totalDistance,
     estimatedDuration,
@@ -1095,14 +1146,23 @@ function buildRoute(plan, spotById, contentNames, existingIds) {
       seedKey: plan.seedKey,
       sourceUrls: plan.sourceUrls,
       sourceSummary: plan.sourceSummary,
-      researchedAt: RESEARCHED_AT,
+      researchedAt: plan.researchedAt || RESEARCHED_AT,
       insertedAt: now,
-      allStopsAlreadyInDb: plan.spotIds.every(
-        (spotId) => !newSpotPlans.some((newSpot) => newSpot.id === spotId)
+      allStopsAlreadyInDb: plan.spotIds.every((spotId) =>
+        existingSpotIds.has(spotId)
       ),
-      newSpotIds: plan.spotIds.filter((spotId) =>
-        newSpotPlans.some((newSpot) => newSpot.id === spotId)
-      ),
+      newSpotIds: plan.spotIds.filter((spotId) => !existingSpotIds.has(spotId)),
+      methodology: plan.pilgrimSources
+        ? 'pilgrim-trip-pattern-v1'
+        : 'editorial-research-v1',
+      routeType: plan.routeType || null,
+      calculatedDuration,
+      durationMethod: plan.estimatedDurationMinutes
+        ? 'source-informed-override'
+        : 'distance-formula',
+      distanceMethod: 'geodesic-lower-bound',
+      observedTravelPattern: plan.observedTravelPattern || null,
+      pilgrimSources: plan.pilgrimSources || [],
       generatedBy: 'scripts/seed-researched-routes.mjs',
     },
   }
@@ -1122,8 +1182,11 @@ function printPlan(routes) {
           totalDistance: route.totalDistance,
           estimatedDuration: route.estimatedDuration,
           difficulty: route.difficulty,
+          routeType: route.sourceAudit.routeType,
+          durationMethod: route.sourceAudit.durationMethod,
           relatedContentNames: route.relatedContentNames,
           sourceUrls: route.sourceAudit.sourceUrls,
+          newSpotIds: route.sourceAudit.newSpotIds,
         })),
       },
       null,

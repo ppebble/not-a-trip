@@ -21,13 +21,27 @@ async function main() {
     const query = seededOnly
       ? { 'sourceAudit.generatedBy': 'scripts/seed-researched-routes.mjs' }
       : {}
-    const [routes, spotIds, contentNames] = await Promise.all([
+    const [routes, spotsById, contentNames] = await Promise.all([
       db.collection('routes').find(query).toArray(),
       db
         .collection('spots')
-        .find({}, { projection: { _id: 0, id: 1 } })
+        .find(
+          {},
+          {
+            projection: {
+              _id: 0,
+              id: 1,
+              name: 1,
+              coordinates: 1,
+              photos: 1,
+              status: 1,
+              spotStatus: 1,
+              lifecycleStatus: 1,
+            },
+          }
+        )
         .toArray()
-        .then((spots) => new Set(spots.map((spot) => spot.id))),
+        .then((spots) => new Map(spots.map((spot) => [spot.id, spot]))),
       db
         .collection('content_masters')
         .find({}, { projection: { _id: 0, displayName: 1, normalizedName: 1 } })
@@ -46,7 +60,7 @@ async function main() {
     const routeIdCounts = new Map()
     for (const route of routes) {
       routeIdCounts.set(route.id, (routeIdCounts.get(route.id) || 0) + 1)
-      validateRoute(route, spotIds, contentNames, failures)
+      validateRoute(route, spotsById, contentNames, failures)
     }
 
     for (const [routeId, count] of routeIdCounts.entries()) {
@@ -67,7 +81,7 @@ async function main() {
   }
 }
 
-function validateRoute(route, spotIds, contentNames, failures) {
+function validateRoute(route, spotsById, contentNames, failures) {
   const label = route.id || '(missing id)'
 
   if (!/^ROUTE-\d+$/.test(route.id || '')) {
@@ -85,6 +99,10 @@ function validateRoute(route, spotIds, contentNames, failures) {
   if (!Array.isArray(route.spots) || route.spots.length < 2) {
     failures.push(`${label}: route must have at least 2 spots`)
   }
+  const routeSpotIds = (route.spots || []).map((spot) => spot.spotId)
+  if (new Set(routeSpotIds).size !== routeSpotIds.length) {
+    failures.push(`${label}: route contains duplicated spot ids`)
+  }
   if (!Number.isFinite(route.totalDistance) || route.totalDistance < 0) {
     failures.push(`${label}: totalDistance must be finite and non-negative`)
   }
@@ -99,8 +117,33 @@ function validateRoute(route, spotIds, contentNames, failures) {
   }
 
   for (const [index, spot] of (route.spots || []).entries()) {
-    if (!spotIds.has(spot.spotId)) {
+    const masterSpot = spotsById.get(spot.spotId)
+    if (!masterSpot) {
       failures.push(`${label}: spot ${spot.spotId} does not exist`)
+    } else {
+      if (route.isPublic === true && spot.spotName !== masterSpot.name) {
+        failures.push(`${label}: spot ${spot.spotId} name is stale`)
+      }
+      if (route.isPublic === true && isExplicitlyUnavailable(masterSpot)) {
+        failures.push(
+          `${label}: public route contains unavailable spot ${spot.spotId}`
+        )
+      }
+      if (
+        spot.coordinates &&
+        masterSpot.coordinates &&
+        calculateDistanceMeters(spot.coordinates, masterSpot.coordinates) > 25
+      ) {
+        failures.push(
+          `${label}: spot ${spot.spotId} coordinates drifted from master data`
+        )
+      }
+      if (
+        route.isPublic === true &&
+        (masterSpot.photos?.[0] || '') !== (spot.thumbnailUrl || '')
+      ) {
+        failures.push(`${label}: spot ${spot.spotId} thumbnail is stale`)
+      }
     }
     if (
       !spot.coordinates ||
@@ -145,6 +188,21 @@ function validateRoute(route, spotIds, contentNames, failures) {
     }
   }
 
+  const summedLegDistance = (route.spots || []).reduce(
+    (sum, spot) =>
+      sum +
+      (Number.isFinite(spot.distanceFromPrev) ? spot.distanceFromPrev : 0),
+    0
+  )
+  if (
+    Number.isFinite(route.totalDistance) &&
+    Math.abs(route.totalDistance - summedLegDistance) > 1
+  ) {
+    failures.push(
+      `${label}: totalDistance does not equal the sum of route legs`
+    )
+  }
+
   for (const contentName of route.relatedContentNames || []) {
     if (!contentNames.has(contentName)) {
       failures.push(`${label}: related content does not exist: ${contentName}`)
@@ -179,6 +237,39 @@ function validateRoute(route, spotIds, contentNames, failures) {
       )
     }
   }
+}
+
+function isExplicitlyUnavailable(spot) {
+  const unavailable = new Set([
+    'lost',
+    'removed',
+    'deleted',
+    'closed',
+    'closure',
+    'demolished',
+    'unavailable',
+    'inactive',
+    'archived',
+  ])
+  return [spot.status, spot.spotStatus, spot.lifecycleStatus].some(
+    (value) =>
+      typeof value === 'string' && unavailable.has(value.trim().toLowerCase())
+  )
+}
+
+function calculateDistanceMeters(a, b) {
+  const toRadians = (degrees) => (degrees * Math.PI) / 180
+  const earthRadiusMeters = 6371000
+  const dLat = toRadians(b.lat - a.lat)
+  const dLng = toRadians(b.lng - a.lng)
+  const value =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(a.lat)) *
+      Math.cos(toRadians(b.lat)) *
+      Math.sin(dLng / 2) ** 2
+  return (
+    2 * earthRadiusMeters * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value))
+  )
 }
 
 function loadEnv() {

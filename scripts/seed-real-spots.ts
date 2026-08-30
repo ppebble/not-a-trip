@@ -10,7 +10,8 @@
  * npx tsx scripts/seed-real-spots.ts --append
  */
 
-import { MongoClient } from 'mongodb'
+import fs from 'node:fs'
+import { MongoClient, type Collection, type Document } from 'mongodb'
 import type {
   SpotCategory,
   ContentType,
@@ -18,10 +19,16 @@ import type {
   ExternalLinkType,
 } from '../src/types'
 import { ANIMATION_SPOT_IMAGE_ASSET_BY_ID } from '../src/lib/animation-spot-image-assets'
+import { JAPAN_ANIME_SPOT_ADDITIONS } from './data/japan-anime-spot-additions'
+import { JAPAN_ANIME_SPOT_EXPANSION } from './data/japan-anime-spot-expansion'
+import { JAPAN_ANIME_FACILITY_EXPANSION } from './data/japan-anime-facility-expansion'
 import type {
   DataReviewStatus,
   SourceEvidence,
 } from '../src/lib/real-image-data'
+import type { SpotLifecycleStatus } from '../src/types/spot-quality'
+
+loadEnv()
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017'
 const MONGODB_DB = process.env.MONGODB_DB || 'not-a-trip'
@@ -33,7 +40,27 @@ interface RelatedContent {
   additionalInfo?: string
 }
 
-interface SeedSpot {
+function loadEnv(): void {
+  for (const file of ['.env.local', '.env']) {
+    if (!fs.existsSync(file)) continue
+
+    for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
+      const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/)
+      if (!match || process.env[match[1]]) continue
+
+      let value = match[2].trim()
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1)
+      }
+      process.env[match[1]] = value
+    }
+  }
+}
+
+export interface SeedSpot {
   id: string
   name: string
   description: string
@@ -45,6 +72,7 @@ interface SeedSpot {
   externalLinks?: ExternalLink[] // 외부 링크 (스포츠/음악 카테고리용)
   sourceUrls?: SourceEvidence[]
   reviewStatus?: DataReviewStatus
+  lifecycleStatus?: SpotLifecycleStatus
   authorName: string
   isGuestSpot: boolean
   createdAt: Date
@@ -64,7 +92,7 @@ function createExternalLink(
 // ============================================
 // 애니메이션 성지순례 명소 (10개 이상)
 // ============================================
-const ANIMATION_SPOTS: SeedSpot[] = [
+export const ANIMATION_SPOTS: SeedSpot[] = [
   {
     id: 'REAL-ANI-001',
     name: '스가 신사 (너의 이름은)',
@@ -630,6 +658,9 @@ const ANIMATION_SPOTS: SeedSpot[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  ...JAPAN_ANIME_SPOT_ADDITIONS,
+  ...JAPAN_ANIME_SPOT_EXPANSION,
+  ...JAPAN_ANIME_FACILITY_EXPANSION,
 ]
 
 // ============================================
@@ -983,7 +1014,7 @@ const MOVIE_DRAMA_SPOTS: SeedSpot[] = [
 // ============================================
 // 음악/콘서트 관련 장소 (5개 이상)
 // ============================================
-const MUSIC_SPOTS: SeedSpot[] = [
+export const MUSIC_SPOTS: SeedSpot[] = [
   {
     id: 'REAL-MUS-001',
     name: '애비 로드 횡단보도 (비틀즈)',
@@ -1086,7 +1117,7 @@ const MUSIC_SPOTS: SeedSpot[] = [
     id: 'REAL-MUS-004',
     name: 'HYBE 인사이트',
     description:
-      'BTS 소속사 HYBE의 전시 공간입니다. BTS를 비롯한 HYBE 아티스트들의 역사와 음악을 체험할 수 있는 팬들의 성지입니다.',
+      'HYBE 용산 사옥에서 운영되었던 전시 공간입니다. 해당 상설 뮤지엄은 2023년 1월 운영을 종료했으며, 현재는 과거 팬 성지 기록으로만 제공합니다.',
     photos: ['https://picsum.photos/seed/hybe-insight/800/600'],
     address: '대한민국 서울특별시 용산구 한강대로 42',
     coordinates: { lat: 37.5283, lng: 126.9654 },
@@ -1103,18 +1134,22 @@ const MUSIC_SPOTS: SeedSpot[] = [
         'https://www.hybeinsight.com'
       ),
       createExternalLink(
-        'mus-004-2',
-        'ticket',
-        '예약하기',
-        'https://www.hybeinsight.com/reservation'
-      ),
-      createExternalLink(
         'mus-004-3',
         'sns',
         '인스타그램',
         'https://www.instagram.com/hlobal_official'
       ),
     ],
+    sourceUrls: [
+      {
+        url: 'https://www.hybeinsight.com/',
+        label: 'HYBE INSIGHT 용산 뮤지엄 운영 종료 공지',
+        evidenceType: 'official',
+        collectedAt: '2026-08-31',
+      },
+    ],
+    lifecycleStatus: 'closed',
+    reviewStatus: 'approved',
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -1124,7 +1159,7 @@ const MUSIC_SPOTS: SeedSpot[] = [
     id: 'REAL-MUS-005',
     name: 'SM타운 코엑스아티움',
     description:
-      'SM엔터테인먼트의 복합 문화 공간입니다. EXO, NCT, 에스파 등 SM 아티스트들의 굿즈와 전시를 즐길 수 있습니다.',
+      'SM엔터테인먼트가 코엑스에서 운영했던 복합 문화 공간입니다. 2020년 영업을 종료했으며, 현재는 과거 K-POP 팬 성지 기록으로만 제공합니다.',
     photos: ['https://picsum.photos/seed/smtown/800/600'],
     address: '대한민국 서울특별시 강남구 영동대로 513',
     coordinates: { lat: 37.5116, lng: 127.0595 },
@@ -1148,6 +1183,16 @@ const MUSIC_SPOTS: SeedSpot[] = [
         'https://twitter.com/SMTOWN'
       ),
     ],
+    sourceUrls: [
+      {
+        url: 'https://www.hankyung.com/article/202005207478H',
+        label: 'SMTOWN 코엑스아티움 2020년 영업 종료 보도',
+        evidenceType: 'document',
+        collectedAt: '2026-08-31',
+      },
+    ],
+    lifecycleStatus: 'closed',
+    reviewStatus: 'approved',
     authorName: 'System',
     isGuestSpot: false,
     createdAt: new Date(),
@@ -1277,27 +1322,30 @@ const GAME_SPOTS: SeedSpot[] = [
 // ============================================
 // 모든 스팟 데이터 합치기
 // ============================================
-const APPROVED_ANIMATION_SPOTS: SeedSpot[] = ANIMATION_SPOTS.map((spot) => {
-  const asset = ANIMATION_SPOT_IMAGE_ASSET_BY_ID[spot.id]
+export const APPROVED_ANIMATION_SPOTS: SeedSpot[] = ANIMATION_SPOTS.map(
+  (spot) => {
+    const asset = ANIMATION_SPOT_IMAGE_ASSET_BY_ID[spot.id]
 
-  if (!asset) {
-    return spot
-  }
+    if (!asset) {
+      return spot
+    }
 
-  return {
-    ...spot,
-    photos: [asset.ownedUrl],
-    reviewStatus: 'approved',
-    sourceUrls: [
-      {
-        url: asset.source.sourcePageUrl,
-        label: `${spot.id} 실제 장소 사진 출처`,
-        evidenceType: 'wiki',
-        collectedAt: asset.source.collectedAt,
-      },
-    ],
+    return {
+      ...spot,
+      photos: [asset.ownedUrl],
+      reviewStatus: spot.reviewStatus ?? 'approved',
+      sourceUrls: [
+        ...(spot.sourceUrls ?? []),
+        {
+          url: asset.source.sourcePageUrl,
+          label: `${spot.id} 실제 장소 사진 출처`,
+          evidenceType: 'wiki',
+          collectedAt: asset.source.collectedAt,
+        },
+      ],
+    }
   }
-})
+)
 
 const ALL_REAL_SPOTS: SeedSpot[] = [
   ...APPROVED_ANIMATION_SPOTS,
@@ -1410,6 +1458,142 @@ export async function syncRelationsFromSpots(
   return result.insertedCount
 }
 
+export interface ContentMasterSeed {
+  normalizedName: string
+  displayName: string
+  type: ContentType
+  year?: number
+  spotCount: number
+}
+
+export function buildContentMasterSeeds(
+  spots: SeedSpot[]
+): ContentMasterSeed[] {
+  const contentByName = new Map<
+    string,
+    Omit<ContentMasterSeed, 'spotCount'> & { spotIds: Set<string> }
+  >()
+
+  for (const spot of spots) {
+    for (const content of spot.relatedContent) {
+      const normalizedName = content.name.trim().toLowerCase()
+      const existing = contentByName.get(normalizedName)
+      if (existing) {
+        existing.spotIds.add(spot.id)
+        continue
+      }
+
+      contentByName.set(normalizedName, {
+        normalizedName,
+        displayName: content.name.trim(),
+        type: content.type,
+        year: content.year,
+        spotIds: new Set([spot.id]),
+      })
+    }
+  }
+
+  return [...contentByName.values()].map(({ spotIds, ...content }) => ({
+    ...content,
+    spotCount: spotIds.size,
+  }))
+}
+
+async function syncContentMastersFromDatabase(
+  spotsCollection: Collection<Document>,
+  relationsCollection: Collection<Document>,
+  contentMastersCollection: Collection<Document>
+): Promise<{ created: number; updated: number }> {
+  const now = new Date()
+  const contentByName = new Map<
+    string,
+    {
+      normalizedName: string
+      displayName: string
+      type?: string
+      year?: number
+      spotIds: Set<string>
+    }
+  >()
+  const storedSpots = await spotsCollection
+    .find({ relatedContent: { $exists: true, $ne: [] } })
+    .project({ id: 1, relatedContent: 1 })
+    .toArray()
+  const activeRelations = await relationsCollection
+    .find({ status: 'active', contentName: { $exists: true, $ne: '' } })
+    .project({ spotId: 1, contentName: 1, contentType: 1 })
+    .toArray()
+
+  function addContent(
+    spotId: string,
+    name: string,
+    type?: string,
+    year?: number
+  ) {
+    const displayName = name.trim()
+    const normalizedName = displayName.toLowerCase()
+    const existing = contentByName.get(normalizedName)
+    if (existing) {
+      existing.spotIds.add(spotId)
+      existing.type ||= type
+      existing.year ||= year
+      return
+    }
+
+    contentByName.set(normalizedName, {
+      normalizedName,
+      displayName,
+      type,
+      year,
+      spotIds: new Set([spotId]),
+    })
+  }
+
+  for (const spot of storedSpots) {
+    if (typeof spot.id !== 'string' || !Array.isArray(spot.relatedContent))
+      continue
+    for (const content of spot.relatedContent) {
+      if (!content || typeof content.name !== 'string') continue
+      addContent(spot.id, content.name, content.type, content.year)
+    }
+  }
+  for (const relation of activeRelations) {
+    if (
+      typeof relation.spotId !== 'string' ||
+      typeof relation.contentName !== 'string'
+    )
+      continue
+    addContent(relation.spotId, relation.contentName, relation.contentType)
+  }
+
+  const contentMasters = [...contentByName.values()].map(
+    ({ spotIds, ...content }) => ({ ...content, spotCount: spotIds.size })
+  )
+  const result = await contentMastersCollection.bulkWrite(
+    contentMasters.map((content) => ({
+      updateOne: {
+        filter: { normalizedName: content.normalizedName },
+        update: {
+          $set: { spotCount: content.spotCount, updatedAt: now },
+          $setOnInsert: {
+            normalizedName: content.normalizedName,
+            displayName: content.displayName,
+            type: content.type,
+            year: content.year,
+            createdAt: now,
+          },
+        },
+        upsert: true,
+      },
+    }))
+  )
+
+  return {
+    created: result.upsertedCount,
+    updated: result.modifiedCount,
+  }
+}
+
 async function seedRealSpots() {
   const client = new MongoClient(MONGODB_URI)
   const isAppendMode = process.argv.includes('--append')
@@ -1424,6 +1608,7 @@ async function seedRealSpots() {
     const db = client.db(MONGODB_DB)
     const collection = db.collection('spots')
     const relationsCollection = db.collection('spot_content_relations')
+    const contentMastersCollection = db.collection('content_masters')
 
     if (!isAppendMode) {
       // eslint-disable-next-line no-console
@@ -1460,6 +1645,15 @@ async function seedRealSpots() {
           // eslint-disable-next-line no-console
           console.log(`✅ ${syncCount}개의 spot_content_relations 동기화 완료`)
         }
+        const contentSync = await syncContentMastersFromDatabase(
+          collection,
+          relationsCollection,
+          contentMastersCollection
+        )
+        // eslint-disable-next-line no-console
+        console.log(
+          `✅ content_masters 동기화: ${contentSync.created}개 생성, ${contentSync.updated}개 갱신`
+        )
         return
       }
       // eslint-disable-next-line no-console
@@ -1481,6 +1675,15 @@ async function seedRealSpots() {
         // eslint-disable-next-line no-console
         console.log(`✅ ${syncCount}개의 spot_content_relations 추가`)
       }
+      const contentSync = await syncContentMastersFromDatabase(
+        collection,
+        relationsCollection,
+        contentMastersCollection
+      )
+      // eslint-disable-next-line no-console
+      console.log(
+        `✅ content_masters 동기화: ${contentSync.created}개 생성, ${contentSync.updated}개 갱신`
+      )
       return
     }
 
@@ -1506,6 +1709,15 @@ async function seedRealSpots() {
     // eslint-disable-next-line no-console
     console.log(
       `✅ ${relResult.insertedCount}개의 spot_content_relations 생성 완료!`
+    )
+    const contentSync = await syncContentMastersFromDatabase(
+      collection,
+      relationsCollection,
+      contentMastersCollection
+    )
+    // eslint-disable-next-line no-console
+    console.log(
+      `✅ content_masters 동기화: ${contentSync.created}개 생성, ${contentSync.updated}개 갱신`
     )
 
     // eslint-disable-next-line no-console

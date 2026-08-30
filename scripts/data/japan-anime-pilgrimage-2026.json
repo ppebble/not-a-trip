@@ -1,0 +1,1242 @@
+{
+  "edition": 2026,
+  "source": {
+    "publisher": "Anime Tourism Association",
+    "url": "https://animetourism88.com/topic/%E3%80%8E%E8%A8%AA%E3%82%8C%E3%81%A6%E3%81%BF%E3%81%9F%E3%81%84%E6%97%A5%E6%9C%AC%E3%81%AE%E3%82%A2%E3%83%8B%E3%83%A1%E8%81%96%E5%9C%B0-88%E3%80%8F2026%E5%B9%B4%E7%89%88-%E9%81%B8%E5%AE%9A%E3%81%AB/",
+    "publishedAt": "2026-02-13",
+    "retrievedAt": "2026-08-30"
+  },
+  "counts": {
+    "works": 146,
+    "facilities": 29,
+    "total": 175,
+    "newSelections": 34
+  },
+  "selections": [
+    {
+      "index": 1,
+      "kind": "work",
+      "name": "薄桜鬼 真改",
+      "region": "北海道函館市",
+      "isNew": false
+    },
+    {
+      "index": 2,
+      "kind": "work",
+      "name": "ラブライブ！サンシャイン!!",
+      "region": "北海道函館市",
+      "isNew": false
+    },
+    {
+      "index": 3,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "青森県",
+      "isNew": true
+    },
+    {
+      "index": 4,
+      "kind": "work",
+      "name": "艦隊これくしょん ‐艦これ‐",
+      "region": "青森県むつ市（大湊）",
+      "isNew": false
+    },
+    {
+      "index": 5,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "岩手県",
+      "isNew": true
+    },
+    {
+      "index": 6,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "宮城県",
+      "isNew": true
+    },
+    {
+      "index": 7,
+      "kind": "work",
+      "name": "釣りキチ三平",
+      "region": "秋田県横手市",
+      "isNew": false
+    },
+    {
+      "index": 8,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "福島県",
+      "isNew": true
+    },
+    {
+      "index": 9,
+      "kind": "work",
+      "name": "薄桜鬼 真改",
+      "region": "福島県会津若松市",
+      "isNew": false
+    },
+    {
+      "index": 10,
+      "kind": "work",
+      "name": "ラブライブ！スーパースター!!",
+      "region": "茨城県牛久市",
+      "isNew": true
+    },
+    {
+      "index": 11,
+      "kind": "work",
+      "name": "ガールズ＆パンツァー 最終章",
+      "region": "茨城県大洗町",
+      "isNew": false
+    },
+    {
+      "index": 12,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "栃木県",
+      "isNew": true
+    },
+    {
+      "index": 13,
+      "kind": "work",
+      "name": "秒速5センチメートル",
+      "region": "栃木県栃木市",
+      "isNew": false
+    },
+    {
+      "index": 14,
+      "kind": "work",
+      "name": "頭文字D",
+      "region": "群馬県",
+      "isNew": true
+    },
+    {
+      "index": 15,
+      "kind": "work",
+      "name": "前橋ウィッチーズ",
+      "region": "群馬県前橋市",
+      "isNew": true
+    },
+    {
+      "index": 16,
+      "kind": "work",
+      "name": "菜なれ花なれ",
+      "region": "群馬県高崎市",
+      "isNew": false
+    },
+    {
+      "index": 17,
+      "kind": "work",
+      "name": "菜なれ花なれ",
+      "region": "群馬県沼田市",
+      "isNew": false
+    },
+    {
+      "index": 18,
+      "kind": "work",
+      "name": "宇宙よりも遠い場所",
+      "region": "群馬県館林市",
+      "isNew": false
+    },
+    {
+      "index": 19,
+      "kind": "work",
+      "name": "その着せ替え人形は恋をする",
+      "region": "埼玉県さいたま市（岩槻）",
+      "isNew": false
+    },
+    {
+      "index": 20,
+      "kind": "work",
+      "name": "神様はじめました",
+      "region": "埼玉県川越市",
+      "isNew": false
+    },
+    {
+      "index": 21,
+      "kind": "work",
+      "name": "月がきれい",
+      "region": "埼玉県川越市",
+      "isNew": false
+    },
+    {
+      "index": 22,
+      "kind": "work",
+      "name": "あの日見た花の名前を僕達はまだ知らない。",
+      "region": "埼玉県秩父市",
+      "isNew": false
+    },
+    {
+      "index": 23,
+      "kind": "work",
+      "name": "心が叫びたがってるんだ。",
+      "region": "埼玉県秩父市",
+      "isNew": false
+    },
+    {
+      "index": 24,
+      "kind": "work",
+      "name": "空の青さを知る人よ",
+      "region": "埼玉県秩父市",
+      "isNew": false
+    },
+    {
+      "index": 25,
+      "kind": "work",
+      "name": "女子高生の無駄づかい",
+      "region": "埼玉県所沢市",
+      "isNew": false
+    },
+    {
+      "index": 26,
+      "kind": "work",
+      "name": "ヤマノススメ Next Summit",
+      "region": "埼玉県飯能市",
+      "isNew": false
+    },
+    {
+      "index": 27,
+      "kind": "work",
+      "name": "さよなら私のクラマー",
+      "region": "埼玉県蕨市",
+      "isNew": false
+    },
+    {
+      "index": 28,
+      "kind": "work",
+      "name": "『冴えない彼女の育てかた』シリーズ",
+      "region": "埼玉県和光市",
+      "isNew": false
+    },
+    {
+      "index": 29,
+      "kind": "work",
+      "name": "らき☆すた",
+      "region": "埼玉県久喜市",
+      "isNew": false
+    },
+    {
+      "index": 30,
+      "kind": "work",
+      "name": "心が叫びたがってるんだ。",
+      "region": "埼玉県横瀬町",
+      "isNew": false
+    },
+    {
+      "index": 31,
+      "kind": "work",
+      "name": "私に天使が舞い降りた! プレシャス・フレンズ",
+      "region": "埼玉県長瀞町",
+      "isNew": false
+    },
+    {
+      "index": 32,
+      "kind": "work",
+      "name": "青のオーケストラ",
+      "region": "千葉県千葉市",
+      "isNew": false
+    },
+    {
+      "index": 33,
+      "kind": "work",
+      "name": "俺の妹がこんなに可愛いわけがない",
+      "region": "千葉県千葉市",
+      "isNew": false
+    },
+    {
+      "index": 34,
+      "kind": "work",
+      "name": "『やはり俺の青春ラブコメはまちがっている。』シリーズ",
+      "region": "千葉県千葉市",
+      "isNew": false
+    },
+    {
+      "index": 35,
+      "kind": "work",
+      "name": "『アマガミSS』シリーズ",
+      "region": "千葉県銚子市",
+      "isNew": false
+    },
+    {
+      "index": 36,
+      "kind": "work",
+      "name": "映画『トラペジウム』",
+      "region": "千葉県館山市",
+      "isNew": false
+    },
+    {
+      "index": 37,
+      "kind": "work",
+      "name": "劇場版 ソードアート・オンライン -オーディナル・スケール-",
+      "region": "東京都",
+      "isNew": false
+    },
+    {
+      "index": 38,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "東京都",
+      "isNew": true
+    },
+    {
+      "index": 39,
+      "kind": "work",
+      "name": "『BanG Dream!』シリーズ",
+      "region": "東京都（都電荒川線早稲田駅近辺）",
+      "isNew": false
+    },
+    {
+      "index": 40,
+      "kind": "work",
+      "name": "STEINS;GATE（シュタインズ・ゲート）",
+      "region": "東京都千代田区",
+      "isNew": false
+    },
+    {
+      "index": 41,
+      "kind": "work",
+      "name": "ラブライブ！",
+      "region": "東京都千代田区",
+      "isNew": false
+    },
+    {
+      "index": 42,
+      "kind": "work",
+      "name": "江戸前エルフ",
+      "region": "東京都中央区",
+      "isNew": false
+    },
+    {
+      "index": 43,
+      "kind": "work",
+      "name": "薫る花は凛と咲く",
+      "region": "東京都港区（マクセル アクアパーク品川）",
+      "isNew": true
+    },
+    {
+      "index": 44,
+      "kind": "work",
+      "name": "デジモンアドベンチャー(1999年)",
+      "region": "東京都港区（お台場）",
+      "isNew": false
+    },
+    {
+      "index": 45,
+      "kind": "work",
+      "name": "ラブライブ！虹ヶ咲学園スクールアイドル同好会",
+      "region": "東京都港区",
+      "isNew": false
+    },
+    {
+      "index": 46,
+      "kind": "work",
+      "name": "リコリス・リコイル",
+      "region": "東京都墨田区",
+      "isNew": false
+    },
+    {
+      "index": 47,
+      "kind": "work",
+      "name": "アイドルマスター ミリオンライブ！",
+      "region": "東京都江東区（豊洲）",
+      "isNew": false
+    },
+    {
+      "index": 48,
+      "kind": "work",
+      "name": "ラブライブ！虹ヶ咲学園スクールアイドル同好会",
+      "region": "東京都江東区",
+      "isNew": false
+    },
+    {
+      "index": 49,
+      "kind": "work",
+      "name": "秒速5センチメートル",
+      "region": "東京都世田谷区",
+      "isNew": false
+    },
+    {
+      "index": 50,
+      "kind": "work",
+      "name": "ぼっち・ざ・ろっく！",
+      "region": "東京都世田谷区",
+      "isNew": false
+    },
+    {
+      "index": 51,
+      "kind": "work",
+      "name": "夜のクラゲは泳げない",
+      "region": "東京都渋谷区",
+      "isNew": false
+    },
+    {
+      "index": 52,
+      "kind": "work",
+      "name": "ラブライブ！スーパースター!!",
+      "region": "東京都渋谷区",
+      "isNew": false
+    },
+    {
+      "index": 53,
+      "kind": "work",
+      "name": "『冴えない彼女の育てかた』シリーズ",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 54,
+      "kind": "work",
+      "name": "その着せ替え人形は恋をする",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 55,
+      "kind": "work",
+      "name": "デュラララ!!",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 56,
+      "kind": "work",
+      "name": "『BanG Dream!』シリーズ",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 57,
+      "kind": "work",
+      "name": "四月は君の嘘",
+      "region": "東京都練馬区",
+      "isNew": true
+    },
+    {
+      "index": 58,
+      "kind": "work",
+      "name": "デジモンアドベンチャー(1999年)",
+      "region": "東京都練馬区（光が丘）",
+      "isNew": false
+    },
+    {
+      "index": 59,
+      "kind": "work",
+      "name": "日々は過ぎれど飯うまし",
+      "region": "東京都八王子市",
+      "isNew": true
+    },
+    {
+      "index": 60,
+      "kind": "work",
+      "name": "とある科学の超電磁砲",
+      "region": "東京都立川市",
+      "isNew": false
+    },
+    {
+      "index": 61,
+      "kind": "work",
+      "name": "とある魔術の禁書目録",
+      "region": "東京都立川市",
+      "isNew": false
+    },
+    {
+      "index": 62,
+      "kind": "work",
+      "name": "劇場版「SHIROBAKO」",
+      "region": "東京都武蔵野市",
+      "isNew": false
+    },
+    {
+      "index": 63,
+      "kind": "work",
+      "name": "『ゆるキャン△』シリーズ",
+      "region": "東京都昭島市",
+      "isNew": false
+    },
+    {
+      "index": 64,
+      "kind": "work",
+      "name": "ゲゲゲの鬼太郎",
+      "region": "東京都調布市",
+      "isNew": false
+    },
+    {
+      "index": 65,
+      "kind": "work",
+      "name": "うたごえはミルフィーユ",
+      "region": "東京都町田市",
+      "isNew": true
+    },
+    {
+      "index": 66,
+      "kind": "work",
+      "name": "しかのこのこのここしたんたん",
+      "region": "東京都日野市",
+      "isNew": false
+    },
+    {
+      "index": 67,
+      "kind": "work",
+      "name": "薄桜鬼 真改",
+      "region": "東京都日野市",
+      "isNew": false
+    },
+    {
+      "index": 68,
+      "kind": "work",
+      "name": "女子高生の無駄づかい",
+      "region": "東京都東村山市",
+      "isNew": false
+    },
+    {
+      "index": 69,
+      "kind": "work",
+      "name": "ラブライブ！スーパースター!!",
+      "region": "東京都神津島村",
+      "isNew": false
+    },
+    {
+      "index": 70,
+      "kind": "work",
+      "name": "文豪ストレイドッグス",
+      "region": "神奈川県横浜市",
+      "isNew": false
+    },
+    {
+      "index": 71,
+      "kind": "work",
+      "name": "ガールズバンドクライ",
+      "region": "神奈川県川崎市",
+      "isNew": false
+    },
+    {
+      "index": 72,
+      "kind": "work",
+      "name": "艦隊これくしょん ‐艦これ‐",
+      "region": "神奈川県横須賀市",
+      "isNew": false
+    },
+    {
+      "index": 73,
+      "kind": "work",
+      "name": "スローループ",
+      "region": "神奈川県横須賀市",
+      "isNew": false
+    },
+    {
+      "index": 74,
+      "kind": "work",
+      "name": "ハイスクール・フリート",
+      "region": "神奈川県横須賀市",
+      "isNew": false
+    },
+    {
+      "index": 75,
+      "kind": "work",
+      "name": "青春ブタ野郎はバニーガール先輩の夢を見ない",
+      "region": "神奈川県藤沢市",
+      "isNew": false
+    },
+    {
+      "index": 76,
+      "kind": "work",
+      "name": "TARI TARI",
+      "region": "神奈川県藤沢市",
+      "isNew": false
+    },
+    {
+      "index": 77,
+      "kind": "work",
+      "name": "MFゴースト",
+      "region": "神奈川県小田原市",
+      "isNew": true
+    },
+    {
+      "index": 78,
+      "kind": "work",
+      "name": "薫る花は凛と咲く",
+      "region": "神奈川県茅ヶ崎市（茅ヶ崎市立図書館）",
+      "isNew": true
+    },
+    {
+      "index": 79,
+      "kind": "work",
+      "name": "『エヴァンゲリオン』シリーズ",
+      "region": "神奈川県箱根町",
+      "isNew": false
+    },
+    {
+      "index": 80,
+      "kind": "work",
+      "name": "弱虫ペダル",
+      "region": "神奈川県箱根町",
+      "isNew": false
+    },
+    {
+      "index": 81,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "新潟県",
+      "isNew": true
+    },
+    {
+      "index": 82,
+      "kind": "work",
+      "name": "Do It Yourself!! -どぅー・いっと・ゆあせるふ-",
+      "region": "新潟県三条市",
+      "isNew": false
+    },
+    {
+      "index": 83,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "富山県",
+      "isNew": true
+    },
+    {
+      "index": 84,
+      "kind": "work",
+      "name": "おおかみこどもの雨と雪",
+      "region": "富山県上市町",
+      "isNew": false
+    },
+    {
+      "index": 85,
+      "kind": "work",
+      "name": "花咲くいろは",
+      "region": "石川県金沢市（湯涌温泉）",
+      "isNew": false
+    },
+    {
+      "index": 86,
+      "kind": "work",
+      "name": "TVアニメ「君は放課後インソムニア」",
+      "region": "石川県七尾市",
+      "isNew": true
+    },
+    {
+      "index": 87,
+      "kind": "work",
+      "name": "千歳くんはラムネ瓶のなか",
+      "region": "福井県福井市",
+      "isNew": true
+    },
+    {
+      "index": 88,
+      "kind": "work",
+      "name": "mono",
+      "region": "山梨県甲府市ほか（県央ネットやまなし）",
+      "isNew": true
+    },
+    {
+      "index": 89,
+      "kind": "work",
+      "name": "『ゆるキャン△』シリーズ",
+      "region": "山梨県山梨市",
+      "isNew": false
+    },
+    {
+      "index": 90,
+      "kind": "work",
+      "name": "スーパーカブ",
+      "region": "山梨県北杜市",
+      "isNew": false
+    },
+    {
+      "index": 91,
+      "kind": "work",
+      "name": "『ゆるキャン△』シリーズ",
+      "region": "山梨県身延町",
+      "isNew": false
+    },
+    {
+      "index": 92,
+      "kind": "work",
+      "name": "サマーウォーズ",
+      "region": "長野県上田市",
+      "isNew": false
+    },
+    {
+      "index": 93,
+      "kind": "work",
+      "name": "Turkey!",
+      "region": "長野県千曲市",
+      "isNew": true
+    },
+    {
+      "index": 94,
+      "kind": "work",
+      "name": "小市民シリーズ",
+      "region": "岐阜県岐阜市",
+      "isNew": false
+    },
+    {
+      "index": 95,
+      "kind": "work",
+      "name": "氷菓",
+      "region": "岐阜県高山市",
+      "isNew": false
+    },
+    {
+      "index": 96,
+      "kind": "work",
+      "name": "『やくならマグカップも』シリーズ",
+      "region": "岐阜県多治見市",
+      "isNew": false
+    },
+    {
+      "index": 97,
+      "kind": "work",
+      "name": "ウマ娘 シンデレラグレイ",
+      "region": "岐阜県笠松町",
+      "isNew": true
+    },
+    {
+      "index": 98,
+      "kind": "work",
+      "name": "ひぐらしのなく頃に 業・卒",
+      "region": "岐阜県白川村",
+      "isNew": false
+    },
+    {
+      "index": 99,
+      "kind": "work",
+      "name": "『エヴァンゲリオン』シリーズ",
+      "region": "静岡県浜松市",
+      "isNew": false
+    },
+    {
+      "index": 100,
+      "kind": "work",
+      "name": "『ゆるキャン△』シリーズ",
+      "region": "静岡県浜松市",
+      "isNew": false
+    },
+    {
+      "index": 101,
+      "kind": "work",
+      "name": "ラブライブ！サンシャイン!!",
+      "region": "静岡県沼津市",
+      "isNew": false
+    },
+    {
+      "index": 102,
+      "kind": "work",
+      "name": "ぐらんぶる",
+      "region": "静岡県伊東市",
+      "isNew": true
+    },
+    {
+      "index": 103,
+      "kind": "work",
+      "name": "『ゆるキャン△』シリーズ",
+      "region": "静岡県川根本町",
+      "isNew": false
+    },
+    {
+      "index": 104,
+      "kind": "work",
+      "name": "『ゆるキャン△』シリーズ",
+      "region": "愛知県名古屋市",
+      "isNew": false
+    },
+    {
+      "index": 105,
+      "kind": "work",
+      "name": "負けヒロインが多すぎる！",
+      "region": "愛知県豊橋市",
+      "isNew": false
+    },
+    {
+      "index": 106,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "三重県",
+      "isNew": true
+    },
+    {
+      "index": 107,
+      "kind": "work",
+      "name": "凪のあすから",
+      "region": "三重県熊野市",
+      "isNew": false
+    },
+    {
+      "index": 108,
+      "kind": "work",
+      "name": "薄桜鬼 真改",
+      "region": "京都府京都市",
+      "isNew": false
+    },
+    {
+      "index": 109,
+      "kind": "work",
+      "name": "艦隊これくしょん ‐艦これ‐",
+      "region": "京都府舞鶴市",
+      "isNew": false
+    },
+    {
+      "index": 110,
+      "kind": "work",
+      "name": "一休さん(酬恩庵一休寺)",
+      "region": "京都府京田辺市",
+      "isNew": false
+    },
+    {
+      "index": 111,
+      "kind": "work",
+      "name": "『涼宮ハルヒの憂鬱』シリーズ",
+      "region": "兵庫県西宮市",
+      "isNew": false
+    },
+    {
+      "index": 112,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "和歌山県",
+      "isNew": true
+    },
+    {
+      "index": 113,
+      "kind": "work",
+      "name": "ひなビタ♪",
+      "region": "鳥取県倉吉市",
+      "isNew": false
+    },
+    {
+      "index": 114,
+      "kind": "work",
+      "name": "ゲゲゲの鬼太郎",
+      "region": "鳥取県境港市",
+      "isNew": false
+    },
+    {
+      "index": 115,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "島根県",
+      "isNew": true
+    },
+    {
+      "index": 116,
+      "kind": "work",
+      "name": "推しが武道館いってくれたら死ぬ",
+      "region": "岡山県岡山市",
+      "isNew": false
+    },
+    {
+      "index": 117,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "広島県",
+      "isNew": true
+    },
+    {
+      "index": 118,
+      "kind": "work",
+      "name": "艦隊これくしょん ‐艦これ‐",
+      "region": "広島県呉市",
+      "isNew": false
+    },
+    {
+      "index": 119,
+      "kind": "work",
+      "name": "たまゆら",
+      "region": "広島県竹原市",
+      "isNew": false
+    },
+    {
+      "index": 120,
+      "kind": "work",
+      "name": "『蒼穹のファフナー』シリーズ",
+      "region": "広島県尾道市",
+      "isNew": false
+    },
+    {
+      "index": 121,
+      "kind": "work",
+      "name": "『エヴァンゲリオン』シリーズ",
+      "region": "山口県宇部市",
+      "isNew": false
+    },
+    {
+      "index": 122,
+      "kind": "work",
+      "name": "ざつ旅-That’s Journey-",
+      "region": "香川県",
+      "isNew": true
+    },
+    {
+      "index": 123,
+      "kind": "work",
+      "name": "Summer Pockets",
+      "region": "香川県男木島",
+      "isNew": true
+    },
+    {
+      "index": 124,
+      "kind": "work",
+      "name": "Summer Pockets",
+      "region": "香川県女木島",
+      "isNew": true
+    },
+    {
+      "index": 125,
+      "kind": "work",
+      "name": "『結城友奈は勇者である』シリーズ",
+      "region": "香川県観音寺市",
+      "isNew": false
+    },
+    {
+      "index": 126,
+      "kind": "work",
+      "name": "からかい上手の高木さん３",
+      "region": "香川県土庄町",
+      "isNew": false
+    },
+    {
+      "index": 127,
+      "kind": "work",
+      "name": "がんばっていきまっしょい",
+      "region": "愛媛県松山市",
+      "isNew": false
+    },
+    {
+      "index": 128,
+      "kind": "work",
+      "name": "私を喰べたい、ひとでなし",
+      "region": "愛媛県伊予市",
+      "isNew": true
+    },
+    {
+      "index": 129,
+      "kind": "work",
+      "name": "竜とそばかすの姫",
+      "region": "高知県越知町",
+      "isNew": false
+    },
+    {
+      "index": 130,
+      "kind": "work",
+      "name": "ブルバスター",
+      "region": "福岡県北九州市",
+      "isNew": false
+    },
+    {
+      "index": 131,
+      "kind": "work",
+      "name": "色づく世界の明日から",
+      "region": "長崎県長崎市",
+      "isNew": false
+    },
+    {
+      "index": 132,
+      "kind": "work",
+      "name": "きみの色",
+      "region": "長崎県長崎市",
+      "isNew": false
+    },
+    {
+      "index": 133,
+      "kind": "work",
+      "name": "艦隊これくしょん ‐艦これ‐",
+      "region": "長崎県佐世保市",
+      "isNew": false
+    },
+    {
+      "index": 134,
+      "kind": "work",
+      "name": "きみの色",
+      "region": "長崎県佐世保市",
+      "isNew": false
+    },
+    {
+      "index": 135,
+      "kind": "work",
+      "name": "アンゴルモア元寇合戦記",
+      "region": "長崎県対馬市",
+      "isNew": false
+    },
+    {
+      "index": 136,
+      "kind": "work",
+      "name": "蒼の彼方のフォーリズム",
+      "region": "長崎県五島市",
+      "isNew": false
+    },
+    {
+      "index": 137,
+      "kind": "work",
+      "name": "きみの色",
+      "region": "長崎県五島市",
+      "isNew": false
+    },
+    {
+      "index": 138,
+      "kind": "work",
+      "name": "蒼の彼方のフォーリズム",
+      "region": "長崎県新上五島町",
+      "isNew": false
+    },
+    {
+      "index": 139,
+      "kind": "work",
+      "name": "きみの色",
+      "region": "長崎県新上五島町",
+      "isNew": false
+    },
+    {
+      "index": 140,
+      "kind": "work",
+      "name": "夏目友人帳",
+      "region": "熊本県人吉・球磨地域ほか",
+      "isNew": false
+    },
+    {
+      "index": 141,
+      "kind": "work",
+      "name": "放課後ていぼう日誌",
+      "region": "熊本県芦北町",
+      "isNew": false
+    },
+    {
+      "index": 142,
+      "kind": "work",
+      "name": "男女の友情は成立する?（いや、しないっ!!）",
+      "region": "宮崎県延岡市",
+      "isNew": true
+    },
+    {
+      "index": 143,
+      "kind": "work",
+      "name": "秒速5センチメートル",
+      "region": "鹿児島県種子島",
+      "isNew": false
+    },
+    {
+      "index": 144,
+      "kind": "work",
+      "name": "劇場版 のんのんびより ばけーしょん",
+      "region": "沖縄県八重山諸島",
+      "isNew": false
+    },
+    {
+      "index": 145,
+      "kind": "work",
+      "name": "沖縄で好きになった子が方言すぎてツラすぎる",
+      "region": "沖縄県うるま市",
+      "isNew": true
+    },
+    {
+      "index": 146,
+      "kind": "work",
+      "name": "白い砂のアクアトープ",
+      "region": "沖縄県南城市",
+      "isNew": false
+    },
+    {
+      "index": 147,
+      "kind": "facility",
+      "name": "宮沢賢治童話村",
+      "region": "岩手県花巻市",
+      "isNew": false
+    },
+    {
+      "index": 148,
+      "kind": "facility",
+      "name": "石ノ森萬画館",
+      "region": "宮城県石巻市",
+      "isNew": false
+    },
+    {
+      "index": 149,
+      "kind": "facility",
+      "name": "横手市増田まんが美術館",
+      "region": "秋田県横手市",
+      "isNew": false
+    },
+    {
+      "index": 150,
+      "kind": "facility",
+      "name": "おもちゃのまちバンダイミュージアム",
+      "region": "栃木県壬生町",
+      "isNew": false
+    },
+    {
+      "index": 151,
+      "kind": "facility",
+      "name": "長谷川町子記念館",
+      "region": "東京都世田谷区",
+      "isNew": false
+    },
+    {
+      "index": 152,
+      "kind": "facility",
+      "name": "東京アニメセンター in DNP PLAZA SHIBUYA",
+      "region": "東京都渋谷区",
+      "isNew": false
+    },
+    {
+      "index": 153,
+      "kind": "facility",
+      "name": "東京工芸大学 杉並アニメーションミュージアム",
+      "region": "東京都杉並区",
+      "isNew": false
+    },
+    {
+      "index": 154,
+      "kind": "facility",
+      "name": "アニメイト池袋本店",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 155,
+      "kind": "facility",
+      "name": "アニメ東京ステーション",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 156,
+      "kind": "facility",
+      "name": "豊島区立 トキワ荘マンガミュージアム",
+      "region": "東京都豊島区",
+      "isNew": false
+    },
+    {
+      "index": 157,
+      "kind": "facility",
+      "name": "東映アニメーションミュージアム",
+      "region": "東京都練馬区",
+      "isNew": false
+    },
+    {
+      "index": 158,
+      "kind": "facility",
+      "name": "水木マンガの生まれた街",
+      "region": "東京都調布市",
+      "isNew": false
+    },
+    {
+      "index": 159,
+      "kind": "facility",
+      "name": "サンリオピューロランド",
+      "region": "東京都多摩市",
+      "isNew": false
+    },
+    {
+      "index": 160,
+      "kind": "facility",
+      "name": "新潟市マンガ・アニメ情報館",
+      "region": "新潟県新潟市",
+      "isNew": false
+    },
+    {
+      "index": 161,
+      "kind": "facility",
+      "name": "新潟市マンガの家",
+      "region": "新潟県新潟市",
+      "isNew": false
+    },
+    {
+      "index": 162,
+      "kind": "facility",
+      "name": "氷見市潮風ギャラリー（藤子不二雄Ⓐアートコレクション）",
+      "region": "富山県氷見市",
+      "isNew": false
+    },
+    {
+      "index": 163,
+      "kind": "facility",
+      "name": "ちびまる子ちゃんランド",
+      "region": "静岡県静岡市（清水区）",
+      "isNew": false
+    },
+    {
+      "index": 164,
+      "kind": "facility",
+      "name": "世界コスプレサミット",
+      "region": "愛知県名古屋市",
+      "isNew": false
+    },
+    {
+      "index": 165,
+      "kind": "facility",
+      "name": "京都国際マンガミュージアム",
+      "region": "京都府京都市",
+      "isNew": false
+    },
+    {
+      "index": 166,
+      "kind": "facility",
+      "name": "尼子騒兵衛漫画ギャラリー",
+      "region": "兵庫県尼崎市",
+      "isNew": true
+    },
+    {
+      "index": 167,
+      "kind": "facility",
+      "name": "宝塚市立手塚治虫記念館",
+      "region": "兵庫県宝塚市",
+      "isNew": false
+    },
+    {
+      "index": 168,
+      "kind": "facility",
+      "name": "水木しげるロード",
+      "region": "鳥取県境港市",
+      "isNew": false
+    },
+    {
+      "index": 169,
+      "kind": "facility",
+      "name": "青山剛昌ふるさと館",
+      "region": "鳥取県北栄町",
+      "isNew": false
+    },
+    {
+      "index": 170,
+      "kind": "facility",
+      "name": "マチ★アソビ",
+      "region": "徳島県徳島市",
+      "isNew": false
+    },
+    {
+      "index": 171,
+      "kind": "facility",
+      "name": "香美市立やなせたかし記念館 アンパンマンミュージアム",
+      "region": "高知県香美市",
+      "isNew": false
+    },
+    {
+      "index": 172,
+      "kind": "facility",
+      "name": "北九州市漫画ミュージアム",
+      "region": "福岡県北九州市",
+      "isNew": false
+    },
+    {
+      "index": 173,
+      "kind": "facility",
+      "name": "五島の雲 山本二三美術館",
+      "region": "長崎県五島市",
+      "isNew": false
+    },
+    {
+      "index": 174,
+      "kind": "facility",
+      "name": "進撃の巨人 in HITAミュージアム＆進撃の巨人 in HITAミュージアム ANNEX",
+      "region": "大分県日田市",
+      "isNew": false
+    },
+    {
+      "index": 175,
+      "kind": "facility",
+      "name": "サンリオキャラクターパーク ハーモニーランド",
+      "region": "大分県日出町",
+      "isNew": false
+    }
+  ]
+}

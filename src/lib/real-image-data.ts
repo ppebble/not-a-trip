@@ -92,6 +92,7 @@ export const EXTERNAL_HOTLINK_HOSTS = new Set([
 export const COMPATIBLE_IMAGE_LICENSES = new Set([
   'cc0 1.0',
   'cc by 2.0',
+  'cc by 2.5',
   'cc by 3.0',
   'cc by 4.0',
   'cc by-sa 2.0',
