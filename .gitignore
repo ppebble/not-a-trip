@@ -75,3 +75,6 @@ public/sw.js.map
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Personal project learning notes (local only)
+/portfolio-learning/
