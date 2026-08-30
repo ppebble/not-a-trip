@@ -1,6 +1,12 @@
 import { spawnSync } from 'child_process'
 import { mkdirSync, readdirSync, rmSync, statSync } from 'fs'
 import { join } from 'path'
+import {
+  describeMongoTarget,
+  loadRepositoryEnv,
+} from './lib/load-repository-env.mjs'
+
+loadRepositoryEnv()
 
 const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/not-a-trip'
 const backupRoot = process.env.BACKUP_DIR || 'backups'
@@ -9,6 +15,7 @@ const timestamp = now.toISOString().replace(/[:.]/g, '-')
 const archivePath = join(backupRoot, `mongodb-backup-${timestamp}.archive.gz`)
 
 mkdirSync(backupRoot, { recursive: true })
+console.log(`Backup target: ${describeMongoTarget(uri)}`)
 
 const result = spawnSync(
   'mongodump',
